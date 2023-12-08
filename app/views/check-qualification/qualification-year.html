@@ -1,0 +1,50 @@
+{% extends "layouts/main.html" %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-l">
+        Was the qualification started in September 2014 or later?
+      </h1>
+
+      <form class="form" action="/path/of/next/page" method="post">
+        <p>
+        <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="BeforeAfter2014" name="BeforeAfter2014" type="radio" value="Before2014">
+              <label class="govuk-label govuk-radios__label" for="BeforeAfter2014">
+                Before September 2014
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="BeforeAfter2014-2" name="BeforeAfter2014" type="radio" value="After2014">
+              <label class="govuk-label govuk-radios__label" for="BeforeAfter2014-2">
+                In September 2014 or later
+              </label>
+            </div>
+        </div>
+        </p>
+        {{ govukButton({
+          text: "Continue",
+          href: "awarding-body.html"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
