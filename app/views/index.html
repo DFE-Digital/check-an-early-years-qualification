@@ -1,4 +1,4 @@
-{% extends "layouts/main.html" %}
+{% extends "govuk-prototype-kit/layouts/unbranded.html" %}
 
 {% set pageName="Home" %}
 
@@ -7,19 +7,15 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% include "govuk-prototype-kit/includes/homepage-top.njk" %}
+    <!-- {% include "govuk-prototype-kit/includes/homepage-top.njk" %} -->
 
-    <h1 class="govuk-heading-xl">
+    <h1 class="govuk-heading-m">
       {{ serviceName }}
     </h1>
 
-    <p>
-      <a href="/check-qualification">
-          Go to the start page
-      </a>
-  </p>
+    <p><a href="/check-qualification">Prototype 0.1</a>, 8 Dec 2023</p>
 
-    {% include "govuk-prototype-kit/includes/homepage-bottom.njk" %}
+    <!-- {% include "govuk-prototype-kit/includes/homepage-bottom.njk" %} -->
   </div>
 </div>
 
