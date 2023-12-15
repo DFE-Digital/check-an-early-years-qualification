@@ -1,7 +1,7 @@
 {% extends "layouts/main.html" %}
 
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  Was the qualification started in September 2014 or later? – {{ serviceName }} – GOV.UK Prototype Kit
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,7 +20,7 @@
         Was the qualification started in September 2014 or later?
       </h1>
 
-      <form class="form" action="/path/of/next/page" method="post">
+      <form class="form" action="level-qualification" method="post">
         <p>
         <div class="govuk-radios" data-module="govuk-radios">
             <div class="govuk-radios__item">
@@ -37,11 +37,11 @@
             </div>
         </div>
         </p>
-        {{ govukButton({
-          text: "Continue",
-          href: "awarding-body.html"
-        }) }}
 
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+      
       </form>
 
     </div>
