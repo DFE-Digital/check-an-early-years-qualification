@@ -1,0 +1,43 @@
+name: Code PR Check 
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+  pull_request:
+    branches: ["main"]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/code-pr-check.yml'
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+  
+env:
+  DOTNET_VERSION: 8
+  SOLUTION_NAME: 'Dfe.EarlyYearsQualification.sln'
+  
+jobs:
+
+  build-app:  
+    name: Build and run unit tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      
+      - name: Build web app  
+        uses: ./.github/actions/build-dotnet-app
+        with:
+          dotnet_version: ${{ env.DOTNET_VERSION }}  
+          solution_filename: ${{ env.SOLUTION_NAME }}
+
+      - name: Run unit tests
+        uses: ./.github/actions/run-unit-tests
+        with:
+          solution_filename: ${{ env.SOLUTION_NAME }}
