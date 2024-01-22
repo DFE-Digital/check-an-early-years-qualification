@@ -1,0 +1,11 @@
+﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.LandingPageModel
+
+@{
+    ViewData["Title"] = "Content Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.Header</h1>
+    @Html.Raw(Model.ServiceIntroduction)
+    <button>@Model.StartButtonText</button>
+</div>
