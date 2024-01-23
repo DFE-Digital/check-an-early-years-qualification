@@ -20,6 +20,7 @@ public class ContentfulContentService : IContentService
         var landingPageContent = landingPageEntries.First();
         var htmlRenderer = new HtmlRenderer();
         htmlRenderer.AddRenderer(new UnorderedListRenderer() { Order = 10 });
+        htmlRenderer.AddRenderer(new Dfe.EarlyYearsQualification.Content.Renderers.ParagraphRenderer() { Order = 10 });
         landingPageContent.ServiceIntroductionHtml = await htmlRenderer.ToHtml(landingPageContent.ServiceIntroduction);
         return landingPageContent;
     }
