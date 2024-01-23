@@ -1,5 +1,6 @@
 using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.Services;
+using GovUk.Frontend.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddContentful(builder.Configuration);
 builder.Services.AddTransient<IContentService, ContentfulContentService>();
+builder.Services.AddGovUkFrontend();
 
 var app = builder.Build();
 
