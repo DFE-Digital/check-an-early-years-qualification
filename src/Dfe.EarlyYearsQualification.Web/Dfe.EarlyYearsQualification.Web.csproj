@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="contentful.aspnetcore" Version="7.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj" />
+  </ItemGroup>
+
 </Project>

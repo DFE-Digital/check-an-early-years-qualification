@@ -1,7 +1,13 @@
+using Contentful.AspNetCore;
+using Dfe.EarlyYearsQualification.Content.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddContentful(builder.Configuration);
+builder.Services.AddTransient<IContentService, ContentfulContentService>();
 
 var app = builder.Build();
 
