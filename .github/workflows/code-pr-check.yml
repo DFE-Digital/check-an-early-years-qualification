@@ -41,3 +41,8 @@ jobs:
         uses: ./.github/actions/run-unit-tests
         with:
           solution_filename: ${{ env.SOLUTION_NAME }}
+
+      - name: Run e2e tests
+        uses: ./github/actions/run-e2e-tests
+        with:
+          url: "<THIS CAN BE UPDATED WITH THE URL OF THE PR TEST SITE AT A LATER DATE>"
