@@ -1,8 +1,19 @@
-﻿@{
+﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.LandingPageModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">@Model.Header</h1>
+    @Html.Raw(Model.ServiceIntroduction)
+
+    @using (Html.BeginForm("Index", "Result", FormMethod.Get)) 
+    {
+      <label for="CourseName">Course Name:</label>
+      <input type="text" name="CourseName" id="CourseName" />
+    
+      <input type="submit" value="Search" />
+    }
+
 </div>

@@ -1,0 +1,15 @@
+﻿@model Dfe.EarlyYearsQualification.Web.Models.Result.ResultPageModel
+
+@{
+    ViewData["Title"] = "Result Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.Header</h1>
+
+    @foreach(var result in Model.SearchResults)
+    {
+      <div>@result.CourseId</div>
+      <div>@result.CourseName</div>
+    }
+</div>

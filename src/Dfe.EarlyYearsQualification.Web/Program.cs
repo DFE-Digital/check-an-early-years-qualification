@@ -11,6 +11,8 @@ builder.Services.AddTransient<IContentService, ContentfulContentService>();
 
 var app = builder.Build();
 
+System.Diagnostics.Debugger.Launch();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
