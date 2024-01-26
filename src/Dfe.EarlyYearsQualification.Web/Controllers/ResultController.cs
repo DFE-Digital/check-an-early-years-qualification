@@ -7,10 +7,10 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 public class ResultController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<ResultController> _logger;
     private readonly IContentService _contentService;
 
-    public ResultController(ILogger<HomeController> logger, IContentService contentService)
+    public ResultController(ILogger<ResultController> logger, IContentService contentService)
     {
         _logger = logger;
         _contentService = contentService;

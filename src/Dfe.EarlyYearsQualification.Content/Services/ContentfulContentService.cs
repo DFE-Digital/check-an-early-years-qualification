@@ -27,15 +27,32 @@ public class ContentfulContentService : IContentService
 
   public async Task<ResultPage> GetResultPage()
   {
-    var resultPageEntries = await _contentfulClient.GetEntriesByType<ResultPage>("landingPage");
+    var resultPageEntries = await _contentfulClient.GetEntriesByType<ResultPage>("resultPage");
     var resultPageContent = resultPageEntries.First();
     return resultPageContent;
   }
 
+  public async Task<CourseSummaryPage> GetCourseSummaryPage()
+  {
+    var courseSummaryPageEntries = await _contentfulClient.GetEntriesByType<CourseSummaryPage>("courseSummaryPage");
+    var courseSummaryPageContent = courseSummaryPageEntries.First();
+    return courseSummaryPageContent;
+  }
+
   public async Task<List<CourseSummary>> GetCourseResults(string searchText)
   {
-    var queryBuilder = new QueryBuilder<CourseSummary>().FullTextSearch(searchText);
+    var queryBuilder = new QueryBuilder<CourseSummary>().ContentTypeIs("courseSummary").FullTextSearch(searchText);
     var searchResult = await _contentfulClient.GetEntries(queryBuilder);
     return searchResult.ToList();
+  }
+
+  public async Task<CourseSummary> GetCourseById(int courseId)
+  {
+    var queryBuilder = new QueryBuilder<CourseSummary>().ContentTypeIs("courseSummary").FieldEquals("fields.courseId", courseId.ToString());
+    var test = queryBuilder.Build();
+    Console.WriteLine(test);
+    var searchResult = await _contentfulClient.GetEntries(queryBuilder);
+
+    return searchResult.First();
   }
 }

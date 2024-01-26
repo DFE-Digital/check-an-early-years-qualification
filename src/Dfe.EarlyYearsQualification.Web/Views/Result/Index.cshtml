@@ -11,5 +11,6 @@
     {
       <div>@result.CourseId</div>
       <div>@result.CourseName</div>
+      <a asp-action="Index" asp-controller="Details" asp-route-courseId="@result.CourseId">Go To Course</a>
     }
 </div>

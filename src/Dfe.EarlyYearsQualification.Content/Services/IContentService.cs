@@ -8,5 +8,9 @@ public interface IContentService
 
     Task<ResultPage> GetResultPage();
 
+    Task<CourseSummaryPage> GetCourseSummaryPage();
+
     Task<List<CourseSummary>> GetCourseResults(string searchText);
+
+    Task<CourseSummary> GetCourseById(int courseId);
 }
