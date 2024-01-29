@@ -17,10 +17,10 @@ public class ResultController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string CourseName)
+    public async Task<IActionResult> Index(string courseName)
     {
       var pageContent = await _contentService.GetResultPage();
-      var searchResult = await _contentService.GetCourseResults(CourseName);
+      var searchResult = await _contentService.GetCourseResults(courseName);
       var model = new ResultPageModel()
       {
         Header = pageContent.Header,
