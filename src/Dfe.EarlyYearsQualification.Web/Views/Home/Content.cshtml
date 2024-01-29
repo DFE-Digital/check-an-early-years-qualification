@@ -5,7 +5,7 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">@Model.Header</h1>
+    <h1 class="govuk-heading-xl">@Model.Header</h1>
     @Html.Raw(Model.ServiceIntroduction)
-    <button>@Model.StartButtonText</button>
+    <govuk-button-link is-start-button="true">@Model.StartButtonText</govuk-button-link>
 </div>
