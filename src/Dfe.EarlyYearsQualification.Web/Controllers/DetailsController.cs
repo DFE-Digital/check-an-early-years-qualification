@@ -23,7 +23,7 @@ public class DetailsController : Controller
       var model = new DetailsPageModel()
       {
         Header = pageContent.Header,
-        courseSummary = courseSummary
+        CourseSummary = courseSummary
       };
 
       return View(model);
