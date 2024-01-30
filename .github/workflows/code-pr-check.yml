@@ -48,6 +48,9 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
 
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@v4
+
       - name: Run unit tests
         uses: ./.github/actions/run-unit-tests
         with:
