@@ -18,13 +18,7 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Content()
+    public async Task<IActionResult> Index()
     {
         var landingPageContent = await _contentService.GetLandingPage();
         var model = new LandingPageModel() 
