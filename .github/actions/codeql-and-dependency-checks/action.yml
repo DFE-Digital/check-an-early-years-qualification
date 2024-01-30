@@ -1,0 +1,20 @@
+name: Run CodeQL and dependency review
+description: Runs CodeQL checks as well as dependency checks for issues.
+
+runs:
+  using: composite
+
+  steps:
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: csharp, javascript
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+
+    - name: 'Dependency Review'
+      uses: actions/dependency-review-action@v4
