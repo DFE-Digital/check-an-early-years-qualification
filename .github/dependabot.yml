@@ -1,19 +1,17 @@
----
-
 version: 2
 updates:
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: daily
+      interval: 'daily'
 
   - package-ecosystem: docker
     directory: /
     schedule:
-      interval: weekly
+      interval: 'weekly'
 
   — package-ecosystem: nuget
-  directory: /
-  schedule:
-    interval: daily
+    directory: /
+    schedule:
+      interval: 'daily'
