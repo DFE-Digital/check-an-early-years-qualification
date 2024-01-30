@@ -1,0 +1,13 @@
+@model Dfe.EarlyYearsQualification.Web.Models.DetailsPageModel
+
+@{
+    ViewData["Title"] = "Course Summary Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.Header</h1>
+
+    <div>@Model.CourseSummary.CourseId</div>
+    <div>@Model.CourseSummary.CourseName</div>
+
+</div>
