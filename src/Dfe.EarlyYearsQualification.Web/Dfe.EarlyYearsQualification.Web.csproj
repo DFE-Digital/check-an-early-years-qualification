@@ -14,4 +14,9 @@
     <ProjectReference Include="..\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj" />
   </ItemGroup>
 
+  <Target Name="BuildWebAssets" BeforeTargets="Build" Condition="'$(buildWebAssets)' == 'true'">
+      <Exec Command="npm install" WorkingDirectory="../Dfe.EarlyYearsQualification.Node" />
+      <Exec Command="npm run build" WorkingDirectory="../Dfe.EarlyYearsQualification.Node" />
+  </Target>
+
 </Project>
