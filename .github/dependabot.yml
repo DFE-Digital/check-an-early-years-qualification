@@ -11,7 +11,7 @@ updates:
     schedule:
       interval: 'weekly'
 
-  — package-ecosystem: nuget
+  - package-ecosystem: nuget
     directory: /
     schedule:
       interval: 'daily'
