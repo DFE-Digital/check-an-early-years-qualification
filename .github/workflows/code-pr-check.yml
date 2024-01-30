@@ -36,6 +36,17 @@ jobs:
         with:
           dotnet_version: ${{ env.DOTNET_VERSION }}  
           solution_filename: ${{ env.SOLUTION_NAME }}
+          
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: csharp, javascript
+  
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v1
+  
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
 
       - name: Run unit tests
         uses: ./.github/actions/run-unit-tests
