@@ -162,3 +162,42 @@ resource "azurerm_key_vault_certificate" "kv_cert" {
     }
   }
 }
+
+resource "azurerm_key_vault_secret" "vault_secret_contentful_deliveryapikey" {
+  key_vault_id = azurerm_key_vault.kv[0].id
+  name         = "ContentfulOptions--DeliveryApiKey"
+  value        = "temp value"
+
+  lifecycle {
+    ignore_changes = [
+      value,
+      expiration_date
+    ]
+  }
+}
+
+resource "azurerm_key_vault_secret" "vault_secret_contentful_previewapikey" {
+  key_vault_id = azurerm_key_vault.kv[0].id
+  name         = "ContentfulOptions--PreviewApiKey"
+  value        = "temp value"
+
+  lifecycle {
+    ignore_changes = [
+      value,
+      expiration_date
+    ]
+  }
+}
+
+resource "azurerm_key_vault_secret" "vault_secret_contentful_spaceid" {
+  key_vault_id = azurerm_key_vault.kv[0].id
+  name         = "ContentfulOptions--SpaceId"
+  value        = "temp value"
+
+  lifecycle {
+    ignore_changes = [
+      value,
+      expiration_date
+    ]
+  }
+}
