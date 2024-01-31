@@ -5,13 +5,19 @@ updates:
     directory: /
     schedule:
       interval: 'daily'
+    labels:
+      - github-actions
 
   - package-ecosystem: docker
     directory: /
     schedule:
       interval: 'weekly'
+    labels:
+      - docker
 
   - package-ecosystem: nuget
     directory: /
     schedule:
       interval: 'daily'
+    labels:
+      - nuget
