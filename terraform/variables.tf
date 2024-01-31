@@ -60,3 +60,101 @@ variable "kv_certificate_subject" {
   description = "Subject of the Certificate"
   type        = string
 }
+
+variable "as_service_principal_object_id" {
+  description = "Object ID of the service principal for App Service"
+  type        = string
+  sensitive   = true
+}
+
+variable "asp_sku" {
+  default     = "S1"
+  description = "SKU name for the App Service Plan"
+  type        = string
+}
+
+variable "webapp_worker_count" {
+  default     = 1
+  description = "Number of Workers for the App Service Plan"
+  type        = string
+}
+
+variable "webapp_name" {
+  description = "Name for the Web Application"
+  type        = string
+}
+
+variable "webapp_docker_registry_url" {
+  description = "URL to the Docker Registry"
+  type        = string
+}
+
+variable "webapp_docker_image" {
+  description = "Docker Image to deploy"
+  type        = string
+}
+
+variable "webapp_docker_image_tag" {
+  default     = "latest"
+  description = "Tag for the Docker Image"
+  type        = string
+}
+
+variable "custom_domain_name" {
+  description = "Custom domain hostname"
+  type        = string
+}
+
+variable "hotjar_site_id" {
+  description = "Hotjar tracking ID"
+  type        = string
+}
+
+variable "tracking_id" {
+  description = "Google Tag Manager tracking ID"
+  type        = string
+}
+
+variable "webapp_config_user_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "webapp_config_bot_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "webapp_config_contentful_environment" {
+  default = null
+  type    = string
+}
+
+variable "webapp_config_contentful_preview" {
+  default = null
+  type    = string
+}
+
+variable "webapp_config_domain" {
+  type = string
+}
+
+variable "webapp_config_editor" {
+  type = string
+}
+
+variable "webapp_config_feedback_url" {
+  type = string
+}
+
+variable "webapp_config_grover_no_sandbox" {
+  type = bool
+}
+
+variable "webapp_config_node_env" {
+  type = string
+}
+
+variable "webapp_config_web_concurrency" {
+  type = string
+}
