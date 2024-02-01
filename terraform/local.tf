@@ -15,7 +15,6 @@ locals {
     "DOMAIN"                              = var.webapp_config_domain
     "FEEDBACK_URL"                        = var.webapp_config_feedback_url
     "TRACKING_ID"                         = var.tracking_id
-    "WEB_CONCURRENCY"                     = var.webapp_config_web_concurrency
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
   }
 
@@ -26,7 +25,6 @@ locals {
     "DOMAIN"                              = var.webapp_config_domain
     "FEEDBACK_URL"                        = var.webapp_config_feedback_url
     "TRACKING_ID"                         = var.tracking_id
-    "WEB_CONCURRENCY"                     = var.webapp_config_web_concurrency
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
   }
 }

@@ -122,7 +122,3 @@ variable "webapp_config_domain" {
 variable "webapp_config_feedback_url" {
   type = string
 }
-
-variable "webapp_config_web_concurrency" {
-  type = string
-}
