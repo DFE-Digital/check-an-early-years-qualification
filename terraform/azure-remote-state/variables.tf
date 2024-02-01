@@ -7,5 +7,5 @@ variable "default_environment" {
 }
 
 variable "resource_name_prefix" {
-  default = "s187d01-eyqualification"
+  default = "s202d01-earlyyearsqualifications"
 }

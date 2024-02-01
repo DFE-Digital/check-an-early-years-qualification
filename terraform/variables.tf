@@ -105,11 +105,6 @@ variable "custom_domain_name" {
   type        = string
 }
 
-variable "hotjar_site_id" {
-  description = "Hotjar tracking ID"
-  type        = string
-}
-
 variable "tracking_id" {
   description = "Google Tag Manager tracking ID"
   type        = string
@@ -125,33 +120,11 @@ variable "webapp_config_bot_token" {
   sensitive = true
 }
 
-variable "webapp_config_contentful_environment" {
-  default = null
-  type    = string
-}
-
-variable "webapp_config_contentful_preview" {
-  default = null
-  type    = string
-}
-
 variable "webapp_config_domain" {
   type = string
 }
 
-variable "webapp_config_editor" {
-  type = string
-}
-
 variable "webapp_config_feedback_url" {
-  type = string
-}
-
-variable "webapp_config_grover_no_sandbox" {
-  type = bool
-}
-
-variable "webapp_config_node_env" {
   type = string
 }
 
