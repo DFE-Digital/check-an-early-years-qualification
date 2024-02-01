@@ -7,6 +7,7 @@ updates:
       interval: 'daily'
     labels:
       - github-actions
+      - dependabot
 
   - package-ecosystem: docker
     directory: /
@@ -14,6 +15,7 @@ updates:
       interval: 'weekly'
     labels:
       - docker
+      - dependabot
 
   - package-ecosystem: nuget
     directory: /
@@ -21,3 +23,4 @@ updates:
       interval: 'daily'
     labels:
       - nuget
+      - dependabot
