@@ -24,18 +24,21 @@ env:
 jobs:
 
   build-app:  
-    name: Build and run unit tests
+    name: Build, check and run tests
     runs-on: ubuntu-22.04
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Build web app  
         uses: ./.github/actions/build-dotnet-app
         with:
           dotnet_version: ${{ env.DOTNET_VERSION }}  
           solution_filename: ${{ env.SOLUTION_NAME }}
+          
+      - name: Run CodeQL and dependency checks
+        uses: ./.github/actions/codeql-and-dependency-checks
 
       - name: Run unit tests
         uses: ./.github/actions/run-unit-tests
