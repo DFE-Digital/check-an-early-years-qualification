@@ -3,8 +3,8 @@ locals {
   common_tags = {
     "Environment"      = var.environment
     "Parent Business"  = "Children’s Care"
-    "Product"          = "Early Years Qualification"
-    "Service Offering" = "Early Years Qualification"
+    "Product"          = "Early Years Qualifications"
+    "Service Offering" = "Early Years Qualifications"
   }
 
   # Web Application Configuration
