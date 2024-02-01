@@ -331,7 +331,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   # Can be retrieved using 'az ad sp show --id abfa0a7c-a6b6-4736-8310-5855508787cd --query id'
   object_id               = var.as_service_principal_object_id
-  secret_permissions      = ["Get"]
+  secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
 }
 
