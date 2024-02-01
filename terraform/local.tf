@@ -12,7 +12,6 @@ locals {
     "ENVIRONMENT"                         = var.environment
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
     "BOT_TOKEN"                           = var.webapp_config_bot_token
-    "USER_PASSWORD"                       = var.webapp_config_user_password
     "DOMAIN"                              = var.webapp_config_domain
     "FEEDBACK_URL"                        = var.webapp_config_feedback_url
     "TRACKING_ID"                         = var.tracking_id
@@ -24,7 +23,6 @@ locals {
     "ENVIRONMENT"                         = var.environment
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
     "BOT_TOKEN"                           = var.webapp_config_bot_token
-    "USER_PASSWORD"                       = var.webapp_config_user_password
     "DOMAIN"                              = var.webapp_config_domain
     "FEEDBACK_URL"                        = var.webapp_config_feedback_url
     "TRACKING_ID"                         = var.tracking_id

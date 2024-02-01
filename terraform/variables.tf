@@ -110,11 +110,6 @@ variable "tracking_id" {
   type        = string
 }
 
-variable "webapp_config_user_password" {
-  type      = string
-  sensitive = true
-}
-
 variable "webapp_config_bot_token" {
   type      = string
   sensitive = true
