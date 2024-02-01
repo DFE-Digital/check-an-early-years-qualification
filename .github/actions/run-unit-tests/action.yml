@@ -15,7 +15,7 @@ runs:
       run: dotnet test ${{ inputs.solution_filename }} --no-restore --verbosity normal --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=test-results.trx" || true
     - name: Test Report
       uses: dorny/test-reporter@v1
-      if: always()
+      if: github.actor != 'dependabot[bot]' # dependabot PRs have issues accessing the resource so skip
       with:
         name: DotNET Tests
         path: "**/test-results.trx"                            
