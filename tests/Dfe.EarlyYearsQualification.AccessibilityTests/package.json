@@ -1,0 +1,10 @@
+{
+  "name": "dfe.earlyyearsqualification.accessibilitytests",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pa11y-ci": "^3.1.0"
+  }
+}
