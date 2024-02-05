@@ -1,0 +1,15 @@
+name: Run app for testing
+description: Run the app within the action so we can run E2E and Accessibility tests.
+
+inputs:
+  url:
+    required: true
+    type: string
+
+runs:
+  using: composite
+
+  steps:
+    - name: Run .Net Project
+      shell: bash
+      run: dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" &

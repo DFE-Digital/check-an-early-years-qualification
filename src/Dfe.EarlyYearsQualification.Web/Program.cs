@@ -1,5 +1,6 @@
 using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddContentful(builder.Configuration);
-builder.Services.AddTransient<IContentService, ContentfulContentService>();
+builder.Services.AddMockContentful();
 
 var app = builder.Build();
 
