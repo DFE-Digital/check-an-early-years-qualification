@@ -7,7 +7,7 @@
   },
   "pluginDependencies": [{
     "packageName": "govuk-frontend",
-    "minVersion": "4.4.0"
+    "minVersion": "5.0.0"
   }],
   "sass": [
     "/sass/_contents-list.scss",
@@ -53,6 +53,11 @@
     {
       "name": "Mainstream guide page",
       "path": "/templates/mainstream-guide.html",
+      "type":  "nunjucks"
+    },
+    {
+      "name": "Task list page (for GOV.UK Frontend >=5.0.0)",
+      "path": "/templates/task-list.html",
       "type":  "nunjucks"
     }]
 }

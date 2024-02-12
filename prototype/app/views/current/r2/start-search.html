@@ -1,0 +1,43 @@
+{% extends "layouts/main.html" %}
+
+{% block pageTitle %}
+  Search for a qualification – {{ serviceName }} – GOV.UK Prototype 
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="search-results" method="post">
+
+        <div class="govuk-form-group">
+            <h1 class="govuk-label-wrapper">
+              <label class="govuk-label govuk-label--l" for="event-name">
+                Search for an Early Years qualification
+              </label>
+            </h1>
+            <div id="event-name-hint" class="govuk-hint">
+                For example, Level 2 Diploma Early Years Practitioner
+              </div>
+            <input class="govuk-input" id="event-name" name="eventName" type="text">
+          </div>
+
+        {{ govukButton({
+          text: "Search",
+          url: "search-results.html"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

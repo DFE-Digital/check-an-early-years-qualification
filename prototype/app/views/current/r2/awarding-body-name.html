@@ -1,0 +1,214 @@
+{% extends "layouts/main.html" %}
+
+{% block pageTitle %}
+    Select the awarding organisation – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-l">
+        Select the awarding organisation
+      </h1>
+
+      <form class="form" action="qualification-name" method="post">
+        <p>
+        <div class="govuk-radios" data-module="govuk-radios">
+            <!-- <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="BeforeAfter2014" name="BeforeAfter2014" type="radio" value="Before2014">
+              <label class="govuk-label govuk-radios__label" for="BeforeAfter2014">
+                Before September 2014
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="BeforeAfter2014-2" name="BeforeAfter2014" type="radio" value="After2014">
+              <label class="govuk-label govuk-radios__label" for="BeforeAfter2014-2">
+                In September 2014 or later
+              </label>
+            </div> -->
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO1" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO1">
+                    Anglia Ruskin University / University Centre Peterborough</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO2" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO2">
+                    Bath Spa University</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO3" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO3">
+                    BIIAB</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO4" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO4">City and Guilds</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO5" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO5">Crossfields Institute</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO6" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO6">FutureQuals</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO7" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO7">Focus Awards Limited</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO8" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO8">Highfield Qualifications</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO9" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO9">iCan Qualifications Limited (iCQ)</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO10" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO10">iFATE</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO11" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO11">Innovate Awarding</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO12" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO12">Kingston University</label>
+            </div>
+            
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO13" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO13">London Metropolitan University</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO14" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO14">
+                    <!-- Northern Council for Further Education (NCFE) -->
+                    NCFE
+                </label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO15" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO15">Newcastle College Group (NCG)</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO16" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO16">Newman University</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO17" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO17">Nottingham Trent University</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO18" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO18">Open University / University Centre Peterborough</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO19" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO19">Pearson</label>
+            </div>
+            
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO20" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO20">Sheffield Hallam University</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO21" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO21">Skillsfirst</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO22" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO22">Training Qualifications UK (TQUK)</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO23" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO23">University of Bedfordshire</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO24" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO24">University of Derby and Collaborative Provision</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO25" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO25">University of East Anglia </label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO26" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="">University of Greenwich</label>
+            </div>
+            
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO27" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO26">University of Hertfordshire</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO28" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO28">University of Hull</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO29" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO29">University of Plymouth</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO30" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO30">University of Worcester</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="AwardingOrg" id="AO31" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="AO31">Warwickshire College Group (WCG)</label>
+            </div>
+
+        </div>
+        </p>
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+<!-- For future: add link to help if awarding organisation isn't shown -->
+
+    </div>
+  </div>
+
+{% endblock %}

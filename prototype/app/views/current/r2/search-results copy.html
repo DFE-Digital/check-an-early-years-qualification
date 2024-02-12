@@ -1,0 +1,60 @@
+{% extends "layouts/main.html" %}
+
+{% block pageTitle %}
+  Search results for 'NFCE' – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <form class="form" action="#" method="post">
+
+            <div class="govuk-form-group">
+                <h1 class="govuk-label-wrapper">
+                  <label class="govuk-label govuk-label--l" for="event-name">
+                    Search for a qualification
+                  </label>
+                </h1>
+                <input class="govuk-input" id="event-name" name="eventName" type="text" value="level 3 diploma childcare education">
+              </div>
+    
+            {{ govukButton({
+              text: "Search",
+              url: "search-results.html"
+            }) }}
+    
+          </form>
+    
+      <p class="govuk-body-l"><strong>8 results</strong></p>
+
+      <ul class="govuk-list govuk-list--spaced">
+        <li><a href="601-4000-8.html">FAQ Level 3 Diploma in Early Years Education and Childcare (Early Years Educator)</a></li>
+        <li><a href="601-4000-8.html">IAO Level 3 Diploma In Early Learning and Childcare (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">NCFE CACHE Level 2 Diploma for the Early Years Practitioner</a></li> -->
+        <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma in Early Years Education and Care (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma for the Early Years Workforce ((Early Years Educator)</a></li> -->
+        <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma in Childcare and Education (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma in Montessori Pedagogy – Birth to Seven (Early Years Educator)</a></li> -->
+        <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma in Holistic Baby and Child Care (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">NCFE Diploma for the Children's Workforce (Early Years Educator)</a></li> -->
+        <li><a href="601-4000-8.html">NCFE CACHE Technical Level 3 Diploma in Early Years Education and Care (Early Years Educator)</a></li>
+        <li><a href="601-4000-8.html">NCFE CACHE Technical Level 3 Diploma in Childcare and Education (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)</a></li> -->
+        <!-- <li><a href="601-4000-8.html">NCFE CACHE Level 4 Diploma Steiner Waldorf Early Childhood Studies (Early Years Educator)</a></li>
+        <li><a href="601-4000-8.html">NCFE CACHE Level 4 Diploma in Montessori Pedagogy – Birth to Seven (Early Years Educator)</a></li>
+        <li><a href="601-4000-8.html">NCFE CACHE Level 5 Diploma for the Early Years Senior Practitioner</a></li> -->
+      </ul>
+
+    </div>
+  </div>
+
+{% endblock %}

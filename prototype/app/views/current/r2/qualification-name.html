@@ -1,0 +1,125 @@
+{% extends "layouts/main.html" %}
+
+{% block pageTitle %}
+Northern Council for Further Education qualifications – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-xl gem-c-title__context">
+        <!-- Northern Council for Further Education (NCFE) -->
+        NCFE
+      </span>
+
+      <h1 class="govuk-heading-l">
+        Select the qualification
+      </h1>
+
+      <form class="form" action="601-4000-8" method="post">
+        <p>
+        <div class="govuk-radios" data-module="govuk-radios">
+
+            <!-- <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q1" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q1">
+                    NCFE CACHE Level 2 Diploma for the Early Years Practitioner</label>
+            </div> -->
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q2" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q2">
+                    NCFE CACHE Level 3 Diploma in Early Years Education and Care (Early Years Educator)</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q3" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q3">
+                    NCFE CACHE Level 3 Diploma for the Early Years Workforce ((Early Years Educator)</label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q4" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q4">
+                    NCFE CACHE Level 3 Diploma in Childcare and Education (Early Years Educator)
+                </label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q5" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q5">
+                    NCFE CACHE Level 3 Diploma in Montessori Pedagogy – Birth to Seven (Early Years Educator)
+                </label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q6" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q6">
+                    NCFE CACHE Level 3 Diploma in Holistic Baby and Child Care (Early Years Educator)
+                </label>
+            </div>
+
+            <!-- <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q7" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q7">
+                    NCFE Diploma for the Children's Workforce (Early Years Educator)
+                </label>
+            </div> -->
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q8" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q8">
+                    NCFE CACHE  Technical Level 3 Diploma in Early Years Education and Care (Early Years Educator)
+                </label>
+            </div>
+
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q9" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q9">
+                    NCFE CACHE Technical Level 3 Diploma in Childcare and Education (Early Years Educator)
+                </label>
+            </div>
+
+            <!-- <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q10" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q10">
+                    NCFE CACHE Level 4 Diploma Steiner Waldorf Early Childhood Studies (Early Years Educator)
+                </label>
+            </div> -->
+
+            <!-- <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q11" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q11">
+                    NCFE CACHE Level 4 Diploma in Montessori Pedagogy – Birth to Seven (Early Years Educator)
+                </label>
+            </div> -->
+
+            <!-- <div class="govuk-radios__item">
+                <input class="govuk-radios__input" name="QualName" id="Q12" type="radio" value=“”>
+                <label class="govuk-label govuk-radios__label" for="Q12">
+                    NCFE CACHE Level 5 Diploma for the Early Years Senior Practitioner 
+                </label>
+            </div> -->
+
+        </div>
+        </p>
+        
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

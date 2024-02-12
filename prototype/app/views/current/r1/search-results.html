@@ -1,0 +1,422 @@
+{% extends "layouts/main.html" %}
+
+{% block pageTitle %}
+  Search results for 'NFCE' – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      
+      <form class="form" action="#" method="post">
+        <!-- Filters -->
+
+        {% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+        {{ govukRadios({
+          classes: "govuk-radios--small",
+          name: "qualification-year",
+          fieldset: {
+            legend: {
+              text: "Year of qualification",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: [
+            {
+              value: "before",
+              text: "Before September 2014"
+            },
+            {
+              value: "after",
+              text: "After September 2014"
+            }
+          ]
+        }) }}
+
+        {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+        {{ govukCheckboxes({
+          name: "qualification-level",
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: "Qualification level",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: [
+            {
+              value: "L2",
+              text: "Level 2"
+            },
+            {
+              value: "L3",
+              text: "Level 3",
+              checked: "Yes"
+            },
+            {
+              value: "L4",
+              text: "Level 4"
+            },
+            {
+              value: "L5",
+              text: "Level 5"
+            },
+            {
+              value: "L6",
+              text: "Level 6"
+            }
+          ]
+        }) }}
+
+        {{ govukCheckboxes({
+          name: "awarding-body",
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: "Awarding body",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: [
+            {
+              value: "ab1",
+              text: "Anglia Ruskin University / University Centre Peterborough"
+            },
+            {
+              value: "ab2",
+              text: "Bath Spa University"
+            },
+            {
+              value: "ab3",
+              text: "BIIAB"
+            },
+            {
+              value: "ab4",
+              text: "City and Guilds"
+            },
+            {
+              value: "ab5",
+              text: "Crossfields Institute"
+            },
+            {
+              value: "ab6",
+              text: "FutureQuals"
+            },
+            {
+              value: "ab7",
+              text: "Focus Awards Limited"
+            },
+            {
+              value: "ab8",
+              text: "Highfield Qualifications"
+            },
+            {
+              value: "ab9",
+              text: "iCan Qualifications Limited (iCQ)"
+            },
+            {
+              value: "ab10",
+              text: "iFATE"
+            },
+            {
+              value: "ab11",
+              text: "Innovate Awarding"
+            },
+            {
+              value: "ab12",
+              text: "Kingston University"
+            },
+            {
+              value: "ab13",
+              text: "London Metropolitan University"
+            },
+            {
+              value: "ab14",
+              text: "NCFE"
+            },
+            {
+              value: "ab15",
+              text: "Newcastle College Group (NCG)"
+            },
+            {
+              value: "ab16",
+              text: "Newman University"
+            },
+            {
+              value: "ab17",
+              text: "Nottingham Trent University"
+            },
+            {
+              value: "ab18",
+              text: "Open University / University Centre Peterborough"
+            },
+            {
+              value: "ab19",
+              text: "Pearson"
+            },
+            {
+              value: "ab20",
+              text: "Sheffield Hallam University"
+            },
+            {
+              value: "ab21",
+              text: "Skillsfirst"
+            },
+            {
+              value: "ab22",
+              text: "Training Qualifications UK (TQUK)"
+            },
+            {
+              value: "ab23",
+              text: "University of Bedfordshire"
+            },
+            {
+              value: "ab23",
+              text: "University of Derby and Collaborative Provision"
+            },
+            {
+              value: "ab23",
+              text: "University of East Anglia"
+            },
+            {
+              value: "ab23",
+              text: "University of Greenwich"
+            },
+            {
+              value: "ab23",
+              text: "University of Hertfordshire"
+            },
+            {
+              value: "ab23",
+              text: "University of Hull"
+            },
+            {
+              value: "ab23",
+              text: "University of Plymouth"
+            },
+            {
+              value: "ab23",
+              text: "University of Worcester"
+            },
+            {
+              value: "ab23",
+              text: "Warwickshire College Group (WCG)"
+            }
+          ]
+        }) }}
+
+        <!-- <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+          <div class="govuk-accordion__section">
+            <div class="govuk-accordion__section-header">
+              <h2 class="govuk-accordion__section-heading">
+                <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+                  Writing well for the web
+                </span>
+              </h2>
+            </div>
+            <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
+              
+              {{ govukCheckboxes({
+                name: "awarding-body",
+                classes: "govuk-checkboxes--small",
+                fieldset: {
+                  legend: {
+                    text: "Awarding body",
+                    isPageHeading: true,
+                    classes: "govuk-fieldset__legend--m"
+                  }
+                },
+                items: [
+                  {
+                    value: "ab1",
+                    text: "Anglia Ruskin University / University Centre Peterborough"
+                  },
+                  {
+                    value: "ab2",
+                    text: "Bath Spa University"
+                  },
+                  {
+                    value: "ab3",
+                    text: "BIIAB"
+                  },
+                  {
+                    value: "ab4",
+                    text: "City and Guilds"
+                  },
+                  {
+                    value: "ab5",
+                    text: "Crossfields Institute"
+                  },
+                  {
+                    value: "ab6",
+                    text: "FutureQuals"
+                  },
+                  {
+                    value: "ab7",
+                    text: "Focus Awards Limited"
+                  },
+                  {
+                    value: "ab8",
+                    text: "Highfield Qualifications"
+                  },
+                  {
+                    value: "ab9",
+                    text: "iCan Qualifications Limited (iCQ)"
+                  },
+                  {
+                    value: "ab10",
+                    text: "iFATE"
+                  },
+                  {
+                    value: "ab11",
+                    text: "Innovate Awarding"
+                  },
+                  {
+                    value: "ab12",
+                    text: "Kingston University"
+                  },
+                  {
+                    value: "ab13",
+                    text: "London Metropolitan University"
+                  },
+                  {
+                    value: "ab14",
+                    text: "NCFE"
+                  },
+                  {
+                    value: "ab15",
+                    text: "Newcastle College Group (NCG)"
+                  },
+                  {
+                    value: "ab16",
+                    text: "Newman University"
+                  },
+                  {
+                    value: "ab17",
+                    text: "Nottingham Trent University"
+                  },
+                  {
+                    value: "ab18",
+                    text: "Open University / University Centre Peterborough"
+                  },
+                  {
+                    value: "ab19",
+                    text: "Pearson"
+                  },
+                  {
+                    value: "ab20",
+                    text: "Sheffield Hallam University"
+                  },
+                  {
+                    value: "ab21",
+                    text: "Skillsfirst"
+                  },
+                  {
+                    value: "ab22",
+                    text: "Training Qualifications UK (TQUK)"
+                  },
+                  {
+                    value: "ab23",
+                    text: "University of Bedfordshire"
+                  },
+                  {
+                    value: "ab23",
+                    text: "University of Derby and Collaborative Provision"
+                  },
+                  {
+                    value: "ab23",
+                    text: "University of East Anglia"
+                  },
+                  {
+                    value: "ab23",
+                    text: "University of Greenwich"
+                  },
+                  {
+                    value: "ab23",
+                    text: "University of Hertfordshire"
+                  },
+                  {
+                    value: "ab23",
+                    text: "University of Hull"
+                  },
+                  {
+                    value: "ab23",
+                    text: "University of Plymouth"
+                  },
+                  {
+                    value: "ab23",
+                    text: "University of Worcester"
+                  },
+                  {
+                    value: "ab23",
+                    text: "Warwickshire College Group (WCG)"
+                  }
+                ]
+              }) }}
+
+
+
+            </div>
+          </div>
+        </div> -->
+
+      </form>
+
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+
+        <form class="form" action="#" method="post">
+
+            <div class="govuk-form-group">
+                <h1 class="govuk-label-wrapper">
+                  <label class="govuk-label govuk-label--l" for="event-name">
+                    Search
+                  </label>
+                </h1>
+                <input class="govuk-input" id="event-name" name="eventName" type="text" value="level 3 diploma childcare education">
+              </div>
+    
+            {{ govukButton({
+              text: "Search",
+              url: "search-results.html"
+            }) }}
+    
+          </form>
+    
+      <p class="govuk-body-l"><strong>8 results</strong></p>
+
+      <ul class="govuk-list govuk-list--spaced">
+        <li><a href="601-4000-8.html">FAQ Level 3 Diploma in Early Years Education and Childcare (Early Years Educator)</a></li>
+        <li><a href="601-4000-8.html">IAO Level 3 Diploma In Early Learning and Childcare (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">NCFE CACHE Level 2 Diploma for the Early Years Practitioner</a></li> -->
+        <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma in Early Years Education and Care (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma for the Early Years Workforce ((Early Years Educator)</a></li> -->
+        <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma in Childcare and Education (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma in Montessori Pedagogy – Birth to Seven (Early Years Educator)</a></li> -->
+        <li><a href="601-4000-8.html">NCFE CACHE Level 3 Diploma in Holistic Baby and Child Care (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">NCFE Diploma for the Children's Workforce (Early Years Educator)</a></li> -->
+        <li><a href="601-4000-8.html">NCFE CACHE Technical Level 3 Diploma in Early Years Education and Care (Early Years Educator)</a></li>
+        <li><a href="601-4000-8.html">NCFE CACHE Technical Level 3 Diploma in Childcare and Education (Early Years Educator)</a></li>
+        <!-- <li><a href="601-4000-8.html">T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)</a></li> -->
+        <!-- <li><a href="601-4000-8.html">NCFE CACHE Level 4 Diploma Steiner Waldorf Early Childhood Studies (Early Years Educator)</a></li>
+        <li><a href="601-4000-8.html">NCFE CACHE Level 4 Diploma in Montessori Pedagogy – Birth to Seven (Early Years Educator)</a></li>
+        <li><a href="601-4000-8.html">NCFE CACHE Level 5 Diploma for the Early Years Senior Practitioner</a></li> -->
+      </ul>
+
+    </div>
+  </div>
+
+{% endblock %}
