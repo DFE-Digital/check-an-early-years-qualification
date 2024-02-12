@@ -38,13 +38,13 @@ jobs:
           dotnet_version: ${{ env.DOTNET_VERSION }}  
           solution_filename: ${{ env.SOLUTION_NAME }}
           
-      # - name: Run CodeQL and dependency checks
-      #   uses: ./.github/actions/codeql-and-dependency-checks
+      - name: Run CodeQL and dependency checks
+        uses: ./.github/actions/codeql-and-dependency-checks
 
-      # - name: Run unit tests
-      #   uses: ./.github/actions/run-unit-tests
-      #   with:
-      #     solution_filename: ${{ env.SOLUTION_NAME }}
+      - name: Run unit tests
+        uses: ./.github/actions/run-unit-tests
+        with:
+          solution_filename: ${{ env.SOLUTION_NAME }}
         
       - name: Run app for testing
         uses: ./.github/actions/run-app-for-testing
