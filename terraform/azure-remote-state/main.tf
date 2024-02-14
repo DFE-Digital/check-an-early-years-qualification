@@ -33,7 +33,7 @@ resource "random_string" "resource_code" {
 }
 
 resource "azurerm_storage_account" "tfstate" {
-  name                            = "eyqualificationtfstate${random_string.resource_code.result}st"
+  name                            = "eyqualtfstate${random_string.resource_code.result}st"
   resource_group_name             = azurerm_resource_group.tfstate.name
   location                        = var.default_azure_region
   account_tier                    = "Standard"
