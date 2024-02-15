@@ -40,6 +40,7 @@ jobs:
           
       - name: Run CodeQL and dependency checks
         uses: ./.github/actions/codeql-and-dependency-checks
+        if: github.event_name == 'pull_request'
 
       - name: Run unit tests
         uses: ./.github/actions/run-unit-tests
