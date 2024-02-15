@@ -20,6 +20,7 @@ concurrency:
 env:
   DOTNET_VERSION: 8
   SOLUTION_NAME: 'Dfe.EarlyYearsQualification.sln'
+  URL: http://localhost:5000
   
 jobs:
 
@@ -45,8 +46,18 @@ jobs:
         uses: ./.github/actions/run-unit-tests
         with:
           solution_filename: ${{ env.SOLUTION_NAME }}
+        
+      - name: Run app for testing
+        uses: ./.github/actions/run-app-for-testing
+        with:
+          url: ${{ env.URL }}
 
       - name: Run e2e tests
         uses: ./.github/actions/run-e2e-tests
         with:
-          url: "<THIS CAN BE UPDATED WITH THE URL OF THE PR TEST SITE AT A LATER DATE>"
+          url: ${{ env.URL }}
+
+      - name: Run Accessibility tests
+        uses: ./.github/actions/run-accessibility-tests
+        with:
+          url: ${{ env.URL }}

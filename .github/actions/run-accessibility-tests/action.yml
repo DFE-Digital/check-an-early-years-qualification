@@ -1,0 +1,18 @@
+name: Run accessibility tests
+description: Runs Pa11y-ci
+
+inputs:
+  url:
+    required: true
+    type: string
+
+runs:
+  using: composite
+
+  steps:
+    - name: Run Pa11y
+      shell: bash
+      run: npm install -g pa11y-ci && pa11y-ci ${{ inputs.url }} --config .pa11yci-ubuntu.json
+      working-directory: ./tests/Dfe.EarlyYearsQualification.AccessibilityTests/
+      
+    

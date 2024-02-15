@@ -10,12 +10,21 @@ runs:
   using: composite
 
   steps:
-    - name: Build and test project
+    - name: Run Chrome Tests
       uses: cypress-io/github-action@v6
+      if: success() || failure()
       with:
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
         browser: chrome
-        #config: baseUrl=${{ inputs.url }} // TODO: Update this once the code check workflow starts running the app locally. For now leave this as the baseUrl in the config file.
+        config: baseUrl="${{ inputs.url }}"
+
+    - name: Run Firefox Tests
+      uses: cypress-io/github-action@v6
+      if: success() || failure()
+      with:
+        working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
+        browser: firefox
+        config: baseUrl="${{ inputs.url }}"
 
     - name: Store screenshots on test failure
       uses: actions/upload-artifact@v3
