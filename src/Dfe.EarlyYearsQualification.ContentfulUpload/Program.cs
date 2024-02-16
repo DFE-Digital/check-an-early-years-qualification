@@ -59,7 +59,7 @@ public class Program
         Version = 1,
       },
       Name = "Qualification",
-      Description = "",
+      Description = "Model for storing all the early years qualifications",
       DisplayField = "qualificationName",
       Fields =
       [
@@ -108,7 +108,7 @@ public class Program
       ]
     };
 
-    var test = await client.CreateOrUpdateContentType(contentType);
+    await client.CreateOrUpdateContentType(contentType);
     await client.ActivateContentType("Qualification", version: 1);
   }
 
