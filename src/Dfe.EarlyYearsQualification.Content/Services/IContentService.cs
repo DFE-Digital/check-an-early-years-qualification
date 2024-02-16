@@ -13,4 +13,6 @@ public interface IContentService
     Task<List<CourseSummary>> GetCourseResults(string searchText);
 
     Task<CourseSummary> GetCourseById(int courseId);
+    
+    Task<List<NavigationLink>> GetNavigationLinks();
 }

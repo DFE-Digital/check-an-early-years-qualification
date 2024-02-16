@@ -25,6 +25,12 @@ public class ContentfulContentService : IContentService
     return landingPageContent;
   }
 
+  public async Task<List<NavigationLink>> GetNavigationLinks()
+  {
+    var navigationLinkEntries = await _contentfulClient.GetEntriesByType<NavigationLink>("navigationLink");
+    return navigationLinkEntries.ToList();
+  }
+
   public async Task<ResultPage> GetResultPage()
   {
     var resultPageEntries = await _contentfulClient.GetEntriesByType<ResultPage>("resultPage");
