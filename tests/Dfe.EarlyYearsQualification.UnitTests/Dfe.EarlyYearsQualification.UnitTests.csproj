@@ -11,9 +11,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="moq" Version="4.20.70" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.2.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.2.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj" />
+    <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Web\Dfe.EarlyYearsQualification.Web.csproj" />
   </ItemGroup>
 
 </Project>

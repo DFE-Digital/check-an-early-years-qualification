@@ -1,0 +1,12 @@
+@model IEnumerable<Dfe.EarlyYearsQualification.Content.Entities.NavigationLink>
+
+<ul class="govuk-footer__inline-list">
+  @{
+    foreach (var link in Model)
+    {
+      <li class="govuk-footer__inline-list-item">
+        <a href=@link.Href class="govuk-footer__link" target=@(link.OpenInNewTab ? "_blank" : "")>@link.DisplayText</a>
+      </li>
+    }
+  }
+</ul>
