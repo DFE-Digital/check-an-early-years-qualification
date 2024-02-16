@@ -23,4 +23,10 @@ public class ContentfulContentService : IContentService
         landingPageContent.ServiceIntroductionHtml = await htmlRenderer.ToHtml(landingPageContent.ServiceIntroduction);
         return landingPageContent;
     }
+
+    public async Task<List<NavigationLink>> GetNavigationLinks()
+    {
+        var navigationLinkEntries = await _contentfulClient.GetEntriesByType<NavigationLink>("navigationLink");
+        return navigationLinkEntries.ToList();
+    }
 }
