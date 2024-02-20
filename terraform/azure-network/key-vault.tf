@@ -1,5 +1,6 @@
 # Create Key Vault
 data "azurerm_client_config" "az_config" {}
+data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "kv" {
   name                        = "${var.resource_name_prefix}-kv"
@@ -33,7 +34,7 @@ resource "azurerm_key_vault_access_policy" "kv_ap" {
   # Key Vault only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = data.azurerm_client_config.az_config.object_id
 
@@ -64,7 +65,7 @@ resource "azurerm_key_vault_access_policy" "kv_gh_ap" {
   # Key Vault only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = data.azurerm_client_config.az_config.object_id
 
@@ -90,7 +91,7 @@ resource "azurerm_key_vault_access_policy" "kv_mi_ap" {
   # Key Vault only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = azurerm_user_assigned_identity.kv_mi[0].principal_id
 
@@ -108,7 +109,7 @@ resource "azurerm_key_vault_certificate_issuer" "kv_ca" {
   count = var.environment != "development" ? 1 : 0
 
   name          = var.kv_certificate_authority_label
-  key_vault_id  = azurerm_key_vault.kv[0].id
+  key_vault_id  = azurerm_key_vault.kv.id
   provider_name = var.kv_certificate_authority_name
   account_id    = var.kv_certificate_authority_username
   password      = var.kv_certificate_authority_password
@@ -126,7 +127,7 @@ resource "azurerm_key_vault_certificate" "kv_cert" {
   count = var.environment != "development" ? 1 : 0
 
   name         = var.kv_certificate_label
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = azurerm_key_vault.kv.id
 
   certificate_policy {
     issuer_parameters {
@@ -163,8 +164,16 @@ resource "azurerm_key_vault_certificate" "kv_cert" {
   }
 }
 
+resource "azurerm_key_vault_access_policy" "vault_access_policy_tf" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  secret_permissions = ["List", "Get", "Set"]
+}
+
 resource "azurerm_key_vault_secret" "vault_secret_contentful_deliveryapikey" {
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = azurerm_key_vault.kv.id
   name         = "ContentfulOptions--DeliveryApiKey"
   value        = "temp value"
 
@@ -177,7 +186,7 @@ resource "azurerm_key_vault_secret" "vault_secret_contentful_deliveryapikey" {
 }
 
 resource "azurerm_key_vault_secret" "vault_secret_contentful_previewapikey" {
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = azurerm_key_vault.kv.id
   name         = "ContentfulOptions--PreviewApiKey"
   value        = "temp value"
 
@@ -190,7 +199,7 @@ resource "azurerm_key_vault_secret" "vault_secret_contentful_previewapikey" {
 }
 
 resource "azurerm_key_vault_secret" "vault_secret_contentful_spaceid" {
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = azurerm_key_vault.kv.id
   name         = "ContentfulOptions--SpaceId"
   value        = "temp value"
 
