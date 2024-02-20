@@ -11,9 +11,6 @@ locals {
   webapp_app_settings = {
     "ENVIRONMENT"                         = var.environment
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-    "BOT_TOKEN"                           = var.webapp_config_bot_token
-    "DOMAIN"                              = var.webapp_config_domain
-    "FEEDBACK_URL"                        = var.webapp_config_feedback_url
     "TRACKING_ID"                         = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
   }
@@ -21,9 +18,6 @@ locals {
   webapp_slot_app_settings = {
     "ENVIRONMENT"                         = var.environment
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-    "BOT_TOKEN"                           = var.webapp_config_bot_token
-    "DOMAIN"                              = var.webapp_config_domain
-    "FEEDBACK_URL"                        = var.webapp_config_feedback_url
     "TRACKING_ID"                         = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
   }

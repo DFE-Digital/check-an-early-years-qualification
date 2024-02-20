@@ -109,16 +109,3 @@ variable "tracking_id" {
   description = "Google Tag Manager tracking ID"
   type        = string
 }
-
-variable "webapp_config_bot_token" {
-  type      = string
-  sensitive = true
-}
-
-variable "webapp_config_domain" {
-  type = string
-}
-
-variable "webapp_config_feedback_url" {
-  type = string
-}
