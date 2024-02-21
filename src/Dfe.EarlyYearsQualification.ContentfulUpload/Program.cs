@@ -28,35 +28,43 @@ public class Program
 
   private static async Task PopulateContentfulWithQualifications(ContentfulManagementClient client)
   {
-    var currentEntries = await client.GetEntriesForLocale(new QueryBuilder<Qualification>().ContentTypeIs("Qualification"), locale);
+    // Check existing entries and identify those to update, and those to create.
+    var currentEntries = await client.GetEntriesForLocale(new QueryBuilder<Entry<dynamic>>().ContentTypeIs("Qualification").Limit(1000), locale);
 
     var qualificationsToAddOrUpdate = GetQualificationsToAddOrUpdate();
 
     foreach (var qualification in qualificationsToAddOrUpdate)
     {
-      if (currentEntries.Any(x => x.QualificationId == qualification.QualificationId))
+      var entryToAddOrUpdate = BuildEntryFromQualification(qualification);
+      var existingEntry = currentEntries.Where(x => x.SystemProperties.Id == qualification.QualificationId.ToString()).FirstOrDefault();
+
+      if (existingEntry != null)
       {
         // Update existing entry
-
-        return;
+        entryToAddOrUpdate.SystemProperties.Version = existingEntry!.SystemProperties.Version!.Value;
       }
 
       // Create new entry
+      var entryToPublish = await client.CreateOrUpdateEntry(entryToAddOrUpdate, contentTypeId: "Qualification", version: entryToAddOrUpdate.SystemProperties.Version);
 
-      var entry = await BuildEntryFromQualification(qualification, client);
-
-      await client.PublishEntry(entry.SystemProperties.Id, entry.SystemProperties.Version!.Value);
+      await client.PublishEntry(entryToPublish.SystemProperties.Id, entryToPublish.SystemProperties.Version!.Value);
     }
   }
 
   private static async Task SetUpContentModels(ContentfulManagementClient client)
   {
+    // Check current version of model
+    var currentModels = await client.GetContentTypes();
+
+    var currentModel = currentModels.Where(x => x.SystemProperties.Id == "Qualification").FirstOrDefault();
+
+    var version = currentModel != null && currentModel.SystemProperties.Version != null ? currentModel.SystemProperties.Version!.Value : 1;
+
     var contentType = new ContentType
     {
       SystemProperties = new SystemProperties
       {
         Id = "Qualification",
-        Version = 1,
       },
       Name = "Qualification",
       Description = "Model for storing all the early years qualifications",
@@ -108,11 +116,12 @@ public class Program
       ]
     };
 
-    await client.CreateOrUpdateContentType(contentType);
-    await client.ActivateContentType("Qualification", version: 1);
+    var typeToActivate = await client.CreateOrUpdateContentType(contentType, version: version);
+    await client.ActivateContentType("Qualification", version: typeToActivate.SystemProperties.Version!.Value);
+    
   }
 
-  private static async Task<Entry<dynamic>> BuildEntryFromQualification(Qualification qualification, ContentfulManagementClient client)
+  private static Entry<dynamic> BuildEntryFromQualification(Qualification qualification)
   {
     var entry = new Entry<dynamic>
     {
@@ -161,9 +170,7 @@ public class Program
       }
     };
 
-    var newEntry = await client.CreateOrUpdateEntry(entry, contentTypeId: "Qualification");
-
-    return newEntry;
+    return entry;
   }
 
   private static List<Qualification> GetQualificationsToAddOrUpdate()
