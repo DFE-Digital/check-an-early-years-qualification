@@ -167,41 +167,41 @@ resource "azurerm_key_vault_access_policy" "vault_access_policy_tf" {
   secret_permissions = ["List", "Get", "Set"]
 }
 
-resource "azurerm_key_vault_secret" "vault_secret_contentful_deliveryapikey" {
-  key_vault_id = azurerm_key_vault.kv.id
-  name         = "ContentfulOptions--DeliveryApiKey"
-  value        = "temp value"
+# resource "azurerm_key_vault_secret" "vault_secret_contentful_deliveryapikey" {
+#   key_vault_id = azurerm_key_vault.kv.id
+#   name         = "ContentfulOptions--DeliveryApiKey"
+#   value        = "temp value"
 
-  lifecycle {
-    ignore_changes = [
-      value,
-      expiration_date
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#       expiration_date
+#     ]
+#   }
+# }
 
-resource "azurerm_key_vault_secret" "vault_secret_contentful_previewapikey" {
-  key_vault_id = azurerm_key_vault.kv.id
-  name         = "ContentfulOptions--PreviewApiKey"
-  value        = "temp value"
+# resource "azurerm_key_vault_secret" "vault_secret_contentful_previewapikey" {
+#   key_vault_id = azurerm_key_vault.kv.id
+#   name         = "ContentfulOptions--PreviewApiKey"
+#   value        = "temp value"
 
-  lifecycle {
-    ignore_changes = [
-      value,
-      expiration_date
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#       expiration_date
+#     ]
+#   }
+# }
 
-resource "azurerm_key_vault_secret" "vault_secret_contentful_spaceid" {
-  key_vault_id = azurerm_key_vault.kv.id
-  name         = "ContentfulOptions--SpaceId"
-  value        = "temp value"
+# resource "azurerm_key_vault_secret" "vault_secret_contentful_spaceid" {
+#   key_vault_id = azurerm_key_vault.kv.id
+#   name         = "ContentfulOptions--SpaceId"
+#   value        = "temp value"
 
-  lifecycle {
-    ignore_changes = [
-      value,
-      expiration_date
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#       expiration_date
+#     ]
+#   }
+# }
