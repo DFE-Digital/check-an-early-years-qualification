@@ -25,7 +25,7 @@ output "agw_pip_id" {
 
 output "kv_id" {
   description = "ID of the Key Vault"
-  value       = azurerm_key_vault.kv[0].id
+  value       = azurerm_key_vault.kv.id
 }
 
 output "kv_cert_secret_id" {
@@ -35,5 +35,5 @@ output "kv_cert_secret_id" {
 
 output "kv_mi_id" {
   description = "ID of the Managed Identity for the Key Vault"
-  value       = azurerm_user_assigned_identity.kv_mi[0].id
+  value       = var.environment != "development" ? azurerm_user_assigned_identity.kv_mi[0].id : null
 }
