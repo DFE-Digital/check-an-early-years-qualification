@@ -1,8 +1,15 @@
 using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Extensions;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (!builder.Environment.IsDevelopment() && !builder.Configuration.GetValue<bool>("UseMockContentful"))
+{
+  var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
+  builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
