@@ -1,6 +1,6 @@
 # Create Key Vault
 data "azurerm_client_config" "az_config" {}
-data "azurerm_client_config" "current" {}
+# data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "kv" {
   name                        = "${var.resource_name_prefix}-kv"
@@ -62,16 +62,11 @@ resource "azurerm_key_vault_access_policy" "kv_ap" {
 
 # Access Policy for GitHub Actions
 resource "azurerm_key_vault_access_policy" "kv_gh_ap" {
-  # Key Vault only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = data.azurerm_client_config.az_config.object_id
 
-  secret_permissions = [
-    "Get"
-  ]
+  secret_permissions = ["List", "Get", "Set"]
 
   certificate_permissions = [
     "Create",
@@ -164,49 +159,49 @@ resource "azurerm_key_vault_certificate" "kv_cert" {
   }
 }
 
-resource "azurerm_key_vault_access_policy" "vault_access_policy_tf" {
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
+# resource "azurerm_key_vault_access_policy" "vault_access_policy_tf" {
+#   key_vault_id = azurerm_key_vault.kv.id
+#   tenant_id    = data.azurerm_client_config.current.tenant_id
+#   object_id    = data.azurerm_client_config.current.object_id
+# 
+#   secret_permissions = ["List", "Get", "Set"]
+# }
 
-  secret_permissions = ["List", "Get", "Set"]
-}
+# resource "azurerm_key_vault_secret" "vault_secret_contentful_deliveryapikey" {
+#   key_vault_id = azurerm_key_vault.kv.id
+#   name         = "ContentfulOptions--DeliveryApiKey"
+#   value        = "temp value"
 
-resource "azurerm_key_vault_secret" "vault_secret_contentful_deliveryapikey" {
-  key_vault_id = azurerm_key_vault.kv.id
-  name         = "ContentfulOptions--DeliveryApiKey"
-  value        = "temp value"
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#       expiration_date
+#     ]
+#   }
+# }
 
-  lifecycle {
-    ignore_changes = [
-      value,
-      expiration_date
-    ]
-  }
-}
+# resource "azurerm_key_vault_secret" "vault_secret_contentful_previewapikey" {
+#   key_vault_id = azurerm_key_vault.kv.id
+#   name         = "ContentfulOptions--PreviewApiKey"
+#   value        = "temp value"
 
-resource "azurerm_key_vault_secret" "vault_secret_contentful_previewapikey" {
-  key_vault_id = azurerm_key_vault.kv.id
-  name         = "ContentfulOptions--PreviewApiKey"
-  value        = "temp value"
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#       expiration_date
+#     ]
+#   }
+# }
 
-  lifecycle {
-    ignore_changes = [
-      value,
-      expiration_date
-    ]
-  }
-}
+# resource "azurerm_key_vault_secret" "vault_secret_contentful_spaceid" {
+#   key_vault_id = azurerm_key_vault.kv.id
+#   name         = "ContentfulOptions--SpaceId"
+#   value        = "temp value"
 
-resource "azurerm_key_vault_secret" "vault_secret_contentful_spaceid" {
-  key_vault_id = azurerm_key_vault.kv.id
-  name         = "ContentfulOptions--SpaceId"
-  value        = "temp value"
-
-  lifecycle {
-    ignore_changes = [
-      value,
-      expiration_date
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#       expiration_date
+#     ]
+#   }
+# }
