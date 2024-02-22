@@ -7,12 +7,6 @@ on:
     paths:
       - 'src/**'
       - '.github/workflows/main-build-and-deploy.yml'
-
-# Permissions for OIDC authentication
-permissions:
-  id-token: write
-  contents: write
-  issues: write
     
 jobs:
 
@@ -48,6 +42,11 @@ jobs:
     needs: create-and-publish-image
     name: Deploy to development
     environment: development
+    # Permissions for OIDC authentication
+    permissions:
+      id-token: write
+      contents: write
+      issues: write
     steps:
       # Login to Azure using OIDC
       - name: Login to Azure CLI
