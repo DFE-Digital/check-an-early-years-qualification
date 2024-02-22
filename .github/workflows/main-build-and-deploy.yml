@@ -7,6 +7,12 @@ on:
     paths:
       - 'src/**'
       - '.github/workflows/main-build-and-deploy.yml'
+
+# Permissions for OIDC authentication
+permissions:
+  id-token: write
+  contents: write
+  issues: write
     
 jobs:
 
