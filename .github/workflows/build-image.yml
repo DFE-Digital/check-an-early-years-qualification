@@ -9,6 +9,10 @@ on:
       checked-out-sha:
         type: string
         required: true
+    outputs:
+        dockerImageTag: 
+          description: "The image written to the GCR"
+          value: ${{ jobs.build-image.outputs.dockerImageTag }}
 
 concurrency:
      group: ${{ github.workflow }}-${{ github.event.inputs.environment }}
@@ -25,7 +29,8 @@ jobs:
 
         runs-on: ubuntu-22.04
         name: Build & Publish Image
-        
+        outputs:
+          dockerImageTag: ${{ steps.image.outputs.dockerImageTag }}
         steps:
 
             - name: Checkout Repository
@@ -49,3 +54,7 @@ jobs:
                 tags: |
                     ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ inputs.branch }}-${{ inputs.checked-out-sha }}
                 push: true
+
+            - name: Output Docker Image Tag
+              id: image
+              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ inputs.branch }}-${{ inputs.checked-out-sha }}" >> $GITHUB_OUTPUT
