@@ -339,12 +339,19 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
   certificate_permissions = ["Get"]
 }
 
+# References the web app to be used in KV access policy as it already existed when changes needed to be made
+data "azurerm_linux_web_app" "ref" {
+  name = azurerm_linux_web_app.webapp.name
+  resource_group_name = azurerm_linux_web_app.webapp.resource_group_name
+}
+
 # Grants permissions to key vault for the managed identity of the App Service
 resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
   key_vault_id = var.kv_id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
-  object_id               = azurerm_linux_web_app.webapp.identity.0.principal_id
+  object_id               = data.azurerm_linux_web_app.ref.identity.0.principal_id
   secret_permissions      = ["Get", "List"]
+  certificate_permissions = ["Get"]
 }
 
 resource "azurerm_app_service_certificate" "webapp_custom_domain_cert" {
