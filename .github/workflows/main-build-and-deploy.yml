@@ -36,3 +36,29 @@ jobs:
     with:
       branch: ${{ needs.set-env.outputs.branch }}
       checked-out-sha: ${{ needs.set-env.outputs.checked-out-sha }}
+
+  deploy-to-dev:
+    runs-on: ubuntu-22.04
+    needs: create-and-publish-image
+    name: Deploy to development
+    environment: development
+    # Permissions for OIDC authentication
+    permissions:
+      id-token: write
+      contents: write
+      issues: write
+    steps:
+      # Login to Azure using OIDC
+      - name: Login to Azure CLI
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Deploy Web Application
+      - name: Deploy to Azure App Services
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ vars.WEBAPP_NAME }}
+          images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
