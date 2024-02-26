@@ -4,12 +4,11 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.24.0",
-    "@contentful/f36-components": "4.60.0",
+    "@contentful/f36-components": "4.60.1",
     "@contentful/f36-tokens": "4.0.4",
-    "@contentful/forma-36-fcss": "^0.0.20",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "contentful-management": "10.46.4",
-    "emotion": "10.0.27",
+    "contentful-management": "11.19.1",
+    "emotion": "11.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1"
