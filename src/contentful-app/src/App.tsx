@@ -1,24 +1,45 @@
-import React, { useMemo } from 'react';
-import { locations } from '@contentful/app-sdk';
-import Home from './locations/Home';
-import { useSDK } from '@contentful/react-apps-toolkit';
+import Home from './locations/Home/Home';
+import { RouterProvider, createMemoryRouter, } from 'react-router-dom';
+import BulkUpload from './locations/Bulk Upload/BulkUpload';
+import { Card } from '@contentful/f36-components';
+import ReviewRelease from './locations/Review Release/ReviewRelease';
+import SingleUpload from './locations/Single Upload/SingleUpload';
+import ReviewBulkUpload from './locations/Review Bulk Upload/ReviewBulkUpload';
+import BulkUploadInProgress from './locations/Bulk Upload In Progress/BulkUploadInProgress';
 
-const ComponentLocationSettings = {
-  [locations.LOCATION_HOME]: Home,
-};
+const router = createMemoryRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/bulk-upload",
+    element: <BulkUpload />
+  },
+  {
+    path: "/single-upload",
+    element: <SingleUpload />
+  },
+  {
+    path: "/review-release",
+    element: <ReviewRelease />
+  },
+  {
+    path: "/review-bulk-upload",
+    element: <ReviewBulkUpload />
+  },
+  {
+    path: "/bulk-upload-in-progress",
+    element: <BulkUploadInProgress />
+  }
+]);
 
 const App = () => {
-  const sdk = useSDK();
-
-  const Component = useMemo(() => {
-    for (const [location, component] of Object.entries(ComponentLocationSettings)) {
-      if (sdk.location.is(location)) {
-        return component;
-      }
-    }
-  }, [sdk.location]);
-
-  return Component ? <Component /> : null;
+  return (
+    <Card style={{height: "100vh"}}>
+        <RouterProvider router={router} />
+    </Card>
+  )
 };
 
 export default App;
