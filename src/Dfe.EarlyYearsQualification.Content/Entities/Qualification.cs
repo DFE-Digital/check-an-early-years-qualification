@@ -3,22 +3,26 @@ using Contentful.Core.Models;
 namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class Qualification(
-  int qualificationId,
+  string qualificationId,
   string qualificationName,
   string awardingOrganisationTitle,
-  string qualificaitonLevel,
+  string qualificationLevel,
   string? fromWhichYear,
+  string? toWhichYear,
   string? qualificationNumber,
-  string? notesAdditionalRequirements)
+  string? notes,
+  string? additionalRequirements)
 {
   // Required Fields
-  public int QualificationId { get; set; } = qualificationId;
+  public string QualificationId { get; set; } = qualificationId;
   public string QualificationName { get; set; } = qualificationName;
   public string AwardingOrganisationTitle { get; set; } = awardingOrganisationTitle;
-  public string QualificationLevel { get; set; } = qualificaitonLevel;
+  public string QualificationLevel { get; set; } = qualificationLevel;
 
   // Optional Fields
   public string? FromWhichYear { get; set; } = fromWhichYear;
+  public string? ToWhichYear { get; set; } = toWhichYear;
   public string? QualificationNumber { get; set; } = qualificationNumber;
-  public string? NotesAdditionalRequirements { get; set; } = notesAdditionalRequirements;
+  public string? Notes { get; set; } = notes;
+  public string? AdditionalRequirements { get; set; } = additionalRequirements;
 }

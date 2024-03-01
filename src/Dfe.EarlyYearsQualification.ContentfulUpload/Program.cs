@@ -1,8 +1,10 @@
 ﻿using Contentful.Core;
 using Contentful.Core.Configuration;
 using Contentful.Core.Models;
+using Contentful.Core.Models.Management;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Microsoft.VisualBasic.FileIO;
 
 namespace Dfe.EarlyYearsQualification.ContentfulUpload;
 
@@ -75,30 +77,43 @@ public class Program
           {
               Name = "Qualification ID",
               Id = "qualificationId",
-              Type = "Integer",
+              Type = "Symbol",
+              Required = true,
+              Validations = new List<IFieldValidator>() {
+                  new UniqueValidator()
+              }
           },
           new Field()
           {
               Name = "Qualification Name",
               Id = "qualificationName",
               Type = "Symbol",
+              Required = true,
           },
           new Field()
           {
               Name = "Qualification Level",
               Id = "qualificationLevel",
               Type = "Symbol",
+              Required = true,
           },
           new Field()
           {
               Name = "Awarding Organisation Title",
               Id = "awardingOrganisationTitle",
               Type = "Symbol",
+              Required = true,
           },
           new Field()
           {
               Name = "From Which Year",
               Id = "fromWhichYear",
+              Type = "Symbol",
+          },
+          new Field()
+          {
+              Name = "To Which Year",
+              Id = "toWhichYear",
               Type = "Symbol",
           },
           new Field()
@@ -109,8 +124,14 @@ public class Program
           },
           new Field()
           {
-              Name = "Notes/Additional Requirements",
-              Id = "notesAdditionalRequirements",
+              Name = "Notes",
+              Id = "notes",
+              Type = "Text",
+          },
+          new Field()
+          {
+              Name = "Additional Requirements",
+              Id = "additionalRequirements",
               Type = "Text",
           },
       ]
@@ -133,7 +154,7 @@ public class Program
 
       Fields = new
       {
-        qualificationId = new Dictionary<string, int>()
+        qualificationId = new Dictionary<string, string>()
         {
             { locale, qualification.QualificationId}
         },
@@ -158,14 +179,24 @@ public class Program
             { locale, qualification.FromWhichYear ?? ""  }
         },
 
+        toWhichYear = new Dictionary<string, string>()
+        {
+            { locale, qualification.ToWhichYear ?? ""  }
+        },
+
         qualificationNumber = new Dictionary<string, string>()
         {
             { locale, qualification.QualificationNumber ?? ""  }
         },
 
-        notesAdditionalRequirements = new Dictionary<string, string>()
+        notes = new Dictionary<string, string>()
         {
-            { locale, qualification.NotesAdditionalRequirements ?? ""  }
+            { locale, qualification.Notes ?? ""  }
+        },
+
+        additionalRequirements = new Dictionary<string, string>()
+        {
+            { locale, qualification.AdditionalRequirements ?? ""  }
         },
       }
     };
@@ -175,20 +206,62 @@ public class Program
 
   private static List<Qualification> GetQualificationsToAddOrUpdate()
   {
-    var csv = new List<string[]>();
-    var lines = System.IO.File.ReadAllLines(@"./csv/ey-quals-full.csv");
+    // var csv = new List<string[]>();
+    // var lines = System.IO.File.ReadAllLines(@"./csv/ey-quals-full.csv");
 
-    foreach (string line in lines)
-      csv.Add(line.Split(','));
+    // foreach (string line in lines)
+    //   csv.Add(line.Split(','));
+    var lines = ReadCsvFile(@"./csv/ey-quals-test-minimal.csv");
 
     var listObjResult = new List<Qualification>();
 
-    for (int i = 1; i < lines.Length; i++)
+    for (int i = 0; i < lines.Count; i++)
     {
-      listObjResult.Add(new Qualification(int.Parse(csv[i][0]), csv[i][3], csv[i][4], csv[i][1], csv[i][2], csv[i][5], csv[i][6]));
+      var qualificationId = lines[i][0];
+      var qualificationName = lines[i][4];
+      var awardingOrganisationTitle = lines[i][5];
+      var qualificationLevel = lines[i][1];
+      var fromWhichYear = lines[i][2];
+      var toWhichYear = lines[i][3];
+      var qualificationNumber = lines[i][6];
+      var notes = lines[i][7];
+      var additionalRequirements = lines[i][8];
+
+      listObjResult.Add(new Qualification(
+        qualificationId,
+        qualificationName,
+        awardingOrganisationTitle,
+        qualificationLevel,
+        fromWhichYear,
+        toWhichYear,
+        qualificationNumber,
+        notes,
+        additionalRequirements
+      ));
     }
 
     return listObjResult;
+  }
+
+  private static List<string[]> ReadCsvFile(string filePath)
+  {
+    var result = new List<string[]>();
+    using (TextFieldParser csvParser = new TextFieldParser(filePath))
+    {
+      csvParser.SetDelimiters(new string[] { "," });
+      csvParser.HasFieldsEnclosedInQuotes = true;
+
+      // Skip the row with the column names
+      csvParser.ReadLine();
+
+      while (!csvParser.EndOfData)
+      {
+        // Read current line fields, pointer moves to the next line.
+        string[] fields = csvParser.ReadFields();
+        result.Add(fields);
+      }
+    }
+    return result;
   }
 }
 
