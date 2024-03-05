@@ -54,26 +54,26 @@ public class Program
   }
 
   private static async Task SetUpContentModels(ContentfulManagementClient client)
-  {
-    // Check current version of model
-    var currentModels = await client.GetContentTypes();
-
-    var currentModel = currentModels.Where(x => x.SystemProperties.Id == "Qualification").FirstOrDefault();
-
-    var version = currentModel != null && currentModel.SystemProperties.Version != null ? currentModel.SystemProperties.Version!.Value : 1;
-
-    var contentType = new ContentType
     {
-      SystemProperties = new SystemProperties
-      {
-        Id = "Qualification",
-      },
-      Name = "Qualification",
-      Description = "Model for storing all the early years qualifications",
-      DisplayField = "qualificationName",
-      Fields =
-      [
-          new Field()
+        // Check current version of model
+        var currentModels = await client.GetContentTypes();
+
+        var currentModel = currentModels.Where(x => x.SystemProperties.Id == "Qualification").FirstOrDefault();
+
+        var version = currentModel != null && currentModel.SystemProperties.Version != null ? currentModel.SystemProperties.Version!.Value : 1;
+
+        var contentType = new ContentType
+        {
+            SystemProperties = new SystemProperties
+            {
+                Id = "Qualification",
+            },
+            Name = "Qualification",
+            Description = "Model for storing all the early years qualifications",
+            DisplayField = "qualificationName",
+            Fields =
+          [
+              new Field()
           {
               Name = "Qualification ID",
               Id = "qualificationId",
@@ -135,14 +135,38 @@ public class Program
               Type = "Text",
           },
       ]
-    };
+        };
 
-    var typeToActivate = await client.CreateOrUpdateContentType(contentType, version: version);
-    await client.ActivateContentType("Qualification", version: typeToActivate.SystemProperties.Version!.Value);
-    
-  }
+        var typeToActivate = await client.CreateOrUpdateContentType(contentType, version: version);
+        await client.ActivateContentType("Qualification", version: typeToActivate.SystemProperties.Version!.Value);
 
-  private static Entry<dynamic> BuildEntryFromQualification(Qualification qualification)
+        Thread.Sleep(2000); // Allows the API time to activate the content type
+        await SetHelpText(client, typeToActivate);
+    }
+
+    private static async Task SetHelpText(ContentfulManagementClient client, ContentType typeToActivate)
+    {
+        var editorInterface = await client.GetEditorInterface("Qualification");
+        SetHelpTextForField(editorInterface, "qualificationId", "The unique identifier used to reference the qualification");
+        SetHelpTextForField(editorInterface, "qualificationName", "The name of the qualification");
+        SetHelpTextForField(editorInterface, "qualificationLevel", "The level of the qualification");
+        SetHelpTextForField(editorInterface, "awardingOrganisationTitle", "The name of the awarding organisation");
+        SetHelpTextForField(editorInterface, "fromWhichYear", "The date which the qualification was marked approved");
+        SetHelpTextForField(editorInterface, "toWhichYear", "The date which the qualification was marked as disapproved");
+        SetHelpTextForField(editorInterface, "qualificationNumber", "The number of the qualification");
+        SetHelpTextForField(editorInterface, "notes", "The corresponding notes for the qualification");
+        SetHelpTextForField(editorInterface, "additionalRequirements", "The additional requirements for the qualification");
+
+        await client.UpdateEditorInterface(editorInterface, "Qualification", typeToActivate.SystemProperties.Version!.Value);
+    }
+
+    private static void SetHelpTextForField(EditorInterface editorInterface, string fieldId, string helpText)
+    {
+        editorInterface.Controls.First(x => x.FieldId == fieldId).Settings = new EditorInterfaceControlSettings() { HelpText = helpText };
+        editorInterface.Controls.First(x => x.FieldId == fieldId).WidgetId = SystemWidgetIds.SingleLine;
+    }
+
+    private static Entry<dynamic> BuildEntryFromQualification(Qualification qualification)
   {
     var entry = new Entry<dynamic>
     {
@@ -211,7 +235,7 @@ public class Program
 
     // foreach (string line in lines)
     //   csv.Add(line.Split(','));
-    var lines = ReadCsvFile(@"./csv/ey-quals-test-minimal.csv");
+    var lines = ReadCsvFile(@"./csv/ey-quals-full-updated.csv");
 
     var listObjResult = new List<Qualification>();
 
