@@ -7,4 +7,6 @@ public interface IContentService
     Task<LandingPage> GetLandingPage();
 
     Task<List<NavigationLink>> GetNavigationLinks();
+
+    Task<Qualification> GetQualification(string qualificationId);
 }
