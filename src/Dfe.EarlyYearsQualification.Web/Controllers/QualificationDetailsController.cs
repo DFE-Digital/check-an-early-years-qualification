@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
@@ -20,7 +21,7 @@ public class QualificationDetailsController : Controller
     public async Task<IActionResult> Index(string qualificationId)
     {
         if (string.IsNullOrEmpty(qualificationId)) return BadRequest();
-        
+
         var qualification = await _contentService.GetQualificationById(qualificationId);
         if (qualification is null)
         {
@@ -42,7 +43,8 @@ public class QualificationDetailsController : Controller
             FromWhichYear = qualification.FromWhichYear,
             ToWhichYear = qualification.ToWhichYear,
             Notes = qualification.Notes,
-            AdditionalRequirements = qualification.AdditionalRequirements
+            AdditionalRequirements = qualification.AdditionalRequirements,
+            BookmarkUrl = HttpContext.Request.GetDisplayUrl()
         };
     }
 }

@@ -6,7 +6,7 @@ public class Qualification
         string qualificationId,
         string qualificationName,
         string awardingOrganisationTitle,
-        string qualificationLevel,
+        int qualificationLevel,
         string? fromWhichYear,
         string? toWhichYear,
         string? qualificationNumber,
@@ -27,7 +27,7 @@ public class Qualification
     public string QualificationId { get; set; }
     public string QualificationName { get; set; }
     public string AwardingOrganisationTitle { get; set; }
-    public string QualificationLevel { get; set; }
+    public int QualificationLevel { get; set; }
 
     // Optional Fields
     public string? FromWhichYear { get; set; }

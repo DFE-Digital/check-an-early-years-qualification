@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -21,7 +22,13 @@ public class QualificationDetailsControllerTests
     public void BeforeEachTest()
     {
         _mockContentService = new Mock<IContentService>();
-        _controller = new QualificationDetailsController(_mockLogger, _mockContentService.Object);
+        _controller = new QualificationDetailsController(_mockLogger, _mockContentService.Object)
+        {
+            ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+            }
+        };
     }
 
     [TestMethod]
@@ -53,7 +60,7 @@ public class QualificationDetailsControllerTests
     public async Task Index_ContentServiceReturnsQualification_ReturnsQualificationDetailsModel()
     {
         var qualificationId = "eyq-145";
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", "2", "2014", "2019", "ABC/547/900", "notes", "additonal requirements");
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019", "ABC/547/900", "notes", "additonal requirements");
         _mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         var result = await _controller!.Index(qualificationId);
 
