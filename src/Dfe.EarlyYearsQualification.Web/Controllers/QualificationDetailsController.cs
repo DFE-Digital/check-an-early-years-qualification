@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
+[Route("/qualifications")]
 public class QualificationDetailsController : Controller
 {
     private readonly ILogger<QualificationDetailsController> _logger;
@@ -17,7 +18,13 @@ public class QualificationDetailsController : Controller
         _contentService = contentService;
     }
 
-    [HttpGet("/qualification-details/{qualificationId}")]
+    [HttpGet]
+    public IActionResult Get()
+    {
+        return View();
+    }
+
+    [HttpGet("qualification-details/{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
     {
         if (string.IsNullOrEmpty(qualificationId)) return BadRequest();
