@@ -19,7 +19,13 @@ public class QualificationDetailsController : Controller
     [HttpGet("/qualification-details/{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
     {
-        var qualification = await _contentService.GetQualification(qualificationId);
+        if (string.IsNullOrEmpty(qualificationId)) return BadRequest();
+        
+        var qualification = await _contentService.GetQualificationById(qualificationId);
+        if (qualification is null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
         var model = Map(qualification);
         return View(model);
     }
