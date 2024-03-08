@@ -4,6 +4,7 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers;
 using Microsoft.Extensions.Logging;
+using System.Web;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
@@ -58,7 +59,7 @@ public class ContentfulContentService : IContentService
 
         if (qualifications is null || !qualifications.Any())
         {
-            _logger.LogWarning($"No qualifications returned for qualificationId: {qualificationId}");
+            _logger.LogWarning($"No qualifications returned for qualificationId: {HttpUtility.HtmlEncode(qualificationId)}");
             return default;
         }
         var qualification = qualifications.First();
