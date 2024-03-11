@@ -10,13 +10,13 @@
         <span class="govuk-caption-xl gem-c-title__context">
             Early Years Qualification List
         </span>
-        <h1 class="govuk-heading-xl">@Model.QualificationName</h1>
+        <h1 class="govuk-heading-xl" id="qualification-name-value">@Model.QualificationName</h1>
         <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     Awarding organisation
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value" id="awarding-qualification-value">
                     @Model.AwardingOrganisationTitle
                 </dd>
             </div>
@@ -24,7 +24,7 @@
                 <dt class="govuk-summary-list__key">
                     Level
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value" id="qualification-level-value">
                     @Model.QualificationLevel
                 </dd>
             </div>
@@ -32,7 +32,7 @@
                 <dt class="govuk-summary-list__key">
                     Number
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value" id="qualification-number-value">
                     @Model.QualificationNumber
                 </dd>
             </div>
@@ -40,7 +40,7 @@
                 <dt class="govuk-summary-list__key">
                     Date added to Early Years Qualification List
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value" id="from-which-year-value">
                     @Model.FromWhichYear
                 </dd>
             </div>
@@ -53,8 +53,8 @@
                 </dd>
             </div>
         </dl>
-        <p>@Model.Notes</p>
-        <p>@Model.AdditionalRequirements</p>
+        <p id="notes-value">@Model.Notes</p>
+        <p id="additional-requirements-value">@Model.AdditionalRequirements</p>
         <h2 class="govuk-heading-m">
             Bookmark a link to this qualification check
         </h2>
