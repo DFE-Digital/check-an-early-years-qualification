@@ -3,5 +3,9 @@
     "chromeLaunchConfig": {
       "executablePath": "/usr/bin/google-chrome"
     }
-  }
+  },
+  "urls": [
+    "/",
+    "/qualifications/qualification-details/eyq-240"
+  ]
 }
