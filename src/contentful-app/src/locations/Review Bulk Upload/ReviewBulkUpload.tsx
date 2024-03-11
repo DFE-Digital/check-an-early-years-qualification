@@ -20,14 +20,9 @@ const ReviewBulkUpload = () => {
   const props: ReviewBulkUploadProps = location.state;
 
   const [page, setPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  
+  const itemsPerPage = 5;
   const isLastPage = (page + 1) * itemsPerPage >= props.qualifications.length;
-
-  const handleViewPerPageChange = (i: number) => {
-    // Reset page to match item being shown on new View per page
-    setPage(Math.floor((itemsPerPage * page + 1) / i));
-    setItemsPerPage(i);
-  };
 
   return (
     <Stack
@@ -50,7 +45,6 @@ const ReviewBulkUpload = () => {
         isLastPage={isLastPage}
         itemsPerPage={itemsPerPage}
         totalItems={props.qualifications.length}
-        onViewPerPageChange={handleViewPerPageChange}
       />
       <ButtonGroup variant="spaced" spacing="spacingS">
         <BackButton />

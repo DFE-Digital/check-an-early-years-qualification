@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Stack,
   Form,
@@ -35,28 +35,30 @@ const BulkUpload = () => {
   }, [file]);
 
   return (
-    <>
-      <Stack flexDirection="column">
-        <Heading>Bulk Upload</Heading>
-        <Form>
-          <FormControl>
-            <FormControl.Label isRequired>Upload a CSV:</FormControl.Label>
-            <Box>
-              <input type="file" onChange={fileUploaded} accept={".csv"} />
-            </Box>
-            <FormControl.HelpText>
-              Please upload a csv with any qualification you want to add.
-            </FormControl.HelpText>
-          </FormControl>
-          <ButtonGroup variant="spaced" spacing="spacingS">
-            <BackButton />
-            <NavigationButton url="/review-bulk-upload" isDisabled={qualifications.length === 0} propsToPass={{ qualifications: qualifications }}>
-              Next
-            </NavigationButton>
-          </ButtonGroup>
-        </Form>
-      </Stack>
-    </>
+    <Stack flexDirection="column">
+      <Heading>Bulk Upload</Heading>
+      <Form>
+        <FormControl>
+          <FormControl.Label isRequired>Upload a CSV:</FormControl.Label>
+          <Box>
+            <input type="file" onChange={fileUploaded} accept={".csv"} />
+          </Box>
+          <FormControl.HelpText>
+            Please upload a csv with any qualification you want to add.
+          </FormControl.HelpText>
+        </FormControl>
+        <ButtonGroup variant="spaced" spacing="spacingS">
+          <BackButton />
+          <NavigationButton
+            url="/review-bulk-upload"
+            isDisabled={qualifications.length === 0}
+            propsToPass={{ qualifications: qualifications }}
+          >
+            Next
+          </NavigationButton>
+        </ButtonGroup>
+      </Form>
+    </Stack>
   );
 };
 
