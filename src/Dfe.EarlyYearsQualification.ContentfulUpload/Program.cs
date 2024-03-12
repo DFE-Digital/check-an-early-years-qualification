@@ -149,21 +149,21 @@ public class Program
         var editorInterface = await client.GetEditorInterface("Qualification");
         SetHelpTextForField(editorInterface, "qualificationId", "The unique identifier used to reference the qualification");
         SetHelpTextForField(editorInterface, "qualificationName", "The name of the qualification");
-        SetHelpTextForField(editorInterface, "qualificationLevel", "The level of the qualification");
+        SetHelpTextForField(editorInterface, "qualificationLevel", "The level of the qualification", SystemWidgetIds.NumberEditor);
         SetHelpTextForField(editorInterface, "awardingOrganisationTitle", "The name of the awarding organisation");
         SetHelpTextForField(editorInterface, "fromWhichYear", "The date from which the qualification is considered full and relevant");
         SetHelpTextForField(editorInterface, "toWhichYear", "The date on which the qualification stops being considered full and relevant");
         SetHelpTextForField(editorInterface, "qualificationNumber", "The number of the qualification");
-        SetHelpTextForField(editorInterface, "notes", "The corresponding notes for the qualification");
-        SetHelpTextForField(editorInterface, "additionalRequirements", "The additional requirements for the qualification");
+        SetHelpTextForField(editorInterface, "notes", "The corresponding notes for the qualification", SystemWidgetIds.MultipleLine);
+        SetHelpTextForField(editorInterface, "additionalRequirements", "The additional requirements for the qualification", SystemWidgetIds.MultipleLine);
 
         await client.UpdateEditorInterface(editorInterface, "Qualification", typeToActivate.SystemProperties.Version!.Value);
     }
 
-    private static void SetHelpTextForField(EditorInterface editorInterface, string fieldId, string helpText)
+    private static void SetHelpTextForField(EditorInterface editorInterface, string fieldId, string helpText, string widgetId = SystemWidgetIds.SingleLine)
     {
         editorInterface.Controls.First(x => x.FieldId == fieldId).Settings = new EditorInterfaceControlSettings() { HelpText = helpText };
-        editorInterface.Controls.First(x => x.FieldId == fieldId).WidgetId = SystemWidgetIds.SingleLine;
+        editorInterface.Controls.First(x => x.FieldId == fieldId).WidgetId = widgetId;
     }
 
     private static Entry<dynamic> BuildEntryFromQualification(Qualification qualification)
