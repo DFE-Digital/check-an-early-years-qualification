@@ -21,6 +21,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var landingPageContent = await _contentService.GetLandingPage();
+        if (landingPageContent is null) return RedirectToAction("Error");
         var model = new LandingPageModel() 
         { 
             Header = landingPageContent.Header, 
