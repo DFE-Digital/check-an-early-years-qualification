@@ -1,4 +1,4 @@
-# 0010 - Secrets Management
+# 0009 - Secrets Management
 
 * **Status**: Accepted
 

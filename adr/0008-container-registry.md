@@ -1,4 +1,4 @@
-# 0009 - Container Registry
+# 0008 - Container Registry
 
 * **Status**: Accepted
 
@@ -15,8 +15,8 @@ As the application will be containerised with Docker where is the best place sol
 ## Considered Options
 
 * Azure Container Registry
-* Docker Hub
+* GitHub Container Registry
 
 ## Decision Outcome
 
-Chosen option: [Azure Container Registry](https://azure.microsoft.com/en-us/products/container-registry) as this is within the Azure ecosystem making configuration simpler.
+Chosen option: [GHCR](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry) as this is within source repository making configuration simpler.
