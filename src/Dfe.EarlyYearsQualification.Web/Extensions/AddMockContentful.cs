@@ -11,11 +11,11 @@ namespace Dfe.EarlyYearsQualification.Web.Extensions
 
       var mockContentfulService = new Mock<IContentService>();
 
-      mockContentfulService.Setup(x => x.GetLandingPage()).ReturnsAsync(new LandingPage()
+      mockContentfulService.Setup(x => x.GetStartPage()).ReturnsAsync(new StartPage()
       {
         Header = "Test Header",
-        ServiceIntroduction = new Contentful.Core.Models.Document(),
-        StartButtonText = "Test Start Button Text"
+        PreCtaButtonContent = new Contentful.Core.Models.Document(),
+        CtaButtonText = "Test Start Button Text"
       });
 
       mockContentfulService.Setup(x => x.GetNavigationLinks()).ReturnsAsync(new List<NavigationLink>()
