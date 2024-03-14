@@ -5,7 +5,7 @@
 }
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <h1 class="govuk-heading-xl">@Model.Header</h1>
         @Html.Raw(Model.PreCtaButtonContent)
         <a href="@Url.Action("Get", "QualificationDetails")" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
@@ -16,7 +16,7 @@
         </a>
         @Html.Raw(Model.PostCtaButtonContent)
     </div>
-    <div class="govuk-grid-column-one-third">
+    <div class="govuk-grid-column-full govuk-grid-column-one-third-from-desktop">
         <aside class="govuk-prototype-kit-common-templates-related-items" role="complementary">
             <h2 class="govuk-heading-m" id="subsection-title">
             @Model.RightHandSideContentHeader
