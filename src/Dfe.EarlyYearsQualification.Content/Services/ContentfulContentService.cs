@@ -83,21 +83,19 @@ public class ContentfulContentService : IContentService
 
     private static HtmlRenderer GetGeneralHtmlRenderer()
     {
-        var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddRenderer(new Renderers.ParagraphRenderer() { Order = 10 });
-        htmlRenderer.AddRenderer(new Heading2Renderer() { Order = 11 });
-        htmlRenderer.AddRenderer(new UnorderedListRenderer() { Order = 12 });
-        htmlRenderer.AddRenderer(new HyperlinkRenderer() { Order = 13 });
+        var htmlRenderer = new HtmlRenderer();      
+        htmlRenderer.AddRenderer(new Heading2Renderer() { Order = 10 });
+        htmlRenderer.AddRenderer(new UnorderedListRenderer() { Order = 11 });
+        htmlRenderer.AddRenderer(new HyperlinkRenderer() { Order = 12 });
         return htmlRenderer;
     }
 
     private static HtmlRenderer GetSideContentHtmlRenderer()
     {
         var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddRenderer(new Renderers.ParagraphRenderer() { Order = 10 });
+        htmlRenderer.AddRenderer(new HyperlinkRenderer() { Order = 10 });
         htmlRenderer.AddRenderer(new Heading2Renderer() { Order = 11 });
         htmlRenderer.AddRenderer(new UnorderedListHyperlinksRenderer() { Order = 12 });
-        htmlRenderer.AddRenderer(new HyperlinkRenderer() { Order = 13 });
         return htmlRenderer;
     }
 }
