@@ -15,7 +15,7 @@ public class ContentfulContentService : IContentService
 
     private Dictionary<object, string> ContentTypes = new()
     {
-        {typeof(LandingPage), "landingPage"},
+        {typeof(StartPage), "startPage"},
         {typeof(NavigationLink), "navigationLink"},
         {typeof(Qualification), "Qualification"}
     };
@@ -26,19 +26,20 @@ public class ContentfulContentService : IContentService
         _logger = logger;
     }
 
-    public async Task<LandingPage?> GetLandingPage()
+    public async Task<StartPage?> GetStartPage()
     {
-        var landingPageEntries = await GetEntriesByType<LandingPage>();
+        var landingPageEntries = await GetEntriesByType<StartPage>();
         if (landingPageEntries is null || !landingPageEntries.Any())
         {
             _logger.LogWarning($"No landing page entry returned");
             return default;
         }
-        var landingPageContent = landingPageEntries.First();
-        var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddRenderer(new UnorderedListRenderer() { Order = 10 });
-        landingPageContent.ServiceIntroductionHtml = await htmlRenderer.ToHtml(landingPageContent.ServiceIntroduction);
-        return landingPageContent;
+        var startPageContent = landingPageEntries.First();
+        HtmlRenderer htmlRenderer = GetGeneralHtmlRenderer();
+        startPageContent.PreCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PreCtaButtonContent);
+        startPageContent.PostCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent);
+        startPageContent.RightHandSideContentHtml = await GetSideContentHtmlRenderer().ToHtml(startPageContent.RightHandSideContent);
+        return startPageContent;
     }
 
     public async Task<List<NavigationLink>?> GetNavigationLinks()
@@ -78,5 +79,23 @@ public class ContentfulContentService : IContentService
             _logger.LogError($"Exception trying to retrieve {typeof(T)} from Contentful. Error: {ex}");
             return default;
         }
+    }
+
+    private static HtmlRenderer GetGeneralHtmlRenderer()
+    {
+        var htmlRenderer = new HtmlRenderer();      
+        htmlRenderer.AddRenderer(new Heading2Renderer() { Order = 10 });
+        htmlRenderer.AddRenderer(new UnorderedListRenderer() { Order = 11 });
+        htmlRenderer.AddRenderer(new HyperlinkRenderer() { Order = 12 });
+        return htmlRenderer;
+    }
+
+    private static HtmlRenderer GetSideContentHtmlRenderer()
+    {
+        var htmlRenderer = new HtmlRenderer();
+        htmlRenderer.AddRenderer(new HyperlinkRenderer() { Order = 10 });
+        htmlRenderer.AddRenderer(new Heading2Renderer() { Order = 11 });
+        htmlRenderer.AddRenderer(new UnorderedListHyperlinksRenderer() { Order = 12 });
+        return htmlRenderer;
     }
 }

@@ -20,13 +20,16 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var landingPageContent = await _contentService.GetLandingPage();
-        if (landingPageContent is null) return RedirectToAction("Error");
-        var model = new LandingPageModel() 
+        var startPageContent = await _contentService.GetStartPage();
+        if (startPageContent is null) return RedirectToAction("Error");
+        var model = new StartPageModel() 
         { 
-            Header = landingPageContent.Header, 
-            ServiceIntroduction = landingPageContent.ServiceIntroductionHtml, 
-            StartButtonText = landingPageContent.StartButtonText 
+            Header = startPageContent.Header, 
+            PreCtaButtonContent = startPageContent.PreCtaButtonContentHtml, 
+            CtaButtonText = startPageContent.CtaButtonText,
+            PostCtaButtonContent = startPageContent.PostCtaButtonContentHtml,
+            RightHandSideContentHeader = startPageContent.RightHandSideContentHeader,
+            RightHandSideContent = startPageContent.RightHandSideContentHtml
         };
         return View(model);
     }
