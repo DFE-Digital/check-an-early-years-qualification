@@ -45,6 +45,14 @@ module "network" {
   kv_certificate_subject                    = var.kv_certificate_subject
 }
 
+# Create App Insights
+module "appinsights" {
+  source               = "./azure-app-insights"
+  location             = var.azure_region
+  resource_group       = azurerm_resource_group.rg.name
+  resource_name_prefix = var.resource_name_prefix
+}
+
 # Create Web Application resources
 module "webapp" {
   source = "./azure-web"
