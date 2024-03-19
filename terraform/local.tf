@@ -21,6 +21,6 @@ locals {
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
     "TRACKING_ID"                         = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
-    "KeyVault__Endpoint"                  = "http://${var.resource_name_prefix}-kv.vault.azure.net/"
+    "KeyVault__Endpoint"                  = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
   }
 }
