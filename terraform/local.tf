@@ -14,9 +14,6 @@ locals {
     "TRACKING_ID"                                = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT"        = 720
     "KeyVault__Endpoint"                         = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = module.appinsights.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = module.appinsights.connection_string
-    "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
   }
 
   webapp_slot_app_settings = {
@@ -25,8 +22,5 @@ locals {
     "TRACKING_ID"                                = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT"        = 720
     "KeyVault__Endpoint"                         = "http://${var.resource_name_prefix}-kv.vault.azure.net/"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = module.appinsights.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = module.appinsights.connection_string
-    "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
   }
 }
