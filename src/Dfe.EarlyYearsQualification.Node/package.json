@@ -8,6 +8,7 @@
     "build": "node index.js"
   },
   "dependencies": {
+    "@contentful/live-preview": "^2.17.3",
     "dfe-frontend-alpha": "^1.0.1",
     "esbuild": "0.19.4",
     "esbuild-sass-plugin": "^2.16.1",

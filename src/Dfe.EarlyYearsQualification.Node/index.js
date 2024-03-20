@@ -16,6 +16,15 @@ await esbuild.build({
   outfile: 'out/css/application.css'
 });
 
+// Build JS
+await esbuild.build({
+  entryPoints: ['js/live-preview.js'],
+  bundle: true,
+  minify: true,
+  sourcemap: true,
+  outfile: 'out/js/live-preview.js'
+})
+
 //Copy assets
 //DFE
 const dfeDir = "./node_modules/dfe-frontend-alpha/packages/assets";
@@ -46,7 +55,7 @@ for (const folder of targetFolders) {
 
 //Copy to web project
 const targetDir = "../Dfe.EarlyYearsQualification.Web/wwwroot";
-const folders = ["css", "assets"];
+const folders = ["css", "assets", "js"];
 
 for (const folder of folders) {
   const path = `./out/${folder}`;

@@ -4,6 +4,13 @@
     ViewData["Title"] = $"Qualification Details - {Model.QualificationId}";
 }
 
+@section Scripts {
+  <script type="module" src="~/js/live-preview.js"></script>
+  @* <script>
+    document.addEventListener('DOMContentLoaded', SetUpLivePreview(@Model.RawJson));
+  </script> *@
+}
+
 <a href="javascript:window.history.back()" class="govuk-back-link">Back</a>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
