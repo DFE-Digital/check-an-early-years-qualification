@@ -12,4 +12,4 @@ runs:
   steps:
     - name: Run .Net Project
       shell: bash
-      run: dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" --UseMockContentful=true
+      run: dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" --UseMockContentful=true &
