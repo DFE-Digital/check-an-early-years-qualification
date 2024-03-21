@@ -2,6 +2,9 @@
 
 A public service that allows for managers in childcare positions that require child care certifications e.g. nurseries to check a job applicants certifications against the position they are applying for.
 
+## Prototype
+The prototype can be found [here](https://github.com/DFE-Digital/ey-qualifications-prototype).
+
 ## Project structure
 
 ```
