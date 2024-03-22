@@ -5,10 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers;
 using Microsoft.Extensions.Logging;
 using FuzzySharp;
-
 using System.Web;
-using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
