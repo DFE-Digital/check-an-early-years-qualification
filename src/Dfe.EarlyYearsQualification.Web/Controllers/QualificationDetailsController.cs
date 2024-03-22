@@ -18,12 +18,6 @@ public class QualificationDetailsController : Controller
         _contentService = contentService;
     }
 
-    [HttpGet]
-    public IActionResult Get()
-    {
-        return View();
-    }
-
     [HttpGet("qualification-details/{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
     {

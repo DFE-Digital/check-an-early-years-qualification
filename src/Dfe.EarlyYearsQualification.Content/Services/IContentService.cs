@@ -9,4 +9,8 @@ public interface IContentService
     Task<List<NavigationLink>?> GetNavigationLinks();
 
     Task<Qualification?> GetQualificationById(string qualificationId);
+
+    Task<SearchResultPage> GetSearchResultPage();
+
+    Task<List<Qualification>> SearchQualifications(string qualificationName);
 }

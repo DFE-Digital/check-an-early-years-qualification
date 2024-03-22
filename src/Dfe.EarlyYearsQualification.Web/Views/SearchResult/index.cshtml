@@ -1,0 +1,19 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.SearchResultPageModel
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<a href="javascript:window.history.back()" class="govuk-back-link">Back</a>
+
+<div class="govuk-grid-row">
+  @Model.Header
+
+  @foreach(var result in Model.SearchResults)
+    {
+      <div>@result.QualificationId</div>
+      <div>@result.QualificationName</div>
+      <a asp-action="Index" asp-controller="QualificationDetails" asp-route-courseId="@result.QualificationId">Go To Course</a>
+    }
+
+</div>

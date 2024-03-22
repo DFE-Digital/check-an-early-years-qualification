@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Search";
+}
+
+<a href="javascript:window.history.back()" class="govuk-back-link">Back</a>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    @using (Html.BeginForm("Search", "Search", FormMethod.Post))
+    {
+      <h1 class="govuk-label-wrapper">
+        <label class="govuk-label govuk-label--l"> Search for an early years qualification </label>
+      </h1>
+      <div class="govuk-hint">Use the full qualification name from the certificate, if you have it.</div>
+      <div class="govuk-form-group">
+        <input class="govuk-input" name="qualificationName" id="QualificationName" type="text" />
+      </div>
+      <input type="submit" class="govuk-button" value="Search" />
+    }
+    </div>
+</div>

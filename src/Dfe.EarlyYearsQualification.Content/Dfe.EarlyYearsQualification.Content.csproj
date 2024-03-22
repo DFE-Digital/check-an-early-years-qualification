@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="contentful.csharp" Version="7.5.1" />
+    <PackageReference Include="FuzzySharp" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
   </ItemGroup>
 
