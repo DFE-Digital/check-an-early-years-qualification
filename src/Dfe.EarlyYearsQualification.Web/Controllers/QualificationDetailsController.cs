@@ -29,12 +29,16 @@ public class QualificationDetailsController : Controller
     {
         if (string.IsNullOrEmpty(qualificationId)) return BadRequest();
 
+        var detailsPageContent = await _contentService.GetDetailsPage();
+        if (detailsPageContent is null) return RedirectToAction("Error");
+
         var qualification = await _contentService.GetQualificationById(qualificationId);
         if (qualification is null)
         {
             return RedirectToAction("Error", "Home");
         }
         var model = Map(qualification);
+        model.Content = detailsPageContent;
         return View(model);
     }
 
