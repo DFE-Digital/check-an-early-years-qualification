@@ -2,6 +2,7 @@
 using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Extensions;
 using Dfe.EarlyYearsQualification.Content.Renderers;
 using Microsoft.Extensions.Logging;
 using System.Web;
@@ -29,13 +30,13 @@ public class ContentfulContentService : IContentService
 
     public async Task<StartPage?> GetStartPage()
     {
-        var landingPageEntries = await GetEntriesByType<StartPage>();
-        if (landingPageEntries is null || !landingPageEntries.Any())
+        var startPageEntries = await GetEntriesByType<StartPage>();
+        if (startPageEntries is null || !startPageEntries.Any())
         {
-            _logger.LogWarning($"No landing page entry returned");
+            _logger.LogWarning($"No start page entry returned");
             return default;
         }
-        var startPageContent = landingPageEntries.First();
+        var startPageContent = startPageEntries.First();
         HtmlRenderer htmlRenderer = GetGeneralHtmlRenderer();
         startPageContent.PreCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PreCtaButtonContent);
         startPageContent.PostCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent);
@@ -97,21 +98,17 @@ public class ContentfulContentService : IContentService
         }
     }
 
-    private static HtmlRenderer GetGeneralHtmlRenderer()
+    private HtmlRenderer GetGeneralHtmlRenderer()
     {
         var htmlRenderer = new HtmlRenderer();      
-        htmlRenderer.AddRenderer(new Heading2Renderer() { Order = 10 });
-        htmlRenderer.AddRenderer(new UnorderedListRenderer() { Order = 11 });
-        htmlRenderer.AddRenderer(new HyperlinkRenderer() { Order = 12 });
+        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListRenderer() { Order = 17 });
         return htmlRenderer;
     }
 
-    private static HtmlRenderer GetSideContentHtmlRenderer()
+    private HtmlRenderer GetSideContentHtmlRenderer()
     {
         var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddRenderer(new HyperlinkRenderer() { Order = 10 });
-        htmlRenderer.AddRenderer(new Heading2Renderer() { Order = 11 });
-        htmlRenderer.AddRenderer(new UnorderedListHyperlinksRenderer() { Order = 12 });
+        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListHyperlinksRenderer() { Order = 17 });
         return htmlRenderer;
     }
 }
