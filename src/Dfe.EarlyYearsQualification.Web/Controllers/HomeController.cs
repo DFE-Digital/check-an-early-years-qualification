@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Content.Entities;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
@@ -22,7 +23,19 @@ public class HomeController : Controller
     {
         var startPageContent = await _contentService.GetStartPage();
         if (startPageContent is null) return RedirectToAction("Error");
-        var model = new StartPageModel() 
+        var model = Map(startPageContent);
+        return View(model);
+    }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    private StartPageModel Map(StartPage startPageContent)
+    {
+        return new StartPageModel() 
         { 
             Header = startPageContent.Header, 
             PreCtaButtonContent = startPageContent.PreCtaButtonContentHtml, 
@@ -31,12 +44,5 @@ public class HomeController : Controller
             RightHandSideContentHeader = startPageContent.RightHandSideContentHeader,
             RightHandSideContent = startPageContent.RightHandSideContentHtml
         };
-        return View(model);
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
