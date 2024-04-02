@@ -18,7 +18,8 @@ public class ContentfulContentService : IContentService
     {
         {typeof(StartPage), "startPage"},
         {typeof(NavigationLink), "navigationLink"},
-        {typeof(Qualification), "Qualification"}
+        {typeof(Qualification), "Qualification"},
+        {typeof(DetailsPage), "detailsPage"}
     };
 
     public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
@@ -41,6 +42,21 @@ public class ContentfulContentService : IContentService
         startPageContent.PostCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent);
         startPageContent.RightHandSideContentHtml = await GetSideContentHtmlRenderer().ToHtml(startPageContent.RightHandSideContent);
         return startPageContent;
+    }
+
+    public async Task<DetailsPage?> GetDetailsPage()
+    {
+      var detailsPageEntries = await GetEntriesByType<DetailsPage>();
+      if (detailsPageEntries is null || !detailsPageEntries.Any())
+      {
+          _logger.LogWarning($"No details page entry returned");
+          return default;
+      }
+      var detailsPageContent = detailsPageEntries.First();
+      HtmlRenderer htmlRenderer = GetGeneralHtmlRenderer();
+      detailsPageContent.CheckAnotherQualificationTextHtml = await htmlRenderer.ToHtml(detailsPageContent.CheckAnotherQualificationText);
+      detailsPageContent.FurtherInfoTextHtml = await htmlRenderer.ToHtml(detailsPageContent.FurtherInfoText);
+      return detailsPageContent;
     }
 
     public async Task<List<NavigationLink>?> GetNavigationLinks()
