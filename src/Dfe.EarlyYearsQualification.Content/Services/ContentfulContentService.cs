@@ -54,6 +54,7 @@ public class ContentfulContentService : IContentService
       }
       var detailsPageContent = detailsPageEntries.First();
       HtmlRenderer htmlRenderer = GetGeneralHtmlRenderer();
+      htmlRenderer.AddRenderer(new GovUkInsetTextRenderer(_contentfulClient) { Order = 18 });
       detailsPageContent.CheckAnotherQualificationTextHtml = await htmlRenderer.ToHtml(detailsPageContent.CheckAnotherQualificationText);
       detailsPageContent.FurtherInfoTextHtml = await htmlRenderer.ToHtml(detailsPageContent.FurtherInfoText);
       return detailsPageContent;

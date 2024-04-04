@@ -14,6 +14,7 @@ public static class HtmlRendererExtensions
         htmlRenderer.AddRenderer(new Heading4Renderer() { Order = 14 });
         htmlRenderer.AddRenderer(new Heading5Renderer() { Order = 15 });
         htmlRenderer.AddRenderer(new Heading6Renderer() { Order = 16 });
+        htmlRenderer.AddRenderer(new GovUkParagraphRenderer() { Order = 17 });
         return htmlRenderer;
     }
 }
