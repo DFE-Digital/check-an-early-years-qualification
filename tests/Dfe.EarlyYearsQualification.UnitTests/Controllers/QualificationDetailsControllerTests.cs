@@ -47,6 +47,7 @@ public class QualificationDetailsControllerTests
     {
         var qualificationId = "eyq-145";
         _mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync((Qualification)default!);
+        _mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
         var result = await _controller!.Index(qualificationId);
 
         Assert.IsNotNull(result);
