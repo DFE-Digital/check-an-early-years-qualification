@@ -26,6 +26,8 @@ namespace Dfe.EarlyYearsQualification.Web.Extensions
         new NavigationLink() { DisplayText = "Privacy notice", Href="#"}
       });
 
+      mockContentfulService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+
       mockContentfulService.Setup(x => x.GetQualificationById(It.IsAny<string>())).ReturnsAsync(new Qualification(
         "EYQ-240", 
         "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
