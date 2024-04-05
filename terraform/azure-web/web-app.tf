@@ -1,3 +1,25 @@
+# Create Log Analytics
+resource "azurerm_log_analytics_workspace" "webapp_logs" {
+  name                = "${var.resource_name_prefix}-log"
+  location            = var.location
+  resource_group_name = var.resource_group
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+  daily_quota_gb      = 1
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
+}
+
+resource "azurerm_application_insights" "web" {
+  name                = "${var.resource_name_prefix}-appinsights"
+  resource_group_name = var.resource_group
+  location            = var.location
+  application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.webapp_logs.id
+}
+
 # Create App Service Plan
 resource "azurerm_service_plan" "asp" {
   name                = "${var.resource_name_prefix}-asp"
@@ -23,7 +45,11 @@ resource "azurerm_linux_web_app" "webapp" {
   service_plan_id           = azurerm_service_plan.asp.id
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
-  app_settings              = var.webapp_app_settings
+  app_settings = merge({
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
+    "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+  }, var.webapp_app_settings)
 
   identity {
     type = "SystemAssigned"
@@ -103,7 +129,11 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
   app_service_id            = azurerm_linux_web_app.webapp.id
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
-  app_settings              = var.webapp_slot_app_settings
+  app_settings = merge({
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
+    "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+  }, var.webapp_slot_app_settings)
 
   site_config {
     app_command_line                  = var.webapp_startup_command
@@ -136,20 +166,6 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
 
   lifecycle {
     ignore_changes = [tags, site_config.0.application_stack]
-  }
-}
-
-# Create Log Analytics
-resource "azurerm_log_analytics_workspace" "webapp_logs" {
-  name                = "${var.resource_name_prefix}-log"
-  location            = var.location
-  resource_group_name = var.resource_group
-  sku                 = "PerGB2018"
-  retention_in_days   = 30
-  daily_quota_gb      = 1
-
-  lifecycle {
-    ignore_changes = [tags]
   }
 }
 
@@ -341,14 +357,14 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
 
 # References the web app to be used in KV access policy as it already existed when changes needed to be made
 data "azurerm_linux_web_app" "ref" {
-  name = azurerm_linux_web_app.webapp.name
+  name                = azurerm_linux_web_app.webapp.name
   resource_group_name = azurerm_linux_web_app.webapp.resource_group_name
 }
 
 # Grants permissions to key vault for the managed identity of the App Service
 resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
-  key_vault_id = var.kv_id
-  tenant_id    = data.azurerm_client_config.az_config.tenant_id
+  key_vault_id            = var.kv_id
+  tenant_id               = data.azurerm_client_config.az_config.tenant_id
   object_id               = data.azurerm_linux_web_app.ref.identity.0.principal_id
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
