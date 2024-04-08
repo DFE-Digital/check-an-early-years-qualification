@@ -26,6 +26,22 @@ namespace Dfe.EarlyYearsQualification.Web.Extensions
         new NavigationLink() { DisplayText = "Privacy notice", Href="#"}
       });
 
+      mockContentfulService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage()
+      {
+        AwardingOrgLabel = "Awarding Org Label",
+        BookmarkHeading = "Test Bookmark Heading",
+        BookmarkText = "Test Bookmark Text",
+        CheckAnotherQualificationHeading = "Test Check Another Qualification Heading",
+        CheckAnotherQualificationTextHtml = "<p id='check-another-qualification-text'>Test Check Another Qualification Text</p>",
+        DateAddedLabel = "Test Date Added Label",
+        FurtherInfoTextHtml = "<p id='futher-info-text'>Test Further Info Text</p>",
+        DateOfCheckLabel = "Test Date Of Check Label",
+        FutherInfoHeading = "Test Further Info Heading",
+        LevelLabel = "Test Level Label",
+        MainHeader = "Test Main Heading",
+        QualificationNumberLabel = "Test Qualification Number Label",
+      });
+
       mockContentfulService.Setup(x => x.GetQualificationById(It.IsAny<string>())).ReturnsAsync(new Qualification(
         "EYQ-240", 
         "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
