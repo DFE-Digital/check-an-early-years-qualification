@@ -35,7 +35,7 @@ namespace Dfe.EarlyYearsQualification.Web.Extensions
         CheckAnotherQualificationTextHtml = "<p id='check-another-qualification-text'>Test Check Another Qualification Text</p>",
         DateAddedLabel = "Test Date Added Label",
         DateOfCheckLabel = "Test Date Of Check Label",
-        FurtherInfoTextHtml = "<p id='futher-info-text'>Test Further Info Text</p>",
+        FurtherInfoTextHtml = "<p id='further-info-text'>Test Further Info Text</p>",
         FurtherInfoHeading = "Test Further Info Heading",
         LevelLabel = "Test Level Label",
         MainHeader = "Test Main Heading",
