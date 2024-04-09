@@ -24,16 +24,15 @@ check-an-early-years-qualification/
 - .Net 8
 
 ### Development Setup
-- Set up the contentful secrets. You can either:
-    - Paste this object into your ```appsettings.json```:
-      ```
-      "ContentfulOptions": {
-        "DeliveryApiKey": "<YOUR_DELIVERY_API_KEY_HERE>",
-        "PreviewApiKey": "<YOUR_PREVIEW_API_KEY_HERE>",
-        "SpaceId": "<YOUR_SPACE_ID_HERE>",
-        "UsePreviewApi": false,
-        "MaxNumberOfRateLimitRetries": 1
-      },
-      ```
-    - Alternatively, you can utilise [dot-net user secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows).
+- In order for the application to be run locally, you need to add the Dev Service Principal client id and secret to your launchSettings.json file
+Replace the environment variables object in the http profile with the following:
+```
+"environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_TENANT_ID": "<TENANT_ID>",
+        "AZURE_CLIENT_ID": "<CLIENT_ID>",
+        "AZURE_CLIENT_SECRET": "<CLIENT_SECRET>",
+      }
+```
+Speak to one of the developers about getting the values for the above settings.
       
