@@ -26,7 +26,7 @@ public class DetailsPage
 
   public string CheckAnotherQualificationTextHtml { get; set; } = string.Empty;
 
-  public string FutherInfoHeading { get; set; } = string.Empty;
+  public string FurtherInfoHeading { get; set; } = string.Empty;
 
   public Document? FurtherInfoText { get; set; }
 
