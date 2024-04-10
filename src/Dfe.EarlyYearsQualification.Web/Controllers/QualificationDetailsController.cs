@@ -27,16 +27,23 @@ public class QualificationDetailsController : Controller
     [HttpGet("qualification-details/{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
     {
-        if (string.IsNullOrEmpty(qualificationId)) return BadRequest();
+        if (string.IsNullOrEmpty(qualificationId))
+        {
+            return BadRequest();
+        }
 
         var detailsPageContent = await _contentService.GetDetailsPage();
-        if (detailsPageContent is null) return RedirectToAction("Error");
+        if (detailsPageContent is null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
 
         var qualification = await _contentService.GetQualificationById(qualificationId);
         if (qualification is null)
         {
             return RedirectToAction("Error", "Home");
         }
+
         var model = Map(qualification);
         model.Content = detailsPageContent;
         return View(model);
@@ -44,7 +51,7 @@ public class QualificationDetailsController : Controller
 
     private QualificationDetailsModel Map(Qualification qualification)
     {
-        return new QualificationDetailsModel()
+        return new QualificationDetailsModel
         {
             QualificationId = qualification.QualificationId,
             QualificationLevel = qualification.QualificationLevel,
