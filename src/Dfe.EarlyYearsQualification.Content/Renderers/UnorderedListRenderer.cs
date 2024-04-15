@@ -16,7 +16,7 @@ public class UnorderedListRenderer : IContentRenderer
         {
             if (listItem is ListItem listItemValue)
             {
-                var listItemParagraph = listItemValue!.Content[0] as Paragraph;
+                var listItemParagraph = listItemValue.Content[0] as Paragraph;
                 var listItemText = listItemParagraph!.Content[0] as Text;
                 sb.Append($"<li>{listItemText!.Value}</li>");
             }
