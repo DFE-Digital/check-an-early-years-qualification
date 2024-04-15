@@ -14,8 +14,8 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 public class QualificationDetailsControllerTests
 {
 
-    private ILogger<QualificationDetailsController> _mockLogger = new NullLoggerFactory().CreateLogger<QualificationDetailsController>();
-    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
+    private readonly ILogger<QualificationDetailsController> _mockLogger = new NullLoggerFactory().CreateLogger<QualificationDetailsController>();
+    private Mock<IContentService> _mockContentService = new();
     private QualificationDetailsController? _controller;
 
     [TestInitialize]
@@ -24,7 +24,7 @@ public class QualificationDetailsControllerTests
         _mockContentService = new Mock<IContentService>();
         _controller = new QualificationDetailsController(_mockLogger, _mockContentService.Object)
         {
-            ControllerContext = new ControllerContext()
+            ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext()
             }
@@ -45,7 +45,7 @@ public class QualificationDetailsControllerTests
     [TestMethod]
     public async Task Index_ContentServiceReturnsNoQualification_RedirectsToErrorPage()
     {
-        var qualificationId = "eyq-145";
+        const string qualificationId = "eyq-145";
         _mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync((Qualification)default!);
         _mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
         var result = await _controller!.Index(qualificationId);
@@ -60,7 +60,7 @@ public class QualificationDetailsControllerTests
     [TestMethod]
     public async Task Index_ContentServiceReturnsQualification_ReturnsQualificationDetailsModel()
     {
-        var qualificationId = "eyq-145";
+        const string qualificationId = "eyq-145";
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019", "ABC/547/900", "notes", "additonal requirements");
         _mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         _mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());

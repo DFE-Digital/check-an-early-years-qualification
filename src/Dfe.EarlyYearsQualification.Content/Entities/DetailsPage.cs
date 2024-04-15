@@ -4,29 +4,29 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class DetailsPage
 {
-  public string MainHeader { get; set; } = string.Empty;
+  public string MainHeader { get; init; } = string.Empty;
 
-  public string AwardingOrgLabel { get; set; } = string.Empty;
+  public string AwardingOrgLabel { get; init; } = string.Empty;
 
-  public string LevelLabel { get; set; } = string.Empty;
+  public string LevelLabel { get; init; } = string.Empty;
 
-  public string QualificationNumberLabel { get; set; } = string.Empty;
+  public string QualificationNumberLabel { get; init; } = string.Empty;
 
-  public string DateAddedLabel { get; set; } = string.Empty;
+  public string DateAddedLabel { get; init; } = string.Empty;
 
-  public string DateOfCheckLabel { get; set; } = string.Empty;
+  public string DateOfCheckLabel { get; init; } = string.Empty;
 
-  public string BookmarkHeading { get; set; } = string.Empty;
+  public string BookmarkHeading { get; init; } = string.Empty;
 
-  public string BookmarkText { get; set; } = string.Empty;
+  public string BookmarkText { get; init; } = string.Empty;
 
-  public string CheckAnotherQualificationHeading { get; set; } = string.Empty;
+  public string CheckAnotherQualificationHeading { get; init; } = string.Empty;
 
   public Document? CheckAnotherQualificationText { get; set; }
 
   public string CheckAnotherQualificationTextHtml { get; set; } = string.Empty;
 
-  public string FurtherInfoHeading { get; set; } = string.Empty;
+  public string FurtherInfoHeading { get; init; } = string.Empty;
 
   public Document? FurtherInfoText { get; set; }
 

@@ -12,7 +12,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
 public class FooterLinksViewComponentTests
 {
     private ILogger<FooterLinksViewComponent> _mockLogger = new NullLoggerFactory().CreateLogger<FooterLinksViewComponent>();
-    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
+    private Mock<IContentService> _mockContentService = new();
     
     [TestInitialize]
     public void BeforeTestRun()
@@ -24,9 +24,9 @@ public class FooterLinksViewComponentTests
     [TestMethod]
     public async Task InvokeAsync_CallsContentService_ReturnsNavigationLinks()
     {
-        var navigationLink = new NavigationLink() { DisplayText = "Test", Href = "https://test.com", OpenInNewTab = true };
+        var navigationLink = new NavigationLink { DisplayText = "Test", Href = "https://test.com", OpenInNewTab = true };
 
-        _mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync(new List<NavigationLink>(){ navigationLink });
+        _mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync(new List<NavigationLink> { navigationLink });
 
         var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
         var result = await footerLinksViewComponent.InvokeAsync();

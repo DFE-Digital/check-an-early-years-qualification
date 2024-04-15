@@ -2,7 +2,10 @@ using System.Text;
 using Contentful.Core;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
 using Newtonsoft.Json.Linq;
+
+namespace Dfe.EarlyYearsQualification.Content.Renderers;
 
 public class GovUkInsetTextRenderer : IContentRenderer
 {

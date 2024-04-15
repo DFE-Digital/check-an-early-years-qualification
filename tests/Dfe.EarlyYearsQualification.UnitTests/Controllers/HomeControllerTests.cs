@@ -12,8 +12,8 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class HomeControllerTests
 {
-    private ILogger<HomeController> _mockLogger = new NullLoggerFactory().CreateLogger<HomeController>();
-    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
+    private readonly ILogger<HomeController> _mockLogger = new NullLoggerFactory().CreateLogger<HomeController>();
+    private Mock<IContentService> _mockContentService = new();
     private HomeController? _controller;
 
     [TestInitialize]
@@ -38,7 +38,7 @@ public class HomeControllerTests
     [TestMethod]
     public async Task Index_ContentServiceReturnsContent_ReturnsStartPageModel()
     {
-        var startPageResult = new StartPage()
+        var startPageResult = new StartPage
         {
             CtaButtonText = "Start now",
             Header = "This is the header",
