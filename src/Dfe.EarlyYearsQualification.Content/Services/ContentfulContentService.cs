@@ -79,23 +79,26 @@ public class ContentfulContentService : IContentService
 
         if (qualifications is null || !qualifications.Any())
         {
-            _logger.LogWarning($"No qualifications returned for qualificationId: {HttpUtility.HtmlEncode(qualificationId)}");
+            var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
+            _logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}", encodedQualificationId);
             return default;
         }
         var qualification = qualifications.First();
         return qualification;
     }
 
-    private async Task<ContentfulCollection<T>?> GetEntriesByType<T>(QueryBuilder<T>? queryBuilder = null) 
+    private async Task<ContentfulCollection<T>?> GetEntriesByType<T>(QueryBuilder<T>? queryBuilder = null)
     {
+        var type = typeof(T);
         try
         {
-            var results = await _contentfulClient.GetEntriesByType(_contentTypes[typeof(T)], queryBuilder);
+            var results = await _contentfulClient.GetEntriesByType(_contentTypes[type], queryBuilder);
             return results;
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception trying to retrieve {typeof(T)} from Contentful. Error: {ex}");
+            var typeName = type.Name;
+            _logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
             return default;
         }
     }
