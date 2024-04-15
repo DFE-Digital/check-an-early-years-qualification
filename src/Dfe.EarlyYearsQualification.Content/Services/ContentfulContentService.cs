@@ -14,7 +14,7 @@ public class ContentfulContentService : IContentService
     private readonly IContentfulClient _contentfulClient;
     private readonly ILogger<ContentfulContentService> _logger;
 
-    private Dictionary<object, string> ContentTypes = new()
+    private readonly Dictionary<object, string> _contentTypes = new()
     {
         {typeof(StartPage), "startPage"},
         {typeof(NavigationLink), "navigationLink"},
@@ -33,11 +33,11 @@ public class ContentfulContentService : IContentService
         var startPageEntries = await GetEntriesByType<StartPage>();
         if (startPageEntries is null || !startPageEntries.Any())
         {
-            _logger.LogWarning($"No start page entry returned");
+            _logger.LogWarning("No start page entry returned");
             return default;
         }
         var startPageContent = startPageEntries.First();
-        HtmlRenderer htmlRenderer = GetGeneralHtmlRenderer();
+        var htmlRenderer = GetGeneralHtmlRenderer();
         startPageContent.PreCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PreCtaButtonContent);
         startPageContent.PostCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent);
         startPageContent.RightHandSideContentHtml = await GetSideContentHtmlRenderer().ToHtml(startPageContent.RightHandSideContent);
@@ -49,11 +49,11 @@ public class ContentfulContentService : IContentService
       var detailsPageEntries = await GetEntriesByType<DetailsPage>();
       if (detailsPageEntries is null || !detailsPageEntries.Any())
       {
-          _logger.LogWarning($"No details page entry returned");
+          _logger.LogWarning("No details page entry returned");
           return default;
       }
       var detailsPageContent = detailsPageEntries.First();
-      HtmlRenderer htmlRenderer = GetGeneralHtmlRenderer();
+      var htmlRenderer = GetGeneralHtmlRenderer();
       htmlRenderer.AddRenderer(new GovUkInsetTextRenderer(_contentfulClient) { Order = 18 });
       detailsPageContent.CheckAnotherQualificationTextHtml = await htmlRenderer.ToHtml(detailsPageContent.CheckAnotherQualificationText);
       detailsPageContent.FurtherInfoTextHtml = await htmlRenderer.ToHtml(detailsPageContent.FurtherInfoText);
@@ -63,18 +63,19 @@ public class ContentfulContentService : IContentService
     public async Task<List<NavigationLink>?> GetNavigationLinks()
     {
         var navigationLinkEntries = await GetEntriesByType<NavigationLink>();
-        if (navigationLinkEntries is null || !navigationLinkEntries.Any())
+        if (navigationLinkEntries is not null && navigationLinkEntries.Any())
         {
-            _logger.LogWarning($"No navigation links returned");
-            return default;
+            return navigationLinkEntries.ToList();
         }
-        return navigationLinkEntries.ToList();
+
+        _logger.LogWarning("No navigation links returned");
+        return default;
     }
 
     public async Task<Qualification?> GetQualificationById(string qualificationId)
     {
-        var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(ContentTypes[typeof(Qualification)]).FieldEquals("fields.qualificationId", qualificationId.ToUpper());
-        var qualifications = await GetEntriesByType<Qualification>(queryBuilder);
+        var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(_contentTypes[typeof(Qualification)]).FieldEquals("fields.qualificationId", qualificationId.ToUpper());
+        var qualifications = await GetEntriesByType(queryBuilder);
 
         if (qualifications is null || !qualifications.Any())
         {
@@ -89,7 +90,7 @@ public class ContentfulContentService : IContentService
     {
         try
         {
-            var results = await _contentfulClient.GetEntriesByType<T>(ContentTypes[typeof(T)], queryBuilder);
+            var results = await _contentfulClient.GetEntriesByType(_contentTypes[typeof(T)], queryBuilder);
             return results;
         }
         catch (Exception ex)
@@ -99,17 +100,17 @@ public class ContentfulContentService : IContentService
         }
     }
 
-    private HtmlRenderer GetGeneralHtmlRenderer()
+    private static HtmlRenderer GetGeneralHtmlRenderer()
     {
         var htmlRenderer = new HtmlRenderer();      
-        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListRenderer() { Order = 17 });
+        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListRenderer { Order = 17 });
         return htmlRenderer;
     }
 
-    private HtmlRenderer GetSideContentHtmlRenderer()
+    private static HtmlRenderer GetSideContentHtmlRenderer()
     {
         var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListHyperlinksRenderer() { Order = 17 });
+        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListHyperlinksRenderer { Order = 17 });
         return htmlRenderer;
     }
 }

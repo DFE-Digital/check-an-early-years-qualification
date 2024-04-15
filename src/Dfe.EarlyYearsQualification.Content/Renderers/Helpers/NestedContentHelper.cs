@@ -1,6 +1,7 @@
 using System.Text;
 using Contentful.Core.Models;
-using Dfe.EarlyYearsQualification.Content.Renderers;
+
+namespace Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
 
 public static class NestedContentHelper
 {
@@ -35,4 +36,3 @@ public static class NestedContentHelper
     return sb.ToString();
   }
 }
-

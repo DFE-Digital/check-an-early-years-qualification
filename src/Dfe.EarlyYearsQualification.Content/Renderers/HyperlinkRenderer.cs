@@ -10,7 +10,7 @@ public class HyperlinkRenderer : IContentRenderer
     {
         var hyperlink = content as Hyperlink;
         var hyperlinkText = hyperlink!.Content[0] as Text;
-        return Task.FromResult($"<a href='{hyperlink!.Data.Uri}' class='govuk-link'>{hyperlinkText!.Value}</a>");
+        return Task.FromResult($"<a href='{hyperlink.Data.Uri}' class='govuk-link'>{hyperlinkText!.Value}</a>");
     }
 
     public bool SupportsContent(IContent content)
