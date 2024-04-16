@@ -10,7 +10,7 @@ on:
         type: choice
         options:
           - development
-        #   - staging
+          - staging
         #   - production
 
 defaults:
