@@ -14,6 +14,7 @@ locals {
     "TRACKING_ID"                         = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
     "KeyVault__Endpoint"                  = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
+    "ContentfulOptions__UsePreviewApi"    = var.environment == staging ? true : false
   }
 
   webapp_slot_app_settings = {
