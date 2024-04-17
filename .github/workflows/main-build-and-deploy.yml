@@ -65,7 +65,7 @@ jobs:
 
   deploy-to-staging:
     runs-on: ubuntu-22.04
-    needs: create-and-publish-image
+    needs: [create-and-publish-image, deploy-to-dev]
     name: Deploy to staging
     environment: staging
     # Permissions for OIDC authentication
