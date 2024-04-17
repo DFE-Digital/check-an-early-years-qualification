@@ -3,7 +3,7 @@ using Contentful.Core;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Dfe.EarlyYearsQualification.Content.Renderers;
 
@@ -24,7 +24,8 @@ public class GovUkInsetTextRenderer : IContentRenderer
 
     try
     {
-      return model!.JObject.SelectToken("sys.contentType.sys.id")!.ToString().Contains("govUkInsetText");
+      var insetTextModel = model!.JObject.ToObject<GovUkInsetTextModel>();
+      return insetTextModel!.Sys.ContentType.SystemProperties.Id == "govUkInsetText";
     }
     catch
     {
@@ -36,15 +37,15 @@ public class GovUkInsetTextRenderer : IContentRenderer
   {
     var model = (content as EntryStructure)!.Data.Target as CustomNode;
 
-    // To simplify, we just grab the contentful ID from the content and recall to contentful to get a nice object back
-    var contentfulId = model!.JObject.Values().First(x => x.Path == "$id").ToString();
-    var insetTextModel = await _contentfulClient.GetEntry<GovUkInsetTextModel>(contentfulId);
+    var insetTextModel = model!.JObject.ToObject<GovUkInsetTextModel>();
+    var documentObject = insetTextModel!.Content!.ToString();
+    var doc = JsonConvert.DeserializeObject<Document>(documentObject!, _contentfulClient.SerializerSettings);
 
     var sb = new StringBuilder();
 
     sb.Append("<div class=\"govuk-inset-text\">");
 
-    sb.Append(await NestedContentHelper.Render(insetTextModel!.Content!.Content));
+    sb.Append(await NestedContentHelper.Render(doc!.Content));
 
     sb.Append("</div>");
 
