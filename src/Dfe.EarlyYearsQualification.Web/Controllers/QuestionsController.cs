@@ -21,26 +21,31 @@ public class QuestionsController : Controller
     [HttpGet("where-was-the-qualification-awarded")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
-        var questionPage = await _contentService.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
-        if (questionPage is null)
-        {
-            return RedirectToAction("Error", "Home");
-        }
-
-        var model = Map(questionPage, "WhereWasTheQualificationAwarded", "Questions");
-
-        return View("Question", model);
+        return await GetView(QuestionPages.WhereWasTheQualificationAwarded, "WhereWasTheQualificationAwarded", "Questions");
     }
 
     [ValidateAntiForgeryToken]
     [HttpPost("where-was-the-qualification-awarded")]
     public IActionResult WhereWasTheQualificationAwarded(string option)
     {
-        if (option == "outside-uk")
+        if (option == Options.OutsideOfTheUnitedKingdom)
         {
             return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
         }
         return RedirectToAction("Get", "QualificationDetails");
+    }
+
+    private async Task<IActionResult> GetView(string questionPageId, string actionName, string controllerName)
+    {
+        var questionPage = await _contentService.GetQuestionPage(questionPageId);
+        if (questionPage is null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        var model = Map(questionPage, actionName, controllerName);
+
+        return View("Question", model);
     }
 
     private QuestionModel Map(QuestionPage question, string actionName, string controllerName)
