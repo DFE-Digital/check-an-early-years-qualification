@@ -19,7 +19,9 @@ public class ContentfulContentService : IContentService
         {typeof(StartPage), "startPage"},
         {typeof(NavigationLink), "navigationLink"},
         {typeof(Qualification), "Qualification"},
-        {typeof(DetailsPage), "detailsPage"}
+        {typeof(DetailsPage), "detailsPage"},
+        {typeof(AdvicePage), "advicePage"},
+        {typeof(QuestionPage), "questionPage"}
     };
 
     public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
@@ -85,6 +87,40 @@ public class ContentfulContentService : IContentService
         }
         var qualification = qualifications.First();
         return qualification;
+    }
+
+    public async Task<AdvicePage?> GetAdvicePage(string entryId)
+    {
+        var advicePage = await GetEntryById<AdvicePage>(entryId);
+        if (advicePage is null)
+        {
+            _logger.LogWarning($"Advice page with {entryId} could not be found");
+            return default;
+        }
+        var htmlRenderer = GetGeneralHtmlRenderer();
+        advicePage.BodyHtml = await htmlRenderer.ToHtml(advicePage.Body);
+        return advicePage;
+    }
+
+    public async Task<QuestionPage?> GetQuestionPage(string entryId)
+    {
+        return await GetEntryById<QuestionPage>(entryId);
+    }
+
+    private async Task<T?> GetEntryById<T>(string entryId)
+    {
+        try
+        {
+            // NOTE: GetEntry doesn't bind linked references which is why we are using GetEntriesByType
+            var queryBuilder = new QueryBuilder<T>().ContentTypeIs(_contentTypes[typeof(T)]).FieldEquals("sys.id", entryId);
+            var entry = await _contentfulClient.GetEntriesByType(_contentTypes[typeof(T)], queryBuilder);
+            return entry.FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception trying to retrieve entryId {entryId} for type {type} from Contentful.", entryId, nameof(T));
+            return default;
+        }
     }
 
     private async Task<ContentfulCollection<T>?> GetEntriesByType<T>(QueryBuilder<T>? queryBuilder = null)
