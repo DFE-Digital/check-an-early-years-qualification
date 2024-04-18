@@ -11,4 +11,8 @@ public interface IContentService
     Task<Qualification?> GetQualificationById(string qualificationId);
 
     Task<DetailsPage?> GetDetailsPage();
+
+    Task<AdvicePage?> GetAdvicePage(string entryId);
+
+    Task<QuestionPage?> GetQuestionPage(string entryId);
 }
