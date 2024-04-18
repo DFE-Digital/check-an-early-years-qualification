@@ -59,9 +59,21 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public void Post_WhereWasTheQualificationAwarded_PassInOutsideUk_RedirectsToAdvicePage()
+    public async Task Post_WhereWasTheQualificationAwarded_InvalidModel_ReturnsQuestionPage()
     {
-        var result = _controller!.WhereWasTheQualificationAwarded(Options.OutsideOfTheUnitedKingdom);
+        _controller!.ModelState.AddModelError("option", "test error");
+        var result = await _controller!.WhereWasTheQualificationAwarded(new QuestionModel());
+
+        Assert.IsNotNull(result);
+        var resultType = result as ViewResult;
+        Assert.IsNotNull(resultType);
+        Assert.AreEqual("Question", resultType.ViewName);
+    }
+
+    [TestMethod]
+    public async Task Post_WhereWasTheQualificationAwarded_PassInOutsideUk_RedirectsToAdvicePage()
+    {
+        var result = await _controller!.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.OutsideOfTheUnitedKingdom });
 
         Assert.IsNotNull(result);
         var resultType = result as RedirectToActionResult;
@@ -71,9 +83,9 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public void Post_WhereWasTheQualificationAwarded_PassInEngland_RedirectsToQualificationDetails()
+    public async Task Post_WhereWasTheQualificationAwarded_PassInEngland_RedirectsToQualificationDetails()
     {
-        var result = _controller!.WhereWasTheQualificationAwarded(Options.England);
+        var result = await _controller!.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.England });
 
         Assert.IsNotNull(result);
         var resultType = result as RedirectToActionResult;

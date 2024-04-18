@@ -26,9 +26,21 @@ public class QuestionsController : Controller
 
     [ValidateAntiForgeryToken]
     [HttpPost("where-was-the-qualification-awarded")]
-    public IActionResult WhereWasTheQualificationAwarded(string option)
+    public async Task<IActionResult> WhereWasTheQualificationAwarded(QuestionModel model)
     {
-        if (option == Options.OutsideOfTheUnitedKingdom)
+        if (!ModelState.IsValid)
+        {
+            var questionPage = await _contentService.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
+            if (questionPage is not null)
+            {
+                model = Map(model, questionPage, "WhereWasTheQualificationAwarded", "Questions");
+                model.HasErrors = true;
+            }
+            
+            return View("Question", model);
+        }
+
+        if (model.Option == Options.OutsideOfTheUnitedKingdom)
         {
             return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
         }
@@ -43,20 +55,19 @@ public class QuestionsController : Controller
             return RedirectToAction("Error", "Home");
         }
 
-        var model = Map(questionPage, actionName, controllerName);
+        var model = Map(new QuestionModel(), questionPage, actionName, controllerName);
 
         return View("Question", model);
     }
 
-    private QuestionModel Map(QuestionPage question, string actionName, string controllerName)
+    private QuestionModel Map(QuestionModel model, QuestionPage question, string actionName, string controllerName)
     {
-        return new QuestionModel
-        {
-            Question = question.Question,
-            Options = question.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList(),
-            CtaButtonText = question.CtaButtonText,
-            ActionName = actionName,
-            ControllerName = controllerName,
-        };
+        model.Question = question.Question;
+        model.Options = question.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList();
+        model.CtaButtonText = question.CtaButtonText;
+        model.ActionName = actionName;
+        model.ControllerName = controllerName;
+        model.ErrorMessage = question.ErrorMessage;
+        return model;
     }
 }
