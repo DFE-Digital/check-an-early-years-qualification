@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Moq;
+using Dfe.EarlyYearsQualification.Content.Constants;
 
 namespace Dfe.EarlyYearsQualification.Web.Extensions;
 
@@ -53,6 +54,25 @@ public static class ServiceCollectionExtensions
       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
       "Additional notes"
     ));
+
+    mockContentfulService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUK)).ReturnsAsync(new AdvicePage {
+      Heading = "Qualifications achieved outside the United Kingdom",
+      BodyHtml = "<p id='outside-uk-body'>This is the body of the page</p>"
+    });
+
+    mockContentfulService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new QuestionPage {
+      Question = "Where was the qualification awarded?",
+      Options = new List<Option> {
+        new Option {
+          Label = "England", Value = Options.England
+        },
+        new Option {
+          Label = "Outside the United Kingdom", Value = Options.OutsideOfTheUnitedKingdom
+        }
+      },
+      CtaButtonText = "Continue",
+      ErrorMessage = "Test error message"
+    });
 
     services.AddSingleton(mockContentfulService.Object);
     return services;
