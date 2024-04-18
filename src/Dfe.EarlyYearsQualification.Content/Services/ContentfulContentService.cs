@@ -142,14 +142,14 @@ public class ContentfulContentService : IContentService
     private static HtmlRenderer GetGeneralHtmlRenderer()
     {
         var htmlRenderer = new HtmlRenderer();      
-        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListRenderer { Order = 17 });
+        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListRenderer { Order = 18 });
         return htmlRenderer;
     }
 
     private static HtmlRenderer GetSideContentHtmlRenderer()
     {
         var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListHyperlinksRenderer { Order = 17 });
+        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListHyperlinksRenderer { Order = 18 });
         return htmlRenderer;
     }
 }
