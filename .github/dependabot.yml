@@ -24,3 +24,11 @@ updates:
     labels:
       - nuget
       - dependabot
+
+  - package-ecosystem: npm
+    directory: /src/Dfe.EarlyYearsQualification.Node
+    schedule:
+      interval: 'daily'
+    labels:
+      - npm
+      - dependabot
