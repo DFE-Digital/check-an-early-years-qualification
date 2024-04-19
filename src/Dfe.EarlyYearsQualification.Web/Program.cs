@@ -2,8 +2,13 @@ using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Extensions;
 using Azure.Identity;
+using OwaspHeaders.Core.Extensions;
+using Dfe.EarlyYearsQualification.Web.Security;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(serverOptions => {
+  serverOptions.AddServerHeader = false;
+});
 
 if (!builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
@@ -25,6 +30,9 @@ if (builder.Configuration.GetValue<bool>("UseMockContentful"))
 }
 
 var app = builder.Build();
+app.UseSecureHeadersMiddleware(
+  SecureHeaderConfiguration.CustomConfiguration()
+);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
