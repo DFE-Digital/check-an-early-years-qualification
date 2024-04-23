@@ -39,7 +39,7 @@ public class GovUkInsetTextRenderer : IContentRenderer
 
     var insetTextModel = model!.JObject.ToObject<GovUkInsetTextModel>();
     var documentObject = insetTextModel!.Content!.ToString();
-    var doc = JsonConvert.DeserializeObject<Document>(documentObject!, _contentfulClient.SerializerSettings);
+    var doc = JsonConvert.DeserializeObject<Document>(documentObject, _contentfulClient.SerializerSettings);
 
     var sb = new StringBuilder();
 

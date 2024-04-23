@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,12 @@ public class QuestionsControllerTests
     [TestMethod]
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsQuestionPage_ReturnsAdvicePageModel()
     {
-        var questionPage = new QuestionPage() { Question = "Test question", CtaButtonText = "Continue", Options = new List<Option> { new Option { Label = "Label", Value = "Value"} } };
+        var questionPage = new QuestionPage
+                           { 
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               Options = [new() { Label = "Label", Value = "Value" }]
+                           };
         _mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(questionPage);
         var result = await _controller!.WhereWasTheQualificationAwarded();
 

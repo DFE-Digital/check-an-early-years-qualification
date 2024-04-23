@@ -21,7 +21,7 @@ public class AdviceController : Controller
     [HttpGet("qualification-outside-the-united-kingdom")]
     public async Task<IActionResult> QualificationOutsideTheUnitedKingdom()
     {
-        return await GetView(AdvicePages.QualificationsAchievedOutsideTheUK);
+        return await GetView(AdvicePages.QualificationsAchievedOutsideTheUk);
     }
 
     private async Task<IActionResult> GetView(string advicePageId)
@@ -37,12 +37,12 @@ public class AdviceController : Controller
         return View("Advice", model);
     }
 
-    private AdvicePageModel Map(AdvicePage advicePage)
+    private static AdvicePageModel Map(AdvicePage advicePage)
     {
         return new AdvicePageModel
         {
             Heading = advicePage.Heading,
-            BodyContent = advicePage.BodyHtml,
+            BodyContent = advicePage.BodyHtml
         };
     }
 }
