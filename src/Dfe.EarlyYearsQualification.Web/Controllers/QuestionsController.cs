@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Constants;
+using Dfe.EarlyYearsQualification.Web.Constants;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
@@ -60,7 +61,7 @@ public class QuestionsController : Controller
         return View("Question", model);
     }
 
-    private QuestionModel Map(QuestionModel model, QuestionPage question, string actionName, string controllerName)
+    private static QuestionModel Map(QuestionModel model, QuestionPage question, string actionName, string controllerName)
     {
         model.Question = question.Question;
         model.Options = question.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList();

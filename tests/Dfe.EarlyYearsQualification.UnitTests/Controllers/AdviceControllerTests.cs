@@ -28,7 +28,7 @@ public class AdviceControllerTests
     [TestMethod]
     public async Task QualificationOutsideTheUnitedKingdom_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {
-        _mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUK)).ReturnsAsync((AdvicePage)default!).Verifiable();
+        _mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk)).ReturnsAsync((AdvicePage)default!).Verifiable();
         var result = await _controller!.QualificationOutsideTheUnitedKingdom();
 
         _mockContentService.VerifyAll();
@@ -42,8 +42,8 @@ public class AdviceControllerTests
     [TestMethod]
     public async Task QualificationOutsideTheUnitedKingdom_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
     {
-        var advicePage = new AdvicePage() { Heading = "Heading", BodyHtml = "Test html body" };
-        _mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUK)).ReturnsAsync(advicePage);
+        var advicePage = new AdvicePage { Heading = "Heading", BodyHtml = "Test html body" };
+        _mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk)).ReturnsAsync(advicePage);
         var result = await _controller!.QualificationOutsideTheUnitedKingdom();
 
         Assert.IsNotNull(result);

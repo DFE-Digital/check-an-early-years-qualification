@@ -4,7 +4,7 @@ public class QuestionPage
 {
   public string Question { get; init; } = string.Empty;
 
-  public List<Option> Options { get; init; } = new List<Option>();
+  public List<Option> Options { get; init; } = [];
 
   public string CtaButtonText { get; init; } = string.Empty;
 

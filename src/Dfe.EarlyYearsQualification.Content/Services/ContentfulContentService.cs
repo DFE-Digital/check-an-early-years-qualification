@@ -94,7 +94,7 @@ public class ContentfulContentService : IContentService
         var advicePage = await GetEntryById<AdvicePage>(entryId);
         if (advicePage is null)
         {
-            _logger.LogWarning($"Advice page with {entryId} could not be found");
+            _logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
             return default;
         }
         var htmlRenderer = GetGeneralHtmlRenderer();

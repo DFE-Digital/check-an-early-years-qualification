@@ -1,9 +1,9 @@
-namespace Dfe.EarlyYearsQualification.Content.Constants;
+namespace Dfe.EarlyYearsQualification.Web.Constants;
 
-public class Options
+public static class Options
 {
     /// <summary>
-    /// Option for outside of the UK.
+    /// Option for outside the UK.
     /// </summary>
     public const string OutsideOfTheUnitedKingdom = "outside-uk";
 
@@ -15,7 +15,7 @@ public class Options
     /// <summary>
     /// Option for Scotland, Wales and Northern Ireland.
     /// </summary>
-    public const string ScotlandWalesNI = "scotland-wales-ni";
+    public const string ScotlandWalesNi = "scotland-wales-ni";
 
     /// <summary>
     /// Option for Not Sure.

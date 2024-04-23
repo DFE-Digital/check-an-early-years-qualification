@@ -6,7 +6,7 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class GovUkInsetTextModel
 {
-  public SystemProperties Sys { get; set; } = new SystemProperties();
+  public SystemProperties Sys { get; } = new();
 
   public string? Name { get; set; }
 
