@@ -13,7 +13,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 public class ContentfulContentServiceTests
 {
     [TestMethod]
-    public void GetStartPage_ReturnsExpectedResult()
+    public void GetStartPage_PageFound_ReturnsExpectedResult()
     {
         var startPage = new StartPage { CtaButtonText = "CtaButton" };
 
