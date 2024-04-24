@@ -36,4 +36,5 @@ runs:
         path: code-coverage-results.md
     
     - name: Write to Job Summary
+      shell: bash
       run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
