@@ -1,31 +1,33 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Renderers;
+using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 using FluentAssertions;
+using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.Renderers.GovUk.ParagraphRenderer;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
 
 [TestClass]
-public class GovUkParagraphRendererTests
+public class ParagraphRendererTests
 {
     [TestMethod]
     public void GovUkParagraphRenderer_SupportsPara()
     {
         var para = new Paragraph();
-        new GovUkParagraphRenderer().SupportsContent(para).Should().BeTrue();
+        new ParagraphRenderer().SupportsContent(para).Should().BeTrue();
     }
     
     [TestMethod]
     public void GovUkParagraphRenderer_DoesNotSupportText()
     {
         var para = new Text();
-        new GovUkParagraphRenderer().SupportsContent(para).Should().BeFalse();
+        new ParagraphRenderer().SupportsContent(para).Should().BeFalse();
     }
     
     [TestMethod]
     public void GovUkParagraphRenderer_DoesNotSupportHyperlink()
     {
         var para = new Hyperlink();
-        new GovUkParagraphRenderer().SupportsContent(para).Should().BeFalse();
+        new ParagraphRenderer().SupportsContent(para).Should().BeFalse();
     }
     
     [TestMethod]
@@ -35,7 +37,7 @@ public class GovUkParagraphRendererTests
 
         var para = new Paragraph { Content = [text] };
         
-        var renderer = new GovUkParagraphRenderer();
+        var renderer = new ParagraphRenderer();
         var result = renderer.RenderAsync(para).Result;
 
         result.Should().Be("<p class=\"govuk-body\">Some text.</p>");

@@ -2,9 +2,9 @@ using System.Text;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
 
-namespace Dfe.EarlyYearsQualification.Content.Renderers;
+namespace Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 
-public class GovUkParagraphRenderer : IContentRenderer
+public class ParagraphRenderer : IContentRenderer
 {
     public int Order { get; set; }
 
