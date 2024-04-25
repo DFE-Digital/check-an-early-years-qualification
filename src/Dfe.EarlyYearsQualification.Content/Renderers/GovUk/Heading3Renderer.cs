@@ -1,6 +1,6 @@
 using Contentful.Core.Models;
 
-namespace Dfe.EarlyYearsQualification.Content.Renderers;
+namespace Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 
 public class Heading3Renderer : IContentRenderer
 {
