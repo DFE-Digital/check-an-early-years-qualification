@@ -15,8 +15,7 @@ builder.WebHost.ConfigureKestrel(serverOptions => {
 var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
 if (!builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
-  var keyVaultUri = new Uri(keyVaultEndpoint!);
-  builder.Configuration.AddAzureKeyVault(keyVaultUri, new DefaultAzureCredential());
+  builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 }
 
 // Add services to the container.
