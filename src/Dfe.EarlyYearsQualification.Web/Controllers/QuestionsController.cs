@@ -25,7 +25,6 @@ public class QuestionsController : Controller
         return await GetView(QuestionPages.WhereWasTheQualificationAwarded, "WhereWasTheQualificationAwarded", "Questions");
     }
 
-    //[ValidateAntiForgeryToken]
     [HttpPost("where-was-the-qualification-awarded")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded(QuestionModel model)
     {
