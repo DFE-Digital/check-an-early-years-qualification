@@ -16,6 +16,10 @@ var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<str
 if (!builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
   builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
+  var blobStorageConnectionString = builder.Configuration.GetSection("Storage").GetValue<string>("ConnectionString");
+  builder.Services.AddDataProtection()
+    .PersistKeysToAzureBlobStorage(blobStorageConnectionString, "data-protection", "data-protection")
+    .ProtectKeysWithAzureKeyVault(new Uri(string.Format("{0}keys/data-protection", keyVaultEndpoint)), new DefaultAzureCredential());
 }
 
 // Add services to the container.
@@ -23,11 +27,6 @@ builder.Services.AddControllersWithViews(options => {
   // Ensures that all POST actions are protected by default.
   options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
-
-var blobStorageConnectionString = builder.Configuration.GetSection("Storage").GetValue<string>("ConnectionString");
-builder.Services.AddDataProtection()
-  .PersistKeysToAzureBlobStorage(blobStorageConnectionString, "data-protection", "data-protection")
-  .ProtectKeysWithAzureKeyVault(new Uri(string.Format("{0}keys/data-protection", keyVaultEndpoint)), new DefaultAzureCredential());
 
 builder.Services.AddContentful(builder.Configuration);
 
