@@ -6,6 +6,7 @@ using Dfe.EarlyYearsQualification.Content.Extensions;
 using Dfe.EarlyYearsQualification.Content.Renderers;
 using Microsoft.Extensions.Logging;
 using System.Web;
+using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
@@ -56,7 +57,7 @@ public class ContentfulContentService : IContentService
       }
       var detailsPageContent = detailsPageEntries.First();
       var htmlRenderer = GetGeneralHtmlRenderer();
-      htmlRenderer.AddRenderer(new GovUkInsetTextRenderer(_contentfulClient) { Order = 18 });
+      htmlRenderer.AddRenderer(new InsetTextRenderer(_contentfulClient) { Order = 18 });
       detailsPageContent.CheckAnotherQualificationTextHtml = await htmlRenderer.ToHtml(detailsPageContent.CheckAnotherQualificationText);
       detailsPageContent.FurtherInfoTextHtml = await htmlRenderer.ToHtml(detailsPageContent.FurtherInfoText);
       return detailsPageContent;
