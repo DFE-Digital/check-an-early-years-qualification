@@ -10,8 +10,6 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddMockContentful(this IServiceCollection services)
     {
-        // todo: can we implement a mock content service, rather than invoking Moq?
-        // todo: can we move this into a separate library, so the mock service isn't an explicit dependency?
         var mockContentfulService = new Mock<IContentService>();
 
         mockContentfulService.Setup(x => x.GetStartPage())
