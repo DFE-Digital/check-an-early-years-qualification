@@ -6,6 +6,6 @@ describe("A spec that tests the accessibility statement page", () => {
 
 
       cy.get("#accessibility-statement-heading").should("contain.text", "Test Accessibility Statement Heading");
-      cy.get("#accessibility-statement-body").should("contain.text", "<p> Test Accessibility Statement Body </p>");
+      cy.get("#accessibility-statement-body").should("contain.text", "Test Accessibility Statement Body");
   })
 })
