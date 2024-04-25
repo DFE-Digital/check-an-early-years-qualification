@@ -20,11 +20,19 @@ public class InsetTextRenderer : IContentRenderer
 
     public bool SupportsContent(IContent content)
     {
-        var model = (content as EntryStructure)!.Data.Target as CustomNode;
+        if (content is not EntryStructure entryStructure)
+        {
+            return false;
+        }
+
+        if (entryStructure.Data is null || entryStructure.Data.Target is null || entryStructure.Data.Target is not CustomNode model)
+        {
+            return false;
+        }
 
         try
         {
-            var insetTextModel = model!.JObject.ToObject<GovUkInsetTextModel>();
+            var insetTextModel = model.JObject.ToObject<GovUkInsetTextModel>();
             return insetTextModel!.Sys.ContentType.SystemProperties.Id == "govUkInsetText";
         }
         catch

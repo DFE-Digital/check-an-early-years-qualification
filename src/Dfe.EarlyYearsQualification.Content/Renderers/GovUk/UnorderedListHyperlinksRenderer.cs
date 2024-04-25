@@ -10,6 +10,12 @@ public class UnorderedListHyperlinksRenderer : IContentRenderer
     public Task<string> RenderAsync(IContent content)
     {
         var list = content as List;
+
+        if (list!.Content.Count == 0)
+        {
+            return Task.FromResult(string.Empty);
+        }
+
         var sb = new StringBuilder();
         sb.Append("<ul class=\"govuk-list govuk-list--spaced govuk-!-font-size-16\">");
         foreach (var contentItem in list!.Content)
