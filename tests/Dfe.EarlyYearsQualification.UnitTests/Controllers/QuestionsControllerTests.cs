@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -14,10 +15,11 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class QuestionsControllerTests
 {
+    private readonly ILogger<QuestionsController> _mockLogger =
+        new NullLoggerFactory().CreateLogger<QuestionsController>();
 
-    private readonly ILogger<QuestionsController> _mockLogger = new NullLoggerFactory().CreateLogger<QuestionsController>();
-    private Mock<IContentService> _mockContentService = new();
     private QuestionsController? _controller;
+    private Mock<IContentService> _mockContentService = new();
 
     [TestInitialize]
     public void BeforeEachTest()
@@ -29,39 +31,47 @@ public class QuestionsControllerTests
     [TestMethod]
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
-        _mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync((QuestionPage)default!).Verifiable();
+        _mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                           .ReturnsAsync((QuestionPage)default!).Verifiable();
         var result = await _controller!.WhereWasTheQualificationAwarded();
 
         _mockContentService.VerifyAll();
-        Assert.IsNotNull(result);
+
+        result.Should().NotBeNull();
+
         var resultType = result as RedirectToActionResult;
-        Assert.IsNotNull(resultType);
-        Assert.AreEqual("Error", resultType.ActionName);
-        Assert.AreEqual("Home", resultType.ControllerName);
+        result.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Error");
+        resultType.ControllerName.Should().Be("Home");
     }
 
     [TestMethod]
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsQuestionPage_ReturnsAdvicePageModel()
     {
         var questionPage = new QuestionPage
-                           { 
+                           {
                                Question = "Test question",
                                CtaButtonText = "Continue",
-                               Options = [new() { Label = "Label", Value = "Value" }]
+                               Options = [new Option { Label = "Label", Value = "Value" }]
                            };
-        _mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(questionPage);
+        _mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                           .ReturnsAsync(questionPage);
         var result = await _controller!.WhereWasTheQualificationAwarded();
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var resultType = result as ViewResult;
-        Assert.IsNotNull(resultType);
-        var model = resultType.Model as QuestionModel;
-        Assert.IsNotNull(model);
-        Assert.AreEqual(questionPage.Question, model.Question);
-        Assert.AreEqual(questionPage.CtaButtonText, model.CtaButtonText);
-        Assert.AreEqual(1, model.Options.Count);
-        Assert.AreEqual(questionPage.Options[0].Label, model.Options[0].Label);
-        Assert.AreEqual(questionPage.Options[0].Value, model.Options[0].Value);
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as QuestionModel;
+        model.Should().NotBeNull();
+
+        model!.Question.Should().Be(questionPage.Question);
+        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
+        model.Options.Count.Should().Be(1);
+        model.Options[0].Label.Should().Be(questionPage.Options[0].Label);
+        model.Options[0].Value.Should().Be(questionPage.Options[0].Value);
     }
 
     [TestMethod]
@@ -70,22 +80,28 @@ public class QuestionsControllerTests
         _controller!.ModelState.AddModelError("option", "test error");
         var result = await _controller!.WhereWasTheQualificationAwarded(new QuestionModel());
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var resultType = result as ViewResult;
-        Assert.IsNotNull(resultType);
-        Assert.AreEqual("Question", resultType.ViewName);
+        resultType.Should().NotBeNull();
+
+        resultType!.ViewName.Should().Be("Question");
     }
 
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_PassInOutsideUk_RedirectsToAdvicePage()
     {
-        var result = await _controller!.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.OutsideOfTheUnitedKingdom });
+        var result =
+            await _controller!.WhereWasTheQualificationAwarded(new QuestionModel
+                                                               { Option = Options.OutsideOfTheUnitedKingdom });
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var resultType = result as RedirectToActionResult;
-        Assert.IsNotNull(resultType);
-        Assert.AreEqual("QualificationOutsideTheUnitedKingdom", resultType.ActionName);
-        Assert.AreEqual("Advice", resultType.ControllerName);
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("QualificationOutsideTheUnitedKingdom");
+        resultType.ControllerName.Should().Be("Advice");
     }
 
     [TestMethod]
@@ -93,10 +109,12 @@ public class QuestionsControllerTests
     {
         var result = await _controller!.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.England });
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var resultType = result as RedirectToActionResult;
-        Assert.IsNotNull(resultType);
-        Assert.AreEqual("Get", resultType.ActionName);
-        Assert.AreEqual("QualificationDetails", resultType.ControllerName);
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Get");
+        resultType.ControllerName.Should().Be("QualificationDetails");
     }
 }

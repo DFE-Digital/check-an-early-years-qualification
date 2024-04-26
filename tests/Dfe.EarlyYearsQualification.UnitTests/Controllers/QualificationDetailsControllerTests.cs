@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,22 +14,23 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class QualificationDetailsControllerTests
 {
+    private readonly ILogger<QualificationDetailsController> _mockLogger =
+        new NullLoggerFactory().CreateLogger<QualificationDetailsController>();
 
-    private readonly ILogger<QualificationDetailsController> _mockLogger = new NullLoggerFactory().CreateLogger<QualificationDetailsController>();
-    private Mock<IContentService> _mockContentService = new();
     private QualificationDetailsController? _controller;
+    private Mock<IContentService> _mockContentService = new();
 
     [TestInitialize]
     public void BeforeEachTest()
     {
         _mockContentService = new Mock<IContentService>();
         _controller = new QualificationDetailsController(_mockLogger, _mockContentService.Object)
-        {
-            ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext()
-            }
-        };
+                      {
+                          ControllerContext = new ControllerContext
+                                              {
+                                                  HttpContext = new DefaultHttpContext()
+                                              }
+                      };
     }
 
     [TestMethod]
@@ -36,10 +38,11 @@ public class QualificationDetailsControllerTests
     {
         var result = await _controller!.Index(string.Empty);
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var resultType = result as BadRequestResult;
-        Assert.IsNotNull(resultType);
-        Assert.AreEqual(400, resultType.StatusCode);
+        resultType.Should().NotBeNull();
+        resultType!.StatusCode.Should().Be(400);
     }
 
     [TestMethod]
@@ -50,35 +53,40 @@ public class QualificationDetailsControllerTests
         _mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
         var result = await _controller!.Index(qualificationId);
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var resultType = result as RedirectToActionResult;
-        Assert.IsNotNull(resultType);
-        Assert.AreEqual("Error", resultType.ActionName);
-        Assert.AreEqual("Home", resultType.ControllerName);
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Error");
+        resultType.ControllerName.Should().Be("Home");
     }
 
     [TestMethod]
     public async Task Index_ContentServiceReturnsQualification_ReturnsQualificationDetailsModel()
     {
         const string qualificationId = "eyq-145";
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019", "ABC/547/900", "notes", "additonal requirements");
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+                                                    "ABC/547/900", "notes", "additonal requirements");
         _mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         _mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
         var result = await _controller!.Index(qualificationId);
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var resultType = result as ViewResult;
-        Assert.IsNotNull(resultType);
-        var model = resultType.Model as QualificationDetailsModel;
-        Assert.IsNotNull(model);
-        Assert.AreEqual(qualificationResult.QualificationId, model.QualificationId);
-        Assert.AreEqual(qualificationResult.QualificationName, model.QualificationName);
-        Assert.AreEqual(qualificationResult.AwardingOrganisationTitle, model.AwardingOrganisationTitle);
-        Assert.AreEqual(qualificationResult.QualificationLevel, model.QualificationLevel);
-        Assert.AreEqual(qualificationResult.FromWhichYear, model.FromWhichYear);
-        Assert.AreEqual(qualificationResult.ToWhichYear, model.ToWhichYear);
-        Assert.AreEqual(qualificationResult.QualificationNumber, model.QualificationNumber);
-        Assert.AreEqual(qualificationResult.Notes, model.Notes);
-        Assert.AreEqual(qualificationResult.AdditionalRequirements, model.AdditionalRequirements);
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as QualificationDetailsModel;
+        model.Should().NotBeNull();
+
+        model!.QualificationId.Should().Be(qualificationResult.QualificationId);
+        model.QualificationName.Should().Be(qualificationResult.QualificationName);
+        model.AwardingOrganisationTitle.Should().Be(qualificationResult.AwardingOrganisationTitle);
+        model.QualificationLevel.Should().Be(qualificationResult.QualificationLevel);
+        model.FromWhichYear.Should().Be(qualificationResult.FromWhichYear);
+        model.ToWhichYear.Should().Be(qualificationResult.ToWhichYear);
+        model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
+        model.Notes.Should().Be(qualificationResult.Notes);
+        model.AdditionalRequirements.Should().Be(qualificationResult.AdditionalRequirements);
     }
 }
