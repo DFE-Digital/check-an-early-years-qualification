@@ -134,4 +134,65 @@ public class ContentfulContentServiceTests
     result.Should().NotBeNull();
     result.Should().BeSameAs(accessibilityStatementPage);
   }
+
+  [TestMethod]
+  public void GetCookiesPage_NoContent_ReturnsNull()
+  {
+    var pages = new ContentfulCollection<CookiesPage> { Items = new List<CookiesPage>() };
+
+    var clientMock = new Mock<IContentfulClient>();
+    clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(pages);
+
+    var service = new ContentfulContentService(clientMock.Object, new NullLogger<ContentfulContentService>());
+
+    var result = service.GetCookiesPage().Result;
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetCookiesPage_NullPages_ReturnsNull()
+  {
+    var clientMock = new Mock<IContentfulClient>();
+    clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync((ContentfulCollection<CookiesPage>)null!);
+
+    var service = new ContentfulContentService(clientMock.Object, new NullLogger<ContentfulContentService>());
+
+    var result = service.GetCookiesPage().Result;
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetCookiesPage_PageFound_ReturnsExpectedResult()
+  {
+    var cookiesPage = new CookiesPage { Heading = "Heading", BodyHtml = "BodyHtml" };
+
+    var pages = new ContentfulCollection<CookiesPage> { Items = new[] { cookiesPage } };
+
+    var clientMock = new Mock<IContentfulClient>();
+    clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(pages);
+
+    var service = new ContentfulContentService(clientMock.Object, new NullLogger<ContentfulContentService>());
+
+    var result = service.GetCookiesPage().Result;
+
+    result.Should().NotBeNull();
+    result.Should().BeSameAs(cookiesPage);
+  }
 }
