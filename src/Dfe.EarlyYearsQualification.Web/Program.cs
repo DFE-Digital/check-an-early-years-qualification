@@ -12,10 +12,11 @@ builder.WebHost.ConfigureKestrel(serverOptions => {
   serverOptions.AddServerHeader = false;
 });
 
-var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
 if (!builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
+  var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
   builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
+  
   var blobStorageConnectionString = builder.Configuration.GetSection("Storage").GetValue<string>("ConnectionString");
   builder.Services.AddDataProtection()
     .PersistKeysToAzureBlobStorage(blobStorageConnectionString, "data-protection", "data-protection")
