@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -11,8 +12,8 @@ public class HealthControllerTests
     {
         var controller = new HealthController();
         var result = controller.Get();
-        
-        Assert.IsNotNull(result);
-        Assert.IsInstanceOfType<OkResult>(result);
+
+        result.Should().NotBeNull();
+        result.Should().BeOfType<OkResult>();
     }
 }
