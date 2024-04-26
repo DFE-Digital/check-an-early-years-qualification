@@ -9,36 +9,37 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [Route("accessibility-statement")]
 public class AccessibilityStatementController : Controller
 {
-    private readonly ILogger<AccessibilityStatementController> _logger;
-    private readonly IContentService _contentService;
+  private readonly ILogger<AccessibilityStatementController> _logger;
+  private readonly IContentService _contentService;
 
-    public AccessibilityStatementController(ILogger<AccessibilityStatementController> logger, IContentService contentService)
+  public AccessibilityStatementController(ILogger<AccessibilityStatementController> logger, IContentService contentService)
+  {
+    _logger = logger;
+    _contentService = contentService;
+  }
+
+  [HttpGet]
+  public async Task<IActionResult> Index()
+  {
+    var content = await _contentService.GetAccessibilityStatementPage();
+
+    if (content is null)
     {
-        _logger = logger;
-        _contentService = contentService;
+      _logger.LogError("No content for the accessibility statement page");
+      return RedirectToAction("Error", "Home");
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Index()
+    var model = Map(content);
+
+    return View(model);
+  }
+
+  private static AccessibilityStatementPageModel Map(AccessibilityStatementPage content)
+  {
+    return new AccessibilityStatementPageModel
     {
-        var content = await _contentService.GetAccessibilityStatementPage();
-
-        if (content is null)
-        {
-            return RedirectToAction("Error", "Home");
-        }
-
-        var model = Map(content);
-
-        return View(model);
-    }
-
-    private static AccessibilityStatementPageModel Map(AccessibilityStatementPage content)
-    {
-      return new AccessibilityStatementPageModel
-      {
-        Heading = content.Heading,
-        BodyContent = content.BodyHtml
-      };
-    }
+      Heading = content.Heading,
+      BodyContent = content.BodyHtml
+    };
+  }
 }

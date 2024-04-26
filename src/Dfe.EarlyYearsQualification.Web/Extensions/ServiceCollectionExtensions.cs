@@ -33,7 +33,13 @@ public static class ServiceCollectionExtensions
                                                                                   {
                                                                                       DisplayText =
                                                                                           "Privacy notice",
-                                                                                      Href = "#"
+                                                                                      Href = "/link-to-privacy-notice"
+                                                                                  },
+                                                                                  new()
+                                                                                  {
+                                                                                      DisplayText =
+                                                                                          "Accessibility statement",
+                                                                                      Href = "/link-to-accessibility-statement"
                                                                                   }
                                                                               });
 
