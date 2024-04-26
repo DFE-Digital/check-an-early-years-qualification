@@ -23,7 +23,8 @@ public class ContentfulContentService : IContentService
         {typeof(DetailsPage), "detailsPage"},
         {typeof(AdvicePage), "advicePage"},
         {typeof(QuestionPage), "questionPage"},
-        {typeof(AccessibilityStatementPage), "accessibilityStatementPage"}
+        {typeof(AccessibilityStatementPage), "accessibilityStatementPage"},
+        {typeof(CookiesPage), "cookiesPage"}
     };
 
     public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
@@ -76,6 +77,20 @@ public class ContentfulContentService : IContentService
       var htmlRenderer = GetGeneralHtmlRenderer();
       accessibilityStatementPageContent.BodyHtml = await htmlRenderer.ToHtml(accessibilityStatementPageContent.Body);
       return accessibilityStatementPageContent;
+    }
+
+    public async Task<CookiesPage?> GetCookiesPage()
+    {
+      var cookiesEntities = await GetEntriesByType<CookiesPage>();
+      if (cookiesEntities is null || !cookiesEntities.Any())
+      {
+          _logger.LogWarning("No cookies page entry returned");
+          return default;
+      }
+      var cookiesContent = cookiesEntities.First();
+      var htmlRenderer = GetGeneralHtmlRenderer();
+      cookiesContent.BodyHtml = await htmlRenderer.ToHtml(cookiesContent.Body);
+      return cookiesContent;
     }
 
     public async Task<List<NavigationLink>?> GetNavigationLinks()

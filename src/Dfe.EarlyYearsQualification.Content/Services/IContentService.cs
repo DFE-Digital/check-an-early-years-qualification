@@ -17,4 +17,6 @@ public interface IContentService
     Task<QuestionPage?> GetQuestionPage(string entryId);
 
     Task<AccessibilityStatementPage?> GetAccessibilityStatementPage();
+
+    Task<CookiesPage?> GetCookiesPage();
 }
