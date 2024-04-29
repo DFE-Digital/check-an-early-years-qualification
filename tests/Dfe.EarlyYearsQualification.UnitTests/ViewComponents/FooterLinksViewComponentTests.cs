@@ -1,6 +1,7 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -11,9 +12,11 @@ namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
 [TestClass]
 public class FooterLinksViewComponentTests
 {
-    private ILogger<FooterLinksViewComponent> _mockLogger = new NullLoggerFactory().CreateLogger<FooterLinksViewComponent>();
     private Mock<IContentService> _mockContentService = new();
-    
+
+    private ILogger<FooterLinksViewComponent> _mockLogger =
+        new NullLoggerFactory().CreateLogger<FooterLinksViewComponent>();
+
     [TestInitialize]
     public void BeforeTestRun()
     {
@@ -24,21 +27,24 @@ public class FooterLinksViewComponentTests
     [TestMethod]
     public async Task InvokeAsync_CallsContentService_ReturnsNavigationLinks()
     {
-        var navigationLink = new NavigationLink { DisplayText = "Test", Href = "https://test.com", OpenInNewTab = true };
+        var navigationLink = new NavigationLink
+                             { DisplayText = "Test", Href = "https://test.com", OpenInNewTab = true };
 
-        _mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync(new List<NavigationLink> { navigationLink });
+        _mockContentService.Setup(x => x.GetNavigationLinks())
+                           .ReturnsAsync(new List<NavigationLink> { navigationLink });
 
         var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
         var result = await footerLinksViewComponent.InvokeAsync();
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-        Assert.IsNotNull(model);
+        model.Should().NotBeNull();
 
         var data = model as List<NavigationLink>;
-        Assert.IsNotNull(data);
+        data.Should().NotBeNull();
 
-        Assert.AreEqual(navigationLink.DisplayText, data[0].DisplayText);
+        data![0].DisplayText.Should().Be(navigationLink.DisplayText);
     }
 
     [TestMethod]
@@ -49,12 +55,13 @@ public class FooterLinksViewComponentTests
         var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
         var result = await footerLinksViewComponent.InvokeAsync();
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-        Assert.IsNotNull(model);
+        model.Should().NotBeNull();
 
         var data = model as List<NavigationLink>;
-        Assert.IsNull(data);
+        data.Should().BeNull(); // question: should data instead be an empty list?
     }
 
     [TestMethod]
@@ -65,11 +72,12 @@ public class FooterLinksViewComponentTests
         var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
         var result = await footerLinksViewComponent.InvokeAsync();
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-        Assert.IsNotNull(model);
+        model.Should().NotBeNull();
 
         var data = model as List<NavigationLink>;
-        Assert.IsNull(data);
+        data.Should().BeNull(); // question: should data instead be an empty list?
     }
 }

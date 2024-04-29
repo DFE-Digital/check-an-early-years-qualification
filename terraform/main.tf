@@ -25,7 +25,7 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
-# Create Network Resources
+# Create network resources
 module "network" {
   source = "./azure-network"
 
@@ -45,7 +45,15 @@ module "network" {
   kv_certificate_subject                    = var.kv_certificate_subject
 }
 
-# Create Web Application resources
+# Create storage account for web app
+module "storage" {
+  source = "./azure-storage"
+
+  location       = var.azure_region
+  resource_group = azurerm_resource_group.rg.name
+}
+
+# Create web application resources
 module "webapp" {
   source = "./azure-web"
 

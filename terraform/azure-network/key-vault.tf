@@ -37,6 +37,8 @@ resource "azurerm_key_vault_access_policy" "kv_ap" {
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = data.azurerm_client_config.az_config.object_id
 
+  key_permissions = ["Get", "UnwrapKey", "WrapKey"]
+
   secret_permissions = [
     "Get"
   ]
@@ -64,6 +66,8 @@ resource "azurerm_key_vault_access_policy" "kv_gh_ap" {
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = data.azurerm_client_config.az_config.object_id
+
+  key_permissions = ["Get", "UnwrapKey", "WrapKey"]
 
   secret_permissions = ["List", "Get", "Set"]
 
