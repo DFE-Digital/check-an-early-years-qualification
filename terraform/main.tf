@@ -49,8 +49,8 @@ module "network" {
 module "storage" {
   source = "./azure-storage"
 
-  location                                  = var.azure_region
-  resource_group                            = azurerm_resource_group.rg.name
+  location       = var.azure_region
+  resource_group = azurerm_resource_group.rg.name
 }
 
 # Create web application resources
