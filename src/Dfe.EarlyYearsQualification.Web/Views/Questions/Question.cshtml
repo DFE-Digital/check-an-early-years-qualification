@@ -23,7 +23,17 @@
                             <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
                         </p>
                     }
-                    @Html.Partial("./Components/RadioButtonGroup/Index", Model.Options)
+                    <div class="govuk-radios" data-module="govuk-radios">
+                    @foreach(var option in Model.Options)
+                    {
+                        <div class="govuk-radios__item">
+                            @Html.RadioButtonFor(x => x.Option, option.Value, new {@class="govuk-radios__input", id=option.Value})
+                            <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                @option.Label
+                            </label>
+                        </div>
+                    }
+                    </div>
                 </fieldset>
                 <div class="govuk-form-group">
                     <button type="submit" class="govuk-button" data-module="govuk-button">

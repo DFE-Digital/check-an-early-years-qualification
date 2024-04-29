@@ -9,4 +9,6 @@ public class CookiesPageModel
   public List<OptionModel> Options { get; set; } = [];
 
   public string ButtonText { get; init; } = string.Empty;
+
+  public string CookiesAnswer { get; } = "cookies-answer";
 }
