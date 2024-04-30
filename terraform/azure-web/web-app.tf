@@ -17,7 +17,7 @@ resource "azurerm_application_insights" "web" {
   resource_group_name = var.resource_group
   location            = var.location
   application_type    = "web"
-  workspace_id        = azurerm_log_analytics_workspace.webapp_logs.id
+  workspace_id                        = azurerm_log_analytics_workspace.webapp_logs.id
 }
 
 # Create App Service Plan
