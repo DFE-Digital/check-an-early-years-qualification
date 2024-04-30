@@ -45,11 +45,28 @@ public class QualificationDetailsControllerTests
         resultType!.StatusCode.Should().Be(400);
     }
 
+
+    [TestMethod]
+    public async Task Index_ContentServiceReturnsNullDetailsPage_RedirectsToHomeError()
+    {
+        _mockContentService.Setup(s => s.GetDetailsPage())
+                           .ReturnsAsync((DetailsPage?)null);
+
+        var result = await _controller!.Index("X");
+
+        result.Should().BeOfType<RedirectToActionResult>();
+
+        var actionResult = (RedirectToActionResult)result;
+
+        actionResult.ActionName.Should().Be("Error");
+        actionResult.ControllerName.Should().Be("Home");
+    }
+
     [TestMethod]
     public async Task Index_ContentServiceReturnsNoQualification_RedirectsToErrorPage()
     {
         const string qualificationId = "eyq-145";
-        _mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync((Qualification)default!);
+        _mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync((Qualification?)default);
         _mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
         var result = await _controller!.Index(qualificationId);
 
@@ -88,5 +105,14 @@ public class QualificationDetailsControllerTests
         model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
         model.Notes.Should().Be(qualificationResult.Notes);
         model.AdditionalRequirements.Should().Be(qualificationResult.AdditionalRequirements);
+    }
+
+    [TestMethod]
+    public void Get_ReturnsView()
+    {
+        var result = _controller!.Get();
+
+        result.Should().NotBeNull();
+        result.Should().BeOfType<ViewResult>();
     }
 }
