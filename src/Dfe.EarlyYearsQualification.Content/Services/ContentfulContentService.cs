@@ -89,6 +89,7 @@ public class ContentfulContentService : IContentService
       }
       var cookiesContent = cookiesEntities.First();
       var htmlRenderer = GetGeneralHtmlRenderer();
+      htmlRenderer.AddRenderer(new Renderers.GovUk.TableRenderer { Order = 18 });
       cookiesContent.BodyHtml = await htmlRenderer.ToHtml(cookiesContent.Body);
       return cookiesContent;
     }

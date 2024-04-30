@@ -11,8 +11,8 @@
 <a href="javascript:window.history.back()" class="govuk-back-link">Back</a>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-        <h1 id="cookies-heading" class="govuk-heading-xl">@Model.Heading</h1>
-        <div id="cookies-body" class="govuk-body">@Html.Raw(Model.BodyContent)</div>
+        <h2 id="cookies-heading" class="govuk-heading-xl">@Model.Heading</h2>
+        <div id="cookies-body">@Html.Raw(Model.BodyContent)</div>
         <div class="govuk-form-group">
           @foreach(var option in Model.Options)
           {
