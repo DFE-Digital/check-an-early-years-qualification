@@ -32,7 +32,8 @@ public class QuestionsControllerTests
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
         _mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
-                           .ReturnsAsync((QuestionPage)default!).Verifiable();
+                           .ReturnsAsync((QuestionPage?)default).Verifiable();
+
         var result = await _controller!.WhereWasTheQualificationAwarded();
 
         _mockContentService.VerifyAll();

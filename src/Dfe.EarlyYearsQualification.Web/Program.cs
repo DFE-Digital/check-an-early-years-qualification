@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Extensions;
@@ -20,7 +21,7 @@ if (!builder.Configuration.GetValue<bool>("UseMockContentful"))
   var blobStorageConnectionString = builder.Configuration.GetSection("Storage").GetValue<string>("ConnectionString");
   builder.Services.AddDataProtection()
     .PersistKeysToAzureBlobStorage(blobStorageConnectionString, "data-protection", "data-protection")
-    .ProtectKeysWithAzureKeyVault(new Uri(string.Format("{0}keys/data-protection", keyVaultEndpoint)), new DefaultAzureCredential());
+    .ProtectKeysWithAzureKeyVault(new Uri($"{keyVaultEndpoint}keys/data-protection"), new DefaultAzureCredential());
 }
 
 // Add services to the container.
@@ -64,3 +65,9 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+[ExcludeFromCodeCoverage]
+// ReSharper disable once UnusedType.Global
+// ...declared partial so we can exclude it from code coverage calculations
+public static partial class Program {}
