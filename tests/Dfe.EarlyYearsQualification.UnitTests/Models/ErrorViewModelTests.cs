@@ -7,7 +7,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Models;
 public class ErrorViewModelTests
 {
     [TestMethod]
-    public void RequestIdSet_ShowRequestId_IsTrue()
+    public void RequestId_IsNotEmpty_ShowRequestId_IsTrue()
     {
         var model = new ErrorViewModel { RequestId = "xyz" };
 
@@ -15,7 +15,7 @@ public class ErrorViewModelTests
     }
 
     [TestMethod]
-    public void RequestIdNotNull_ShowRequestId_IsFalse()
+    public void RequestId_IsNull_ShowRequestId_IsFalse()
     {
         var model = new ErrorViewModel { RequestId = null };
 
@@ -23,7 +23,7 @@ public class ErrorViewModelTests
     }
 
     [TestMethod]
-    public void RequestIdEmpty_ShowRequestId_IsFalse()
+    public void RequestId_IsEmpty_ShowRequestId_IsFalse()
     {
         var model = new ErrorViewModel { RequestId = string.Empty };
 
@@ -31,7 +31,7 @@ public class ErrorViewModelTests
     }
 
     [TestMethod]
-    public void RequestIdWhitespace_ShowRequestId_IsFalse()
+    public void RequestId_IsWhitespace_ShowRequestId_IsFalse()
     {
         var model = new ErrorViewModel { RequestId = "   " };
 
