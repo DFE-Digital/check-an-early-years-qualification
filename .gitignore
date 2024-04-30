@@ -497,3 +497,6 @@ junit.xml
 #Build
 
 build/
+
+# Cypress
+tests/Dfe.EarlyYearsQualification.E2ETests/cypress/screenshots/

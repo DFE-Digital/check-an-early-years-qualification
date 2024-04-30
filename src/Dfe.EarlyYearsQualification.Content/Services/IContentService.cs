@@ -15,4 +15,6 @@ public interface IContentService
     Task<AdvicePage?> GetAdvicePage(string entryId);
 
     Task<QuestionPage?> GetQuestionPage(string entryId);
+
+    Task<AccessibilityStatementPage?> GetAccessibilityStatementPage();
 }

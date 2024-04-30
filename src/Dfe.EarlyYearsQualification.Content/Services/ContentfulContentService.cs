@@ -22,7 +22,8 @@ public class ContentfulContentService : IContentService
         {typeof(Qualification), "Qualification"},
         {typeof(DetailsPage), "detailsPage"},
         {typeof(AdvicePage), "advicePage"},
-        {typeof(QuestionPage), "questionPage"}
+        {typeof(QuestionPage), "questionPage"},
+        {typeof(AccessibilityStatementPage), "accessibilityStatementPage"}
     };
 
     public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
@@ -61,6 +62,20 @@ public class ContentfulContentService : IContentService
       detailsPageContent.CheckAnotherQualificationTextHtml = await htmlRenderer.ToHtml(detailsPageContent.CheckAnotherQualificationText);
       detailsPageContent.FurtherInfoTextHtml = await htmlRenderer.ToHtml(detailsPageContent.FurtherInfoText);
       return detailsPageContent;
+    }
+
+    public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
+    {
+      var accessibilityStatementEntities = await GetEntriesByType<AccessibilityStatementPage>();
+      if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
+      {
+          _logger.LogWarning("No accessibility statement page entry returned");
+          return default;
+      }
+      var accessibilityStatementPageContent = accessibilityStatementEntities.First();
+      var htmlRenderer = GetGeneralHtmlRenderer();
+      accessibilityStatementPageContent.BodyHtml = await htmlRenderer.ToHtml(accessibilityStatementPageContent.Body);
+      return accessibilityStatementPageContent;
     }
 
     public async Task<List<NavigationLink>?> GetNavigationLinks()
