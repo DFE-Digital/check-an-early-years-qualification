@@ -4,7 +4,7 @@
 
 ## Context and Problem Statement
 
-What tool should be adopted in Check and Early Years Qualification service pipelines
+What tool should be adopted in Check an Early Years Qualification service pipelines
 to ensure adequate unit-test coverage? 
 
 ## Decision Drivers
