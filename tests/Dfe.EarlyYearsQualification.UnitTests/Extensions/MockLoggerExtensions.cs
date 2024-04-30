@@ -5,13 +5,13 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Helpers;
 
 public static class MockLoggerExtensions
 {
-  public static void VerifyError<T>(this Mock<ILogger<T>> _logger, string message)
+  public static void VerifyError<T>(this Mock<ILogger<T>> mockLogger, string message)
   {
-    _logger.Verify(
+    mockLogger.Verify(
     logger => logger.Log(
-        It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
+        LogLevel.Error,
         It.IsAny<EventId>(),
-        It.Is<It.IsAnyType>((@object, @type) => @object.ToString() == message),
+        It.Is<It.IsAnyType>((@object, _) => @object.ToString() == message),
         It.IsAny<Exception>(),
         It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
     Times.Once);

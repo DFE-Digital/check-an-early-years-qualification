@@ -4,6 +4,8 @@ using Dfe.EarlyYearsQualification.Web.Extensions;
 using Azure.Identity;
 using OwaspHeaders.Core.Extensions;
 using Dfe.EarlyYearsQualification.Web.Security;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(serverOptions => {
@@ -14,10 +16,18 @@ if (!builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
   var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
   builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
+  
+  var blobStorageConnectionString = builder.Configuration.GetSection("Storage").GetValue<string>("ConnectionString");
+  builder.Services.AddDataProtection()
+    .PersistKeysToAzureBlobStorage(blobStorageConnectionString, "data-protection", "data-protection")
+    .ProtectKeysWithAzureKeyVault(new Uri(string.Format("{0}keys/data-protection", keyVaultEndpoint)), new DefaultAzureCredential());
 }
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options => {
+  // Ensures that all POST actions are protected by default.
+  options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
 
 builder.Services.AddContentful(builder.Configuration);
 
