@@ -10,5 +10,11 @@ public class CookiesPageModel
 
   public string ButtonText { get; init; } = string.Empty;
 
-  public string CookiesAnswer { get; } = "cookies-answer";
+  public string CookiesAnswer { get; } = "CookiesAnswer";
+
+  public string SuccessBannerHeading { get; init; } = string.Empty;
+
+  public string SuccessBannerContent { get; init; } = string.Empty;
+
+  public string ErrorText { get; init; } = string.Empty;
 }

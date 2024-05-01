@@ -91,6 +91,7 @@ public class ContentfulContentService : IContentService
       var htmlRenderer = GetGeneralHtmlRenderer();
       htmlRenderer.AddRenderer(new Renderers.GovUk.TableRenderer { Order = 18 });
       cookiesContent.BodyHtml = await htmlRenderer.ToHtml(cookiesContent.Body);
+      cookiesContent.SuccessBannerContentHtml = await GetSuccessBannerHtmlRenderer().ToHtml(cookiesContent.SuccessBannerContent);
       return cookiesContent;
     }
 
@@ -183,5 +184,13 @@ public class ContentfulContentService : IContentService
         var htmlRenderer = new HtmlRenderer();
         htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListHyperlinksRenderer { Order = 18 });
         return htmlRenderer;
+    }
+
+    private static HtmlRenderer GetSuccessBannerHtmlRenderer()
+    {
+      var htmlRenderer = new HtmlRenderer();
+      htmlRenderer.AddRenderer(new SuccessBannerParagraphRenderer { Order = 1});
+      htmlRenderer.AddRenderer(new HyperlinkRenderer { Order = 2 });
+      return htmlRenderer;
     }
 }

@@ -40,7 +40,10 @@ public class CookiesController : Controller
       Heading = content.Heading,
       BodyContent = content.BodyHtml,
       Options = content.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList(),
-      ButtonText = content.ButtonText
+      ButtonText = content.ButtonText,
+      SuccessBannerContent = content.SuccessBannerContentHtml,
+      SuccessBannerHeading = content.SuccessBannerHeading,
+      ErrorText = content.ErrorText
     };
 
     return test;
