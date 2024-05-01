@@ -15,6 +15,7 @@ locals {
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
     "KeyVault__Endpoint"                  = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
     "ContentfulOptions__UsePreviewApi"    = var.environment == "staging" ? true : false
+    "WEBSITES_PORT"                       = "8080"
   }
 
   webapp_slot_app_settings = {
@@ -24,5 +25,6 @@ locals {
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
     "KeyVault__Endpoint"                  = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
     "ContentfulOptions__UsePreviewApi"    = var.environment == "staging" ? true : false
+    "WEBSITES_PORT"                       = "8080"
   }
 }
