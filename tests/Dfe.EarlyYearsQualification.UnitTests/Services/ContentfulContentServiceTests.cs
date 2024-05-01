@@ -176,7 +176,7 @@ public class ContentfulContentServiceTests
   [TestMethod]
   public void GetCookiesPage_PageFound_ReturnsExpectedResult()
   {
-    var cookiesPage = new CookiesPage { Heading = "Heading", BodyHtml = "BodyHtml" };
+    var cookiesPage = new CookiesPage { Heading = "Heading", BodyHtml = "BodyHtml", ButtonText = "ButtonText", SuccessBannerHeading = "SuccessBannerHeading", SuccessBannerContentHtml = "SuccessBannerContentHtml" };
 
     var pages = new ContentfulCollection<CookiesPage> { Items = new[] { cookiesPage } };
 

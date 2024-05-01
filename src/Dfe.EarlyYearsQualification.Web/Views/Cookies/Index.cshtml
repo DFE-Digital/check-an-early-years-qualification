@@ -37,12 +37,12 @@
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
       <div id="cookies-set-banner" class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" hidden>
         <div class="govuk-notification-banner__header">
-          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          <h2 id="cookies-set-banner-heading" class="govuk-notification-banner__title" id="govuk-notification-banner-title">
             @Model.SuccessBannerHeading
           </h2>
         </div>
         <div class="govuk-notification-banner__content">
-          <p class="govuk-notification-banner__heading">
+          <p id="cookies-set-banner-content" class="govuk-notification-banner__heading">
             @Html.Raw(Model.SuccessBannerContent)
           </p>
         </div>

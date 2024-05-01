@@ -132,7 +132,10 @@ public static class ServiceCollectionExtensions
                               Label = "Test Option Label 2",
                               Value = "test-option-value-2"
                             }
-                           }
+                           },
+                           ErrorText = "Test Error Text",
+                           SuccessBannerHeading = "Test Banner Heading",
+                           SuccessBannerContentHtml = "Test Banner Content"
                          });
 
     services.AddSingleton(mockContentfulService.Object);
