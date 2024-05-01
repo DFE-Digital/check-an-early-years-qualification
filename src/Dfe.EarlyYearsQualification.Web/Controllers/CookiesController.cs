@@ -35,7 +35,7 @@ public class CookiesController : Controller
 
   private static CookiesPageModel Map(CookiesPage content)
   {
-    var test = new CookiesPageModel
+    return new CookiesPageModel
     {
       Heading = content.Heading,
       BodyContent = content.BodyHtml,
@@ -44,8 +44,6 @@ public class CookiesController : Controller
       SuccessBannerContent = content.SuccessBannerContentHtml,
       SuccessBannerHeading = content.SuccessBannerHeading,
       ErrorText = content.ErrorText
-    };
-
-    return test;
+    };;
   }
 }
