@@ -23,7 +23,8 @@ public class ContentfulContentService : IContentService
         {typeof(DetailsPage), "detailsPage"},
         {typeof(AdvicePage), "advicePage"},
         {typeof(QuestionPage), "questionPage"},
-        {typeof(AccessibilityStatementPage), "accessibilityStatementPage"}
+        {typeof(AccessibilityStatementPage), "accessibilityStatementPage"},
+        {typeof(CookiesPage), "cookiesPage"}
     };
 
     public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
@@ -76,6 +77,22 @@ public class ContentfulContentService : IContentService
       var htmlRenderer = GetGeneralHtmlRenderer();
       accessibilityStatementPageContent.BodyHtml = await htmlRenderer.ToHtml(accessibilityStatementPageContent.Body);
       return accessibilityStatementPageContent;
+    }
+
+    public async Task<CookiesPage?> GetCookiesPage()
+    {
+      var cookiesEntities = await GetEntriesByType<CookiesPage>();
+      if (cookiesEntities is null || !cookiesEntities.Any())
+      {
+          _logger.LogWarning("No cookies page entry returned");
+          return default;
+      }
+      var cookiesContent = cookiesEntities.First();
+      var htmlRenderer = GetGeneralHtmlRenderer();
+      htmlRenderer.AddRenderer(new Renderers.GovUk.TableRenderer { Order = 18 });
+      cookiesContent.BodyHtml = await htmlRenderer.ToHtml(cookiesContent.Body);
+      cookiesContent.SuccessBannerContentHtml = await GetSuccessBannerHtmlRenderer().ToHtml(cookiesContent.SuccessBannerContent);
+      return cookiesContent;
     }
 
     public async Task<List<NavigationLink>?> GetNavigationLinks()
@@ -167,5 +184,13 @@ public class ContentfulContentService : IContentService
         var htmlRenderer = new HtmlRenderer();
         htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListHyperlinksRenderer { Order = 18 });
         return htmlRenderer;
+    }
+
+    private static HtmlRenderer GetSuccessBannerHtmlRenderer()
+    {
+      var htmlRenderer = new HtmlRenderer();
+      htmlRenderer.AddRenderer(new SuccessBannerParagraphRenderer { Order = 1});
+      htmlRenderer.AddRenderer(new HyperlinkRenderer { Order = 2 });
+      return htmlRenderer;
     }
 }
