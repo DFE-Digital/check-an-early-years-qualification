@@ -16,4 +16,16 @@ public static class MockLoggerExtensions
         It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
     Times.Once);
   }
+
+  public static void VerifyWarning<T>(this Mock<ILogger<T>> mockLogger, string message)
+  {
+    mockLogger.Verify(
+    logger => logger.Log(
+        LogLevel.Warning,
+        It.IsAny<EventId>(),
+        It.Is<It.IsAnyType>((@object, _) => @object.ToString() == message),
+        It.IsAny<Exception>(),
+        It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+    Times.Once);
+  }
 }
