@@ -13,10 +13,11 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class ContentfulContentServiceTests
 {
-  private readonly Mock<ILogger<ContentfulContentService>> _logger;
-  private readonly  Mock<IContentfulClient> _clientMock;
+  private Mock<ILogger<ContentfulContentService>> _logger = new ();
+  private Mock<IContentfulClient> _clientMock = new ();
 
-  public ContentfulContentServiceTests()
+  [TestInitialize]
+  public void BeforeEachTest()
   {
     _logger = new Mock<ILogger<ContentfulContentService>>();
     _clientMock = new Mock<IContentfulClient>();
@@ -281,5 +282,7 @@ public class ContentfulContentServiceTests
 
     result.Should().NotBeNull();
     result.Should().BeSameAs(links);
+
+    
   }
 }
