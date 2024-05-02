@@ -14,10 +14,12 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 public class ContentfulContentServiceTests
 {
   private readonly Mock<ILogger<ContentfulContentService>> _logger;
+  private readonly  Mock<IContentfulClient> _clientMock;
 
   public ContentfulContentServiceTests()
   {
     _logger = new Mock<ILogger<ContentfulContentService>>();
+    _clientMock = new Mock<IContentfulClient>();
   }
 
   [TestMethod]
@@ -27,15 +29,14 @@ public class ContentfulContentServiceTests
 
     var pages = new ContentfulCollection<StartPage> { Items = new[] { startPage } };
 
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<StartPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync(pages);
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetStartPage().Result;
 
@@ -49,15 +50,14 @@ public class ContentfulContentServiceTests
     var pages = new ContentfulCollection<StartPage> { Items = new List<StartPage>() };
     // NB: If "pages.Items" is ever null, the iterator built into ContentfulCollection will throw an exception
 
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<StartPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync(pages);
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetStartPage().Result;
 
@@ -69,15 +69,14 @@ public class ContentfulContentServiceTests
   [TestMethod]
   public void GetStartPage_NullPages_ReturnsNull()
   {
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<StartPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync((ContentfulCollection<StartPage>)null!);
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetStartPage().Result;
 
@@ -91,15 +90,14 @@ public class ContentfulContentServiceTests
   {
     var pages = new ContentfulCollection<AccessibilityStatementPage> { Items = new List<AccessibilityStatementPage>() };
 
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync(pages);
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetAccessibilityStatementPage().Result;
 
@@ -111,15 +109,14 @@ public class ContentfulContentServiceTests
   [TestMethod]
   public void GetAccessibilityStatementPage_NullPages_ReturnsNull()
   {
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync((ContentfulCollection<AccessibilityStatementPage>)null!);
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetAccessibilityStatementPage().Result;
 
@@ -135,15 +132,14 @@ public class ContentfulContentServiceTests
 
     var pages = new ContentfulCollection<AccessibilityStatementPage> { Items = new[] { accessibilityStatementPage } };
 
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync(pages);
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetAccessibilityStatementPage().Result;
 
@@ -156,17 +152,18 @@ public class ContentfulContentServiceTests
   {
     var pages = new ContentfulCollection<CookiesPage> { Items = new List<CookiesPage>() };
 
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<CookiesPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync(pages);
 
-    var service = new ContentfulContentService(clientMock.Object, new NullLogger<ContentfulContentService>());
+    var service = new ContentfulContentService(_clientMock.Object,_logger.Object);
 
     var result = service.GetCookiesPage().Result;
+
+    _logger.VerifyWarning("No cookies page entry returned");
 
     result.Should().BeNull();
   }
@@ -174,17 +171,18 @@ public class ContentfulContentServiceTests
   [TestMethod]
   public void GetCookiesPage_NullPages_ReturnsNull()
   {
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<CookiesPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync((ContentfulCollection<CookiesPage>)null!);
 
-    var service = new ContentfulContentService(clientMock.Object, new NullLogger<ContentfulContentService>());
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetCookiesPage().Result;
+
+    _logger.VerifyWarning("No cookies page entry returned");
 
     result.Should().BeNull();
   }
@@ -196,15 +194,14 @@ public class ContentfulContentServiceTests
 
     var pages = new ContentfulCollection<CookiesPage> { Items = new[] { cookiesPage } };
 
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<CookiesPage>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync(pages);
 
-    var service = new ContentfulContentService(clientMock.Object, new NullLogger<ContentfulContentService>());
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetCookiesPage().Result;
 
@@ -215,15 +212,14 @@ public class ContentfulContentServiceTests
   [TestMethod]
   public void GetNavigationLinks_NoContent_LogsWarningAndReturns()
   {
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<NavigationLinks>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync(new ContentfulCollection<NavigationLinks> { Items = new List<NavigationLinks>() });
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetNavigationLinks().Result;
 
@@ -235,15 +231,14 @@ public class ContentfulContentServiceTests
   [TestMethod]
   public void GetNavigationLinks_Null_LogsWarningAndReturns()
   {
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<NavigationLinks>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync((ContentfulCollection<NavigationLinks>)null!);
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetNavigationLinks().Result;
 
@@ -273,15 +268,14 @@ public class ContentfulContentServiceTests
 
     var content = new ContentfulCollection<NavigationLinks>() { Items = [new NavigationLinks() { Links = links }] };
 
-    var clientMock = new Mock<IContentfulClient>();
-    clientMock.Setup(client =>
+    _clientMock.Setup(client =>
                          client.GetEntriesByType(
                                                  It.IsAny<string>(),
                                                  It.IsAny<QueryBuilder<NavigationLinks>>(),
                                                  It.IsAny<CancellationToken>()))
               .ReturnsAsync(content);
 
-    var service = new ContentfulContentService(clientMock.Object, _logger.Object);
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
     var result = service.GetNavigationLinks().Result;
 
