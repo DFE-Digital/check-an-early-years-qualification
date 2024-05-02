@@ -114,6 +114,30 @@ public static class ServiceCollectionExtensions
                            BodyHtml = "Test Accessibility Statement Body",
                          });
 
+    mockContentfulService.Setup(x => x.GetCookiesPage())
+                         .ReturnsAsync(new CookiesPage()
+                         {
+                           Heading = "Test Cookies Heading",
+                           BodyHtml = "Test Cookies Body",
+                           ButtonText = "Test Cookies Button",
+                           Options = new List<Option>()
+                           {
+                            new Option()
+                            {
+                              Label = "Test Option Label 1",
+                              Value = "test-option-value-1"
+                            },
+                            new Option()
+                            {
+                              Label = "Test Option Label 2",
+                              Value = "test-option-value-2"
+                            }
+                           },
+                           ErrorText = "Test Error Text",
+                           SuccessBannerHeading = "Test Banner Heading",
+                           SuccessBannerContentHtml = "Test Banner Content"
+                         });
+
     services.AddSingleton(mockContentfulService.Object);
     return services;
   }
