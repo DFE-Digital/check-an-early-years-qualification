@@ -18,12 +18,12 @@ public class ContentfulContentService : IContentService
     private readonly Dictionary<object, string> _contentTypes = new()
     {
         {typeof(StartPage), "startPage"},
-        {typeof(NavigationLink), "navigationLink"},
         {typeof(Qualification), "Qualification"},
         {typeof(DetailsPage), "detailsPage"},
         {typeof(AdvicePage), "advicePage"},
         {typeof(QuestionPage), "questionPage"},
-        {typeof(AccessibilityStatementPage), "accessibilityStatementPage"}
+        {typeof(AccessibilityStatementPage), "accessibilityStatementPage"},
+        {typeof(NavigationLinks), "navigationLinks"}
     };
 
     public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
@@ -80,10 +80,10 @@ public class ContentfulContentService : IContentService
 
     public async Task<List<NavigationLink>?> GetNavigationLinks()
     {
-        var navigationLinkEntries = await GetEntriesByType<NavigationLink>();
+        var navigationLinkEntries = await GetEntriesByType<NavigationLinks>();
         if (navigationLinkEntries is not null && navigationLinkEntries.Any())
         {
-            return navigationLinkEntries.ToList();
+            return navigationLinkEntries.First().Links;
         }
 
         _logger.LogWarning("No navigation links returned");
