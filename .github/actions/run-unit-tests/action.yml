@@ -12,7 +12,7 @@ runs:
   steps:
     - name: Test
       shell: bash
-      run: cd tests/Dfe.EarlyYearsQualification.UnitTests && dotnet test ${{ inputs.solution_filename }} --no-restore --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage || true --settings coverlet.runsettings
+      run: dotnet test ${{ inputs.solution_filename }} --no-restore --verbosity normal --collect:"XPlat Code Coverage" /p:ExcludeByFile="**/*.cshtml" --results-directory ./coverage || true
 
     - name: Code Coverage Summary Report
       uses: irongut/CodeCoverageSummary@v1.3.0
