@@ -16,6 +16,16 @@ public class ContentfulContentServiceTests
   private Mock<ILogger<ContentfulContentService>> _logger = new ();
   private Mock<IContentfulClient> _clientMock = new ();
 
+  private Document _testRichText = new Document()
+    {
+      Content = new List<IContent>{
+        new Text()
+        {
+          Value = "TEST"
+        }
+      }
+    };
+
   [TestInitialize]
   public void BeforeEachTest()
   {
@@ -282,7 +292,194 @@ public class ContentfulContentServiceTests
 
     result.Should().NotBeNull();
     result.Should().BeSameAs(links);
+  }
 
+  [TestMethod]
+  public void GetAdvicePage_Null_LogsAndReturnsDefault()
+  {
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<AdvicePage>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync((ContentfulCollection<AdvicePage>)null!);
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetAdvicePage("SomeId").Result;
+
+    _logger.VerifyWarning("Advice page with SomeId could not be found");
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetAdvicePage_ReturnsContent_RendersHtmlandReturns()
+  {
+    var content = new ContentfulCollection<AdvicePage>()
+    {
+      Items = [new AdvicePage()
+      {
+        Heading = "Test Heading",
+        Body = _testRichText
+      }]
+    };
+
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<AdvicePage>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(content);
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetAdvicePage("SomeId").Result;
+
+    result!.Heading.Should().Be("Test Heading");
+    result!.Body.Should().Be(_testRichText);
+    result!.BodyHtml.Should().NotBeNull();
+  }
+
+  [TestMethod]
+  public void GetDetailsPage_Null_LogsAndReturnsDefault()
+  {
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync((ContentfulCollection<DetailsPage>)null!);
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetDetailsPage().Result;
+
+    _logger.VerifyWarning("No details page entry returned");
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetDetailsPage_NoContent_LogsAndReturnsDefault()
+  {
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(new ContentfulCollection<DetailsPage> { Items = new List<DetailsPage>() });
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetDetailsPage().Result;
+
+    _logger.VerifyWarning("No details page entry returned");
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetDetailsPage_Content_RendersHtmlAndReturns()
+  {
+    var content = new ContentfulCollection<DetailsPage>() { Items = [new DetailsPage
+                  {
+                    AwardingOrgLabel = "Test Awarding Org Label",
+                    BookmarkHeading = "Test bookmark heading",
+                    BookmarkText = "Test bookmark text",
+                    CheckAnotherQualificationHeading = "Test check another qualification heading",
+                    CheckAnotherQualificationText = _testRichText,
+                    DateAddedLabel = "Test date added label",
+                    DateOfCheckLabel = "Test date of check label",
+                    FurtherInfoHeading = "Test further info heading",
+                    FurtherInfoText = _testRichText,
+                    LevelLabel = "Test level label",
+                    MainHeader = "Test main header",
+                    QualificationNumberLabel = "Test qualification number label"
+                  }] };
+              
+     _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(content);
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetDetailsPage().Result;
+
+    result!.AwardingOrgLabel.Should().Be("Test Awarding Org Label");
+    result!.BookmarkHeading.Should().Be("Test bookmark heading");
+    result!.BookmarkText.Should().Be("Test bookmark text");
+    result!.CheckAnotherQualificationHeading.Should().Be("Test check another qualification heading");
+    result!.CheckAnotherQualificationText.Should().Be(_testRichText);
+    result!.CheckAnotherQualificationTextHtml.Should().NotBeNull();
+    result!.DateAddedLabel.Should().Be("Test date added label");
+    result!.DateOfCheckLabel.Should().Be("Test date of check label");
+    result!.FurtherInfoHeading.Should().Be("Test further info heading");
+    result!.FurtherInfoText.Should().Be(_testRichText);
+    result!.FurtherInfoTextHtml.Should().NotBeNull();
+    result!.LevelLabel.Should().Be("Test level label");
+    result!.MainHeader.Should().Be("Test main header");
+    result!.QualificationNumberLabel.Should().Be("Test qualification number label");
+  }
+
+  [TestMethod]
+  public void GetQualificationById_Null_LogsAndReturnsDefault()
+  {
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<Qualification>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync((ContentfulCollection<Qualification>)null!);
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetQualificationById("SomeId").Result;
+
+    _logger.VerifyWarning("No qualifications returned for qualificationId: SomeId");
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetQualificationById_NoContent_LogsAndReturnsDefault()
+  {
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<Qualification>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(new ContentfulCollection<Qualification> { Items = new List<Qualification>() });
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetQualificationById("SomeId").Result;
+
+    _logger.VerifyWarning("No qualifications returned for qualificationId: SomeId");
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetQualificationById_QualificationExists_Returns()
+  {
+    var qualification = new Qualification("SomeId", "Test qualification name", "Test awarding org", 123, "Test from which year", "Test to which year", "Test qualification number", "Test notes", "Test additional requirements");
     
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<Qualification>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(new ContentfulCollection<Qualification> { Items = new List<Qualification>() { qualification } });
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetQualificationById("SomeId").Result;
+
+    result.Should().NotBeNull();
+    result.Should().Be(qualification);
   }
 }

@@ -35,4 +35,12 @@ Replace the environment variables object in the http profile with the following:
       }
 ```
 Speak to one of the developers about getting the values for the above settings.
-      
+
+## Unit testing
+
+To run the unit tests locally make sure you are in the root directory and then you can use the following command:
+```
+dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+```
+
+This will pull in the exclusions such as the .cshtml files and will replicate coverage in the GitHub Actions.
