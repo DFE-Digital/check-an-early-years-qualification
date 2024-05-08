@@ -34,6 +34,8 @@ runs:
       with:
         recreate: true
         path: code-coverage-results.md
+        message: |
+          Code coverage report
     
     - name: Write to Job Summary
       shell: bash
