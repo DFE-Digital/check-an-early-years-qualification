@@ -30,7 +30,7 @@ runs:
 
     - name: Add Coverage PR Comment
       uses: marocchino/sticky-pull-request-comment@v2
-      if: github.event_name == 'pull_request'
+      if: github.actor != 'dependabot[bot]' && github.event_name == 'pull_request'
       with:
         recreate: true
         path: code-coverage-results.md
@@ -39,4 +39,5 @@ runs:
     
     - name: Write to Job Summary
       shell: bash
+      if: github.actor != 'dependabot[bot]' && github.event_name == 'pull_request'
       run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
