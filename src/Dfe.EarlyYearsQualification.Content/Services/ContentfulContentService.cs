@@ -24,7 +24,8 @@ public class ContentfulContentService : IContentService
         {typeof(QuestionPage), "questionPage"},
         {typeof(AccessibilityStatementPage), "accessibilityStatementPage"},
         {typeof(NavigationLinks), "navigationLinks"},
-        {typeof(CookiesPage), "cookiesPage"}
+        {typeof(CookiesPage), "cookiesPage"},
+        {typeof(PhaseBanner), "phaseBanner"}
     };
 
     public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
@@ -140,6 +141,19 @@ public class ContentfulContentService : IContentService
         return await GetEntryById<QuestionPage>(entryId);
     }
 
+    public async Task<PhaseBanner?> GetPhaseBannerContent()
+    {
+      var phaseBannerEntities = await GetEntriesByType<PhaseBanner>();
+      if (phaseBannerEntities is null || !phaseBannerEntities.Any())
+      {
+          _logger.LogWarning("No phase banner entry returned");
+          return default;
+      }
+      var phaseBannerContent = phaseBannerEntities.First();
+      phaseBannerContent.ContentHtml = await GetPhaseBannerRenderer().ToHtml(phaseBannerContent.Content);
+      return phaseBannerContent;
+    }
+
     private async Task<T?> GetEntryById<T>(string entryId)
     {
         try
@@ -189,8 +203,15 @@ public class ContentfulContentService : IContentService
     private static HtmlRenderer GetSuccessBannerHtmlRenderer()
     {
       var htmlRenderer = new HtmlRenderer();
-      htmlRenderer.AddRenderer(new SuccessBannerParagraphRenderer { Order = 1});
+      htmlRenderer.AddRenderer(new SuccessBannerParagraphRenderer { Order = 1 });
       htmlRenderer.AddRenderer(new HyperlinkRenderer { Order = 2 });
+      return htmlRenderer;
+    }
+
+    private static HtmlRenderer GetPhaseBannerRenderer()
+    {
+      var htmlRenderer = new HtmlRenderer();
+      htmlRenderer.AddRenderer(new PhaseBannerRenderer { Order = 1 });
       return htmlRenderer;
     }
 }
