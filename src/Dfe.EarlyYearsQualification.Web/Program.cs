@@ -1,12 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
 using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.Services;
-using Dfe.EarlyYearsQualification.Web.Extensions;
 using Azure.Identity;
 using OwaspHeaders.Core.Extensions;
 using Dfe.EarlyYearsQualification.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.DataProtection;
+using Dfe.EarlyYearsQualification.Mock;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(serverOptions => {
@@ -34,7 +34,7 @@ builder.Services.AddContentful(builder.Configuration);
 
 if (builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
-  builder.Services.AddMockContentful();
+  builder.Services.AddMockContentfulService();
 } else
 {
   builder.Services.AddTransient<IContentService, ContentfulContentService>();
