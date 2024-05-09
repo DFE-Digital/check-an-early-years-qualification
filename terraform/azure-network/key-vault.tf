@@ -37,7 +37,13 @@ resource "azurerm_key_vault_access_policy" "kv_ap" {
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = data.azurerm_client_config.az_config.object_id
 
-  key_permissions = ["Get", "UnwrapKey", "WrapKey"]
+  key_permissions = [
+    "Create", 
+    "Delete", 
+    "Get", 
+    "UnwrapKey", 
+    "WrapKey"
+  ]
 
   secret_permissions = [
     "Get"
@@ -67,7 +73,13 @@ resource "azurerm_key_vault_access_policy" "kv_gh_ap" {
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = data.azurerm_client_config.az_config.object_id
 
-  key_permissions = ["Get", "UnwrapKey", "WrapKey"]
+  key_permissions = [
+    "Create", 
+    "Delete", 
+    "Get", 
+    "UnwrapKey", 
+    "WrapKey"
+  ]
 
   secret_permissions = ["List", "Get", "Set"]
 
@@ -160,4 +172,20 @@ resource "azurerm_key_vault_certificate" "kv_cert" {
       validity_in_months = 12
     }
   }
+}
+
+resource "azurerm_key_vault_key" "data-protection" {
+  name         = "data-protection"
+  key_vault_id = azurerm_key_vault.kv.id
+  key_type     = "RSA"
+  key_size     = 2048
+
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
+  ]
 }
