@@ -38,10 +38,10 @@ resource "azurerm_key_vault_access_policy" "kv_ap" {
   object_id    = data.azurerm_client_config.az_config.object_id
 
   key_permissions = [
-    "Create", 
-    "Delete", 
-    "Get", 
-    "UnwrapKey", 
+    "Create",
+    "Delete",
+    "Get",
+    "UnwrapKey",
     "WrapKey"
   ]
 
@@ -74,10 +74,10 @@ resource "azurerm_key_vault_access_policy" "kv_gh_ap" {
   object_id    = data.azurerm_client_config.az_config.object_id
 
   key_permissions = [
-    "Create", 
-    "Delete", 
-    "Get", 
-    "UnwrapKey", 
+    "Create",
+    "Delete",
+    "Get",
+    "UnwrapKey",
     "WrapKey"
   ]
 
