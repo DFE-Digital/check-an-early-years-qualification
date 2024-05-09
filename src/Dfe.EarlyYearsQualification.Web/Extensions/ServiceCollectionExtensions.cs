@@ -137,6 +137,14 @@ public static class ServiceCollectionExtensions
                            SuccessBannerHeading = "Test Banner Heading",
                            SuccessBannerContentHtml = "Test Banner Content"
                          });
+    
+    mockContentfulService.Setup(x => x.GetPhaseBannerContent())
+                          .ReturnsAsync(new PhaseBanner()
+                          {
+                            ContentHtml = "Test phase banner content",
+                            PhaseName = "Test phase banner name",
+                            Show = true
+                          });
 
     services.AddSingleton(mockContentfulService.Object);
     return services;
