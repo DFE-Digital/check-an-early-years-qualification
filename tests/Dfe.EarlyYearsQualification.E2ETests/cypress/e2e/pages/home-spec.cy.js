@@ -4,7 +4,7 @@ describe("A spec used to test the home page", () => {
     cy.visit("/");
   })
 
-  // Mock details found in Dfe.EarlyYearsQualification.Web.Extensions.AddMockContentful. 
+  // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
   it("Checks the page contains the relevant components", () => {
     cy.get(".govuk-heading-xl").should("contain.text", "Test Header");
     cy.get("#pre-cta-content").should("contain.text", "This is the pre cta content");
