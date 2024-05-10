@@ -4,7 +4,7 @@ describe('A spec used to test the various routes through the journey', () => {
     cy.get('.govuk-button--start').should('exist');
   })
 
-  // Mock details found in Dfe.EarlyYearsQualification.Web.Extensions.AddMockContentful. 
+  // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
   it("should redirect the user when they select qualification was awarded outside the UK", () => {
     // home page
     cy.get('.govuk-button--start').click();

@@ -1,5 +1,5 @@
 describe("A spec that tests the cookies page", () => {
-  // Mock details found in Dfe.EarlyYearsQualification.Web.Extensions.AddMockContentful.
+  // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
 
   beforeEach(() => {
     cy.visit("/cookies");

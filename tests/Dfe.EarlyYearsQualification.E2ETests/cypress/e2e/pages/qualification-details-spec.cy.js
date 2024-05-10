@@ -4,7 +4,7 @@ describe("A spec used to test the qualification details page", () => {
       cy.visit("/qualifications/qualification-details/eyq-240");
     })
   
-    // Mock details found in Dfe.EarlyYearsQualification.Web.Extensions.AddMockContentful. 
+    // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService.  
     it("Checks the qualification details are on the page", () => {
       cy.get("#qualification-name-value").should("contain.text", "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)");
       cy.get("#awarding-qualification-value").should("contain.text", "NCFE");
