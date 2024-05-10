@@ -8,7 +8,7 @@ public class PhaseBanner
 
   public Document? Content { get; set; }
 
-  public string ContentHtml {get; set;} = string.Empty;
+  public string ContentHtml {get; set; } = string.Empty;
 
   public bool Show { get; init; }
 }

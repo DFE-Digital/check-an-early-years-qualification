@@ -1,6 +1,6 @@
 describe("A spec that tests question pages", () => {
    
-    // Mock details found in Dfe.EarlyYearsQualification.Web.Extensions.AddMockContentful. 
+    // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
     it("Checks the qualification details are on the page", () => {
         cy.visit("/questions/where-was-the-qualification-awarded");
 

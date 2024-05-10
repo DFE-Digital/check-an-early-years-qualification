@@ -1,6 +1,6 @@
 describe("A spec that tests the phase banner is showing on all pages", () => {
    
-  // Mock details found in Dfe.EarlyYearsQualification.Web.Extensions.AddMockContentful.
+  // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
 
   var pages = [
     "/",
