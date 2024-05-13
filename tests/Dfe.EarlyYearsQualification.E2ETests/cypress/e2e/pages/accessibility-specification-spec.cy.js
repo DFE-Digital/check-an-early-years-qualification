@@ -1,6 +1,6 @@
 describe("A spec that tests the accessibility statement page", () => {
    
-  // Mock details found in Dfe.EarlyYearsQualification.Web.Extensions.AddMockContentful. 
+  // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
   it("Checks the heading and content are present", () => {
       cy.visit("/accessibility-statement");
 

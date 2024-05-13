@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj" />
+    <ProjectReference Include="..\Dfe.EarlyYearsQualification.Mock\Dfe.EarlyYearsQualification.Mock.csproj" />
   </ItemGroup>
 
   <Target Name="BuildWebAssets" BeforeTargets="Build" Condition="'$(buildWebAssets)' == 'true'">

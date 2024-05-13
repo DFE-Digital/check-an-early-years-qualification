@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.Services;
-using Dfe.EarlyYearsQualification.Web.Extensions;
+using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Azure.Identity;
 using OwaspHeaders.Core.Extensions;
 using Dfe.EarlyYearsQualification.Web.Security;
@@ -34,7 +34,7 @@ builder.Services.AddContentful(builder.Configuration);
 
 if (builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
-  builder.Services.AddMockContentful();
+  builder.Services.AddMockContentfulService();
 } else
 {
   builder.Services.AddTransient<IContentService, ContentfulContentService>();

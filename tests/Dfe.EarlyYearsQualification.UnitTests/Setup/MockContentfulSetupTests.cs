@@ -1,4 +1,4 @@
-using Dfe.EarlyYearsQualification.Web.Extensions;
+using Dfe.EarlyYearsQualification.Mock.Extensions;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -14,7 +14,7 @@ public class MockContentfulSetupTests
         var services = new Mock<IServiceCollection>();
 
         // ReSharper disable once InvokeAsExtensionMethod
-        var returned = ServiceCollectionExtensions.AddMockContentful(services.Object);
+        var returned = ServiceCollectionExtensions.AddMockContentfulService(services.Object);
 
         returned.Should().BeSameAs(services.Object);
     }
@@ -28,7 +28,7 @@ public class MockContentfulSetupTests
         services.Setup(s => s.Add(It.IsAny<ServiceDescriptor>())).Callback((object o) => serviceList.Add(o));
 
         // ReSharper disable once InvokeAsExtensionMethod
-        var unused = ServiceCollectionExtensions.AddMockContentful(services.Object);
+        var unused = ServiceCollectionExtensions.AddMockContentfulService(services.Object);
 
         var serviceProvider = services.Object.BuildServiceProvider();
 
@@ -38,6 +38,6 @@ public class MockContentfulSetupTests
 
         service.ToString()
                .Should()
-               .MatchRegex("ServiceType: Dfe.EarlyYearsQualification.Content.Services.IContentService Lifetime: Singleton ImplementationInstance: Mock<IContentService:[0-9]+>.Object");
+               .MatchRegex("ServiceType: Dfe.EarlyYearsQualification.Content.Services.IContentService Lifetime: Singleton ImplementationType: Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService");
     }
 }
