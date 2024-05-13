@@ -1,4 +1,4 @@
-using Dfe.EarlyYearsQualification.Mock;
+using Dfe.EarlyYearsQualification.Mock.Extensions;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;

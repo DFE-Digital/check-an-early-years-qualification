@@ -85,6 +85,16 @@ public class MockContentfulService : IContentService
         });
     }
 
+    public async Task<PhaseBanner?> GetPhaseBannerContent()
+    {
+        return await Task.FromResult(new PhaseBanner()
+            {
+                ContentHtml = "Test phase banner content",
+                PhaseName = "Test phase banner name",
+                Show = true
+            });
+    }
+
     public async Task<Qualification?> GetQualificationById(string qualificationId)
     {
         return await Task.FromResult(new Qualification(
@@ -109,13 +119,13 @@ public class MockContentfulService : IContentService
                                            [
                                                new Option
                                                    {
-                                                       Label = "England", Value = "england", //Options.England
+                                                       Label = "England", Value = "england",
                                                    },
 
                                                    new Option
                                                    {
                                                        Label = "Outside the United Kingdom",
-                                                       Value = "outside-uk" //
+                                                       Value = "outside-uk"
                                                    }
                                            ],
                            CtaButtonText = "Continue",

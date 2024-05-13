@@ -482,4 +482,71 @@ public class ContentfulContentServiceTests
     result.Should().NotBeNull();
     result.Should().Be(qualification);
   }
+
+  [TestMethod]
+  public void GetPhaseBannerContent_Null_LogsAndReturnsDefault()
+  {
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<PhaseBanner>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync((ContentfulCollection<PhaseBanner>)null!);
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetPhaseBannerContent().Result;
+
+    _logger.VerifyWarning("No phase banner entry returned");
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetPhaseBannerContent_NoContent_LogsAndReturnsDefault()
+  {
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<PhaseBanner>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(new ContentfulCollection<PhaseBanner> { Items = new List<PhaseBanner>() });
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetPhaseBannerContent().Result;
+
+    _logger.VerifyWarning("No phase banner entry returned");
+
+    result.Should().BeNull();
+  }
+
+  [TestMethod]
+  public void GetPhaseBannerContent_PhaseBannerExists_Returns()
+  {
+    var phaseBanner = new PhaseBanner()
+    {
+      PhaseName = "Test phase name",
+      Content = _testRichText,
+      Show = true
+    };
+
+    _clientMock.Setup(client =>
+                         client.GetEntriesByType(
+                                                 It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<PhaseBanner>>(),
+                                                 It.IsAny<CancellationToken>()))
+              .ReturnsAsync(new ContentfulCollection<PhaseBanner> { Items = new List<PhaseBanner>() { phaseBanner } });
+
+    var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+    var result = service.GetPhaseBannerContent().Result;
+
+    result.Should().NotBeNull();
+
+    result!.Content.Should().Be(phaseBanner.Content);
+    result!.PhaseName.Should().Be(phaseBanner.PhaseName);
+    result!.ContentHtml.Should().Be("TEST");
+    result!.Show.Should().Be(phaseBanner.Show);
+  }
 }

@@ -2,7 +2,7 @@
 using Dfe.EarlyYearsQualification.Mock.Content;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Dfe.EarlyYearsQualification.Mock;
+namespace Dfe.EarlyYearsQualification.Mock.Extensions;
 
 public static class ServiceCollectionExtensions
 {

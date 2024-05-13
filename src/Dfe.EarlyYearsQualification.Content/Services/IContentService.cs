@@ -19,4 +19,6 @@ public interface IContentService
     Task<AccessibilityStatementPage?> GetAccessibilityStatementPage();
 
     Task<CookiesPage?> GetCookiesPage();
+
+    Task<PhaseBanner?> GetPhaseBannerContent();
 }
