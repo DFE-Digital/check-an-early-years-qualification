@@ -6,7 +6,7 @@ public class PhaseBanner
 {
   public string PhaseName { get; init; } = string.Empty;
 
-  public Document? Content { get; set; }
+  public Document? Content { get; init; }
 
   public string ContentHtml {get; set; } = string.Empty;
 
