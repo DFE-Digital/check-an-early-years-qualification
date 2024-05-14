@@ -22,7 +22,6 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AccessibilityStatementPage>();
         result!.Heading.Should().NotBeNullOrEmpty();
-        result.BodyHtml.Should().NotBeNullOrEmpty();
     }
 
     [TestMethod]

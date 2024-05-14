@@ -1,32 +1,34 @@
-﻿using Contentful.Core;
+﻿using System.Web;
+using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Extensions;
-using Dfe.EarlyYearsQualification.Content.Renderers;
-using Microsoft.Extensions.Logging;
-using System.Web;
 using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
+using Microsoft.Extensions.Logging;
+using TableRenderer = Dfe.EarlyYearsQualification.Content.Renderers.GovUk.TableRenderer;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentService : IContentService
 {
     private readonly IContentfulClient _contentfulClient;
-    private readonly ILogger<ContentfulContentService> _logger;
 
-    private readonly Dictionary<object, string> _contentTypes = new()
-    {
-        {typeof(StartPage), "startPage"},
-        {typeof(Qualification), "Qualification"},
-        {typeof(DetailsPage), "detailsPage"},
-        {typeof(AdvicePage), "advicePage"},
-        {typeof(QuestionPage), "questionPage"},
-        {typeof(AccessibilityStatementPage), "accessibilityStatementPage"},
-        {typeof(NavigationLinks), "navigationLinks"},
-        {typeof(CookiesPage), "cookiesPage"},
-        {typeof(PhaseBanner), "phaseBanner"}
-    };
+    private readonly Dictionary<object, string> _contentTypes
+        = new()
+          {
+              { typeof(StartPage), "startPage" },
+              { typeof(Qualification), "Qualification" },
+              { typeof(DetailsPage), "detailsPage" },
+              { typeof(AdvicePage), "advicePage" },
+              { typeof(QuestionPage), "questionPage" },
+              { typeof(AccessibilityStatementPage), "accessibilityStatementPage" },
+              { typeof(NavigationLinks), "navigationLinks" },
+              { typeof(CookiesPage), "cookiesPage" },
+              { typeof(PhaseBanner), "phaseBanner" }
+          };
+
+    private readonly ILogger<ContentfulContentService> _logger;
 
     public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
     {
@@ -42,58 +44,62 @@ public class ContentfulContentService : IContentService
             _logger.LogWarning("No start page entry returned");
             return default;
         }
+
         var startPageContent = startPageEntries.First();
         var htmlRenderer = GetGeneralHtmlRenderer();
         startPageContent.PreCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PreCtaButtonContent);
         startPageContent.PostCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent);
-        startPageContent.RightHandSideContentHtml = await GetSideContentHtmlRenderer().ToHtml(startPageContent.RightHandSideContent);
+        startPageContent.RightHandSideContentHtml =
+            await GetSideContentHtmlRenderer().ToHtml(startPageContent.RightHandSideContent);
         return startPageContent;
     }
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-      var detailsPageEntries = await GetEntriesByType<DetailsPage>();
-      if (detailsPageEntries is null || !detailsPageEntries.Any())
-      {
-          _logger.LogWarning("No details page entry returned");
-          return default;
-      }
-      var detailsPageContent = detailsPageEntries.First();
-      var htmlRenderer = GetGeneralHtmlRenderer();
-      htmlRenderer.AddRenderer(new InsetTextRenderer(_contentfulClient) { Order = 18 });
-      detailsPageContent.CheckAnotherQualificationTextHtml = await htmlRenderer.ToHtml(detailsPageContent.CheckAnotherQualificationText);
-      detailsPageContent.FurtherInfoTextHtml = await htmlRenderer.ToHtml(detailsPageContent.FurtherInfoText);
-      return detailsPageContent;
+        var detailsPageEntries = await GetEntriesByType<DetailsPage>();
+        if (detailsPageEntries is null || !detailsPageEntries.Any())
+        {
+            _logger.LogWarning("No details page entry returned");
+            return default;
+        }
+
+        var detailsPageContent = detailsPageEntries.First();
+        var htmlRenderer = GetGeneralHtmlRenderer();
+        htmlRenderer.AddRenderer(new InsetTextRenderer(_contentfulClient) { Order = 18 });
+        detailsPageContent.CheckAnotherQualificationTextHtml =
+            await htmlRenderer.ToHtml(detailsPageContent.CheckAnotherQualificationText);
+        detailsPageContent.FurtherInfoTextHtml = await htmlRenderer.ToHtml(detailsPageContent.FurtherInfoText);
+        return detailsPageContent;
     }
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
-      var accessibilityStatementEntities = await GetEntriesByType<AccessibilityStatementPage>();
-      if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
-      {
-          _logger.LogWarning("No accessibility statement page entry returned");
-          return default;
-      }
-      var accessibilityStatementPageContent = accessibilityStatementEntities.First();
-      var htmlRenderer = GetGeneralHtmlRenderer();
-      accessibilityStatementPageContent.BodyHtml = await htmlRenderer.ToHtml(accessibilityStatementPageContent.Body);
-      return accessibilityStatementPageContent;
+        var accessibilityStatementEntities = await GetEntriesByType<AccessibilityStatementPage>();
+        if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
+        {
+            _logger.LogWarning("No accessibility statement page entry returned");
+            return default;
+        }
+
+        return accessibilityStatementEntities.First();
     }
 
     public async Task<CookiesPage?> GetCookiesPage()
     {
-      var cookiesEntities = await GetEntriesByType<CookiesPage>();
-      if (cookiesEntities is null || !cookiesEntities.Any())
-      {
-          _logger.LogWarning("No cookies page entry returned");
-          return default;
-      }
-      var cookiesContent = cookiesEntities.First();
-      var htmlRenderer = GetGeneralHtmlRenderer();
-      htmlRenderer.AddRenderer(new Renderers.GovUk.TableRenderer { Order = 18 });
-      cookiesContent.BodyHtml = await htmlRenderer.ToHtml(cookiesContent.Body);
-      cookiesContent.SuccessBannerContentHtml = await GetSuccessBannerHtmlRenderer().ToHtml(cookiesContent.SuccessBannerContent);
-      return cookiesContent;
+        var cookiesEntities = await GetEntriesByType<CookiesPage>();
+        if (cookiesEntities is null || !cookiesEntities.Any())
+        {
+            _logger.LogWarning("No cookies page entry returned");
+            return default;
+        }
+
+        var cookiesContent = cookiesEntities.First();
+        var htmlRenderer = GetGeneralHtmlRenderer();
+        htmlRenderer.AddRenderer(new TableRenderer { Order = 18 });
+        cookiesContent.BodyHtml = await htmlRenderer.ToHtml(cookiesContent.Body);
+        cookiesContent.SuccessBannerContentHtml =
+            await GetSuccessBannerHtmlRenderer().ToHtml(cookiesContent.SuccessBannerContent);
+        return cookiesContent;
     }
 
     public async Task<List<NavigationLink>?> GetNavigationLinks()
@@ -110,15 +116,19 @@ public class ContentfulContentService : IContentService
 
     public async Task<Qualification?> GetQualificationById(string qualificationId)
     {
-        var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(_contentTypes[typeof(Qualification)]).FieldEquals("fields.qualificationId", qualificationId.ToUpper());
+        var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(_contentTypes[typeof(Qualification)])
+                                                            .FieldEquals("fields.qualificationId",
+                                                                         qualificationId.ToUpper());
         var qualifications = await GetEntriesByType(queryBuilder);
 
         if (qualifications is null || !qualifications.Any())
         {
             var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
-            _logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}", encodedQualificationId);
+            _logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
+                               encodedQualificationId);
             return default;
         }
+
         var qualification = qualifications.First();
         return qualification;
     }
@@ -131,6 +141,7 @@ public class ContentfulContentService : IContentService
             _logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
             return default;
         }
+
         var htmlRenderer = GetGeneralHtmlRenderer();
         advicePage.BodyHtml = await htmlRenderer.ToHtml(advicePage.Body);
         return advicePage;
@@ -143,15 +154,16 @@ public class ContentfulContentService : IContentService
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
-      var phaseBannerEntities = await GetEntriesByType<PhaseBanner>();
-      if (phaseBannerEntities is null || !phaseBannerEntities.Any())
-      {
-          _logger.LogWarning("No phase banner entry returned");
-          return default;
-      }
-      var phaseBannerContent = phaseBannerEntities.First();
-      phaseBannerContent.ContentHtml = await GetPhaseBannerRenderer().ToHtml(phaseBannerContent.Content);
-      return phaseBannerContent;
+        var phaseBannerEntities = await GetEntriesByType<PhaseBanner>();
+        if (phaseBannerEntities is null || !phaseBannerEntities.Any())
+        {
+            _logger.LogWarning("No phase banner entry returned");
+            return default;
+        }
+
+        var phaseBannerContent = phaseBannerEntities.First();
+        phaseBannerContent.ContentHtml = await GetPhaseBannerRenderer().ToHtml(phaseBannerContent.Content);
+        return phaseBannerContent;
     }
 
     private async Task<T?> GetEntryById<T>(string entryId)
@@ -159,13 +171,15 @@ public class ContentfulContentService : IContentService
         try
         {
             // NOTE: GetEntry doesn't bind linked references which is why we are using GetEntriesByType
-            var queryBuilder = new QueryBuilder<T>().ContentTypeIs(_contentTypes[typeof(T)]).FieldEquals("sys.id", entryId);
+            var queryBuilder = new QueryBuilder<T>().ContentTypeIs(_contentTypes[typeof(T)])
+                                                    .FieldEquals("sys.id", entryId);
             var entry = await _contentfulClient.GetEntriesByType(_contentTypes[typeof(T)], queryBuilder);
             return entry.FirstOrDefault();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception trying to retrieve entryId {entryId} for type {type} from Contentful.", entryId, nameof(T));
+            _logger.LogError(ex, "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
+                             entryId, nameof(T));
             return default;
         }
     }
@@ -188,7 +202,7 @@ public class ContentfulContentService : IContentService
 
     private static HtmlRenderer GetGeneralHtmlRenderer()
     {
-        var htmlRenderer = new HtmlRenderer();      
+        var htmlRenderer = new HtmlRenderer();
         htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListRenderer { Order = 18 });
         return htmlRenderer;
     }
@@ -202,16 +216,16 @@ public class ContentfulContentService : IContentService
 
     private static HtmlRenderer GetSuccessBannerHtmlRenderer()
     {
-      var htmlRenderer = new HtmlRenderer();
-      htmlRenderer.AddRenderer(new SuccessBannerParagraphRenderer { Order = 1 });
-      htmlRenderer.AddRenderer(new HyperlinkRenderer { Order = 2 });
-      return htmlRenderer;
+        var htmlRenderer = new HtmlRenderer();
+        htmlRenderer.AddRenderer(new SuccessBannerParagraphRenderer { Order = 1 });
+        htmlRenderer.AddRenderer(new HyperlinkRenderer { Order = 2 });
+        return htmlRenderer;
     }
 
     private static HtmlRenderer GetPhaseBannerRenderer()
     {
-      var htmlRenderer = new HtmlRenderer();
-      htmlRenderer.AddRenderer(new PhaseBannerRenderer { Order = 1 });
-      return htmlRenderer;
+        var htmlRenderer = new HtmlRenderer();
+        htmlRenderer.AddRenderer(new PhaseBannerRenderer { Order = 1 });
+        return htmlRenderer;
     }
 }
