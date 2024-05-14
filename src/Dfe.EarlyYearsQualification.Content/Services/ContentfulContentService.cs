@@ -45,13 +45,7 @@ public class ContentfulContentService : IContentService
             return default;
         }
 
-        var startPageContent = startPageEntries.First();
-        var htmlRenderer = GetGeneralHtmlRenderer();
-        startPageContent.PreCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PreCtaButtonContent);
-        startPageContent.PostCtaButtonContentHtml = await htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent);
-        startPageContent.RightHandSideContentHtml =
-            await GetSideContentHtmlRenderer().ToHtml(startPageContent.RightHandSideContent);
-        return startPageContent;
+        return startPageEntries.First();
     }
 
     public async Task<DetailsPage?> GetDetailsPage()
@@ -202,13 +196,6 @@ public class ContentfulContentService : IContentService
     {
         var htmlRenderer = new HtmlRenderer();
         htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListRenderer { Order = 18 });
-        return htmlRenderer;
-    }
-
-    private static HtmlRenderer GetSideContentHtmlRenderer()
-    {
-        var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListHyperlinksRenderer { Order = 18 });
         return htmlRenderer;
     }
 

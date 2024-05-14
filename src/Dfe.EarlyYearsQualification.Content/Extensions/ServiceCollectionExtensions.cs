@@ -9,7 +9,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddModelRenderers(this IServiceCollection services)
     {
         services.AddSingleton<IHtmlRenderer, HtmlModelRenderer>()
-                .AddSingleton<IPhaseBannerRenderer, PhaseBannerRenderer>();
+                .AddSingleton<IPhaseBannerRenderer, PhaseBannerRenderer>()
+                .AddSingleton<ISideContentRenderer, SideContentRenderer>();
 
         return services;
     }

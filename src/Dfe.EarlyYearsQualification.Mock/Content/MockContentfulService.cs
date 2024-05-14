@@ -1,6 +1,6 @@
-using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Mock.Content;
 
@@ -8,19 +8,12 @@ public class MockContentfulService : IContentService
 {
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
+        var body = ContentfulContentHelper.Text("Test Accessibility Statement text");
+
         return await Task.FromResult(new AccessibilityStatementPage
                                      {
                                          Heading = "Test Accessibility Statement Heading",
-                                         Body = new Document
-                                                {
-                                                    Content =
-                                                    [
-                                                        new Text
-                                                        {
-                                                            Value = "Test Accessibility Statement text"
-                                                        }
-                                                    ]
-                                                }
+                                         Body = body
                                      });
     }
 
@@ -42,13 +35,13 @@ public class MockContentfulService : IContentService
                                          ButtonText = "Test Cookies Button",
                                          Options =
                                          [
-                                             new Option()
+                                             new Option
                                              {
                                                  Label = "Test Option Label 1",
                                                  Value = "test-option-value-1"
                                              },
 
-                                             new Option()
+                                             new Option
                                              {
                                                  Label = "Test Option Label 2",
                                                  Value = "test-option-value-2"
@@ -99,15 +92,11 @@ public class MockContentfulService : IContentService
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
+        var content = ContentfulContentHelper.Text("Test phase banner content");
+
         return await Task.FromResult(new PhaseBanner
                                      {
-                                         Content = new Document
-                                                   {
-                                                       Content =
-                                                       [
-                                                           new Text { Value = "Test phase banner content" }
-                                                       ]
-                                                   },
+                                         Content = content,
                                          PhaseName = "Test phase banner name",
                                          Show = true
                                      });
@@ -153,18 +142,23 @@ public class MockContentfulService : IContentService
 
     public async Task<StartPage?> GetStartPage()
     {
+        var preCtaButtonContent =
+            ContentfulContentHelper.Paragraph("This is the pre cta content");
+
+        var postCtaButtonContent =
+            ContentfulContentHelper.Paragraph("This is the post cta content");
+
+        var rightHandSideContent =
+            ContentfulContentHelper.Paragraph("This is the right hand content");
+
         return await Task.FromResult(new StartPage
                                      {
                                          Header = "Test Header",
-                                         PreCtaButtonContentHtml =
-                                             "<p id='pre-cta-content'>This is the pre cta content</p>",
+                                         PreCtaButtonContent = preCtaButtonContent,
                                          CtaButtonText = "Start Button Text",
-                                         PostCtaButtonContentHtml =
-                                             "<p id='post-cta-content'>This is the post cta content</p>",
-                                         RightHandSideContentHeader =
-                                             "Related content",
-                                         RightHandSideContentHtml =
-                                             "<p id='right-hand-content'>This is the right hand content</p>"
+                                         PostCtaButtonContent = postCtaButtonContent,
+                                         RightHandSideContentHeader = "Related content",
+                                         RightHandSideContent = rightHandSideContent
                                      });
     }
 }

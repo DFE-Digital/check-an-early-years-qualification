@@ -1,4 +1,5 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities;
+﻿using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using FluentAssertions;
 
@@ -112,13 +113,21 @@ public class MockContentfulServiceTests
     public async Task GetStartPage_ReturnsExpectedDetails()
     {
         var result = await _contentfulService.GetStartPage();
+
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StartPage>();
         result!.CtaButtonText.Should().NotBeNullOrEmpty();
         result.Header.Should().NotBeNullOrEmpty();
-        result.PostCtaButtonContentHtml.Should().NotBeNullOrEmpty();
-        result.PreCtaButtonContentHtml.Should().NotBeNullOrEmpty();
-        result.RightHandSideContentHtml.Should().NotBeNullOrEmpty();
+
+        result.PostCtaButtonContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post cta content");
+
+        result.PreCtaButtonContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the pre cta content");
+
+        result.RightHandSideContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the right hand content");
+
         result.RightHandSideContentHeader.Should().NotBeNullOrEmpty();
     }
 
