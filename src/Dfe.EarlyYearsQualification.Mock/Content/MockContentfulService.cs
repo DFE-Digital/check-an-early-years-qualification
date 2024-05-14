@@ -8,7 +8,7 @@ public class MockContentfulService : IContentService
 {
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
-        var body = ContentfulContentHelper.Text("Test Accessibility Statement text");
+        var body = ContentfulContentHelper.Text("Test Accessibility Statement Body");
 
         return await Task.FromResult(new AccessibilityStatementPage
                                      {
