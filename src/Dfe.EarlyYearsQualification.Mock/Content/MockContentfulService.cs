@@ -101,7 +101,13 @@ public class MockContentfulService : IContentService
     {
         return await Task.FromResult(new PhaseBanner
                                      {
-                                         ContentHtml = "Test phase banner content",
+                                         Content = new Document
+                                                   {
+                                                       Content =
+                                                       [
+                                                           new Text { Value = "Test phase banner content" }
+                                                       ]
+                                                   },
                                          PhaseName = "Test phase banner name",
                                          Show = true
                                      });

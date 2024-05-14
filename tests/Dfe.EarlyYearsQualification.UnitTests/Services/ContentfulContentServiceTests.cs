@@ -567,7 +567,7 @@ public class ContentfulContentServiceTests
 
         result!.Content.Should().Be(phaseBanner.Content);
         result.PhaseName.Should().Be(phaseBanner.PhaseName);
-        result.ContentHtml.Should().Be("TEST");
+        result.Content!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
         result.Show.Should().Be(phaseBanner.Show);
     }
 }

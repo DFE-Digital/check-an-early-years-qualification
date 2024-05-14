@@ -128,7 +128,7 @@ public class MockContentfulServiceTests
         var result = await _contentfulService.GetPhaseBannerContent();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<PhaseBanner>();
-        result!.ContentHtml.Should().NotBeNullOrEmpty();
+        result!.Content.Should().NotBeNull();
         result.PhaseName.Should().NotBeNullOrEmpty();
         result.Show.Should().BeTrue();
     }

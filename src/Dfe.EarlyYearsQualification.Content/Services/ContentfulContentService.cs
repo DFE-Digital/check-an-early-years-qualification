@@ -161,9 +161,7 @@ public class ContentfulContentService : IContentService
             return default;
         }
 
-        var phaseBannerContent = phaseBannerEntities.First();
-        phaseBannerContent.ContentHtml = await GetPhaseBannerRenderer().ToHtml(phaseBannerContent.Content);
-        return phaseBannerContent;
+        return phaseBannerEntities.First();
     }
 
     private async Task<T?> GetEntryById<T>(string entryId)
@@ -219,13 +217,6 @@ public class ContentfulContentService : IContentService
         var htmlRenderer = new HtmlRenderer();
         htmlRenderer.AddRenderer(new SuccessBannerParagraphRenderer { Order = 1 });
         htmlRenderer.AddRenderer(new HyperlinkRenderer { Order = 2 });
-        return htmlRenderer;
-    }
-
-    private static HtmlRenderer GetPhaseBannerRenderer()
-    {
-        var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddRenderer(new PhaseBannerRenderer { Order = 1 });
         return htmlRenderer;
     }
 }
