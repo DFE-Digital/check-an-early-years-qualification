@@ -1,3 +1,7 @@
+# Azure Storage Module
+
+This module provisions a new Azure blob storage to be used by the Web Application.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
