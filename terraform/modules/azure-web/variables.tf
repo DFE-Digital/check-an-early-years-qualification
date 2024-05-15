@@ -132,3 +132,8 @@ variable "kv_mi_id" {
   description = "ID of the Managed Identity for the Key Vault"
   type        = string
 }
+
+variable "tags" {
+  description = "Resource tags"
+  type        = map(string)
+}

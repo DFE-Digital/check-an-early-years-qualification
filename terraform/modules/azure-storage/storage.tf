@@ -35,6 +35,8 @@ resource "azurerm_storage_account" "sa" {
     }
   }
 
+  tags = var.tags
+
   #checkov:skip=CKV_AZURE_206:GRS not required
   #checkov:skip=CKV_AZURE_59:Argument has been deprecated
   #checkov:skip=CKV2_AZURE_18:Microsoft Managed keys are sufficient

@@ -18,6 +18,7 @@ resource "azurerm_application_insights" "web" {
   location            = var.location
   application_type    = "web"
   workspace_id        = azurerm_log_analytics_workspace.webapp_logs.id
+  tags                = var.tags
 }
 
 # Create App Service Plan
@@ -111,8 +112,10 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   lifecycle {
-    ignore_changes = [tags, site_config.0.application_stack]
+    ignore_changes = [site_config.0.application_stack]
   }
+
+  tags = var.tags
 
   #checkov:skip=CKV_AZURE_13:App uses built-in authentication
   #checkov:skip=CKV_AZURE_88:Using Docker

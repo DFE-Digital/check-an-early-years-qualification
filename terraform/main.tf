@@ -51,6 +51,7 @@ module "storage" {
 
   location       = var.azure_region
   resource_group = azurerm_resource_group.rg.name
+  tags           = local.common_tags
 }
 
 # Create web application resources
