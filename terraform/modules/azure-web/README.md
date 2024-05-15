@@ -55,6 +55,7 @@ No modules.
 | <a name="input_location"></a> [location](#input\_location) | Name of the Azure region to deploy resources | `string` | n/a | yes |
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Name of the Azure Resource Group to deploy resources | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(string)` | n/a | yes |
 | <a name="input_webapp_admin_email_address"></a> [webapp\_admin\_email\_address](#input\_webapp\_admin\_email\_address) | Email Address of the Admin | `string` | n/a | yes |
 | <a name="input_webapp_app_settings"></a> [webapp\_app\_settings](#input\_webapp\_app\_settings) | App Settings are exposed as environment variables | `map(string)` | n/a | yes |
 | <a name="input_webapp_custom_domain_cert_secret_label"></a> [webapp\_custom\_domain\_cert\_secret\_label](#input\_webapp\_custom\_domain\_cert\_secret\_label) | Label for the Certificate | `string` | n/a | yes |
