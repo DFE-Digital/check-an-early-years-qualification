@@ -1,4 +1,5 @@
 run-name: 'Terraform Deploy - ${{inputs.environment}}'
+name: 'Terraform Deploy'
 
 on:
   workflow_dispatch:
