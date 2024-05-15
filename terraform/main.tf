@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "rg" {
 
 # Create network resources
 module "network" {
-  source = "./azure-network"
+  source = "./modules/azure-network"
 
   environment                               = var.environment
   location                                  = var.azure_region
@@ -47,7 +47,7 @@ module "network" {
 
 # Create storage account for web app
 module "storage" {
-  source = "./azure-storage"
+  source = "./modules/azure-storage"
 
   location       = var.azure_region
   resource_group = azurerm_resource_group.rg.name
@@ -55,7 +55,7 @@ module "storage" {
 
 # Create web application resources
 module "webapp" {
-  source = "./azure-web"
+  source = "./modules/azure-web"
 
   environment                              = var.environment
   location                                 = var.azure_region
