@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Microsoft.AspNetCore.Http.Extensions;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
@@ -11,11 +12,13 @@ public class QualificationDetailsController : Controller
 {
     private readonly ILogger<QualificationDetailsController> _logger;
     private readonly IContentService _contentService;
+    private readonly IGovUkInsetTextRenderer _renderer;
 
-    public QualificationDetailsController(ILogger<QualificationDetailsController> logger, IContentService contentService)
+    public QualificationDetailsController(ILogger<QualificationDetailsController> logger, IContentService contentService, IGovUkInsetTextRenderer renderer)
     {
         _logger = logger;
         _contentService = contentService;
+        _renderer = renderer;
     }
 
     [HttpGet]
@@ -44,12 +47,11 @@ public class QualificationDetailsController : Controller
             return RedirectToAction("Error", "Home");
         }
 
-        var model = Map(qualification);
-        model.Content = detailsPageContent;
+        var model = await Map(qualification, detailsPageContent);
         return View(model);
     }
 
-    private QualificationDetailsModel Map(Qualification qualification)
+    private async Task<QualificationDetailsModel> Map(Qualification qualification, DetailsPage content)
     {
         return new QualificationDetailsModel
         {
@@ -62,7 +64,22 @@ public class QualificationDetailsController : Controller
             ToWhichYear = qualification.ToWhichYear,
             Notes = qualification.Notes,
             AdditionalRequirements = qualification.AdditionalRequirements,
-            BookmarkUrl = HttpContext.Request.GetDisplayUrl()
+            BookmarkUrl = HttpContext.Request.GetDisplayUrl(),
+            Content = new DetailsPageModel()
+            {
+              AwardingOrgLabel = content.AwardingOrgLabel,
+              BookmarkHeading = content.BookmarkHeading,
+              BookmarkText = content.BookmarkText,
+              CheckAnotherQualificationHeading = content.CheckAnotherQualificationHeading,
+              CheckAnotherQualificationText = await _renderer.ToHtml(content.CheckAnotherQualificationText),
+              DateAddedLabel = content.DateAddedLabel,
+              DateOfCheckLabel = content.DateOfCheckLabel,
+              FurtherInfoHeading = content.FurtherInfoHeading,
+              FurtherInfoText = await _renderer.ToHtml(content.FurtherInfoText),
+              LevelLabel = content.LevelLabel,
+              MainHeader = content.MainHeader,
+              QualificationNumberLabel = content.QualificationNumberLabel
+            },
         };
     }
 }

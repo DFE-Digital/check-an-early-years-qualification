@@ -58,11 +58,6 @@ public class ContentfulContentService : IContentService
         }
 
         var detailsPageContent = detailsPageEntries.First();
-        var htmlRenderer = GetGeneralHtmlRenderer();
-        htmlRenderer.AddRenderer(new InsetTextRenderer(_contentfulClient) { Order = 18 });
-        detailsPageContent.CheckAnotherQualificationTextHtml =
-            await htmlRenderer.ToHtml(detailsPageContent.CheckAnotherQualificationText);
-        detailsPageContent.FurtherInfoTextHtml = await htmlRenderer.ToHtml(detailsPageContent.FurtherInfoText);
         return detailsPageContent;
     }
 
@@ -88,11 +83,6 @@ public class ContentfulContentService : IContentService
         }
 
         var cookiesContent = cookiesEntities.First();
-        var htmlRenderer = GetGeneralHtmlRenderer();
-        htmlRenderer.AddRenderer(new TableRenderer { Order = 18 });
-        cookiesContent.BodyHtml = await htmlRenderer.ToHtml(cookiesContent.Body);
-        cookiesContent.SuccessBannerContentHtml =
-            await GetSuccessBannerHtmlRenderer().ToHtml(cookiesContent.SuccessBannerContent);
         return cookiesContent;
     }
 
@@ -135,9 +125,6 @@ public class ContentfulContentService : IContentService
             _logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
             return default;
         }
-
-        var htmlRenderer = GetGeneralHtmlRenderer();
-        advicePage.BodyHtml = await htmlRenderer.ToHtml(advicePage.Body);
         return advicePage;
     }
 
@@ -190,20 +177,5 @@ public class ContentfulContentService : IContentService
             _logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
             return default;
         }
-    }
-
-    private static HtmlRenderer GetGeneralHtmlRenderer()
-    {
-        var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddCommonRenderers().AddRenderer(new UnorderedListRenderer { Order = 18 });
-        return htmlRenderer;
-    }
-
-    private static HtmlRenderer GetSuccessBannerHtmlRenderer()
-    {
-        var htmlRenderer = new HtmlRenderer();
-        htmlRenderer.AddRenderer(new SuccessBannerParagraphRenderer { Order = 1 });
-        htmlRenderer.AddRenderer(new HyperlinkRenderer { Order = 2 });
-        return htmlRenderer;
     }
 }

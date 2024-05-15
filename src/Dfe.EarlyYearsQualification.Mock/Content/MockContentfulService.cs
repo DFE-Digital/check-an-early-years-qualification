@@ -22,7 +22,6 @@ public class MockContentfulService : IContentService
         return await Task.FromResult(new AdvicePage
                                      {
                                          Heading = "Qualifications achieved outside the United Kingdom",
-                                         BodyHtml = "<p id='outside-uk-body'>This is the body of the page</p>"
                                      });
     }
 
@@ -31,7 +30,6 @@ public class MockContentfulService : IContentService
         return await Task.FromResult(new CookiesPage
                                      {
                                          Heading = "Test Cookies Heading",
-                                         BodyHtml = "Test Cookies Body",
                                          ButtonText = "Test Cookies Button",
                                          Options =
                                          [
@@ -49,7 +47,6 @@ public class MockContentfulService : IContentService
                                          ],
                                          ErrorText = "Test Error Text",
                                          SuccessBannerHeading = "Test Banner Heading",
-                                         SuccessBannerContentHtml = "Test Banner Content"
                                      });
     }
 
@@ -61,11 +58,8 @@ public class MockContentfulService : IContentService
                                          BookmarkHeading = "Test Bookmark Heading",
                                          BookmarkText = "Test Bookmark Text",
                                          CheckAnotherQualificationHeading = "Test Check Another Qualification Heading",
-                                         CheckAnotherQualificationTextHtml =
-                                             "<p id='check-another-qualification-text'>Test Check Another Qualification Text</p>",
                                          DateAddedLabel = "Test Date Added Label",
                                          DateOfCheckLabel = "Test Date Of Check Label",
-                                         FurtherInfoTextHtml = "<p id='further-info-text'>Test Further Info Text</p>",
                                          FurtherInfoHeading = "Test Further Info Heading",
                                          LevelLabel = "Test Level Label",
                                          MainHeader = "Test Main Heading",

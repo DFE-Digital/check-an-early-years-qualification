@@ -10,7 +10,10 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IHtmlRenderer, HtmlModelRenderer>()
                 .AddSingleton<IPhaseBannerRenderer, PhaseBannerRenderer>()
-                .AddSingleton<ISideContentRenderer, SideContentRenderer>();
+                .AddSingleton<ISideContentRenderer, SideContentRenderer>()
+                .AddSingleton<IHtmlTableRenderer, HtmlTableRenderer>()
+                .AddSingleton<ISuccessBannerRenderer, SuccessBannerRenderer>()
+                .AddSingleton<IGovUkInsetTextRenderer, GovUkInsetTextRenderer>();
 
         return services;
     }
