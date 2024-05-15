@@ -83,5 +83,6 @@ module "webapp" {
   kv_id                                    = module.network.kv_id
   kv_cert_secret_id                        = module.network.kv_cert_secret_id
   kv_mi_id                                 = module.network.kv_mi_id
+  tags                                     = local.common_tags
   depends_on                               = [module.network]
 }
