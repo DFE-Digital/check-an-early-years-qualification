@@ -1,4 +1,4 @@
-name: 'Terraform Deploy [Azure]'
+run-name: 'Terraform Deploy - ${{inputs.environment}}'
 
 on:
   workflow_dispatch:
