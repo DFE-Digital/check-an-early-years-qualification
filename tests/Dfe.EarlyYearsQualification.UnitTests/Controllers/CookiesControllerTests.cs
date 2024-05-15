@@ -7,46 +7,45 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Contentful.Core.Models;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 
 [TestClass]
 public class CookiesControllerTests
 {
-  private Mock<IContentService> _mockContentService = new();
-  private CookiesController? _controller;
-  private Mock<ILogger<CookiesController>>? _mockLogger;
-
-  [TestInitialize]
-  public void BeforeEachTest()
-  {
-    _mockContentService = new Mock<IContentService>();
-    _mockLogger = new Mock<ILogger<CookiesController>>();
-    
-    _controller = new CookiesController(_mockLogger.Object, _mockContentService.Object);
-  }
-
   [TestMethod]
   public async Task Index_NoContent_NavigatesToErrorPageAsync()
   {
-    _mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage)default!);
-    _controller = new CookiesController(_mockLogger!.Object, _mockContentService.Object);
+    var mockContentService = new Mock<IContentService>();
+    var mockLogger = new Mock<ILogger<CookiesController>>();
+    var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+    var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
 
-    var result = await _controller!.Index();
+    var controller = new CookiesController(mockLogger.Object, mockContentService.Object, mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object);
+
+    mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage)default!);
+
+    var result = await controller!.Index();
 
     result.Should().NotBeNull();
     result.Should().BeEquivalentTo(new RedirectToActionResult("Error", "Home", null));
 
-    _mockLogger.VerifyError("No content for the cookies page");
+    mockLogger.VerifyError("No content for the cookies page");
   }
 
   [TestMethod]
   public async Task Index_ContentFound_ReturnsCorrectModel()
   {
+    var mockContentService = new Mock<IContentService>();
+    var mockLogger = new Mock<ILogger<CookiesController>>();
+    var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+    var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+
     var expectedContent = new CookiesPage()
     {
       Heading = "Test Heading",
-      BodyHtml = "<p> Test Body </p>",
       ButtonText = "Test Button Text",
       Options = new List<Option>
       {
@@ -60,14 +59,19 @@ public class CookiesControllerTests
         Label = "No Click Me!",
         Value = "test option 2"
        },
-      }
+      },
+      SuccessBannerHeading = "Test success banner heading",
+      ErrorText = "Test error text",
     };
 
-    _mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync(expectedContent);
+    mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync(expectedContent);
 
-    _controller = new CookiesController(_mockLogger!.Object, _mockContentService.Object);
+    mockHtmlTableRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test main content");
+    mockSuccessBannerRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test success banner content");
 
-    var result = await _controller!.Index();
+    var controller = new CookiesController(mockLogger.Object, mockContentService.Object, mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object);
+
+    var result = await controller!.Index();
 
     result.Should().NotBeNull();
     result.Should()
@@ -77,7 +81,7 @@ public class CookiesControllerTests
                 .BeEquivalentTo(new CookiesPageModel()
                 {
                   Heading = expectedContent.Heading,
-                  BodyContent = expectedContent.BodyHtml,
+                  BodyContent = "Test main content",
                   ButtonText = expectedContent.ButtonText,
                   Options = new List<OptionModel>()
                   {
@@ -91,7 +95,10 @@ public class CookiesControllerTests
                       Label = expectedContent.Options[1].Label,
                       Value = expectedContent.Options[1].Value,
                     }
-                  }
+                  },
+                  SuccessBannerHeading = expectedContent.SuccessBannerHeading,
+                  SuccessBannerContent = "Test success banner content",
+                  ErrorText = expectedContent.ErrorText
                 });
   }
 }

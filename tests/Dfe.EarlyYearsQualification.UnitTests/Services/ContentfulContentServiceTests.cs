@@ -3,6 +3,7 @@ using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Helpers;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -206,9 +207,9 @@ public class ContentfulContentServiceTests
     {
         var cookiesPage = new CookiesPage
                           {
-                              Heading = "Heading", BodyHtml = "BodyHtml", ButtonText = "ButtonText",
+                              Heading = "Heading", Body = ContentfulContentHelper.Paragraph("Test Body"), ButtonText = "ButtonText",
                               SuccessBannerHeading = "SuccessBannerHeading",
-                              SuccessBannerContentHtml = "SuccessBannerContentHtml"
+                              SuccessBannerContent = ContentfulContentHelper.Paragraph("SuccessBannerContentHtml")
                           };
 
         var pages = new ContentfulCollection<CookiesPage> { Items = new[] { cookiesPage } };
@@ -349,7 +350,7 @@ public class ContentfulContentServiceTests
 
         result!.Heading.Should().Be("Test Heading");
         result.Body.Should().Be(_testRichText);
-        result.BodyHtml.Should().NotBeNull();
+        result.Body.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -431,12 +432,12 @@ public class ContentfulContentServiceTests
         result.BookmarkText.Should().Be("Test bookmark text");
         result.CheckAnotherQualificationHeading.Should().Be("Test check another qualification heading");
         result.CheckAnotherQualificationText.Should().Be(_testRichText);
-        result.CheckAnotherQualificationTextHtml.Should().NotBeNull();
+        result.CheckAnotherQualificationText.Should().NotBeNull();
         result.DateAddedLabel.Should().Be("Test date added label");
         result.DateOfCheckLabel.Should().Be("Test date of check label");
         result.FurtherInfoHeading.Should().Be("Test further info heading");
         result.FurtherInfoText.Should().Be(_testRichText);
-        result.FurtherInfoTextHtml.Should().NotBeNull();
+        result.FurtherInfoText.Should().NotBeNull();
         result.LevelLabel.Should().Be("Test level label");
         result.MainHeader.Should().Be("Test main header");
         result.QualificationNumberLabel.Should().Be("Test qualification number label");

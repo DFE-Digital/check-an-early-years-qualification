@@ -32,7 +32,8 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
         result!.Heading.Should().NotBeNullOrEmpty();
-        result.BodyHtml.Should().NotBeNullOrEmpty();
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
 
     [TestMethod]
@@ -42,11 +43,13 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CookiesPage>();
         result!.Heading.Should().NotBeNullOrEmpty();
-        result.BodyHtml.Should().NotBeNullOrEmpty();
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Cookies Page Body");
         result.ButtonText.Should().NotBeNullOrEmpty();
         result.ErrorText.Should().NotBeNullOrEmpty();
         result.SuccessBannerHeading.Should().NotBeNullOrEmpty();
-        result.SuccessBannerContentHtml.Should().NotBeNullOrEmpty();
+        result.SuccessBannerContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Success Banner Content");
         result.Options.Should().NotBeNullOrEmpty();
         result.Options.Count.Should().Be(2);
     }
@@ -61,10 +64,12 @@ public class MockContentfulServiceTests
         result.BookmarkHeading.Should().NotBeNullOrEmpty();
         result.BookmarkText.Should().NotBeNullOrEmpty();
         result.CheckAnotherQualificationHeading.Should().NotBeNullOrEmpty();
-        result.CheckAnotherQualificationTextHtml.Should().NotBeNullOrEmpty();
+        result.CheckAnotherQualificationText!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Check Another Qualification Text");
         result.DateAddedLabel.Should().NotBeNullOrEmpty();
         result.DateOfCheckLabel.Should().NotBeNullOrEmpty();
-        result.FurtherInfoTextHtml.Should().NotBeNullOrEmpty();
+        result.FurtherInfoText!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Further Info Text");
         result.LevelLabel.Should().NotBeNullOrEmpty();
         result.MainHeader.Should().NotBeNullOrEmpty();
         result.QualificationNumberLabel.Should().NotBeNullOrEmpty();

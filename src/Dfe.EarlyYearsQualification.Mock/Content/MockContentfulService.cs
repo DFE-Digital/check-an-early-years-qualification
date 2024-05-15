@@ -8,7 +8,7 @@ public class MockContentfulService : IContentService
 {
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
-        var body = ContentfulContentHelper.Text("Test Accessibility Statement Body");
+        var body = ContentfulContentHelper.Paragraph("Test Accessibility Statement Body");
 
         return await Task.FromResult(new AccessibilityStatementPage
                                      {
@@ -19,14 +19,19 @@ public class MockContentfulService : IContentService
 
     public async Task<AdvicePage?> GetAdvicePage(string entryId)
     {
+        var body = ContentfulContentHelper.Paragraph("Test Advice Page Body");
+
         return await Task.FromResult(new AdvicePage
                                      {
                                          Heading = "Qualifications achieved outside the United Kingdom",
+                                         Body = body
                                      });
     }
 
     public async Task<CookiesPage?> GetCookiesPage()
     {
+        var body = ContentfulContentHelper.Paragraph("Test Cookies Page Body");
+        var successBannerContent = ContentfulContentHelper.Paragraph("Test Success Banner Content");
         return await Task.FromResult(new CookiesPage
                                      {
                                          Heading = "Test Cookies Heading",
@@ -47,11 +52,15 @@ public class MockContentfulService : IContentService
                                          ],
                                          ErrorText = "Test Error Text",
                                          SuccessBannerHeading = "Test Banner Heading",
+                                         Body = body,
+                                         SuccessBannerContent = successBannerContent
                                      });
     }
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
+        var checkAnotherQualificationText = ContentfulContentHelper.Paragraph("Test Check Another Qualification Text");
+        var furtherInfoText = ContentfulContentHelper.Paragraph("Test Further Info Text");
         return await Task.FromResult(new DetailsPage
                                      {
                                          AwardingOrgLabel = "Awarding Org Label",
@@ -63,7 +72,9 @@ public class MockContentfulService : IContentService
                                          FurtherInfoHeading = "Test Further Info Heading",
                                          LevelLabel = "Test Level Label",
                                          MainHeader = "Test Main Heading",
-                                         QualificationNumberLabel = "Test Qualification Number Label"
+                                         QualificationNumberLabel = "Test Qualification Number Label",
+                                         CheckAnotherQualificationText = checkAnotherQualificationText,
+                                         FurtherInfoText = furtherInfoText
                                      });
     }
 

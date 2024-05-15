@@ -1,12 +1,14 @@
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -14,53 +16,57 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class AdviceControllerTests
 {
-    private readonly ILogger<AdviceController> _mockLogger = new NullLoggerFactory().CreateLogger<AdviceController>();
-    private AdviceController? _controller;
-    private Mock<IContentService> _mockContentService = new();
+  [TestMethod]
+  public async Task QualificationOutsideTheUnitedKingdom_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+  {
+    var mockLogger = new Mock<ILogger<AdviceController>>();
+    var mockContentService = new Mock<IContentService>();
+    var mockHtmlRenderer = new Mock<IHtmlRenderer>();
 
-    [TestInitialize]
-    public void BeforeEachTest()
-    {
-        _mockContentService = new Mock<IContentService>();
-        _controller = new AdviceController(_mockLogger, _mockContentService.Object);
-    }
+    var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
 
-    [TestMethod]
-    public async Task QualificationOutsideTheUnitedKingdom_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
-    {
-        _mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk))
-                           .ReturnsAsync((AdvicePage)default!).Verifiable();
-        var result = await _controller!.QualificationOutsideTheUnitedKingdom();
+    mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk))
+                       .ReturnsAsync((AdvicePage)default!).Verifiable();
+    var result = await controller!.QualificationOutsideTheUnitedKingdom();
 
-        _mockContentService.VerifyAll();
+    result.Should().NotBeNull();
 
-        result.Should().NotBeNull();
+    var resultType = result as RedirectToActionResult;
 
-        var resultType = result as RedirectToActionResult;
+    resultType.Should().NotBeNull();
 
-        resultType.Should().NotBeNull();
+    resultType!.ActionName.Should().Be("Error");
+    resultType.ControllerName.Should().Be("Home");
+  }
 
-        resultType!.ActionName.Should().Be("Error");
-        resultType.ControllerName.Should().Be("Home");
-    }
+  [TestMethod]
+  public async Task QualificationOutsideTheUnitedKingdom_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+  {
+    var mockLogger = new Mock<ILogger<AdviceController>>();
+    var mockContentService = new Mock<IContentService>();
+    var mockHtmlRenderer = new Mock<IHtmlRenderer>();
 
-    [TestMethod]
-    public async Task QualificationOutsideTheUnitedKingdom_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
-    {
-        var advicePage = new AdvicePage { Heading = "Heading", BodyHtml = "Test html body" };
-        _mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk))
-                           .ReturnsAsync(advicePage);
-        var result = await _controller!.QualificationOutsideTheUnitedKingdom();
+    var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
 
-        result.Should().NotBeNull();
+    var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+    mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk))
+                       .ReturnsAsync(advicePage);
 
-        var resultType = result as ViewResult;
-        resultType.Should().NotBeNull();
+    mockHtmlRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
 
-        var model = resultType!.Model as AdvicePageModel;
-        model.Should().NotBeNull();
+    var result = await controller!.QualificationOutsideTheUnitedKingdom();
 
-        model!.Heading.Should().Be(advicePage.Heading);
-        model.BodyContent.Should().Be(advicePage.BodyHtml);
-    }
+    result.Should().NotBeNull();
+
+    var resultType = result as ViewResult;
+    resultType.Should().NotBeNull();
+
+    var model = resultType!.Model as AdvicePageModel;
+    model.Should().NotBeNull();
+
+    model!.Heading.Should().Be(advicePage.Heading);
+    model.BodyContent.Should().Be("Test html body");
+
+    mockHtmlRenderer.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+  }
 }
