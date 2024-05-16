@@ -4,7 +4,7 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
-using Dfe.EarlyYearsQualification.UnitTests.Helpers;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -207,7 +207,8 @@ public class ContentfulContentServiceTests
     {
         var cookiesPage = new CookiesPage
                           {
-                              Heading = "Heading", Body = ContentfulContentHelper.Paragraph("Test Body"), ButtonText = "ButtonText",
+                              Heading = "Heading", Body = ContentfulContentHelper.Paragraph("Test Body"),
+                              ButtonText = "ButtonText",
                               SuccessBannerHeading = "SuccessBannerHeading",
                               SuccessBannerContent = ContentfulContentHelper.Paragraph("SuccessBannerContentHtml")
                           };
