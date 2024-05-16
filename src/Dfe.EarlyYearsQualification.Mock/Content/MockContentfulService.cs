@@ -51,7 +51,7 @@ public class MockContentfulService : IContentService
                                              }
                                          ],
                                          ErrorText = "Test Error Text",
-                                         SuccessBannerHeading = "Test Banner Heading",
+                                         SuccessBannerHeading = "Test Success Banner Heading",
                                          Body = body,
                                          SuccessBannerContent = successBannerContent
                                      });
