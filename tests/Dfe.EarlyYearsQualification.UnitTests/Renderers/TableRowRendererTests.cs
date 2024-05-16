@@ -1,6 +1,5 @@
 using Contentful.Core.Models;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using TableRowRenderer = Dfe.EarlyYearsQualification.Content.Renderers.GovUk.TableRowRenderer;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;

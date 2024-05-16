@@ -1,5 +1,4 @@
 using Contentful.Core.Models;
-using Dfe.EarlyYearsQualification.Content.Renderers;
 using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 using FluentAssertions;
 

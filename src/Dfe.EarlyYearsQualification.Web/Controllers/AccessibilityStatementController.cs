@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Constants;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 

@@ -1,4 +1,3 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Microsoft.AspNetCore.Mvc;
 

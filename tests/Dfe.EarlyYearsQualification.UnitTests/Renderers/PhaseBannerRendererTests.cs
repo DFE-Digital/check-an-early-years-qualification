@@ -1,7 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 using FluentAssertions;
-using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.Renderers.GovUk.ParagraphRenderer;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
 
