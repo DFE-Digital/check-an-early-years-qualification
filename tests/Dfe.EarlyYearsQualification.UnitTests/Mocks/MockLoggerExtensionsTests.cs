@@ -13,7 +13,7 @@ public class MockLoggerExtensionsTests
     {
         var mockLogger = new Mock<ILogger<object>>();
 
-        var exceptionThrown = false;
+        var exceptionWasCaught = false;
 
         try
         {
@@ -23,10 +23,10 @@ public class MockLoggerExtensionsTests
         catch (MockException ex)
         {
             ex.Message.Should().Contain("Expected invocation");
-            exceptionThrown = true;
+            exceptionWasCaught = true;
         }
 
-        exceptionThrown.Should().BeTrue();
+        exceptionWasCaught.Should().BeTrue();
     }
 
     [TestMethod]
@@ -49,7 +49,7 @@ public class MockLoggerExtensionsTests
         var mockLogger = new Mock<ILogger<object>>();
         mockLogger.Object.LogError($"Not the {expectedMessage}");
 
-        var exceptionThrown = false;
+        var exceptionWasCaught = false;
 
         try
         {
@@ -59,10 +59,38 @@ public class MockLoggerExtensionsTests
         catch (MockException ex)
         {
             ex.Message.Should().Contain("Expected invocation");
-            exceptionThrown = true;
+            exceptionWasCaught = true;
         }
 
-        exceptionThrown.Should().BeTrue();
+        exceptionWasCaught.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void Logger_ErrorCalledTwice_VerifyErrorWithExpectedMessage_Fails()
+    {
+        const string expectedMessage = "Error message";
+
+        var mockLogger = new Mock<ILogger<object>>();
+        mockLogger.Object.LogError(expectedMessage);
+        mockLogger.Object.LogError(expectedMessage);
+
+        var exceptionWasCaught = false;
+
+        try
+        {
+            // ReSharper disable once InvokeAsExtensionMethod
+            MockLoggerExtensions.VerifyError(mockLogger, expectedMessage);
+        }
+        catch (MockException ex)
+        {
+            ex.Message
+              .Should().Contain("Expected invocation")
+              .And.Contain("was 2 times");
+
+            exceptionWasCaught = true;
+        }
+
+        exceptionWasCaught.Should().BeTrue();
     }
 
     [TestMethod]
@@ -73,7 +101,7 @@ public class MockLoggerExtensionsTests
         var mockLogger = new Mock<ILogger<object>>();
         mockLogger.Object.LogWarning(expectedMessage);
 
-        var exceptionThrown = false;
+        var exceptionWasCaught = false;
 
         try
         {
@@ -83,10 +111,10 @@ public class MockLoggerExtensionsTests
         catch (MockException ex)
         {
             ex.Message.Should().Contain("Expected invocation");
-            exceptionThrown = true;
+            exceptionWasCaught = true;
         }
 
-        exceptionThrown.Should().BeTrue();
+        exceptionWasCaught.Should().BeTrue();
     }
 
     [TestMethod]
@@ -94,7 +122,7 @@ public class MockLoggerExtensionsTests
     {
         var mockLogger = new Mock<ILogger<object>>();
 
-        var exceptionThrown = false;
+        var exceptionWasCaught = false;
 
         try
         {
@@ -104,10 +132,10 @@ public class MockLoggerExtensionsTests
         catch (MockException ex)
         {
             ex.Message.Should().Contain("Expected invocation");
-            exceptionThrown = true;
+            exceptionWasCaught = true;
         }
 
-        exceptionThrown.Should().BeTrue();
+        exceptionWasCaught.Should().BeTrue();
     }
 
     [TestMethod]
@@ -130,7 +158,7 @@ public class MockLoggerExtensionsTests
         var mockLogger = new Mock<ILogger<object>>();
         mockLogger.Object.LogWarning($"Not the {expectedMessage}");
 
-        var exceptionThrown = false;
+        var exceptionWasCaught = false;
 
         try
         {
@@ -140,10 +168,38 @@ public class MockLoggerExtensionsTests
         catch (MockException ex)
         {
             ex.Message.Should().Contain("Expected invocation");
-            exceptionThrown = true;
+            exceptionWasCaught = true;
         }
 
-        exceptionThrown.Should().BeTrue();
+        exceptionWasCaught.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void Logger_WarningCalledTwice_VerifyWarningWithExpectedMessage_Fails()
+    {
+        const string expectedMessage = "Warning message";
+
+        var mockLogger = new Mock<ILogger<object>>();
+        mockLogger.Object.LogWarning(expectedMessage);
+        mockLogger.Object.LogWarning(expectedMessage);
+
+        var exceptionWasCaught = false;
+
+        try
+        {
+            // ReSharper disable once InvokeAsExtensionMethod
+            MockLoggerExtensions.VerifyWarning(mockLogger, expectedMessage);
+        }
+        catch (MockException ex)
+        {
+            ex.Message
+              .Should().Contain("Expected invocation")
+              .And.Contain("was 2 times");
+
+            exceptionWasCaught = true;
+        }
+
+        exceptionWasCaught.Should().BeTrue();
     }
 
     [TestMethod]
@@ -154,7 +210,7 @@ public class MockLoggerExtensionsTests
         var mockLogger = new Mock<ILogger<object>>();
         mockLogger.Object.LogError(expectedMessage);
 
-        var exceptionThrown = false;
+        var exceptionWasCaught = false;
 
         try
         {
@@ -164,9 +220,9 @@ public class MockLoggerExtensionsTests
         catch (MockException ex)
         {
             ex.Message.Should().Contain("Expected invocation");
-            exceptionThrown = true;
+            exceptionWasCaught = true;
         }
 
-        exceptionThrown.Should().BeTrue();
+        exceptionWasCaught.Should().BeTrue();
     }
 }
