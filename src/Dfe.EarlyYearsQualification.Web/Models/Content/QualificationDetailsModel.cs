@@ -17,5 +17,5 @@ public class QualificationDetailsModel
 
     public string BookmarkUrl {get; init;} = string.Empty;
 
-    public DetailsPage? Content { get; set; }
+    public DetailsPageModel? Content { get; set; }
 }

@@ -1,8 +1,6 @@
-using Contentful.Core.Models;
+namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
-namespace Dfe.EarlyYearsQualification.Content.Entities;
-
-public class DetailsPage
+public class DetailsPageModel
 {
   public string MainHeader { get; init; } = string.Empty;
 
@@ -22,9 +20,9 @@ public class DetailsPage
 
   public string CheckAnotherQualificationHeading { get; init; } = string.Empty;
 
-  public Document? CheckAnotherQualificationText { get; set; }
+  public string CheckAnotherQualificationText { get; set; } = string.Empty;
 
   public string FurtherInfoHeading { get; init; } = string.Empty;
 
-  public Document? FurtherInfoText { get; set; }
+  public string FurtherInfoText { get; set; } = string.Empty;
 }

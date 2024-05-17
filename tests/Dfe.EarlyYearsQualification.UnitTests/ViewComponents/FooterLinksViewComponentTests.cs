@@ -50,7 +50,7 @@ public class FooterLinksViewComponentTests
     [TestMethod]
     public async Task InvokeAsync_ContentServiceReturnsNull_ReturnsEmptyNavigationLinks()
     {
-        _mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync((List<NavigationLink>)default!);
+        _mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync((List<NavigationLink>?)default);
 
         var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
         var result = await footerLinksViewComponent.InvokeAsync();

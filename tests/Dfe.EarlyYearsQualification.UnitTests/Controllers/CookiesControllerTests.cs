@@ -1,8 +1,10 @@
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
-using Dfe.EarlyYearsQualification.UnitTests.Helpers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,85 +15,93 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class CookiesControllerTests
 {
-  private Mock<IContentService> _mockContentService = new();
-  private CookiesController? _controller;
-  private Mock<ILogger<CookiesController>>? _mockLogger;
-
-  [TestInitialize]
-  public void BeforeEachTest()
-  {
-    _mockContentService = new Mock<IContentService>();
-    _mockLogger = new Mock<ILogger<CookiesController>>();
-    
-    _controller = new CookiesController(_mockLogger.Object, _mockContentService.Object);
-  }
-
-  [TestMethod]
-  public async Task Index_NoContent_NavigatesToErrorPageAsync()
-  {
-    _mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage)default!);
-    _controller = new CookiesController(_mockLogger!.Object, _mockContentService.Object);
-
-    var result = await _controller!.Index();
-
-    result.Should().NotBeNull();
-    result.Should().BeEquivalentTo(new RedirectToActionResult("Error", "Home", null));
-
-    _mockLogger.VerifyError("No content for the cookies page");
-  }
-
-  [TestMethod]
-  public async Task Index_ContentFound_ReturnsCorrectModel()
-  {
-    var expectedContent = new CookiesPage()
+    [TestMethod]
+    public async Task Index_NoContent_NavigatesToErrorPageAsync()
     {
-      Heading = "Test Heading",
-      BodyHtml = "<p> Test Body </p>",
-      ButtonText = "Test Button Text",
-      Options = new List<Option>
-      {
-       new Option()
-       {
-        Label = "Click Me!",
-        Value = "test option 1"
-       },
-       new Option()
-       {
-        Label = "No Click Me!",
-        Value = "test option 2"
-       },
-      }
-    };
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesController>>();
+        var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+        var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
 
-    _mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync(expectedContent);
+        var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object);
 
-    _controller = new CookiesController(_mockLogger!.Object, _mockContentService.Object);
+        mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage?)default);
 
-    var result = await _controller!.Index();
+        var result = await controller!.Index();
 
-    result.Should().NotBeNull();
-    result.Should()
-          .BeAssignableTo<ViewResult>()
-          .Which.Model
-                .Should()
-                .BeEquivalentTo(new CookiesPageModel()
-                {
-                  Heading = expectedContent.Heading,
-                  BodyContent = expectedContent.BodyHtml,
-                  ButtonText = expectedContent.ButtonText,
-                  Options = new List<OptionModel>()
-                  {
-                    new OptionModel()
-                    {
-                      Label = expectedContent.Options[0].Label,
-                      Value = expectedContent.Options[0].Value,
-                    },
-                    new OptionModel()
-                    {
-                      Label = expectedContent.Options[1].Label,
-                      Value = expectedContent.Options[1].Value,
-                    }
-                  }
-                });
-  }
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(new RedirectToActionResult("Error", "Home", null));
+
+        mockLogger.VerifyError("No content for the cookies page");
+    }
+
+    [TestMethod]
+    public async Task Index_ContentFound_ReturnsCorrectModel()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesController>>();
+        var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+        var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+
+        var expectedContent = new CookiesPage
+                              {
+                                  Heading = "Test Heading",
+                                  ButtonText = "Test Button Text",
+                                  Options = new List<Option>
+                                            {
+                                                new()
+                                                {
+                                                    Label = "Click Me!",
+                                                    Value = "test option 1"
+                                                },
+                                                new()
+                                                {
+                                                    Label = "No Click Me!",
+                                                    Value = "test option 2"
+                                                }
+                                            },
+                                  SuccessBannerHeading = "Test success banner heading",
+                                  ErrorText = "Test error text"
+                              };
+
+        mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync(expectedContent);
+
+        mockHtmlTableRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test main content");
+        mockSuccessBannerRenderer.Setup(x => x.ToHtml(It.IsAny<Document>()))
+                                 .ReturnsAsync("Test success banner content");
+
+        var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object);
+
+        var result = await controller!.Index();
+
+        result.Should().NotBeNull();
+        result.Should()
+              .BeAssignableTo<ViewResult>()
+              .Which.Model
+              .Should()
+              .BeEquivalentTo(new CookiesPageModel
+                              {
+                                  Heading = expectedContent.Heading,
+                                  BodyContent = "Test main content",
+                                  ButtonText = expectedContent.ButtonText,
+                                  Options = new List<OptionModel>
+                                            {
+                                                new()
+                                                {
+                                                    Label = expectedContent.Options[0].Label,
+                                                    Value = expectedContent.Options[0].Value
+                                                },
+                                                new()
+                                                {
+                                                    Label = expectedContent.Options[1].Label,
+                                                    Value = expectedContent.Options[1].Value
+                                                }
+                                            },
+                                  SuccessBannerHeading = expectedContent.SuccessBannerHeading,
+                                  SuccessBannerContent = "Test success banner content",
+                                  ErrorText = expectedContent.ErrorText
+                              });
+    }
 }

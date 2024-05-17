@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Constants;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
@@ -12,10 +13,13 @@ public class AdviceController : Controller
     private readonly ILogger<AdviceController> _logger;
     private readonly IContentService _contentService;
 
-    public AdviceController(ILogger<AdviceController> logger, IContentService contentService)
+    private readonly IHtmlRenderer _renderer;
+
+    public AdviceController(ILogger<AdviceController> logger, IContentService contentService, IHtmlRenderer renderer)
     {
         _logger = logger;
         _contentService = contentService;
+        _renderer = renderer;
     }
 
     [HttpGet("qualification-outside-the-united-kingdom")]
@@ -32,17 +36,17 @@ public class AdviceController : Controller
             return RedirectToAction("Error", "Home");
         }
 
-        var model = Map(advicePage);
+        var model = await Map(advicePage);
 
         return View("Advice", model);
     }
 
-    private static AdvicePageModel Map(AdvicePage advicePage)
+    private async Task<AdvicePageModel> Map(AdvicePage advicePage)
     {
         return new AdvicePageModel
         {
             Heading = advicePage.Heading,
-            BodyContent = advicePage.BodyHtml
+            BodyContent = await _renderer.ToHtml(advicePage.Body)
         };
     }
 }

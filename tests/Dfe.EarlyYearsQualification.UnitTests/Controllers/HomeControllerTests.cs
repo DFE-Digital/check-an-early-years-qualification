@@ -1,5 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using FluentAssertions;
@@ -13,22 +15,19 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class HomeControllerTests
 {
-    private readonly ILogger<HomeController> _mockLogger = new NullLoggerFactory().CreateLogger<HomeController>();
-    private HomeController? _controller;
-    private Mock<IContentService> _mockContentService = new();
-
-    [TestInitialize]
-    public void BeforeEachTest()
-    {
-        _mockContentService = new Mock<IContentService>();
-        _controller = new HomeController(_mockLogger, _mockContentService.Object);
-    }
-
     [TestMethod]
     public async Task Index_ContentServiceReturnsNoContent_RedirectsToErrorPage()
     {
-        _mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage)default!);
-        var result = await _controller!.Index();
+        var mockLogger = new NullLoggerFactory().CreateLogger<HomeController>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockSideRenderer = new Mock<ISideContentRenderer>();
+        var mockContentService = new Mock<IContentService>();
+        var controller = new HomeController(mockLogger, mockContentService.Object, mockHtmlRenderer.Object,
+                                            mockSideRenderer.Object);
+
+        mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage?)default);
+
+        var result = await controller.Index();
 
         result.Should().NotBeNull();
 
@@ -40,18 +39,37 @@ public class HomeControllerTests
     [TestMethod]
     public async Task Index_ContentServiceReturnsContent_ReturnsStartPageModel()
     {
+        var mockLogger = new NullLoggerFactory().CreateLogger<HomeController>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockSideRenderer = new Mock<ISideContentRenderer>();
+        var mockContentService = new Mock<IContentService>();
+        var controller = new HomeController(mockLogger, mockContentService.Object, mockHtmlRenderer.Object,
+                                            mockSideRenderer.Object);
+
+        var postCtaContentText = "This is the post cta content";
+        var preCtaContentText = "This is the pre cta content";
+        var sideContentText = "This is the side content";
+
+        var postCtaButtonContent = ContentfulContentHelper.Text(postCtaContentText);
+        var preCtaButtonContent = ContentfulContentHelper.Text(preCtaContentText);
+        var rightHandSideContent = ContentfulContentHelper.Text(sideContentText);
+
+        mockHtmlRenderer.Setup(x => x.ToHtml(postCtaButtonContent)).ReturnsAsync(postCtaContentText);
+        mockHtmlRenderer.Setup(x => x.ToHtml(preCtaButtonContent)).ReturnsAsync(preCtaContentText);
+        mockSideRenderer.Setup(x => x.ToHtml(rightHandSideContent)).ReturnsAsync(sideContentText);
+
         var startPageResult = new StartPage
                               {
                                   CtaButtonText = "Start now",
                                   Header = "This is the header",
-                                  PostCtaButtonContentHtml = "This is the post cta content",
-                                  PreCtaButtonContentHtml = "This is the pre cta content",
+                                  PostCtaButtonContent = postCtaButtonContent,
+                                  PreCtaButtonContent = preCtaButtonContent,
                                   RightHandSideContentHeader = "This is the side content header",
-                                  RightHandSideContentHtml = "This is the side content"
+                                  RightHandSideContent = rightHandSideContent
                               };
 
-        _mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync(startPageResult);
-        var result = await _controller!.Index();
+        mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync(startPageResult);
+        var result = await controller.Index();
 
         result.Should().NotBeNull();
 
@@ -62,9 +80,9 @@ public class HomeControllerTests
         model.Should().NotBeNull();
         model!.Header.Should().Be(startPageResult.Header);
         model.CtaButtonText.Should().Be(startPageResult.CtaButtonText);
-        model.PostCtaButtonContent.Should().Be(startPageResult.PostCtaButtonContentHtml);
-        model.PreCtaButtonContent.Should().Be(startPageResult.PreCtaButtonContentHtml);
-        model.RightHandSideContent.Should().Be(startPageResult.RightHandSideContentHtml);
+        model.PostCtaButtonContent.Should().Be(postCtaContentText);
+        model.PreCtaButtonContent.Should().Be(preCtaContentText);
+        model.RightHandSideContent.Should().Be(sideContentText);
         model.RightHandSideContentHeader.Should().Be(startPageResult.RightHandSideContentHeader);
     }
 }

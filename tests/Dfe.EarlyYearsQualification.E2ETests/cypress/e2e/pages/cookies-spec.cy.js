@@ -8,11 +8,11 @@ describe("A spec that tests the cookies page", () => {
   it("Checks the content is present", () => {
     cy.get("#cookies-set-banner").should("not.be.visible");
 
-    cy.get("#cookies-set-banner-heading").should("contain.text","Test Banner Heading");
-    cy.get("#cookies-set-banner-content").should("contain.text","Test Banner Content");
+    cy.get("#cookies-set-banner-heading").should("contain.text","Test Success Banner Heading");
+    cy.get("#cookies-set-banner-content").should("contain.text","Test Success Banner Content");
 
     cy.get("#cookies-heading").should("contain.text", "Test Cookies Heading");
-    cy.get("#cookies-body").should("contain.text", "Test Cookies Body");
+    cy.get("#cookies-body").should("contain.text", "Test Cookies Page Body");
 
     cy.get("#test-option-value-1").should("exist");
     cy.get("#test-option-value-2").should("exist");

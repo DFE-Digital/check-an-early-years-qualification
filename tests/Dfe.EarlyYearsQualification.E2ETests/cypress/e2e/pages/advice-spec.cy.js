@@ -6,6 +6,6 @@ describe("A spec that tests advice pages", () => {
 
 
         cy.get("#advice-page-heading").should("contain.text", "Qualifications achieved outside the United Kingdom");
-        cy.get("#outside-uk-body").should("contain.text", "This is the body of the page");
+        cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
     })
 })
