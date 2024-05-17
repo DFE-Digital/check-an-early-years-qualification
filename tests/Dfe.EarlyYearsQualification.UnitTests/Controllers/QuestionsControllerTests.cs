@@ -73,6 +73,7 @@ public class QuestionsControllerTests
         model.Options.Count.Should().Be(1);
         model.Options[0].Label.Should().Be(questionPage.Options[0].Label);
         model.Options[0].Value.Should().Be(questionPage.Options[0].Value);
+        model.HasErrors.Should().BeFalse();
     }
 
     [TestMethod]

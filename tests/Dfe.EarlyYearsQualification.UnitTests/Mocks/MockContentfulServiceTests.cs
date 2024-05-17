@@ -1,4 +1,5 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities;
+﻿using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using FluentAssertions;
 
@@ -22,7 +23,6 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AccessibilityStatementPage>();
         result!.Heading.Should().NotBeNullOrEmpty();
-        result.BodyHtml.Should().NotBeNullOrEmpty();
     }
 
     [TestMethod]
@@ -32,7 +32,8 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
         result!.Heading.Should().NotBeNullOrEmpty();
-        result.BodyHtml.Should().NotBeNullOrEmpty();
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
 
     [TestMethod]
@@ -42,11 +43,13 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CookiesPage>();
         result!.Heading.Should().NotBeNullOrEmpty();
-        result.BodyHtml.Should().NotBeNullOrEmpty();
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Cookies Page Body");
         result.ButtonText.Should().NotBeNullOrEmpty();
         result.ErrorText.Should().NotBeNullOrEmpty();
         result.SuccessBannerHeading.Should().NotBeNullOrEmpty();
-        result.SuccessBannerContentHtml.Should().NotBeNullOrEmpty();
+        result.SuccessBannerContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Success Banner Content");
         result.Options.Should().NotBeNullOrEmpty();
         result.Options.Count.Should().Be(2);
     }
@@ -61,10 +64,12 @@ public class MockContentfulServiceTests
         result.BookmarkHeading.Should().NotBeNullOrEmpty();
         result.BookmarkText.Should().NotBeNullOrEmpty();
         result.CheckAnotherQualificationHeading.Should().NotBeNullOrEmpty();
-        result.CheckAnotherQualificationTextHtml.Should().NotBeNullOrEmpty();
+        result.CheckAnotherQualificationText!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Check Another Qualification Text");
         result.DateAddedLabel.Should().NotBeNullOrEmpty();
         result.DateOfCheckLabel.Should().NotBeNullOrEmpty();
-        result.FurtherInfoTextHtml.Should().NotBeNullOrEmpty();
+        result.FurtherInfoText!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Further Info Text");
         result.LevelLabel.Should().NotBeNullOrEmpty();
         result.MainHeader.Should().NotBeNullOrEmpty();
         result.QualificationNumberLabel.Should().NotBeNullOrEmpty();
@@ -113,13 +118,21 @@ public class MockContentfulServiceTests
     public async Task GetStartPage_ReturnsExpectedDetails()
     {
         var result = await _contentfulService.GetStartPage();
+
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StartPage>();
         result!.CtaButtonText.Should().NotBeNullOrEmpty();
         result.Header.Should().NotBeNullOrEmpty();
-        result.PostCtaButtonContentHtml.Should().NotBeNullOrEmpty();
-        result.PreCtaButtonContentHtml.Should().NotBeNullOrEmpty();
-        result.RightHandSideContentHtml.Should().NotBeNullOrEmpty();
+
+        result.PostCtaButtonContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post cta content");
+
+        result.PreCtaButtonContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the pre cta content");
+
+        result.RightHandSideContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the right hand content");
+
         result.RightHandSideContentHeader.Should().NotBeNullOrEmpty();
     }
 
@@ -129,7 +142,7 @@ public class MockContentfulServiceTests
         var result = await _contentfulService.GetPhaseBannerContent();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<PhaseBanner>();
-        result!.ContentHtml.Should().NotBeNullOrEmpty();
+        result!.Content.Should().NotBeNull();
         result.PhaseName.Should().NotBeNullOrEmpty();
         result.Show.Should().BeTrue();
     }
