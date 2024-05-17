@@ -25,7 +25,9 @@ public class InsetTextRenderer : IContentRenderer
             return false;
         }
 
-        if (entryStructure.Data is null || entryStructure.Data.Target is null || entryStructure.Data.Target is not CustomNode model)
+        if (entryStructure.Data is null
+            || entryStructure.Data.Target is null
+            || entryStructure.Data.Target is not CustomNode model)
         {
             return false;
         }

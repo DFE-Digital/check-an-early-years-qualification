@@ -16,10 +16,9 @@ public class QuestionModel
 
     public string ErrorMessage { get; set; } = string.Empty;
 
-    [Required]
-    public string? Option { get; init; } = string.Empty;
+    [Required] public string? Option { get; init; } = string.Empty;
 
-    public bool HasErrors {get; set; }
+    public bool HasErrors { get; set; }
 }
 
 public class OptionModel

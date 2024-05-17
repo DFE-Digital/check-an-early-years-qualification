@@ -75,7 +75,7 @@ public class InsetTextRendererTests
                                                         }
                                       }
                                   };
-        
+
         var jObject = JObject.FromObject(govUkInsetTextModel);
 
         var customNode = new CustomNode
@@ -112,7 +112,7 @@ public class InsetTextRendererTests
                                                         }
                                       }
                                   };
-        
+
         var jObject = JObject.FromObject(govUkInsetTextModel);
 
         var customNode = new CustomNode

@@ -23,6 +23,7 @@ public class Qualification
         Notes = notes;
         AdditionalRequirements = additionalRequirements;
     }
+
     // Required Fields
     public string QualificationId { get; }
     public string QualificationName { get; }

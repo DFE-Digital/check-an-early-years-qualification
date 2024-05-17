@@ -46,10 +46,10 @@ public class UnorderedListHyperlinksRendererTests
     public void UnorderedListHyperlinksRenderer_RendersListWithOneItem()
     {
         var hyperlink = new Hyperlink
-                         {
-                             Content = [new Text { Value = "Hyperlink1" }],
-                             Data = new HyperlinkData { Uri = "https://site.one.com" }
-                         };
+                        {
+                            Content = [new Text { Value = "Hyperlink1" }],
+                            Data = new HyperlinkData { Uri = "https://site.one.com" }
+                        };
 
         var paragraph = new Paragraph { Content = [hyperlink] };
 
@@ -60,7 +60,8 @@ public class UnorderedListHyperlinksRendererTests
         var renderer = new UnorderedListHyperlinksRenderer();
         var result = renderer.RenderAsync(list).Result;
 
-        result.Should().Be("<ul class=\"govuk-list govuk-list--spaced govuk-!-font-size-16\"><li><a href='https://site.one.com' class='govuk-link'>Hyperlink1</a></li></ul>");
+        result.Should()
+              .Be("<ul class=\"govuk-list govuk-list--spaced govuk-!-font-size-16\"><li><a href='https://site.one.com' class='govuk-link'>Hyperlink1</a></li></ul>");
     }
 
     [TestMethod]
@@ -81,7 +82,7 @@ public class UnorderedListHyperlinksRendererTests
                              Content = [new Text { Value = "Hyperlink2" }],
                              Data = new HyperlinkData { Uri = "https://site.two.com" }
                          };
-        
+
         var para2 = new Paragraph { Content = [hyperlink2] };
 
         var listItem2 = new ListItem { Content = [para2] };

@@ -37,5 +37,4 @@ public class ErrorViewModelTests
 
         model.ShowRequestId.Should().BeFalse();
     }
-    
 }

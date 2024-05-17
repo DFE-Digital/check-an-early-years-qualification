@@ -14,146 +14,151 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class QualificationDetailsControllerTests
 {
-  [TestMethod]
-  public async Task Index_PassInNullQualificationId_ReturnsBadRequest()
-  {
-    var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-    var mockContentService = new Mock<IContentService>();
-    var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
-
-    var controller = new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+    [TestMethod]
+    public async Task Index_PassInNullQualificationId_ReturnsBadRequest()
     {
-      ControllerContext = new ControllerContext
-      {
-        HttpContext = new DefaultHttpContext()
-      }
-    };
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
 
-    var result = await controller!.Index(string.Empty);
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
 
-    result.Should().NotBeNull();
+        var result = await controller!.Index(string.Empty);
 
-    var resultType = result as BadRequestResult;
-    resultType.Should().NotBeNull();
-    resultType!.StatusCode.Should().Be(400);
-  }
+        result.Should().NotBeNull();
+
+        var resultType = result as BadRequestResult;
+        resultType.Should().NotBeNull();
+        resultType!.StatusCode.Should().Be(400);
+    }
 
 
-  [TestMethod]
-  public async Task Index_ContentServiceReturnsNullDetailsPage_RedirectsToHomeError()
-  {
-    var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-    var mockContentService = new Mock<IContentService>();
-    var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
-
-    var controller = new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+    [TestMethod]
+    public async Task Index_ContentServiceReturnsNullDetailsPage_RedirectsToHomeError()
     {
-      ControllerContext = new ControllerContext
-      {
-        HttpContext = new DefaultHttpContext()
-      }
-    };
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
 
-    mockContentService.Setup(s => s.GetDetailsPage())
-                       .ReturnsAsync((DetailsPage?)null);
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
 
-    var result = await controller!.Index("X");
+        mockContentService.Setup(s => s.GetDetailsPage())
+                          .ReturnsAsync((DetailsPage?)null);
 
-    result.Should().BeOfType<RedirectToActionResult>();
+        var result = await controller!.Index("X");
 
-    var actionResult = (RedirectToActionResult)result;
+        result.Should().BeOfType<RedirectToActionResult>();
 
-    actionResult.ActionName.Should().Be("Error");
-    actionResult.ControllerName.Should().Be("Home");
-  }
+        var actionResult = (RedirectToActionResult)result;
 
-  [TestMethod]
-  public async Task Index_ContentServiceReturnsNoQualification_RedirectsToErrorPage()
-  {
-    var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-    var mockContentService = new Mock<IContentService>();
-    var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
+        actionResult.ActionName.Should().Be("Error");
+        actionResult.ControllerName.Should().Be("Home");
+    }
 
-    var controller = new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+    [TestMethod]
+    public async Task Index_ContentServiceReturnsNoQualification_RedirectsToErrorPage()
     {
-      ControllerContext = new ControllerContext
-      {
-        HttpContext = new DefaultHttpContext()
-      }
-    };
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
 
-    const string qualificationId = "eyq-145";
-    mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync((Qualification?)default);
-    mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-    var result = await controller!.Index(qualificationId);
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
 
-    result.Should().NotBeNull();
+        const string qualificationId = "eyq-145";
+        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync((Qualification?)default);
+        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        var result = await controller!.Index(qualificationId);
 
-    var resultType = result as RedirectToActionResult;
-    resultType.Should().NotBeNull();
-    resultType!.ActionName.Should().Be("Error");
-    resultType.ControllerName.Should().Be("Home");
-  }
+        result.Should().NotBeNull();
 
-  [TestMethod]
-  public async Task Index_ContentServiceReturnsQualification_ReturnsQualificationDetailsModel()
-  {
-    var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-    var mockContentService = new Mock<IContentService>();
-    var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Error");
+        resultType.ControllerName.Should().Be("Home");
+    }
 
-    var controller = new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+    [TestMethod]
+    public async Task Index_ContentServiceReturnsQualification_ReturnsQualificationDetailsModel()
     {
-      ControllerContext = new ControllerContext
-      {
-        HttpContext = new DefaultHttpContext()
-      }
-    };
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
 
-    const string qualificationId = "eyq-145";
-    var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
-                                                "ABC/547/900", "notes", "additonal requirements");
-    mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-    mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-    var result = await controller!.Index(qualificationId);
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
 
-    result.Should().NotBeNull();
+        const string qualificationId = "eyq-145";
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+                                                    "ABC/547/900", "notes", "additonal requirements");
+        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
+        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        var result = await controller!.Index(qualificationId);
 
-    var resultType = result as ViewResult;
-    resultType.Should().NotBeNull();
+        result.Should().NotBeNull();
 
-    var model = resultType!.Model as QualificationDetailsModel;
-    model.Should().NotBeNull();
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
 
-    model!.QualificationId.Should().Be(qualificationResult.QualificationId);
-    model.QualificationName.Should().Be(qualificationResult.QualificationName);
-    model.AwardingOrganisationTitle.Should().Be(qualificationResult.AwardingOrganisationTitle);
-    model.QualificationLevel.Should().Be(qualificationResult.QualificationLevel);
-    model.FromWhichYear.Should().Be(qualificationResult.FromWhichYear);
-    model.ToWhichYear.Should().Be(qualificationResult.ToWhichYear);
-    model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
-    model.Notes.Should().Be(qualificationResult.Notes);
-    model.AdditionalRequirements.Should().Be(qualificationResult.AdditionalRequirements);
-  }
+        var model = resultType!.Model as QualificationDetailsModel;
+        model.Should().NotBeNull();
 
-  [TestMethod]
-  public void Get_ReturnsView()
-  {
-    var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-    var mockContentService = new Mock<IContentService>();
-    var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
+        model!.QualificationId.Should().Be(qualificationResult.QualificationId);
+        model.QualificationName.Should().Be(qualificationResult.QualificationName);
+        model.AwardingOrganisationTitle.Should().Be(qualificationResult.AwardingOrganisationTitle);
+        model.QualificationLevel.Should().Be(qualificationResult.QualificationLevel);
+        model.FromWhichYear.Should().Be(qualificationResult.FromWhichYear);
+        model.ToWhichYear.Should().Be(qualificationResult.ToWhichYear);
+        model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
+        model.Notes.Should().Be(qualificationResult.Notes);
+        model.AdditionalRequirements.Should().Be(qualificationResult.AdditionalRequirements);
+    }
 
-    var controller = new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+    [TestMethod]
+    public void Get_ReturnsView()
     {
-      ControllerContext = new ControllerContext
-      {
-        HttpContext = new DefaultHttpContext()
-      }
-    };
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
 
-    var result = controller!.Get();
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
 
-    result.Should().NotBeNull();
-    result.Should().BeOfType<ViewResult>();
-  }
+        var result = controller!.Get();
+
+        result.Should().NotBeNull();
+        result.Should().BeOfType<ViewResult>();
+    }
 }

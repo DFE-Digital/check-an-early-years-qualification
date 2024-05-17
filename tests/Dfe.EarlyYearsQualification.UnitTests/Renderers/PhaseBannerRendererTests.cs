@@ -13,26 +13,37 @@ public class PhaseBannerRendererTests
         var para = new Paragraph();
         new PhaseBannerRenderer().SupportsContent(para).Should().BeTrue();
     }
-    
+
     [TestMethod]
     public void PhaseBannerRendererTests_DoesNotSupportText()
     {
         var para = new Text();
         new PhaseBannerRenderer().SupportsContent(para).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void PhaseBannerRendererTests_DoesNotSupportHyperlink()
     {
         var para = new Hyperlink();
         new PhaseBannerRenderer().SupportsContent(para).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void PhaseBannerRendererTests_RemovesPTags()
     {
-        var para = new Paragraph { Content = [new Text { Value = "Some text." }, new Hyperlink { Content = [new Text { Value = "Some text." }], Data = new HyperlinkData { Uri = "https://some.website.com" } }] };
-        
+        var para = new Paragraph
+                   {
+                       Content =
+                       [
+                           new Text { Value = "Some text." },
+                           new Hyperlink
+                           {
+                               Content = [new Text { Value = "Some text." }],
+                               Data = new HyperlinkData { Uri = "https://some.website.com" }
+                           }
+                       ]
+                   };
+
         var renderer = new PhaseBannerRenderer();
         var result = renderer.RenderAsync(para).Result;
 
