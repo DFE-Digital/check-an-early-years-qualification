@@ -53,7 +53,7 @@ public class AccessibilityStatementControllerTests
 
         mockContentService.Setup(x => x.GetAccessibilityStatementPage()).ReturnsAsync(expectedContent);
 
-        var expectedHtml = "<p>Some HTML.</p>";
+        const string expectedHtml = "<p>Some HTML.</p>";
 
         mockRenderer.Setup(x => x.ToHtml(It.IsAny<Document>()))
                     .ReturnsAsync(expectedHtml);

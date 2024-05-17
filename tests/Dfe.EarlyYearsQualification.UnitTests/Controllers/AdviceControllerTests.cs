@@ -26,8 +26,8 @@ public class AdviceControllerTests
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk))
-                          .ReturnsAsync((AdvicePage)default!).Verifiable();
-        var result = await controller!.QualificationOutsideTheUnitedKingdom();
+                          .ReturnsAsync((AdvicePage?)default).Verifiable();
+        var result = await controller.QualificationOutsideTheUnitedKingdom();
 
         result.Should().NotBeNull();
 
@@ -54,7 +54,7 @@ public class AdviceControllerTests
 
         mockHtmlRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
 
-        var result = await controller!.QualificationOutsideTheUnitedKingdom();
+        var result = await controller.QualificationOutsideTheUnitedKingdom();
 
         result.Should().NotBeNull();
 

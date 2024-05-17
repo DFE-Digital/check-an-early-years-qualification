@@ -28,7 +28,7 @@ public class CookiesControllerTests
 
         mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage?)default);
 
-        var result = await controller!.Index();
+        var result = await controller.Index();
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(new RedirectToActionResult("Error", "Home", null));
@@ -48,19 +48,20 @@ public class CookiesControllerTests
                               {
                                   Heading = "Test Heading",
                                   ButtonText = "Test Button Text",
-                                  Options = new List<Option>
-                                            {
-                                                new()
-                                                {
-                                                    Label = "Click Me!",
-                                                    Value = "test option 1"
-                                                },
-                                                new()
-                                                {
-                                                    Label = "No Click Me!",
-                                                    Value = "test option 2"
-                                                }
-                                            },
+                                  Options =
+                                  [
+                                      new Option
+                                      {
+                                          Label = "Click Me!",
+                                          Value = "test option 1"
+                                      },
+
+                                      new Option
+                                      {
+                                          Label = "No Click Me!",
+                                          Value = "test option 2"
+                                      }
+                                  ],
                                   SuccessBannerHeading = "Test success banner heading",
                                   ErrorText = "Test error text"
                               };
@@ -74,7 +75,7 @@ public class CookiesControllerTests
         var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
                                                mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object);
 
-        var result = await controller!.Index();
+        var result = await controller.Index();
 
         result.Should().NotBeNull();
         result.Should()
@@ -86,19 +87,20 @@ public class CookiesControllerTests
                                   Heading = expectedContent.Heading,
                                   BodyContent = "Test main content",
                                   ButtonText = expectedContent.ButtonText,
-                                  Options = new List<OptionModel>
-                                            {
-                                                new()
-                                                {
-                                                    Label = expectedContent.Options[0].Label,
-                                                    Value = expectedContent.Options[0].Value
-                                                },
-                                                new()
-                                                {
-                                                    Label = expectedContent.Options[1].Label,
-                                                    Value = expectedContent.Options[1].Value
-                                                }
-                                            },
+                                  Options =
+                                  [
+                                      new OptionModel
+                                      {
+                                          Label = expectedContent.Options[0].Label,
+                                          Value = expectedContent.Options[0].Value
+                                      },
+
+                                      new OptionModel
+                                      {
+                                          Label = expectedContent.Options[1].Label,
+                                          Value = expectedContent.Options[1].Value
+                                      }
+                                  ],
                                   SuccessBannerHeading = expectedContent.SuccessBannerHeading,
                                   SuccessBannerContent = "Test success banner content",
                                   ErrorText = expectedContent.ErrorText

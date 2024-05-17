@@ -18,15 +18,17 @@ public class UnorderedListHyperlinksRenderer : IContentRenderer
 
         var sb = new StringBuilder();
         sb.Append("<ul class=\"govuk-list govuk-list--spaced govuk-!-font-size-16\">");
-        foreach (var contentItem in list!.Content)
+        foreach (var contentItem in list.Content)
         {
-            if (contentItem is ListItem listItem)
+            if (contentItem is not ListItem listItem)
             {
-                var paragraph = listItem.Content[0] as Paragraph;
-                var hyperlink = paragraph!.Content.First(x => x.GetType() == typeof(Hyperlink)) as Hyperlink;
-                var hyperlinkText = hyperlink!.Content[0] as Text;
-                sb.Append($"<li><a href='{hyperlink.Data.Uri}' class='govuk-link'>{hyperlinkText!.Value}</a></li>");
+                continue;
             }
+
+            var paragraph = listItem.Content[0] as Paragraph;
+            var hyperlink = paragraph!.Content.First(x => x.GetType() == typeof(Hyperlink)) as Hyperlink;
+            var hyperlinkText = hyperlink!.Content[0] as Text;
+            sb.Append($"<li><a href='{hyperlink.Data.Uri}' class='govuk-link'>{hyperlinkText!.Value}</a></li>");
         }
 
         sb.Append("</ul>");

@@ -30,7 +30,7 @@ public class QualificationDetailsControllerTests
                                     }
             };
 
-        var result = await controller!.Index(string.Empty);
+        var result = await controller.Index(string.Empty);
 
         result.Should().NotBeNull();
 
@@ -59,7 +59,7 @@ public class QualificationDetailsControllerTests
         mockContentService.Setup(s => s.GetDetailsPage())
                           .ReturnsAsync((DetailsPage?)null);
 
-        var result = await controller!.Index("X");
+        var result = await controller.Index("X");
 
         result.Should().BeOfType<RedirectToActionResult>();
 
@@ -88,7 +88,7 @@ public class QualificationDetailsControllerTests
         const string qualificationId = "eyq-145";
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync((Qualification?)default);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        var result = await controller!.Index(qualificationId);
+        var result = await controller.Index(qualificationId);
 
         result.Should().NotBeNull();
 
@@ -119,7 +119,7 @@ public class QualificationDetailsControllerTests
                                                     "ABC/547/900", "notes", "additonal requirements");
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        var result = await controller!.Index(qualificationId);
+        var result = await controller.Index(qualificationId);
 
         result.Should().NotBeNull();
 
@@ -156,7 +156,7 @@ public class QualificationDetailsControllerTests
                                     }
             };
 
-        var result = controller!.Get();
+        var result = controller.Get();
 
         result.Should().NotBeNull();
         result.Should().BeOfType<ViewResult>();

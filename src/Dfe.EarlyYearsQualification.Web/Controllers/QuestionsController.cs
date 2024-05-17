@@ -7,18 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
-[Route("/questions")]
+[Route("/questions/where-was-the-qualification-awarded")]
 public class QuestionsController(ILogger<QuestionsController> logger, IContentService contentService)
     : Controller
 {
-    [HttpGet("where-was-the-qualification-awarded")]
+    [HttpGet("")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
         return await GetView(QuestionPages.WhereWasTheQualificationAwarded, "WhereWasTheQualificationAwarded",
                              "Questions");
     }
 
-    [HttpPost("where-was-the-qualification-awarded")]
+    [HttpPost("")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded(QuestionModel model)
     {
         if (!ModelState.IsValid)
@@ -33,12 +33,9 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
             return View("Question", model);
         }
 
-        if (model.Option == Options.OutsideOfTheUnitedKingdom)
-        {
-            return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
-        }
-
-        return RedirectToAction("Get", "QualificationDetails");
+        return model.Option == Options.OutsideOfTheUnitedKingdom
+                   ? RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice")
+                   : RedirectToAction("Get", "QualificationDetails");
     }
 
     private async Task<IActionResult> GetView(string questionPageId, string actionName, string controllerName)

@@ -9,5 +9,5 @@ public class GovUkInsetTextModel
 
     public string? Name { get; set; }
 
-    public JObject? Content { get; set; }
+    public JObject? Content { get; init; }
 }
