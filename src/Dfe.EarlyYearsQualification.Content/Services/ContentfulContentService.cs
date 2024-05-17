@@ -3,10 +3,7 @@ using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Extensions;
-using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 using Microsoft.Extensions.Logging;
-using TableRenderer = Dfe.EarlyYearsQualification.Content.Renderers.GovUk.TableRenderer;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
