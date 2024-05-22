@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "dfe-frontend-alpha": "^1.0.0",
-    "esbuild": "0.20.2",
+    "esbuild": "0.21.3",
     "esbuild-sass-plugin": "^3.3.0",
     "fs": "^0.0.1-security",
     "govuk-frontend": "^5.4.0",
