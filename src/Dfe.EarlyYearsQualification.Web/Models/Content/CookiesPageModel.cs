@@ -2,19 +2,19 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class CookiesPageModel
 {
-  public string Heading { get; init; } = string.Empty;
+    public string Heading { get; init; } = string.Empty;
 
-  public string BodyContent { get; init; } = string.Empty;
+    public string BodyContent { get; init; } = string.Empty;
 
-  public List<OptionModel> Options { get; set; } = [];
+    public List<OptionModel> Options { get; init; } = [];
 
-  public string ButtonText { get; init; } = string.Empty;
+    public string ButtonText { get; init; } = string.Empty;
 
-  public string CookiesAnswer { get; } = "CookiesAnswer";
+    public string CookiesAnswer => "CookiesAnswer";
 
-  public string SuccessBannerHeading { get; init; } = string.Empty;
+    public string SuccessBannerHeading { get; init; } = string.Empty;
 
-  public string SuccessBannerContent { get; init; } = string.Empty;
+    public string SuccessBannerContent { get; init; } = string.Empty;
 
-  public string ErrorText { get; init; } = string.Empty;
+    public string ErrorText { get; init; } = string.Empty;
 }

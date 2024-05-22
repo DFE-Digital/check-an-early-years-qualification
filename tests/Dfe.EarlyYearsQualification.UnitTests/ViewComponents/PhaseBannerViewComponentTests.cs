@@ -37,7 +37,7 @@ public class PhaseBannerViewComponentTests
     [TestMethod]
     public async Task InvokeAsync_ReturnsExpectedResult()
     {
-        var expectedHtml = "Some HTML";
+        const string expectedHtml = "Some HTML";
 
         var phaseBanner = new PhaseBanner
                           {

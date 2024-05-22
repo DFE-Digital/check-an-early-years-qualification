@@ -13,28 +13,28 @@ public class SuccessBannerParagraphRendererTests
         var para = new Paragraph();
         new SuccessBannerParagraphRenderer().SupportsContent(para).Should().BeTrue();
     }
-    
+
     [TestMethod]
     public void GovUkParagraphRenderer_DoesNotSupportText()
     {
         var para = new Text();
         new SuccessBannerParagraphRenderer().SupportsContent(para).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void GovUkParagraphRenderer_DoesNotSupportHyperlink()
     {
         var para = new Hyperlink();
         new SuccessBannerParagraphRenderer().SupportsContent(para).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void GovUkParagraphRenderer_RendersTextOnly()
     {
         var text = new Text { Value = "Some text." };
 
         var para = new Paragraph { Content = [text] };
-        
+
         var renderer = new SuccessBannerParagraphRenderer();
         var result = renderer.RenderAsync(para).Result;
 

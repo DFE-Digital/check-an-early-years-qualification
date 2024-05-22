@@ -7,10 +7,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
-public class ContentfulContentService : IContentService
+public class ContentfulContentService(
+    IContentfulClient contentfulClient,
+    ILogger<ContentfulContentService> logger)
+    : IContentService
 {
-    private readonly IContentfulClient _contentfulClient;
-
     private readonly Dictionary<object, string> _contentTypes
         = new()
           {
@@ -25,20 +26,12 @@ public class ContentfulContentService : IContentService
               { typeof(PhaseBanner), "phaseBanner" }
           };
 
-    private readonly ILogger<ContentfulContentService> _logger;
-
-    public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
-    {
-        _contentfulClient = contentfulClient;
-        _logger = logger;
-    }
-
     public async Task<StartPage?> GetStartPage()
     {
         var startPageEntries = await GetEntriesByType<StartPage>();
         if (startPageEntries is null || !startPageEntries.Any())
         {
-            _logger.LogWarning("No start page entry returned");
+            logger.LogWarning("No start page entry returned");
             return default;
         }
 
@@ -50,7 +43,7 @@ public class ContentfulContentService : IContentService
         var detailsPageEntries = await GetEntriesByType<DetailsPage>();
         if (detailsPageEntries is null || !detailsPageEntries.Any())
         {
-            _logger.LogWarning("No details page entry returned");
+            logger.LogWarning("No details page entry returned");
             return default;
         }
 
@@ -63,7 +56,7 @@ public class ContentfulContentService : IContentService
         var accessibilityStatementEntities = await GetEntriesByType<AccessibilityStatementPage>();
         if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
         {
-            _logger.LogWarning("No accessibility statement page entry returned");
+            logger.LogWarning("No accessibility statement page entry returned");
             return default;
         }
 
@@ -75,7 +68,7 @@ public class ContentfulContentService : IContentService
         var cookiesEntities = await GetEntriesByType<CookiesPage>();
         if (cookiesEntities is null || !cookiesEntities.Any())
         {
-            _logger.LogWarning("No cookies page entry returned");
+            logger.LogWarning("No cookies page entry returned");
             return default;
         }
 
@@ -91,7 +84,7 @@ public class ContentfulContentService : IContentService
             return navigationLinkEntries.First().Links;
         }
 
-        _logger.LogWarning("No navigation links returned");
+        logger.LogWarning("No navigation links returned");
         return default;
     }
 
@@ -105,8 +98,8 @@ public class ContentfulContentService : IContentService
         if (qualifications is null || !qualifications.Any())
         {
             var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
-            _logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
-                               encodedQualificationId);
+            logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
+                              encodedQualificationId);
             return default;
         }
 
@@ -119,9 +112,10 @@ public class ContentfulContentService : IContentService
         var advicePage = await GetEntryById<AdvicePage>(entryId);
         if (advicePage is null)
         {
-            _logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
+            logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
             return default;
         }
+
         return advicePage;
     }
 
@@ -135,7 +129,7 @@ public class ContentfulContentService : IContentService
         var phaseBannerEntities = await GetEntriesByType<PhaseBanner>();
         if (phaseBannerEntities is null || !phaseBannerEntities.Any())
         {
-            _logger.LogWarning("No phase banner entry returned");
+            logger.LogWarning("No phase banner entry returned");
             return default;
         }
 
@@ -149,13 +143,13 @@ public class ContentfulContentService : IContentService
             // NOTE: GetEntry doesn't bind linked references which is why we are using GetEntriesByType
             var queryBuilder = new QueryBuilder<T>().ContentTypeIs(_contentTypes[typeof(T)])
                                                     .FieldEquals("sys.id", entryId);
-            var entry = await _contentfulClient.GetEntriesByType(_contentTypes[typeof(T)], queryBuilder);
+            var entry = await contentfulClient.GetEntriesByType(_contentTypes[typeof(T)], queryBuilder);
             return entry.FirstOrDefault();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
-                             entryId, nameof(T));
+            logger.LogError(ex, "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
+                            entryId, nameof(T));
             return default;
         }
     }
@@ -165,13 +159,13 @@ public class ContentfulContentService : IContentService
         var type = typeof(T);
         try
         {
-            var results = await _contentfulClient.GetEntriesByType(_contentTypes[type], queryBuilder);
+            var results = await contentfulClient.GetEntriesByType(_contentTypes[type], queryBuilder);
             return results;
         }
         catch (Exception ex)
         {
             var typeName = type.Name;
-            _logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
+            logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
             return default;
         }
     }

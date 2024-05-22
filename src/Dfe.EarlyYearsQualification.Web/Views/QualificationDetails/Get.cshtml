@@ -9,16 +9,17 @@
         <h1 class="govuk-heading-xl">Temporary page</h1>
         <table class="govuk-table">
             <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Qualification link</th>
-                </tr>
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Qualification link</th>
+            </tr>
             </thead>
             <tbody class="govuk-table__body">
-                @foreach (var qualification in qualifications){
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Html.ActionLink(qualification, "Index", new {qualificationId = qualification})</td>
-                    </tr>
-                }
+            @foreach (var qualification in qualifications)
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@Html.ActionLink(qualification, "Index", new { qualificationId = qualification })</td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

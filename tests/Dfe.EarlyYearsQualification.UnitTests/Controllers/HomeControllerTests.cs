@@ -46,9 +46,9 @@ public class HomeControllerTests
         var controller = new HomeController(mockLogger, mockContentService.Object, mockHtmlRenderer.Object,
                                             mockSideRenderer.Object);
 
-        var postCtaContentText = "This is the post cta content";
-        var preCtaContentText = "This is the pre cta content";
-        var sideContentText = "This is the side content";
+        const string postCtaContentText = "This is the post cta content";
+        const string preCtaContentText = "This is the pre cta content";
+        const string sideContentText = "This is the side content";
 
         var postCtaButtonContent = ContentfulContentHelper.Text(postCtaContentText);
         var preCtaButtonContent = ContentfulContentHelper.Text(preCtaContentText);

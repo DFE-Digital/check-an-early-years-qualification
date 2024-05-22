@@ -27,8 +27,10 @@ public class FooterLinksViewComponent : ViewComponent
         try
         {
             var navigationLinks = await _contentService.GetNavigationLinks();
-            if (navigationLinks is null || navigationLinks.Count == 0) 
+            if (navigationLinks is null || navigationLinks.Count == 0)
+            {
                 return await Task.FromResult(Array.Empty<NavigationLink>().AsEnumerable());
+            }
 
             return navigationLinks;
         }

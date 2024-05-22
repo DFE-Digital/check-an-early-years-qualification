@@ -73,6 +73,7 @@ public class UnorderedListRendererTests
         var renderer = new UnorderedListRenderer();
         var result = renderer.RenderAsync(list).Result;
 
-        result.Should().Be("<ul class=\"govuk-list govuk-list--bullet\"><li>First paragraph text.</li><li>Second paragraph text.</li></ul>");
+        result.Should()
+              .Be("<ul class=\"govuk-list govuk-list--bullet\"><li>First paragraph text.</li><li>Second paragraph text.</li></ul>");
     }
 }

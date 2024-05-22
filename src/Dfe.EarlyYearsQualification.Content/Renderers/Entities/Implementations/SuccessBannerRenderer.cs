@@ -1,5 +1,4 @@
 using Contentful.Core.Models;
-using Dfe.EarlyYearsQualification.Content.Extensions;
 using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 
 namespace Dfe.EarlyYearsQualification.Content.Renderers.Entities.Implementations;

@@ -19,14 +19,16 @@ public class UnorderedListRenderer : IContentRenderer
         var sb = new StringBuilder();
         sb.Append("<ul class=\"govuk-list govuk-list--bullet\">");
 
-        foreach (var contentValue in list!.Content)
+        foreach (var contentValue in list.Content)
         {
-            if (contentValue is ListItem listItem)
+            if (contentValue is not ListItem listItem)
             {
-                var listItemParagraph = listItem.Content[0] as Paragraph;
-                var listItemText = listItemParagraph!.Content[0] as Text;
-                sb.Append($"<li>{listItemText!.Value}</li>");
+                continue;
             }
+
+            var listItemParagraph = listItem.Content[0] as Paragraph;
+            var listItemText = listItemParagraph!.Content[0] as Text;
+            sb.Append($"<li>{listItemText!.Value}</li>");
         }
 
         sb.Append("</ul>");

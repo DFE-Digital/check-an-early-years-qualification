@@ -7,87 +7,105 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
 [TestClass]
 public class TableHelperTests
 {
+    private readonly TableCell _tableCell
+        = new()
+          {
+              Content =
+              [
+                  new Paragraph
+                  {
+                      Content =
+                      [
+                          new Text
+                          {
+                              Value = "Test"
+                          }
+                      ]
+                  }
+              ]
+          };
 
-  private readonly TableRow _tableRow = new TableRow
-  {
-    Content = [
-      new TableCell {
-        Content = [
-          new Paragraph {
-            Content = [
-              new Text {
-                Value = "Test"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  };
+    private readonly TableHeader _tableHeader
+        = new()
+          {
+              Content =
+              [
+                  new Paragraph
+                  {
+                      Content =
+                      [
+                          new Text
+                          {
+                              Value = "Test"
+                          }
+                      ]
+                  }
+              ]
+          };
 
-  private readonly TableHeader _tableHeader = new TableHeader
-  {
-    Content = [
-      new Paragraph {
-        Content = [
-          new Text {
-            Value = "Test"
-          }
-        ]
-      }
-    ]
-  };
+    private readonly TableRow _tableRow
+        = new()
+          {
+              Content =
+              [
+                  new TableCell
+                  {
+                      Content =
+                      [
+                          new Paragraph
+                          {
+                              Content =
+                              [
+                                  new Text
+                                  {
+                                      Value =
+                                          "Test"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ]
+          };
 
-  private readonly TableCell _tableCell = new TableCell
-  {
-    Content = [
-      new Paragraph {
-        Content = [
-          new Text {
-            Value = "Test"
-          }
-        ]
-      }
-    ]
-  };
+    [TestMethod]
+    public void TableHelper_RendersTableRow()
+    {
+        var content = new List<IContent> { _tableRow };
 
-  [TestMethod]
-  public void TableHelper_RendersTableRow()
-  {
-    var content = new List<IContent> { _tableRow };
+        var output = TableHelper.Render(content).Result;
 
-    var output = TableHelper.Render(content).Result;
+        output.Should().Be("<tr class='govuk-table__row'><td class='govuk-table__cell'>Test</td></tr>");
+    }
 
-    output.Should().Be("<tr class='govuk-table__row'><td class='govuk-table__cell'>Test</td></tr>");
-  }
+    [TestMethod]
+    public void TableHelper_RendersTableHeader()
+    {
+        var content = new List<IContent> { _tableHeader };
 
-  [TestMethod]
-  public void TableHelper_RendersTableHeader()
-  {
-    var content = new List<IContent> { _tableHeader };
+        var output = TableHelper.Render(content).Result;
 
-    var output = TableHelper.Render(content).Result;
+        output.Should().Be("<th class='govuk-table__header'>Test</th>");
+    }
 
-    output.Should().Be("<th class='govuk-table__header'>Test</th>");
-  }
+    [TestMethod]
+    public void TableHelper_RendersTableCell()
+    {
+        var content = new List<IContent> { _tableCell };
 
-  [TestMethod]
-  public void TableHelper_RendersTableCell()
-  {
-    var content = new List<IContent> { _tableCell };
+        var output = TableHelper.Render(content).Result;
 
-    var output = TableHelper.Render(content).Result;
+        output.Should().Be("<td class='govuk-table__cell'>Test</td>");
+    }
 
-    output.Should().Be("<td class='govuk-table__cell'>Test</td>");
-  }
+    [TestMethod]
+    public void TableHelper_RendersMultipleSupported()
+    {
+        var content = new List<IContent> { _tableCell, _tableHeader, _tableRow };
 
-  [TestMethod]
-  public void TableHelper_RendersMultipleSupported()
-  {
-    var content = new List<IContent> { _tableCell, _tableHeader, _tableRow };
+        var output = TableHelper.Render(content).Result;
 
-    var output = TableHelper.Render(content).Result;
-
-    output.Should().Be("<td class='govuk-table__cell'>Test</td><th class='govuk-table__header'>Test</th><tr class='govuk-table__row'><td class='govuk-table__cell'>Test</td></tr>");
-  }
+        output.Should()
+              .Be("<td class='govuk-table__cell'>Test</td><th class='govuk-table__header'>Test</th><tr class='govuk-table__row'><td class='govuk-table__cell'>Test</td></tr>");
+    }
 }

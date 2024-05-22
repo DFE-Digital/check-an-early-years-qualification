@@ -1,26 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
 
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="moq" Version="4.20.70" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.3.1" />
-    <PackageReference Include="coverlet.collector" Version="6.0.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="6.12.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0"/>
+        <PackageReference Include="moq" Version="4.20.70"/>
+        <PackageReference Include="MSTest.TestAdapter" Version="3.3.1"/>
+        <PackageReference Include="MSTest.TestFramework" Version="3.3.1"/>
+        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj" />
-    <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Web\Dfe.EarlyYearsQualification.Web.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj"/>
+        <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Web\Dfe.EarlyYearsQualification.Web.csproj"/>
+    </ItemGroup>
 
 </Project>

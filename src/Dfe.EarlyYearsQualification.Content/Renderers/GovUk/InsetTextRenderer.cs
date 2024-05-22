@@ -7,15 +7,8 @@ using Newtonsoft.Json;
 
 namespace Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 
-public class InsetTextRenderer : IContentRenderer
+public class InsetTextRenderer(IContentfulClient contentfulClient) : IContentRenderer
 {
-    private readonly IContentfulClient _contentfulClient;
-
-    public InsetTextRenderer(IContentfulClient contentfulClient)
-    {
-        _contentfulClient = contentfulClient;
-    }
-
     public int Order { get; set; }
 
     public bool SupportsContent(IContent content)
@@ -25,7 +18,7 @@ public class InsetTextRenderer : IContentRenderer
             return false;
         }
 
-        if (entryStructure.Data is null || entryStructure.Data.Target is null || entryStructure.Data.Target is not CustomNode model)
+        if (entryStructure.Data?.Target is not CustomNode model)
         {
             return false;
         }
@@ -47,7 +40,7 @@ public class InsetTextRenderer : IContentRenderer
 
         var insetTextModel = model!.JObject.ToObject<GovUkInsetTextModel>();
         var documentObject = insetTextModel!.Content!.ToString();
-        var doc = JsonConvert.DeserializeObject<Document>(documentObject, _contentfulClient.SerializerSettings);
+        var doc = JsonConvert.DeserializeObject<Document>(documentObject, contentfulClient.SerializerSettings);
 
         var sb = new StringBuilder();
 

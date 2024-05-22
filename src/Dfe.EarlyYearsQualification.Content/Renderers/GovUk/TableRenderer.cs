@@ -10,15 +10,14 @@ public class TableRenderer : IContentRenderer
 
     public async Task<string> RenderAsync(IContent content)
     {
-      var table = content as Table;
-      var sb = new StringBuilder();
+        var table = content as Table;
+        var sb = new StringBuilder();
 
-      sb.Append("<table class='govuk-table'>");
-      sb.Append(await TableHelper.Render(table!.Content));
-      sb.Append("</table>");
+        sb.Append("<table class='govuk-table'>");
+        sb.Append(await TableHelper.Render(table!.Content));
+        sb.Append("</table>");
 
-      return sb.ToString();
-
+        return sb.ToString();
     }
 
     public bool SupportsContent(IContent content)

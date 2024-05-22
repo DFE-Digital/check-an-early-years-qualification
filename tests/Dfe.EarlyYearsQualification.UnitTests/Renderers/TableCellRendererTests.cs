@@ -13,7 +13,7 @@ public class TableCellRendererTests
         var cell = new TableCell();
         new TableCellRenderer().SupportsContent(cell).Should().BeTrue();
     }
-    
+
     [TestMethod]
     public void TableCellRenderer_DoesNotSupportTableRow()
     {
@@ -27,14 +27,14 @@ public class TableCellRendererTests
         var tableHeader = new TableHeader();
         new TableCellRenderer().SupportsContent(tableHeader).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void TableCellRenderer_DoesNotSupportTable()
     {
         var table = new Table();
         new TableCellRenderer().SupportsContent(table).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void TableCellRenderer_RendersTableCell()
     {
@@ -43,7 +43,7 @@ public class TableCellRendererTests
         var para = new Paragraph { Content = [text] };
 
         var cell = new TableCell { Content = [para] };
-        
+
         var renderer = new TableCellRenderer();
         var result = renderer.RenderAsync(cell).Result;
 

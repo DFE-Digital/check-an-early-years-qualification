@@ -28,7 +28,7 @@ public class NestedContentHelperTests
     {
         var hyperlink = new Hyperlink
                         {
-                            Content = new List<IContent>(),
+                            Content = [],
                             Data = new HyperlinkData
                                    {
                                        Uri = "https://my.uri"
@@ -69,7 +69,7 @@ public class NestedContentHelperTests
 
         var hyperlink = new Hyperlink
                         {
-                            Content = new List<IContent>(),
+                            Content = [],
                             Data = new HyperlinkData
                                    {
                                        Uri = "https://my.uri"
