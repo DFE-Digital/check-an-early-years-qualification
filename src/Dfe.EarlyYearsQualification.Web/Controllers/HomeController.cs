@@ -8,32 +8,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController(
+    ILogger<HomeController> logger,
+    IContentService contentService,
+    IHtmlRenderer htmlRenderer,
+    ISideContentRenderer sideContentRenderer)
+    : Controller
 {
-    private readonly IContentService _contentService;
-    private readonly IHtmlRenderer _htmlRenderer;
-    private readonly ILogger<HomeController> _logger;
-    private readonly ISideContentRenderer _sideContentRenderer;
-
-    public HomeController(
-        ILogger<HomeController> logger,
-        IContentService contentService,
-        IHtmlRenderer htmlRenderer,
-        ISideContentRenderer sideContentRenderer)
-    {
-        _logger = logger;
-        _contentService = contentService;
-        _htmlRenderer = htmlRenderer;
-        _sideContentRenderer = sideContentRenderer;
-    }
-
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var startPageContent = await _contentService.GetStartPage();
+        var startPageContent = await contentService.GetStartPage();
         if (startPageContent is null)
         {
-            _logger.LogCritical("Start page content not found");
+            logger.LogCritical("Start page content not found");
             return RedirectToAction("Error");
         }
 
@@ -52,11 +40,11 @@ public class HomeController : Controller
         return new StartPageModel
                {
                    Header = startPageContent.Header,
-                   PreCtaButtonContent = await _htmlRenderer.ToHtml(startPageContent.PreCtaButtonContent),
+                   PreCtaButtonContent = await htmlRenderer.ToHtml(startPageContent.PreCtaButtonContent),
                    CtaButtonText = startPageContent.CtaButtonText,
-                   PostCtaButtonContent = await _htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent),
+                   PostCtaButtonContent = await htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent),
                    RightHandSideContentHeader = startPageContent.RightHandSideContentHeader,
-                   RightHandSideContent = await _sideContentRenderer.ToHtml(startPageContent.RightHandSideContent)
+                   RightHandSideContent = await sideContentRenderer.ToHtml(startPageContent.RightHandSideContent)
                };
     }
 }

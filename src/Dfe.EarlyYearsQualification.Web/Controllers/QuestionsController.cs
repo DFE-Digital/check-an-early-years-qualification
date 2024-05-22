@@ -43,6 +43,7 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
         var questionPage = await contentService.GetQuestionPage(questionPageId);
         if (questionPage is null)
         {
+            logger.LogError("No content for the question page");
             return RedirectToAction("Error", "Home");
         }
 

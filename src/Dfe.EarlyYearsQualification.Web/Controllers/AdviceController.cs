@@ -22,6 +22,7 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
         var advicePage = await contentService.GetAdvicePage(advicePageId);
         if (advicePage is null)
         {
+          logger.LogError("No content for the advice page");
             return RedirectToAction("Error", "Home");
         }
 

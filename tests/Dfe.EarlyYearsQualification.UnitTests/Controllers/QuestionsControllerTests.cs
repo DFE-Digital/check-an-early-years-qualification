@@ -1,13 +1,13 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -15,28 +15,21 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class QuestionsControllerTests
 {
-    private readonly ILogger<QuestionsController> _mockLogger =
-        new NullLoggerFactory().CreateLogger<QuestionsController>();
-
-    private QuestionsController? _controller;
-    private Mock<IContentService> _mockContentService = new();
-
-    [TestInitialize]
-    public void BeforeEachTest()
-    {
-        _mockContentService = new Mock<IContentService>();
-        _controller = new QuestionsController(_mockLogger, _mockContentService.Object);
-    }
-
     [TestMethod]
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
-        _mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+       
+
+        mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                            .ReturnsAsync((QuestionPage?)default).Verifiable();
 
-        var result = await _controller!.WhereWasTheQualificationAwarded();
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object);
 
-        _mockContentService.VerifyAll();
+        var result = await controller!.WhereWasTheQualificationAwarded();
+
+        mockContentService.VerifyAll();
 
         result.Should().NotBeNull();
 
@@ -45,20 +38,28 @@ public class QuestionsControllerTests
 
         resultType!.ActionName.Should().Be("Error");
         resultType.ControllerName.Should().Be("Home");
+
+        mockLogger.VerifyError("No content for the question page");
     }
 
     [TestMethod]
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsQuestionPage_ReturnsAdvicePageModel()
     {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        
         var questionPage = new QuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
                                Options = [new Option { Label = "Label", Value = "Value" }]
                            };
-        _mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+        mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                            .ReturnsAsync(questionPage);
-        var result = await _controller!.WhereWasTheQualificationAwarded();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object);
+
+        var result = await controller!.WhereWasTheQualificationAwarded();
 
         result.Should().NotBeNull();
 
@@ -79,8 +80,13 @@ public class QuestionsControllerTests
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_InvalidModel_ReturnsQuestionPage()
     {
-        _controller!.ModelState.AddModelError("option", "test error");
-        var result = await _controller!.WhereWasTheQualificationAwarded(new QuestionModel());
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object);
+
+        controller!.ModelState.AddModelError("option", "test error");
+        var result = await controller!.WhereWasTheQualificationAwarded(new QuestionModel());
 
         result.Should().NotBeNull();
 
@@ -93,8 +99,13 @@ public class QuestionsControllerTests
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_PassInOutsideUk_RedirectsToAdvicePage()
     {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object);
+
         var result =
-            await _controller!.WhereWasTheQualificationAwarded(new QuestionModel
+            await controller!.WhereWasTheQualificationAwarded(new QuestionModel
                                                                { Option = Options.OutsideOfTheUnitedKingdom });
 
         result.Should().NotBeNull();
@@ -109,7 +120,12 @@ public class QuestionsControllerTests
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_PassInEngland_RedirectsToQualificationDetails()
     {
-        var result = await _controller!.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.England });
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object);
+
+        var result = await controller!.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.England });
 
         result.Should().NotBeNull();
 

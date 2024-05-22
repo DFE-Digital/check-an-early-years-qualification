@@ -6,29 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 
-public class PhaseBannerViewComponent : ViewComponent
+public class PhaseBannerViewComponent(
+    IContentService contentService,
+    ILogger<PhaseBannerViewComponent> logger,
+    IPhaseBannerRenderer renderer)
+    : ViewComponent
 {
-    private readonly IContentService _contentService;
-    private readonly ILogger<PhaseBannerViewComponent> _logger;
-    private readonly IPhaseBannerRenderer _renderer;
-
-    public PhaseBannerViewComponent(
-        IContentService contentService,
-        ILogger<PhaseBannerViewComponent> logger,
-        IPhaseBannerRenderer renderer)
-    {
-        _contentService = contentService;
-        _logger = logger;
-        _renderer = renderer;
-    }
-
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var content = await _contentService.GetPhaseBannerContent();
+        var content = await contentService.GetPhaseBannerContent();
 
         if (content is null)
         {
-            _logger.LogError("No content for the phase banner");
+            logger.LogError("No content for the phase banner");
             return View();
         }
 
@@ -43,7 +33,7 @@ public class PhaseBannerViewComponent : ViewComponent
                {
                    PhaseName = content.PhaseName,
                    Show = content.Show,
-                   Content = await _renderer.ToHtml(content.Content)
+                   Content = await renderer.ToHtml(content.Content)
                };
     }
 }
