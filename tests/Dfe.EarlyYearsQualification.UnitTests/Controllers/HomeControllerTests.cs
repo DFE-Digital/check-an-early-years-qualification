@@ -2,12 +2,12 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -18,11 +18,11 @@ public class HomeControllerTests
     [TestMethod]
     public async Task Index_ContentServiceReturnsNoContent_RedirectsToErrorPage()
     {
-        var mockLogger = new NullLoggerFactory().CreateLogger<HomeController>();
+        var mockLogger = new Mock<ILogger<HomeController>>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockSideRenderer = new Mock<ISideContentRenderer>();
         var mockContentService = new Mock<IContentService>();
-        var controller = new HomeController(mockLogger, mockContentService.Object, mockHtmlRenderer.Object,
+        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                             mockSideRenderer.Object);
 
         mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage?)default);
@@ -34,16 +34,18 @@ public class HomeControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
         resultType!.ActionName.Should().Be("Error");
+
+        mockLogger.VerifyCritical("Start page content not found");
     }
 
     [TestMethod]
     public async Task Index_ContentServiceReturnsContent_ReturnsStartPageModel()
     {
-        var mockLogger = new NullLoggerFactory().CreateLogger<HomeController>();
+        var mockLogger = new Mock<ILogger<HomeController>>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockSideRenderer = new Mock<ISideContentRenderer>();
         var mockContentService = new Mock<IContentService>();
-        var controller = new HomeController(mockLogger, mockContentService.Object, mockHtmlRenderer.Object,
+        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                             mockSideRenderer.Object);
 
         const string postCtaContentText = "This is the post cta content";

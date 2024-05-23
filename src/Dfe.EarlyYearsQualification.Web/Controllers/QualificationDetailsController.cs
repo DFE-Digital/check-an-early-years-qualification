@@ -31,12 +31,14 @@ public class QualificationDetailsController(
         var detailsPageContent = await contentService.GetDetailsPage();
         if (detailsPageContent is null)
         {
+            logger.LogError("No content for the qualification details page");
             return RedirectToAction("Error", "Home");
         }
 
         var qualification = await contentService.GetQualificationById(qualificationId);
         if (qualification is null)
         {
+            logger.LogError($"Could not find details for qualification with ID: {qualificationId.Replace(Environment.NewLine, "")}");
             return RedirectToAction("Error", "Home");
         }
 

@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using FluentAssertions;
@@ -37,6 +38,8 @@ public class AdviceControllerTests
 
         resultType!.ActionName.Should().Be("Error");
         resultType.ControllerName.Should().Be("Home");
+
+        mockLogger.VerifyError("No content for the advice page");
     }
 
     [TestMethod]

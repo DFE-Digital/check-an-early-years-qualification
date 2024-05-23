@@ -1,10 +1,10 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
@@ -12,28 +12,19 @@ namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
 [TestClass]
 public class FooterLinksViewComponentTests
 {
-    private Mock<IContentService> _mockContentService = new();
-
-    private ILogger<FooterLinksViewComponent> _mockLogger =
-        new NullLoggerFactory().CreateLogger<FooterLinksViewComponent>();
-
-    [TestInitialize]
-    public void BeforeTestRun()
-    {
-        _mockLogger = new NullLoggerFactory().CreateLogger<FooterLinksViewComponent>();
-        _mockContentService = new Mock<IContentService>();
-    }
-
     [TestMethod]
     public async Task InvokeAsync_CallsContentService_ReturnsNavigationLinks()
     {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<FooterLinksViewComponent>>();
+
         var navigationLink = new NavigationLink
                              { DisplayText = "Test", Href = "https://test.com", OpenInNewTab = true };
 
-        _mockContentService.Setup(x => x.GetNavigationLinks())
+        mockContentService.Setup(x => x.GetNavigationLinks())
                            .ReturnsAsync(new List<NavigationLink> { navigationLink });
 
-        var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
+        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
 
         result.Should().NotBeNull();
@@ -50,9 +41,12 @@ public class FooterLinksViewComponentTests
     [TestMethod]
     public async Task InvokeAsync_ContentServiceReturnsNull_ReturnsEmptyNavigationLinks()
     {
-        _mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync((List<NavigationLink>?)default);
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<FooterLinksViewComponent>>();
 
-        var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
+        mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync((List<NavigationLink>?)default);
+
+        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
 
         result.Should().NotBeNull();
@@ -60,16 +54,20 @@ public class FooterLinksViewComponentTests
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
         model.Should().NotBeNull();
 
-        var data = model as List<NavigationLink>;
-        data.Should().BeNull(); // question: should data instead be an empty list?
+        var data = model as IEnumerable<NavigationLink>;
+        data.Should().NotBeNull();
+        data?.Count().Should().Be(0);
     }
 
     [TestMethod]
     public async Task InvokeAsync_ContentServiceThrowsException_ReturnsEmptyNavigationLinks()
     {
-        _mockContentService.Setup(x => x.GetNavigationLinks()).ThrowsAsync(new Exception());
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<FooterLinksViewComponent>>();
 
-        var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
+        mockContentService.Setup(x => x.GetNavigationLinks()).ThrowsAsync(new Exception());
+
+        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
 
         result.Should().NotBeNull();
@@ -77,7 +75,10 @@ public class FooterLinksViewComponentTests
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
         model.Should().NotBeNull();
 
-        var data = model as List<NavigationLink>;
-        data.Should().BeNull(); // question: should data instead be an empty list?
+        var data = model as IEnumerable<NavigationLink>;
+        data.Should().NotBeNull();
+        data?.Count().Should().Be(0);
+
+        mockLogger.VerifyError("Error retrieving navigation links for footer");
     }
 }

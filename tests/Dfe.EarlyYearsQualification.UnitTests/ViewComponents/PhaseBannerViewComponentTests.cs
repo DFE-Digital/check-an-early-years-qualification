@@ -10,7 +10,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
@@ -50,13 +49,12 @@ public class PhaseBannerViewComponentTests
         contentMock.Setup(x => x.GetPhaseBannerContent())
                    .ReturnsAsync(phaseBanner);
 
-        var logger = new NullLoggerFactory().CreateLogger<PhaseBannerViewComponent>();
-
+        var logger = new Mock<ILogger<PhaseBannerViewComponent>>();
         var rendererMock = new Mock<IPhaseBannerRenderer>();
         rendererMock.Setup(x => x.ToHtml(It.IsAny<Document>()))
                     .ReturnsAsync(expectedHtml);
 
-        var component = new PhaseBannerViewComponent(contentMock.Object, logger, rendererMock.Object);
+        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, rendererMock.Object);
 
         var result = await component.InvokeAsync();
 

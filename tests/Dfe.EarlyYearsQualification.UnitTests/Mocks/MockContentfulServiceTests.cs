@@ -8,18 +8,12 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 [TestClass]
 public class MockContentfulServiceTests
 {
-    private MockContentfulService _contentfulService = new();
-
-    [TestInitialize]
-    public void BeforeEachTest()
-    {
-        _contentfulService = new MockContentfulService();
-    }
-
     [TestMethod]
     public async Task GetAccessibilityStatementPage_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetAccessibilityStatementPage();
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAccessibilityStatementPage();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AccessibilityStatementPage>();
         result!.Heading.Should().NotBeNullOrEmpty();
@@ -28,7 +22,9 @@ public class MockContentfulServiceTests
     [TestMethod]
     public async Task GetAdvicePage_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetAdvicePage("test_id");
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage("test_id");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
         result!.Heading.Should().NotBeNullOrEmpty();
@@ -39,7 +35,9 @@ public class MockContentfulServiceTests
     [TestMethod]
     public async Task GetCookiesPage_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetCookiesPage();
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetCookiesPage();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CookiesPage>();
         result!.Heading.Should().NotBeNullOrEmpty();
@@ -57,7 +55,9 @@ public class MockContentfulServiceTests
     [TestMethod]
     public async Task GetDetailsPage_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetDetailsPage();
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetDetailsPage();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<DetailsPage>();
         result!.AwardingOrgLabel.Should().NotBeNullOrEmpty();
@@ -78,7 +78,9 @@ public class MockContentfulServiceTests
     [TestMethod]
     public async Task GetNavigationLinks_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetNavigationLinks();
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetNavigationLinks();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<List<NavigationLink>>();
         result!.Count.Should().Be(2);
@@ -87,7 +89,9 @@ public class MockContentfulServiceTests
     [TestMethod]
     public async Task GetQualificationById_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetQualificationById("test_id");
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetQualificationById("test_id");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
         result!.AdditionalRequirements.Should().NotBeNullOrEmpty();
@@ -104,7 +108,9 @@ public class MockContentfulServiceTests
     [TestMethod]
     public async Task GetQuestionPage_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetQuestionPage("test_id");
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetQuestionPage("test_id");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<QuestionPage>();
         result!.Question.Should().NotBeNullOrEmpty();
@@ -117,7 +123,9 @@ public class MockContentfulServiceTests
     [TestMethod]
     public async Task GetStartPage_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetStartPage();
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetStartPage();
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StartPage>();
@@ -139,7 +147,9 @@ public class MockContentfulServiceTests
     [TestMethod]
     public async Task GetPhaseBannerContent_ReturnsExpectedDetails()
     {
-        var result = await _contentfulService.GetPhaseBannerContent();
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetPhaseBannerContent();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<PhaseBanner>();
         result!.Content.Should().NotBeNull();

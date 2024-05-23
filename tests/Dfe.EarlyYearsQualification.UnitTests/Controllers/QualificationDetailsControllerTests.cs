@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using FluentAssertions;
@@ -67,6 +68,8 @@ public class QualificationDetailsControllerTests
 
         actionResult.ActionName.Should().Be("Error");
         actionResult.ControllerName.Should().Be("Home");
+
+        mockLogger.VerifyError("No content for the qualification details page");
     }
 
     [TestMethod]
@@ -96,6 +99,8 @@ public class QualificationDetailsControllerTests
         resultType.Should().NotBeNull();
         resultType!.ActionName.Should().Be("Error");
         resultType.ControllerName.Should().Be("Home");
+
+        mockLogger.VerifyError("Could not find details for qualification with ID: eyq-145");
     }
 
     [TestMethod]

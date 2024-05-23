@@ -4,17 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 
-public class FooterLinksViewComponent : ViewComponent
+public class FooterLinksViewComponent(IContentService contentService, ILogger<FooterLinksViewComponent> logger) : ViewComponent
 {
-    private readonly IContentService _contentService;
-    private readonly ILogger<FooterLinksViewComponent> _logger;
-
-    public FooterLinksViewComponent(IContentService contentService, ILogger<FooterLinksViewComponent> logger)
-    {
-        _contentService = contentService;
-        _logger = logger;
-    }
-
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var navigationLinks = await GetNavigationLinksAsync();
@@ -26,7 +17,7 @@ public class FooterLinksViewComponent : ViewComponent
     {
         try
         {
-            var navigationLinks = await _contentService.GetNavigationLinks();
+            var navigationLinks = await contentService.GetNavigationLinks();
             if (navigationLinks is null || navigationLinks.Count == 0)
             {
                 return await Task.FromResult(Array.Empty<NavigationLink>().AsEnumerable());
@@ -36,7 +27,7 @@ public class FooterLinksViewComponent : ViewComponent
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving navigation links for footer");
+            logger.LogError(ex, "Error retrieving navigation links for footer");
 
             return await Task.FromResult(Array.Empty<NavigationLink>().AsEnumerable());
         }

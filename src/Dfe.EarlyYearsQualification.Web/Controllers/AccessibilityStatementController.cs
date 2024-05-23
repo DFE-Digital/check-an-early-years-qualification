@@ -7,30 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("accessibility-statement")]
-public class AccessibilityStatementController : Controller
+public class AccessibilityStatementController(
+    ILogger<AccessibilityStatementController> logger,
+    IContentService contentService,
+    IHtmlRenderer renderer)
+    : Controller
 {
-    private readonly IContentService _contentService;
-    private readonly ILogger<AccessibilityStatementController> _logger;
-    private readonly IHtmlRenderer _renderer;
-
-    public AccessibilityStatementController(
-        ILogger<AccessibilityStatementController> logger,
-        IContentService contentService,
-        IHtmlRenderer renderer)
-    {
-        _logger = logger;
-        _contentService = contentService;
-        _renderer = renderer;
-    }
-
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var content = await _contentService.GetAccessibilityStatementPage();
+        var content = await contentService.GetAccessibilityStatementPage();
 
         if (content is null)
         {
-            _logger.LogError("No content for the accessibility statement page");
+            logger.LogError("No content for the accessibility statement page");
             return RedirectToAction("Error", "Home");
         }
 
@@ -44,7 +34,7 @@ public class AccessibilityStatementController : Controller
         return new AccessibilityStatementPageModel
                {
                    Heading = content.Heading,
-                   BodyContent = await _renderer.ToHtml(content.Body)
+                   BodyContent = await renderer.ToHtml(content.Body)
                };
     }
 }
