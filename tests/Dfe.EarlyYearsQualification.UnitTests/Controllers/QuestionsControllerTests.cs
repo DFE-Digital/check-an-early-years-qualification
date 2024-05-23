@@ -132,6 +132,49 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
+        resultType!.ActionName.Should().Be("WhenWasTheQualificationStarted");
+    }
+
+    [TestMethod]
+    public void WhenWasTheQualificationStarted_ReturnsView()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object);
+
+        var result = controller!.WhenWasTheQualificationStarted();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as QuestionModel;
+        model.Should().NotBeNull();
+
+        // TODO: The following will need to be replaced once the page has been created in Contentful.
+        // The model is currently hard coded in the action and doesn't call the content service.
+        model!.Question.Should().Be("When was the qualification started?");
+        model!.CtaButtonText.Should().Be("Continue");
+        model.HasErrors.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void Post_WhenWasTheQualificationStarted_ReturnsRedirectResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object);
+
+        var result = controller!.WhenWasTheQualificationStarted(new QuestionModel());
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
         resultType!.ActionName.Should().Be("Get");
         resultType.ControllerName.Should().Be("QualificationDetails");
     }
