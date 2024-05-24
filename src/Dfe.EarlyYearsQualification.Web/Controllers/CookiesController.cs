@@ -2,6 +2,8 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.CookieService;
+using Dfe.EarlyYearsQualification.Web.Services.RedirectUrlChecker;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -11,7 +13,9 @@ public class CookiesController(
     ILogger<CookiesController> logger,
     IContentService contentService,
     IHtmlTableRenderer tableRenderer,
-    ISuccessBannerRenderer successBannerRenderer)
+    ISuccessBannerRenderer successBannerRenderer,
+    ICookieService cookieService,
+    IRedirectUrlCheckerService redirectService)
     : Controller
 {
     [HttpGet]
@@ -28,6 +32,42 @@ public class CookiesController(
         var model = await Map(content);
 
         return View(model);
+    }
+
+    [HttpPost("accept")]
+    public IActionResult Accept([FromForm]string? returnUrl)
+    {
+        cookieService.SetPreference(true);
+        return Redirect(redirectService.CheckUrl(returnUrl));
+    }
+
+    [HttpPost("reject")]
+    public IActionResult Reject([FromForm]string? returnUrl)
+    {
+        cookieService.RejectCookies();
+        return Redirect(redirectService.CheckUrl(returnUrl));
+    }
+
+    [HttpPost("hidebanner")]
+    public IActionResult HideBanner([FromForm]string? returnUrl)
+    {
+        cookieService.SetVisibility(false);
+        return Redirect(redirectService.CheckUrl(returnUrl));
+    }
+
+    [HttpPost]
+    public IActionResult CookiePreference(string cookiesAnswer)
+    {
+        if (cookiesAnswer == "all-cookies")
+        {
+            cookieService.SetPreference(true);
+        }
+        else
+        {
+            cookieService.RejectCookies();
+        }
+        TempData["UserPreferenceRecorded"] = true;
+        return Redirect("/cookies");
     }
 
     private async Task<CookiesPageModel> Map(CookiesPage content)

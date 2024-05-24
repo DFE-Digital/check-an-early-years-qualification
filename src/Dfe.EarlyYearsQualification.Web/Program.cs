@@ -5,6 +5,8 @@ using Dfe.EarlyYearsQualification.Content.Extensions;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Dfe.EarlyYearsQualification.Web.Security;
+using Dfe.EarlyYearsQualification.Web.Services.CookieService;
+using Dfe.EarlyYearsQualification.Web.Services.RedirectUrlChecker;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using OwaspHeaders.Core.Extensions;
@@ -43,6 +45,9 @@ else
 }
 
 builder.Services.AddModelRenderers();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<ICookieService, CookieService>();
+builder.Services.AddSingleton<IRedirectUrlCheckerService, RedirectUrlCheckerService>();
 
 var app = builder.Build();
 app.UseSecureHeadersMiddleware(

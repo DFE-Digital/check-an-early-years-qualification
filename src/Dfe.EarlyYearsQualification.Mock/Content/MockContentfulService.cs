@@ -166,4 +166,19 @@ public class MockContentfulService : IContentService
                                          RightHandSideContent = rightHandSideContent
                                      });
     }
+
+    public async Task<CookiesBanner?> GetCookiesBannerContent()
+    {
+      var cookiesBannerContent =
+            ContentfulContentHelper.Paragraph("This is the cookies banner content");
+
+      return await Task.FromResult(new CookiesBanner
+                                     {
+                                         AcceptButtonText = "Test Accept Button Text",
+                                         CookiesBannerContent = cookiesBannerContent,
+                                         CookiesBannerTitle = "Test Cookies Banner Title",
+                                         CookiesBannerLinkText = "Test Cookies Banner Text",
+                                         RejectButtonText = "Test Reject Button Text"
+                                     });
+    }
 }

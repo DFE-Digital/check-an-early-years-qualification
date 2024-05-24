@@ -21,4 +21,6 @@ public interface IContentService
     Task<CookiesPage?> GetCookiesPage();
 
     Task<PhaseBanner?> GetPhaseBannerContent();
+
+    Task<CookiesBanner?> GetCookiesBannerContent();
 }
