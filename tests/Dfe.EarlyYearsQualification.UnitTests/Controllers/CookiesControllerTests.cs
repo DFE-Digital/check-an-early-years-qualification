@@ -5,8 +5,12 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.CookieService;
+using Dfe.EarlyYearsQualification.Web.Services.RedirectUrlChecker;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -22,9 +26,13 @@ public class CookiesControllerTests
         var mockLogger = new Mock<ILogger<CookiesController>>();
         var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
         var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+        var mockCookieService = new Mock<ICookieService>();
+        var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
+
 
         var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
-                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object);
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
+                                               mockCookieService.Object, mockRedirectService.Object);
 
         mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage?)default);
 
@@ -43,6 +51,8 @@ public class CookiesControllerTests
         var mockLogger = new Mock<ILogger<CookiesController>>();
         var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
         var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+        var mockCookieService = new Mock<ICookieService>();
+        var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
 
         var expectedContent = new CookiesPage
                               {
@@ -73,7 +83,8 @@ public class CookiesControllerTests
                                  .ReturnsAsync("Test success banner content");
 
         var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
-                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object);
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
+                                               mockCookieService.Object, mockRedirectService.Object);
 
         var result = await controller.Index();
 
@@ -105,5 +116,150 @@ public class CookiesControllerTests
                                   SuccessBannerContent = "Test success banner content",
                                   ErrorText = expectedContent.ErrorText
                               });
+    }
+
+    [TestMethod]
+    public void Accept_EndpointCalled_CallsToSetPreferenceAndChecksUrl()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesController>>();
+        var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+        var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+        var mockCookieService = new Mock<ICookieService>();
+        var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
+
+        mockRedirectService.Setup(x => x.CheckUrl("some URL")).Returns("validated URL");
+
+        var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
+                                               mockCookieService.Object, mockRedirectService.Object);
+
+        var result = controller.Accept("some URL");
+
+        result.Should().NotBeNull();
+        result.Should()
+              .BeAssignableTo<RedirectResult>()
+              .Which.Url.Should().Be("validated URL");
+
+        mockCookieService.Verify(x => x.SetPreference(true), Times.Once);
+        mockRedirectService.Verify(x => x.CheckUrl("some URL"), Times.Once);
+    }
+
+    [TestMethod]
+    public void Reject_EndpointCalled_CallsToRejectAndChecksUrl()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesController>>();
+        var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+        var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+        var mockCookieService = new Mock<ICookieService>();
+        var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
+
+        mockRedirectService.Setup(x => x.CheckUrl("some URL")).Returns("validated URL");
+
+        var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
+                                               mockCookieService.Object, mockRedirectService.Object);
+
+        var result = controller.Reject("some URL");
+
+        result.Should().NotBeNull();
+        result.Should()
+              .BeAssignableTo<RedirectResult>()
+              .Which.Url.Should().Be("validated URL");
+
+        mockCookieService.Verify(x => x.RejectCookies(), Times.Once);
+        mockRedirectService.Verify(x => x.CheckUrl("some URL"), Times.Once);
+    }
+
+    [TestMethod]
+    public void HideBanner_EndpointCalled_CallsToSetVisibilityAndChecksUrl()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesController>>();
+        var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+        var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+        var mockCookieService = new Mock<ICookieService>();
+        var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
+
+        mockRedirectService.Setup(x => x.CheckUrl("some URL")).Returns("validated URL");
+
+        var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
+                                               mockCookieService.Object, mockRedirectService.Object);
+
+        var result = controller.HideBanner("some URL");
+
+        result.Should().NotBeNull();
+        result.Should()
+              .BeAssignableTo<RedirectResult>()
+              .Which.Url.Should().Be("validated URL");
+
+        mockCookieService.Verify(x => x.SetVisibility(false), Times.Once);
+        mockRedirectService.Verify(x => x.CheckUrl("some URL"), Times.Once);
+    }
+
+    [TestMethod]
+    public void CookiePreference_Accept_CallsToSetPreferenceAndRedirects()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesController>>();
+        var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+        var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+        var mockCookieService = new Mock<ICookieService>();
+        var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
+
+        mockRedirectService.Setup(x => x.CheckUrl("some URL")).Returns("validated URL");
+        var tempData = new TempDataDictionary(new DefaultHttpContext(), new Mock<ITempDataProvider>().Object);
+        tempData["UserPreferenceRecorded"] = false;
+        var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
+                                               mockCookieService.Object, mockRedirectService.Object)
+                                               {
+                                                TempData = tempData
+                                               };
+
+        var result = controller.CookiePreference("all-cookies");
+
+        result.Should().NotBeNull();
+        result.Should()
+              .BeAssignableTo<RedirectResult>()
+              .Which.Url.Should().Be("/cookies");
+
+        controller.TempData["UserPreferenceRecorded"].Should().Be(true);
+
+        mockCookieService.Verify(x => x.SetPreference(true), Times.Once);
+    }
+
+    [TestMethod]
+    public void CookiePreference_Reject_CallsToSetPreferenceAndRedirects()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesController>>();
+        var mockHtmlTableRenderer = new Mock<IHtmlTableRenderer>();
+        var mockSuccessBannerRenderer = new Mock<ISuccessBannerRenderer>();
+        var mockCookieService = new Mock<ICookieService>();
+        var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
+
+        mockRedirectService.Setup(x => x.CheckUrl("some URL")).Returns("validated URL");
+        var tempData = new TempDataDictionary(new DefaultHttpContext(), new Mock<ITempDataProvider>().Object);
+        tempData["UserPreferenceRecorded"] = false;
+        var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
+                                               mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
+                                               mockCookieService.Object, mockRedirectService.Object)
+                                               {
+                                                TempData = tempData
+                                               };
+
+        var result = controller.CookiePreference("anything-but-all-cookies");
+
+        result.Should().NotBeNull();
+        result.Should()
+              .BeAssignableTo<RedirectResult>()
+              .Which.Url.Should().Be("/cookies");
+
+        controller.TempData["UserPreferenceRecorded"].Should().Be(true);
+
+        mockCookieService.Verify(x => x.RejectCookies(), Times.Once);
     }
 }

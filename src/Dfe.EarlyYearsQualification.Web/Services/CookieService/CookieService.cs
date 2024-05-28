@@ -40,8 +40,15 @@ public class CookieService : ICookieService
         }
         else
         {
-            var dfeCookie = JsonSerializer.Deserialize<DfeCookie>(cookie);
-            return dfeCookie is null ? new DfeCookie() : dfeCookie;
+            try
+            {
+                var dfeCookie = JsonSerializer.Deserialize<DfeCookie>(cookie);
+                return dfeCookie is null ? new DfeCookie() : dfeCookie;
+            }
+            catch
+            {
+                return new DfeCookie();
+            } 
         }
     }
 
@@ -52,10 +59,12 @@ public class CookieService : ICookieService
 
     private void CreateCookie(string key, bool value, bool visibility = true, bool rejected = false)
     {
-        CookieOptions cookieOptions = new CookieOptions();
-        cookieOptions.Secure = true;
-        cookieOptions.HttpOnly = true;
-        cookieOptions.Expires = new DateTimeOffset(DateTime.Now.AddYears(1));
+        CookieOptions cookieOptions = new CookieOptions
+        {
+            Secure = true,
+            HttpOnly = true,
+            Expires = new DateTimeOffset(DateTime.Now.AddYears(1))
+        };
 
         var cookie = new DfeCookie { IsVisible = visibility, HasApproved = value, IsRejected = rejected };
         var serializedCookie = JsonSerializer.Serialize(cookie);

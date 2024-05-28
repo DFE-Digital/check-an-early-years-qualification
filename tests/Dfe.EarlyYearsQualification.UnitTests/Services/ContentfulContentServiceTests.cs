@@ -572,4 +572,76 @@ public class ContentfulContentServiceTests
         result.Content!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
         result.Show.Should().Be(phaseBanner.Show);
     }
+
+    [TestMethod]
+    public void GetCookiesBannerContent_Null_LogsAndReturnsDefault()
+    {
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<CookiesBanner>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync((ContentfulCollection<CookiesBanner>)null!);
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = service.GetCookiesBannerContent().Result;
+
+        _logger.VerifyWarning("No cookies banner entry returned");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void GetCookiesBannerContent_NoContent_LogsAndReturnsDefault()
+    {
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<CookiesBanner>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<CookiesBanner> { Items = new List<CookiesBanner>() });
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = service.GetCookiesBannerContent().Result;
+
+        _logger.VerifyWarning("No cookies banner entry returned");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void GetCookiesBannerContent_CookiesBannerExists_Returns()
+    {
+        var cookiesBanner = new CookiesBanner
+                            {
+                              AcceptButtonText = "Test Accept Button Text",
+                              CookiesBannerContent = _testRichText,
+                              CookiesBannerLinkText = "Test Cookies Banner Link Text",
+                              CookiesBannerTitle = "Test Cookies Banner Title",
+                              RejectButtonText = "Test Reject Cookies Button Text"
+                            };
+
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<CookiesBanner>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<CookiesBanner>
+                                 { Items = new List<CookiesBanner> { cookiesBanner } });
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = service.GetCookiesBannerContent().Result;
+
+        result.Should().NotBeNull();
+
+        result!.AcceptButtonText.Should().Be(cookiesBanner.AcceptButtonText);
+        result!.CookiesBannerContent.Should().Be(cookiesBanner.CookiesBannerContent);
+        result!.CookiesBannerContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        result!.CookiesBannerLinkText.Should().Be(cookiesBanner.CookiesBannerLinkText);
+        result!.CookiesBannerTitle.Should().Be(cookiesBanner.CookiesBannerTitle);
+        result!.RejectButtonText.Should().Be(cookiesBanner.RejectButtonText);
+    }
 }

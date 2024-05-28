@@ -11,11 +11,11 @@ public class RedirectUrlCheckerService : IRedirectUrlCheckerService
     "/questions/where-was-the-qualification-awarded",
   ];
 
-  private readonly string detailsUrl = "/qualifications/qualification-details";
+  private readonly string detailsUrl = "/qualifications/qualification-details/";
 
   public string CheckUrl(string? url)
   {
-    if (url == null || !_validUrls.Contains(url))
+    if (url == null)
     {
       return "/cookies";
     }
@@ -29,6 +29,13 @@ public class RedirectUrlCheckerService : IRedirectUrlCheckerService
       {
         return "/cookies";
       }
+
+      return url;
+    }
+
+    if (!_validUrls.Contains(url))
+    {
+      return "/cookies";
     }
 
     return url;
