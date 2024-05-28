@@ -1,3 +1,5 @@
+using Contentful.Core.Models;
+
 namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class QuestionPage
@@ -9,4 +11,8 @@ public class QuestionPage
     public string CtaButtonText { get; init; } = string.Empty;
 
     public string ErrorMessage { get; init; } = string.Empty;
+
+    public string AdditionalInformationHeader {get; init;} = string.Empty;
+
+    public Document? AdditionalInformationBody {get; init;}
 }

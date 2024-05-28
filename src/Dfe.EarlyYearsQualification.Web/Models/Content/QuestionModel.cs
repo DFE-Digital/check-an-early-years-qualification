@@ -19,6 +19,10 @@ public class QuestionModel
     [Required] public string? Option { get; init; } = string.Empty;
 
     public bool HasErrors { get; set; }
+
+    public string AdditionalInformationHeader {get; set;} = string.Empty;
+
+    public string AdditionalInformationBody {get; set;} = string.Empty;
 }
 
 public class OptionModel
