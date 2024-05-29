@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 
@@ -7,13 +8,13 @@ public class UnorderedListRenderer : IContentRenderer
 {
     public int Order { get; set; }
 
-    public Task<string> RenderAsync(IContent content)
+    public async Task<string> RenderAsync(IContent content)
     {
         var list = content as List;
 
         if (list!.Content.Count == 0)
         {
-            return Task.FromResult(string.Empty);
+            return await Task.FromResult(string.Empty);
         }
 
         var sb = new StringBuilder();
@@ -27,12 +28,11 @@ public class UnorderedListRenderer : IContentRenderer
             }
 
             var listItemParagraph = listItem.Content[0] as Paragraph;
-            var listItemText = listItemParagraph!.Content[0] as Text;
-            sb.Append($"<li>{listItemText!.Value}</li>");
+            sb.Append($"<li>{await NestedContentHelper.Render(listItemParagraph!.Content)}</li>");
         }
 
         sb.Append("</ul>");
-        return Task.FromResult(sb.ToString());
+        return await Task.FromResult(sb.ToString());
     }
 
     public bool SupportsContent(IContent content)
