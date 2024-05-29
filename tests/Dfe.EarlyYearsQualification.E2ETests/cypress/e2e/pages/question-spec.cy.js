@@ -15,7 +15,7 @@ describe("A spec that tests question pages", () => {
         cy.get("#option-error").should("not.exist");
         cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
 
-        cy.get('button[type="submit"]').click();
+        cy.get('button[id="question-submit"]').click();
         cy.location().should((loc) => {
           expect(loc.pathname).to.eq("/questions/where-was-the-qualification-awarded");
         })

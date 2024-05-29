@@ -7,5 +7,8 @@ public class CookiesBannerModel
     public string AcceptButtonText { get; init; } = string.Empty;
     public string RejectButtonText { get; init; } = string.Empty;
     public string CookiesBannerLinkText { get; init; } = string.Empty;
+    public string AcceptedCookiesContent { get; init; } = string.Empty;
+    public string RejectedCookiesContent { get; init; } = string.Empty;
+    public string HideCookieBannerButtonText { get; init; } = string.Empty;
     public bool Show { get; init; }
 }

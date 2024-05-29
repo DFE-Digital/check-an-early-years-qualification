@@ -25,23 +25,23 @@
 {
   <form method="post">
     <input type="hidden" id="returnUrl" name="returnUrl" />
-    <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="@Model.CookiesBannerTitle">
+    <div id="choose-cookies-preference" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="@Model.CookiesBannerTitle">
       <div class="govuk-cookie-banner__message govuk-width-container">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
             <h2 class="govuk-cookie-banner__heading govuk-heading-m">
               @Model.CookiesBannerTitle
             </h2>
-            <div class="govuk-cookie-banner__content">
+            <div id="cookies-banner-choose-pref-content" class="govuk-cookie-banner__content">
               @Html.Raw(Model.CookiesBannerContent)
             </div>
           </div>
         </div>
         <div class="govuk-button-group">
-           <button value="accept" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="Cookies" asp-action="Accept">
+           <button id="accept-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="Cookies" asp-action="Accept">
             @Model.AcceptButtonText
           </button>
-           <button value="accept" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="Cookies" asp-action="Reject">
+           <button id="reject-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="Cookies" asp-action="Reject">
             @Model.RejectButtonText
           </button>
           <a class="govuk-link" href="/cookies">@Model.CookiesBannerLinkText</a>
@@ -54,18 +54,18 @@ else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
 {
   <form method="post" asp-controller="Cookies" asp-action="HideBanner">
     <input type="hidden" id="returnUrlHideBanner" name="returnUrl" />
-    <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+    <div id="cookies-preference-chosen" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
       <div class="govuk-cookie-banner__message govuk-width-container">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <div class="govuk-cookie-banner__content">
-              <p class="govuk-body">You've @(cookie.HasApproved ? "accepted" : "rejected") additional cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+            <div id="cookies-banner-pref-chosen-content" class="govuk-cookie-banner__content">
+              @(cookie.HasApproved ? Html.Raw(Model.AcceptedCookiesContent) : Html.Raw(Model.RejectedCookiesContent))
             </div>
           </div>
         </div>
         <div class="govuk-button-group">
-          <button value="yes" type="submit" name="cookies" class="govuk-button" data-module="govuk-button">
-            Hide cookie message
+          <button id="hide-cookie-banner-button" value="yes" type="submit" name="cookies" class="govuk-button" data-module="govuk-button">
+            @Model.HideCookieBannerButtonText
           </button>
         </div>
       </div>

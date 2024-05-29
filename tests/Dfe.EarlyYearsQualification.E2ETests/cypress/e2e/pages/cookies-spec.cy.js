@@ -6,10 +6,7 @@ describe("A spec that tests the cookies page", () => {
   });
 
   it("Checks the content is present", () => {
-    cy.get("#cookies-set-banner").should("not.be.visible");
-
-    cy.get("#cookies-set-banner-heading").should("contain.text","Test Success Banner Heading");
-    cy.get("#cookies-set-banner-content").should("contain.text","Test Success Banner Content");
+    cy.get("#cookies-set-banner").should("not.exist");
 
     cy.get("#cookies-heading").should("contain.text", "Test Cookies Heading");
     cy.get("#cookies-body").should("contain.text", "Test Cookies Page Body");
@@ -24,14 +21,14 @@ describe("A spec that tests the cookies page", () => {
       .should("not.be.visible")
       .and("contain.text", "Test Error Text");
 
-    cy.get("#cookies-button").should("contain.text", "Test Cookies Button");
+    cy.get('button[id="cookies-button"]').should("contain.text", "Test Cookies Button");
   });
 
   describe("Check the functionality of the page", () => {
     it("Checks that the radio button validation is working", () => {
-      cy.get("#cookies-button").click();
+      cy.get('button[id="cookies-button"]').click();
   
-      cy.get("#cookies-set-banner").should("not.be.visible");
+      cy.get("#cookies-set-banner").should("not.exist");
   
       cy.get("#cookies-choice-error").should("be.visible");
     });
@@ -41,9 +38,13 @@ describe("A spec that tests the cookies page", () => {
 
         cy.get(`#${option}`).click();
 
-        cy.get("#cookies-button").click();
+        cy.get('button[id="cookies-button"]').click();
     
         cy.get("#cookies-set-banner").should("be.visible");
+        
+        // Seen as the success banner doesn't exist in the rendered HTML by default; we have to check the content once we expect the heading to be visible.
+        cy.get("#cookies-set-banner-heading").should("contain.text","Test Success Banner Heading");
+        cy.get("#cookies-set-banner-content").should("contain.text","Test Success Banner Content");
     
         cy.get("#cookies-choice-error").should("not.be.visible");
       });

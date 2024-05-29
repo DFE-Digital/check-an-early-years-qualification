@@ -32,7 +32,7 @@ public static class SecureHeaderConfiguration
         var cookiesPageShaCspElement = new ContentSecurityPolicyElement
                                        {
                                            CommandType = CspCommandType.Directive,
-                                           DirectiveOrUri = "sha256-oRMkcVFF9H5r4SaWLpGJnNejhYNTeLE1GpA4sFvNcjE="
+                                           DirectiveOrUri = "sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI="
                                        };
         
         var WindowLocationShaCspElement = new ContentSecurityPolicyElement

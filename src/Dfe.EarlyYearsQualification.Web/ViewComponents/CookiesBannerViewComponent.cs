@@ -35,9 +35,12 @@ public class CookiesBannerViewComponent(
         return new CookiesBannerModel
                {
                    AcceptButtonText = content.AcceptButtonText,
+                   AcceptedCookiesContent =  await renderer.ToHtml(content.AcceptedCookiesContent),
                    CookiesBannerContent = await renderer.ToHtml(content.CookiesBannerContent),
                    CookiesBannerTitle = content.CookiesBannerTitle,
                    CookiesBannerLinkText = content.CookiesBannerLinkText,
+                   HideCookieBannerButtonText = content.HideCookieBannerButtonText,
+                   RejectedCookiesContent = await renderer.ToHtml(content.RejectedCookiesContent),
                    RejectButtonText = content.RejectButtonText,
                    Show = true
                };

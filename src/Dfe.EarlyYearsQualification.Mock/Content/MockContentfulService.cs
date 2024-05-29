@@ -169,16 +169,25 @@ public class MockContentfulService : IContentService
 
     public async Task<CookiesBanner?> GetCookiesBannerContent()
     {
+      var AcceptedCookiesContent = 
+            ContentfulContentHelper.Paragraph("This is the accepted cookie content");
+
       var cookiesBannerContent =
             ContentfulContentHelper.Paragraph("This is the cookies banner content");
+
+      var RejectedCookieContent = 
+            ContentfulContentHelper.Paragraph("This is the rejected cookie content");
 
       return await Task.FromResult(new CookiesBanner
                                      {
                                          AcceptButtonText = "Test Accept Button Text",
+                                         AcceptedCookiesContent = AcceptedCookiesContent,
                                          CookiesBannerContent = cookiesBannerContent,
                                          CookiesBannerTitle = "Test Cookies Banner Title",
                                          CookiesBannerLinkText = "Test Cookies Banner Text",
-                                         RejectButtonText = "Test Reject Button Text"
+                                         HideCookieBannerButtonText = "Test Hide Cookie Banner Button Text",
+                                         RejectButtonText = "Test Reject Button Text",
+                                         RejectedCookiesContent = RejectedCookieContent
                                      });
     }
 }
