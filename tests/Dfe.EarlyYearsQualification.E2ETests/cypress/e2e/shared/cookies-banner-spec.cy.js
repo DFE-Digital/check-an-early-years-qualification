@@ -36,7 +36,7 @@ describe("A spec that tests that the cookies banner shows on all pages", () => {
         .should('have.property', 'value', "%7B%22HasApproved%22%3Atrue%2C%22IsVisible%22%3Afalse%2C%22IsRejected%22%3Afalse%7D");
     });
 
-    it(`Rejecting the cookies shows the reject message at the URL: ${option}`, () => {
+    it(`Rejecting the cookies shows the reject message at the URL: ${option}, then clicking to hide the banner should hide the banner`, () => {
       cy.visit(option);
 
       cy.get('button[id="reject-cookies-button"]').click();
