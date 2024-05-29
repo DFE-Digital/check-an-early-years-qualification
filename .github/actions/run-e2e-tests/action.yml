@@ -16,7 +16,7 @@ runs:
       with:
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
         browser: chrome
-        config: baseUrl="${{ inputs.url }},defaultCommandTimeout=10000"
+        config: defaultCommandTimeout=10000,baseUrl="${{ inputs.url }}"
 
     - name: Run Firefox Tests
       uses: cypress-io/github-action@v6
@@ -24,8 +24,7 @@ runs:
       with:
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
         browser: firefox
-        config: baseUrl="${{ inputs.url }},defaultCommandTimeout=10000"
-
+        config: defaultCommandTimeout=10000,baseUrl="${{ inputs.url }}"
     - name: Store screenshots on test failure
       uses: actions/upload-artifact@v3
       if: failure()
