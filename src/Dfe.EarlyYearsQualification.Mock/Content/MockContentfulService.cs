@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
@@ -124,25 +125,15 @@ public class MockContentfulService : IContentService
 
     public async Task<QuestionPage?> GetQuestionPage(string entryId)
     {
-        return await Task.FromResult(new QuestionPage
-                                     {
-                                         Question = "Where was the qualification awarded?",
-                                         Options =
-                                         [
-                                             new Option
-                                             {
-                                                 Label = "England", Value = "england"
-                                             },
-
-                                             new Option
-                                             {
-                                                 Label = "Outside the United Kingdom",
-                                                 Value = "outside-uk"
-                                             }
-                                         ],
-                                         CtaButtonText = "Continue",
-                                         ErrorMessage = "Test error message"
-                                     });
+        switch (entryId)
+        {
+            case QuestionPages.WhatLevelIsTheQualification: 
+                return await Task.FromResult(CreateWhatLevelIsTheQualificationPage());
+            case QuestionPages.WhereWasTheQualificationAwarded:
+                return await Task.FromResult(CreateWhereWasTheQualificationAwardedPage());
+            default:
+                throw new NotImplementedException($"No question page mock for entry {entryId}");
+        }
     }
 
     public async Task<StartPage?> GetStartPage()
@@ -165,5 +156,47 @@ public class MockContentfulService : IContentService
                                          RightHandSideContentHeader = "Related content",
                                          RightHandSideContent = rightHandSideContent
                                      });
+    }
+
+    private QuestionPage? CreateWhereWasTheQualificationAwardedPage()
+    {
+        var options = new List<Option>
+                       {
+                            new Option
+                            {
+                                Label = "England", Value = "england"
+                            },
+                            new Option
+                            {
+                                Label = "Outside the United Kingdom",
+                                Value = "outside-uk"
+                            }
+                        };
+        return CreateQuestionPage("Where was the qualification awarded?", options);
+    }
+
+    private QuestionPage? CreateWhatLevelIsTheQualificationPage()
+    {
+        var options = new List<Option>
+                       {
+                            new Option
+                            {
+                                Label = "Level 2", Value = "2"
+                            },
+                            new Option
+                            {
+                                Label = "Level 3", Value = "3"
+                            }
+                        };
+        return CreateQuestionPage("What level is the qualification?", options);
+    }
+
+    private QuestionPage CreateQuestionPage(string question, List<Option> options)
+    {
+        return new QuestionPage { 
+            Question = question, 
+            Options = options, 
+            CtaButtonText = "Continue", 
+            ErrorMessage = "Test error message" };
     }
 }
