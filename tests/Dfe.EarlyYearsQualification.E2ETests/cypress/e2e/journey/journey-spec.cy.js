@@ -35,6 +35,12 @@ describe('A spec used to test the various routes through the journey', () => {
     cy.get('#england').click();
     cy.get('button[id="question-submit"]').click();
 
+    // when-was-the-qualification-started page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
+    })
+    cy.get('button[type="submit"]').click();
+
     // qualifications page (This is only a temporary page)
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/qualifications');
