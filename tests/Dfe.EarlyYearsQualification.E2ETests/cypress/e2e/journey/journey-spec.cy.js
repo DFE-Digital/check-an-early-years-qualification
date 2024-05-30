@@ -46,7 +46,7 @@ describe('A spec used to test the various routes through the journey', () => {
       expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
     })
     cy.get('#3').click();
-    cy.get('button[type="submit"]').click();
+    cy.get('button[id="question-submit"]').click();
 
     // qualifications page (This is only a temporary page)
     cy.location().should((loc) => {

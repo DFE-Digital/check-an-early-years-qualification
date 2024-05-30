@@ -25,6 +25,7 @@ runs:
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
         browser: firefox
         config: baseUrl="${{ inputs.url }}"
+        
     - name: Store screenshots on test failure
       uses: actions/upload-artifact@v3
       if: failure()
