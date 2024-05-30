@@ -9,7 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/questions")]
-public class QuestionsController(ILogger<QuestionsController> logger, IContentService contentService, IHtmlRenderer renderer)
+public class QuestionsController(
+    ILogger<QuestionsController> logger,
+    IContentService contentService,
+    IHtmlRenderer renderer)
     : Controller
 {
     private const string Questions = "Questions";
@@ -17,7 +20,8 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
     [HttpGet("where-was-the-qualification-awarded")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
-        return await GetView(QuestionPages.WhereWasTheQualificationAwarded, nameof(this.WhereWasTheQualificationAwarded),
+        return await GetView(QuestionPages.WhereWasTheQualificationAwarded,
+                             nameof(this.WhereWasTheQualificationAwarded),
                              Questions);
     }
 
@@ -44,21 +48,22 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
     [HttpGet("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted()
     {
-        // TODO: This is just a temporary page until the design is finalised through UR
-        var questionPage = new QuestionPage()
+        // This is just a temporary page until the design is finalised through UR
+        var questionPage = new QuestionPage
                            {
-                                CtaButtonText = "Continue",
-                                Question = "When was the qualification started?",
-                                Options = new List<Option>()
+                               CtaButtonText = "Continue",
+                               Question = "When was the qualification started?",
+                               Options = []
                            };
-        var model = await Map(new QuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted), Questions);
+        var model = await Map(new QuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted),
+                              Questions);
         return View("Question", model);
     }
 
     [HttpPost("when-was-the-qualification-started")]
     public IActionResult WhenWasTheQualificationStarted(QuestionModel model)
     {
-        // TODO: This is just a temporary page until the design is finalised through UR
+        // This is just a temporary page until the design is finalised through UR
         // For now just redirect to the next page. Model validation will be done at a later date
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
@@ -103,7 +108,7 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
     }
 
     private async Task<QuestionModel> Map(QuestionModel model, QuestionPage question, string actionName,
-                                     string controllerName)
+                                          string controllerName)
     {
         model.Question = question.Question;
         model.Options = question.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList();

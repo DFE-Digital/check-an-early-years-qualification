@@ -2,9 +2,9 @@ namespace Dfe.EarlyYearsQualification.Web.Services.CookieService;
 
 public class DfeCookie
 {
-    public bool HasApproved { get; set; } = false;
+    public bool HasApproved { get; init; }
 
-    public bool IsVisible { get; set; } = true;
+    public bool IsVisible { get; init; } = true;
 
-    public bool IsRejected { get; set; } = false;
+    public bool IsRejected { get; init; }
 }

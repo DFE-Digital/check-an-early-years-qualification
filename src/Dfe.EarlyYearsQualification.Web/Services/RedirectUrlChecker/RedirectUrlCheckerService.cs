@@ -2,42 +2,34 @@ namespace Dfe.EarlyYearsQualification.Web.Services.RedirectUrlChecker;
 
 public class RedirectUrlCheckerService : IRedirectUrlCheckerService
 {
-  private readonly List<string> _validUrls =
-  [
-    "",
-    "/",
-    "/cookies",
-    "/accessibility-statement",
-    "/questions/where-was-the-qualification-awarded",
-  ];
+    private const string CookiesUrl = "/cookies";
 
-  private readonly string detailsUrl = "/qualifications/qualification-details/";
+    private const string DetailsUrl = "/qualifications/qualification-details/";
 
-  public string CheckUrl(string? url)
-  {
-    if (url == null)
+    private readonly List<string> _validUrls =
+    [
+        "",
+        "/",
+        "/cookies",
+        "/accessibility-statement",
+        "/questions/where-was-the-qualification-awarded"
+    ];
+
+    public string CheckUrl(string? url)
     {
-      return "/cookies";
+        if (url == null)
+        {
+            return CookiesUrl;
+        }
+
+        // Check details page explicitly to check provided qualification ID if any
+        if (url.StartsWith(DetailsUrl))
+        {
+            var qualificationId = url[DetailsUrl.Length..];
+
+            return qualificationId.Contains('/') ? CookiesUrl : url;
+        }
+
+        return _validUrls.Contains(url) ? url : CookiesUrl;
     }
-
-    // Check details page explicitly to check provided qualification ID if any
-    if (url.StartsWith(detailsUrl))
-    {
-      var qualificationId = url.Substring(detailsUrl.Length);
-
-      if (qualificationId.Contains("/"))
-      {
-        return "/cookies";
-      }
-
-      return url;
-    }
-
-    if (!_validUrls.Contains(url))
-    {
-      return "/cookies";
-    }
-
-    return url;
-  }
 }

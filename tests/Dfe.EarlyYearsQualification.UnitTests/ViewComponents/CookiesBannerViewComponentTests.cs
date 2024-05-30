@@ -17,75 +17,77 @@ namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
 [TestClass]
 public class CookiesBannerViewComponentTests
 {
-  [TestMethod]
-  public async Task InvokeAsync_NoContentFound_ThrowsAndReturnsShowFalse()
-  {
-    var mockContentService = new Mock<IContentService>();
-    var mockLogger = new Mock<ILogger<CookiesBannerViewComponent>>();
-    var mockHtmlRenderer = new Mock<IHtmlRenderer>();
-
-    mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync((CookiesBanner?)default);
-
-    var CookiesBannerViewComponent = new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockHtmlRenderer.Object);
-
-    var result = await CookiesBannerViewComponent.InvokeAsync();
-
-    result.Should().BeAssignableTo<IViewComponentResult>();
-
-    var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-    model.Should().NotBeNull();
-
-    var data = (CookiesBannerModel)model!;
-
-    data.Show.Should().BeFalse();
-
-    mockLogger.VerifyError("No content for the cookies banner");
-  }
-
-  [TestMethod]
-  public async Task InvokeAsync_ContentFound_MapsContentAndReturnsModel()
-  {
-    var mockContentService = new Mock<IContentService>();
-    var mockLogger = new Mock<ILogger<CookiesBannerViewComponent>>();
-    var mockHtmlRenderer = new Mock<IHtmlRenderer>();
-
-    var expectedContent = new CookiesBanner
+    [TestMethod]
+    public async Task InvokeAsync_NoContentFound_ThrowsAndReturnsShowFalse()
     {
-      AcceptButtonText = "Test Accept Button Text",
-      AcceptedCookiesContent = ContentfulContentHelper.Text("Some HTML"),
-      CookiesBannerContent = ContentfulContentHelper.Text("Some HTML"),
-      CookiesBannerLinkText = "Test Cookies Banner Link Text",
-      CookiesBannerTitle = "Test Cookies Banner Title",
-      HideCookieBannerButtonText = "Test Hide Cookies Banner Button Text",
-      RejectButtonText = "Test Reject Button Text",
-      RejectedCookiesContent = ContentfulContentHelper.Text("Some HTML")
-    };
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesBannerViewComponent>>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
 
-    mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync(expectedContent);
+        mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync((CookiesBanner?)default);
 
-    mockHtmlRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Mock HTML renderer result");
+        var cookiesBannerViewComponent =
+            new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockHtmlRenderer.Object);
 
-    var CookiesBannerViewComponent = new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockHtmlRenderer.Object);
+        var result = await cookiesBannerViewComponent.InvokeAsync();
 
-    var result = await CookiesBannerViewComponent.InvokeAsync();
+        result.Should().BeAssignableTo<IViewComponentResult>();
 
-    result.Should().BeAssignableTo<IViewComponentResult>();
+        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
+        model.Should().NotBeNull();
 
-    var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-    model.Should().NotBeNull();
+        var data = (CookiesBannerModel)model!;
 
-    var data = (CookiesBannerModel)model!;
+        data.Show.Should().BeFalse();
 
-    data.AcceptButtonText.Should().Be(expectedContent.AcceptButtonText);
-    data.AcceptedCookiesContent.Should().Be("Mock HTML renderer result");
-    data.CookiesBannerContent.Should().Be("Mock HTML renderer result");
-    data.CookiesBannerLinkText.Should().Be(expectedContent.CookiesBannerLinkText);
-    data.CookiesBannerTitle.Should().Be(expectedContent.CookiesBannerTitle);
-    data.RejectButtonText.Should().Be(expectedContent.RejectButtonText);
-    data.RejectedCookiesContent.Should().Be("Mock HTML renderer result");
-    data.HideCookieBannerButtonText.Should().Be("Test Hide Cookies Banner Button Text");
-    data.Show.Should().BeTrue();
+        mockLogger.VerifyError("No content for the cookies banner");
+    }
 
-    mockHtmlRenderer.Verify(x => x.ToHtml(expectedContent.CookiesBannerContent), Times.Once);
-  }
+    [TestMethod]
+    public async Task InvokeAsync_ContentFound_MapsContentAndReturnsModel()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<CookiesBannerViewComponent>>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+
+        var expectedContent = new CookiesBanner
+                              {
+                                  AcceptButtonText = "Test Accept Button Text",
+                                  AcceptedCookiesContent = ContentfulContentHelper.Text("Some HTML"),
+                                  CookiesBannerContent = ContentfulContentHelper.Text("Some HTML"),
+                                  CookiesBannerLinkText = "Test Cookies Banner Link Text",
+                                  CookiesBannerTitle = "Test Cookies Banner Title",
+                                  HideCookieBannerButtonText = "Test Hide Cookies Banner Button Text",
+                                  RejectButtonText = "Test Reject Button Text",
+                                  RejectedCookiesContent = ContentfulContentHelper.Text("Some HTML")
+                              };
+
+        mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync(expectedContent);
+
+        mockHtmlRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Mock HTML renderer result");
+
+        var cookiesBannerViewComponent =
+            new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockHtmlRenderer.Object);
+
+        var result = await cookiesBannerViewComponent.InvokeAsync();
+
+        result.Should().BeAssignableTo<IViewComponentResult>();
+
+        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
+        model.Should().NotBeNull();
+
+        var data = (CookiesBannerModel)model!;
+
+        data.AcceptButtonText.Should().Be(expectedContent.AcceptButtonText);
+        data.AcceptedCookiesContent.Should().Be("Mock HTML renderer result");
+        data.CookiesBannerContent.Should().Be("Mock HTML renderer result");
+        data.CookiesBannerLinkText.Should().Be(expectedContent.CookiesBannerLinkText);
+        data.CookiesBannerTitle.Should().Be(expectedContent.CookiesBannerTitle);
+        data.RejectButtonText.Should().Be(expectedContent.RejectButtonText);
+        data.RejectedCookiesContent.Should().Be("Mock HTML renderer result");
+        data.HideCookieBannerButtonText.Should().Be("Test Hide Cookies Banner Button Text");
+        data.Show.Should().BeTrue();
+
+        mockHtmlRenderer.Verify(x => x.ToHtml(expectedContent.CookiesBannerContent), Times.Once);
+    }
 }

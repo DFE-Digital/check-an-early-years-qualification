@@ -38,7 +38,10 @@ public class QualificationDetailsController(
         var qualification = await contentService.GetQualificationById(qualificationId);
         if (qualification is null)
         {
-            logger.LogError($"Could not find details for qualification with ID: {qualificationId.Replace(Environment.NewLine, "")}");
+            var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
+            logger.LogError("Could not find details for qualification with ID: {QualificationId}",
+                            loggedQualificationId);
+
             return RedirectToAction("Error", "Home");
         }
 

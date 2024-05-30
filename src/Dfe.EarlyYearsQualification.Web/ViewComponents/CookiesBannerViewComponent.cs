@@ -19,10 +19,10 @@ public class CookiesBannerViewComponent(
         if (content is null)
         {
             logger.LogError("No content for the cookies banner");
-            return View(new CookiesBannerModel()
-            {
-              Show = false
-            });
+            return View(new CookiesBannerModel
+                        {
+                            Show = false
+                        });
         }
 
         var model = await Map(content);
@@ -35,7 +35,7 @@ public class CookiesBannerViewComponent(
         return new CookiesBannerModel
                {
                    AcceptButtonText = content.AcceptButtonText,
-                   AcceptedCookiesContent =  await renderer.ToHtml(content.AcceptedCookiesContent),
+                   AcceptedCookiesContent = await renderer.ToHtml(content.AcceptedCookiesContent),
                    CookiesBannerContent = await renderer.ToHtml(content.CookiesBannerContent),
                    CookiesBannerTitle = content.CookiesBannerTitle,
                    CookiesBannerLinkText = content.CookiesBannerLinkText,

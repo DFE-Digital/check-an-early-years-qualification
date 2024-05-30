@@ -210,14 +210,16 @@ public class CookiesControllerTests
         var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
 
         mockRedirectService.Setup(x => x.CheckUrl("some URL")).Returns("validated URL");
-        var tempData = new TempDataDictionary(new DefaultHttpContext(), new Mock<ITempDataProvider>().Object);
-        tempData["UserPreferenceRecorded"] = false;
+        var tempData = new TempDataDictionary(new DefaultHttpContext(), new Mock<ITempDataProvider>().Object)
+                       {
+                           ["UserPreferenceRecorded"] = false
+                       };
         var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
                                                mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
                                                mockCookieService.Object, mockRedirectService.Object)
-                                               {
-                                                TempData = tempData
-                                               };
+                         {
+                             TempData = tempData
+                         };
 
         var result = controller.CookiePreference("all-cookies");
 
@@ -242,14 +244,16 @@ public class CookiesControllerTests
         var mockRedirectService = new Mock<IRedirectUrlCheckerService>();
 
         mockRedirectService.Setup(x => x.CheckUrl("some URL")).Returns("validated URL");
-        var tempData = new TempDataDictionary(new DefaultHttpContext(), new Mock<ITempDataProvider>().Object);
-        tempData["UserPreferenceRecorded"] = false;
+        var tempData = new TempDataDictionary(new DefaultHttpContext(), new Mock<ITempDataProvider>().Object)
+                       {
+                           ["UserPreferenceRecorded"] = false
+                       };
         var controller = new CookiesController(mockLogger.Object, mockContentService.Object,
                                                mockHtmlTableRenderer.Object, mockSuccessBannerRenderer.Object,
                                                mockCookieService.Object, mockRedirectService.Object)
-                                               {
-                                                TempData = tempData
-                                               };
+                         {
+                             TempData = tempData
+                         };
 
         var result = controller.CookiePreference("anything-but-all-cookies");
 

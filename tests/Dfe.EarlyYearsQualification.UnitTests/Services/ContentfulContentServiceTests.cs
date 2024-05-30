@@ -616,14 +616,14 @@ public class ContentfulContentServiceTests
     {
         var cookiesBanner = new CookiesBanner
                             {
-                              AcceptButtonText = "Test Accept Button Text",
-                              AcceptedCookiesContent = _testRichText,
-                              CookiesBannerContent = _testRichText,
-                              CookiesBannerLinkText = "Test Cookies Banner Link Text",
-                              CookiesBannerTitle = "Test Cookies Banner Title",
-                              HideCookieBannerButtonText = "Test Hide Cookies Banner Button Text",
-                              RejectButtonText = "Test Reject Cookies Button Text",
-                              RejectedCookiesContent = _testRichText,
+                                AcceptButtonText = "Test Accept Button Text",
+                                AcceptedCookiesContent = _testRichText,
+                                CookiesBannerContent = _testRichText,
+                                CookiesBannerLinkText = "Test Cookies Banner Link Text",
+                                CookiesBannerTitle = "Test Cookies Banner Title",
+                                HideCookieBannerButtonText = "Test Hide Cookies Banner Button Text",
+                                RejectButtonText = "Test Reject Cookies Button Text",
+                                RejectedCookiesContent = _testRichText
                             };
 
         _clientMock.Setup(client =>
@@ -642,18 +642,18 @@ public class ContentfulContentServiceTests
 
         result!.AcceptButtonText.Should().Be(cookiesBanner.AcceptButtonText);
 
-        result!.AcceptedCookiesContent.Should().Be(cookiesBanner.AcceptedCookiesContent);
-        result!.AcceptedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        result.AcceptedCookiesContent.Should().Be(cookiesBanner.AcceptedCookiesContent);
+        result.AcceptedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
 
-        result!.CookiesBannerContent.Should().Be(cookiesBanner.CookiesBannerContent);
-        result!.CookiesBannerContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        result.CookiesBannerContent.Should().Be(cookiesBanner.CookiesBannerContent);
+        result.CookiesBannerContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
 
-        result!.CookiesBannerLinkText.Should().Be(cookiesBanner.CookiesBannerLinkText);
-        result!.CookiesBannerTitle.Should().Be(cookiesBanner.CookiesBannerTitle);
-        result!.HideCookieBannerButtonText.Should().Be(cookiesBanner.HideCookieBannerButtonText);
-        result!.RejectButtonText.Should().Be(cookiesBanner.RejectButtonText);
+        result.CookiesBannerLinkText.Should().Be(cookiesBanner.CookiesBannerLinkText);
+        result.CookiesBannerTitle.Should().Be(cookiesBanner.CookiesBannerTitle);
+        result.HideCookieBannerButtonText.Should().Be(cookiesBanner.HideCookieBannerButtonText);
+        result.RejectButtonText.Should().Be(cookiesBanner.RejectButtonText);
 
-        result!.RejectedCookiesContent.Should().Be(cookiesBanner.RejectedCookiesContent);
-        result!.RejectedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        result.RejectedCookiesContent.Should().Be(cookiesBanner.RejectedCookiesContent);
+        result.RejectedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
     }
 }

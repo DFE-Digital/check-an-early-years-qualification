@@ -34,12 +34,12 @@ public static class SecureHeaderConfiguration
                                            CommandType = CspCommandType.Directive,
                                            DirectiveOrUri = "sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI="
                                        };
-        
-        var WindowLocationShaCspElement = new ContentSecurityPolicyElement
-                                        {
-                                          CommandType = CspCommandType.Directive,
-                                          DirectiveOrUri = "sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms="
-                                        };
+
+        var windowLocationShaCspElement = new ContentSecurityPolicyElement
+                                          {
+                                              CommandType = CspCommandType.Directive,
+                                              DirectiveOrUri = "sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms="
+                                          };
 
         var unsafeHashesElement = new ContentSecurityPolicyElement
                                   { CommandType = CspCommandType.Directive, DirectiveOrUri = "unsafe-hashes" };
@@ -47,7 +47,7 @@ public static class SecureHeaderConfiguration
                                    { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://app.contentful.com" };
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
-        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(WindowLocationShaCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowLocationShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(unsafeHashesElement);
         configuration.ContentSecurityPolicyConfiguration.FrameAncestors.Add(contentfulCspElement);
         return configuration;
