@@ -1,4 +1,5 @@
 ﻿using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using FluentAssertions;
@@ -106,11 +107,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetQuestionPage_ReturnsExpectedDetails()
+    public async Task GetQuestionPage_PassInWhereWasTheQualificationAwarded_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetQuestionPage("test_id");
+        var result = await contentfulService.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<QuestionPage>();
         result!.Question.Should().NotBeNullOrEmpty();
@@ -118,6 +119,40 @@ public class MockContentfulServiceTests
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.Options.Should().NotBeNullOrEmpty();
         result.Options.Count.Should().Be(2);
+        result.Options[0].Label.Should().Be("England");
+        result.Options[0].Value.Should().Be("england");
+        result.Options[1].Label.Should().Be("Outside the United Kingdom");
+        result.Options[1].Value.Should().Be("outside-uk");
+    }
+
+    [TestMethod]
+    public async Task GetQuestionPage_PassInWhatLevelIsTheQualification_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetQuestionPage(QuestionPages.WhatLevelIsTheQualification);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<QuestionPage>();
+        result!.Question.Should().NotBeNullOrEmpty();
+        result.CtaButtonText.Should().NotBeNullOrEmpty();
+        result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.Options.Should().NotBeNullOrEmpty();
+        result.Options.Count.Should().Be(2);
+        result.Options[0].Label.Should().Be("Level 2");
+        result.Options[0].Value.Should().Be("2");
+        result.Options[1].Label.Should().Be("Level 3");
+        result.Options[1].Value.Should().Be("3");
+    }
+
+    [TestMethod]
+    public async Task GetQuestionPage_PassInvalidEntryId_ReturnsException()
+    {
+        var contentfulService = new MockContentfulService();
+
+        Func<Task> act = () => contentfulService.GetQuestionPage("Fake_entry_id");
+
+        await act.Should().ThrowAsync<NotImplementedException>()
+            .WithMessage("No question page mock for entry Fake_entry_id");
     }
 
     [TestMethod]

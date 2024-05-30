@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -8,14 +9,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/questions")]
-public class QuestionsController(ILogger<QuestionsController> logger, IContentService contentService)
+public class QuestionsController(ILogger<QuestionsController> logger, IContentService contentService, IHtmlRenderer renderer)
     : Controller
 {
+    private const string Questions = "Questions";
+
     [HttpGet("where-was-the-qualification-awarded")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
-        return await GetView(QuestionPages.WhereWasTheQualificationAwarded, "WhereWasTheQualificationAwarded",
-                             "Questions");
+        return await GetView(QuestionPages.WhereWasTheQualificationAwarded, nameof(this.WhereWasTheQualificationAwarded),
+                             Questions);
     }
 
     [HttpPost("where-was-the-qualification-awarded")]
@@ -26,7 +29,7 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
             var questionPage = await contentService.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
             if (questionPage is not null)
             {
-                model = Map(model, questionPage, "WhereWasTheQualificationAwarded", "Questions");
+                model = await Map(model, questionPage, nameof(this.WhereWasTheQualificationAwarded), Questions);
                 model.HasErrors = true;
             }
 
@@ -35,11 +38,11 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
 
         return model.Option == Options.OutsideOfTheUnitedKingdom
                    ? RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice")
-                   : RedirectToAction("WhenWasTheQualificationStarted");
+                   : RedirectToAction(nameof(this.WhenWasTheQualificationStarted));
     }
 
     [HttpGet("when-was-the-qualification-started")]
-    public IActionResult WhenWasTheQualificationStarted()
+    public async Task<IActionResult> WhenWasTheQualificationStarted()
     {
         // TODO: This is just a temporary page until the design is finalised through UR
         var questionPage = new QuestionPage()
@@ -48,7 +51,7 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
                                 Question = "When was the qualification started?",
                                 Options = new List<Option>()
                            };
-        var model = Map(new QuestionModel(), questionPage, "WhenWasTheQualificationStarted", "Questions");
+        var model = await Map(new QuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted), Questions);
         return View("Question", model);
     }
 
@@ -57,6 +60,31 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
     {
         // TODO: This is just a temporary page until the design is finalised through UR
         // For now just redirect to the next page. Model validation will be done at a later date
+        return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
+    }
+
+    [HttpGet("what-level-is-the-qualification")]
+    public async Task<IActionResult> WhatLevelIsTheQualification()
+    {
+        return await GetView(QuestionPages.WhatLevelIsTheQualification, nameof(this.WhatLevelIsTheQualification),
+                             Questions);
+    }
+
+    [HttpPost("what-level-is-the-qualification")]
+    public async Task<IActionResult> WhatLevelIsTheQualification(QuestionModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            var questionPage = await contentService.GetQuestionPage(QuestionPages.WhatLevelIsTheQualification);
+            if (questionPage is not null)
+            {
+                model = await Map(model, questionPage, nameof(this.WhatLevelIsTheQualification), Questions);
+                model.HasErrors = true;
+            }
+
+            return View("Question", model);
+        }
+
         return RedirectToAction("Get", "QualificationDetails");
     }
 
@@ -69,12 +97,12 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
             return RedirectToAction("Error", "Home");
         }
 
-        var model = Map(new QuestionModel(), questionPage, actionName, controllerName);
+        var model = await Map(new QuestionModel(), questionPage, actionName, controllerName);
 
         return View("Question", model);
     }
 
-    private static QuestionModel Map(QuestionModel model, QuestionPage question, string actionName,
+    private async Task<QuestionModel> Map(QuestionModel model, QuestionPage question, string actionName,
                                      string controllerName)
     {
         model.Question = question.Question;
@@ -83,6 +111,8 @@ public class QuestionsController(ILogger<QuestionsController> logger, IContentSe
         model.ActionName = actionName;
         model.ControllerName = controllerName;
         model.ErrorMessage = question.ErrorMessage;
+        model.AdditionalInformationHeader = question.AdditionalInformationHeader;
+        model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
         return model;
     }
 }
