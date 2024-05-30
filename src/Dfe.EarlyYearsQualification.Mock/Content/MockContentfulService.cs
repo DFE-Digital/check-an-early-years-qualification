@@ -222,7 +222,5 @@ public class MockContentfulService : IContentService
             Options = options, 
             CtaButtonText = "Continue", 
             ErrorMessage = "Test error message" };
-    }
-
-    
+    } 
 }
