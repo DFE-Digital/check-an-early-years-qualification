@@ -8,6 +8,7 @@ using Dfe.EarlyYearsQualification.Web.Security;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using OwaspHeaders.Core.Extensions;
+using RobotsTxt;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
@@ -44,7 +45,10 @@ else
 
 builder.Services.AddModelRenderers();
 
+builder.Services.AddStaticRobotsTxt(builder => builder.DenyAll());
+
 var app = builder.Build();
+
 app.UseSecureHeadersMiddleware(
                                SecureHeaderConfiguration.CustomConfiguration()
                               );
@@ -59,7 +63,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseRobotsTxt();
 app.UseRouting();
 
 app.UseAuthorization();
