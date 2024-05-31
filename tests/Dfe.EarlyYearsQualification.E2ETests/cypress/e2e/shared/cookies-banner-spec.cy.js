@@ -58,4 +58,23 @@ describe("A spec that tests that the cookies banner shows on all pages", () => {
         .should('have.property', 'value', "%7B%22HasApproved%22%3Afalse%2C%22IsVisible%22%3Afalse%2C%22IsRejected%22%3Atrue%7D");
     });
   });
+
+  const badUrls = [
+    'some-url',
+    'https://google.co.uk'
+  ];
+
+  badUrls.forEach((url) => {
+    it(`Manually changing the redirect Url value to ${url} invalid redirects to the cookies page on action`, () => {
+      cy.visit("/");
+
+      cy.get("#returnUrl").then(elem => {
+        elem.val(url);
+      });
+
+      cy.get('button[id="accept-cookies-button"]').click();
+
+      cy.url().should('include', '/cookies');
+    });
+  });
 });
