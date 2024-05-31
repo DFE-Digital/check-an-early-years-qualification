@@ -15,7 +15,7 @@ describe('A spec used to test the various routes through the journey', () => {
     })
 
     cy.get('#outside-uk').click();
-    cy.get('button[type="submit"]').click();
+    cy.get('button[id="question-submit"]').click();
 
     // qualification-outside-the-united-kingdom page
     cy.location().should((loc) => {
@@ -33,20 +33,20 @@ describe('A spec used to test the various routes through the journey', () => {
     })
 
     cy.get('#england').click();
-    cy.get('button[type="submit"]').click();
+    cy.get('button[id="question-submit"]').click();
 
     // when-was-the-qualification-started page
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
     })
-    cy.get('button[type="submit"]').click();
+    cy.get('button[id="question-submit"]').click();
 
     // what-level-is-the-qualification page
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
     })
     cy.get('#3').click();
-    cy.get('button[type="submit"]').click();
+    cy.get('button[id="question-submit"]').click();
 
     // qualifications page (This is only a temporary page)
     cy.location().should((loc) => {

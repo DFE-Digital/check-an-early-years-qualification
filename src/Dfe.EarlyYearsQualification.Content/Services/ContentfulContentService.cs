@@ -23,7 +23,8 @@ public class ContentfulContentService(
               { typeof(AccessibilityStatementPage), "accessibilityStatementPage" },
               { typeof(NavigationLinks), "navigationLinks" },
               { typeof(CookiesPage), "cookiesPage" },
-              { typeof(PhaseBanner), "phaseBanner" }
+              { typeof(PhaseBanner), "phaseBanner" },
+              { typeof(CookiesBanner), "cookiesBanner" }
           };
 
     public async Task<StartPage?> GetStartPage()
@@ -134,6 +135,18 @@ public class ContentfulContentService(
         }
 
         return phaseBannerEntities.First();
+    }
+
+    public async Task<CookiesBanner?> GetCookiesBannerContent()
+    {
+        var cookiesBannerEntry = await GetEntriesByType<CookiesBanner>();
+        if (cookiesBannerEntry is null || !cookiesBannerEntry.Any())
+        {
+            logger.LogWarning("No cookies banner entry returned");
+            return default;
+        }
+
+        return cookiesBannerEntry.First();
     }
 
     private async Task<T?> GetEntryById<T>(string entryId)

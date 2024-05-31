@@ -1,0 +1,75 @@
+@using Dfe.EarlyYearsQualification.Web.Services.CookieService
+@model Dfe.EarlyYearsQualification.Web.Models.Content.CookiesBannerModel;
+@inject ICookieService cookieService
+
+@{
+    var cookie = cookieService.GetCookie();
+}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var relativePath = window.location.pathname+window.location.search;
+
+    var returnUrl = document.getElementById("returnUrl");
+    if (returnUrl) {
+      returnUrl.value = relativePath;
+    }
+
+    var returnUrlHideBanner = document.getElementById("returnUrlHideBanner");
+    if (returnUrlHideBanner) {
+      returnUrlHideBanner.value = relativePath;
+    }
+  });
+</script>
+
+@if (cookie is { HasApproved: false, IsRejected: false })
+{
+    <form method="post">
+        <input type="hidden" id="returnUrl" name="returnUrl"/>
+        <div id="choose-cookies-preference" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="@Model.CookiesBannerTitle">
+            <div class="govuk-cookie-banner__message govuk-width-container">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+                            @Model.CookiesBannerTitle
+                        </h2>
+                        <div id="cookies-banner-choose-pref-content" class="govuk-cookie-banner__content">
+                            @Html.Raw(Model.CookiesBannerContent)
+                        </div>
+                    </div>
+                </div>
+                <div class="govuk-button-group">
+                    <button id="accept-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="Cookies" asp-action="Accept">
+                        @Model.AcceptButtonText
+                    </button>
+                    <button id="reject-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="Cookies" asp-action="Reject">
+                        @Model.RejectButtonText
+                    </button>
+                    <a class="govuk-link" href="/cookies">@Model.CookiesBannerLinkText</a>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
+{
+    <form method="post" asp-controller="Cookies" asp-action="HideBanner">
+        <input type="hidden" id="returnUrlHideBanner" name="returnUrl"/>
+        <div id="cookies-preference-chosen" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+            <div class="govuk-cookie-banner__message govuk-width-container">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <div id="cookies-banner-pref-chosen-content" class="govuk-cookie-banner__content">
+                            @(cookie.HasApproved ? Html.Raw(Model.AcceptedCookiesContent) : Html.Raw(Model.RejectedCookiesContent))
+                        </div>
+                    </div>
+                </div>
+                <div class="govuk-button-group">
+                    <button id="hide-cookie-banner-button" value="yes" type="submit" name="cookies" class="govuk-button" data-module="govuk-button">
+                        @Model.HideCookieBannerButtonText
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+}
