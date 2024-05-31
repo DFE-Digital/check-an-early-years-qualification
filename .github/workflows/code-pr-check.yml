@@ -23,7 +23,7 @@ concurrency:
 env:
   DOTNET_VERSION: 8
   SOLUTION_NAME: 'Dfe.EarlyYearsQualification.sln'
-  URL: http://localhost:5000
+  URL: http://127.0.0.1:5000
   
 jobs:
 

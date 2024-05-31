@@ -5,8 +5,11 @@ using Dfe.EarlyYearsQualification.Content.Extensions;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Dfe.EarlyYearsQualification.Web.Security;
+using Dfe.EarlyYearsQualification.Web.Services.CookieService;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using OwaspHeaders.Core.Extensions;
 using RobotsTxt;
 
@@ -44,8 +47,17 @@ else
 }
 
 builder.Services.AddModelRenderers();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<ICookieService, CookieService>();
 
-builder.Services.AddStaticRobotsTxt(builder => builder.DenyAll());
+builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+builder.Services.AddScoped(x => {
+    var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+    var factory = x.GetRequiredService<IUrlHelperFactory>();
+    return factory.GetUrlHelper(actionContext!);
+});
+
+builder.Services.AddStaticRobotsTxt(robotsTxtOptions => robotsTxtOptions.DenyAll());
 
 var app = builder.Build();
 

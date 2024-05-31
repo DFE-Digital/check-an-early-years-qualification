@@ -125,15 +125,14 @@ public class MockContentfulService : IContentService
 
     public async Task<QuestionPage?> GetQuestionPage(string entryId)
     {
-        switch (entryId)
-        {
-            case QuestionPages.WhatLevelIsTheQualification: 
-                return await Task.FromResult(CreateWhatLevelIsTheQualificationPage());
-            case QuestionPages.WhereWasTheQualificationAwarded:
-                return await Task.FromResult(CreateWhereWasTheQualificationAwardedPage());
-            default:
-                throw new NotImplementedException($"No question page mock for entry {entryId}");
-        }
+        return entryId switch
+               {
+                   QuestionPages.WhatLevelIsTheQualification =>
+                       await Task.FromResult(CreateWhatLevelIsTheQualificationPage()),
+                   QuestionPages.WhereWasTheQualificationAwarded =>
+                       await Task.FromResult(CreateWhereWasTheQualificationAwardedPage()),
+                   _ => throw new NotImplementedException($"No question page mock for entry {entryId}")
+               };
     }
 
     public async Task<StartPage?> GetStartPage()
@@ -158,45 +157,71 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    private QuestionPage? CreateWhereWasTheQualificationAwardedPage()
+    public async Task<CookiesBanner?> GetCookiesBannerContent()
+    {
+        var acceptedCookiesContent =
+            ContentfulContentHelper.Paragraph("This is the accepted cookie content");
+
+        var cookiesBannerContent =
+            ContentfulContentHelper.Paragraph("This is the cookies banner content");
+
+        var rejectedCookieContent =
+            ContentfulContentHelper.Paragraph("This is the rejected cookie content");
+
+        return await Task.FromResult(new CookiesBanner
+                                     {
+                                         AcceptButtonText = "Test Accept Button Text",
+                                         AcceptedCookiesContent = acceptedCookiesContent,
+                                         CookiesBannerContent = cookiesBannerContent,
+                                         CookiesBannerTitle = "Test Cookies Banner Title",
+                                         CookiesBannerLinkText = "Test Cookies Banner Text",
+                                         HideCookieBannerButtonText = "Test Hide Cookie Banner Button Text",
+                                         RejectButtonText = "Test Reject Button Text",
+                                         RejectedCookiesContent = rejectedCookieContent
+                                     });
+    }
+
+    private static QuestionPage CreateWhereWasTheQualificationAwardedPage()
     {
         var options = new List<Option>
-                       {
-                            new Option
-                            {
-                                Label = "England", Value = "england"
-                            },
-                            new Option
-                            {
-                                Label = "Outside the United Kingdom",
-                                Value = "outside-uk"
-                            }
-                        };
+                      {
+                          new()
+                          {
+                              Label = "England", Value = "england"
+                          },
+                          new()
+                          {
+                              Label = "Outside the United Kingdom",
+                              Value = "outside-uk"
+                          }
+                      };
         return CreateQuestionPage("Where was the qualification awarded?", options);
     }
 
-    private QuestionPage? CreateWhatLevelIsTheQualificationPage()
+    private static QuestionPage CreateWhatLevelIsTheQualificationPage()
     {
         var options = new List<Option>
-                       {
-                            new Option
-                            {
-                                Label = "Level 2", Value = "2"
-                            },
-                            new Option
-                            {
-                                Label = "Level 3", Value = "3"
-                            }
-                        };
+                      {
+                          new()
+                          {
+                              Label = "Level 2", Value = "2"
+                          },
+                          new()
+                          {
+                              Label = "Level 3", Value = "3"
+                          }
+                      };
         return CreateQuestionPage("What level is the qualification?", options);
     }
 
-    private QuestionPage CreateQuestionPage(string question, List<Option> options)
+    private static QuestionPage CreateQuestionPage(string question, List<Option> options)
     {
-        return new QuestionPage { 
-            Question = question, 
-            Options = options, 
-            CtaButtonText = "Continue", 
-            ErrorMessage = "Test error message" };
+        return new QuestionPage
+               {
+                   Question = question,
+                   Options = options,
+                   CtaButtonText = "Continue",
+                   ErrorMessage = "Test error message"
+               };
     }
 }

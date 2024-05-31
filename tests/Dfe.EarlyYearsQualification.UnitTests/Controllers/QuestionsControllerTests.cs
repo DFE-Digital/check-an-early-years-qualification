@@ -26,11 +26,11 @@ public class QuestionsControllerTests
         var mockRenderer = new Mock<IHtmlRenderer>();
 
         mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
-                           .ReturnsAsync((QuestionPage?)default).Verifiable();
+                          .ReturnsAsync((QuestionPage?)default).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller!.WhereWasTheQualificationAwarded();
+        var result = await controller.WhereWasTheQualificationAwarded();
 
         mockContentService.VerifyAll();
 
@@ -51,7 +51,7 @@ public class QuestionsControllerTests
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
-        
+
         var questionPage = new QuestionPage
                            {
                                Question = "Test question",
@@ -59,11 +59,11 @@ public class QuestionsControllerTests
                                Options = [new Option { Label = "Label", Value = "Value" }]
                            };
         mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
-                           .ReturnsAsync(questionPage);
+                          .ReturnsAsync(questionPage);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller!.WhereWasTheQualificationAwarded();
+        var result = await controller.WhereWasTheQualificationAwarded();
 
         result.Should().NotBeNull();
 
@@ -90,8 +90,8 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        controller!.ModelState.AddModelError("option", "test error");
-        var result = await controller!.WhereWasTheQualificationAwarded(new QuestionModel());
+        controller.ModelState.AddModelError("option", "test error");
+        var result = await controller.WhereWasTheQualificationAwarded(new QuestionModel());
 
         result.Should().NotBeNull();
 
@@ -111,8 +111,8 @@ public class QuestionsControllerTests
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
         var result =
-            await controller!.WhereWasTheQualificationAwarded(new QuestionModel
-                                                               { Option = Options.OutsideOfTheUnitedKingdom });
+            await controller.WhereWasTheQualificationAwarded(new QuestionModel
+                                                             { Option = Options.OutsideOfTheUnitedKingdom });
 
         result.Should().NotBeNull();
 
@@ -132,7 +132,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller!.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.England });
+        var result = await controller.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.England });
 
         result.Should().NotBeNull();
 
@@ -151,7 +151,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller!.WhenWasTheQualificationStarted();
+        var result = await controller.WhenWasTheQualificationStarted();
 
         result.Should().NotBeNull();
 
@@ -161,10 +161,10 @@ public class QuestionsControllerTests
         var model = resultType!.Model as QuestionModel;
         model.Should().NotBeNull();
 
-        // TODO: The following will need to be replaced once the page has been created in Contentful.
+        // The following will need to be replaced once the page has been created in Contentful.
         // The model is currently hard coded in the action and doesn't call the content service.
         model!.Question.Should().Be("When was the qualification started?");
-        model!.CtaButtonText.Should().Be("Continue");
+        model.CtaButtonText.Should().Be("Continue");
         model.HasErrors.Should().BeFalse();
     }
 
@@ -177,7 +177,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = controller!.WhenWasTheQualificationStarted(new QuestionModel());
+        var result = controller.WhenWasTheQualificationStarted(new QuestionModel());
 
         result.Should().NotBeNull();
 
@@ -195,11 +195,11 @@ public class QuestionsControllerTests
         var mockRenderer = new Mock<IHtmlRenderer>();
 
         mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhatLevelIsTheQualification))
-                           .ReturnsAsync((QuestionPage?)default).Verifiable();
+                          .ReturnsAsync((QuestionPage?)default).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller!.WhatLevelIsTheQualification();
+        var result = await controller.WhatLevelIsTheQualification();
 
         mockContentService.VerifyAll();
 
@@ -220,7 +220,7 @@ public class QuestionsControllerTests
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
-        
+
         var questionPage = new QuestionPage
                            {
                                Question = "Test question",
@@ -230,13 +230,13 @@ public class QuestionsControllerTests
                                AdditionalInformationBody = ContentfulContentHelper.Text("Test html body")
                            };
         mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhatLevelIsTheQualification))
-                           .ReturnsAsync(questionPage);
+                          .ReturnsAsync(questionPage);
 
         mockRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller!.WhatLevelIsTheQualification();
+        var result = await controller.WhatLevelIsTheQualification();
 
         result.Should().NotBeNull();
 
@@ -267,8 +267,8 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        controller!.ModelState.AddModelError("option", "test error");
-        var result = await controller!.WhatLevelIsTheQualification(new QuestionModel());
+        controller.ModelState.AddModelError("option", "test error");
+        var result = await controller.WhatLevelIsTheQualification(new QuestionModel());
 
         result.Should().NotBeNull();
 
@@ -287,7 +287,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller!.WhatLevelIsTheQualification(new QuestionModel());
+        var result = await controller.WhatLevelIsTheQualification(new QuestionModel());
 
         result.Should().NotBeNull();
 
@@ -295,6 +295,6 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ActionName.Should().Be("Get");
-        resultType!.ControllerName.Should().Be("QualificationDetails");
+        resultType.ControllerName.Should().Be("QualificationDetails");
     }
 }

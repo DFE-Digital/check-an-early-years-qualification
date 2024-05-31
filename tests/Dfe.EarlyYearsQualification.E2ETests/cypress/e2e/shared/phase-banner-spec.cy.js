@@ -1,15 +1,8 @@
+import { pages } from "./urls-to-check";
+
 describe("A spec that tests the phase banner is showing on all pages", () => {
    
   // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
-
-  var pages = [
-    "/",
-    "/accessibility-statement",
-    "/advice/qualification-outside-the-united-kingdom",
-    "/cookies",
-    "/qualifications/qualification-details/eyq-240",
-    "/questions/where-was-the-qualification-awarded"
-  ]
 
   pages.forEach((option) => {
     it(`Checks that the phase banner is present at the URL: ${option}`, () => {
