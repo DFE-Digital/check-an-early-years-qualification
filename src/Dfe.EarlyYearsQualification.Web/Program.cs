@@ -57,7 +57,7 @@ builder.Services.AddScoped(x => {
     return factory.GetUrlHelper(actionContext!);
 });
 
-builder.Services.AddStaticRobotsTxt(builder => builder.DenyAll());
+builder.Services.AddStaticRobotsTxt(robotsTxtOptions => robotsTxtOptions.DenyAll());
 
 var app = builder.Build();
 
