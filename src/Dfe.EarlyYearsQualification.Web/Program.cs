@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using OwaspHeaders.Core.Extensions;
+using RobotsTxt;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
@@ -56,7 +57,10 @@ builder.Services.AddScoped(x => {
     return factory.GetUrlHelper(actionContext!);
 });
 
+builder.Services.AddStaticRobotsTxt(builder => builder.DenyAll());
+
 var app = builder.Build();
+
 app.UseSecureHeadersMiddleware(
                                SecureHeaderConfiguration.CustomConfiguration()
                               );
@@ -71,7 +75,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseRobotsTxt();
 app.UseRouting();
 
 app.UseAuthorization();
