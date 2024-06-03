@@ -24,6 +24,8 @@ check-an-early-years-qualification/
 - .Net 8
 
 ### Development Setup
+
+#### Azure environment variables
 - In order for the application to be run locally, you need to add the Dev Service Principal client id and secret to your launchSettings.json file
 Replace the environment variables object in the http profile with the following:
 ```
@@ -35,6 +37,11 @@ Replace the environment variables object in the http profile with the following:
       }
 ```
 Speak to one of the developers about getting the values for the above settings.
+
+#### Contentful Setup
+- We are using [dotnet user-secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0) to manage the contentful secrets.
+- We have a .sh script called ```set-contentful-secrets.sh``` that will help you set these up. Go to the Contentful space to get access to the: Delivery API Key, Preview API Key and Space ID.
+- Run this script and copy paste the keys in and you're all set!
 
 ## Unit testing
 
