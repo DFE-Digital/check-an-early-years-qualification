@@ -16,6 +16,18 @@ using RobotsTxt;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
+if (!builder.Configuration.GetValue<bool>("UseMockContentful"))
+{
+    var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
+    builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
+
+    var blobStorageConnectionString = builder.Configuration.GetSection("Storage").GetValue<string>("ConnectionString");
+    builder.Services.AddDataProtection()
+           .PersistKeysToAzureBlobStorage(blobStorageConnectionString, "data-protection", "data-protection")
+           .ProtectKeysWithAzureKeyVault(new Uri($"{keyVaultEndpoint}keys/data-protection"),
+                                         new DefaultAzureCredential());
+}
+
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
                                          {
