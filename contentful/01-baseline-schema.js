@@ -2,8 +2,11 @@ module.exports = function (migration) {
   const cookiesBanner = migration
     .createContentType("cookiesBanner")
     .name("Cookies Banner")
-    .description("")
+    .description(
+      "Content type for the cookies banner that shows on every page if the user has not chosen their cookie preferences"
+    )
     .displayField("cookiesBannerTitle");
+
   cookiesBanner
     .createField("cookiesBannerTitle")
     .name("CookiesBannerTitle")
@@ -91,6 +94,116 @@ module.exports = function (migration) {
     .validations([])
     .disabled(false)
     .omitted(false);
+
+  cookiesBanner
+    .createField("acceptedCookiesContent")
+    .name("AcceptedCookiesContent")
+    .type("RichText")
+    .localized(false)
+    .required(true)
+    .validations([
+      {
+        enabledMarks: [
+          "bold",
+          "italic",
+          "underline",
+          "code",
+          "superscript",
+          "subscript",
+        ],
+        message:
+          "Only bold, italic, underline, code, superscript, and subscript marks are allowed",
+      },
+      {
+        enabledNodeTypes: [
+          "heading-1",
+          "heading-2",
+          "heading-3",
+          "heading-4",
+          "heading-5",
+          "heading-6",
+          "ordered-list",
+          "unordered-list",
+          "hr",
+          "blockquote",
+          "embedded-entry-block",
+          "embedded-asset-block",
+          "table",
+          "hyperlink",
+          "entry-hyperlink",
+          "asset-hyperlink",
+          "embedded-entry-inline",
+        ],
+
+        message:
+          "Only heading 1, heading 2, heading 3, heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, asset, table, link to Url, link to entry, link to asset, and inline entry nodes are allowed",
+      },
+      {
+        nodes: {},
+      },
+    ])
+    .disabled(false)
+    .omitted(false);
+
+  cookiesBanner
+    .createField("rejectedCookiesContent")
+    .name("RejectedCookiesContent")
+    .type("RichText")
+    .localized(false)
+    .required(true)
+    .validations([
+      {
+        enabledMarks: [
+          "bold",
+          "italic",
+          "underline",
+          "code",
+          "superscript",
+          "subscript",
+        ],
+        message:
+          "Only bold, italic, underline, code, superscript, and subscript marks are allowed",
+      },
+      {
+        enabledNodeTypes: [
+          "heading-1",
+          "heading-2",
+          "heading-3",
+          "heading-4",
+          "heading-5",
+          "heading-6",
+          "ordered-list",
+          "unordered-list",
+          "hr",
+          "blockquote",
+          "embedded-entry-block",
+          "embedded-asset-block",
+          "table",
+          "hyperlink",
+          "entry-hyperlink",
+          "asset-hyperlink",
+          "embedded-entry-inline",
+        ],
+
+        message:
+          "Only heading 1, heading 2, heading 3, heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, asset, table, link to Url, link to entry, link to asset, and inline entry nodes are allowed",
+      },
+      {
+        nodes: {},
+      },
+    ])
+    .disabled(false)
+    .omitted(false);
+
+  cookiesBanner
+    .createField("hideCookieBannerButtonText")
+    .name("HideCookieBannerButtonText")
+    .type("Symbol")
+    .localized(false)
+    .required(true)
+    .validations([])
+    .disabled(false)
+    .omitted(false);
   cookiesBanner.changeFieldControl(
     "cookiesBannerTitle",
     "builtin",
@@ -121,6 +234,163 @@ module.exports = function (migration) {
     "singleLine",
     {}
   );
+  cookiesBanner.changeFieldControl(
+    "acceptedCookiesContent",
+    "builtin",
+    "richTextEditor",
+    {}
+  );
+  cookiesBanner.changeFieldControl(
+    "rejectedCookiesContent",
+    "builtin",
+    "richTextEditor",
+    {}
+  );
+  cookiesBanner.changeFieldControl(
+    "hideCookieBannerButtonText",
+    "builtin",
+    "singleLine",
+    {}
+  );
+
+  const questionPage = migration
+    .createContentType("questionPage")
+    .name("Question Page")
+    .description(
+      "Model for storing information relating to questions used within the journey"
+    )
+    .displayField("question");
+
+  questionPage
+    .createField("question")
+    .name("Question")
+    .type("Symbol")
+    .localized(false)
+    .required(true)
+    .validations([
+      {
+        unique: true,
+      },
+    ])
+    .disabled(false)
+    .omitted(false);
+
+  questionPage
+    .createField("options")
+    .name("Options")
+    .type("Array")
+    .localized(false)
+    .required(true)
+    .validations([])
+    .disabled(false)
+    .omitted(false)
+    .items({
+      type: "Link",
+
+      validations: [
+        {
+          linkContentType: ["option"],
+        },
+      ],
+
+      linkType: "Entry",
+    });
+
+  questionPage
+    .createField("ctaButtonText")
+    .name("CTA Button Text")
+    .type("Symbol")
+    .localized(false)
+    .required(true)
+    .validations([])
+    .defaultValue({
+      "en-GB": "Continue",
+    })
+    .disabled(false)
+    .omitted(false);
+
+  questionPage
+    .createField("errorMessage")
+    .name("Error Message")
+    .type("Symbol")
+    .localized(false)
+    .required(true)
+    .validations([])
+    .defaultValue({
+      "en-GB": "Select an option",
+    })
+    .disabled(false)
+    .omitted(false);
+
+  questionPage
+    .createField("additionalInformationHeader")
+    .name("Additional Information Header")
+    .type("Symbol")
+    .localized(false)
+    .required(false)
+    .validations([])
+    .disabled(false)
+    .omitted(false);
+
+  questionPage
+    .createField("additionalInformationBody")
+    .name("Additional Information Body")
+    .type("RichText")
+    .localized(false)
+    .required(false)
+    .validations([
+      {
+        enabledMarks: ["bold", "italic", "underline"],
+        message: "Only bold, italic, and underline marks are allowed",
+      },
+      {
+        enabledNodeTypes: ["ordered-list", "unordered-list", "hyperlink"],
+        message:
+          "Only ordered list, unordered list, and link to Url nodes are allowed",
+      },
+      {
+        nodes: {},
+      },
+    ])
+    .disabled(false)
+    .omitted(false);
+
+  questionPage.changeFieldControl("question", "builtin", "singleLine", {
+    helpText: "This is the question to show on the page",
+  });
+
+  questionPage.changeFieldControl("options", "builtin", "entryLinksEditor", {});
+
+  questionPage.changeFieldControl("ctaButtonText", "builtin", "singleLine", {
+    helpText:
+      "This is the text that appears on the main call to action (CTA) button",
+  });
+
+  questionPage.changeFieldControl("errorMessage", "builtin", "singleLine", {
+    helpText:
+      "This is the message that appears when a user doesn't select an option",
+  });
+
+  questionPage.changeFieldControl(
+    "additionalInformationHeader",
+    "builtin",
+    "singleLine",
+    {
+      helpText:
+        "(OPTIONAL) This is the heading for the additional information section",
+    }
+  );
+
+  questionPage.changeFieldControl(
+    "additionalInformationBody",
+    "builtin",
+    "richTextEditor",
+    {
+      helpText:
+        "(OPTIONAL) This is the body for the additional information section",
+    }
+  );
+
   const phaseBanner = migration
     .createContentType("phaseBanner")
     .name("Phase Banner")
@@ -910,91 +1180,6 @@ module.exports = function (migration) {
     "richTextEditor",
     {}
   );
-
-  const questionPage = migration
-    .createContentType("questionPage")
-    .name("QuestionPage")
-    .description(
-      "Model for storing information relating to questions used within the journey"
-    )
-    .displayField("question");
-
-  questionPage
-    .createField("question")
-    .name("Question")
-    .type("Symbol")
-    .localized(false)
-    .required(true)
-    .validations([
-      {
-        unique: true,
-      },
-    ])
-    .disabled(false)
-    .omitted(false);
-
-  questionPage
-    .createField("options")
-    .name("Options")
-    .type("Array")
-    .localized(false)
-    .required(true)
-    .validations([])
-    .disabled(false)
-    .omitted(false)
-    .items({
-      type: "Link",
-
-      validations: [
-        {
-          linkContentType: ["option"],
-        },
-      ],
-
-      linkType: "Entry",
-    });
-
-  questionPage
-    .createField("ctaButtonText")
-    .name("CTA Button Text")
-    .type("Symbol")
-    .localized(false)
-    .required(true)
-    .validations([])
-    .defaultValue({
-      "en-GB": "Continue",
-    })
-    .disabled(false)
-    .omitted(false);
-
-  questionPage
-    .createField("errorMessage")
-    .name("Error Message")
-    .type("Symbol")
-    .localized(false)
-    .required(true)
-    .validations([])
-    .defaultValue({
-      "en-GB": "Select an option",
-    })
-    .disabled(false)
-    .omitted(false);
-
-  questionPage.changeFieldControl("question", "builtin", "singleLine", {
-    helpText: "This is the question to show on the page",
-  });
-
-  questionPage.changeFieldControl("options", "builtin", "entryLinksEditor", {});
-
-  questionPage.changeFieldControl("ctaButtonText", "builtin", "singleLine", {
-    helpText:
-      "This is the text that appears on the main call to action (CTA) button",
-  });
-
-  questionPage.changeFieldControl("errorMessage", "builtin", "singleLine", {
-    helpText:
-      "This is the message that appears when a user doesn't select an option",
-  });
 
   const option = migration
     .createContentType("option")
