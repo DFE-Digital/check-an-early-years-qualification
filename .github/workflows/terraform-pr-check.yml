@@ -41,7 +41,7 @@ jobs:
 
       # Update README.md files with latest changes
       - name: Render terraform docs inside the README.md and push changes back to PR branch
-        uses: terraform-docs/gh-actions@v1.1.0
+        uses: terraform-docs/gh-actions@v1.2.0
         with:
           working-dir: ./terraform
           config-file: .terraform-docs.yml
