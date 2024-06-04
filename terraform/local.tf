@@ -2,7 +2,7 @@ locals {
   # Common tags to be assigned to resources
   common_tags = {
     "Environment"      = var.environment
-    "Parent Business"  = "Children’s Care"
+    "Parent Business"  = "Children's Care"
     "Product"          = "Early Years Qualifications"
     "Service Offering" = "Early Years Qualifications"
   }
@@ -14,6 +14,8 @@ locals {
     "TRACKING_ID"                         = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
     "KeyVault__Endpoint"                  = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
+    "ContentfulOptions__UsePreviewApi"    = var.environment == "staging" ? true : false
+    "WEBSITES_PORT"                       = "8080"
   }
 
   webapp_slot_app_settings = {
@@ -22,5 +24,7 @@ locals {
     "TRACKING_ID"                         = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
     "KeyVault__Endpoint"                  = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
+    "ContentfulOptions__UsePreviewApi"    = var.environment == "staging" ? true : false
+    "WEBSITES_PORT"                       = "8080"
   }
 }

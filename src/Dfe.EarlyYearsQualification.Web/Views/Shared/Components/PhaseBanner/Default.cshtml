@@ -1,0 +1,15 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.PhaseBannerModel;
+
+@if (Model.Show)
+{
+    <div class="govuk-phase-banner">
+        <p class="govuk-phase-banner__content">
+            <strong class="govuk-tag govuk-phase-banner__content__tag">
+                @Model.PhaseName
+            </strong>
+            <span class="govuk-phase-banner__text">
+                @Html.Raw(Model.Content)
+            </span>
+        </p>
+    </div>
+}

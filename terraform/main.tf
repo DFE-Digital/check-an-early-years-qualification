@@ -25,9 +25,9 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
-# Create Network Resources
+# Create network resources
 module "network" {
-  source = "./azure-network"
+  source = "./modules/azure-network"
 
   environment                               = var.environment
   location                                  = var.azure_region
@@ -45,9 +45,18 @@ module "network" {
   kv_certificate_subject                    = var.kv_certificate_subject
 }
 
-# Create Web Application resources
+# Create storage account for web app
+module "storage" {
+  source = "./modules/azure-storage"
+
+  location       = var.azure_region
+  resource_group = azurerm_resource_group.rg.name
+  tags           = local.common_tags
+}
+
+# Create web application resources
 module "webapp" {
-  source = "./azure-web"
+  source = "./modules/azure-web"
 
   environment                              = var.environment
   location                                 = var.azure_region
@@ -65,6 +74,7 @@ module "webapp" {
   webapp_docker_image_tag                  = var.webapp_docker_image_tag
   webapp_docker_registry_url               = var.webapp_docker_registry_url
   webapp_session_cookie_name               = "_early_years_qualification_session"
+  webapp_cookie_preference_name            = "cookies_preferences_set"
   webapp_custom_domain_name                = var.custom_domain_name
   webapp_custom_domain_cert_secret_label   = var.kv_certificate_label
   webapp_health_check_path                 = "/health"
@@ -74,5 +84,6 @@ module "webapp" {
   kv_id                                    = module.network.kv_id
   kv_cert_secret_id                        = module.network.kv_cert_secret_id
   kv_mi_id                                 = module.network.kv_mi_id
+  tags                                     = local.common_tags
   depends_on                               = [module.network]
 }

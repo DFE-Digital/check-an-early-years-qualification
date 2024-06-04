@@ -1,0 +1,48 @@
+name: Terraform PR Check 
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform-pr-check.yml'
+
+defaults:
+  run:
+    working-directory: ./terraform
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+  
+jobs:
+
+  terraform-formatting:  
+    name: Check terraform file format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      
+      # Install the latest version of the Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.6
+          terraform_wrapper: false
+
+      # Checks that all Terraform configuration files adhere to a canonical format
+      # Will fail the build if not
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+
+      # Update README.md files with latest changes
+      - name: Render terraform docs inside the README.md and push changes back to PR branch
+        uses: terraform-docs/gh-actions@v1.1.0
+        with:
+          working-dir: ./terraform
+          config-file: .terraform-docs.yml
+          git-push: "true"

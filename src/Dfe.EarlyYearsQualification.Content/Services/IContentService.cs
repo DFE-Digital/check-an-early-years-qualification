@@ -9,4 +9,18 @@ public interface IContentService
     Task<List<NavigationLink>?> GetNavigationLinks();
 
     Task<Qualification?> GetQualificationById(string qualificationId);
+
+    Task<DetailsPage?> GetDetailsPage();
+
+    Task<AdvicePage?> GetAdvicePage(string entryId);
+
+    Task<QuestionPage?> GetQuestionPage(string entryId);
+
+    Task<AccessibilityStatementPage?> GetAccessibilityStatementPage();
+
+    Task<CookiesPage?> GetCookiesPage();
+
+    Task<PhaseBanner?> GetPhaseBannerContent();
+
+    Task<CookiesBanner?> GetCookiesBannerContent();
 }

@@ -24,16 +24,30 @@ check-an-early-years-qualification/
 - .Net 8
 
 ### Development Setup
-- Set up the contentful secrets. You can either:
-    - Paste this object into your ```appsettings.json```:
-      ```
-      "ContentfulOptions": {
-        "DeliveryApiKey": "<YOUR_DELIVERY_API_KEY_HERE>",
-        "PreviewApiKey": "<YOUR_PREVIEW_API_KEY_HERE>",
-        "SpaceId": "<YOUR_SPACE_ID_HERE>",
-        "UsePreviewApi": false,
-        "MaxNumberOfRateLimitRetries": 1
-      },
-      ```
-    - Alternatively, you can utilise [dot-net user secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows).
-      
+
+#### Azure environment variables
+- In order for the application to be run locally, you need to add the Dev Service Principal client id and secret to your launchSettings.json file
+Replace the environment variables object in the http profile with the following:
+```
+"environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_TENANT_ID": "<TENANT_ID>",
+        "AZURE_CLIENT_ID": "<CLIENT_ID>",
+        "AZURE_CLIENT_SECRET": "<CLIENT_SECRET>",
+      }
+```
+Speak to one of the developers about getting the values for the above settings.
+
+#### Contentful Setup
+- We are using [dotnet user-secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0) to manage the contentful secrets.
+- We have a .sh script called ```set-contentful-secrets.sh``` that will help you set these up. Go to the Contentful space to get access to the: Delivery API Key, Preview API Key and Space ID.
+- Run this script and copy paste the keys in and you're all set!
+
+## Unit testing
+
+To run the unit tests locally make sure you are in the root directory and then you can use the following command:
+```
+dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+```
+
+This will pull in the exclusions such as the .cshtml files and will replicate coverage in the GitHub Actions.

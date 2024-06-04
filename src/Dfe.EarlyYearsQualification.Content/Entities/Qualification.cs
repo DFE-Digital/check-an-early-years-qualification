@@ -23,16 +23,17 @@ public class Qualification
         Notes = notes;
         AdditionalRequirements = additionalRequirements;
     }
+
     // Required Fields
-    public string QualificationId { get; set; }
-    public string QualificationName { get; set; }
-    public string AwardingOrganisationTitle { get; set; }
-    public int QualificationLevel { get; set; }
+    public string QualificationId { get; }
+    public string QualificationName { get; }
+    public string AwardingOrganisationTitle { get; }
+    public int QualificationLevel { get; }
 
     // Optional Fields
-    public string? FromWhichYear { get; set; }
-    public string? ToWhichYear { get; set; }
-    public string? QualificationNumber { get; set; }
-    public string? Notes { get; set; }
-    public string? AdditionalRequirements { get; set; }
+    public string? FromWhichYear { get; }
+    public string? ToWhichYear { get; }
+    public string? QualificationNumber { get; }
+    public string? Notes { get; }
+    public string? AdditionalRequirements { get; }
 }

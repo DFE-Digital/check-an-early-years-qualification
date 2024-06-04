@@ -1,37 +1,31 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Dfe.EarlyYearsQualification.Web.Models;
-using Dfe.EarlyYearsQualification.Content.Services;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController(
+    ILogger<HomeController> logger,
+    IContentService contentService,
+    IHtmlRenderer htmlRenderer,
+    ISideContentRenderer sideContentRenderer)
+    : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly IContentService _contentService;
-
-    public HomeController(ILogger<HomeController> logger, IContentService contentService)
-    {
-        _logger = logger;
-        _contentService = contentService;
-    }
-
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var startPageContent = await _contentService.GetStartPage();
-        if (startPageContent is null) return RedirectToAction("Error");
-        var model = new StartPageModel() 
-        { 
-            Header = startPageContent.Header, 
-            PreCtaButtonContent = startPageContent.PreCtaButtonContentHtml, 
-            CtaButtonText = startPageContent.CtaButtonText,
-            PostCtaButtonContent = startPageContent.PostCtaButtonContentHtml,
-            RightHandSideContentHeader = startPageContent.RightHandSideContentHeader,
-            RightHandSideContent = startPageContent.RightHandSideContentHtml
-        };
+        var startPageContent = await contentService.GetStartPage();
+        if (startPageContent is null)
+        {
+            logger.LogCritical("Start page content not found");
+            return RedirectToAction("Error");
+        }
+
+        var model = await Map(startPageContent);
         return View(model);
     }
 
@@ -41,16 +35,16 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    private StartPageModel Map(StartPage startPageContent)
+    private async Task<StartPageModel> Map(StartPage startPageContent)
     {
-        return new StartPageModel() 
-        { 
-            Header = startPageContent.Header, 
-            PreCtaButtonContent = startPageContent.PreCtaButtonContentHtml, 
-            CtaButtonText = startPageContent.CtaButtonText,
-            PostCtaButtonContent = startPageContent.PostCtaButtonContentHtml,
-            RightHandSideContentHeader = startPageContent.RightHandSideContentHeader,
-            RightHandSideContent = startPageContent.RightHandSideContentHtml
-        };
+        return new StartPageModel
+               {
+                   Header = startPageContent.Header,
+                   PreCtaButtonContent = await htmlRenderer.ToHtml(startPageContent.PreCtaButtonContent),
+                   CtaButtonText = startPageContent.CtaButtonText,
+                   PostCtaButtonContent = await htmlRenderer.ToHtml(startPageContent.PostCtaButtonContent),
+                   RightHandSideContentHeader = startPageContent.RightHandSideContentHeader,
+                   RightHandSideContent = await sideContentRenderer.ToHtml(startPageContent.RightHandSideContent)
+               };
     }
 }

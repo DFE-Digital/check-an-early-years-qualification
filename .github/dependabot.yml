@@ -10,7 +10,7 @@ updates:
       - dependabot
 
   - package-ecosystem: docker
-    directory: /
+    directory: /src/Dfe.EarlyYearsQualification.Web
     schedule:
       interval: 'weekly'
     labels:
@@ -23,4 +23,12 @@ updates:
       interval: 'daily'
     labels:
       - nuget
+      - dependabot
+
+  - package-ecosystem: npm
+    directory: /src/Dfe.EarlyYearsQualification.Node
+    schedule:
+      interval: 'daily'
+    labels:
+      - npm
       - dependabot

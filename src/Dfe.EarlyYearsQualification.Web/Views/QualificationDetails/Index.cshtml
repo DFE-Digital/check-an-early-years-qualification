@@ -8,13 +8,13 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <span class="govuk-caption-xl gem-c-title__context">
-            Early Years Qualification List
+            @Model.Content!.MainHeader
         </span>
         <h1 class="govuk-heading-xl" id="qualification-name-value">@Model.QualificationName</h1>
         <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    Awarding organisation
+                    @Model.Content.AwardingOrgLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="awarding-qualification-value">
                     @Model.AwardingOrganisationTitle
@@ -22,7 +22,7 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    Level
+                    @Model.Content.LevelLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="qualification-level-value">
                     @Model.QualificationLevel
@@ -30,7 +30,7 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    Number
+                    @Model.Content.QualificationNumberLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="qualification-number-value">
                     @Model.QualificationNumber
@@ -38,7 +38,7 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    Date added to Early Years Qualification List
+                    @Model.Content.DateAddedLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="from-which-year-value">
                     @Model.FromWhichYear
@@ -46,7 +46,7 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    Date of check
+                    @Model.Content.DateOfCheckLabel
                 </dt>
                 <dd class="govuk-summary-list__value">
                     @DateTime.UtcNow.ToString("dd MMMM yyyy")
@@ -56,32 +56,21 @@
         <p class="govuk-body" id="notes-value">@Model.Notes</p>
         <p class="govuk-body" id="additional-requirements-value">@Model.AdditionalRequirements</p>
         <h2 class="govuk-heading-m">
-            Bookmark a link to this qualification check
+            @Model.Content.BookmarkHeading
         </h2>
         <p class="govuk-body">
-            A permanent link to this qualification check is available at:
+            @Model.Content.BookmarkText
             <br>
             <br>
             <a href="#" class="govuk-link">@Model.BookmarkUrl</a>
         </p>
         <h2 class="govuk-heading-m">
-            Check another qualification
+            @Model.Content.CheckAnotherQualificationHeading
         </h2>
-        <p class="govuk-body">Return to the start of the <a href="/" class="govuk-link">Check an early years qualification</a> service to check another qualification.</p>
+        @Html.Raw(Model.Content.CheckAnotherQualificationText)
         <h2 class="govuk-heading-m">
-            Further information about the Early Years Qualification List
+            @Model.Content.FurtherInfoHeading
         </h2>
-        <p class="govuk-body">
-            For more information on qualification requirements, see the <a href="https://www.gov.uk/government/publications/early-years-qualification-requirements-and-standards" class="govuk-link">early years qualification requirements and standards</a> statutory guidance and the <a href="https://www.gov.uk/government/publications/early-years-foundation-stage-framework--2" class="govuk-link">EYFS statutory framework</a>. Ensure that you refer to the correct version of the EYFS (group and school-based providers, or childminders).
-        </p>
-        <p class="govuk-body">For information on non-UK qualifications, refer to the <a href="https://www.gov.uk/government/publications/early-years-qualifications-achieved-outside-england" class="govuk-link">early years qualifications achieved outside the United Kingdom</a> guidance.</p>
-        <div class="govuk-inset-text">
-            <p class="govuk-body">
-                If you have further queries, contact Ecctis. Information on the <a rel="external" href="https://ecctis.com/Qualifications/eys/Default.aspx" class="govuk-link">guidance Ecctis is able to provide</a> can be found on its website.
-            </p>
-            <p class="govuk-body">
-                If you contacted the DfE early years workforce team prior to 5 September 2022, you do not need to contact Ecctis.
-            </p>
-      </div>
+        @Html.Raw(Model.Content.FurtherInfoText)
     </div>
 </div>

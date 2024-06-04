@@ -1,9 +1,10 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
@@ -11,65 +12,72 @@ namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
 [TestClass]
 public class FooterLinksViewComponentTests
 {
-    private ILogger<FooterLinksViewComponent> _mockLogger = new NullLoggerFactory().CreateLogger<FooterLinksViewComponent>();
-    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
-    
-    [TestInitialize]
-    public void BeforeTestRun()
-    {
-        _mockLogger = new NullLoggerFactory().CreateLogger<FooterLinksViewComponent>();
-        _mockContentService = new Mock<IContentService>();
-    }
-
     [TestMethod]
     public async Task InvokeAsync_CallsContentService_ReturnsNavigationLinks()
     {
-        var navigationLink = new NavigationLink() { DisplayText = "Test", Href = "https://test.com", OpenInNewTab = true };
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<FooterLinksViewComponent>>();
 
-        _mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync(new List<NavigationLink>(){ navigationLink });
+        var navigationLink = new NavigationLink
+                             { DisplayText = "Test", Href = "https://test.com", OpenInNewTab = true };
 
-        var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
+        mockContentService.Setup(x => x.GetNavigationLinks())
+                          .ReturnsAsync(new List<NavigationLink> { navigationLink });
+
+        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
 
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
+
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-        Assert.IsNotNull(model);
+        model.Should().NotBeNull();
 
         var data = model as List<NavigationLink>;
-        Assert.IsNotNull(data);
+        data.Should().NotBeNull();
 
-        Assert.AreEqual(navigationLink.DisplayText, data[0].DisplayText);
+        data![0].DisplayText.Should().Be(navigationLink.DisplayText);
     }
 
     [TestMethod]
     public async Task InvokeAsync_ContentServiceReturnsNull_ReturnsEmptyNavigationLinks()
     {
-        _mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync((List<NavigationLink>)default!);
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<FooterLinksViewComponent>>();
 
-        var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
+        mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync((List<NavigationLink>?)default);
+
+        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
 
-        Assert.IsNotNull(result);
-        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-        Assert.IsNotNull(model);
+        result.Should().NotBeNull();
 
-        var data = model as List<NavigationLink>;
-        Assert.IsNull(data);
+        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
+        model.Should().NotBeNull().And.BeAssignableTo<IEnumerable<NavigationLink>>();
+
+        var data = ((IEnumerable<NavigationLink>)model!).ToList();
+        data.Should().BeEmpty();
     }
 
     [TestMethod]
     public async Task InvokeAsync_ContentServiceThrowsException_ReturnsEmptyNavigationLinks()
     {
-        _mockContentService.Setup(x => x.GetNavigationLinks()).ThrowsAsync(new Exception());
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<FooterLinksViewComponent>>();
 
-        var footerLinksViewComponent = new FooterLinksViewComponent(_mockContentService.Object, _mockLogger);
+        mockContentService.Setup(x => x.GetNavigationLinks()).ThrowsAsync(new Exception());
+
+        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
 
-        Assert.IsNotNull(result);
-        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-        Assert.IsNotNull(model);
+        result.Should().NotBeNull();
 
-        var data = model as List<NavigationLink>;
-        Assert.IsNull(data);
+        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
+        model.Should().NotBeNull().And.BeAssignableTo<IEnumerable<NavigationLink>>();
+
+        var data = ((IEnumerable<NavigationLink>)model!).ToList();
+
+        data.Should().BeEmpty();
+
+        mockLogger.VerifyError("Error retrieving navigation links for footer");
     }
 }

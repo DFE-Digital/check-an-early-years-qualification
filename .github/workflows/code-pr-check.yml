@@ -13,6 +13,8 @@ on:
       - 'tests/**'
       - '.github/workflows/code-pr-check.yml'
       - '.github/actions/**'
+      - 'terraform/**'
+      - 'adr/**'
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
@@ -21,7 +23,7 @@ concurrency:
 env:
   DOTNET_VERSION: 8
   SOLUTION_NAME: 'Dfe.EarlyYearsQualification.sln'
-  URL: http://localhost:5000
+  URL: http://127.0.0.1:5000
   
 jobs:
 
