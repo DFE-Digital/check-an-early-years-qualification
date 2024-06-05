@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.CookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ public class CookiesController(
     ISuccessBannerRenderer successBannerRenderer,
     ICookieService cookieService,
     IUrlHelper urlHelper)
-    : Controller
+    : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -34,21 +35,21 @@ public class CookiesController(
     }
 
     [HttpPost("accept")]
-    public IActionResult Accept([FromForm]string? returnUrl)
+    public IActionResult Accept([FromForm] string? returnUrl)
     {
         cookieService.SetPreference(true);
         return Redirect(CheckUrl(returnUrl));
     }
 
     [HttpPost("reject")]
-    public IActionResult Reject([FromForm]string? returnUrl)
+    public IActionResult Reject([FromForm] string? returnUrl)
     {
         cookieService.RejectCookies();
         return Redirect(CheckUrl(returnUrl));
     }
 
     [HttpPost("hidebanner")]
-    public IActionResult HideBanner([FromForm]string? returnUrl)
+    public IActionResult HideBanner([FromForm] string? returnUrl)
     {
         cookieService.SetVisibility(false);
         return Redirect(CheckUrl(returnUrl));
@@ -65,13 +66,14 @@ public class CookiesController(
         {
             cookieService.RejectCookies();
         }
+
         TempData["UserPreferenceRecorded"] = true;
         return Redirect("/cookies");
     }
 
     private string CheckUrl(string? url)
     {
-      return urlHelper.IsLocalUrl(url) ? url : "/cookies";
+        return urlHelper.IsLocalUrl(url) ? url : "/cookies";
     }
 
     private async Task<CookiesPageModel> Map(CookiesPage content)

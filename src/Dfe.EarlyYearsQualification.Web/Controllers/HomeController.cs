@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ public class HomeController(
     IContentService contentService,
     IHtmlRenderer htmlRenderer,
     ISideContentRenderer sideContentRenderer)
-    : Controller
+    : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()

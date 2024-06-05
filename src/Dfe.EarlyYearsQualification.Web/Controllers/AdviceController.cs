@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/advice")]
 public class AdviceController(ILogger<AdviceController> logger, IContentService contentService, IHtmlRenderer renderer)
-    : Controller
+    : ServiceController
 {
     [HttpGet("qualification-outside-the-united-kingdom")]
     public async Task<IActionResult> QualificationOutsideTheUnitedKingdom()
@@ -22,7 +23,7 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
         var advicePage = await contentService.GetAdvicePage(advicePageId);
         if (advicePage is null)
         {
-          logger.LogError("No content for the advice page");
+            logger.LogError("No content for the advice page");
             return RedirectToAction("Error", "Home");
         }
 

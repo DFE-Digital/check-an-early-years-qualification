@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ public class QualificationDetailsController(
     ILogger<QualificationDetailsController> logger,
     IContentService contentService,
     IGovUkInsetTextRenderer renderer)
-    : Controller
+    : ServiceController
 {
     [HttpGet]
     public IActionResult Get()
