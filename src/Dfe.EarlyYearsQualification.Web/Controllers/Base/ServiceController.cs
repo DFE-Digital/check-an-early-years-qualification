@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers.Base;
 
-[ChallengeResourceFilter]
+[ServiceFilter<ChallengeResourceFilterAttribute>]
 public class ServiceController : Controller
 {
 }
