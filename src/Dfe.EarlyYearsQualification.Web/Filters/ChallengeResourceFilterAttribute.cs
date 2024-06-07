@@ -9,34 +9,42 @@ public class ChallengeResourceFilterAttribute(ILogger<ChallengeResourceFilterAtt
     : Attribute, IResourceFilter
 {
     public const string AuthSecretCookieName = "auth-secret";
-    public const string Challenge = "CX";
 
     private const bool RedirectIsPermanent = false;
-    private const bool RedirectPreservesMethod = true;
+    private const bool RedirectPreservesMethod = false;
+
+    public static string Challenge
+    {
+        get { return "CX"; }
+    }
 
     public void OnResourceExecuting(ResourceExecutingContext context)
     {
-        if (context.HttpContext.Request.Cookies.ContainsKey(AuthSecretCookieName)
-            && context.HttpContext.Request.Cookies[AuthSecretCookieName]!.Equals(Challenge))
+        var cookieIsPresent = context.HttpContext.Request.Cookies.ContainsKey(AuthSecretCookieName);
+
+        if (cookieIsPresent && context.HttpContext.Request.Cookies[AuthSecretCookieName]!.Equals(Challenge))
         {
             return;
         }
 
-        logger.LogWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)}");
+        var warningMessage = $"Access denied by {nameof(ChallengeResourceFilterAttribute)}";
+
+        if (cookieIsPresent)
+        {
+            warningMessage += " (incorrect value submitted)";
+        }
+
+        logger.LogWarning(warningMessage);
 
         var requestedUri = context.HttpContext.Request.GetEncodedUrl();
 
-        var uriBuilder = new UriBuilder(requestedUri)
-                         {
-                             Path = "/challenge",
-                             Query = $"from={requestedUri}"
-                         };
-
-        var redirectUri = uriBuilder.Uri;
-
-        context.Result = new RedirectResult(redirectUri.ToString(),
-                                            RedirectIsPermanent,
-                                            RedirectPreservesMethod);
+        context.Result = new RedirectToActionResult("Index", "Challenge",
+                                                    new
+                                                    {
+                                                        redirectAddress = requestedUri
+                                                    },
+                                                    RedirectIsPermanent,
+                                                    RedirectPreservesMethod);
     }
 
     public void OnResourceExecuted(ResourceExecutedContext context)
