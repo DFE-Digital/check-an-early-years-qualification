@@ -65,7 +65,7 @@ public class ChallengeControllerTests
 
         content.Model.Should().BeAssignableTo<ChallengeModel>()
                .Which
-               .RedirectAddress.Should().Be(from);
+               .RedirectAddress.Should().Be("/");
     }
 
     [TestMethod]
