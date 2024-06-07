@@ -60,7 +60,6 @@ jobs:
               with:
                 context: ./
                 file: ./src/Dfe.EarlyYearsQualification.Web/Dockerfile
-                build-args: COMMIT_SHA=${{ inputs.checked-out-sha }}
                 tags: |
                     ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ inputs.branch }}-${{ inputs.checked-out-sha }}
                 push: true
