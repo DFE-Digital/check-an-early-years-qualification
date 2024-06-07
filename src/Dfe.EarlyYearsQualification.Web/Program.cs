@@ -59,6 +59,13 @@ builder.Services.AddScoped(x => {
 
 builder.Services.AddStaticRobotsTxt(robotsTxtOptions => robotsTxtOptions.DenyAll());
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 app.UseSecureHeadersMiddleware(
@@ -77,6 +84,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRobotsTxt();
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

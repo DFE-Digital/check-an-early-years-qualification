@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.SessionService;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,9 @@ public class QualificationDetailsController(
     [HttpGet]
     public IActionResult Get()
     {
-        return View();
+        var model = HttpContext.Session.GetSessionModel();
+        
+        return View(model);
     }
 
     [HttpGet("qualification-details/{qualificationId}")]

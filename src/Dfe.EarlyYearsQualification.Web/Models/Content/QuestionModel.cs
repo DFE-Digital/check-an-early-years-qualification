@@ -8,6 +8,8 @@ public class QuestionModel
 
     public List<OptionModel> Options { get; set; } = [];
 
+    public string SelectedOption { get; set; } = string.Empty;
+
     public string CtaButtonText { get; set; } = string.Empty;
 
     public string ActionName { get; set; } = string.Empty;
