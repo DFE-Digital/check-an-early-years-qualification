@@ -38,16 +38,6 @@ jobs:
               with:
                 ref: ${{ github.ref }}
 
-            - name: App Settings Variable Substitution
-              uses: microsoft/variable-substitution@v1
-              with:
-                files: 'src/Dfe.EarlyYearsQualification.Web/appsettings.json'
-              env:
-                ContentfulOptions.DeliveryApiKey: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
-                ContentfulOptions.PreviewApiKey: ${{ secrets.CONTENTFUL_PREVIEW_API_KEY }}
-                ContentfulOptions.SpaceId: ${{ secrets.CONTENTFUL_SPACE_ID }}
-                ContentfulOptions.UsePreviewApi: ${{ vars.CONTENTFUL_USE_PREVIEW_API }}
-
             - name: GitHub Container Registry Login
               uses: docker/login-action@v3
               with:
@@ -60,6 +50,7 @@ jobs:
               with:
                 context: ./
                 file: ./src/Dfe.EarlyYearsQualification.Web/Dockerfile
+                build-args: COMMIT_SHA=${{ inputs.checked-out-sha }}
                 tags: |
                     ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ inputs.branch }}-${{ inputs.checked-out-sha }}
                 push: true
