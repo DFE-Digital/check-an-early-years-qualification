@@ -109,3 +109,23 @@ variable "tracking_id" {
   description = "Google Tag Manager tracking ID"
   type        = string
 }
+
+variable "contentful_delivery_api_key" {
+  description = "Contentful delivery API key"
+  type        = string
+}
+
+variable "contentful_preview_api_key" {
+  description = "Contentful preview API key"
+  type        = string
+}
+
+variable "contentful_space_id" {
+  description = "Contentful space ID"
+  type        = string
+}
+
+variable "contentful_use_preview_api" {
+  description = "Boolean used to set whether content is preview or published"
+  type        = bool
+}

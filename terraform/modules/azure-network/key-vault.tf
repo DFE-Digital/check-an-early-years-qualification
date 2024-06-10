@@ -194,3 +194,21 @@ resource "azurerm_key_vault_key" "data-protection" {
     "wrapKey",
   ]
 }
+
+resource "azurerm_key_vault_secret" "contentful_delivery_api_key" {
+  name         = "ContentfulOptions--DeliveryApiKey"
+  value        = var.contentful_delivery_api_key
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+resource "azurerm_key_vault_secret" "contentful_preview_api_key" {
+  name         = "ContentfulOptions--PreviewApiKey"
+  value        = var.contentful_preview_api_key
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+resource "azurerm_key_vault_secret" "contentful_space_id" {
+  name         = "ContentfulOptions--SpaceId"
+  value        = var.contentful_space_id
+  key_vault_id = azurerm_key_vault.kv.id
+}
