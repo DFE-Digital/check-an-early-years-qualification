@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
@@ -19,7 +20,19 @@ public class ChallengeResourceFilterAttributeTests
     [TestMethod]
     public void ExecuteFilter_NoSecretValue_RedirectsToChallenge()
     {
-        var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance);
+        const string accessKey = "CX";
+
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:Keys:0", accessKey }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
+        var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance,
+                                                          configuration);
 
         var httpContext = new DefaultHttpContext
                           {
@@ -58,9 +71,20 @@ public class ChallengeResourceFilterAttributeTests
     [TestMethod]
     public void ExecuteFilter_NoSecretValue_LogsWarning()
     {
+        const string accessKey = "CX";
+
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:Keys:0", accessKey }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
         var mockLogger = new Mock<ILogger<ChallengeResourceFilterAttribute>>();
 
-        var filter = new ChallengeResourceFilterAttribute(mockLogger.Object);
+        var filter = new ChallengeResourceFilterAttribute(mockLogger.Object, configuration);
 
         var httpContext = new DefaultHttpContext
                           {
@@ -87,9 +111,21 @@ public class ChallengeResourceFilterAttributeTests
     }
 
     [TestMethod]
-    public void ExecuteFilter_CorrectSecretValue_PassesThrough()
+    public void ExecuteFilter_CorrectSecretValue1_PassesThrough()
     {
-        var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance);
+        const string accessKey = "CX";
+
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:Keys:0", accessKey }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
+        var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance,
+                                                          configuration);
 
         var httpContext = new DefaultHttpContext
                           {
@@ -103,7 +139,56 @@ public class ChallengeResourceFilterAttributeTests
 
         var cookie = new[]
                      {
-                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={ChallengeResourceFilterAttribute.Challenge}"
+                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={accessKey}"
+                     };
+
+        httpContext.Request.Headers["Cookie"] = cookie;
+
+        var actionContext = new ActionContext(httpContext,
+                                              new RouteData(),
+                                              new ActionDescriptor(),
+                                              new ModelStateDictionary());
+
+        var resourceExecutingContext = new ResourceExecutingContext(actionContext,
+                                                                    new List<IFilterMetadata>(),
+                                                                    new List<IValueProviderFactory>());
+
+        filter.OnResourceExecuting(resourceExecutingContext);
+
+        resourceExecutingContext.Result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void ExecuteFilter_CorrectSecretValue2_PassesThrough()
+    {
+        const string accessKey = "CX";
+
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:Keys:0", "SomeKey" }, // <== NB, not using the first key in the array 
+                      { "ServiceAccess:Keys:1", accessKey }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
+        var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance,
+                                                          configuration);
+
+        var httpContext = new DefaultHttpContext
+                          {
+                              Request =
+                              {
+                                  Scheme = "https",
+                                  Host = new HostString("localhost"),
+                                  Path = "/start"
+                              }
+                          };
+
+        var cookie = new[]
+                     {
+                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={accessKey}"
                      };
 
         httpContext.Request.Headers["Cookie"] = cookie;
@@ -125,7 +210,19 @@ public class ChallengeResourceFilterAttributeTests
     [TestMethod]
     public void ExecuteFilter_IncorrectSecretValue_RedirectsToChallenge()
     {
-        var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance);
+        const string accessKey = "CX";
+
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:Keys:0", accessKey }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
+        var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance,
+                                                          configuration);
 
         var httpContext = new DefaultHttpContext
                           {
@@ -139,7 +236,7 @@ public class ChallengeResourceFilterAttributeTests
 
         var cookie = new[]
                      {
-                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{ChallengeResourceFilterAttribute.Challenge}"
+                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{accessKey}"
                      };
 
         httpContext.Request.Headers["Cookie"] = cookie;
@@ -171,9 +268,20 @@ public class ChallengeResourceFilterAttributeTests
     [TestMethod]
     public void ExecuteFilter_IncorrectSecretValue_LogsWarning()
     {
+        const string accessKey = "CX";
+
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:Keys:0", accessKey }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
         var logger = new Mock<ILogger<ChallengeResourceFilterAttribute>>();
 
-        var filter = new ChallengeResourceFilterAttribute(logger.Object);
+        var filter = new ChallengeResourceFilterAttribute(logger.Object, configuration);
 
         var httpContext = new DefaultHttpContext
                           {
@@ -187,7 +295,7 @@ public class ChallengeResourceFilterAttributeTests
 
         var cookie = new[]
                      {
-                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{ChallengeResourceFilterAttribute.Challenge}"
+                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{accessKey}"
                      };
 
         httpContext.Request.Headers["Cookie"] = cookie;

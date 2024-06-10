@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace Dfe.EarlyYearsQualification.Web.Filters;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-public class ChallengeResourceFilterAttribute(ILogger<ChallengeResourceFilterAttribute> logger)
+public class ChallengeResourceFilterAttribute(
+    ILogger<ChallengeResourceFilterAttribute> logger,
+    IConfiguration configuration)
     : Attribute, IResourceFilter
 {
     public const string AuthSecretCookieName = "auth-secret";
@@ -12,16 +14,32 @@ public class ChallengeResourceFilterAttribute(ILogger<ChallengeResourceFilterAtt
     private const bool RedirectIsPermanent = false;
     private const bool RedirectPreservesMethod = false;
 
-    public static string Challenge
+    private string[]? ChallengeValues
     {
-        get { return "CX"; }
+        get
+        {
+            return configuration
+                   .GetSection("ServiceAccess")
+                   .GetSection("Keys")
+                   .Get<string[]>();
+        }
     }
 
     public void OnResourceExecuting(ResourceExecutingContext context)
     {
         var cookieIsPresent = context.HttpContext.Request.Cookies.ContainsKey(AuthSecretCookieName);
 
-        if (cookieIsPresent && context.HttpContext.Request.Cookies[AuthSecretCookieName]!.Equals(Challenge))
+        if (ChallengeValues == null || ChallengeValues.Length == 0)
+        {
+            logger.LogError("Service access keys not configured");
+            context.Result = new RedirectToActionResult("Error",
+                                                        "Home",
+                                                        new { },
+                                                        RedirectIsPermanent,
+                                                        RedirectPreservesMethod);
+        }
+
+        if (cookieIsPresent && ChallengeValues!.Contains(context.HttpContext.Request.Cookies[AuthSecretCookieName]))
         {
             return;
         }

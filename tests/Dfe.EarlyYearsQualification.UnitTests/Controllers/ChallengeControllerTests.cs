@@ -72,6 +72,7 @@ public class ChallengeControllerTests
     public async Task PostChallenge_WithCorrectValue_RedirectsWithCookie()
     {
         const string from = "/cookies";
+        const string accessKey = "CX";
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
@@ -82,7 +83,7 @@ public class ChallengeControllerTests
         var cookiesMock = new Mock<IResponseCookies>();
         cookiesMock.Setup(c =>
                               c.Append(ChallengeResourceFilterAttribute.AuthSecretCookieName,
-                                       ChallengeResourceFilterAttribute.Challenge))
+                                       accessKey))
                    .Callback((string k, string v) => cookies.Add(k, v));
 
         var mockContext = new Mock<HttpContext>();
@@ -98,7 +99,7 @@ public class ChallengeControllerTests
         var result = await controller.Post(new ChallengeModel
                                            {
                                                RedirectAddress = from,
-                                               Value = ChallengeResourceFilterAttribute.Challenge
+                                               Value = accessKey
                                            });
 
         result.Should().BeAssignableTo<RedirectResult>();
@@ -108,13 +109,14 @@ public class ChallengeControllerTests
 
         cookies.Should().ContainKey(ChallengeResourceFilterAttribute.AuthSecretCookieName);
         cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Should()
-                                                                      .Be(ChallengeResourceFilterAttribute.Challenge);
+                                                                      .Be(accessKey);
     }
 
     [TestMethod]
     public async Task PostChallenge_WithCorrectValue_ButNonLocalFrom_RedirectsWithCookie_ToBaseUrl()
     {
         const string from = "https://google.co.uk";
+        const string accessKey = "CX";
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
@@ -125,7 +127,7 @@ public class ChallengeControllerTests
         var cookiesMock = new Mock<IResponseCookies>();
         cookiesMock.Setup(c =>
                               c.Append(ChallengeResourceFilterAttribute.AuthSecretCookieName,
-                                       ChallengeResourceFilterAttribute.Challenge))
+                                       accessKey))
                    .Callback((string k, string v) => cookies.Add(k, v));
 
         var mockContext = new Mock<HttpContext>();
@@ -141,7 +143,7 @@ public class ChallengeControllerTests
         var result = await controller.Post(new ChallengeModel
                                            {
                                                RedirectAddress = from,
-                                               Value = ChallengeResourceFilterAttribute.Challenge
+                                               Value = accessKey
                                            });
 
         result.Should().BeAssignableTo<RedirectResult>();
@@ -151,6 +153,6 @@ public class ChallengeControllerTests
 
         cookies.Should().ContainKey(ChallengeResourceFilterAttribute.AuthSecretCookieName);
         cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Should()
-                                                                      .Be(ChallengeResourceFilterAttribute.Challenge);
+                                                                      .Be(accessKey);
     }
 }
