@@ -1,4 +1,4 @@
-@model Dfe.EarlyYearsQualification.Web.Models.JourneySessionModel;
+@model Dfe.EarlyYearsQualification.Web.Models.QualificationSearchModel;
 
 @{
     ViewData["Title"] = "Qualifications";
@@ -16,12 +16,12 @@
     <ul class="govuk-list govuk-list--bullet">
       @if(!string.IsNullOrEmpty(Model.LevelOfQual))
       {
-        <li>@Model.LevelOfQual</li> 
+        <li>@Model.SearchParams.LevelOfQual</li> 
       }
 
       @if(!string.IsNullOrEmpty(Model.WhereWasQualAwarded))
       {
-        <li>@Model.WhereWasQualAwarded</li> 
+        <li>@Model.SearchParams.WhereWasQualAwarded</li> 
       }
     </ul>
 

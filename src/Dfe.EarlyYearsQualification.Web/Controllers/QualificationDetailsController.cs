@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.SessionService;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -16,10 +17,14 @@ public class QualificationDetailsController(
     : Controller
 {
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
-        var model = HttpContext.Session.GetSessionModel();
+        var searchParams = HttpContext.Session.GetSessionModel();
         
+        var qualifications = await contentService.GetQualifications();
+
+        var model = MapQualificationSearch(qualifications, searchParams);
+
         return View(model);
     }
 
@@ -48,11 +53,32 @@ public class QualificationDetailsController(
             return RedirectToAction("Error", "Home");
         }
 
-        var model = await Map(qualification, detailsPageContent);
+        var model = await MapQualificationDetails(qualification, detailsPageContent);
         return View(model);
     }
 
-    private async Task<QualificationDetailsModel> Map(Qualification qualification, DetailsPage content)
+    private QualificationSearchModel MapQualificationSearch(List<Qualification> qualifications, JourneySessionModel searchParams)
+    {
+      var modelToReturn = new QualificationSearchModel()
+      {
+        SearchParams = searchParams
+      };
+
+      foreach (var qualification in qualifications)
+      {
+        modelToReturn.Qualifications.Add(new QualificationCardModel()
+        {
+          AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
+          QualificationId = qualification.QualificationId,
+          QualificationLevel = qualification.QualificationLevel,
+          QualificationName = qualification.QualificationName
+        });
+      }
+
+      return modelToReturn;
+    }
+
+    private async Task<QualificationDetailsModel> MapQualificationDetails(Qualification qualification, DetailsPage content)
     {
         return new QualificationDetailsModel
                {

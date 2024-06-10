@@ -22,5 +22,7 @@ public interface IContentService
 
     Task<PhaseBanner?> GetPhaseBannerContent();
 
+    Task<List<Qualification>> GetQualifications();
+
     Task<CookiesBanner?> GetCookiesBannerContent();
 }

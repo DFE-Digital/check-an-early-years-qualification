@@ -181,6 +181,11 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public async Task<List<Qualification>> GetQualifications()
+    {
+      return new List<Qualification>();
+    }
+
     private static QuestionPage CreateWhereWasTheQualificationAwardedPage()
     {
         var options = new List<Option>
