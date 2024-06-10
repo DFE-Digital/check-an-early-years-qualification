@@ -15,10 +15,11 @@
     If you have been invited to view this preview service, you will have been
     given a value that will grant access. Please type in the value and click 'Submit'.
 </p>
-<form action=@Url.Action("Post") method="post" enctype="application/x-www-form-urlencoded">
-    <input type="hidden" id="referralAddress" name="referralAddress" value="@Model.RedirectAddress"/>
+@using (Html.BeginForm("Post", "Challenge", new { }, FormMethod.Post))
+{
+    <input type="hidden" id="redirectAddress" name="redirectAddress" value="@Model.RedirectAddress"/>
     <input type="text" id="value" name="value" placeholder="key"/>
     <input type="submit" value="Submit"/>
-</form>
+}
 </body>
 </html>

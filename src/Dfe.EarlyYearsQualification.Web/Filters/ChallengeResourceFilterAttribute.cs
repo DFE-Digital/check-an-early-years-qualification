@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -36,12 +35,12 @@ public class ChallengeResourceFilterAttribute(ILogger<ChallengeResourceFilterAtt
 
         logger.LogWarning(warningMessage);
 
-        var requestedUri = context.HttpContext.Request.GetEncodedUrl();
+        var requestedPath = context.HttpContext.Request.Path;
 
         context.Result = new RedirectToActionResult("Index", "Challenge",
                                                     new
                                                     {
-                                                        redirectAddress = requestedUri
+                                                        redirectAddress = requestedPath
                                                     },
                                                     RedirectIsPermanent,
                                                     RedirectPreservesMethod);
