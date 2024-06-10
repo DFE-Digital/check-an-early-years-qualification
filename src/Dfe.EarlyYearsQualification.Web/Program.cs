@@ -59,7 +59,17 @@ builder.Services.AddScoped(x =>
                                return factory.GetUrlHelper(actionContext!);
                            });
 
-builder.Services.AddScoped<ChallengeResourceFilterAttribute>();
+var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:Unchallenged");
+// ...by default, challenge the user for the secret value unless that's explicitly turned off
+
+if (accessIsChallenged)
+{
+    builder.Services.AddScoped<IChallengeResourceFilterAttribute, ChallengeResourceFilterAttribute>();
+}
+else
+{
+    builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
+}
 
 builder.Services.AddStaticRobotsTxt(robotsTxtOptions => robotsTxtOptions.DenyAll());
 

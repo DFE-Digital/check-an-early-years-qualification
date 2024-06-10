@@ -7,7 +7,7 @@ namespace Dfe.EarlyYearsQualification.Web.Filters;
 public class ChallengeResourceFilterAttribute(
     ILogger<ChallengeResourceFilterAttribute> logger,
     IConfiguration configuration)
-    : Attribute, IResourceFilter
+    : Attribute, IChallengeResourceFilterAttribute
 {
     public const string AuthSecretCookieName = "auth-secret";
 
@@ -27,8 +27,6 @@ public class ChallengeResourceFilterAttribute(
 
     public void OnResourceExecuting(ResourceExecutingContext context)
     {
-        var cookieIsPresent = context.HttpContext.Request.Cookies.ContainsKey(AuthSecretCookieName);
-
         if (ChallengeValues == null || ChallengeValues.Length == 0)
         {
             logger.LogError("Service access keys not configured");
@@ -38,6 +36,8 @@ public class ChallengeResourceFilterAttribute(
                                                         RedirectIsPermanent,
                                                         RedirectPreservesMethod);
         }
+
+        var cookieIsPresent = context.HttpContext.Request.Cookies.ContainsKey(AuthSecretCookieName);
 
         if (cookieIsPresent && ChallengeValues!.Contains(context.HttpContext.Request.Cookies[AuthSecretCookieName]))
         {
