@@ -38,15 +38,6 @@
                 <th scope="col" class="govuk-table__header">Qualification link</th>
             </tr>
             </thead>
-            @* <tbody class="govuk-table__body">
-            @foreach (var qualification in Model.Qualifications)
-            {
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">@Html.ActionLink(qualification.QualificationName, "Index", new { qualificationId = qualification.QualificationId })</td>
-                    <td>Level: @qualification.QualificationLevel</td>
-                </tr>
-            }
-            </tbody> *@
             <ul class="govuk-list govuk-list--spaced">
             @foreach (var qualification in Model.Qualifications)
             {
