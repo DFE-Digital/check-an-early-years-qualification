@@ -21,7 +21,7 @@ public class QualificationDetailsController(
     {
         var searchParams = HttpContext.Session.GetSessionModel();
         
-        var qualifications = await contentService.GetQualifications();
+        var qualifications = await contentService.GetQualifications(searchParams.LevelOfQual);
 
         var model = MapQualificationSearch(qualifications, searchParams);
 

@@ -181,7 +181,7 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<List<Qualification>> GetQualifications()
+    public async Task<List<Qualification>> GetQualifications(string? level)
     {
       return new List<Qualification>();
     }

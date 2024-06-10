@@ -22,7 +22,7 @@ public interface IContentService
 
     Task<PhaseBanner?> GetPhaseBannerContent();
 
-    Task<List<Qualification>> GetQualifications();
+    Task<List<Qualification>> GetQualifications(string? level);
 
     Task<CookiesBanner?> GetCookiesBannerContent();
 }

@@ -149,9 +149,17 @@ public class ContentfulContentService(
         return cookiesBannerEntry.First();
     }
 
-    public async Task<List<Qualification>> GetQualifications()
+    public async Task<List<Qualification>> GetQualifications(string? level)
     {
-      var qualifications = await GetEntriesByType<Qualification>();
+
+      var queryBuilder = new QueryBuilder<Qualification>();
+
+      if (!string.IsNullOrEmpty(level))
+      {
+        queryBuilder.FieldEquals("fields.qualificationLevel", level);
+      }
+
+      var qualifications = await GetEntriesByType(queryBuilder);
 
       if (qualifications == null)
       {

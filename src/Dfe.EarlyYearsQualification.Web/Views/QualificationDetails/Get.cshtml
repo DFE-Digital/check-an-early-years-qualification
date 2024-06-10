@@ -1,4 +1,4 @@
-@model Dfe.EarlyYearsQualification.Web.Models.QualificationSearchModel;
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QualificationSearchModel;
 
 @{
     ViewData["Title"] = "Qualifications";
@@ -14,19 +14,19 @@
       </label>
     </h1>
     <ul class="govuk-list govuk-list--bullet">
-      @if(!string.IsNullOrEmpty(Model.LevelOfQual))
+      @if(!string.IsNullOrEmpty(Model.SearchParams.LevelOfQual))
       {
         <li>@Model.SearchParams.LevelOfQual</li> 
       }
 
-      @if(!string.IsNullOrEmpty(Model.WhereWasQualAwarded))
+      @if(!string.IsNullOrEmpty(Model.SearchParams.WhereWasQualAwarded))
       {
         <li>@Model.SearchParams.WhereWasQualAwarded</li> 
       }
     </ul>
 
     <p class="govuk-body">
-      <a href="q1" class="govuk-link">Change my search</a>
+      <a href="/" class="govuk-link">Change my search</a>
     </p>
 
   </div>
@@ -38,14 +38,40 @@
                 <th scope="col" class="govuk-table__header">Qualification link</th>
             </tr>
             </thead>
-            <tbody class="govuk-table__body">
-            @foreach (var qualification in qualifications)
+            @* <tbody class="govuk-table__body">
+            @foreach (var qualification in Model.Qualifications)
             {
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">@Html.ActionLink(qualification, "Index", new { qualificationId = qualification })</td>
+                    <td class="govuk-table__cell">@Html.ActionLink(qualification.QualificationName, "Index", new { qualificationId = qualification.QualificationId })</td>
+                    <td>Level: @qualification.QualificationLevel</td>
                 </tr>
             }
-            </tbody>
+            </tbody> *@
+            <ul class="govuk-list govuk-list--spaced">
+            @foreach (var qualification in Model.Qualifications)
+            {
+              <li>
+                <div>
+                  <h2>
+                    @Html.ActionLink(qualification.QualificationName, "Index", new { qualificationId = qualification.QualificationId })
+                  </h2>
+                  <p>
+                    <strong>
+                      Level: 
+                    </strong>
+                    @qualification.QualificationLevel
+                  </p>
+                  <p>
+                    <strong>
+                      Awarding Organisation: 
+                    </strong>
+                    @qualification.AwardingOrganisationTitle
+                  </p>
+                </div>
+              </li>
+              <hr />
+            }
+            </ul>
         </table>
     </div>
 </div>
