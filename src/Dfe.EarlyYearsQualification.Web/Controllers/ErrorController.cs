@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/error")]
-public class ErrorController(
-    ILogger<ChallengeController> logger) : Controller
+public class ErrorController : Controller
 {
     [HttpGet]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
