@@ -20,24 +20,24 @@ public class QuestionsController(
     [HttpGet("where-was-the-qualification-awarded")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
-        return await GetView(QuestionPages.WhereWasTheQualificationAwarded,
+        return await GetRadioView(QuestionPages.WhereWasTheQualificationAwarded,
                              nameof(this.WhereWasTheQualificationAwarded),
                              Questions);
     }
 
     [HttpPost("where-was-the-qualification-awarded")]
-    public async Task<IActionResult> WhereWasTheQualificationAwarded(QuestionModel model)
+    public async Task<IActionResult> WhereWasTheQualificationAwarded(RadioQuestionModel model)
     {
         if (!ModelState.IsValid)
         {
-            var questionPage = await contentService.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
+            var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
             if (questionPage is not null)
             {
-                model = await Map(model, questionPage, nameof(this.WhereWasTheQualificationAwarded), Questions);
+                model = await MapRadioModel(model, questionPage, nameof(this.WhereWasTheQualificationAwarded), Questions);
                 model.HasErrors = true;
             }
 
-            return View("Question", model);
+            return View("Radio", model);
         }
 
         return model.Option == Options.OutsideOfTheUnitedKingdom
@@ -46,22 +46,26 @@ public class QuestionsController(
     }
 
     [HttpGet("when-was-the-qualification-started")]
-    public async Task<IActionResult> WhenWasTheQualificationStarted()
+    public IActionResult WhenWasTheQualificationStarted()
     {
         // This is just a temporary page until the design is finalised through UR
-        var questionPage = new QuestionPage
+        var questionPage = new DateQuestionPage
                            {
                                CtaButtonText = "Continue",
                                Question = "When was the qualification started?",
-                               Options = []
+                               ErrorMessage = "Please select a valid date",
+                               MonthLabel = "Month",
+                               YearLabel = "Year",
+                               QuestionHint = "Enter the month and year, for example 3 2014"
                            };
-        var model = await Map(new QuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted),
+
+        var model = MapDateModel(new DateQuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted),
                               Questions);
-        return View("Question", model);
+        return View("Date", model);
     }
 
     [HttpPost("when-was-the-qualification-started")]
-    public IActionResult WhenWasTheQualificationStarted(QuestionModel model)
+    public IActionResult WhenWasTheQualificationStarted(RadioQuestionModel model)
     {
         // This is just a temporary page until the design is finalised through UR
         // For now just redirect to the next page. Model validation will be done at a later date
@@ -71,43 +75,43 @@ public class QuestionsController(
     [HttpGet("what-level-is-the-qualification")]
     public async Task<IActionResult> WhatLevelIsTheQualification()
     {
-        return await GetView(QuestionPages.WhatLevelIsTheQualification, nameof(this.WhatLevelIsTheQualification),
+        return await GetRadioView(QuestionPages.WhatLevelIsTheQualification, nameof(this.WhatLevelIsTheQualification),
                              Questions);
     }
 
     [HttpPost("what-level-is-the-qualification")]
-    public async Task<IActionResult> WhatLevelIsTheQualification(QuestionModel model)
+    public async Task<IActionResult> WhatLevelIsTheQualification(RadioQuestionModel model)
     {
         if (!ModelState.IsValid)
         {
-            var questionPage = await contentService.GetQuestionPage(QuestionPages.WhatLevelIsTheQualification);
+            var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification);
             if (questionPage is not null)
             {
-                model = await Map(model, questionPage, nameof(this.WhatLevelIsTheQualification), Questions);
+                model = await MapRadioModel(model, questionPage, nameof(this.WhatLevelIsTheQualification), Questions);
                 model.HasErrors = true;
             }
 
-            return View("Question", model);
+            return View("Radio", model);
         }
 
         return RedirectToAction("Get", "QualificationDetails");
     }
 
-    private async Task<IActionResult> GetView(string questionPageId, string actionName, string controllerName)
+    private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName)
     {
-        var questionPage = await contentService.GetQuestionPage(questionPageId);
+        var questionPage = await contentService.GetRadioQuestionPage(questionPageId);
         if (questionPage is null)
         {
             logger.LogError("No content for the question page");
             return RedirectToAction("Error", "Home");
         }
 
-        var model = await Map(new QuestionModel(), questionPage, actionName, controllerName);
+        var model = await MapRadioModel(new RadioQuestionModel(), questionPage, actionName, controllerName);
 
-        return View("Question", model);
+        return View("Radio", model);
     }
 
-    private async Task<QuestionModel> Map(QuestionModel model, QuestionPage question, string actionName,
+    private async Task<RadioQuestionModel> MapRadioModel(RadioQuestionModel model, RadioQuestionPage question, string actionName,
                                           string controllerName)
     {
         model.Question = question.Question;
@@ -118,6 +122,20 @@ public class QuestionsController(
         model.ErrorMessage = question.ErrorMessage;
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
         model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
+        return model;
+    }
+
+    private DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestionPage question, string actionName,
+                                          string controllerName)
+    {
+        model.Question = question.Question;
+        model.CtaButtonText = question.CtaButtonText;
+        model.ActionName = actionName;
+        model.ControllerName = controllerName;
+        model.ErrorMessage = question.ErrorMessage;
+        model.QustionHint = question.QuestionHint;
+        model.MonthLabel = question.MonthLabel;
+        model.YearLabel = question.YearLabel;
         return model;
     }
 }

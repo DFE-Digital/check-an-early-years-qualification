@@ -123,7 +123,7 @@ public class MockContentfulService : IContentService
                                                       ));
     }
 
-    public async Task<QuestionPage?> GetQuestionPage(string entryId)
+    public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
     {
         return entryId switch
                {
@@ -133,6 +133,11 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateWhereWasTheQualificationAwardedPage()),
                    _ => throw new NotImplementedException($"No question page mock for entry {entryId}")
                };
+    }
+
+    public Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
+    {
+      throw new NotImplementedException();
     }
 
     public async Task<StartPage?> GetStartPage()
@@ -181,7 +186,7 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    private static QuestionPage CreateWhereWasTheQualificationAwardedPage()
+    private static RadioQuestionPage CreateWhereWasTheQualificationAwardedPage()
     {
         var options = new List<Option>
                       {
@@ -198,7 +203,7 @@ public class MockContentfulService : IContentService
         return CreateQuestionPage("Where was the qualification awarded?", options);
     }
 
-    private static QuestionPage CreateWhatLevelIsTheQualificationPage()
+    private static RadioQuestionPage CreateWhatLevelIsTheQualificationPage()
     {
         var options = new List<Option>
                       {
@@ -214,9 +219,9 @@ public class MockContentfulService : IContentService
         return CreateQuestionPage("What level is the qualification?", options);
     }
 
-    private static QuestionPage CreateQuestionPage(string question, List<Option> options)
+    private static RadioQuestionPage CreateQuestionPage(string question, List<Option> options)
     {
-        return new QuestionPage
+        return new RadioQuestionPage
                {
                    Question = question,
                    Options = options,

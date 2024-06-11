@@ -19,12 +19,13 @@ public class ContentfulContentService(
               { typeof(Qualification), "Qualification" },
               { typeof(DetailsPage), "detailsPage" },
               { typeof(AdvicePage), "advicePage" },
-              { typeof(QuestionPage), "questionPage" },
+              { typeof(RadioQuestionPage), "radioQuestionPage" },
               { typeof(AccessibilityStatementPage), "accessibilityStatementPage" },
               { typeof(NavigationLinks), "navigationLinks" },
               { typeof(CookiesPage), "cookiesPage" },
               { typeof(PhaseBanner), "phaseBanner" },
-              { typeof(CookiesBanner), "cookiesBanner" }
+              { typeof(CookiesBanner), "cookiesBanner" },
+              { typeof(DateQuestionPage), "dateQuestionPage" },
           };
 
     public async Task<StartPage?> GetStartPage()
@@ -120,10 +121,15 @@ public class ContentfulContentService(
         return advicePage;
     }
 
-    public async Task<QuestionPage?> GetQuestionPage(string entryId)
+    public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
     {
-        return await GetEntryById<QuestionPage>(entryId);
+        return await GetEntryById<RadioQuestionPage>(entryId);
     }
+
+      public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
+      {
+          return await GetEntryById<DateQuestionPage>(entryId);
+      }
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
