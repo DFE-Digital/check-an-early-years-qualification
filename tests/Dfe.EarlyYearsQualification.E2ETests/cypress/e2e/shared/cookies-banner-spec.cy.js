@@ -1,12 +1,16 @@
 import { pages } from "./urls-to-check";
 
 describe("A spec that tests that the cookies banner shows on all pages", () => {
+  beforeEach(() => {
+    cy.setCookie('auth-secret', Cypress.env('auth_secret'));
+  })
+
   // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
   pages.forEach((option) => {
     it(`Checks that the cookies banner is present at the URL: ${option}`, () => {
 
       cy.visit(option);
-      
+
       cy.get("#choose-cookies-preference").should("be.visible");
       cy.get("#cookies-preference-chosen").should("not.exist");
 
@@ -26,7 +30,7 @@ describe("A spec that tests that the cookies banner shows on all pages", () => {
         .should('have.property', 'value', "%7B%22HasApproved%22%3Atrue%2C%22IsVisible%22%3Atrue%2C%22IsRejected%22%3Afalse%7D");
 
       cy.get("#cookies-banner-pref-chosen-content").should("contain.text", "This is the accepted cookie content");
-      
+
       cy.get('button[id="hide-cookie-banner-button"]').click();
 
       cy.get("#choose-cookies-preference").should("not.exist");
@@ -48,7 +52,7 @@ describe("A spec that tests that the cookies banner shows on all pages", () => {
         .should('have.property', 'value', "%7B%22HasApproved%22%3Afalse%2C%22IsVisible%22%3Atrue%2C%22IsRejected%22%3Atrue%7D");
 
       cy.get("#cookies-banner-pref-chosen-content").should("contain.text", "This is the rejected cookie content");
-      
+
       cy.get('button[id="hide-cookie-banner-button"]').click();
 
       cy.get("#choose-cookies-preference").should("not.exist");

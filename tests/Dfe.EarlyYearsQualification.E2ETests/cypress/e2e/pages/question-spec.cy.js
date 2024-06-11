@@ -1,5 +1,8 @@
 describe("A spec that tests question pages", () => {
-   
+    beforeEach(() => {
+        cy.setCookie('auth-secret', Cypress.env('auth_secret'));
+    })
+
     // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService. 
     it("Checks the content on where-was-the-qualification-awarded page", () => {
         cy.visit("/questions/where-was-the-qualification-awarded");
@@ -17,7 +20,7 @@ describe("A spec that tests question pages", () => {
 
         cy.get('button[id="question-submit"]').click();
         cy.location().should((loc) => {
-          expect(loc.pathname).to.eq("/questions/where-was-the-qualification-awarded");
+            expect(loc.pathname).to.eq("/questions/where-was-the-qualification-awarded");
         })
 
         cy.get('#option-error').should("exist");
@@ -47,7 +50,7 @@ describe("A spec that tests question pages", () => {
 
         cy.get('button[id="question-submit"]').click();
         cy.location().should((loc) => {
-          expect(loc.pathname).to.eq("/questions/what-level-is-the-qualification");
+            expect(loc.pathname).to.eq("/questions/what-level-is-the-qualification");
         })
 
         cy.get('#option-error').should("exist");
