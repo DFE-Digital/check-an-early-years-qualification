@@ -36,8 +36,8 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Error");
-        resultType.ControllerName.Should().Be("Home");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
     }

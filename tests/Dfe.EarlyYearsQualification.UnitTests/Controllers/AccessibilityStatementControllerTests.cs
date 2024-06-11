@@ -33,7 +33,7 @@ public class AccessibilityStatementControllerTests
         var result = await controller.Index();
 
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(new RedirectToActionResult("Error", "Home", null));
+        result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null));
 
         mockLogger.VerifyError("No content for the accessibility statement page");
     }

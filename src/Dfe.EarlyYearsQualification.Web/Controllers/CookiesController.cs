@@ -26,7 +26,7 @@ public class CookiesController(
         if (content is null)
         {
             logger.LogError("No content for the cookies page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var model = await Map(content);

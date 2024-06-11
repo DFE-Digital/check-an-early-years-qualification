@@ -24,7 +24,7 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
         if (advicePage is null)
         {
             logger.LogError("No content for the advice page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var model = await Map(advicePage);

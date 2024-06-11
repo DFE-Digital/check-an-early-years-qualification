@@ -33,7 +33,7 @@ public class QualificationDetailsController(
         if (detailsPageContent is null)
         {
             logger.LogError("No content for the qualification details page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var qualification = await contentService.GetQualificationById(qualificationId);
@@ -43,7 +43,7 @@ public class QualificationDetailsController(
             logger.LogError("Could not find details for qualification with ID: {QualificationId}",
                             loggedQualificationId);
 
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var model = await Map(qualification, detailsPageContent);

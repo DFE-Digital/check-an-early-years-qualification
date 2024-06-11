@@ -100,7 +100,7 @@ public class QuestionsController(
         if (questionPage is null)
         {
             logger.LogError("No content for the question page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var model = await Map(new QuestionModel(), questionPage, actionName, controllerName);

@@ -59,7 +59,7 @@ builder.Services.AddScoped(x =>
                                return factory.GetUrlHelper(actionContext!);
                            });
 
-var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:Unchallenged");
+var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
 
 if (accessIsChallenged)

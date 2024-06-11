@@ -22,7 +22,7 @@ public class AccessibilityStatementController(
         if (content is null)
         {
             logger.LogError("No content for the accessibility statement page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var model = await Map(content);

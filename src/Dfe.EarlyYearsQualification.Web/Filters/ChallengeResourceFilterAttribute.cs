@@ -11,8 +11,8 @@ public class ChallengeResourceFilterAttribute(
 {
     public const string AuthSecretCookieName = "auth-secret";
 
-    private const bool RedirectIsPermanent = false;
-    private const bool RedirectPreservesMethod = false;
+    private const bool RedirectsArePermanent = false;
+    private const bool RedirectsPreserveMethod = false;
 
     private string[]? ChallengeValues
     {
@@ -30,11 +30,12 @@ public class ChallengeResourceFilterAttribute(
         if (ChallengeValues == null || ChallengeValues.Length == 0)
         {
             logger.LogError("Service access keys not configured");
-            context.Result = new RedirectToActionResult("Error",
-                                                        "Home",
+            context.Result = new RedirectToActionResult("Index",
+                                                        "Error",
                                                         new { },
-                                                        RedirectIsPermanent,
-                                                        RedirectPreservesMethod);
+                                                        RedirectsArePermanent,
+                                                        RedirectsPreserveMethod);
+            return;
         }
 
         var cookieIsPresent = context.HttpContext.Request.Cookies.ContainsKey(AuthSecretCookieName);
@@ -55,13 +56,14 @@ public class ChallengeResourceFilterAttribute(
 
         var requestedPath = context.HttpContext.Request.Path;
 
-        context.Result = new RedirectToActionResult("Index", "Challenge",
+        context.Result = new RedirectToActionResult("Index",
+                                                    "Challenge",
                                                     new
                                                     {
                                                         redirectAddress = requestedPath
                                                     },
-                                                    RedirectIsPermanent,
-                                                    RedirectPreservesMethod);
+                                                    RedirectsArePermanent,
+                                                    RedirectsPreserveMethod);
     }
 
     public void OnResourceExecuted(ResourceExecutedContext context)
