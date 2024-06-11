@@ -86,7 +86,7 @@ resource "azurerm_key_vault_access_policy" "kv_gh_ap" {
     "SetRotationPolicy"
   ]
 
-  secret_permissions = ["List", "Get", "Set"]
+  secret_permissions = ["List", "Get", "Set", "Recover"]
 
   certificate_permissions = [
     "Create",
