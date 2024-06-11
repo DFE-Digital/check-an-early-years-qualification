@@ -67,3 +67,18 @@ variable "kv_certificate_subject" {
   description = "Subject of the Certificate"
   type        = string
 }
+
+variable "contentful_delivery_api_key" {
+  description = "Contentful delivery API key"
+  type        = string
+}
+
+variable "contentful_preview_api_key" {
+  description = "Contentful preview API key"
+  type        = string
+}
+
+variable "contentful_space_id" {
+  description = "Contentful space ID"
+  type        = string
+}
