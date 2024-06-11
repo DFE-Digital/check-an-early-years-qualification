@@ -3,6 +3,26 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Dfe.EarlyYearsQualification.Web.Filters;
 
+/// <summary>
+///     Filter attribute that will check the HTTP request for a cookie whose value matches
+///     one of the configured keys. Up to four allowable keys are set up in the service config:
+///     <code>
+///   "ServiceAccess":
+///   {
+///     "IsPublic": false,
+///     "Keys": [
+///       "Key-value-1",
+///       "Key-value-2"
+///       "Key-value-3"
+///       "Key-value-4"
+///     ]
+///   }
+///     </code>
+///     "IsPublic" defaults to false. If "IsPublic" is true, it is more efficient to
+///     add <see cref="NoChallengeResourceFilterAttribute" /> to the pipeline instead.
+/// </summary>
+/// <param name="logger"></param>
+/// <param name="configuration"></param>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 public class ChallengeResourceFilterAttribute(
     ILogger<ChallengeResourceFilterAttribute> logger,
@@ -14,20 +34,32 @@ public class ChallengeResourceFilterAttribute(
     private const bool RedirectsArePermanent = false;
     private const bool RedirectsPreserveMethod = false;
 
-    private string[]? ChallengeValues
+    private bool AllowPublicAccess
+    {
+        get { return configuration.GetValue<bool>("ServiceAccess:IsPublic"); }
+    }
+
+    private IEnumerable<string> ConfiguredKeys
     {
         get
         {
-            return configuration
-                   .GetSection("ServiceAccess")
-                   .GetSection("Keys")
-                   .Get<string[]>();
+            var keys = configuration
+                       .GetSection("ServiceAccess")
+                       .GetSection("Keys")
+                       .Get<string[]>();
+
+            return keys == null ? [] : keys.Where(k => !string.IsNullOrWhiteSpace(k));
         }
     }
 
     public void OnResourceExecuting(ResourceExecutingContext context)
     {
-        if (ChallengeValues == null || ChallengeValues.Length == 0)
+        if (AllowPublicAccess)
+        {
+            return;
+        }
+
+        if (!ConfiguredKeys.Any())
         {
             logger.LogError("Service access keys not configured");
             context.Result = new RedirectToActionResult("Index",
@@ -40,7 +72,7 @@ public class ChallengeResourceFilterAttribute(
 
         var cookieIsPresent = context.HttpContext.Request.Cookies.ContainsKey(AuthSecretCookieName);
 
-        if (cookieIsPresent && ChallengeValues!.Contains(context.HttpContext.Request.Cookies[AuthSecretCookieName]))
+        if (cookieIsPresent && ConfiguredKeys.Contains(context.HttpContext.Request.Cookies[AuthSecretCookieName]))
         {
             return;
         }

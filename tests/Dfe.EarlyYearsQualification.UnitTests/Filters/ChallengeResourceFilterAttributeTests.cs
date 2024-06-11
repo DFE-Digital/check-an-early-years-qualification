@@ -313,4 +313,213 @@ public class ChallengeResourceFilterAttributeTests
 
         logger.VerifyWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)} (incorrect value submitted)");
     }
+
+    [TestMethod]
+    public void Filter_NoSecretsConfigured_RedirectsToError()
+    {
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(new Dictionary<string, string?>())
+                            .Build();
+
+        var logger = new Mock<ILogger<ChallengeResourceFilterAttribute>>();
+
+        var filter = new ChallengeResourceFilterAttribute(logger.Object, configuration);
+
+
+        var httpContext = new DefaultHttpContext
+                          {
+                              Request =
+                              {
+                                  Scheme = "https",
+                                  Host = new HostString("localhost"),
+                                  Path = "/start"
+                              }
+                          };
+
+        var actionContext = new ActionContext(httpContext,
+                                              new RouteData(),
+                                              new ActionDescriptor(),
+                                              new ModelStateDictionary());
+
+        var resourceExecutingContext = new ResourceExecutingContext(actionContext,
+                                                                    new List<IFilterMetadata>(),
+                                                                    new List<IValueProviderFactory>());
+
+        filter.OnResourceExecuting(resourceExecutingContext);
+
+        var result = resourceExecutingContext.Result;
+
+        result.Should().BeAssignableTo<RedirectToActionResult>();
+
+        var redirect = (RedirectToActionResult)result!;
+
+        redirect.ActionName.Should().Be("Index");
+        redirect.ControllerName.Should().Be("Error");
+    }
+
+    [TestMethod]
+    public void Filter_OnlyEmptySecretsConfigured_RedirectsToError()
+    {
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:Keys:0", " " },
+                      { "ServiceAccess:Keys:1", "\t" }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
+        var logger = new Mock<ILogger<ChallengeResourceFilterAttribute>>();
+
+        var filter = new ChallengeResourceFilterAttribute(logger.Object, configuration);
+
+
+        var httpContext = new DefaultHttpContext
+                          {
+                              Request =
+                              {
+                                  Scheme = "https",
+                                  Host = new HostString("localhost"),
+                                  Path = "/start"
+                              }
+                          };
+
+        var actionContext = new ActionContext(httpContext,
+                                              new RouteData(),
+                                              new ActionDescriptor(),
+                                              new ModelStateDictionary());
+
+        var resourceExecutingContext = new ResourceExecutingContext(actionContext,
+                                                                    new List<IFilterMetadata>(),
+                                                                    new List<IValueProviderFactory>());
+
+        filter.OnResourceExecuting(resourceExecutingContext);
+
+        var result = resourceExecutingContext.Result;
+
+        result.Should().BeAssignableTo<RedirectToActionResult>();
+
+        var redirect = (RedirectToActionResult)result!;
+
+        redirect.ActionName.Should().Be("Index");
+        redirect.ControllerName.Should().Be("Error");
+    }
+
+    [TestMethod]
+    public void Filter_NoSecretsConfigured_LogsError()
+    {
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(new Dictionary<string, string?>())
+                            .Build();
+
+        var mockLogger = new Mock<ILogger<ChallengeResourceFilterAttribute>>();
+
+        var filter = new ChallengeResourceFilterAttribute(mockLogger.Object, configuration);
+
+        var httpContext = new DefaultHttpContext
+                          {
+                              Request =
+                              {
+                                  Scheme = "https",
+                                  Host = new HostString("localhost"),
+                                  Path = "/start"
+                              }
+                          };
+
+        var actionContext = new ActionContext(httpContext,
+                                              new RouteData(),
+                                              new ActionDescriptor(),
+                                              new ModelStateDictionary());
+
+        var resourceExecutingContext = new ResourceExecutingContext(actionContext,
+                                                                    new List<IFilterMetadata>(),
+                                                                    new List<IValueProviderFactory>());
+
+        filter.OnResourceExecuting(resourceExecutingContext);
+
+        mockLogger.VerifyError("Service access keys not configured");
+    }
+
+    [TestMethod]
+    public void Filter_OnlyEmptySecretsConfigured_LogsError()
+    {
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:Keys:0", " " },
+                      { "ServiceAccess:Keys:1", "\t" }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
+        var mockLogger = new Mock<ILogger<ChallengeResourceFilterAttribute>>();
+
+        var filter = new ChallengeResourceFilterAttribute(mockLogger.Object, configuration);
+
+        var httpContext = new DefaultHttpContext
+                          {
+                              Request =
+                              {
+                                  Scheme = "https",
+                                  Host = new HostString("localhost"),
+                                  Path = "/start"
+                              }
+                          };
+
+        var actionContext = new ActionContext(httpContext,
+                                              new RouteData(),
+                                              new ActionDescriptor(),
+                                              new ModelStateDictionary());
+
+        var resourceExecutingContext = new ResourceExecutingContext(actionContext,
+                                                                    new List<IFilterMetadata>(),
+                                                                    new List<IValueProviderFactory>());
+
+        filter.OnResourceExecuting(resourceExecutingContext);
+
+        mockLogger.VerifyError("Service access keys not configured");
+    }
+
+    [TestMethod]
+    public void ExecuteFilter_AllowPublicAccess_PassesThrough()
+    {
+        var dic = new Dictionary<string, string?>
+                  {
+                      { "ServiceAccess:IsPublic", true.ToString() }
+                  };
+
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(dic)
+                            .Build();
+
+        var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance,
+                                                          configuration);
+
+        var httpContext = new DefaultHttpContext
+                          {
+                              Request =
+                              {
+                                  Scheme = "https",
+                                  Host = new HostString("localhost"),
+                                  Path = "/start"
+                              }
+                          };
+
+        var actionContext = new ActionContext(httpContext,
+                                              new RouteData(),
+                                              new ActionDescriptor(),
+                                              new ModelStateDictionary());
+
+        var resourceExecutingContext = new ResourceExecutingContext(actionContext,
+                                                                    new List<IFilterMetadata>(),
+                                                                    new List<IValueProviderFactory>());
+
+        filter.OnResourceExecuting(resourceExecutingContext);
+
+        var result = resourceExecutingContext.Result;
+
+        result.Should().BeNull();
+    }
 }
