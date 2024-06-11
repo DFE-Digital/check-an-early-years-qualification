@@ -65,10 +65,20 @@ public class QuestionsController(
     }
 
     [HttpPost("when-was-the-qualification-started")]
-    public IActionResult WhenWasTheQualificationStarted(RadioQuestionModel model)
+    public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
     {
-        // This is just a temporary page until the design is finalised through UR
-        // For now just redirect to the next page. Model validation will be done at a later date
+        if (!ModelState.IsValid || !model.IsModelValid())
+        {
+            var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+            if (questionPage is not null)
+            {
+                model = MapDateModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions);
+                model.HasErrors = true;
+            }
+
+            return View("Date", model);
+        }
+
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
 
