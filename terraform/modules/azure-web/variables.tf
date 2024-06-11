@@ -45,6 +45,32 @@ variable "webapp_name" {
   type        = string
 }
 
+variable "webapp_accessIsPublic" {
+  description = "Web app service is public, and access is unchallenged"
+  default     = false
+  type        = bool
+}
+
+variable "webapp_e2e_accessKey" {
+  description = "Web app access key for automated end-to-end tests"
+  type        = string
+}
+
+variable "webapp_team_accessKey" {
+  description = "Web app access key for the service team"
+  type        = string
+}
+
+variable "webapp_accessKey1" {
+  description = "Web app access key for invited access 1"
+  type        = string
+}
+
+variable "webapp_accessKey2" {
+  description = "Web app access key for invited access 2"
+  type        = string
+}
+
 variable "webapp_subnet_id" {
   description = "ID of the delegated Subnet for the Web Application"
   type        = string
@@ -82,6 +108,11 @@ variable "webapp_session_cookie_name" {
 
 variable "webapp_cookie_preference_name" {
   description = "Name of the user's cookie preference cookie"
+  type        = string
+}
+
+variable "webapp_cookie_auth_secret_name" {
+  description = "Name of the cookie holding the auth secret"
   type        = string
 }
 

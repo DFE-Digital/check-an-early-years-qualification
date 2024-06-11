@@ -75,10 +75,16 @@ module "webapp" {
   webapp_docker_registry_url               = var.webapp_docker_registry_url
   webapp_session_cookie_name               = "_early_years_qualification_session"
   webapp_cookie_preference_name            = "cookies_preferences_set"
+  webapp_cookie_auth_secret_name           = "auth-secret"
   webapp_custom_domain_name                = var.custom_domain_name
   webapp_custom_domain_cert_secret_label   = var.kv_certificate_label
   webapp_health_check_path                 = "/health"
   webapp_health_check_eviction_time_in_min = 10
+  webapp_accessIsPublic                    = false
+  webapp_e2e_accessKey                     = ""
+  webapp_team_accessKey                    = ""
+  webapp_accessKey1                        = ""
+  webapp_accessKey2                        = ""
   agw_subnet_id                            = module.network.agw_subnet_id
   agw_pip_id                               = module.network.agw_pip_id
   kv_id                                    = module.network.kv_id
