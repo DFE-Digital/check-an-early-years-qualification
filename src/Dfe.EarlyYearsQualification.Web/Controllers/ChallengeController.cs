@@ -12,6 +12,7 @@ public class ChallengeController(
     private const string DefaultRedirectAddress = "/";
 
     [HttpGet]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public Task<IActionResult> Index([FromQuery] ChallengeModel model)
     {
         if (!ModelState.IsValid)
