@@ -380,7 +380,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
 
 # References the web app slot to be used in KV access policy
 data "azurerm_linux_web_app" "webapp_slot" {
-  name                = "${var.webapp_name}/${var.webapp_slot_name}"
+  name                = "${var.webapp_name}-${var.webapp_slot_name}"
   resource_group_name = var.resource_group
 }
 
