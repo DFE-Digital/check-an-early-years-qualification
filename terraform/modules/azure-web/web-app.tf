@@ -128,7 +128,7 @@ resource "azurerm_linux_web_app" "webapp" {
 
 # Create Web Application Deployment Slot
 resource "azurerm_linux_web_app_slot" "webapp_slot" {
-  name                      = "green"
+  name                      = var.webapp_slot_name
   app_service_id            = azurerm_linux_web_app.webapp.id
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
@@ -199,7 +199,7 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_logs_monitor" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "webapp_slot_logs_monitor" {
-  name                       = "${var.resource_name_prefix}-webapp-green-mon"
+  name                       = "${var.resource_name_prefix}-webapp-${var.webapp_slot_name}-mon"
   target_resource_id         = azurerm_linux_web_app_slot.webapp_slot.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
 
@@ -380,7 +380,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
 
 # References the web app slot to be used in KV access policy
 data "azurerm_linux_web_app" "webapp_slot" {
-  name                = azurerm_linux_web_app_slot.webapp_slot.name
+  name                = "${var.webapp_name}/${var.webapp_slot_name}"
   resource_group_name = var.resource_group
 }
 

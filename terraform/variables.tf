@@ -84,6 +84,12 @@ variable "webapp_name" {
   type        = string
 }
 
+variable "webapp_slot_name" {
+  default     = "green"
+  description = "Name for the slot for the Web Application"
+  type        = string
+}
+
 variable "webapp_docker_registry_url" {
   description = "URL to the Docker Registry"
   type        = string

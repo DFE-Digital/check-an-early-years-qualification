@@ -71,6 +71,7 @@ No modules.
 | <a name="input_webapp_name"></a> [webapp\_name](#input\_webapp\_name) | Name for the Web Application | `string` | n/a | yes |
 | <a name="input_webapp_session_cookie_name"></a> [webapp\_session\_cookie\_name](#input\_webapp\_session\_cookie\_name) | Name of the user session Cookie | `string` | n/a | yes |
 | <a name="input_webapp_slot_app_settings"></a> [webapp\_slot\_app\_settings](#input\_webapp\_slot\_app\_settings) | App Settings are exposed as environment variables | `map(string)` | n/a | yes |
+| <a name="input_webapp_slot_name"></a> [webapp\_slot\_name](#input\_webapp\_slot\_name) | Name for the slot for the Web Application | `string` | n/a | yes |
 | <a name="input_webapp_startup_command"></a> [webapp\_startup\_command](#input\_webapp\_startup\_command) | Startup command to pass into the Web Application | `string` | `null` | no |
 | <a name="input_webapp_subnet_id"></a> [webapp\_subnet\_id](#input\_webapp\_subnet\_id) | ID of the delegated Subnet for the Web Application | `string` | n/a | yes |
 | <a name="input_webapp_worker_count"></a> [webapp\_worker\_count](#input\_webapp\_worker\_count) | Number of Workers for the App Service Plan | `string` | n/a | yes |

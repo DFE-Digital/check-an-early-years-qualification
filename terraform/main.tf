@@ -71,6 +71,7 @@ module "webapp" {
   webapp_worker_count                      = var.webapp_worker_count
   webapp_subnet_id                         = module.network.webapp_subnet_id
   webapp_name                              = var.webapp_name
+  webapp_slot_name                         = var.webapp_slot_name
   webapp_app_settings                      = local.webapp_app_settings
   webapp_slot_app_settings                 = local.webapp_slot_app_settings
   webapp_docker_image                      = var.webapp_docker_image
