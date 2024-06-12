@@ -5,6 +5,9 @@ inputs:
   url:
     required: true
     type: string
+  auth_secret:
+    required: true
+    type: string
 
 runs:
   using: composite
@@ -14,7 +17,7 @@ runs:
       uses: cypress-io/github-action@v6
       if: success() || failure()
       with:
-        env: auth_secret=${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+        env: auth_secret=${{ inputs.auth_secret }}
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
         browser: chrome
         config: baseUrl="${{ inputs.url }}"
@@ -23,7 +26,7 @@ runs:
       uses: cypress-io/github-action@v6
       if: success() || failure()
       with:
-        env: auth_secret=${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+        env: auth_secret=${{ inputs.auth_secret }}
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
         browser: firefox
         config: baseUrl="${{ inputs.url }}"
