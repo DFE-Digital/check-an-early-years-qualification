@@ -3,9 +3,11 @@ description: Run the app within the action so we can run E2E and Accessibility t
 
 inputs:
   url:
+    description: "URL used by the app to listen"
     required: true
     type: string
-  e2e_auth_secret:
+  auth_secret:
+    description: "Auth secret used by end-to-end tests"
     required: true
     type: string
 
@@ -19,4 +21,4 @@ runs:
       run: |
         dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
         --UseMockContentful=true \
-        --ServiceAccess:Keys:0="${{ inputs.e2e_auth_secret }}" &
+        --ServiceAccess:Keys:0="${{ inputs.auth_secret }}" &
