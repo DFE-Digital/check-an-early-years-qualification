@@ -43,6 +43,9 @@ module "network" {
   kv_certificate_authority_admin_phone_no   = var.kv_certificate_authority_admin_phone_no
   kv_certificate_label                      = var.kv_certificate_label
   kv_certificate_subject                    = var.kv_certificate_subject
+  contentful_delivery_api_key               = var.contentful_delivery_api_key
+  contentful_preview_api_key                = var.contentful_preview_api_key
+  contentful_space_id                       = var.contentful_space_id
 }
 
 # Create storage account for web app
@@ -68,6 +71,7 @@ module "webapp" {
   webapp_worker_count                      = var.webapp_worker_count
   webapp_subnet_id                         = module.network.webapp_subnet_id
   webapp_name                              = var.webapp_name
+  webapp_slot_name                         = var.webapp_slot_name
   webapp_app_settings                      = local.webapp_app_settings
   webapp_slot_app_settings                 = local.webapp_slot_app_settings
   webapp_docker_image                      = var.webapp_docker_image

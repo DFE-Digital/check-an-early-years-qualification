@@ -71,6 +71,11 @@ variable "webapp_access_key_2" {
   type        = string
 }
 
+variable "webapp_slot_name" {
+  description = "Name for the slot for the Web Application"
+  type        = string
+}
+
 variable "webapp_subnet_id" {
   description = "ID of the delegated Subnet for the Web Application"
   type        = string
