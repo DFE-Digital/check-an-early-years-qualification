@@ -386,6 +386,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
+  depends_on = [ azurerm_linux_web_app_slot.webapp_slot ]
 }
 
 resource "azurerm_app_service_certificate" "webapp_custom_domain_cert" {
