@@ -378,6 +378,12 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
   certificate_permissions = ["Get"]
 }
 
+# References the web app slot to be used in KV access policy
+data "azurerm_linux_web_app_slot" "ref" {
+  name                = azurerm_linux_web_app_slot.webapp_slot.name
+  resource_group_name = azurerm_linux_web_app_slot.webapp_slot.resource_group_name
+}
+
 # Grants permissions to key vault for the managed identity of the App Service slot
 resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   key_vault_id            = var.kv_id
