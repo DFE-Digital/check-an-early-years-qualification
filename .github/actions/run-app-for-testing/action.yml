@@ -5,6 +5,10 @@ inputs:
   url:
     required: true
     type: string
+  e2e_auth_secret:
+    required: true
+    type: string
+
 
 runs:
   using: composite
@@ -15,7 +19,4 @@ runs:
       run: |
         dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
         --UseMockContentful=true \
-        --ServiceAccess:Keys:0={{ secrets.WEBAPP_E2E_ACCESS_KEY }} \
-        --ServiceAccess:Keys:1={{ secrets.WEBAPP_TEAM_ACCESS_KEY }} \
-        --ServiceAccess:Keys:2={{ secrets.WEBAPP_ACCESS_KEY_1 }} \
-        --ServiceAccess:Keys:3={{ secrets.WEBAPP_ACCESS_KEY_2 }} &
+        --ServiceAccess:Keys:0={{ inputs.e2e_auth_secret }} &
