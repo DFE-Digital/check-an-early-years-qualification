@@ -45,28 +45,28 @@ variable "webapp_name" {
   type        = string
 }
 
-variable "webapp_accessIsPublic" {
+variable "webapp_access_is_public" {
   description = "Web app service is public, and access is unchallenged"
   default     = false
   type        = bool
 }
 
-variable "webapp_e2e_accessKey" {
+variable "webapp_e2e_access_key" {
   description = "Web app access key for automated end-to-end tests"
   type        = string
 }
 
-variable "webapp_team_accessKey" {
+variable "webapp_team_access_key" {
   description = "Web app access key for the service team"
   type        = string
 }
 
-variable "webapp_accessKey1" {
+variable "webapp_access_key_1" {
   description = "Web app access key for invited access 1"
   type        = string
 }
 
-variable "webapp_accessKey2" {
+variable "webapp_access_key_2" {
   description = "Web app access key for invited access 2"
   type        = string
 }

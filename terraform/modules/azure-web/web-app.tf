@@ -136,11 +136,11 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
-    "ServiceAccess__IsPublic"                    = false
-    "ServiceAccess__Keys__0"                     = var.webapp_e2e_accessKey
-    "ServiceAccess__Keys__1"                     = var.webapp_team_accessKey
-    "ServiceAccess__Keys__2"                     = var.webapp_accessKey1
-    "ServiceAccess__Keys__3"                     = var.webapp_accessKey2
+    "ServiceAccess__IsPublic"                    = var.webapp_access_is_public
+    "ServiceAccess__Keys__0"                     = var.webapp_e2e_access_key
+    "ServiceAccess__Keys__1"                     = var.webapp_team_access_key
+    "ServiceAccess__Keys__2"                     = var.webapp_access_key_1
+    "ServiceAccess__Keys__3"                     = var.webapp_access_key_2
   }, var.webapp_slot_app_settings)
 
   site_config {

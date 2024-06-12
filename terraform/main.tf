@@ -80,11 +80,11 @@ module "webapp" {
   webapp_custom_domain_cert_secret_label   = var.kv_certificate_label
   webapp_health_check_path                 = "/health"
   webapp_health_check_eviction_time_in_min = 10
-  webapp_accessIsPublic                    = false
-  webapp_e2e_accessKey                     = ""
-  webapp_team_accessKey                    = ""
-  webapp_accessKey1                        = ""
-  webapp_accessKey2                        = ""
+  webapp_access_is_public                  = false
+  webapp_e2e_access_key                    = ""
+  webapp_team_access_key                   = ""
+  webapp_access_key_1                      = ""
+  webapp_access_key_2                      = ""
   agw_subnet_id                            = module.network.agw_subnet_id
   agw_pip_id                               = module.network.agw_pip_id
   kv_id                                    = module.network.kv_id
