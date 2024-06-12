@@ -56,9 +56,9 @@ No modules.
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Name of the Azure Resource Group to deploy resources | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(string)` | n/a | yes |
-| <a name="input_webapp_accessIsPublic"></a> [webapp\_accessIsPublic](#input\_webapp\_accessIsPublic) | Web app service is public, and access is unchallenged | `bool` | `false` | no |
-| <a name="input_webapp_accessKey1"></a> [webapp\_accessKey1](#input\_webapp\_accessKey1) | Web app access key for invited access 1 | `string` | n/a | yes |
-| <a name="input_webapp_accessKey2"></a> [webapp\_accessKey2](#input\_webapp\_accessKey2) | Web app access key for invited access 2 | `string` | n/a | yes |
+| <a name="input_webapp_access_is_public"></a> [webapp\_access\_is\_public](#input\_webapp\_access\_is\_public) | Web app service is public, and access is unchallenged | `bool` | `false` | no |
+| <a name="input_webapp_access_key_1"></a> [webapp\_access\_key\_1](#input\_webapp\_access\_key\_1) | Web app access key for invited access 1 | `string` | n/a | yes |
+| <a name="input_webapp_access_key_2"></a> [webapp\_access\_key\_2](#input\_webapp\_access\_key\_2) | Web app access key for invited access 2 | `string` | n/a | yes |
 | <a name="input_webapp_admin_email_address"></a> [webapp\_admin\_email\_address](#input\_webapp\_admin\_email\_address) | Email Address of the Admin | `string` | n/a | yes |
 | <a name="input_webapp_app_settings"></a> [webapp\_app\_settings](#input\_webapp\_app\_settings) | App Settings are exposed as environment variables | `map(string)` | n/a | yes |
 | <a name="input_webapp_cookie_auth_secret_name"></a> [webapp\_cookie\_auth\_secret\_name](#input\_webapp\_cookie\_auth\_secret\_name) | Name of the cookie holding the auth secret | `string` | n/a | yes |
@@ -68,7 +68,7 @@ No modules.
 | <a name="input_webapp_docker_image"></a> [webapp\_docker\_image](#input\_webapp\_docker\_image) | Docker Image to deploy | `string` | n/a | yes |
 | <a name="input_webapp_docker_image_tag"></a> [webapp\_docker\_image\_tag](#input\_webapp\_docker\_image\_tag) | Tag for the Docker Image | `string` | n/a | yes |
 | <a name="input_webapp_docker_registry_url"></a> [webapp\_docker\_registry\_url](#input\_webapp\_docker\_registry\_url) | URL to the Docker Registry | `string` | n/a | yes |
-| <a name="input_webapp_e2e_accessKey"></a> [webapp\_e2e\_accessKey](#input\_webapp\_e2e\_accessKey) | Web app access key for automated end-to-end tests | `string` | n/a | yes |
+| <a name="input_webapp_e2e_access_key"></a> [webapp\_e2e\_access\_key](#input\_webapp\_e2e\_access\_key) | Web app access key for automated end-to-end tests | `string` | n/a | yes |
 | <a name="input_webapp_health_check_eviction_time_in_min"></a> [webapp\_health\_check\_eviction\_time\_in\_min](#input\_webapp\_health\_check\_eviction\_time\_in\_min) | Minutes before considering an instance unhealthy | `number` | `null` | no |
 | <a name="input_webapp_health_check_path"></a> [webapp\_health\_check\_path](#input\_webapp\_health\_check\_path) | Path to health check endpoint | `string` | `null` | no |
 | <a name="input_webapp_name"></a> [webapp\_name](#input\_webapp\_name) | Name for the Web Application | `string` | n/a | yes |
@@ -76,7 +76,7 @@ No modules.
 | <a name="input_webapp_slot_app_settings"></a> [webapp\_slot\_app\_settings](#input\_webapp\_slot\_app\_settings) | App Settings are exposed as environment variables | `map(string)` | n/a | yes |
 | <a name="input_webapp_startup_command"></a> [webapp\_startup\_command](#input\_webapp\_startup\_command) | Startup command to pass into the Web Application | `string` | `null` | no |
 | <a name="input_webapp_subnet_id"></a> [webapp\_subnet\_id](#input\_webapp\_subnet\_id) | ID of the delegated Subnet for the Web Application | `string` | n/a | yes |
-| <a name="input_webapp_team_accessKey"></a> [webapp\_team\_accessKey](#input\_webapp\_team\_accessKey) | Web app access key for the service team | `string` | n/a | yes |
+| <a name="input_webapp_team_access_key"></a> [webapp\_team\_access\_key](#input\_webapp\_team\_access\_key) | Web app access key for the service team | `string` | n/a | yes |
 | <a name="input_webapp_worker_count"></a> [webapp\_worker\_count](#input\_webapp\_worker\_count) | Number of Workers for the App Service Plan | `string` | n/a | yes |
 
 ## Outputs
