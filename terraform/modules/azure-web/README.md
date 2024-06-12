@@ -28,6 +28,7 @@ No modules.
 | [azurerm_application_insights.web](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights) | resource |
 | [azurerm_key_vault_access_policy.webapp_kv_ap](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.webapp_kv_app_service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
+| [azurerm_key_vault_access_policy.webapp_kv_app_service_slot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_linux_web_app.webapp](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app) | resource |
 | [azurerm_linux_web_app_slot.webapp_slot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app_slot) | resource |
 | [azurerm_log_analytics_workspace.webapp_logs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) | resource |
@@ -39,6 +40,7 @@ No modules.
 | [azurerm_web_application_firewall_policy.agw_wafp](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/web_application_firewall_policy) | resource |
 | [azurerm_client_config.az_config](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
 | [azurerm_linux_web_app.ref](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/linux_web_app) | data source |
+| [azurerm_linux_web_app.webapp_slot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/linux_web_app) | data source |
 
 ## Inputs
 
@@ -74,6 +76,7 @@ No modules.
 | <a name="input_webapp_name"></a> [webapp\_name](#input\_webapp\_name) | Name for the Web Application | `string` | n/a | yes |
 | <a name="input_webapp_session_cookie_name"></a> [webapp\_session\_cookie\_name](#input\_webapp\_session\_cookie\_name) | Name of the user session Cookie | `string` | n/a | yes |
 | <a name="input_webapp_slot_app_settings"></a> [webapp\_slot\_app\_settings](#input\_webapp\_slot\_app\_settings) | App Settings are exposed as environment variables | `map(string)` | n/a | yes |
+| <a name="input_webapp_slot_name"></a> [webapp\_slot\_name](#input\_webapp\_slot\_name) | Name for the slot for the Web Application | `string` | n/a | yes |
 | <a name="input_webapp_startup_command"></a> [webapp\_startup\_command](#input\_webapp\_startup\_command) | Startup command to pass into the Web Application | `string` | `null` | no |
 | <a name="input_webapp_subnet_id"></a> [webapp\_subnet\_id](#input\_webapp\_subnet\_id) | ID of the delegated Subnet for the Web Application | `string` | n/a | yes |
 | <a name="input_webapp_team_access_key"></a> [webapp\_team\_access\_key](#input\_webapp\_team\_access\_key) | Web app access key for the service team | `string` | n/a | yes |
