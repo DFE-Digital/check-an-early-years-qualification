@@ -382,7 +382,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
 resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   key_vault_id            = var.kv_id
   tenant_id               = data.azurerm_client_config.az_config.tenant_id
-  object_id               = azurerm_linux_web_app_slot.webapp_slot.id
+  object_id               = azurerm_linux_web_app_slot.webapp_slot.identity.0.principal_id
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
