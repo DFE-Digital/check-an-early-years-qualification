@@ -70,15 +70,15 @@ jobs:
           attempt_counter=0
           max_attempts=5
 
-          until $(curl --output /dev/null --silent -i --fail -w '%{http_code}\n' https://earlyyearsqualifications-dev-green.azurewebsites.net/health); do
+          until status_code=$(curl --output /dev/null --silent -i --fail -w '%{response_code}\n' https://earlyyearsqualifications-dev-green.azurewebsites.net/health); do
               if [ ${attempt_counter} -eq ${max_attempts} ];then
                 echo "Max attempts reached"
                 exit 1
               fi
 
-              echo "Response status code: ${http_code}"
+              echo "Response status code: $status_code"
 
-              if [ ${http_code} -eq "200" ]; then
+              if [[ $status_code -eq "200" ]]; then
                 exit 0
               else
                 attempt_counter=$(($attempt_counter+1))
