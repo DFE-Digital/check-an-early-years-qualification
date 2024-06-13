@@ -66,3 +66,4 @@ jobs:
         uses: ./.github/actions/run-accessibility-tests
         with:
           url: ${{ env.URL }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}

@@ -4,7 +4,7 @@
       "executablePath": "/usr/bin/google-chrome"
     },
     "headers": {
-      "Cookie": "auth-secret=E2ETest"
+      "Cookie": "auth-secret=${AUTH_SECRET}"
     }
   },
   "urls": [
