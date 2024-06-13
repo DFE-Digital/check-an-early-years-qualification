@@ -1,0 +1,40 @@
+name: Make request to health check endpoint
+description: Makes a request to the health check endpoint. Will return code 0 if successful, 1 if a failure
+
+inputs:
+  webapp_name:
+    required: true
+    type: string
+  slot_name:
+    required: true
+    type: string
+
+runs:
+  using: composite
+
+  steps:
+    - name: Make request to health check endpoint
+      run: |
+        attempt_counter=0
+        max_attempts=5
+
+        until [ ${attempt_counter} -eq ${max_attempts} ]; do
+          status_code=$(curl --output /dev/null --silent -i --fail -w '%{response_code}\n' https://${{ inputs.webapp_name }}-${{ inputs.slot_name }}.azurewebsites.net/health);
+
+          echo "Response status code: $status_code"
+            
+          if [[ $status_code -eq "200" ]]; then
+            echo "Success"
+            exit 0
+          else
+            attempt_counter=$(($attempt_counter+1))
+            
+            if [ ${attempt_counter} -eq ${max_attempts} ]; then
+                echo "Max attempts reached. Failed!"
+                exit 1;
+            fi
+
+            echo "Current retry count: $attempt_counter"
+            sleep 10
+          fi
+        done
