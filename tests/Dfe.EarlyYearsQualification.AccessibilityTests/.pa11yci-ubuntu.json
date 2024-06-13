@@ -2,6 +2,9 @@
   "defaults": {
     "chromeLaunchConfig": {
       "executablePath": "/usr/bin/google-chrome"
+    },
+    "headers": {
+      "Cookie": "auth-secret=E2ETest"
     }
   },
   "urls": [
