@@ -48,6 +48,9 @@ jobs:
       contents: write
       issues: write
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
       # Login to Azure using OIDC
       - name: Login to Azure CLI
         uses: azure/login@v2
@@ -62,34 +65,19 @@ jobs:
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
           images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
-          slot-name: "green"
+          slot-name: "${{ vars.WEBAPP_SLOT_NAME }}"
 
-      # Make a http request to the health check endpoint
-      - name: Make request to health check endpoint
-        run: |
-          attempt_counter=0
-          max_attempts=5
-
-          until status_code=$(curl --output /dev/null --silent -i --fail -w '%{response_code}\n' https://earlyyearsqualifications-dev-green.azurewebsites.net/health); do
-              if [ ${attempt_counter} -eq ${max_attempts} ];then
-                echo "Max attempts reached"
-                exit 1
-              fi
-
-              echo "Response status code: $status_code"
-
-              if [[ $status_code -eq "200" ]]; then
-                exit 0
-              else
-                attempt_counter=$(($attempt_counter+1))
-                sleep 10
-              fi
-          done
-      
+      # Make a request to the health check endpoint
+      - name: Make request to health check endpoint 
+        uses: ./.github/actions/health-check
+        with:
+          webapp_name: ${{ vars.WEBAPP_NAME }}  
+          slot_name: ${{ vars.WEBAPP_SLOT_NAME }}
+     
       # Swap the slots
       - name: Swap to the production slot
         run: |
-          az webapp deployment slot swap --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --slot green --target-slot production
+          az webapp deployment slot swap --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --slot ${{ vars.WEBAPP_SLOT_NAME }} --target-slot production
 
   deploy-to-staging:
     runs-on: ubuntu-22.04
@@ -102,6 +90,9 @@ jobs:
       contents: write
       issues: write
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
       # Login to Azure using OIDC
       - name: Login to Azure CLI
         uses: azure/login@v2
@@ -116,3 +107,16 @@ jobs:
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
           images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          slot-name: "${{ vars.WEBAPP_SLOT_NAME }}"
+
+      # Make a request to the health check endpoint
+      - name: Make request to health check endpoint 
+        uses: ./.github/actions/health-check
+        with:
+          webapp_name: ${{ vars.WEBAPP_NAME }}  
+          slot_name: ${{ vars.WEBAPP_SLOT_NAME }}
+     
+      # Swap the slots
+      - name: Swap to the production slot
+        run: |
+          az webapp deployment slot swap --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --slot ${{ vars.WEBAPP_SLOT_NAME }} --target-slot production
