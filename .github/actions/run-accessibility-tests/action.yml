@@ -15,7 +15,7 @@ runs:
   steps:
     - name: Run Pa11y
       shell: bash
-      run: npm install -g pa11y-ci && export AUTH_SECRET=${{ inputs.auth_secret }} && pa11y-ci ${{ inputs.url }} --config .pa11yci-ubuntu.json
+      run: npm install -g pa11y-ci && export AUTH_SECRET=${{ inputs.auth_secret }} && pa11y-ci ${{ inputs.url }} --config .pa11yci-ubuntu.js
       working-directory: ./tests/Dfe.EarlyYearsQualification.AccessibilityTests/
       
     
