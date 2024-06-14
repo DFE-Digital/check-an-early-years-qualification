@@ -53,7 +53,8 @@ public class MockContentfulServiceTests
 
         Func<Task> act = async () => await contentfulService.GetAdvicePage("Invalid entry Id");
 
-        await act.Should().ThrowAsync<NotImplementedException>();
+        await act.Should().ThrowAsync<NotImplementedException>()
+                 .WithMessage("No advice page mock for entry Invalid entry Id");
     }
 
     [TestMethod]
@@ -213,5 +214,23 @@ public class MockContentfulServiceTests
         result!.Content.Should().NotBeNull();
         result.PhaseName.Should().NotBeNullOrEmpty();
         result.Show.Should().BeTrue();
+    }
+    
+    [TestMethod]
+    public async Task GetCookiesBannerContent_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetCookiesBannerContent();
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CookiesBanner>();
+        result!.AcceptButtonText.Should().NotBeNull();
+        result.AcceptedCookiesContent.Should().NotBeNull();
+        result.CookiesBannerContent.Should().NotBeNull();
+        result.CookiesBannerTitle.Should().NotBeNullOrEmpty();
+        result.CookiesBannerLinkText.Should().NotBeNullOrEmpty();
+        result.HideCookieBannerButtonText.Should().NotBeNullOrEmpty();
+        result.RejectButtonText.Should().NotBeNullOrEmpty();
+        result.RejectedCookiesContent.Should().NotBeNull();
     }
 }
