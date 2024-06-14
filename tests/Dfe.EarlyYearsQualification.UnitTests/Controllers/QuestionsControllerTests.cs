@@ -25,8 +25,8 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
 
-        mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
-                          .ReturnsAsync((QuestionPage?)default).Verifiable();
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                          .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
@@ -52,13 +52,13 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
 
-        var questionPage = new QuestionPage
+        var questionPage = new RadioQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
                                Options = [new Option { Label = "Label", Value = "Value" }]
                            };
-        mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                           .ReturnsAsync(questionPage);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
@@ -70,7 +70,7 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as QuestionModel;
+        var model = resultType!.Model as RadioQuestionModel;
         model.Should().NotBeNull();
 
         model!.Question.Should().Be(questionPage.Question);
@@ -91,14 +91,14 @@ public class QuestionsControllerTests
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
         controller.ModelState.AddModelError("option", "test error");
-        var result = await controller.WhereWasTheQualificationAwarded(new QuestionModel());
+        var result = await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel());
 
         result.Should().NotBeNull();
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("Question");
+        resultType!.ViewName.Should().Be("Radio");
     }
 
     [TestMethod]
@@ -111,7 +111,7 @@ public class QuestionsControllerTests
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
         var result =
-            await controller.WhereWasTheQualificationAwarded(new QuestionModel
+            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
                                                              { Option = Options.OutsideOfTheUnitedKingdom });
 
         result.Should().NotBeNull();
@@ -132,7 +132,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller.WhereWasTheQualificationAwarded(new QuestionModel { Option = Options.England });
+        var result = await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel { Option = Options.England });
 
         result.Should().NotBeNull();
 
@@ -149,6 +149,18 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
 
+        var questionPage = new DateQuestionPage
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               ErrorMessage = "Test error message",
+                               MonthLabel = "Test month label",
+                               YearLabel = "Test year label",
+                               QuestionHint = "Test quesiton hint"
+                           };
+        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
+                          .ReturnsAsync(questionPage);
+
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
         var result = await controller.WhenWasTheQualificationStarted();
@@ -158,18 +170,46 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as QuestionModel;
+        var model = resultType!.Model as DateQuestionModel;
         model.Should().NotBeNull();
 
         // The following will need to be replaced once the page has been created in Contentful.
         // The model is currently hard coded in the action and doesn't call the content service.
-        model!.Question.Should().Be("When was the qualification started?");
-        model.CtaButtonText.Should().Be("Continue");
+        model!.Question.Should().Be(questionPage.Question);
+        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.HasErrors.Should().BeFalse();
+        model!.ErrorMessage.Should().Be(questionPage.ErrorMessage);
+        model!.MonthLabel.Should().Be(questionPage.MonthLabel);
+        model!.YearLabel.Should().Be(questionPage.YearLabel);
+        model!.QuestionHint.Should().Be(questionPage.QuestionHint);
     }
 
     [TestMethod]
-    public void Post_WhenWasTheQualificationStarted_ReturnsRedirectResponse()
+    public async Task WhenWasTheQualificationStarted_CantFindContentfulPage_ReturnsErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+
+        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
+                          .ReturnsAsync((DateQuestionPage?)default).Verifiable();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
+
+        var result = await controller.WhenWasTheQualificationStarted();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType!.ActionName.Should().Be("Error");
+        resultType.ControllerName.Should().Be("Home");
+
+        mockLogger.VerifyError("No content for the question page");
+    }
+
+    [TestMethod]
+    public async Task Post_WhenWasTheQualificationStarted_InvalidModel_ReturnsDateQuestionPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -177,7 +217,122 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = controller.WhenWasTheQualificationStarted(new QuestionModel());
+        controller.ModelState.AddModelError("option", "test error");
+        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel());
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ViewName.Should().Be("Date");
+    }
+
+    [TestMethod]
+    [DataRow(-1, 2020)]
+    [DataRow(13, 2020)]
+    [DataRow(0, 2020)]
+    [DataRow(1, 1899)]
+    public async Task Post_WhenWasTheQualificationStarted_PassedInvalidValues_ReturnsBackToPageWithErrorTag(int month, int year)
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+
+        var questionPage = new DateQuestionPage
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               ErrorMessage = "Test error message",
+                               MonthLabel = "Test month label",
+                               YearLabel = "Test year label",
+                               QuestionHint = "Test quesiton hint"
+                           };
+        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
+                          .ReturnsAsync(questionPage);
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
+
+        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel()
+        {
+          SelectedMonth = month,
+          SelectedYear = year
+        });
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as DateQuestionModel;
+        model.Should().NotBeNull();
+
+        // The following will need to be replaced once the page has been created in Contentful.
+        // The model is currently hard coded in the action and doesn't call the content service.
+        model!.Question.Should().Be(questionPage.Question);
+        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
+        model.HasErrors.Should().BeTrue();
+        model!.ErrorMessage.Should().Be(questionPage.ErrorMessage);
+        model!.MonthLabel.Should().Be(questionPage.MonthLabel);
+        model!.YearLabel.Should().Be(questionPage.YearLabel);
+        model!.QuestionHint.Should().Be(questionPage.QuestionHint);
+    }
+
+     public async Task Post_WhenWasTheQualificationStarted_YearProvidedIsNextYear_ReturnsRedirectResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+
+        var questionPage = new DateQuestionPage
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               ErrorMessage = "Test error message",
+                               MonthLabel = "Test month label",
+                               YearLabel = "Test year label",
+                               QuestionHint = "Test quesiton hint"
+                           };
+        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
+                          .ReturnsAsync(questionPage);
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
+
+        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel()
+        {
+          SelectedMonth = 01,
+          SelectedYear = DateTime.UtcNow.Year + 1
+        });
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as DateQuestionModel;
+        model.Should().NotBeNull();
+
+        // The following will need to be replaced once the page has been created in Contentful.
+        // The model is currently hard coded in the action and doesn't call the content service.
+        model!.Question.Should().Be(questionPage.Question);
+        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
+        model.HasErrors.Should().BeTrue();
+        model!.ErrorMessage.Should().Be(questionPage.ErrorMessage);
+        model!.MonthLabel.Should().Be(questionPage.MonthLabel);
+        model!.YearLabel.Should().Be(questionPage.YearLabel);
+        model!.QuestionHint.Should().Be(questionPage.QuestionHint);
+    }
+
+    [TestMethod]
+    public async Task Post_WhenWasTheQualificationStarted_ValidModel_ReturnsRedirectResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
+
+        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel()
+        {
+          SelectedMonth = 12,
+          SelectedYear = 2024
+        });
 
         result.Should().NotBeNull();
 
@@ -194,8 +349,8 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
 
-        mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhatLevelIsTheQualification))
-                          .ReturnsAsync((QuestionPage?)default).Verifiable();
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+                          .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
@@ -221,7 +376,7 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
 
-        var questionPage = new QuestionPage
+        var questionPage = new RadioQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
@@ -229,7 +384,7 @@ public class QuestionsControllerTests
                                AdditionalInformationHeader = "Test header",
                                AdditionalInformationBody = ContentfulContentHelper.Text("Test html body")
                            };
-        mockContentService.Setup(x => x.GetQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
                           .ReturnsAsync(questionPage);
 
         mockRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
@@ -243,7 +398,7 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as QuestionModel;
+        var model = resultType!.Model as RadioQuestionModel;
         model.Should().NotBeNull();
 
         model!.Question.Should().Be(questionPage.Question);
@@ -268,14 +423,14 @@ public class QuestionsControllerTests
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
         controller.ModelState.AddModelError("option", "test error");
-        var result = await controller.WhatLevelIsTheQualification(new QuestionModel());
+        var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel());
 
         result.Should().NotBeNull();
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("Question");
+        resultType!.ViewName.Should().Be("Radio");
     }
 
     [TestMethod]
@@ -287,7 +442,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller.WhatLevelIsTheQualification(new QuestionModel());
+        var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel());
 
         result.Should().NotBeNull();
 

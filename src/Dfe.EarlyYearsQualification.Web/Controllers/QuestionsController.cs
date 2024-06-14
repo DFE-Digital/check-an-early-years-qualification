@@ -46,18 +46,15 @@ public class QuestionsController(
     }
 
     [HttpGet("when-was-the-qualification-started")]
-    public IActionResult WhenWasTheQualificationStarted()
+    public async Task<IActionResult> WhenWasTheQualificationStarted()
     {
         // This is just a temporary page until the design is finalised through UR
-        var questionPage = new DateQuestionPage
-                           {
-                               CtaButtonText = "Continue",
-                               Question = "When was the qualification started?",
-                               ErrorMessage = "Please select a valid date",
-                               MonthLabel = "Month",
-                               YearLabel = "Year",
-                               QuestionHint = "Enter the month and year, for example 3 2014"
-                           };
+        var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+        if (questionPage is null)
+        {
+            logger.LogError("No content for the question page");
+            return RedirectToAction("Error", "Home");
+        }
 
         var model = MapDateModel(new DateQuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted),
                               Questions);
@@ -143,7 +140,7 @@ public class QuestionsController(
         model.ActionName = actionName;
         model.ControllerName = controllerName;
         model.ErrorMessage = question.ErrorMessage;
-        model.QustionHint = question.QuestionHint;
+        model.QuestionHint = question.QuestionHint;
         model.MonthLabel = question.MonthLabel;
         model.YearLabel = question.YearLabel;
         return model;

@@ -16,11 +16,11 @@
                             @Model.Question
                         </h1>
                     </legend>
-                    <div id="date-format-hint" class="govuk-hint">@Model.QustionHint</div>
+                    <div id="date-format-hint" class="govuk-hint">@Model.QuestionHint</div>
 
                     @if (Model.HasErrors)
                       {
-                          <p class="govuk-error-message">
+                          <p id="date-error" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
                           </p>
                       }

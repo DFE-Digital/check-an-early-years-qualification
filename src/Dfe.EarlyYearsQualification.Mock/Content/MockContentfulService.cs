@@ -131,13 +131,18 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateWhatLevelIsTheQualificationPage()),
                    QuestionPages.WhereWasTheQualificationAwarded =>
                        await Task.FromResult(CreateWhereWasTheQualificationAwardedPage()),
-                   _ => throw new NotImplementedException($"No question page mock for entry {entryId}")
+                   _ => throw new NotImplementedException($"No radio question page mock for entry {entryId}")
                };
     }
 
-    public Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
+    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
     {
-      throw new NotImplementedException();
+      return entryId switch
+               {
+                   QuestionPages.WhenWasTheQualificationStarted =>
+                       await Task.FromResult(CreateDateQuestionPage()),
+                   _ => throw new NotImplementedException($"No date question page mock for entry {entryId}")
+               };
     }
 
     public async Task<StartPage?> GetStartPage()
@@ -200,7 +205,7 @@ public class MockContentfulService : IContentService
                               Value = "outside-uk"
                           }
                       };
-        return CreateQuestionPage("Where was the qualification awarded?", options);
+        return CreateRadioQuestionPage("Where was the qualification awarded?", options);
     }
 
     private static RadioQuestionPage CreateWhatLevelIsTheQualificationPage()
@@ -216,10 +221,10 @@ public class MockContentfulService : IContentService
                               Label = "Level 3", Value = "3"
                           }
                       };
-        return CreateQuestionPage("What level is the qualification?", options);
+        return CreateRadioQuestionPage("What level is the qualification?", options);
     }
 
-    private static RadioQuestionPage CreateQuestionPage(string question, List<Option> options)
+    private static RadioQuestionPage CreateRadioQuestionPage(string question, List<Option> options)
     {
         return new RadioQuestionPage
                {
@@ -228,5 +233,18 @@ public class MockContentfulService : IContentService
                    CtaButtonText = "Continue",
                    ErrorMessage = "Test error message"
                };
+    }
+
+    private static DateQuestionPage CreateDateQuestionPage()
+    {
+      return new DateQuestionPage
+              {
+                Question = "Test Date Question",
+                CtaButtonText = "Continue",
+                ErrorMessage = "Test Error Message",
+                MonthLabel = "Test Month Label",
+                YearLabel = "Test Year Label",
+                QuestionHint = "Test Question Hint"
+              };
     }
 }
