@@ -1,4 +1,4 @@
-namespace Dfe.EarlyYearsQualification.Web.Models.Content;
+namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 public abstract class BaseQuestionModel
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Dfe.EarlyYearsQualification.Web.Models.Content;
+namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 public class DateQuestionModel : BaseQuestionModel
 {
@@ -10,9 +10,9 @@ public class DateQuestionModel : BaseQuestionModel
 
   public string YearLabel { get; set; } = string.Empty;
 
-  [Required] public int SelectedMonth { get; set; }
+  [Required] public int SelectedMonth { get; init; }
 
-  [Required] public int SelectedYear { get; set; }
+  [Required] public int SelectedYear { get; init; }
 
   public bool IsModelValid()
   {
@@ -21,11 +21,6 @@ public class DateQuestionModel : BaseQuestionModel
       return false;
     }
 
-    if (SelectedYear <= 1900 || SelectedYear > DateTime.UtcNow.Year)
-    {
-      return false;
-    }
-
-    return true;
+    return SelectedYear > 1900 && SelectedYear <= DateTime.UtcNow.Year;
   }
 }

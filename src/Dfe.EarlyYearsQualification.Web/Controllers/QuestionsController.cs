@@ -4,7 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -111,7 +111,7 @@ public class QuestionsController(
         if (questionPage is null)
         {
             logger.LogError("No content for the question page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var model = await MapRadioModel(new RadioQuestionModel(), questionPage, actionName, controllerName);
@@ -133,7 +133,7 @@ public class QuestionsController(
         return model;
     }
 
-    private DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestionPage question, string actionName,
+    private static DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestionPage question, string actionName,
                                           string controllerName)
     {
         model.Question = question.Question;

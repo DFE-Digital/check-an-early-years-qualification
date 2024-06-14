@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Dfe.EarlyYearsQualification.Web.Models.Content;
+namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 public class RadioQuestionModel : BaseQuestionModel
 {

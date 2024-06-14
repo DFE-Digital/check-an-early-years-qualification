@@ -25,7 +25,7 @@ public class ContentfulContentService(
               { typeof(CookiesPage), "cookiesPage" },
               { typeof(PhaseBanner), "phaseBanner" },
               { typeof(CookiesBanner), "cookiesBanner" },
-              { typeof(DateQuestionPage), "dateQuestionPage" },
+              { typeof(DateQuestionPage), "dateQuestionPage" }
           };
 
     public async Task<StartPage?> GetStartPage()

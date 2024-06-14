@@ -7,7 +7,7 @@ using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -132,7 +132,8 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel { Option = Options.England });
+        var result =
+            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel { Option = Options.England });
 
         result.Should().NotBeNull();
 
@@ -156,7 +157,7 @@ public class QuestionsControllerTests
                                ErrorMessage = "Test error message",
                                MonthLabel = "Test month label",
                                YearLabel = "Test year label",
-                               QuestionHint = "Test quesiton hint"
+                               QuestionHint = "Test question hint"
                            };
         mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
                           .ReturnsAsync(questionPage);
@@ -178,10 +179,10 @@ public class QuestionsControllerTests
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.HasErrors.Should().BeFalse();
-        model!.ErrorMessage.Should().Be(questionPage.ErrorMessage);
-        model!.MonthLabel.Should().Be(questionPage.MonthLabel);
-        model!.YearLabel.Should().Be(questionPage.YearLabel);
-        model!.QuestionHint.Should().Be(questionPage.QuestionHint);
+        model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
+        model.MonthLabel.Should().Be(questionPage.MonthLabel);
+        model.YearLabel.Should().Be(questionPage.YearLabel);
+        model.QuestionHint.Should().Be(questionPage.QuestionHint);
     }
 
     [TestMethod]
@@ -202,8 +203,8 @@ public class QuestionsControllerTests
 
         var resultType = result as RedirectToActionResult;
 
-        resultType!.ActionName.Should().Be("Error");
-        resultType.ControllerName.Should().Be("Home");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the question page");
     }
@@ -233,7 +234,8 @@ public class QuestionsControllerTests
     [DataRow(13, 2020)]
     [DataRow(0, 2020)]
     [DataRow(1, 1899)]
-    public async Task Post_WhenWasTheQualificationStarted_PassedInvalidValues_ReturnsBackToPageWithErrorTag(int month, int year)
+    public async Task Post_WhenWasTheQualificationStarted_PassedInvalidValues_ReturnsBackToPageWithErrorTag(
+        int month, int year)
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -253,11 +255,11 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel()
-        {
-          SelectedMonth = month,
-          SelectedYear = year
-        });
+        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
+                                                                     {
+                                                                         SelectedMonth = month,
+                                                                         SelectedYear = year
+                                                                     });
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
@@ -270,13 +272,14 @@ public class QuestionsControllerTests
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.HasErrors.Should().BeTrue();
-        model!.ErrorMessage.Should().Be(questionPage.ErrorMessage);
-        model!.MonthLabel.Should().Be(questionPage.MonthLabel);
-        model!.YearLabel.Should().Be(questionPage.YearLabel);
-        model!.QuestionHint.Should().Be(questionPage.QuestionHint);
+        model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
+        model.MonthLabel.Should().Be(questionPage.MonthLabel);
+        model.YearLabel.Should().Be(questionPage.YearLabel);
+        model.QuestionHint.Should().Be(questionPage.QuestionHint);
     }
 
-     public async Task Post_WhenWasTheQualificationStarted_YearProvidedIsNextYear_ReturnsRedirectResponse()
+    [TestMethod]
+    public async Task Post_WhenWasTheQualificationStarted_YearProvidedIsNextYear_ReturnsRedirectResponse()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -296,11 +299,11 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel()
-        {
-          SelectedMonth = 01,
-          SelectedYear = DateTime.UtcNow.Year + 1
-        });
+        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
+                                                                     {
+                                                                         SelectedMonth = 01,
+                                                                         SelectedYear = DateTime.UtcNow.Year + 1
+                                                                     });
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
@@ -313,10 +316,10 @@ public class QuestionsControllerTests
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.HasErrors.Should().BeTrue();
-        model!.ErrorMessage.Should().Be(questionPage.ErrorMessage);
-        model!.MonthLabel.Should().Be(questionPage.MonthLabel);
-        model!.YearLabel.Should().Be(questionPage.YearLabel);
-        model!.QuestionHint.Should().Be(questionPage.QuestionHint);
+        model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
+        model.MonthLabel.Should().Be(questionPage.MonthLabel);
+        model.YearLabel.Should().Be(questionPage.YearLabel);
+        model.QuestionHint.Should().Be(questionPage.QuestionHint);
     }
 
     [TestMethod]
@@ -328,11 +331,11 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
 
-        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel()
-        {
-          SelectedMonth = 12,
-          SelectedYear = 2024
-        });
+        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
+                                                                     {
+                                                                         SelectedMonth = 12,
+                                                                         SelectedYear = 2024
+                                                                     });
 
         result.Should().NotBeNull();
 
