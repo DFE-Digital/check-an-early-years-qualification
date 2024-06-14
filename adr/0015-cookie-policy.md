@@ -15,4 +15,16 @@ with other government online services. There are multiple possible implementatio
 
 ## Considered Options
 
+- New JavaScript implementation
+- Approaches taken by other DfE/digital government project teams
+
+This has been implemented on several government digital services.
+
+Several other teams' implementations suggested possible approaches. One in particular
+seemed a close match to the service's requirements.
+
 ## Decision Outcome
+
+The approach worked out by the 
+[Schools Technology Services (STS) team](https://github.com/DFE-Digital/sts-plan-technology-for-your-school/tree/main)
+was chosen as the model for this service's handling of web Cookie policy.
