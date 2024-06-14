@@ -142,7 +142,7 @@ public class ChallengeResourceFilterAttributeTests
                          $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={accessKey}"
                      };
 
-        httpContext.Request.Headers["Cookie"] = cookie;
+        httpContext.Request.Headers.Cookie = cookie;
 
         var actionContext = new ActionContext(httpContext,
                                               new RouteData(),
@@ -191,7 +191,7 @@ public class ChallengeResourceFilterAttributeTests
                          $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={accessKey}"
                      };
 
-        httpContext.Request.Headers["Cookie"] = cookie;
+        httpContext.Request.Headers.Cookie = cookie;
 
         var actionContext = new ActionContext(httpContext,
                                               new RouteData(),
@@ -239,7 +239,7 @@ public class ChallengeResourceFilterAttributeTests
                          $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{accessKey}"
                      };
 
-        httpContext.Request.Headers["Cookie"] = cookie;
+        httpContext.Request.Headers.Cookie = cookie;
 
         var actionContext = new ActionContext(httpContext,
                                               new RouteData(),
@@ -298,7 +298,7 @@ public class ChallengeResourceFilterAttributeTests
                          $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{accessKey}"
                      };
 
-        httpContext.Request.Headers["Cookie"] = cookie;
+        httpContext.Request.Headers.Cookie = cookie;
 
         var actionContext = new ActionContext(httpContext,
                                               new RouteData(),
