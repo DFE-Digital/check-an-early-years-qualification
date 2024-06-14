@@ -37,6 +37,12 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
       selector                = var.webapp_cookie_preference_name
       selector_match_operator = "Equals"
     }
+
+    exclusion {
+      match_variable          = "RequestCookieNames"
+      selector                = var.webapp_cookie_auth_secret_name
+      selector_match_operator = "Equals"
+    }
   }
 
   policy_settings {

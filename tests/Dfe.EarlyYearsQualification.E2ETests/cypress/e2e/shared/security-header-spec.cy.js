@@ -1,6 +1,9 @@
 import { pagesWithForms, pagesWithoutForms } from "./urls-to-check";
 
 describe("A spec that checks for security headers in the response", () => {
+  beforeEach(() => {
+    cy.setCookie('auth-secret', Cypress.env('auth_secret'));
+  })
 
   pagesWithForms.forEach((page) => {
     it(`pages with forms and no cookie banner - ${page} contains the expected response headers`, () => {

@@ -56,11 +56,16 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_kv_certificate_subject"></a> [kv\_certificate\_subject](#input\_kv\_certificate\_subject) | Subject of the Certificate | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
 | <a name="input_tracking_id"></a> [tracking\_id](#input\_tracking\_id) | Google Tag Manager tracking ID | `string` | n/a | yes |
+| <a name="input_webapp_access_is_public"></a> [webapp\_access\_is\_public](#input\_webapp\_access\_is\_public) | Web app service is public, and access is unchallenged | `bool` | `false` | no |
+| <a name="input_webapp_access_key_1"></a> [webapp\_access\_key\_1](#input\_webapp\_access\_key\_1) | Web app access key for invited access 1 | `string` | n/a | yes |
+| <a name="input_webapp_access_key_2"></a> [webapp\_access\_key\_2](#input\_webapp\_access\_key\_2) | Web app access key for invited access 2 | `string` | n/a | yes |
 | <a name="input_webapp_docker_image"></a> [webapp\_docker\_image](#input\_webapp\_docker\_image) | Docker Image to deploy | `string` | n/a | yes |
 | <a name="input_webapp_docker_image_tag"></a> [webapp\_docker\_image\_tag](#input\_webapp\_docker\_image\_tag) | Tag for the Docker Image | `string` | `"latest"` | no |
 | <a name="input_webapp_docker_registry_url"></a> [webapp\_docker\_registry\_url](#input\_webapp\_docker\_registry\_url) | URL to the Docker Registry | `string` | n/a | yes |
+| <a name="input_webapp_e2e_access_key"></a> [webapp\_e2e\_access\_key](#input\_webapp\_e2e\_access\_key) | Web app access key for automated end-to-end tests | `string` | n/a | yes |
 | <a name="input_webapp_name"></a> [webapp\_name](#input\_webapp\_name) | Name for the Web Application | `string` | n/a | yes |
 | <a name="input_webapp_slot_name"></a> [webapp\_slot\_name](#input\_webapp\_slot\_name) | Name for the slot for the Web Application | `string` | `"green"` | no |
+| <a name="input_webapp_team_access_key"></a> [webapp\_team\_access\_key](#input\_webapp\_team\_access\_key) | Web app access key for the service team | `string` | n/a | yes |
 | <a name="input_webapp_worker_count"></a> [webapp\_worker\_count](#input\_webapp\_worker\_count) | Number of Workers for the App Service Plan | `string` | `1` | no |
 
 ## Outputs

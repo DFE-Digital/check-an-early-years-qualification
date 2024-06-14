@@ -5,6 +5,9 @@ inputs:
   url:
     required: true
     type: string
+  auth_secret:
+    required: true
+    type: string
 
 runs:
   using: composite
@@ -14,6 +17,7 @@ runs:
       uses: cypress-io/github-action@v6
       if: success() || failure()
       with:
+        env: auth_secret="${{ inputs.auth_secret }}"
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
         browser: chrome
         config: baseUrl="${{ inputs.url }}"
@@ -22,12 +26,13 @@ runs:
       uses: cypress-io/github-action@v6
       if: success() || failure()
       with:
+        env: auth_secret="${{ inputs.auth_secret }}"
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
         browser: firefox
         config: baseUrl="${{ inputs.url }}"
 
     - name: Store screenshots on test failure
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: cypress-screenshots
