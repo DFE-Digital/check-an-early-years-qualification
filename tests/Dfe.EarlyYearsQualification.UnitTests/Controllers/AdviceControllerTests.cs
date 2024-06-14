@@ -72,4 +72,60 @@ public class AdviceControllerTests
 
         mockHtmlRenderer.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task QualificationsStartedBetweenSept2014AndAug2019_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
+
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019))
+                          .ReturnsAsync((AdvicePage?)default).Verifiable();
+        var result = await controller.QualificationsStartedBetweenSept2014AndAug2019();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the advice page");
+    }
+
+    [TestMethod]
+    public async Task QualificationsStartedBetweenSept2014AndAug2019_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
+
+        var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019))
+                          .ReturnsAsync(advicePage);
+
+        mockHtmlRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+
+        var result = await controller.QualificationsStartedBetweenSept2014AndAug2019();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as AdvicePageModel;
+        model.Should().NotBeNull();
+
+        model!.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be("Test html body");
+
+        mockHtmlRenderer.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+    }
 }
