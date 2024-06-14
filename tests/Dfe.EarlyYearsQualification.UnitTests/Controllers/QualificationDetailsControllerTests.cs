@@ -66,8 +66,8 @@ public class QualificationDetailsControllerTests
 
         var actionResult = (RedirectToActionResult)result;
 
-        actionResult.ActionName.Should().Be("Error");
-        actionResult.ControllerName.Should().Be("Home");
+        actionResult.ActionName.Should().Be("Index");
+        actionResult.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the qualification details page");
     }
@@ -97,8 +97,8 @@ public class QualificationDetailsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Error");
-        resultType.ControllerName.Should().Be("Home");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("Could not find details for qualification with ID: eyq-145");
     }

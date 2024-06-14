@@ -71,6 +71,7 @@ module "webapp" {
   webapp_worker_count                      = var.webapp_worker_count
   webapp_subnet_id                         = module.network.webapp_subnet_id
   webapp_name                              = var.webapp_name
+  webapp_slot_name                         = var.webapp_slot_name
   webapp_app_settings                      = local.webapp_app_settings
   webapp_slot_app_settings                 = local.webapp_slot_app_settings
   webapp_docker_image                      = var.webapp_docker_image
@@ -78,6 +79,7 @@ module "webapp" {
   webapp_docker_registry_url               = var.webapp_docker_registry_url
   webapp_session_cookie_name               = "_early_years_qualification_session"
   webapp_cookie_preference_name            = "cookies_preferences_set"
+  webapp_cookie_auth_secret_name           = "auth-secret"
   webapp_custom_domain_name                = var.custom_domain_name
   webapp_custom_domain_cert_secret_label   = var.kv_certificate_label
   webapp_health_check_path                 = "/health"
