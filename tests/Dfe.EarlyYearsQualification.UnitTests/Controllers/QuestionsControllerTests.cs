@@ -39,8 +39,8 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         result.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Error");
-        resultType.ControllerName.Should().Be("Home");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the question page");
     }
@@ -208,8 +208,8 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         result.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Error");
-        resultType.ControllerName.Should().Be("Home");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the question page");
     }

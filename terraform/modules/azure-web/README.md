@@ -59,6 +59,7 @@ No modules.
 | <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(string)` | n/a | yes |
 | <a name="input_webapp_admin_email_address"></a> [webapp\_admin\_email\_address](#input\_webapp\_admin\_email\_address) | Email Address of the Admin | `string` | n/a | yes |
 | <a name="input_webapp_app_settings"></a> [webapp\_app\_settings](#input\_webapp\_app\_settings) | App Settings are exposed as environment variables | `map(string)` | n/a | yes |
+| <a name="input_webapp_cookie_auth_secret_name"></a> [webapp\_cookie\_auth\_secret\_name](#input\_webapp\_cookie\_auth\_secret\_name) | Name of the cookie holding the auth secret | `string` | n/a | yes |
 | <a name="input_webapp_cookie_preference_name"></a> [webapp\_cookie\_preference\_name](#input\_webapp\_cookie\_preference\_name) | Name of the user's cookie preference cookie | `string` | n/a | yes |
 | <a name="input_webapp_custom_domain_cert_secret_label"></a> [webapp\_custom\_domain\_cert\_secret\_label](#input\_webapp\_custom\_domain\_cert\_secret\_label) | Label for the Certificate | `string` | n/a | yes |
 | <a name="input_webapp_custom_domain_name"></a> [webapp\_custom\_domain\_name](#input\_webapp\_custom\_domain\_name) | Custom domain hostname | `string` | n/a | yes |

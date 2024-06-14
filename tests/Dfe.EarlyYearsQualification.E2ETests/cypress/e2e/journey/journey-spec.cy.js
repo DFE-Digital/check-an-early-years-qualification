@@ -1,5 +1,6 @@
 describe('A spec used to test the various routes through the journey', () => {
   beforeEach(() => {
+    cy.setCookie('auth-secret', Cypress.env('auth_secret'));
     cy.visit("/");
     cy.get('.govuk-button--start').should('exist');
   })
