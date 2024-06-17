@@ -52,7 +52,7 @@ public class ChallengeController(
     {
         HttpContext.Response
                    .Cookies
-                   .Append(ChallengeResourceFilterAttribute.AuthSecretCookieName, accessValue);
+                   .Append(ChallengeResourceFilterAttribute.AuthSecretCookieName, accessValue, new CookieOptions { HttpOnly = true });
     }
 
     private string SanitiseReferralAddress(string? from)
