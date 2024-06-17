@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Dfe.EarlyYearsQualification.Web.Services.CookieService;
+using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -17,7 +17,7 @@ public class CookieServiceTests
         var cookie = new DfeCookie { IsVisible = !valueToSet, HasApproved = true, IsRejected = false };
         var mockContext = SetContextWithPreferenceCookie(cookie);
 
-        var cookieService = new CookieService(mockContext.Object);
+        var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         cookieService.SetVisibility(valueToSet);
 
@@ -39,7 +39,7 @@ public class CookieServiceTests
         var cookie = new DfeCookie { IsVisible = false, HasApproved = true, IsRejected = false };
         var mockContext = SetContextWithPreferenceCookie(cookie);
 
-        var cookieService = new CookieService(mockContext.Object);
+        var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         cookieService.RejectCookies();
 
@@ -68,7 +68,7 @@ public class CookieServiceTests
                             };
 
         var mockContext = SetContextWithPreferenceCookie(cookieToCheck);
-        var cookieService = new CookieService(mockContext.Object);
+        var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         cookieService.SetPreference(preference);
 
@@ -83,7 +83,7 @@ public class CookieServiceTests
         var cookie = new DfeCookie { IsVisible = false, HasApproved = true, IsRejected = false };
         var mockContext = SetContextWithPreferenceCookie(cookie);
 
-        var cookieService = new CookieService(mockContext.Object);
+        var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         var result = cookieService.GetCookie();
 
@@ -102,7 +102,7 @@ public class CookieServiceTests
 
         var mockContext = new Mock<IHttpContextAccessor>();
         mockContext.Setup(contextAccessor => contextAccessor.HttpContext!.Request.Cookies).Returns(cookiesMock.Object);
-        var cookieService = new CookieService(mockContext.Object);
+        var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         var result = cookieService.GetCookie();
 
@@ -121,7 +121,7 @@ public class CookieServiceTests
 
         var mockContext = new Mock<IHttpContextAccessor>();
         mockContext.Setup(contextAccessor => contextAccessor.HttpContext!.Request.Cookies).Returns(cookiesMock.Object);
-        var cookieService = new CookieService(mockContext.Object);
+        var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         var result = cookieService.GetCookie();
 
@@ -135,7 +135,7 @@ public class CookieServiceTests
     public void GetCookie_NoCookieFound_ReturnDefaultCookie()
     {
         var mockContext = new Mock<IHttpContextAccessor>();
-        var cookieService = new CookieService(mockContext.Object);
+        var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         var result = cookieService.GetCookie();
 
