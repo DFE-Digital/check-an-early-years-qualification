@@ -11,7 +11,7 @@ General information about architectural decision records is available at <https:
 ## List
 
 | Title                                                                           | Status   |
-|---------------------------------------------------------------------------------| -------- |
+|---------------------------------------------------------------------------------|----------|
 | [0001 - Web Framework](./0001-web-framework.md)                                 | Accepted |
 | [0002 - Application Framework](./0002-application-framework.md)                 | Accepted |
 | [0003 - Build/Test/Deploy Environment](./0003-build-test-deploy-environment.md) | Accepted |
@@ -25,3 +25,7 @@ General information about architectural decision records is available at <https:
 | [0011 - Tools for Creating Unit Tests](./0011-tools-for-creating-unit-tests.md) | Accepted |
 | [0012 - Tools for Creating UI Tests](./0012-tools-for-creating-ui-tests.md)     | Accepted |
 | [0013 - Unit Tests Code Coverage](./0013-unit-test-coverage.md)                 | Accepted |
+| [0014 - C# Coding Standards](./0014-c-sharp-coding-standards.md)                | Accepted |
+| [0015 - Cookie Policy](./0015-cookie-policy.md)                                 | Accepted |
+| [0016 - IaC Documentation](./0016-terraform-docs.md)                            | Accepted |
+| [0017 - Access Guard in Pilot](./0017-access-guard-in-pilot.md)                 | Proposed |
