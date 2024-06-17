@@ -6,41 +6,41 @@ namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 public class UserJourneyCookieService(IHttpContextAccessor context) : IUserJourneyCookieService
 {
-    private readonly CookieOptions _options = new CookieOptions
-    {
-        Secure = true,
-        HttpOnly = true,
-        Expires = new DateTimeOffset(DateTime.Now.AddYears(1))
-    };
+    private readonly CookieOptions _options = new()
+                                              {
+                                                  Secure = true,
+                                                  HttpOnly = true,
+                                                  Expires = new DateTimeOffset(DateTime.Now.AddYears(1))
+                                              };
 
     public void SetWhereWasQualificationAwarded(string location)
     {
-        var model = GetUserJourneyCookie();
+        var model = GetUserJourneyModelFromCookie();
 
-        model.WhereWasQualAwarded = location;
+        model.WhereWasQualificationAwarded = location;
 
         SetJourneyCookie(model);
     }
 
-    public void SetWhenWasQualificationAwarded(DateTime date)
+    public void SetWhenWasQualificationAwarded(string date)
     {
-        var model = GetUserJourneyCookie();
+        var model = GetUserJourneyModelFromCookie();
 
-        model.WhenWasQualAwarded = date;
+        model.WhenWasQualificationAwarded = date;
 
         SetJourneyCookie(model);
     }
 
-    public void SetLevelOfQualification(int? level)
+    public void SetLevelOfQualification(string level)
     {
-        var model = GetUserJourneyCookie();
+        var model = GetUserJourneyModelFromCookie();
 
-        model.LevelOfQual = level;
+        model.LevelOfQualification = level;
 
         SetJourneyCookie(model);
     }
 
-    public UserJourneyModel GetUserJourneyCookie()
+    public UserJourneyModel GetUserJourneyModelFromCookie()
     {
         var cookie = context.HttpContext?.Request.Cookies[CookieKeyNames.UserJourneyKey];
         if (cookie is null)
@@ -61,6 +61,11 @@ public class UserJourneyCookieService(IHttpContextAccessor context) : IUserJourn
         }
     }
 
+    public void ResetUserJourneyCookie()
+    {
+        SetJourneyCookie(new UserJourneyModel());
+    }
+
     private void SetJourneyCookie(UserJourneyModel model)
     {
         try
@@ -72,6 +77,5 @@ public class UserJourneyCookieService(IHttpContextAccessor context) : IUserJourn
         {
             // TODO: log when we fail to serialise the UserJourneyModel?
         }
-       
     }
 }

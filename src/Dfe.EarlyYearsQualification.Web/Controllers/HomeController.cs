@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -11,7 +12,8 @@ public class HomeController(
     ILogger<HomeController> logger,
     IContentService contentService,
     IHtmlRenderer htmlRenderer,
-    ISideContentRenderer sideContentRenderer)
+    ISideContentRenderer sideContentRenderer,
+    IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
     [HttpGet]
@@ -25,6 +27,9 @@ public class HomeController(
         }
 
         var model = await Map(startPageContent);
+        
+        userJourneyCookieService.ResetUserJourneyCookie();
+        
         return View(model);
     }
 
