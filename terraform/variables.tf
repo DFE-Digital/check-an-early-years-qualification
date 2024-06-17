@@ -84,6 +84,38 @@ variable "webapp_name" {
   type        = string
 }
 
+variable "webapp_slot_name" {
+  default     = "green"
+  description = "Name for the slot for the Web Application"
+  type        = string
+}
+
+variable "webapp_access_is_public" {
+  description = "Web app service is public, and access is unchallenged"
+  default     = false
+  type        = bool
+}
+
+variable "webapp_e2e_access_key" {
+  description = "Web app access key for automated end-to-end tests"
+  type        = string
+}
+
+variable "webapp_team_access_key" {
+  description = "Web app access key for the service team"
+  type        = string
+}
+
+variable "webapp_access_key_1" {
+  description = "Web app access key for invited access 1"
+  type        = string
+}
+
+variable "webapp_access_key_2" {
+  description = "Web app access key for invited access 2"
+  type        = string
+}
+
 variable "webapp_docker_registry_url" {
   description = "URL to the Docker Registry"
   type        = string
@@ -108,4 +140,24 @@ variable "custom_domain_name" {
 variable "tracking_id" {
   description = "Google Tag Manager tracking ID"
   type        = string
+}
+
+variable "contentful_delivery_api_key" {
+  description = "Contentful delivery API key"
+  type        = string
+}
+
+variable "contentful_preview_api_key" {
+  description = "Contentful preview API key"
+  type        = string
+}
+
+variable "contentful_space_id" {
+  description = "Contentful space ID"
+  type        = string
+}
+
+variable "contentful_use_preview_api" {
+  description = "Boolean used to set whether content is preview or published"
+  type        = bool
 }

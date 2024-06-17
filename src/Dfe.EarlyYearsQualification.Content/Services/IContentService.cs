@@ -14,7 +14,7 @@ public interface IContentService
 
     Task<AdvicePage?> GetAdvicePage(string entryId);
 
-    Task<QuestionPage?> GetQuestionPage(string entryId);
+    Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId);
 
     Task<AccessibilityStatementPage?> GetAccessibilityStatementPage();
 
@@ -25,4 +25,6 @@ public interface IContentService
     Task<List<Qualification>> GetQualifications(string? level);
 
     Task<CookiesBanner?> GetCookiesBannerContent();
+
+    Task<DateQuestionPage?> GetDateQuestionPage(string entryId);
 }

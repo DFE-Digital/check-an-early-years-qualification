@@ -4,6 +4,7 @@ using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.Extensions;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
+using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Security;
 using Dfe.EarlyYearsQualification.Web.Services.CookieService;
 using Microsoft.AspNetCore.DataProtection;
@@ -51,11 +52,24 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ICookieService, CookieService>();
 
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-builder.Services.AddScoped(x => {
-    var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
-    var factory = x.GetRequiredService<IUrlHelperFactory>();
-    return factory.GetUrlHelper(actionContext!);
-});
+builder.Services.AddScoped(x =>
+                           {
+                               var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+                               var factory = x.GetRequiredService<IUrlHelperFactory>();
+                               return factory.GetUrlHelper(actionContext!);
+                           });
+
+var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
+// ...by default, challenge the user for the secret value unless that's explicitly turned off
+
+if (accessIsChallenged)
+{
+    builder.Services.AddScoped<IChallengeResourceFilterAttribute, ChallengeResourceFilterAttribute>();
+}
+else
+{
+    builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
+}
 
 builder.Services.AddStaticRobotsTxt(robotsTxtOptions => robotsTxtOptions.DenyAll());
 
@@ -93,7 +107,7 @@ app.MapControllerRoute(
                        "default",
                        "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+await app.RunAsync();
 
 
 [ExcludeFromCodeCoverage]

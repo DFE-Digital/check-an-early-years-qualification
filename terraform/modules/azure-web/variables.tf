@@ -45,6 +45,11 @@ variable "webapp_name" {
   type        = string
 }
 
+variable "webapp_slot_name" {
+  description = "Name for the slot for the Web Application"
+  type        = string
+}
+
 variable "webapp_subnet_id" {
   description = "ID of the delegated Subnet for the Web Application"
   type        = string
@@ -82,6 +87,11 @@ variable "webapp_session_cookie_name" {
 
 variable "webapp_cookie_preference_name" {
   description = "Name of the user's cookie preference cookie"
+  type        = string
+}
+
+variable "webapp_cookie_auth_secret_name" {
+  description = "Name of the cookie holding the auth secret"
   type        = string
 }
 

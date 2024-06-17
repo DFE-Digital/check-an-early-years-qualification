@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.SessionService;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -14,7 +15,7 @@ public class QualificationDetailsController(
     ILogger<QualificationDetailsController> logger,
     IContentService contentService,
     IGovUkInsetTextRenderer renderer)
-    : Controller
+    : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Get()
@@ -40,7 +41,7 @@ public class QualificationDetailsController(
         if (detailsPageContent is null)
         {
             logger.LogError("No content for the qualification details page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var qualification = await contentService.GetQualificationById(qualificationId);
@@ -50,7 +51,7 @@ public class QualificationDetailsController(
             logger.LogError("Could not find details for qualification with ID: {QualificationId}",
                             loggedQualificationId);
 
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var model = await MapQualificationDetails(qualification, detailsPageContent);

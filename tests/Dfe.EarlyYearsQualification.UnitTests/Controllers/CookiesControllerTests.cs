@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.CookieService;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -37,7 +38,7 @@ public class CookiesControllerTests
         var result = await controller.Index();
 
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(new RedirectToActionResult("Error", "Home", null));
+        result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null));
 
         mockLogger.VerifyError("No content for the cookies page");
     }

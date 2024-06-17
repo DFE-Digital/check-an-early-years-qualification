@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ public class AccessibilityStatementController(
     ILogger<AccessibilityStatementController> logger,
     IContentService contentService,
     IHtmlRenderer renderer)
-    : Controller
+    : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -21,7 +22,7 @@ public class AccessibilityStatementController(
         if (content is null)
         {
             logger.LogError("No content for the accessibility statement page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
         var model = await Map(content);
