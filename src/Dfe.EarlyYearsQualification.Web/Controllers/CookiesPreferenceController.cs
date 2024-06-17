@@ -4,18 +4,18 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
-using Dfe.EarlyYearsQualification.Web.Services.CookieService;
+using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("cookies")]
-public class CookiesController(
-    ILogger<CookiesController> logger,
+public class CookiesPreferenceController(
+    ILogger<CookiesPreferenceController> logger,
     IContentService contentService,
     IHtmlTableRenderer tableRenderer,
     ISuccessBannerRenderer successBannerRenderer,
-    ICookieService cookieService,
+    ICookiesPreferenceService cookieService,
     IUrlHelper urlHelper)
     : ServiceController
 {

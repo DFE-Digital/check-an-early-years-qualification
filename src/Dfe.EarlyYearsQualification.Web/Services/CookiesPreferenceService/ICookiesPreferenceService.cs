@@ -1,7 +1,6 @@
+namespace Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 
-﻿namespace Dfe.EarlyYearsQualification.Web.Services.CookieService;
-
-public interface ICookieService
+public interface ICookiesPreferenceService
 {
     public DfeCookie GetCookie();
 

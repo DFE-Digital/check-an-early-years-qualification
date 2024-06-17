@@ -1,8 +1,8 @@
 using System.Text.Json;
 
-namespace Dfe.EarlyYearsQualification.Web.Services.CookieService;
+namespace Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 
-public class CookieService(IHttpContextAccessor context) : ICookieService
+public class CookiesPreferenceService(IHttpContextAccessor context) : ICookiesPreferenceService
 {
     private const string CookieKey = "cookies_preferences_set";
 

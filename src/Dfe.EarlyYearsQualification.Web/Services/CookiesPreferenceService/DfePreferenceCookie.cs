@@ -1,4 +1,4 @@
-namespace Dfe.EarlyYearsQualification.Web.Services.CookieService;
+namespace Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 
 public class DfeCookie
 {
