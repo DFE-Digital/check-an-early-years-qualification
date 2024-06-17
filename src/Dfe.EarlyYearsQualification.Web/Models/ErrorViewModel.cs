@@ -4,5 +4,8 @@ public class ErrorViewModel
 {
     public string? RequestId { get; init; }
 
-    public bool ShowRequestId => !string.IsNullOrWhiteSpace(RequestId);
+    public bool ShowRequestId
+    {
+        get { return !string.IsNullOrWhiteSpace(RequestId); }
+    }
 }

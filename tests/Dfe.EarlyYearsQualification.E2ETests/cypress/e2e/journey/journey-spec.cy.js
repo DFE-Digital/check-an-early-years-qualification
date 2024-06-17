@@ -40,6 +40,9 @@ describe('A spec used to test the various routes through the journey', () => {
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
     })
+
+    cy.get('#date-started-month').type("6");
+    cy.get('#date-started-year').type("2022");
     cy.get('button[id="question-submit"]').click();
 
     // what-level-is-the-qualification page

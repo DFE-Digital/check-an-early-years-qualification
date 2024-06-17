@@ -1,24 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Dfe.EarlyYearsQualification.Web.Models.Content;
+namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
-public class QuestionModel
+public class RadioQuestionModel : BaseQuestionModel
 {
-    public string Question { get; set; } = string.Empty;
-
     public List<OptionModel> Options { get; set; } = [];
 
-    public string CtaButtonText { get; set; } = string.Empty;
-
-    public string ActionName { get; set; } = string.Empty;
-
-    public string ControllerName { get; set; } = string.Empty;
-
-    public string ErrorMessage { get; set; } = string.Empty;
-
     [Required] public string? Option { get; init; } = string.Empty;
-
-    public bool HasErrors { get; set; }
 
     public string AdditionalInformationHeader {get; set;} = string.Empty;
 

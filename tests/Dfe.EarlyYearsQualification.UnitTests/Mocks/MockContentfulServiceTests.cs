@@ -32,7 +32,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_Level2SeptAndAug_ReturnsExpectedDetails()
     {
@@ -45,7 +45,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
     {
@@ -131,13 +131,13 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetQuestionPage_PassInWhereWasTheQualificationAwarded_ReturnsExpectedDetails()
+    public async Task GetRadioQuestionPage_PassInWhereWasTheQualificationAwarded_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
+        var result = await contentfulService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<QuestionPage>();
+        result.Should().BeAssignableTo<RadioQuestionPage>();
         result!.Question.Should().NotBeNullOrEmpty();
         result.CtaButtonText.Should().NotBeNullOrEmpty();
         result.ErrorMessage.Should().NotBeNullOrEmpty();
@@ -150,13 +150,13 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetQuestionPage_PassInWhatLevelIsTheQualification_ReturnsExpectedDetails()
+    public async Task GetRadioQuestionPage_PassInWhatLevelIsTheQualification_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetQuestionPage(QuestionPages.WhatLevelIsTheQualification);
+        var result = await contentfulService.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<QuestionPage>();
+        result.Should().BeAssignableTo<RadioQuestionPage>();
         result!.Question.Should().NotBeNullOrEmpty();
         result.CtaButtonText.Should().NotBeNullOrEmpty();
         result.ErrorMessage.Should().NotBeNullOrEmpty();
@@ -169,14 +169,40 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetQuestionPage_PassInvalidEntryId_ReturnsException()
+    public async Task GetRadioQuestionPage_PassInvalidEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
 
-        Func<Task> act = () => contentfulService.GetQuestionPage("Fake_entry_id");
+        Func<Task> act = () => contentfulService.GetRadioQuestionPage("Fake_entry_id");
 
         await act.Should().ThrowAsync<NotImplementedException>()
-            .WithMessage("No question page mock for entry Fake_entry_id");
+                 .WithMessage("No radio question page mock for entry Fake_entry_id");
+    }
+
+    [TestMethod]
+    public async Task GetDateQuestionPage_PassWhenWasQualificationStartedId_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+
+        result.Should().NotBeNull();
+        result!.CtaButtonText.Should().Be("Continue");
+        result.ErrorMessage.Should().Be("Test Error Message");
+        result.MonthLabel.Should().Be("Test Month Label");
+        result.YearLabel.Should().Be("Test Year Label");
+        result.QuestionHint.Should().Be("Test Question Hint");
+    }
+
+    [TestMethod]
+    public async Task GetDateQuestionPage_PassInvalidEntryId_ReturnsException()
+    {
+        var contentfulService = new MockContentfulService();
+
+        Func<Task> act = () => contentfulService.GetDateQuestionPage("Fake_entry_id");
+
+        await act.Should().ThrowAsync<NotImplementedException>()
+                 .WithMessage("No date question page mock for entry Fake_entry_id");
     }
 
     [TestMethod]
@@ -215,7 +241,7 @@ public class MockContentfulServiceTests
         result.PhaseName.Should().NotBeNullOrEmpty();
         result.Show.Should().BeTrue();
     }
-    
+
     [TestMethod]
     public async Task GetCookiesBannerContent_ReturnsExpectedDetails()
     {

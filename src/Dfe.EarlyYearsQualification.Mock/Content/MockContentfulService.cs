@@ -127,7 +127,7 @@ public class MockContentfulService : IContentService
                                                       ));
     }
 
-    public async Task<QuestionPage?> GetQuestionPage(string entryId)
+    public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
     {
         return entryId switch
                {
@@ -135,7 +135,17 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateWhatLevelIsTheQualificationPage()),
                    QuestionPages.WhereWasTheQualificationAwarded =>
                        await Task.FromResult(CreateWhereWasTheQualificationAwardedPage()),
-                   _ => throw new NotImplementedException($"No question page mock for entry {entryId}")
+                   _ => throw new NotImplementedException($"No radio question page mock for entry {entryId}")
+               };
+    }
+
+    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
+    {
+      return entryId switch
+               {
+                   QuestionPages.WhenWasTheQualificationStarted =>
+                       await Task.FromResult(CreateDateQuestionPage()),
+                   _ => throw new NotImplementedException($"No date question page mock for entry {entryId}")
                };
     }
 
@@ -185,7 +195,7 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    private static QuestionPage CreateWhereWasTheQualificationAwardedPage()
+    private static RadioQuestionPage CreateWhereWasTheQualificationAwardedPage()
     {
         var options = new List<Option>
                       {
@@ -199,10 +209,10 @@ public class MockContentfulService : IContentService
                               Value = "outside-uk"
                           }
                       };
-        return CreateQuestionPage("Where was the qualification awarded?", options);
+        return CreateRadioQuestionPage("Where was the qualification awarded?", options);
     }
 
-    private static QuestionPage CreateWhatLevelIsTheQualificationPage()
+    private static RadioQuestionPage CreateWhatLevelIsTheQualificationPage()
     {
         var options = new List<Option>
                       {
@@ -215,12 +225,12 @@ public class MockContentfulService : IContentService
                               Label = "Level 3", Value = "3"
                           }
                       };
-        return CreateQuestionPage("What level is the qualification?", options);
+        return CreateRadioQuestionPage("What level is the qualification?", options);
     }
 
-    private static QuestionPage CreateQuestionPage(string question, List<Option> options)
+    private static RadioQuestionPage CreateRadioQuestionPage(string question, List<Option> options)
     {
-        return new QuestionPage
+        return new RadioQuestionPage
                {
                    Question = question,
                    Options = options,
@@ -229,6 +239,19 @@ public class MockContentfulService : IContentService
                };
     }
 
+    private static DateQuestionPage CreateDateQuestionPage()
+    {
+      return new DateQuestionPage
+              {
+                Question = "Test Date Question",
+                CtaButtonText = "Continue",
+                ErrorMessage = "Test Error Message",
+                MonthLabel = "Test Month Label",
+                YearLabel = "Test Year Label",
+                QuestionHint = "Test Question Hint"
+              };
+    }
+    
     private static AdvicePage CreateAdvicePage(string heading, Document body)
     {
         return new AdvicePage
