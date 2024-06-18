@@ -77,14 +77,16 @@ public class ChallengeResourceFilterAttribute(
             return;
         }
 
-        var warningMessage = $"Access denied by {nameof(ChallengeResourceFilterAttribute)}";
-
+        // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+        // ..."the logging message template should not vary between calls to LoggerExtensions.LogWarning(ILogger, string?, params object?[])"
         if (cookieIsPresent)
         {
-            warningMessage += " (incorrect value submitted)";
+            logger.LogWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)} (incorrect value submitted)");
         }
-
-        logger.LogWarning(warningMessage);
+        else
+        {
+            logger.LogWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)}");
+        }
 
         var requestedPath = context.HttpContext.Request.Path;
 

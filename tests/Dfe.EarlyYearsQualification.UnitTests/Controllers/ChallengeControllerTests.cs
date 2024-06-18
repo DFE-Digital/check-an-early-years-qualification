@@ -78,13 +78,14 @@ public class ChallengeControllerTests
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(true);
 
-        var cookies = new Dictionary<string, string>();
+        var cookies = new Dictionary<string, Tuple<string, CookieOptions>>();
 
         var cookiesMock = new Mock<IResponseCookies>();
         cookiesMock.Setup(c =>
                               c.Append(ChallengeResourceFilterAttribute.AuthSecretCookieName,
-                                       accessKey))
-                   .Callback((string k, string v) => cookies.Add(k, v));
+                                       accessKey,
+                                       It.IsAny<CookieOptions>()))
+                   .Callback((string k, string v, CookieOptions o) => cookies.Add(k, new Tuple<string, CookieOptions>(v, o)));
 
         var mockContext = new Mock<HttpContext>();
         mockContext.SetupGet(c => c.Response.Cookies).Returns(cookiesMock.Object);
@@ -108,8 +109,10 @@ public class ChallengeControllerTests
         redirect.Url.Should().Be("/cookies");
 
         cookies.Should().ContainKey(ChallengeResourceFilterAttribute.AuthSecretCookieName);
-        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Should()
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item1.Should()
                                                                       .Be(accessKey);
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item2.HttpOnly.Should()
+                                                                      .BeTrue();
     }
 
     [TestMethod]
@@ -122,13 +125,14 @@ public class ChallengeControllerTests
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(false); // NB: behaviour relies on UrlHelper correctly determining non-local URLs
 
-        var cookies = new Dictionary<string, string>();
+        var cookies = new Dictionary<string, Tuple<string, CookieOptions>>();
 
         var cookiesMock = new Mock<IResponseCookies>();
         cookiesMock.Setup(c =>
                               c.Append(ChallengeResourceFilterAttribute.AuthSecretCookieName,
-                                       accessKey))
-                   .Callback((string k, string v) => cookies.Add(k, v));
+                                       accessKey,
+                                       It.IsAny<CookieOptions>()))
+                   .Callback((string k, string v, CookieOptions o) => cookies.Add(k, new Tuple<string, CookieOptions>(v, o)));
 
         var mockContext = new Mock<HttpContext>();
         mockContext.SetupGet(c => c.Response.Cookies).Returns(cookiesMock.Object);
@@ -152,7 +156,9 @@ public class ChallengeControllerTests
         redirect.Url.Should().Be("/");
 
         cookies.Should().ContainKey(ChallengeResourceFilterAttribute.AuthSecretCookieName);
-        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Should()
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item1.Should()
                                                                       .Be(accessKey);
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item2.HttpOnly.Should()
+                                                                      .BeTrue();
     }
 }

@@ -8,10 +8,10 @@ Which frameworks can be adopted within the Check an Early Years Qualification th
 ## Decision Drivers
 * Open source
 * Within DfE’s Technical Guidance
-* Moq is used by the following services
+* Moq is used by the following services:
 	* [Dfe.Academies.External](https://github.com/DFE-Digital/Dfe.Academies.External)
 	* [find-a-tuition-partner](https://github.com/DFE-Digital/find-a-tuition-partner)
-* AutoFixture can be used to is used by the following services to generate 
+* AutoFixture can be used to generate test data, and is already used by the following services: 
 	* [amsd-casework](https://github.com/DFE-Digital/amsd-casework)
 	* [prepare-academy-conversions](https://github.com/DFE-Digital/prepare-academy-conversions)
 
