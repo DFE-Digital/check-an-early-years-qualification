@@ -42,12 +42,15 @@ public class QuestionsController(
 
             return View("Radio", model);
         }
+
+        if (model.Option == Options.OutsideOfTheUnitedKingdom)
+        {
+            return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
+        }
         
         userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option!);
 
-        return model.Option == Options.OutsideOfTheUnitedKingdom
-                   ? RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice")
-                   : RedirectToAction(nameof(this.WhenWasTheQualificationStarted));
+        return RedirectToAction(nameof(this.WhenWasTheQualificationStarted));
     }
 
     [HttpGet("when-was-the-qualification-started")]

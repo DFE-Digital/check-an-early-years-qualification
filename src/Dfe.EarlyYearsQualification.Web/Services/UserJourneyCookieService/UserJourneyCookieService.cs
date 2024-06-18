@@ -4,7 +4,7 @@ using Dfe.EarlyYearsQualification.Web.Models;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
-public class UserJourneyCookieService(IHttpContextAccessor context) : IUserJourneyCookieService
+public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<UserJourneyCookieService> logger) : IUserJourneyCookieService
 {
     private readonly CookieOptions _options = new()
                                               {
@@ -45,18 +45,23 @@ public class UserJourneyCookieService(IHttpContextAccessor context) : IUserJourn
         var cookie = context.HttpContext?.Request.Cookies[CookieKeyNames.UserJourneyKey];
         if (cookie is null)
         {
-            var model = new UserJourneyModel();
-            SetJourneyCookie(model);
-            return model;
+            ResetUserJourneyCookie();
+            return new UserJourneyModel();
         }
 
         try
         {
             var journeyCookie = JsonSerializer.Deserialize<UserJourneyModel>(cookie);
-            return journeyCookie ?? new UserJourneyModel();
+
+            if (journeyCookie != null) return journeyCookie;
+
+            ResetUserJourneyCookie();
+            return new UserJourneyModel();
+
         }
         catch
         {
+            ResetUserJourneyCookie();
             return new UserJourneyModel();
         }
     }
@@ -73,9 +78,9 @@ public class UserJourneyCookieService(IHttpContextAccessor context) : IUserJourn
             var serializedCookie = JsonSerializer.Serialize(model);
             context.HttpContext?.Response.Cookies.Append(CookieKeyNames.UserJourneyKey, serializedCookie, _options);
         }
-        catch (Exception e)
+        catch
         {
-            // TODO: log when we fail to serialise the UserJourneyModel?
+            logger.LogError("Failed to serialize user journey model");
         }
     }
 }

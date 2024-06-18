@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -152,7 +153,7 @@ public class CookieServiceTests
         var requestCookiesMock = new Mock<IRequestCookieCollection>();
         var responseCookiesMock = new Mock<IResponseCookies>();
 
-        requestCookiesMock.Setup(cookiesCollection => cookiesCollection["cookies_preferences_set"])
+        requestCookiesMock.Setup(cookiesCollection => cookiesCollection[CookieKeyNames.CookiesPreferenceKey])
                           .Returns(serializedCookie);
         responseCookiesMock.Setup(x => x.Delete(It.IsAny<string>())).Verifiable();
 
@@ -172,7 +173,7 @@ public class CookieServiceTests
 
         mockContext
             .Verify(http =>
-                        http.HttpContext!.Response.Cookies.Append("cookies_preferences_set",
+                        http.HttpContext!.Response.Cookies.Append(CookieKeyNames.CookiesPreferenceKey,
                                                                   serializedCookieToCheck,
                                                                   It.Is<CookieOptions>(
                                                                        options =>
