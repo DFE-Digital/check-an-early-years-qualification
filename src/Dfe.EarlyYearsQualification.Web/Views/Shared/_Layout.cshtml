@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using GovUk.Frontend.AspNetCore
+<!DOCTYPE html>
 <html class="govuk-template" lang="en">
 
 <head>
@@ -7,12 +8,12 @@
     <title>@ViewData["Title"] - Check an Early Years qualification</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/css/application.css" asp-append-version="true"/>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.svg"/>
+    @Html.GovUkFrontendStyleImports()
 </head>
 
 <body>
-
+@Html.GovUkFrontendJsEnabledScript()
 @{
     await Html.RenderPartialAsync("_Header");
 }
@@ -31,6 +32,7 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", false)
+@Html.GovUkFrontendScriptImports()
 </body>
 
 </html>
