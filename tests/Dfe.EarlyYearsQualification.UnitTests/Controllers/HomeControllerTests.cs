@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,8 +23,10 @@ public class HomeControllerTests
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockSideRenderer = new Mock<ISideContentRenderer>();
         var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
         var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
-                                            mockSideRenderer.Object);
+                                            mockSideRenderer.Object, mockUserJourneyCookieService.Object);
 
         mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage?)default);
 
@@ -46,8 +49,10 @@ public class HomeControllerTests
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockSideRenderer = new Mock<ISideContentRenderer>();
         var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
         var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
-                                            mockSideRenderer.Object);
+                                            mockSideRenderer.Object, mockUserJourneyCookieService.Object);
 
         const string postCtaContentText = "This is the post cta content";
         const string preCtaContentText = "This is the pre cta content";
@@ -87,5 +92,7 @@ public class HomeControllerTests
         model.PreCtaButtonContent.Should().Be(preCtaContentText);
         model.RightHandSideContent.Should().Be(sideContentText);
         model.RightHandSideContentHeader.Should().Be(startPageResult.RightHandSideContentHeader);
+        
+        mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
     }
 }

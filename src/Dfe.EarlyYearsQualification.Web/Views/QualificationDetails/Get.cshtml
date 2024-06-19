@@ -1,3 +1,5 @@
+@model Dfe.EarlyYearsQualification.Web.Models.UserJourneyModel;
+
 @{
     ViewData["Title"] = "Qualifications";
     string[] qualifications = ["eyq-140", "eyq-150", "eyq-160", "eyq-170", "eyq-180", "eyq-220", "eyq-240"];
@@ -5,6 +7,31 @@
 
 <a href="javascript:window.history.back()" class="govuk-back-link">Back</a>
 <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        <h1 class="govuk-label-wrapper">
+            <label class="govuk-label govuk-label--m">Your Search</label>
+        </h1>
+        <ul class="govuk-list govuk-list--bullet">
+            @if (!string.IsNullOrEmpty(Model.WhereWasQualificationAwarded))
+            {
+                <li>@Model.WhereWasQualificationAwarded</li>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.WhenWasQualificationAwarded))
+            {
+                <li>@Model.WhenWasQualificationAwarded</li>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.LevelOfQualification))
+            {
+                <li>@Model.LevelOfQualification</li>
+            }
+        </ul>
+        
+        <p class="govuk-body">
+            <a href="/" class="govuk-link">Change my search</a>
+        </p>
+    </div>
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Temporary page</h1>
         <table class="govuk-table">

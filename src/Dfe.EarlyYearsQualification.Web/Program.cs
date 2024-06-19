@@ -6,7 +6,8 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Security;
-using Dfe.EarlyYearsQualification.Web.Services.CookieService;
+using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -49,8 +50,8 @@ else
 
 builder.Services.AddModelRenderers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddTransient<ICookieService, CookieService>();
-
+builder.Services.AddTransient<ICookiesPreferenceService, CookiesPreferenceService>();
+builder.Services.AddTransient<IUserJourneyCookieService, UserJourneyCookieService>();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddScoped(x =>
                            {

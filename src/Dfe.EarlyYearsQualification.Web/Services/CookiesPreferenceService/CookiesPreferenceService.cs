@@ -1,32 +1,31 @@
 using System.Text.Json;
+using Dfe.EarlyYearsQualification.Web.Constants;
 
-namespace Dfe.EarlyYearsQualification.Web.Services.CookieService;
+namespace Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 
-public class CookieService(IHttpContextAccessor context) : ICookieService
+public class CookiesPreferenceService(IHttpContextAccessor context) : ICookiesPreferenceService
 {
-    private const string CookieKey = "cookies_preferences_set";
-
     public void SetVisibility(bool visibility)
     {
         var currentCookie = GetCookie();
         DeleteCookie();
-        CreateCookie(CookieKey, currentCookie.HasApproved, visibility, currentCookie.IsRejected);
+        CreateCookie(CookieKeyNames.CookiesPreferenceKey, currentCookie.HasApproved, visibility, currentCookie.IsRejected);
     }
 
     public void RejectCookies()
     {
         DeleteCookie();
-        CreateCookie(CookieKey, false, true, true);
+        CreateCookie(CookieKeyNames.CookiesPreferenceKey, false, true, true);
     }
 
     public void SetPreference(bool userPreference)
     {
-        CreateCookie(CookieKey, userPreference);
+        CreateCookie(CookieKeyNames.CookiesPreferenceKey, userPreference);
     }
 
     public DfeCookie GetCookie()
     {
-        var cookie = context.HttpContext?.Request.Cookies[CookieKey];
+        var cookie = context.HttpContext?.Request.Cookies[CookieKeyNames.CookiesPreferenceKey];
         if (cookie is null)
         {
             return new DfeCookie();
@@ -45,7 +44,7 @@ public class CookieService(IHttpContextAccessor context) : ICookieService
 
     private void DeleteCookie()
     {
-        context.HttpContext?.Response.Cookies.Delete(CookieKey);
+        context.HttpContext?.Response.Cookies.Delete(CookieKeyNames.CookiesPreferenceKey);
     }
 
     private void CreateCookie(string key, bool value, bool visibility = true, bool rejected = false)

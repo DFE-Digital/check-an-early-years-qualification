@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +13,15 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class QualificationDetailsController(
     ILogger<QualificationDetailsController> logger,
     IContentService contentService,
-    IGovUkInsetTextRenderer renderer)
+    IGovUkInsetTextRenderer renderer,
+    IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
     [HttpGet]
     public IActionResult Get()
     {
-        return View();
+        var filterParams = userJourneyCookieService.GetUserJourneyModelFromCookie();
+        return View(filterParams);
     }
 
     [HttpGet("qualification-details/{qualificationId}")]

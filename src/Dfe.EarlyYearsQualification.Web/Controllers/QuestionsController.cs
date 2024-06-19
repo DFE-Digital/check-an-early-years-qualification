@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -13,7 +14,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class QuestionsController(
     ILogger<QuestionsController> logger,
     IContentService contentService,
-    IHtmlRenderer renderer)
+    IHtmlRenderer renderer,
+    IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -41,9 +43,14 @@ public class QuestionsController(
             return View("Radio", model);
         }
 
-        return model.Option == Options.OutsideOfTheUnitedKingdom
-                   ? RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice")
-                   : RedirectToAction(nameof(this.WhenWasTheQualificationStarted));
+        if (model.Option == Options.OutsideOfTheUnitedKingdom)
+        {
+            return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
+        }
+        
+        userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option!);
+
+        return RedirectToAction(nameof(this.WhenWasTheQualificationStarted));
     }
 
     [HttpGet("when-was-the-qualification-started")]
@@ -76,6 +83,8 @@ public class QuestionsController(
 
             return View("Date", model);
         }
+        
+        userJourneyCookieService.SetWhenWasQualificationAwarded(model.SelectedMonth.ToString() + '/' + model.SelectedYear.ToString());
 
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
@@ -101,6 +110,8 @@ public class QuestionsController(
 
             return View("Radio", model);
         }
+        
+        userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
         return RedirectToAction("Get", "QualificationDetails");
     }
