@@ -45,7 +45,7 @@
 
       <h2 id="cookies-heading" class="govuk-heading-xl">@Model.Heading</h2>
       <div id="cookies-body">@Html.Raw(Model.BodyContent)</div>
-      <form id="cookies-form" asp-controller="Cookies" asp-action="CookiePreference" method="post">
+      <form id="cookies-form" asp-controller="CookiesPreference" asp-action="CookiePreference" method="post">
           <div id="cookies-form-group" class="govuk-form-group">
               <fieldset class="govuk-fieldset" role="group" aria-describedby="cookies-choice-error">
                   <p id="cookies-choice-error" class="govuk-error-message" hidden>
