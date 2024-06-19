@@ -80,6 +80,7 @@ module "webapp" {
   webapp_session_cookie_name               = "_early_years_qualification_session"
   webapp_cookie_preference_name            = "cookies_preferences_set"
   webapp_cookie_auth_secret_name           = "auth-secret"
+  webapp_cookie_user_journey_name          = "user_journey"
   webapp_custom_domain_name                = var.custom_domain_name
   webapp_custom_domain_cert_secret_label   = var.kv_certificate_label
   webapp_health_check_path                 = "/health"

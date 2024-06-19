@@ -95,6 +95,11 @@ variable "webapp_cookie_auth_secret_name" {
   type        = string
 }
 
+variable "webapp_cookie_user_journey_name" {
+  description = "Name of the cookie holding the user's filter selections"
+  type        = string
+}
+
 variable "webapp_health_check_path" {
   default     = null
   description = "Path to health check endpoint"
