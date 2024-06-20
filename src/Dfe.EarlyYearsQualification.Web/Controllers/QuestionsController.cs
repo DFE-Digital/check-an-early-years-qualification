@@ -7,6 +7,7 @@ using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
@@ -113,6 +114,44 @@ public class QuestionsController(
         
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
+        return RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation));
+    }
+    
+    [HttpGet("what-is-the-awarding-organisation")]
+    public async Task<IActionResult> WhatIsTheAwardingOrganisation()
+    {
+        var questionPage = await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
+        if (questionPage is null)
+        {
+            logger.LogError("No content for the question page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var qualifications = await contentService.GetQualifications();
+
+        var model = MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications, nameof(this.WhatIsTheAwardingOrganisation),
+                                 Questions);
+        return View("Dropdown", model);
+    }
+    
+    [HttpPost("what-is-the-awarding-organisation")]
+    public async Task<IActionResult> WhatIsTheAwardingOrganisation(DropdownQuestionModel model)
+    {
+        if (!ModelState.IsValid || (string.IsNullOrEmpty(model.SelectedValue) && !model.NotInTheList))
+        {
+            var questionPage = await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
+            if (questionPage is not null)
+            {
+                var qualifications = await contentService.GetQualifications();
+                
+                model = MapDropdownModel(model, questionPage, qualifications, nameof(this.WhatIsTheAwardingOrganisation),
+                                         Questions);
+                model.HasErrors = true;
+            }
+
+            return View("Dropdown", model);
+        }
+        
         return RedirectToAction("Get", "QualificationDetails");
     }
 
@@ -156,5 +195,36 @@ public class QuestionsController(
         model.MonthLabel = question.MonthLabel;
         model.YearLabel = question.YearLabel;
         return model;
+    }
+
+    private static DropdownQuestionModel MapDropdownModel(DropdownQuestionModel model, DropdownQuestionPage question, List<Qualification> qualifications, string actionName,
+                                                          string controllerName)
+    {
+        var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle).Distinct().Order().ToList();
+        
+        model.ActionName = actionName;
+        model.ControllerName = controllerName;
+        model.CtaButtonText = question.CtaButtonText;
+        model.ErrorMessage = question.ErrorMessage;
+        model.Question = question.Question;
+        model.DropdownHeading = question.DropdownHeading;
+        model.NotInListText = question.NotInListText;
+        
+        model.Values.Add(new SelectListItem()
+                         {
+                             Text = question.DefaultText,
+                             Value = ""
+                         });
+       
+       foreach (var awardingOrg in uniqueAwardingOrganisations)
+       {
+           model.Values.Add(new SelectListItem()
+                            {
+                                Value = awardingOrg,
+                                Text = awardingOrg
+                            });
+       }
+
+       return model;
     }
 }
