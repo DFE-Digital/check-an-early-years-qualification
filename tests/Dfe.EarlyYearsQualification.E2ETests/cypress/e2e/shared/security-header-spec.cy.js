@@ -21,7 +21,7 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "content-security-policy",
-          "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes';object-src 'self';frame-ancestors https://app.contentful.com;block-all-mixed-content;upgrade-insecure-requests;"
+          "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=';object-src 'self';frame-ancestors https://app.contentful.com;block-all-mixed-content;upgrade-insecure-requests;"
         );
         expect(response.headers).to.have.property(
           "cross-origin-resource-policy",
@@ -62,7 +62,7 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "content-security-policy",
-          "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes';object-src 'self';frame-ancestors https://app.contentful.com;block-all-mixed-content;upgrade-insecure-requests;"
+          "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=';object-src 'self';frame-ancestors https://app.contentful.com;block-all-mixed-content;upgrade-insecure-requests;"
         );
         expect(response.headers).to.have.property(
           "cross-origin-resource-policy",
@@ -97,7 +97,7 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "content-security-policy",
-          "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes';object-src 'self';frame-ancestors https://app.contentful.com;block-all-mixed-content;upgrade-insecure-requests;"
+          "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=';object-src 'self';frame-ancestors https://app.contentful.com;block-all-mixed-content;upgrade-insecure-requests;"
         );
         expect(response.headers).to.have.property(
           "cross-origin-resource-policy",

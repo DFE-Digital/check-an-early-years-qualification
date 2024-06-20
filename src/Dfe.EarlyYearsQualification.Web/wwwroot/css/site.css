@@ -20,3 +20,8 @@ html {
 body {
     margin-bottom: 60px;
 }
+
+/* GovUK style overrides */
+.govuk-radios__input {
+    z-index: 1;
+}

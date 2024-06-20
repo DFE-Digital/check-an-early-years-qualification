@@ -41,6 +41,18 @@ public static class SecureHeaderConfiguration
                                               DirectiveOrUri = "sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms="
                                           };
 
+        var govukFrontendSupportedElement = new ContentSecurityPolicyElement
+                                            {
+                                                CommandType = CspCommandType.Directive,
+                                                DirectiveOrUri = "sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw="
+                                            };
+        
+        var govukAllMinifiedElement = new ContentSecurityPolicyElement
+                                            {
+                                                CommandType = CspCommandType.Directive,
+                                                DirectiveOrUri = "sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo="
+                                            };
+
         var unsafeHashesElement = new ContentSecurityPolicyElement
                                   { CommandType = CspCommandType.Directive, DirectiveOrUri = "unsafe-hashes" };
         var contentfulCspElement = new ContentSecurityPolicyElement
@@ -49,7 +61,10 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowLocationShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(unsafeHashesElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukFrontendSupportedElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukAllMinifiedElement);
         configuration.ContentSecurityPolicyConfiguration.FrameAncestors.Add(contentfulCspElement);
+        
         return configuration;
     }
 }
