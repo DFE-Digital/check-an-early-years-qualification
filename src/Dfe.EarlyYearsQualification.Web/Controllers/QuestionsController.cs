@@ -131,6 +131,7 @@ public class QuestionsController(
 
         var model = MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications, nameof(this.WhatIsTheAwardingOrganisation),
                                  Questions);
+        
         return View("Dropdown", model);
     }
     
@@ -151,6 +152,8 @@ public class QuestionsController(
 
             return View("Dropdown", model);
         }
+        
+        userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue);
         
         return RedirectToAction("Get", "QualificationDetails");
     }

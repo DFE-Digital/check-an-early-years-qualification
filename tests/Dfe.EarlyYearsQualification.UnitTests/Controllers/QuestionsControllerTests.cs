@@ -483,8 +483,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationDetails");
+        resultType!.ActionName.Should().Be("WhatIsTheAwardingOrganisation");
         
         mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification("2"), Times.Once);
     }

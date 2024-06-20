@@ -40,6 +40,15 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         SetJourneyCookie(model);
     }
 
+    public void SetAwardingOrganisation(string awardingOrganisation)
+    {
+        var model = GetUserJourneyModelFromCookie();
+
+        model.WhatIsTheAwardingOrganisation = awardingOrganisation;
+        
+        SetJourneyCookie(model);
+    }
+
     public UserJourneyModel GetUserJourneyModelFromCookie()
     {
         var cookie = context.HttpContext?.Request.Cookies[CookieKeyNames.UserJourneyKey];

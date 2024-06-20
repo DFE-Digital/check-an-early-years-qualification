@@ -26,6 +26,11 @@
             {
                 <li>@Model.LevelOfQualification</li>
             }
+
+            @if (!string.IsNullOrEmpty(Model.WhatIsTheAwardingOrganisation))
+            {
+                <li>@Model.WhatIsTheAwardingOrganisation</li>
+            }
         </ul>
         
         <p class="govuk-body">
