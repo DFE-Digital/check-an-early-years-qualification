@@ -8,6 +8,7 @@ using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Security;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+using GovUk.Frontend.AspNetCore;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -38,6 +39,8 @@ builder.Services.AddControllersWithViews(options =>
                                          });
 
 builder.Services.AddContentful(builder.Configuration);
+
+builder.Services.AddGovUkFrontend();
 
 if (builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
