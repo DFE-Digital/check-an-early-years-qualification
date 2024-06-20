@@ -659,7 +659,7 @@ public class QuestionsControllerTests
 
         resultType!.ViewName.Should().Be("Dropdown");
         
-        var model = resultType!.Model as DropdownQuestionModel;
+        var model = resultType.Model as DropdownQuestionModel;
         model.Should().NotBeNull();
 
         model!.HasErrors.Should().BeTrue();
