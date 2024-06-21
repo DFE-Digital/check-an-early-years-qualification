@@ -80,4 +80,31 @@ describe("A spec that tests question pages", () => {
         cy.get('#option-error').should("contain.text", "Test error message");
         cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
     })
+    
+    /// What is the awarding organisation page
+    it("Checks the content on what-is-the-awarding-organisation page", () => {
+        cy.visit("/questions/what-is-the-awarding-organisation");
+
+        cy.get("#question").should("contain.text", "Test Dropdown Question");
+        cy.get("#awarding-organisation-select").should("exist");
+        cy.get("#awarding-organisation-not-in-list").should("exist");
+        cy.get('button[id="question-submit"]').should("exist");
+    })
+
+    it("shows an error message when a user doesnt select an option from the dropdown list" +
+        "and also does not check 'not in the list' on the what-is-the-awarding-organisation", () => {
+        cy.visit("/questions/what-is-the-awarding-organisation");
+
+        cy.get("#dropdown-error").should("not.exist");
+        cy.get("#awarding-organisation-select").should("not.have.class", "govuk-select--error");
+
+        cy.get('button[id="question-submit"]').click();
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq("/questions/what-is-the-awarding-organisation");
+        })
+
+        cy.get('#dropdown-error').should("exist");
+        cy.get('#dropdown-error').should("contain.text", "Test Error Message");
+        cy.get("#awarding-organisation-select").should("have.class", "govuk-select--error");
+    })
 })

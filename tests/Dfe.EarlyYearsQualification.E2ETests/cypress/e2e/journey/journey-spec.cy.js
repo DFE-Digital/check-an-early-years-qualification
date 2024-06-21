@@ -51,7 +51,15 @@ describe('A spec used to test the various routes through the journey', () => {
     })
     cy.get('#3').click();
     cy.get('button[id="question-submit"]').click();
-
+    
+    // what-is-the-awarding-organisation page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-is-the-awarding-organisation');
+    })
+    
+    cy.get('#awarding-organisation-select').select('A awarding organisation');
+    cy.get('button[id="question-submit"]').click();
+    
     // qualifications page (This is only a temporary page)
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/qualifications');
