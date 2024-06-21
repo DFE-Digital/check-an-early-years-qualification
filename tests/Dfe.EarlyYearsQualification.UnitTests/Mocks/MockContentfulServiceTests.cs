@@ -204,6 +204,43 @@ public class MockContentfulServiceTests
         await act.Should().ThrowAsync<NotImplementedException>()
                  .WithMessage("No date question page mock for entry Fake_entry_id");
     }
+    
+    [TestMethod]
+    public async Task GetDropdownQuestionPage_PassWhenWasQualificationStartedId_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
+
+        result.Should().NotBeNull();
+        result!.CtaButtonText.Should().Be("Test Button Text");
+        result.ErrorMessage.Should().Be("Test Error Message");
+        result.Question.Should().Be("Test Dropdown Question");
+        result.DefaultText.Should().Be("Test Default Dropdown Text");
+        result.DropdownHeading.Should().Be("Test Dropdown Heading");
+        result.NotInListText.Should().Be("Test Not In The List");
+    }
+
+    [TestMethod]
+    public async Task GetDropdownQuestionPage_PassInvalidEntryId_ReturnsException()
+    {
+        var contentfulService = new MockContentfulService();
+
+        Func<Task> act = () => contentfulService.GetDropdownQuestionPage("Fake_entry_id");
+
+        await act.Should().ThrowAsync<NotImplementedException>()
+                 .WithMessage("No dropdown question page mock for entry Fake_entry_id");
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_ReturnsAListOfQualifications()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetQualifications();
+
+        result.Count.Should().Be(5);
+    }
 
     [TestMethod]
     public async Task GetStartPage_ReturnsExpectedDetails()
