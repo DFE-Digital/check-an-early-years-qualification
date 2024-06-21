@@ -60,13 +60,8 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
 
         try
         {
-            var journeyCookie = JsonSerializer.Deserialize<UserJourneyModel>(cookie);
-
-            if (journeyCookie != null) return journeyCookie;
-
-            ResetUserJourneyCookie();
-            return new UserJourneyModel();
-
+            var toReturn = JsonSerializer.Deserialize<UserJourneyModel>(cookie);
+            return toReturn!;
         }
         catch
         {
@@ -82,14 +77,7 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
 
     private void SetJourneyCookie(UserJourneyModel model)
     {
-        try
-        {
-            var serializedCookie = JsonSerializer.Serialize(model);
-            context.HttpContext?.Response.Cookies.Append(CookieKeyNames.UserJourneyKey, serializedCookie, _options);
-        }
-        catch
-        {
-            logger.LogError("Failed to serialize user journey model");
-        }
+        var serializedCookie = JsonSerializer.Serialize(model);
+        context.HttpContext?.Response.Cookies.Append(CookieKeyNames.UserJourneyKey, serializedCookie, _options);
     }
 }
