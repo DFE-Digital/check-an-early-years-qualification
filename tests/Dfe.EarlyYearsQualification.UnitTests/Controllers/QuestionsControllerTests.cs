@@ -483,9 +483,299 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
+        resultType!.ActionName.Should().Be("WhatIsTheAwardingOrganisation");
+        
+        mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification("2"), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync((DropdownQuestionPage?)default).Verifiable();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+
+        var result = await controller.WhatIsTheAwardingOrganisation();
+
+        mockContentService.VerifyAll();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        result.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the question page");
+    }
+
+    [TestMethod]
+    public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsQuestionPage_ReturnsQuestionModel()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var questionPage = new DropdownQuestionPage()
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               ErrorMessage = "Test error message",
+                               DropdownHeading = "Test dropdown heading",
+                               NotInListText = "Test not in the list text",
+                               DefaultText = "Test default text"
+                           };
+        
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(questionPage);
+
+        mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+
+        var result = await controller.WhatIsTheAwardingOrganisation();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as DropdownQuestionModel;
+        model.Should().NotBeNull();
+
+        model!.Question.Should().Be(questionPage.Question);
+        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
+        model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
+        model.DropdownHeading.Should().Be(questionPage.DropdownHeading);
+        model.HasErrors.Should().BeFalse();
+        model.Values.Count().Should().Be(1);
+        model.Values.First().Text.Should().Be(questionPage.DefaultText);
+        model.Values.First().Value.Should().BeEmpty();
+        model.NotInListText.Should().Be(questionPage.NotInListText);
+    }
+    
+    [TestMethod]
+    public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsQualifications_OrdersAwardingOrganisationsInModel()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var questionPage = new DropdownQuestionPage()
+                           {
+                               DefaultText = "Test default text"
+                           };
+        
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(questionPage);
+
+        var listOfQualifications = new List<Qualification>
+                                   {
+                                       new("1", "TEST",
+                                           "D awarding organisation", 123, null,
+                                           null, null, null, null),
+                                       new("2", "TEST",
+                                                         "E awarding organisation", 123, null,
+                                                         null, null, null, null),
+                                       new("3", "TEST",
+                                                         "A awarding organisation", 123, null,
+                                                         null, null, null, null),
+                                       new("4", "TEST",
+                                                         "C awarding organisation", 123, null,
+                                                         null, null, null, null),
+                                       new("5", "TEST",
+                                                         "B awarding organisation", 123, null,
+                                                         null, null, null, null)
+                                   };
+        
+        mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync(listOfQualifications);
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+
+        var result = await controller.WhatIsTheAwardingOrganisation();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as DropdownQuestionModel;
+        model.Should().NotBeNull();
+        model!.Values.Should().NotBeNull();
+
+        // Count here includes default value added in mapping
+        model.Values.Count.Should().Be(6);
+        model.Values.First().Text.Should().Be(questionPage.DefaultText);
+        model.Values.First().Value.Should().BeEmpty();
+
+        model.Values[1].Text.Should().Be("A awarding organisation");
+        model.Values[2].Text.Should().Be("B awarding organisation");
+        model.Values[3].Text.Should().Be("C awarding organisation");
+        model.Values[4].Text.Should().Be("D awarding organisation");
+        model.Values[5].Text.Should().Be("E awarding organisation");
+    }
+    
+    [TestMethod]
+    public async Task Post_WhatIsTheAwardingOrganisation_InvalidModel_ReturnsQuestionPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+
+        var questionPage = new DropdownQuestionPage()
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               ErrorMessage = "Test error message",
+                               DropdownHeading = "Test dropdown heading",
+                               NotInListText = "Test not in the list text",
+                               DefaultText = "Test default text"
+                           };
+        
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(questionPage);
+        
+        mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+        
+        controller.ModelState.AddModelError("option", "test error");
+        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel());
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ViewName.Should().Be("Dropdown");
+        
+        var model = resultType.Model as DropdownQuestionModel;
+        model.Should().NotBeNull();
+
+        model!.HasErrors.Should().BeTrue();
+        
+        mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation(It.IsAny<string>()), Times.Never);
+    }
+    
+    [TestMethod]
+    public async Task Post_WhatIsTheAwardingOrganisation_NoValueSelectedAndNotInListNotSelected_ReturnsQuestionPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        
+        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel()
+                                                                    {
+                                                                        SelectedValue = string.Empty,
+                                                                        NotInTheList = false
+                                                                    });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+        
+        resultType!.ViewName.Should().Be("Dropdown");
+        
+        mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation(It.IsAny<string>()), Times.Never);
+    }
+    
+    [TestMethod]
+    public async Task Post_WhatIsTheAwardingOrganisation_AwardingOrgPassedIn_SetsJourneyCookieAndRedirectsToTheQualificationListPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+
+        var questionPage = new DropdownQuestionPage()
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               ErrorMessage = "Test error message",
+                               DropdownHeading = "Test dropdown heading",
+                               NotInListText = "Test not in the list text",
+                               DefaultText = "Test default text"
+                           };
+        
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(questionPage);
+        
+        mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+        
+        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel()
+                                                                    {
+                                                                        SelectedValue = "Some Awarding Organisation",
+                                                                        NotInTheList = false
+                                                                    });
+
+        result.Should().NotBeNull();
+
+        result.Should().NotBeNull();
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
         resultType!.ActionName.Should().Be("Get");
         resultType.ControllerName.Should().Be("QualificationDetails");
         
-        mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification("2"), Times.Once);
+        mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_DoesNotSetsJourneyCookieAndRedirectsToTheQualificationListPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+
+        var questionPage = new DropdownQuestionPage()
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               ErrorMessage = "Test error message",
+                               DropdownHeading = "Test dropdown heading",
+                               NotInListText = "Test not in the list text",
+                               DefaultText = "Test default text"
+                           };
+        
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(questionPage);
+        
+        mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+        
+        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel()
+                                                                    {
+                                                                        SelectedValue = "",
+                                                                        NotInTheList = true
+                                                                    });
+
+        result.Should().NotBeNull();
+
+        result.Should().NotBeNull();
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Get");
+        resultType.ControllerName.Should().Be("QualificationDetails");
+        
+        mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);
     }
 }

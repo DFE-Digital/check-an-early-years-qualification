@@ -25,7 +25,8 @@ public class ContentfulContentService(
               { typeof(CookiesPage), "cookiesPage" },
               { typeof(PhaseBanner), "phaseBanner" },
               { typeof(CookiesBanner), "cookiesBanner" },
-              { typeof(DateQuestionPage), "dateQuestionPage" }
+              { typeof(DateQuestionPage), "dateQuestionPage" },
+              { typeof(DropdownQuestionPage), "dropdownQuestionPage" }
           };
 
     public async Task<StartPage?> GetStartPage()
@@ -126,10 +127,15 @@ public class ContentfulContentService(
         return await GetEntryById<RadioQuestionPage>(entryId);
     }
 
-      public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
-      {
-          return await GetEntryById<DateQuestionPage>(entryId);
-      }
+    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId) 
+    {
+        return await GetEntryById<DateQuestionPage>(entryId);
+    }
+    
+    public async Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId) 
+    {
+        return await GetEntryById<DropdownQuestionPage>(entryId);
+    }
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
@@ -153,6 +159,12 @@ public class ContentfulContentService(
         }
 
         return cookiesBannerEntry.First();
+    }
+
+    public async Task<List<Qualification>> GetQualifications()
+    {
+        var qualifications = await GetEntriesByType<Qualification>();
+        return qualifications!.ToList();
     }
 
     private async Task<T?> GetEntryById<T>(string entryId)

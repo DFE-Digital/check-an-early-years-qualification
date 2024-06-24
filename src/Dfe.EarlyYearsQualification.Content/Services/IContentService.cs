@@ -25,4 +25,8 @@ public interface IContentService
     Task<CookiesBanner?> GetCookiesBannerContent();
 
     Task<DateQuestionPage?> GetDateQuestionPage(string entryId);
+
+    Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId);
+
+    Task<List<Qualification>> GetQualifications();
 }

@@ -13,6 +13,4 @@ public abstract class BaseQuestionModel
     public string ErrorMessage { get; set; } = string.Empty;
 
     public bool HasErrors { get; set; }
-
-    
 }
