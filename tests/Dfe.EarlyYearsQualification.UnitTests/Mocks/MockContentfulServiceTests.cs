@@ -50,11 +50,10 @@ public class MockContentfulServiceTests
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
+        
+        var page = await contentfulService.GetAdvicePage("Invalid entry Id");
 
-        Func<Task> act = async () => await contentfulService.GetAdvicePage("Invalid entry Id");
-
-        await act.Should().ThrowAsync<NotImplementedException>()
-                 .WithMessage("No advice page mock for entry Invalid entry Id");
+        page.Should().BeNull();
     }
 
     [TestMethod]

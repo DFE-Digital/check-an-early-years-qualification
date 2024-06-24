@@ -32,7 +32,7 @@ public class MockContentfulService : IContentService
                        await
                            Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
                                                             body)),
-                   _ => throw new NotImplementedException($"No advice page mock for entry {entryId}")
+                   _ => null
                };
     }
 
