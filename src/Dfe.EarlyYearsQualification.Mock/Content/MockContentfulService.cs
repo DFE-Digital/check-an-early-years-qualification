@@ -22,14 +22,17 @@ public class MockContentfulService : IContentService
     public async Task<AdvicePage?> GetAdvicePage(string entryId)
     {
         var body = ContentfulContentHelper.Paragraph("Test Advice Page Body");
-        
+
         return entryId switch
                {
-                     AdvicePages.QualificationsAchievedOutsideTheUk => 
-                        await Task.FromResult(CreateAdvicePage("Qualifications achieved outside the United Kingdom", body)),
-                     AdvicePages.QualificationsStartedBetweenSept2014AndAug2019 => 
-                         await Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019", body)),
-                     _ => throw new NotImplementedException($"No advice page mock for entry {entryId}")
+                   AdvicePages.QualificationsAchievedOutsideTheUk =>
+                       await Task.FromResult(CreateAdvicePage("Qualifications achieved outside the United Kingdom",
+                                                              body)),
+                   AdvicePages.QualificationsStartedBetweenSept2014AndAug2019 =>
+                       await
+                           Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
+                                                            body)),
+                   _ => throw new NotImplementedException($"No advice page mock for entry {entryId}")
                };
     }
 
@@ -83,7 +86,7 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<List<NavigationLink>?> GetNavigationLinks()
+    public async Task<List<NavigationLink>> GetNavigationLinks()
     {
         return await Task.FromResult(new List<NavigationLink>
                                      {
@@ -141,7 +144,7 @@ public class MockContentfulService : IContentService
 
     public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
     {
-      return entryId switch
+        return entryId switch
                {
                    QuestionPages.WhenWasTheQualificationStarted =>
                        await Task.FromResult(CreateDateQuestionPage()),
@@ -273,15 +276,15 @@ public class MockContentfulService : IContentService
 
     private static DateQuestionPage CreateDateQuestionPage()
     {
-      return new DateQuestionPage
-              {
-                Question = "Test Date Question",
-                CtaButtonText = "Continue",
-                ErrorMessage = "Test Error Message",
-                MonthLabel = "Test Month Label",
-                YearLabel = "Test Year Label",
-                QuestionHint = "Test Question Hint"
-              };
+        return new DateQuestionPage
+               {
+                   Question = "Test Date Question",
+                   CtaButtonText = "Continue",
+                   ErrorMessage = "Test Error Message",
+                   MonthLabel = "Test Month Label",
+                   YearLabel = "Test Year Label",
+                   QuestionHint = "Test Question Hint"
+               };
     }
 
     private static DropdownQuestionPage CreateDropdownPage()
@@ -296,7 +299,7 @@ public class MockContentfulService : IContentService
                    NotInListText = "Test Not In The List"
                };
     }
-    
+
     private static AdvicePage CreateAdvicePage(string heading, Document body)
     {
         return new AdvicePage

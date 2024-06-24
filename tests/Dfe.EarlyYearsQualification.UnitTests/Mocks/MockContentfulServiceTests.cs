@@ -108,7 +108,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetNavigationLinks();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<List<NavigationLink>>();
-        result!.Count.Should().Be(2);
+        result.Count.Should().Be(2);
     }
 
     [TestMethod]
@@ -204,7 +204,7 @@ public class MockContentfulServiceTests
         await act.Should().ThrowAsync<NotImplementedException>()
                  .WithMessage("No date question page mock for entry Fake_entry_id");
     }
-    
+
     [TestMethod]
     public async Task GetDropdownQuestionPage_PassWhenWasQualificationStartedId_ReturnsExpectedDetails()
     {

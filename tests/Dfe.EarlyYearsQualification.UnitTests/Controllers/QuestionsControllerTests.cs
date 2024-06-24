@@ -473,7 +473,7 @@ public class QuestionsControllerTests
         
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
 
-        var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel()
+        var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
                                                                       Option = "2"
                                                                   });
@@ -524,7 +524,7 @@ public class QuestionsControllerTests
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         
-        var questionPage = new DropdownQuestionPage()
+        var questionPage = new DropdownQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
@@ -556,9 +556,9 @@ public class QuestionsControllerTests
         model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
         model.DropdownHeading.Should().Be(questionPage.DropdownHeading);
         model.HasErrors.Should().BeFalse();
-        model.Values.Count().Should().Be(1);
-        model.Values.First().Text.Should().Be(questionPage.DefaultText);
-        model.Values.First().Value.Should().BeEmpty();
+        model.Values.Count.Should().Be(1);
+        model.Values[0].Text.Should().Be(questionPage.DefaultText);
+        model.Values[0].Value.Should().BeEmpty();
         model.NotInListText.Should().Be(questionPage.NotInListText);
     }
     
@@ -570,7 +570,7 @@ public class QuestionsControllerTests
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        var questionPage = new DropdownQuestionPage()
+        var questionPage = new DropdownQuestionPage
                            {
                                DefaultText = "Test default text"
                            };
@@ -614,8 +614,8 @@ public class QuestionsControllerTests
 
         // Count here includes default value added in mapping
         model.Values.Count.Should().Be(6);
-        model.Values.First().Text.Should().Be(questionPage.DefaultText);
-        model.Values.First().Value.Should().BeEmpty();
+        model.Values[0].Text.Should().Be(questionPage.DefaultText);
+        model.Values[0].Value.Should().BeEmpty();
 
         model.Values[1].Text.Should().Be("A awarding organisation");
         model.Values[2].Text.Should().Be("B awarding organisation");
@@ -634,7 +634,7 @@ public class QuestionsControllerTests
         
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
 
-        var questionPage = new DropdownQuestionPage()
+        var questionPage = new DropdownQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
@@ -677,7 +677,7 @@ public class QuestionsControllerTests
         
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
         
-        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel()
+        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
                                                                         SelectedValue = string.Empty,
                                                                         NotInTheList = false
@@ -703,7 +703,7 @@ public class QuestionsControllerTests
         
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
 
-        var questionPage = new DropdownQuestionPage()
+        var questionPage = new DropdownQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
@@ -718,7 +718,7 @@ public class QuestionsControllerTests
         
         mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
         
-        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel()
+        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
                                                                         SelectedValue = "Some Awarding Organisation",
                                                                         NotInTheList = false
@@ -746,7 +746,7 @@ public class QuestionsControllerTests
         
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
 
-        var questionPage = new DropdownQuestionPage()
+        var questionPage = new DropdownQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
@@ -761,7 +761,7 @@ public class QuestionsControllerTests
         
         mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
         
-        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel()
+        var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
                                                                         SelectedValue = "",
                                                                         NotInTheList = true

@@ -18,73 +18,73 @@ public class UserJourneyCookieServiceTests
         var modelInCookie = new UserJourneyModel();
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
-        
+
         service.SetWhereWasQualificationAwarded("some test string");
-        
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel()
+
+        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
                                                               {
                                                                   WhereWasQualificationAwarded = "some test string"
                                                               });
-        
+
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
-    
+
     [TestMethod]
     public void SetWhenWasQualificationAwarded_StringProvided_SetsCookieCorrectly()
     {
         var modelInCookie = new UserJourneyModel();
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
-        
+
         service.SetWhenWasQualificationAwarded("some test string");
-        
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel()
+
+        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
                                                               {
                                                                   WhenWasQualificationAwarded = "some test string"
                                                               });
-        
+
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
-    
+
     [TestMethod]
     public void SetLevelOfQualification_StringProvided_SetsCookieCorrectly()
     {
         var modelInCookie = new UserJourneyModel();
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
-        
+
         service.SetLevelOfQualification("some test string");
-        
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel()
+
+        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
                                                               {
                                                                   LevelOfQualification = "some test string"
                                                               });
-        
+
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
-    
+
     [TestMethod]
     public void SetAwardingOrganisation_StringProvided_SetsCookieCorrectly()
     {
         var modelInCookie = new UserJourneyModel();
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
-        
+
         service.SetAwardingOrganisation("some test string");
-        
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel()
+
+        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
                                                               {
                                                                   WhatIsTheAwardingOrganisation = "some test string"
                                                               });
-        
+
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
 
@@ -93,7 +93,7 @@ public class UserJourneyCookieServiceTests
     {
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(null);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
         var model = service.GetUserJourneyModelFromCookie();
@@ -105,19 +105,19 @@ public class UserJourneyCookieServiceTests
         var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
-    
+
     [TestMethod]
     public void GetUserJourneyModelFromCookie_CookieModelSerializesOK_SetsCookieAsProvidedModel()
     {
-        var existingModel = new UserJourneyModel()
-                    {
-                        LevelOfQualification = "test level of qualification",
-                        WhenWasQualificationAwarded = "test when was qualification awarded",
-                        WhereWasQualificationAwarded = "test where was qualification awarded"
-                    };
+        var existingModel = new UserJourneyModel
+                            {
+                                LevelOfQualification = "test level of qualification",
+                                WhenWasQualificationAwarded = "test when was qualification awarded",
+                                WhereWasQualificationAwarded = "test where was qualification awarded"
+                            };
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
         var model = service.GetUserJourneyModelFromCookie();
@@ -126,13 +126,13 @@ public class UserJourneyCookieServiceTests
         model.WhenWasQualificationAwarded.Should().Be(existingModel.WhenWasQualificationAwarded);
         model.WhereWasQualificationAwarded.Should().Be(existingModel.WhereWasQualificationAwarded);
     }
-    
+
     [TestMethod]
     public void GetUserJourneyModelFromCookie_CookieModelDoesntSerialize_SetsBaseModelAsCookie()
     {
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie("test failure");
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
         var model = service.GetUserJourneyModelFromCookie();
@@ -150,19 +150,19 @@ public class UserJourneyCookieServiceTests
     {
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(null);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
-        
+
         service.ResetUserJourneyCookie();
-        
+
         var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
-    
+
     [TestMethod]
     public void ResetUserJourneyCookie_FullModelAsCookieExists_AddsBaseModelAsCookie()
     {
-        var model = new UserJourneyModel()
+        var model = new UserJourneyModel
                     {
                         LevelOfQualification = "test level of qualification",
                         WhenWasQualificationAwarded = "test when was qualification awarded",
@@ -170,11 +170,11 @@ public class UserJourneyCookieServiceTests
                     };
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(model);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-        
+
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
-        
+
         service.ResetUserJourneyCookie();
-        
+
         var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
@@ -200,8 +200,9 @@ public class UserJourneyCookieServiceTests
                        .Returns(responseCookiesMock.Object);
         return httpContextMock;
     }
-    
-    private static void CheckSerializedModelWasSet(Mock<IHttpContextAccessor> mockContext, string serializedModelToCheck)
+
+    private static void CheckSerializedModelWasSet(Mock<IHttpContextAccessor> mockContext,
+                                                   string serializedModelToCheck)
     {
         var in364Days = new DateTimeOffset(DateTime.Now.AddDays(364));
         var inOneYear = new DateTimeOffset(DateTime.Now.AddYears(1));
