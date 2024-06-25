@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -18,10 +19,20 @@ public class QualificationDetailsController(
     : ServiceController
 {
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
+        var listPageContent = await contentService.GetQualificationListPage();
+        if (listPageContent is null)
+        {
+            logger.LogError("No content for the qualification list page");
+            return RedirectToAction("Index", "Error");
+        }
+        
         var filterParams = userJourneyCookieService.GetUserJourneyModelFromCookie();
-        return View(filterParams);
+
+        var model = MapList(listPageContent, filterParams);
+        
+        return View(model);
     }
 
     [HttpGet("qualification-details/{qualificationId}")]
@@ -49,11 +60,21 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await Map(qualification, detailsPageContent);
+        var model = await MapDetails(qualification, detailsPageContent);
         return View(model);
     }
 
-    private async Task<QualificationDetailsModel> Map(Qualification qualification, DetailsPage content)
+    private QualificationListModel MapList(QualificationListPage content, UserJourneyModel? filters)
+    {
+        return new QualificationListModel()
+               {
+                   BackButton = content.BackButton,
+                   Filters = filters,
+                   Header = content.Header
+               };
+    }
+
+    private async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content)
     {
         return new QualificationDetailsModel
                {
@@ -67,6 +88,7 @@ public class QualificationDetailsController(
                    Notes = qualification.Notes,
                    AdditionalRequirements = qualification.AdditionalRequirements,
                    BookmarkUrl = HttpContext.Request.GetDisplayUrl(),
+                   BackButton = content.BackButton,
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,

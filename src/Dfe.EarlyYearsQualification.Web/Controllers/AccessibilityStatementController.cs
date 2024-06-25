@@ -35,7 +35,8 @@ public class AccessibilityStatementController(
         return new AccessibilityStatementPageModel
                {
                    Heading = content.Heading,
-                   BodyContent = await renderer.ToHtml(content.Body)
+                   BodyContent = await renderer.ToHtml(content.Body),
+                   BackButton = content.BackButton,
                };
     }
 }

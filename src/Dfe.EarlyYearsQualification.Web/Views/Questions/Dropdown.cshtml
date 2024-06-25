@@ -15,7 +15,8 @@
     });
 </script>
 
-<a href="javascript:window.history.back()" class="govuk-back-link">Back</a>
+@await Component.InvokeAsync("BackButton", @Model.BackButton)
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
