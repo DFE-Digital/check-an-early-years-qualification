@@ -79,7 +79,7 @@ public class ContentfulContentService(
         return cookiesContent;
     }
 
-    public async Task<List<NavigationLink>?> GetNavigationLinks()
+    public async Task<List<NavigationLink>> GetNavigationLinks()
     {
         var navigationLinkEntries = await GetEntriesByType<NavigationLinks>();
         if (navigationLinkEntries is not null && navigationLinkEntries.Any())
@@ -88,7 +88,7 @@ public class ContentfulContentService(
         }
 
         logger.LogWarning("No navigation links returned");
-        return default;
+        return [];
     }
 
     public async Task<Qualification?> GetQualificationById(string qualificationId)
@@ -127,12 +127,12 @@ public class ContentfulContentService(
         return await GetEntryById<RadioQuestionPage>(entryId);
     }
 
-    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId) 
+    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
     {
         return await GetEntryById<DateQuestionPage>(entryId);
     }
-    
-    public async Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId) 
+
+    public async Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId)
     {
         return await GetEntryById<DropdownQuestionPage>(entryId);
     }

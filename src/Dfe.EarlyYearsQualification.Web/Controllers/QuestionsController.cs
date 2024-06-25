@@ -85,7 +85,7 @@ public class QuestionsController(
             return View("Date", model);
         }
         
-        userJourneyCookieService.SetWhenWasQualificationAwarded(model.SelectedMonth.ToString() + '/' + model.SelectedYear.ToString());
+        userJourneyCookieService.SetWhenWasQualificationAwarded(model.SelectedMonth.ToString() + '/' + model.SelectedYear);
 
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
@@ -213,7 +213,7 @@ public class QuestionsController(
         model.DropdownHeading = question.DropdownHeading;
         model.NotInListText = question.NotInListText;
         
-        model.Values.Add(new SelectListItem()
+        model.Values.Add(new SelectListItem
                          {
                              Text = question.DefaultText,
                              Value = ""
@@ -221,7 +221,7 @@ public class QuestionsController(
        
        foreach (var awardingOrg in uniqueAwardingOrganisations)
        {
-           model.Values.Add(new SelectListItem()
+           model.Values.Add(new SelectListItem
                             {
                                 Value = awardingOrg,
                                 Text = awardingOrg

@@ -22,7 +22,7 @@ public class FooterLinksViewComponentTests
                              { DisplayText = "Test", Href = "https://test.com", OpenInNewTab = true };
 
         mockContentService.Setup(x => x.GetNavigationLinks())
-                          .ReturnsAsync(new List<NavigationLink> { navigationLink });
+                          .ReturnsAsync([navigationLink]);
 
         var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
@@ -36,26 +36,6 @@ public class FooterLinksViewComponentTests
         data.Should().NotBeNull();
 
         data![0].DisplayText.Should().Be(navigationLink.DisplayText);
-    }
-
-    [TestMethod]
-    public async Task InvokeAsync_ContentServiceReturnsNull_ReturnsEmptyNavigationLinks()
-    {
-        var mockContentService = new Mock<IContentService>();
-        var mockLogger = new Mock<ILogger<FooterLinksViewComponent>>();
-
-        mockContentService.Setup(x => x.GetNavigationLinks()).ReturnsAsync((List<NavigationLink>?)default);
-
-        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
-        var result = await footerLinksViewComponent.InvokeAsync();
-
-        result.Should().NotBeNull();
-
-        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-        model.Should().NotBeNull().And.BeAssignableTo<IEnumerable<NavigationLink>>();
-
-        var data = ((IEnumerable<NavigationLink>)model!).ToList();
-        data.Should().BeEmpty();
     }
 
     [TestMethod]

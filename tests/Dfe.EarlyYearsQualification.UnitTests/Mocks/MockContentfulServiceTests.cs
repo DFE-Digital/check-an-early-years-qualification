@@ -50,11 +50,10 @@ public class MockContentfulServiceTests
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
+        
+        var page = await contentfulService.GetAdvicePage("Invalid entry Id");
 
-        Func<Task> act = async () => await contentfulService.GetAdvicePage("Invalid entry Id");
-
-        await act.Should().ThrowAsync<NotImplementedException>()
-                 .WithMessage("No advice page mock for entry Invalid entry Id");
+        page.Should().BeNull();
     }
 
     [TestMethod]
@@ -108,7 +107,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetNavigationLinks();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<List<NavigationLink>>();
-        result!.Count.Should().Be(2);
+        result.Count.Should().Be(2);
     }
 
     [TestMethod]
@@ -204,7 +203,7 @@ public class MockContentfulServiceTests
         await act.Should().ThrowAsync<NotImplementedException>()
                  .WithMessage("No date question page mock for entry Fake_entry_id");
     }
-    
+
     [TestMethod]
     public async Task GetDropdownQuestionPage_PassWhenWasQualificationStartedId_ReturnsExpectedDetails()
     {

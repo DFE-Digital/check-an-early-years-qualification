@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 
-public class FooterLinksViewComponent(IContentService contentService, ILogger<FooterLinksViewComponent> logger) : ViewComponent
+public class FooterLinksViewComponent(IContentService contentService, ILogger<FooterLinksViewComponent> logger)
+    : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
     {
@@ -17,13 +18,7 @@ public class FooterLinksViewComponent(IContentService contentService, ILogger<Fo
     {
         try
         {
-            var navigationLinks = await contentService.GetNavigationLinks();
-            if (navigationLinks is null || navigationLinks.Count == 0)
-            {
-                return await Task.FromResult(Array.Empty<NavigationLink>().AsEnumerable());
-            }
-
-            return navigationLinks;
+            return await contentService.GetNavigationLinks();
         }
         catch (Exception ex)
         {

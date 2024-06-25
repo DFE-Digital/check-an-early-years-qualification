@@ -6,7 +6,7 @@ public interface IContentService
 {
     Task<StartPage?> GetStartPage();
 
-    Task<List<NavigationLink>?> GetNavigationLinks();
+    Task<List<NavigationLink>> GetNavigationLinks();
 
     Task<Qualification?> GetQualificationById(string qualificationId);
 

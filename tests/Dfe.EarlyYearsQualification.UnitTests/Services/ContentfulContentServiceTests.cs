@@ -246,7 +246,7 @@ public class ContentfulContentServiceTests
 
         _logger.VerifyWarning("No navigation links returned");
 
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [TestMethod]
@@ -265,7 +265,7 @@ public class ContentfulContentServiceTests
 
         _logger.VerifyWarning("No navigation links returned");
 
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [TestMethod]
