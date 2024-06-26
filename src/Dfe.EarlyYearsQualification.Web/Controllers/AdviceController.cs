@@ -43,7 +43,8 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
         return new AdvicePageModel
                {
                    Heading = advicePage.Heading,
-                   BodyContent = await renderer.ToHtml(advicePage.Body)
+                   BodyContent = await renderer.ToHtml(advicePage.Body),
+                   BackButton = advicePage.BackButton
                };
     }
 }

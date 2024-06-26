@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Dfe.EarlyYearsQualification.Content.Entities;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 

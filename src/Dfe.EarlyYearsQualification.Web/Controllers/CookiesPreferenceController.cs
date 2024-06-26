@@ -87,7 +87,8 @@ public class CookiesPreferenceController(
                    ButtonText = content.ButtonText,
                    SuccessBannerContent = await successBannerRenderer.ToHtml(content.SuccessBannerContent),
                    SuccessBannerHeading = content.SuccessBannerHeading,
-                   ErrorText = content.ErrorText
+                   ErrorText = content.ErrorText,
+                   BackButton = content.BackButton
                };
     }
 }

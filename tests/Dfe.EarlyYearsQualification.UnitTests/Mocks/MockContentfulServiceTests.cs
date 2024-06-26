@@ -241,6 +241,23 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetQualificationListPage_ReturnsCorrectMockData()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetQualificationListPage();
+
+        result.Should().NotBeNull();
+        result!.Header.Should().Be("Test Header");
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "TEST",
+                                                      Href = "/questions/what-is-the-awarding-organisation",
+                                                      OpenInNewTab = false
+                                                  });
+    }
+
+    [TestMethod]
     public async Task GetStartPage_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
