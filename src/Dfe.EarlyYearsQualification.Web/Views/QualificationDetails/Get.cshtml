@@ -5,7 +5,9 @@
     string[] qualifications = ["eyq-140", "eyq-150", "eyq-160", "eyq-170", "eyq-180", "eyq-220", "eyq-240"];
 }
 
-@await Component.InvokeAsync("BackButton", @Model.BackButton)
+@{
+    await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
+}
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">

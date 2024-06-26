@@ -21,7 +21,9 @@
     </script>
 }
 
-@await Component.InvokeAsync("BackButton", @Model.BackButton)
+@{
+    await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
+}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
