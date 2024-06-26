@@ -10,7 +10,6 @@ public class Qualification
         string? fromWhichYear,
         string? toWhichYear,
         string? qualificationNumber,
-        string? notes,
         string? additionalRequirements)
     {
         QualificationId = qualificationId;
@@ -20,7 +19,6 @@ public class Qualification
         FromWhichYear = fromWhichYear;
         ToWhichYear = toWhichYear;
         QualificationNumber = qualificationNumber;
-        Notes = notes;
         AdditionalRequirements = additionalRequirements;
     }
 
@@ -34,6 +32,5 @@ public class Qualification
     public string? FromWhichYear { get; }
     public string? ToWhichYear { get; }
     public string? QualificationNumber { get; }
-    public string? Notes { get; }
     public string? AdditionalRequirements { get; }
 }

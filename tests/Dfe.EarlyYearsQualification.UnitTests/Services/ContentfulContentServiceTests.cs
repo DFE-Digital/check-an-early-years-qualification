@@ -487,7 +487,7 @@ public class ContentfulContentServiceTests
     {
         var qualification = new Qualification("SomeId", "Test qualification name", "Test awarding org", 123,
                                               "Test from which year", "Test to which year", "Test qualification number",
-                                              "Test notes", "Test additional requirements");
+                                              "Test additional requirements");
 
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
