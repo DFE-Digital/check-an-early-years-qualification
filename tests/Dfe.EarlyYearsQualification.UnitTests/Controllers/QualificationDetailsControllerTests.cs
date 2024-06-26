@@ -150,12 +150,23 @@ public class QualificationDetailsControllerTests
     }
 
     [TestMethod]
-    public void Get_ReturnsView()
+    public async Task Get_ReturnsView()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        mockContentService.Setup(x => x.GetQualificationListPage()).ReturnsAsync(new QualificationListPage
+                 {
+                    BackButton = new NavigationLink
+                                 {
+                                     DisplayText = "TEST",
+                                     Href = "/",
+                                     OpenInNewTab = false
+                                 },
+                    Header = "TEST"
+                 });
         
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object)
@@ -166,9 +177,40 @@ public class QualificationDetailsControllerTests
                                     }
             };
 
-        var result = controller.Get();
+        var result = await controller.Get();
 
         result.Should().NotBeNull();
         result.Should().BeOfType<ViewResult>();
+    }
+
+    [TestMethod]
+    public async Task Get_NoContent_LogsAndRedirectsToError()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        mockContentService.Setup(x => x.GetQualificationListPage()).ReturnsAsync(default(QualificationListPage));
+        
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+        
+        var result = await controller.Get();
+        
+        result.Should().BeOfType<RedirectToActionResult>();
+
+        var actionResult = (RedirectToActionResult)result;
+
+        actionResult.ActionName.Should().Be("Index");
+        actionResult.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the qualification list page");
     }
 }

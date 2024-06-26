@@ -27,4 +27,6 @@ public class DetailsPage
     public string FurtherInfoHeading { get; init; } = string.Empty;
 
     public Document? FurtherInfoText { get; init; }
+    
+    public NavigationLink? BackButton { get; init; }
 }

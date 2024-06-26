@@ -4,7 +4,10 @@
     ViewData["Title"] = $"Qualification Details - {Model.QualificationId}";
 }
 
-<a href="javascript:window.history.back()" class="govuk-back-link">Back</a>
+@{
+    await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <span class="govuk-caption-xl gem-c-title__context">

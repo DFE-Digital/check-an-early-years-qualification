@@ -12,7 +12,9 @@ public class RadioQuestionPage
 
     public string ErrorMessage { get; init; } = string.Empty;
 
-    public string AdditionalInformationHeader {get; init;} = string.Empty;
+    public string AdditionalInformationHeader { get; init; } = string.Empty;
 
-    public Document? AdditionalInformationBody {get; init;}
+    public Document? AdditionalInformationBody { get; init; }
+    
+    public NavigationLink? BackButton { get; init; }
 }

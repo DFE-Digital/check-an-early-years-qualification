@@ -17,4 +17,6 @@ public class CookiesPage
     public Document? SuccessBannerContent { get; init; }
 
     public string ErrorText { get; init; } = string.Empty;
+    
+    public NavigationLink? BackButton { get; init; }
 }

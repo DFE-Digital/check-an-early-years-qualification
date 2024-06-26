@@ -71,6 +71,8 @@ describe('A spec used to test the various routes through the journey', () => {
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/qualifications/qualification-details/eyq-240');
     })
+    
+    
   })
 
   it("should move the user back to the previous page when they click on the back button", () => {

@@ -1,3 +1,5 @@
+using Dfe.EarlyYearsQualification.Content.Entities;
+
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class QualificationDetailsModel
@@ -14,5 +16,7 @@ public class QualificationDetailsModel
 
     public string BookmarkUrl { get; init; } = string.Empty;
 
+    public NavigationLink? BackButton { get; set; }
+    
     public DetailsPageModel? Content { get; init; }
 }

@@ -183,6 +183,7 @@ public class QuestionsController(
         model.ErrorMessage = question.ErrorMessage;
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
         model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
+        model.BackButton = question.BackButton;
         return model;
     }
 
@@ -197,6 +198,7 @@ public class QuestionsController(
         model.QuestionHint = question.QuestionHint;
         model.MonthLabel = question.MonthLabel;
         model.YearLabel = question.YearLabel;
+        model.BackButton = question.BackButton;
         return model;
     }
 
@@ -212,6 +214,7 @@ public class QuestionsController(
         model.Question = question.Question;
         model.DropdownHeading = question.DropdownHeading;
         model.NotInListText = question.NotInListText;
+        model.BackButton = question.BackButton;
         
         model.Values.Add(new SelectListItem
                          {
