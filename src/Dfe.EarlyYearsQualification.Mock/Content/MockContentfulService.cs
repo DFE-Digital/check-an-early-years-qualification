@@ -183,6 +183,11 @@ public class MockContentfulService : IContentService
                                });
     }
 
+    public Task<ConfirmQualificationPage?> GetConfirmQualificationPage()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =
