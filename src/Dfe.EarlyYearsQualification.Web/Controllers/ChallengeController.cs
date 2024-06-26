@@ -37,27 +37,29 @@ public class ChallengeController(
 
         var referralAddress = SanitiseReferralAddress(model.RedirectAddress);
 
-        if (model.Value != null)
+        if (string.IsNullOrWhiteSpace(model.Value))
         {
-            logger.LogInformation("Challenge secret access value entered successfully");
-
-            SetAuthSecretCookie(model.Value);
-            return Task.FromResult<IActionResult>(new RedirectResult(referralAddress));
+            return Index(model);
         }
 
-        return Index(model);
+        logger.LogInformation("Challenge secret access value entered");
+
+        SetAuthSecretCookie(model.Value);
+        return Task.FromResult<IActionResult>(new RedirectResult(referralAddress));
     }
 
     private void SetAuthSecretCookie(string accessValue)
     {
         HttpContext.Response
                    .Cookies
-                   .Append(ChallengeResourceFilterAttribute.AuthSecretCookieName, accessValue, new CookieOptions { HttpOnly = true });
+                   .Append(ChallengeResourceFilterAttribute.AuthSecretCookieName,
+                           accessValue,
+                           new CookieOptions { HttpOnly = true });
     }
 
-    private string SanitiseReferralAddress(string? from)
+    private string SanitiseReferralAddress(string from)
     {
-        var redirectAddress = from ?? DefaultRedirectAddress;
+        var redirectAddress = from;
 
         if (!urlHelper.IsLocalUrl(redirectAddress))
         {

@@ -1,9 +1,11 @@
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
@@ -69,10 +71,32 @@ public class ChallengeControllerTests
     }
 
     [TestMethod]
-    public async Task PostChallenge_WithCorrectValue_RedirectsWithCookie()
+    public async Task GetChallenge_WithInvalidModel_LogsWarning()
+    {
+        var mockLogger = new Mock<ILogger<ChallengeController>>();
+
+        var mockUrlHelper = new Mock<IUrlHelper>();
+
+        var controller = new ChallengeController(mockLogger.Object,
+                                                 mockUrlHelper.Object);
+
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       };
+
+        controller.ModelState.AddModelError("test", "error");
+
+        await controller.Index(new ChallengeModel { RedirectAddress = "/", Value = null });
+
+        mockLogger.VerifyWarning("Invalid challenge model (get)");
+    }
+
+    [TestMethod]
+    public async Task PostChallenge_WithSecretValue_RedirectsWithKeyInCookie()
     {
         const string from = "/cookies";
-        const string accessKey = "CX";
+        const string accessKey = "Key";
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
@@ -85,7 +109,8 @@ public class ChallengeControllerTests
                               c.Append(ChallengeResourceFilterAttribute.AuthSecretCookieName,
                                        accessKey,
                                        It.IsAny<CookieOptions>()))
-                   .Callback((string k, string v, CookieOptions o) => cookies.Add(k, new Tuple<string, CookieOptions>(v, o)));
+                   .Callback((string k, string v, CookieOptions o) =>
+                                 cookies.Add(k, new Tuple<string, CookieOptions>(v, o)));
 
         var mockContext = new Mock<HttpContext>();
         mockContext.SetupGet(c => c.Response.Cookies).Returns(cookiesMock.Object);
@@ -116,7 +141,7 @@ public class ChallengeControllerTests
     }
 
     [TestMethod]
-    public async Task PostChallenge_WithCorrectValue_ButNonLocalFrom_RedirectsWithCookie_ToBaseUrl()
+    public async Task PostChallenge_WithSecretValue_ButNonLocalFrom_RedirectsWithSecretInCookie_ToBaseUrl()
     {
         const string from = "https://google.co.uk";
         const string accessKey = "CX";
@@ -132,7 +157,8 @@ public class ChallengeControllerTests
                               c.Append(ChallengeResourceFilterAttribute.AuthSecretCookieName,
                                        accessKey,
                                        It.IsAny<CookieOptions>()))
-                   .Callback((string k, string v, CookieOptions o) => cookies.Add(k, new Tuple<string, CookieOptions>(v, o)));
+                   .Callback((string k, string v, CookieOptions o) =>
+                                 cookies.Add(k, new Tuple<string, CookieOptions>(v, o)));
 
         var mockContext = new Mock<HttpContext>();
         mockContext.SetupGet(c => c.Response.Cookies).Returns(cookiesMock.Object);
@@ -160,5 +186,48 @@ public class ChallengeControllerTests
                                                                       .Be(accessKey);
         cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item2.HttpOnly.Should()
                                                                       .BeTrue();
+    }
+
+    [TestMethod]
+    public async Task PostChallenge_WithEmptySecretValue_ReturnsPage()
+    {
+        var mockUrlHelper = new Mock<IUrlHelper>();
+        mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
+                     .Returns(true);
+
+        var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
+                                                 mockUrlHelper.Object);
+
+        var result = await controller.Post(new ChallengeModel { RedirectAddress = "/", Value = " \t " });
+
+        result.Should().BeAssignableTo<ViewResult>();
+
+        var content = (ViewResult)result;
+
+        content.Model.Should().BeAssignableTo<ChallengeModel>()
+               .Which
+               .RedirectAddress.Should().Be("/");
+    }
+
+    [TestMethod]
+    public async Task PostChallenge_WithInvalidModel_LogsWarning()
+    {
+        var mockLogger = new Mock<ILogger<ChallengeController>>();
+
+        var mockUrlHelper = new Mock<IUrlHelper>();
+
+        var controller = new ChallengeController(mockLogger.Object,
+                                                 mockUrlHelper.Object);
+
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       };
+
+        controller.ModelState.AddModelError("test", "error");
+
+        await controller.Post(new ChallengeModel { RedirectAddress = "/", Value = null });
+
+        mockLogger.VerifyWarning("Invalid challenge model (post)");
     }
 }
