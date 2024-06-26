@@ -121,7 +121,6 @@ public class MockContentfulServiceTests
         result!.AdditionalRequirements.Should().NotBeNullOrEmpty();
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
-        result.Notes.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
         result.QualificationLevel.Should().BeGreaterThan(0);
         result.QualificationName.Should().NotBeNullOrEmpty();

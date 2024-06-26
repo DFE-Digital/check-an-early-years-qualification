@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.EarlyYearsQualification
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.EarlyYearsQualification.Mock", "src\Dfe.EarlyYearsQualification.Mock\Dfe.EarlyYearsQualification.Mock.csproj", "{CEBFDCBC-939F-4FBC-8855-CA19B0D80CBD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{EBC44A9F-0F60-41AD-A255-BA5E80EB1A8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.EarlyYearsQualification.ContentUpload", "content\Dfe.EarlyYearsQualification.ContentUpload\Dfe.EarlyYearsQualification.ContentUpload.csproj", "{B8DBD46F-6268-4EF0-AD50-8CF63539CF8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,11 +44,16 @@ Global
 		{CEBFDCBC-939F-4FBC-8855-CA19B0D80CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEBFDCBC-939F-4FBC-8855-CA19B0D80CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEBFDCBC-939F-4FBC-8855-CA19B0D80CBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8DBD46F-6268-4EF0-AD50-8CF63539CF8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8DBD46F-6268-4EF0-AD50-8CF63539CF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8DBD46F-6268-4EF0-AD50-8CF63539CF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8DBD46F-6268-4EF0-AD50-8CF63539CF8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{73200EBC-285A-499F-9489-AD3AB7D07D52} = {5ED920E6-E35D-4D6A-8CBE-C76D493EDEE4}
 		{C989778A-398C-4092-97C4-4BCF5C233918} = {CE49B579-76F7-4B4B-B61A-8059FE2F2BAB}
 		{4DEA254F-34B6-47BA-A61A-83872A42BFD5} = {5ED920E6-E35D-4D6A-8CBE-C76D493EDEE4}
 		{CEBFDCBC-939F-4FBC-8855-CA19B0D80CBD} = {5ED920E6-E35D-4D6A-8CBE-C76D493EDEE4}
+		{B8DBD46F-6268-4EF0-AD50-8CF63539CF8E} = {EBC44A9F-0F60-41AD-A255-BA5E80EB1A8F}
 	EndGlobalSection
 EndGlobal
