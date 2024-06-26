@@ -15,7 +15,7 @@ public class ErrorControllerTests
     {
         var controller = new ErrorController();
 
-        var traceIdentifier = "Trace";
+        const string traceIdentifier = "Trace";
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -37,7 +37,7 @@ public class ErrorControllerTests
     {
         var controller = new ErrorController();
 
-        var operationName = "UnitTest";
+        const string operationName = "UnitTest";
 
         var activity = new Activity(operationName).Start();
 
