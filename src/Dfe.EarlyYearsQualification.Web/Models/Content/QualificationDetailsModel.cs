@@ -10,7 +10,6 @@ public class QualificationDetailsModel
     public string? FromWhichYear { get; init; }
     public string? ToWhichYear { get; init; }
     public string? QualificationNumber { get; init; }
-    public string? Notes { get; init; }
     public string? AdditionalRequirements { get; init; }
 
     public string BookmarkUrl { get; init; } = string.Empty;
