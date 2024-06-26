@@ -125,8 +125,7 @@ public class MockContentfulService : IContentService
                                                        "2020",
                                                        "2021",
                                                        "603/5829/4",
-                                                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                                                       "Additional notes"
+                                                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change."
                                                       ));
     }
 
@@ -168,19 +167,19 @@ public class MockContentfulService : IContentService
                                {
                                    new("1", "TEST",
                                        "A awarding organisation", 123, null,
-                                       null, null, null, null),
+                                       null, null, null),
                                    new("2", "TEST",
                                        "B awarding organisation", 123, null,
-                                       null, null, null, null),
+                                       null, null, null),
                                    new("3", "TEST",
                                        "C awarding organisation", 123, null,
-                                       null, null, null, null),
+                                       null, null, null),
                                    new("4", "TEST",
                                        "D awarding organisation", 123, null,
-                                       null, null, null, null),
+                                       null, null, null),
                                    new("5", "TEST",
                                        "E awarding organisation", 123, null,
-                                       null, null, null, null)
+                                       null, null, null)
                                });
     }
 

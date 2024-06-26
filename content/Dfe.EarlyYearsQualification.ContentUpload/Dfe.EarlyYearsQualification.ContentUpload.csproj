@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="contentful.csharp" Version="7.5.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="csv\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="csv\ey-quals-full-2024-updated.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

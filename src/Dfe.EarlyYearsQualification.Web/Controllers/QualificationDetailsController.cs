@@ -64,7 +64,6 @@ public class QualificationDetailsController(
                    AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
                    FromWhichYear = qualification.FromWhichYear,
                    ToWhichYear = qualification.ToWhichYear,
-                   Notes = qualification.Notes,
                    AdditionalRequirements = qualification.AdditionalRequirements,
                    BookmarkUrl = HttpContext.Request.GetDisplayUrl(),
                    Content = new DetailsPageModel
