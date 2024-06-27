@@ -4,6 +4,5 @@ namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public interface IContentFilterService
 {
-    Task<Qualification> GetFilteredQualifications(string? level, string? country, string? startDateMonth,
-                                                  string? startDateYear);
+    Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth, int? startDateYear);
 }

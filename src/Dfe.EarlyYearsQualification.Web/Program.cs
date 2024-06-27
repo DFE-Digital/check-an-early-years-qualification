@@ -49,6 +49,7 @@ if (builder.Configuration.GetValue<bool>("UseMockContentful"))
 else
 {
     builder.Services.AddTransient<IContentService, ContentfulContentService>();
+    builder.Services.AddTransient<IContentFilterService, ContentfulContentFilterService>();
 }
 
 builder.Services.AddModelRenderers();
