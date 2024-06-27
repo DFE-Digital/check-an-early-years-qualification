@@ -13,4 +13,5 @@ public class ConfirmQualificationPage
     public string ErrorBannerLink { get; init; } = string.Empty;
     public string ErrorText { get; init; } = string.Empty;
     public string ButtonText { get; init; } = string.Empty;
+    public NavigationLink? BackButton { get; init; }
 }

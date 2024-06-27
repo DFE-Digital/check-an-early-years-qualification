@@ -28,7 +28,6 @@ public class ContentfulContentService(
               { typeof(DateQuestionPage), "dateQuestionPage" },
               { typeof(DropdownQuestionPage), "dropdownQuestionPage" },
               { typeof(ConfirmQualificationPage), "confirmQualificationPage"},
-              { typeof(DropdownQuestionPage), "dropdownQuestionPage" },
               { typeof(QualificationListPage), "qualificationListPage"}
           };
 

@@ -46,14 +46,41 @@ public class ConfirmQualificationController(
     }
 
     [HttpPost]
-    public IActionResult Confirm(string qualificationId)
+    public async Task<IActionResult> Confirm(ConfirmQualificationPageModel model)
     {
-        if (string.IsNullOrEmpty(qualificationId))
+        if (!ModelState.IsValid || string.IsNullOrEmpty(model.ConfirmQualificationAnswer))
         {
-            return BadRequest();
+            var content = await contentService.GetConfirmQualificationPage();
+
+            if (content is null)
+            {
+                logger.LogError("No content for the cookies page");
+                return RedirectToAction("Index", "Error");
+            }
+
+            var qualification = await contentService.GetQualificationById(model.QualificationId);
+            if (qualification is null)
+            {
+                var loggedQualificationId = model.QualificationId.Replace(Environment.NewLine, "");
+                logger.LogError("Could not find details for qualification with ID: {QualificationId}",
+                                loggedQualificationId);
+
+                return RedirectToAction("Index", "Error");
+            }
+
+            model = Map(content, qualification);
+            model.HasErrors = true;
+
+            return View("Index", model);
         }
         
-        return RedirectToAction("Index", "QualificationDetails", new { qualificationId = qualificationId });
+        if (model.ConfirmQualificationAnswer == "yes")
+        {
+            return RedirectToAction("Index", "QualificationDetails", new { qualificationId = model.QualificationId });
+        }
+        
+        return RedirectToAction("Get", "QualificationDetails");
+
     }
     
     private static ConfirmQualificationPageModel Map(ConfirmQualificationPage content, Qualification qualification)
@@ -76,7 +103,8 @@ public class ConfirmQualificationController(
                    QualificationLevel = qualification.QualificationLevel.ToString(),
                    QualificationId = qualification.QualificationId,
                    QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle,
-                   QualificationDateAdded = ""
+                   QualificationDateAdded = qualification.FromWhichYear!,
+                   BackButton = content.BackButton,
                };
     }
 }
