@@ -29,4 +29,6 @@ public interface IContentService
     Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId);
 
     Task<List<Qualification>> GetQualifications();
+
+    Task<QualificationListPage?> GetQualificationListPage();
 }

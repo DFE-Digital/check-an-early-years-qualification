@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -100,6 +101,7 @@ public class ChallengeResourceFilterAttribute(
                                                     RedirectsPreserveMethod);
     }
 
+    [ExcludeFromCodeCoverage]
     public void OnResourceExecuted(ResourceExecutedContext context)
     {
         // do nothing

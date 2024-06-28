@@ -13,4 +13,6 @@ public class DateQuestionPage
     public string MonthLabel { get; init; } = string.Empty;
 
     public string YearLabel { get; init; } = string.Empty;
+    
+    public NavigationLink? BackButton { get; init; }
 }
