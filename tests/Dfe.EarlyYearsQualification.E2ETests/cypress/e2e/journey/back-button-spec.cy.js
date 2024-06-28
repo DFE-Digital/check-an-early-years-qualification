@@ -39,7 +39,7 @@ describe('A spec used to test the main back button route through the journey', (
             expect(loc.pathname).to.eq('/questions/what-is-the-awarding-organisation');
         })
 
-        cy.get('#awarding-organisation-select').first();
+        cy.get('#awarding-organisation-select').select(0); // first in the list
         cy.get('button[id="question-submit"]').click();
 
         // qualifications page (This is only a temporary page) - click a qualification in the list to move us on
