@@ -14,4 +14,5 @@ public static class ContentTypes
     public const string CookiesBanner = "cookiesBanner";
     public const string DateQuestionPage = "dateQuestionPage";
     public const string DropdownQuestionPage = "dropdownQuestionPage";
+    public const string QualificationListPage = "qualificationListPage";
 }

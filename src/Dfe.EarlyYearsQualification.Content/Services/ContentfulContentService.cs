@@ -28,7 +28,7 @@ public class ContentfulContentService(
               { typeof(CookiesBanner), ContentTypes.CookiesBanner },
               { typeof(DateQuestionPage), ContentTypes.DateQuestionPage },
               { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
-              { typeof(QualificationListPage), "qualificationListPage"}
+              { typeof(QualificationListPage), ContentTypes.QualificationListPage }
           };
 
     public async Task<StartPage?> GetStartPage()
