@@ -57,7 +57,7 @@ describe('A spec used to test the various routes through the journey', () => {
       expect(loc.pathname).to.eq('/questions/what-is-the-awarding-organisation');
     })
     
-    cy.get('#awarding-organisation-select').select(0);  // first in the list
+    cy.get('#awarding-organisation-select').select(1);  // first no-default item in the list
     cy.get('button[id="question-submit"]').click();
     
     // qualifications page (This is only a temporary page)
