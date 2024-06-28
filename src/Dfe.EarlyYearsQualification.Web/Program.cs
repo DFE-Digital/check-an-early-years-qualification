@@ -44,7 +44,7 @@ builder.Services.AddGovUkFrontend();
 
 if (builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
-    builder.Services.AddMockContentfulService();
+    builder.Services.AddMockContentfulServices();
 }
 else
 {
