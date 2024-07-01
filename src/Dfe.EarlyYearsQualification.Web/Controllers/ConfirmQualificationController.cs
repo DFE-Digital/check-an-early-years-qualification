@@ -48,13 +48,19 @@ public class ConfirmQualificationController(
     [HttpPost]
     public async Task<IActionResult> Confirm(ConfirmQualificationPageModel model)
     {
-        if (!ModelState.IsValid || string.IsNullOrEmpty(model.ConfirmQualificationAnswer))
+        if (!ModelState.IsValid)
         {
             var content = await contentService.GetConfirmQualificationPage();
 
             if (content is null)
             {
                 logger.LogError("No content for the cookies page");
+                return RedirectToAction("Index", "Error");
+            }
+
+            if (string.IsNullOrEmpty(model.QualificationId))
+            {
+                logger.LogError("No qualification id provided");
                 return RedirectToAction("Index", "Error");
             }
 
@@ -74,13 +80,7 @@ public class ConfirmQualificationController(
             return View("Index", model);
         }
         
-        if (model.ConfirmQualificationAnswer == "yes")
-        {
-            return RedirectToAction("Index", "QualificationDetails", new { qualificationId = model.QualificationId });
-        }
-        
-        return RedirectToAction("Get", "QualificationDetails");
-
+        return model.ConfirmQualificationAnswer == "yes" ? RedirectToAction("Index", "QualificationDetails", new { qualificationId = model.QualificationId }) : RedirectToAction("Get", "QualificationDetails");
     }
     
     private static ConfirmQualificationPageModel Map(ConfirmQualificationPage content, Qualification qualification)
