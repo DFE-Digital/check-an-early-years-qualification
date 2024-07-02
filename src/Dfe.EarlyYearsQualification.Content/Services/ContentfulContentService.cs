@@ -27,6 +27,7 @@ public class ContentfulContentService(
               { typeof(CookiesBanner), "cookiesBanner" },
               { typeof(DateQuestionPage), "dateQuestionPage" },
               { typeof(DropdownQuestionPage), "dropdownQuestionPage" },
+              { typeof(ConfirmQualificationPage), "confirmQualificationPage"},
               { typeof(QualificationListPage), "qualificationListPage"}
           };
 
@@ -166,6 +167,18 @@ public class ContentfulContentService(
     {
         var qualifications = await GetEntriesByType<Qualification>();
         return qualifications!.ToList();
+    }
+
+    public async Task<ConfirmQualificationPage?> GetConfirmQualificationPage()
+    {
+        var confirmQualificationEntities = await GetEntriesByType<ConfirmQualificationPage>();
+        if (confirmQualificationEntities is null || !confirmQualificationEntities.Any())
+        {
+            logger.LogWarning("No confirm qualification page entry returned");
+            return default;
+        }
+
+        return confirmQualificationEntities.First();
     }
 
     public async Task<QualificationListPage?> GetQualificationListPage()

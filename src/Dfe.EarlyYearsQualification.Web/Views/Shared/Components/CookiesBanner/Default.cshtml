@@ -53,7 +53,7 @@
 }
 else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
 {
-    <form method="post" asp-controller="Cookies" asp-action="HideBanner">
+    <form method="post" asp-controller="CookiesPreference" asp-action="HideBanner">
         <input type="hidden" id="returnUrlHideBanner" name="returnUrl"/>
         <div id="cookies-preference-chosen" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
             <div class="govuk-cookie-banner__message govuk-width-container">

@@ -31,4 +31,6 @@ public interface IContentService
     Task<List<Qualification>> GetQualifications();
 
     Task<QualificationListPage?> GetQualificationListPage();
+
+    Task<ConfirmQualificationPage?> GetConfirmQualificationPage();
 }
