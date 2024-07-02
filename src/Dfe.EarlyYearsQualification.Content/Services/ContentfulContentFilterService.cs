@@ -1,37 +1,45 @@
+using System.Collections.ObjectModel;
+using System.Globalization;
 using Contentful.Core;
+using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentFilterService (
-    IContentfulClient contentfulClient) 
+    IContentfulClient contentfulClient, ILogger<ContentfulContentFilterService> logger) 
     : IContentFilterService
 {
-    private readonly Dictionary<int, string> _months = new()
-                                                      {
-                                                          { 1, "Jan" },
-                                                          { 2, "Feb" },
-                                                          { 3, "Mar" },
-                                                          { 4, "Apr" },
-                                                          { 5, "May" },
-                                                          { 6, "Jun" },
-                                                          { 7, "Jul" },
-                                                          { 8, "Aug" },
-                                                          { 9, "Sep" },
-                                                          { 10, "Oct" },
-                                                          { 11, "Nov" },
-                                                          { 12, "Dec" }
-                                                      };
+    private static readonly DateTimeFormatInfo CurrentFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
+
+    private readonly ReadOnlyDictionary<int, string> _months = new(
+                                                                   new Dictionary<int, string>()
+                                                                   {
+                                                                       { 1, CurrentFormatInfo.AbbreviatedMonthNames[0] },
+                                                                       { 2, CurrentFormatInfo.AbbreviatedMonthNames[1] },
+                                                                       { 3, CurrentFormatInfo.AbbreviatedMonthNames[2] },
+                                                                       { 4, CurrentFormatInfo.AbbreviatedMonthNames[3] },
+                                                                       { 5, CurrentFormatInfo.AbbreviatedMonthNames[4] },
+                                                                       { 6, CurrentFormatInfo.AbbreviatedMonthNames[5] },
+                                                                       { 7, CurrentFormatInfo.AbbreviatedMonthNames[6] },
+                                                                       { 8, CurrentFormatInfo.AbbreviatedMonthNames[7] },
+                                                                       { 9, CurrentFormatInfo.AbbreviatedMonthNames[8] },
+                                                                       { 10, CurrentFormatInfo.AbbreviatedMonthNames[9] },
+                                                                       { 11, CurrentFormatInfo.AbbreviatedMonthNames[10] },
+                                                                       { 12, CurrentFormatInfo.AbbreviatedMonthNames[11] }
+                                                                   });
 
     private const int Day = 28;
 
     // Used by the unit tests to inject a mock builder that returns the query params
-    public QueryBuilder<Qualification> QueryBuilder { get; set; } = QueryBuilder<Qualification>.New;
+    public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
     
     public async Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth, int? startDateYear)
     {
+        logger.LogInformation($"Filtering options passed in - level: {level}, startDateMonth: {startDateMonth}, startDateYear: {startDateYear}");
         // create query builder
         var queryBuilder = QueryBuilder.ContentTypeIs(ContentTypes.Qualification);
 
@@ -41,47 +49,62 @@ public class ContentfulContentFilterService (
         }
         
         // get qualifications
-        var qualifications = await contentfulClient.GetEntries(queryBuilder);
+        ContentfulCollection<Qualification>? qualifications;
+        try
+        {
+            qualifications = await contentfulClient.GetEntries(queryBuilder);
+        }
+        catch (Exception e)
+        {
+            logger.LogError("Error getting qualifications: {0}", e);
+            return new List<Qualification>();
+        }
+        
 
         if (!startDateMonth.HasValue || !startDateYear.HasValue) return qualifications.ToList();
         
         // apply start date filtering
+        var results = FilterQualificationsByDate(startDateMonth.Value, startDateYear.Value, qualifications);
+
+        return results;
+    }
+
+    private List<Qualification> FilterQualificationsByDate(int startDateMonth, int startDateYear,
+                                                           ContentfulCollection<Qualification> qualifications)
+    {
         var results = new List<Qualification>();
-        var enteredStartDate = new DateTime(startDateYear.Value, startDateMonth.Value, Day);
+        var enteredStartDate = new DateOnly(startDateYear, startDateMonth, Day);
         foreach (var qualification in qualifications)
         {
             var qualificationStartDate = GetQualificationDate(qualification.FromWhichYear);
             var qualificationEndDate = GetQualificationDate(qualification.ToWhichYear);
-            if (qualificationStartDate is not null && qualificationEndDate is not null)
+            
+            if (qualificationStartDate is not null && qualificationEndDate is not null
+                && enteredStartDate >= qualificationStartDate && enteredStartDate <= qualificationEndDate)
             {
                 // check start date falls between those dates & add to results
-                if (enteredStartDate >= qualificationStartDate && enteredStartDate <= qualificationEndDate)
-                {
-                    results.Add(qualification);
-                };
+                results.Add(qualification);
             }
-            else if (qualificationStartDate is null && qualificationEndDate is not null)
+            else if (qualificationStartDate is null && qualificationEndDate is not null 
+                                                    && enteredStartDate <= qualificationEndDate)
             {
                 // if qualification start date is null, check entered start date is <= ToWhichYear & add to results
-                if (enteredStartDate <= qualificationEndDate)
-                {
-                    results.Add(qualification);
-                };
+                results.Add(qualification);
             }
-            else if (qualificationStartDate is not null && qualificationEndDate is null)
+            else
             {
                 // if qualification end date is null, check entered start date is >= FromWhichYear & add to results
                 if (enteredStartDate >= qualificationStartDate)
                 {
                     results.Add(qualification);
-                };
+                }
             }
         }
 
         return results;
     }
 
-    private DateTime? GetQualificationDate(string? qualificationDate)
+    private DateOnly? GetQualificationDate(string? qualificationDate)
     {
         if (string.IsNullOrEmpty(qualificationDate) || qualificationDate == "null")
         {
@@ -91,7 +114,7 @@ public class ContentfulContentFilterService (
         return ConvertToDateTime(qualificationDate);
     }
 
-    private DateTime? ConvertToDateTime(string qualificationDate)
+    private DateOnly? ConvertToDateTime(string qualificationDate)
     {
         var splitQualificationDate = qualificationDate.Split('-');
         if (splitQualificationDate.Length != 2) return null;
@@ -99,6 +122,6 @@ public class ContentfulContentFilterService (
         var month = _months.FirstOrDefault(x => x.Value == splitQualificationDate[0]).Key;
         var year = Convert.ToInt32(splitQualificationDate[1]) + 2000;
         
-        return new DateTime(year, month, Day);
+        return new DateOnly(year, month, Day);
     }
 }

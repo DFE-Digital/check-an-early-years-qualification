@@ -4,6 +4,7 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -40,7 +41,8 @@ public class ContentfulContentFilterServiceTests
                             .ReturnsAsync(results);
         
         var mockQueryBuilder = new MockQueryBuilder();
-        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object)
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
                             {
                                 QueryBuilder = mockQueryBuilder
                             };
@@ -73,7 +75,8 @@ public class ContentfulContentFilterServiceTests
                             .ReturnsAsync(results);
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object)
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
                             {
                                 QueryBuilder = mockQueryBuilder
                             };
@@ -124,7 +127,8 @@ public class ContentfulContentFilterServiceTests
                             .ReturnsAsync(results);
         
         var mockQueryBuilder = new MockQueryBuilder();
-        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object)
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
                             {
                                 QueryBuilder = mockQueryBuilder
                             };
@@ -176,7 +180,8 @@ public class ContentfulContentFilterServiceTests
                             .ReturnsAsync(results);
         
         var mockQueryBuilder = new MockQueryBuilder();
-        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object)
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
                             {
                                 QueryBuilder = mockQueryBuilder
                             };
@@ -237,7 +242,8 @@ public class ContentfulContentFilterServiceTests
                             .ReturnsAsync(results);
         
         var mockQueryBuilder = new MockQueryBuilder();
-        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object)
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
                             {
                                 QueryBuilder = mockQueryBuilder
                             };
@@ -249,6 +255,24 @@ public class ContentfulContentFilterServiceTests
         filteredQualifications[0].QualificationId.Should().Be("EYQ-123");
         filteredQualifications[1].QualificationId.Should().Be("EYQ-741");
         filteredQualifications[2].QualificationId.Should().Be("EYQ-746");
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_ContentfulClientThrowsException_ReturnsEmptyList()
+    {
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ThrowsAsync(new Exception());
+        
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object);
+
+        var filteredQualifications = await filterService.GetFilteredQualifications(4, 5, 2016);
+
+        filteredQualifications.Should().NotBeNull();
+        filteredQualifications.Should().BeEmpty();
     }
 }
 
