@@ -8,54 +8,56 @@
     await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
 }
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
-            @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
-            {
-                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading" id="question">
-                            @Model.Question
-                        </h1>
-                    </legend>
-                    @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
-                    {
-                        <details class="govuk-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">
-                                    @Model.AdditionalInformationHeader
-                                </span>
-                            </summary>
-                            <div class="govuk-details__text">
-                                @Html.Raw(Model.AdditionalInformationBody)
-                            </div>
-                        </details>
-                    }
-                    @if (Model.HasErrors)
-                    {
-                        <p id="option-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
-                        </p>
-                    }
-                    <div class="govuk-radios" data-module="govuk-radios">
-                        @foreach (var option in Model.Options)
+<main class="govuk-main-wrapper pb-3" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+                @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
+                {
+                    <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading" id="question">
+                                @Model.Question
+                            </h1>
+                        </legend>
+                        @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
                         {
-                            <div class="govuk-radios__item">
-                                @Html.RadioButtonFor(x => x.Option, option.Value, new { @class = "govuk-radios__input", id = option.Value })
-                                <label class="govuk-label govuk-radios__label" for="@option.Value">
-                                    @option.Label
-                                </label>
-                            </div>
+                            <details class="govuk-details">
+                                <summary class="govuk-details__summary">
+                                    <span class="govuk-details__summary-text">
+                                        @Model.AdditionalInformationHeader
+                                    </span>
+                                </summary>
+                                <div class="govuk-details__text">
+                                    @Html.Raw(Model.AdditionalInformationBody)
+                                </div>
+                            </details>
                         }
+                        @if (Model.HasErrors)
+                        {
+                            <p id="option-error" class="govuk-error-message">
+                                <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
+                            </p>
+                        }
+                        <div class="govuk-radios" data-module="govuk-radios">
+                            @foreach (var option in Model.Options)
+                            {
+                                <div class="govuk-radios__item">
+                                    @Html.RadioButtonFor(x => x.Option, option.Value, new { @class = "govuk-radios__input", id = option.Value })
+                                    <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                        @option.Label
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </fieldset>
+                    <div class="govuk-form-group">
+                        <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                            @Model.CtaButtonText
+                        </button>
                     </div>
-                </fieldset>
-                <div class="govuk-form-group">
-                    <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
-                        @Model.CtaButtonText
-                    </button>
-                </div>
-            }
+                }
+            </div>
         </div>
     </div>
-</div>
+</main>
