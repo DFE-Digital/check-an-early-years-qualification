@@ -8,71 +8,73 @@
     await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
 }
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-        <span class="govuk-caption-xl gem-c-title__context">
-            @Model.Content!.MainHeader
-        </span>
-        <h1 class="govuk-heading-xl" id="qualification-name-value">@Model.QualificationName</h1>
-        <dl class="govuk-summary-list">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Model.Content.AwardingOrgLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="awarding-qualification-value">
-                    @Model.AwardingOrganisationTitle
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Model.Content.LevelLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="qualification-level-value">
-                    @Model.QualificationLevel
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Model.Content.QualificationNumberLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="qualification-number-value">
-                    @Model.QualificationNumber
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Model.Content.DateAddedLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="from-which-year-value">
-                    @Model.FromWhichYear
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Model.Content.DateOfCheckLabel
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @DateTime.UtcNow.ToString("dd MMMM yyyy")
-                </dd>
-            </div>
-        </dl>
-        <p class="govuk-body" id="additional-requirements-value">@Model.AdditionalRequirements</p>
-        <h2 class="govuk-heading-m">
-            @Model.Content.BookmarkHeading
-        </h2>
-        <p class="govuk-body">
-            @Model.Content.BookmarkText
-            <br>
-            <br>
-            <a href="#" class="govuk-link">@Model.BookmarkUrl</a>
-        </p>
-        <h2 class="govuk-heading-m">
-            @Model.Content.CheckAnotherQualificationHeading
-        </h2>
-        @Html.Raw(Model.Content.CheckAnotherQualificationText)
-        <h2 class="govuk-heading-m">
-            @Model.Content.FurtherInfoHeading
-        </h2>
-        @Html.Raw(Model.Content.FurtherInfoText)
+<main class="govuk-main-wrapper pb-3" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+            <span class="govuk-caption-xl gem-c-title__context">
+                @Model.Content!.MainHeader
+            </span>
+            <h1 class="govuk-heading-xl" id="qualification-name-value">@Model.QualificationName</h1>
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        @Model.Content.AwardingOrgLabel
+                    </dt>
+                    <dd class="govuk-summary-list__value" id="awarding-qualification-value">
+                        @Model.AwardingOrganisationTitle
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        @Model.Content.LevelLabel
+                    </dt>
+                    <dd class="govuk-summary-list__value" id="qualification-level-value">
+                        @Model.QualificationLevel
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        @Model.Content.QualificationNumberLabel
+                    </dt>
+                    <dd class="govuk-summary-list__value" id="qualification-number-value">
+                        @Model.QualificationNumber
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        @Model.Content.DateAddedLabel
+                    </dt>
+                    <dd class="govuk-summary-list__value" id="from-which-year-value">
+                        @Model.FromWhichYear
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        @Model.Content.DateOfCheckLabel
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @DateTime.UtcNow.ToString("dd MMMM yyyy")
+                    </dd>
+                </div>
+            </dl>
+            <p class="govuk-body" id="additional-requirements-value">@Model.AdditionalRequirements</p>
+            <h2 class="govuk-heading-m">
+                @Model.Content.BookmarkHeading
+            </h2>
+            <p class="govuk-body">
+                @Model.Content.BookmarkText
+                <br>
+                <br>
+                <a href="#" class="govuk-link">@Model.BookmarkUrl</a>
+            </p>
+            <h2 class="govuk-heading-m">
+                @Model.Content.CheckAnotherQualificationHeading
+            </h2>
+            @Html.Raw(Model.Content.CheckAnotherQualificationText)
+            <h2 class="govuk-heading-m">
+                @Model.Content.FurtherInfoHeading
+            </h2>
+            @Html.Raw(Model.Content.FurtherInfoText)
+        </div>
     </div>
-</div>
+</main>
