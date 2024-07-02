@@ -2,6 +2,7 @@
 using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -15,19 +16,19 @@ public class ContentfulContentService(
     private readonly Dictionary<object, string> _contentTypes
         = new()
           {
-              { typeof(StartPage), "startPage" },
-              { typeof(Qualification), "Qualification" },
-              { typeof(DetailsPage), "detailsPage" },
-              { typeof(AdvicePage), "advicePage" },
-              { typeof(RadioQuestionPage), "radioQuestionPage" },
-              { typeof(AccessibilityStatementPage), "accessibilityStatementPage" },
-              { typeof(NavigationLinks), "navigationLinks" },
-              { typeof(CookiesPage), "cookiesPage" },
-              { typeof(PhaseBanner), "phaseBanner" },
-              { typeof(CookiesBanner), "cookiesBanner" },
-              { typeof(DateQuestionPage), "dateQuestionPage" },
-              { typeof(DropdownQuestionPage), "dropdownQuestionPage" },
-              { typeof(QualificationListPage), "qualificationListPage"}
+              { typeof(StartPage), ContentTypes.StartPage },
+              { typeof(Qualification), ContentTypes.Qualification },
+              { typeof(DetailsPage), ContentTypes.DetailsPage },
+              { typeof(AdvicePage), ContentTypes.AdvicePage },
+              { typeof(RadioQuestionPage), ContentTypes.RadioQuestionPage},
+              { typeof(AccessibilityStatementPage), ContentTypes.AccessibilityStatementPage },
+              { typeof(NavigationLinks), ContentTypes.NavigationLinks },
+              { typeof(CookiesPage), ContentTypes.CookiesPage },
+              { typeof(PhaseBanner), ContentTypes.PhaseBanner },
+              { typeof(CookiesBanner), ContentTypes.CookiesBanner },
+              { typeof(DateQuestionPage), ContentTypes.DateQuestionPage },
+              { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
+              { typeof(QualificationListPage), ContentTypes.QualificationListPage }
           };
 
     public async Task<StartPage?> GetStartPage()

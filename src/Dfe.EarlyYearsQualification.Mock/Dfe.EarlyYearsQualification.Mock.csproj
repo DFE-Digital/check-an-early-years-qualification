@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Content/"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj"/>
     </ItemGroup>
 

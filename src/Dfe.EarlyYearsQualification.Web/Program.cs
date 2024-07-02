@@ -44,11 +44,12 @@ builder.Services.AddGovUkFrontend();
 
 if (builder.Configuration.GetValue<bool>("UseMockContentful"))
 {
-    builder.Services.AddMockContentfulService();
+    builder.Services.AddMockContentfulServices();
 }
 else
 {
     builder.Services.AddTransient<IContentService, ContentfulContentService>();
+    builder.Services.AddTransient<IContentFilterService, ContentfulContentFilterService>();
 }
 
 builder.Services.AddModelRenderers();
