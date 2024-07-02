@@ -230,7 +230,12 @@ public class QuestionsController(
     private static DropdownQuestionModel MapDropdownModel(DropdownQuestionModel model, DropdownQuestionPage question, List<Qualification> qualifications, string actionName,
                                                           string controllerName)
     {
-        var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle).Distinct().Order().ToList();
+        var awardingOrganisationExclusions = new [] { "All Higher Education Institutes", "Various Awarding Organisations" };
+        var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle)
+                                                        .Distinct()
+                                                        .Where(x => !awardingOrganisationExclusions.Any(x.Contains))
+                                                        .Order()
+                                                        .ToList();
         
         model.ActionName = actionName;
         model.ControllerName = controllerName;

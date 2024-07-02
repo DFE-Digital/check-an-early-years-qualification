@@ -648,6 +648,62 @@ public class QuestionsControllerTests
     }
     
     [TestMethod]
+    public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsQualificationsWithVariousOrHigherEducation_FiltersThemOutOfResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+
+        var questionPage = new DropdownQuestionPage
+                           {
+                               DefaultText = "Test default text"
+                           };
+        
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(questionPage);
+
+        var listOfQualifications = new List<Qualification>
+                                   {
+                                       new("1", "TEST",
+                                           "D awarding organisation", 123, null,
+                                           null, null, null),
+                                       new("2", "TEST",
+                                                         "E awarding organisation", 123, null,
+                                                         null, null, null),
+                                       new("3", "TEST",
+                                                         "Various Awarding Organisations", 123, null,
+                                                         null, null, null),
+                                       new("4", "TEST",
+                                                         "All Higher Education Institutes", 123, null,
+                                                         null, null, null),
+                                   };
+        
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
+        mockContentFilterService.Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>()))
+                                .ReturnsAsync(listOfQualifications);
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
+
+        var result = await controller.WhatIsTheAwardingOrganisation();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as DropdownQuestionModel;
+        model.Should().NotBeNull();
+        model!.Values.Should().NotBeNull();
+
+        // Count here includes default value added in mapping
+        model.Values.Count.Should().Be(3);
+        model.Values[1].Text.Should().Be("D awarding organisation");
+        model.Values[2].Text.Should().Be("E awarding organisation");
+    }
+    
+    [TestMethod]
     public async Task Post_WhatIsTheAwardingOrganisation_InvalidModel_ReturnsQuestionPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
