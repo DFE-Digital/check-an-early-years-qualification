@@ -18,7 +18,7 @@ public class ContentfulContentFilterService(
 
     private readonly ReadOnlyDictionary<string, int>
         _months = new(
-                      new Dictionary<string, int>
+                      new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase)
                       {
                           { "Jan", 1 },
                           { "Feb", 2 },
