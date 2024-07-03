@@ -90,12 +90,15 @@ describe('A spec used to test the various routes through the journey', () => {
     })
   })
 
-      [
-          {09, 2014},
-          {06, 2017},
-          {08, 2019},
-      ].forEach((month, year) => {
-        it(`should redirect when qualification is level 2 and startMonth is {month} and startYear is {year}`, () => {
+  const testDates = [
+      ['09', '2014'],
+      ['06', '2017'],
+      ['08', '2019'],
+  ];
+  
+  testDates.forEach((date) => {
+        const [month, year] = date;
+        it(`should redirect when qualification is level 2 and startMonth is ${month} and startYear is ${year}`, () => {
           // home page
           cy.get('.govuk-button--start').click();
     
@@ -125,7 +128,7 @@ describe('A spec used to test the various routes through the journey', () => {
     
           // level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019 page
           cy.location().should((loc) => {
-            expect(loc.pathname).to.eq('advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019');
+            expect(loc.pathname).to.eq('/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019');
           })
       })
   })
