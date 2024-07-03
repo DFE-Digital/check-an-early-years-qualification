@@ -10,12 +10,14 @@ using Microsoft.VisualBasic.FileIO;
 namespace Dfe.EarlyYearsQualification.ContentUpload;
 
 [ExcludeFromCodeCoverage]
-public class Program
+public static class Program
 {
     private const string Locale = "en-US";
     private const string SpaceId = "";
     private const string ManagementApiKey = "";
 
+    // ReSharper disable once UnusedParameter.Global
+    // ...args standard for Program.Main()
     public static async Task Main(string[] args)
     {
         var client = new ContentfulManagementClient(new HttpClient(),
@@ -69,9 +71,7 @@ public class Program
 
         var currentModel = currentModels.FirstOrDefault(x => x.SystemProperties.Id == "Qualification");
 
-        var version = currentModel != null && currentModel.SystemProperties.Version != null
-                          ? currentModel.SystemProperties.Version!.Value
-                          : 1;
+        var version = currentModel?.SystemProperties.Version ?? 1;
 
         var contentType = new ContentType
                           {
@@ -90,10 +90,7 @@ public class Program
                                       Id = "qualificationId",
                                       Type = "Symbol",
                                       Required = true,
-                                      Validations = new List<IFieldValidator>
-                                                    {
-                                                        new UniqueValidator()
-                                                    }
+                                      Validations = [new UniqueValidator()]
                                   },
                                   new Field
                                   {
@@ -238,7 +235,7 @@ public class Program
 
     private static List<Qualification> GetQualificationsToAddOrUpdate()
     {
-        var lines = ReadCsvFile(@"./csv/ey-quals-full-2024-updated.csv");
+        var lines = ReadCsvFile("./csv/ey-quals-full-2024-updated.csv");
 
         var listObjResult = new List<Qualification>();
 
