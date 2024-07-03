@@ -10,15 +10,14 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
-            @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
-            {
-                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading" id="question">
-                            @Model.Question
-                        </h1>
-                    </legend>
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
+        {
+            <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+                    <h1 class="govuk-heading-l" id="question">
+                        @Model.Question
+                    </h1>
+
                     @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
                     {
                         <details class="govuk-details">
@@ -49,13 +48,14 @@
                             </div>
                         }
                     </div>
-                </fieldset>
+                </div>
+
                 <div class="govuk-form-group">
                     <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
                         @Model.CtaButtonText
                     </button>
                 </div>
-            }
-        </div>
+            </fieldset>
+        }
     </div>
 </div>
