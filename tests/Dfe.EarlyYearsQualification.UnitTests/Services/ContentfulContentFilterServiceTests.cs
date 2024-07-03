@@ -371,6 +371,43 @@ public class ContentfulContentFilterServiceTests
     }
 
     [TestMethod]
+    public async Task GetFilteredQualifications_DataContainsInvalidDateFormat_LogsError()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Sep15", // We expect Mmm-yy, e.g. "Sep-15"
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(4, 5, 2016);
+
+        mockLogger.VerifyError("Qualification date Sep15 has unexpected format");
+    }
+
+    [TestMethod]
     public async Task GetFilteredQualifications_DataContainsInvalidMonth_LogsError()
     {
         var results = new ContentfulCollection<Qualification>

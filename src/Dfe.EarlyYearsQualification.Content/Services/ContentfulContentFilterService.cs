@@ -141,7 +141,7 @@ public class ContentfulContentFilterService(
         var splitQualificationDate = qualificationDate.Split('-');
         if (splitQualificationDate.Length != 2)
         {
-            logger.LogError("Found qualification date {QualificationDate} with unexpected format", qualificationDate);
+            logger.LogError("Qualification date {QualificationDate} has unexpected format", qualificationDate);
             return (false, 0, 0);
         }
 
