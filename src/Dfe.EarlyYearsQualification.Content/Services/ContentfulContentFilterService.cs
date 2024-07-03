@@ -94,6 +94,7 @@ public class ContentfulContentFilterService(
             else if (qualificationStartDate is null
                      && qualificationEndDate is not null
                      // ReSharper disable once MergeSequentialChecks
+                     // ...reveals the intention more clearly this way
                      && enteredStartDate <= qualificationEndDate)
             {
                 // if qualification start date is null, check entered start date is <= ToWhichYear & add to results
