@@ -7,6 +7,7 @@ using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using FluentAssertions;
@@ -26,11 +27,12 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                           .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
 
@@ -54,6 +56,7 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         var questionPage = new RadioQuestionPage
                            {
@@ -64,7 +67,7 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                           .ReturnsAsync(questionPage);
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
 
@@ -91,8 +94,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         controller.ModelState.AddModelError("option", "test error");
         var result = await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel());
@@ -114,8 +118,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -139,8 +144,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel { Option = Options.England });
@@ -162,6 +168,7 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         var questionPage = new DateQuestionPage
                            {
@@ -175,7 +182,7 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
                           .ReturnsAsync(questionPage);
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhenWasTheQualificationStarted();
 
@@ -205,11 +212,12 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
                           .ReturnsAsync((DateQuestionPage?)default).Verifiable();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhenWasTheQualificationStarted();
 
@@ -230,8 +238,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         controller.ModelState.AddModelError("option", "test error");
         var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel());
@@ -258,6 +267,7 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         var questionPage = new DateQuestionPage
                            {
@@ -271,7 +281,7 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
                           .ReturnsAsync(questionPage);
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
                                                                      {
@@ -303,6 +313,7 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         var questionPage = new DateQuestionPage
                            {
@@ -316,7 +327,7 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
                           .ReturnsAsync(questionPage);
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
                                                                      {
@@ -348,8 +359,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
                                                                      {
@@ -374,11 +386,12 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
                           .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhatLevelIsTheQualification();
 
@@ -402,6 +415,7 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         var questionPage = new RadioQuestionPage
                            {
@@ -416,7 +430,7 @@ public class QuestionsControllerTests
 
         mockRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhatLevelIsTheQualification();
 
@@ -447,8 +461,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         controller.ModelState.AddModelError("option", "test error");
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel());
@@ -470,8 +485,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -495,11 +511,12 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync((DropdownQuestionPage?)default).Verifiable();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -523,6 +540,7 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
         var questionPage = new DropdownQuestionPage
                            {
@@ -537,9 +555,11 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync(questionPage);
 
-        mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
+        mockContentFilterService.Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>()))
+                                .ReturnsAsync([]);
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -569,6 +589,7 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -597,9 +618,11 @@ public class QuestionsControllerTests
                                                          null, null, null)
                                    };
         
-        mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync(listOfQualifications);
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
+        mockContentFilterService.Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>()))
+                                .ReturnsAsync(listOfQualifications);
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -625,14 +648,71 @@ public class QuestionsControllerTests
     }
     
     [TestMethod]
+    public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsQualificationsWithVariousOrHigherEducation_FiltersThemOutOfResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+
+        var questionPage = new DropdownQuestionPage
+                           {
+                               DefaultText = "Test default text"
+                           };
+        
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(questionPage);
+
+        var listOfQualifications = new List<Qualification>
+                                   {
+                                       new("1", "TEST",
+                                           "D awarding organisation", 123, null,
+                                           null, null, null),
+                                       new("2", "TEST",
+                                                         "E awarding organisation", 123, null,
+                                                         null, null, null),
+                                       new("3", "TEST",
+                                                         "Various Awarding Organisations", 123, null,
+                                                         null, null, null),
+                                       new("4", "TEST",
+                                                         "All Higher Education Institutes", 123, null,
+                                                         null, null, null)
+                                   };
+        
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
+        mockContentFilterService.Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>()))
+                                .ReturnsAsync(listOfQualifications);
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
+
+        var result = await controller.WhatIsTheAwardingOrganisation();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as DropdownQuestionModel;
+        model.Should().NotBeNull();
+        model!.Values.Should().NotBeNull();
+
+        // Count here includes default value added in mapping
+        model.Values.Count.Should().Be(3);
+        model.Values[1].Text.Should().Be("D awarding organisation");
+        model.Values[2].Text.Should().Be("E awarding organisation");
+    }
+    
+    [TestMethod]
     public async Task Post_WhatIsTheAwardingOrganisation_InvalidModel_ReturnsQuestionPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -646,8 +726,9 @@ public class QuestionsControllerTests
         
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync(questionPage);
-        
-        mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
+        mockContentFilterService.Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>())).ReturnsAsync([]);
         
         controller.ModelState.AddModelError("option", "test error");
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel());
@@ -674,8 +755,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
         
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -700,8 +782,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -743,8 +826,9 @@ public class QuestionsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
         
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object);
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
