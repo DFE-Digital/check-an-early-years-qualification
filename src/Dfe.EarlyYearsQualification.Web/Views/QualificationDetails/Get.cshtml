@@ -6,7 +6,7 @@
 }
 
 @{
-    await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
+    await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
 }
 
 <div class="govuk-grid-row">
@@ -35,7 +35,7 @@
                 <li>@Model.Filters!.WhatIsTheAwardingOrganisation</li>
             }
         </ul>
-        
+
         <p class="govuk-body">
             <a href="/" class="govuk-link">Change my search</a>
         </p>

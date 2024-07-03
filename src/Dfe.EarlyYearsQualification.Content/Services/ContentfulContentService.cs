@@ -20,7 +20,7 @@ public class ContentfulContentService(
               { typeof(Qualification), ContentTypes.Qualification },
               { typeof(DetailsPage), ContentTypes.DetailsPage },
               { typeof(AdvicePage), ContentTypes.AdvicePage },
-              { typeof(RadioQuestionPage), ContentTypes.RadioQuestionPage},
+              { typeof(RadioQuestionPage), ContentTypes.RadioQuestionPage },
               { typeof(AccessibilityStatementPage), ContentTypes.AccessibilityStatementPage },
               { typeof(NavigationLinks), ContentTypes.NavigationLinks },
               { typeof(CookiesPage), ContentTypes.CookiesPage },
@@ -29,7 +29,7 @@ public class ContentfulContentService(
               { typeof(DateQuestionPage), ContentTypes.DateQuestionPage },
               { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
               { typeof(QualificationListPage), ContentTypes.QualificationListPage },
-              { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage},
+              { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage }
           };
 
     public async Task<StartPage?> GetStartPage()

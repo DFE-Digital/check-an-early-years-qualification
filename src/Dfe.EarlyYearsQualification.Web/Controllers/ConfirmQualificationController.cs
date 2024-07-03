@@ -21,7 +21,7 @@ public class ConfirmQualificationController(
         {
             return BadRequest();
         }
-        
+
         var content = await contentService.GetConfirmQualificationPage();
 
         if (content is null)
@@ -79,10 +79,12 @@ public class ConfirmQualificationController(
 
             return View("Index", model);
         }
-        
-        return model.ConfirmQualificationAnswer == "yes" ? RedirectToAction("Index", "QualificationDetails", new { qualificationId = model.QualificationId }) : RedirectToAction("Get", "QualificationDetails");
+
+        return model.ConfirmQualificationAnswer == "yes"
+                   ? RedirectToAction("Index", "QualificationDetails", new { qualificationId = model.QualificationId })
+                   : RedirectToAction("Get", "QualificationDetails");
     }
-    
+
     private static ConfirmQualificationPageModel Map(ConfirmQualificationPage content, Qualification qualification)
     {
         return new ConfirmQualificationPageModel
@@ -104,7 +106,7 @@ public class ConfirmQualificationController(
                    QualificationId = qualification.QualificationId,
                    QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle,
                    QualificationDateAdded = qualification.FromWhichYear!,
-                   BackButton = content.BackButton,
+                   BackButton = content.BackButton
                };
     }
 }

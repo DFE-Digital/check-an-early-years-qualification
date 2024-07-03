@@ -17,6 +17,6 @@ public class QualificationDetailsModel
     public string BookmarkUrl { get; init; } = string.Empty;
 
     public NavigationLink? BackButton { get; set; }
-    
+
     public DetailsPageModel? Content { get; init; }
 }

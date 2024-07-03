@@ -27,11 +27,11 @@ public class QualificationDetailsController(
             logger.LogError("No content for the qualification list page");
             return RedirectToAction("Index", "Error");
         }
-        
+
         var filterParams = userJourneyCookieService.GetUserJourneyModelFromCookie();
 
         var model = MapList(listPageContent, filterParams);
-        
+
         return View(model);
     }
 
@@ -66,7 +66,7 @@ public class QualificationDetailsController(
 
     private QualificationListModel MapList(QualificationListPage content, UserJourneyModel? filters)
     {
-        return new QualificationListModel()
+        return new QualificationListModel
                {
                    BackButton = content.BackButton,
                    Filters = filters,

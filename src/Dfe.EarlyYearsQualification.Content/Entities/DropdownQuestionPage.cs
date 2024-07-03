@@ -13,6 +13,6 @@ public class DropdownQuestionPage
     public string NotInListText { get; init; } = string.Empty;
 
     public string DefaultText { get; init; } = string.Empty;
-    
+
     public NavigationLink? BackButton { get; set; }
 }

@@ -26,8 +26,8 @@ public class QuestionsController(
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
         return await GetRadioView(QuestionPages.WhereWasTheQualificationAwarded,
-                             nameof(this.WhereWasTheQualificationAwarded),
-                             Questions);
+                                  nameof(this.WhereWasTheQualificationAwarded),
+                                  Questions);
     }
 
     [HttpPost("where-was-the-qualification-awarded")]
@@ -38,7 +38,8 @@ public class QuestionsController(
             var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
             if (questionPage is not null)
             {
-                model = await MapRadioModel(model, questionPage, nameof(this.WhereWasTheQualificationAwarded), Questions);
+                model = await MapRadioModel(model, questionPage, nameof(this.WhereWasTheQualificationAwarded),
+                                            Questions);
                 model.HasErrors = true;
             }
 
@@ -49,7 +50,7 @@ public class QuestionsController(
         {
             return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
         }
-        
+
         userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option!);
 
         return RedirectToAction(nameof(this.WhenWasTheQualificationStarted));
@@ -67,7 +68,7 @@ public class QuestionsController(
         }
 
         var model = MapDateModel(new DateQuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted),
-                              Questions);
+                                 Questions);
         return View("Date", model);
     }
 
@@ -85,8 +86,9 @@ public class QuestionsController(
 
             return View("Date", model);
         }
-        
-        userJourneyCookieService.SetWhenWasQualificationAwarded(model.SelectedMonth.ToString() + '/' + model.SelectedYear);
+
+        userJourneyCookieService.SetWhenWasQualificationAwarded(model.SelectedMonth.ToString() + '/' +
+                                                                model.SelectedYear);
 
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
@@ -95,7 +97,7 @@ public class QuestionsController(
     public async Task<IActionResult> WhatLevelIsTheQualification()
     {
         return await GetRadioView(QuestionPages.WhatLevelIsTheQualification, nameof(this.WhatLevelIsTheQualification),
-                             Questions);
+                                  Questions);
     }
 
     [HttpPost("what-level-is-the-qualification")]
@@ -112,12 +114,12 @@ public class QuestionsController(
 
             return View("Radio", model);
         }
-        
+
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
         return RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation));
     }
-    
+
     [HttpGet("what-is-the-awarding-organisation")]
     public async Task<IActionResult> WhatIsTheAwardingOrganisation()
     {
@@ -130,39 +132,42 @@ public class QuestionsController(
 
         var qualifications = await GetFilteredQualifications();
 
-        var model = MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications, nameof(this.WhatIsTheAwardingOrganisation),
-                                 Questions);
-        
+        var model = MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications,
+                                     nameof(this.WhatIsTheAwardingOrganisation),
+                                     Questions);
+
         return View("Dropdown", model);
     }
-    
+
     [HttpPost("what-is-the-awarding-organisation")]
     public async Task<IActionResult> WhatIsTheAwardingOrganisation(DropdownQuestionModel model)
     {
         if (!ModelState.IsValid || (string.IsNullOrEmpty(model.SelectedValue) && !model.NotInTheList))
         {
-            var questionPage = await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
+            var questionPage =
+                await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
             if (questionPage is not null)
             {
                 var qualifications = await GetFilteredQualifications();
-                
-                model = MapDropdownModel(model, questionPage, qualifications, nameof(this.WhatIsTheAwardingOrganisation),
+
+                model = MapDropdownModel(model, questionPage, qualifications,
+                                         nameof(this.WhatIsTheAwardingOrganisation),
                                          Questions);
                 model.HasErrors = true;
             }
 
             return View("Dropdown", model);
         }
-        
+
         userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue);
-        
+
         return RedirectToAction("Get", "QualificationDetails");
     }
-    
+
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
         var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
-        
+
         int? level = null;
         if (int.TryParse(cookie.LevelOfQualification, out var parsedLevel))
         {
@@ -172,14 +177,14 @@ public class QuestionsController(
         int? startDateMonth = null;
         int? startDateYear = null;
         var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
-        if (qualificationAwardedDateSplit.Length == 2 
-            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth) 
+        if (qualificationAwardedDateSplit.Length == 2
+            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
             && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
         {
             startDateMonth = parsedStartMonth;
             startDateYear = parsedStartYear;
         }
-        
+
         return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear);
     }
 
@@ -197,8 +202,9 @@ public class QuestionsController(
         return View("Radio", model);
     }
 
-    private async Task<RadioQuestionModel> MapRadioModel(RadioQuestionModel model, RadioQuestionPage question, string actionName,
-                                          string controllerName)
+    private async Task<RadioQuestionModel> MapRadioModel(RadioQuestionModel model, RadioQuestionPage question,
+                                                         string actionName,
+                                                         string controllerName)
     {
         model.Question = question.Question;
         model.Options = question.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList();
@@ -213,7 +219,7 @@ public class QuestionsController(
     }
 
     private static DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestionPage question, string actionName,
-                                          string controllerName)
+                                                  string controllerName)
     {
         model.Question = question.Question;
         model.CtaButtonText = question.CtaButtonText;
@@ -227,16 +233,18 @@ public class QuestionsController(
         return model;
     }
 
-    private static DropdownQuestionModel MapDropdownModel(DropdownQuestionModel model, DropdownQuestionPage question, List<Qualification> qualifications, string actionName,
+    private static DropdownQuestionModel MapDropdownModel(DropdownQuestionModel model, DropdownQuestionPage question,
+                                                          List<Qualification> qualifications, string actionName,
                                                           string controllerName)
     {
-        var awardingOrganisationExclusions = new [] { "All Higher Education Institutes", "Various Awarding Organisations" };
+        var awardingOrganisationExclusions =
+            new[] { "All Higher Education Institutes", "Various Awarding Organisations" };
         var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle)
                                                         .Distinct()
                                                         .Where(x => !awardingOrganisationExclusions.Any(x.Contains))
                                                         .Order()
                                                         .ToList();
-        
+
         model.ActionName = actionName;
         model.ControllerName = controllerName;
         model.CtaButtonText = question.CtaButtonText;
@@ -245,22 +253,22 @@ public class QuestionsController(
         model.DropdownHeading = question.DropdownHeading;
         model.NotInListText = question.NotInListText;
         model.BackButton = question.BackButton;
-        
+
         model.Values.Add(new SelectListItem
                          {
                              Text = question.DefaultText,
                              Value = ""
                          });
-       
-       foreach (var awardingOrg in uniqueAwardingOrganisations)
-       {
-           model.Values.Add(new SelectListItem
-                            {
-                                Value = awardingOrg,
-                                Text = awardingOrg
-                            });
-       }
 
-       return model;
+        foreach (var awardingOrg in uniqueAwardingOrganisations)
+        {
+            model.Values.Add(new SelectListItem
+                             {
+                                 Value = awardingOrg,
+                                 Text = awardingOrg
+                             });
+        }
+
+        return model;
     }
 }
