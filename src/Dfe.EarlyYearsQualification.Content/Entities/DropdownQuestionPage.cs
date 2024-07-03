@@ -14,5 +14,5 @@ public class DropdownQuestionPage
 
     public string DefaultText { get; init; } = string.Empty;
 
-    public NavigationLink? BackButton { get; set; }
+    public NavigationLink? BackButton { get; init; }
 }

@@ -2,7 +2,7 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class QualificationListPage
 {
-    public string Header { get; set; } = string.Empty;
+    public string Header { get; init; } = string.Empty;
 
-    public NavigationLink? BackButton { get; set; }
+    public NavigationLink? BackButton { get; init; }
 }
