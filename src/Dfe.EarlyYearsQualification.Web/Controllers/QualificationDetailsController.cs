@@ -64,7 +64,7 @@ public class QualificationDetailsController(
         return View(model);
     }
 
-    private QualificationListModel MapList(QualificationListPage content, UserJourneyModel? filters)
+    private static QualificationListModel MapList(QualificationListPage content, UserJourneyModel? filters)
     {
         return new QualificationListModel
                {
