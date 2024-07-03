@@ -16,23 +16,23 @@ public class ContentfulContentFilterService(
 {
     private const int Day = 28;
 
-    private readonly ReadOnlyDictionary<string, int>
-        _months = new(
-                      new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase)
-                      {
-                          { "Jan", 1 },
-                          { "Feb", 2 },
-                          { "Mar", 3 },
-                          { "Apr", 4 },
-                          { "May", 5 },
-                          { "Jun", 6 },
-                          { "Jul", 7 },
-                          { "Aug", 8 },
-                          { "Sep", 9 },
-                          { "Oct", 10 },
-                          { "Nov", 11 },
-                          { "Dec", 12 }
-                      });
+    private static readonly ReadOnlyDictionary<string, int>
+        Months = new(
+                     new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase)
+                     {
+                         { "Jan", 1 },
+                         { "Feb", 2 },
+                         { "Mar", 3 },
+                         { "Apr", 4 },
+                         { "May", 5 },
+                         { "Jun", 6 },
+                         { "Jul", 7 },
+                         { "Aug", 8 },
+                         { "Sep", 9 },
+                         { "Oct", 10 },
+                         { "Nov", 11 },
+                         { "Dec", 12 }
+                     });
 
     // Used by the unit tests to inject a mock builder that returns the query params
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
@@ -159,7 +159,7 @@ public class ContentfulContentFilterService(
             return (false, 0, 0);
         }
 
-        if (!_months.TryGetValue(abbreviatedMonth, out var month))
+        if (!Months.TryGetValue(abbreviatedMonth, out var month))
         {
             logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
                             qualificationDate);
