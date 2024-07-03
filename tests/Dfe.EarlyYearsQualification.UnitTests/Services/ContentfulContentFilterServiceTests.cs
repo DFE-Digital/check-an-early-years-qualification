@@ -382,7 +382,7 @@ public class ContentfulContentFilterServiceTests
                                                         "test",
                                                         "NCFE",
                                                         4,
-                                                        "Sept-15", // "Sept" in the data should be "Sep"
+                                                        "Sept-15", // "Sept" in the data: we expect "Sep"
                                                         "Aug-19",
                                                         "abc/123/987",
                                                         "requirements")
@@ -419,8 +419,8 @@ public class ContentfulContentFilterServiceTests
                                                         "test",
                                                         "NCFE",
                                                         4,
-                                                        "Sep-15", // "Sept" in the data should be "Sep"
-                                                        "Aug-1a",
+                                                        "Sep-15",
+                                                        "Aug-1a", // invalid year typo
                                                         "abc/123/987",
                                                         "requirements")
                                   }
