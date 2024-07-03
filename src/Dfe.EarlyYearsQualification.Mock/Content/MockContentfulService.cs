@@ -98,7 +98,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "TEST",
-                                                          Href = "/qualifications",
+                                                          Href = "/confirm-qualification/eyq-240",
                                                           OpenInNewTab = false
                                                       }
                                      });
@@ -213,6 +213,42 @@ public class MockContentfulService : IContentService
                                                           OpenInNewTab = false
                                                       }
                                      });
+    }
+
+    public async Task<ConfirmQualificationPage?> GetConfirmQualificationPage()
+    {
+        return await Task.FromResult(new ConfirmQualificationPage
+               {
+                   QualificationLabel = "Test qualification label",
+                   BackButton = new NavigationLink
+                                {
+                                    DisplayText = "Test back button",
+                                    OpenInNewTab = false,
+                                    Href = "/qualifications"
+                                },
+                   ErrorText = "Test error text",
+                   ButtonText = "Test button text",
+                   LevelLabel = "Test level label",
+                   DateAddedLabel = "Test date added label",
+                   Heading = "Test heading",
+                   Options =
+                   [
+                       new Option
+                       {
+                           Label = "yes",
+                           Value = "yes"
+                       },
+                       new Option
+                       {
+                           Label = "no",
+                           Value = "no"
+                       }
+                   ],
+                   RadioHeading = "Test radio heading",
+                   AwardingOrganisationLabel = "Test awarding organisation label",
+                   ErrorBannerHeading = "Test error banner heading",
+                   ErrorBannerLink = "Test error banner link"
+               });
     }
 
     public async Task<StartPage?> GetStartPage()
