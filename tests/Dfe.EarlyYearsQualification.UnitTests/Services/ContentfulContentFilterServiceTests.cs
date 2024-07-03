@@ -15,31 +15,36 @@ public class ContentfulContentFilterServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_PassInNullParameters_ReturnsAllQualifications()
     {
-        var results = new ContentfulCollection<Qualification>(){ Items = new[] { new Qualification(
-                                                                                "EYQ-123", 
-                                                                                "test", 
-                                                                                "NCFE",
-                                                                                4, 
-                                                                                "Apr-15", 
-                                                                                "Aug-19", 
-                                                                                "abc/123/987", 
-                                                                                "requirements"),
-                                                                                   new Qualification(
-                                                                                    "EYQ-741", 
-                                                                                    "test", 
-                                                                                    "Pearson",
-                                                                                    3, 
-                                                                                    null, 
-                                                                                    "Aug-19", 
-                                                                                    "def/456/951", 
-                                                                                    "requirements")
-                                                                               }};
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-741",
+                                                        "test",
+                                                        "Pearson",
+                                                        3,
+                                                        null,
+                                                        "Aug-19",
+                                                        "def/456/951",
+                                                        "requirements")
+                                  }
+                      };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
                                                      It.IsAny<QueryBuilder<Qualification>>(),
                                                      It.IsAny<CancellationToken>()))
                             .ReturnsAsync(results);
-        
+
         var mockQueryBuilder = new MockQueryBuilder();
         var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
         var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
@@ -55,19 +60,26 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(1);
         queryString.Should().Contain("content_type", "Qualification");
     }
-    
+
     [TestMethod]
     public async Task GetFilteredQualifications_PassInLevel_ClientContainsLevelInQuery()
     {
-        var results = new ContentfulCollection<Qualification>{ Items = new [] {new Qualification(
-                                                                  "EYQ-123", 
-                                                                  "test", 
-                                                                  "NCFE",
-                                                                  4, 
-                                                                  "Apr-15", 
-                                                                  "Aug-19", 
-                                                                  "abc/123/987", 
-                                                                  "requirements")}};
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
                                                      It.IsAny<QueryBuilder<Qualification>>(),
@@ -80,7 +92,7 @@ public class ContentfulContentFilterServiceTests
                             {
                                 QueryBuilder = mockQueryBuilder
                             };
-        
+
         await filterService.GetFilteredQualifications(4, null, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
@@ -88,44 +100,49 @@ public class ContentfulContentFilterServiceTests
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.qualificationLevel", "4");
     }
-    
+
     [TestMethod]
     public async Task GetFilteredQualifications_PassInLevelMonthAndNullParameters_ReturnsAllQualifications()
     {
-        var results = new ContentfulCollection<Qualification>(){ Items = new[] { new Qualification(
-                                                                                "EYQ-123", 
-                                                                                "test", 
-                                                                                "NCFE",
-                                                                                4, 
-                                                                                "Apr-15", 
-                                                                                "Aug-19", 
-                                                                                "abc/123/987", 
-                                                                                "requirements"),
-                                                                                   new Qualification(
-                                                                                    "EYQ-741", 
-                                                                                    "test", 
-                                                                                    "Pearson",
-                                                                                    4, 
-                                                                                    null, 
-                                                                                    "Aug-19", 
-                                                                                    "def/456/951", 
-                                                                                    "requirements"),
-                                                                                   new Qualification(
-                                                                                    "EYQ-752", 
-                                                                                    "test", 
-                                                                                    "CACHE",
-                                                                                    4, 
-                                                                                    "Sep-21", 
-                                                                                    null, 
-                                                                                    "ghi/456/951", 
-                                                                                    "requirements")
-                                                                               }};
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-741",
+                                                        "test",
+                                                        "Pearson",
+                                                        4,
+                                                        null,
+                                                        "Aug-19",
+                                                        "def/456/951",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-752",
+                                                        "test",
+                                                        "CACHE",
+                                                        4,
+                                                        "Sep-21",
+                                                        null,
+                                                        "ghi/456/951",
+                                                        "requirements")
+                                  }
+                      };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
                                                      It.IsAny<QueryBuilder<Qualification>>(),
                                                      It.IsAny<CancellationToken>()))
                             .ReturnsAsync(results);
-        
+
         var mockQueryBuilder = new MockQueryBuilder();
         var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
         var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
@@ -141,44 +158,49 @@ public class ContentfulContentFilterServiceTests
         filteredQualifications[1].QualificationId.Should().Be("EYQ-741");
         filteredQualifications[2].QualificationId.Should().Be("EYQ-752");
     }
-    
+
     [TestMethod]
     public async Task GetFilteredQualifications_PassInLevelNullAndYearParameters_ReturnsAllQualifications()
     {
-        var results = new ContentfulCollection<Qualification>(){ Items = new[] { new Qualification(
-                                                                                "EYQ-123", 
-                                                                                "test", 
-                                                                                "NCFE",
-                                                                                4, 
-                                                                                "Apr-15", 
-                                                                                "Aug-19", 
-                                                                                "abc/123/987", 
-                                                                                "requirements"),
-                                                                                   new Qualification(
-                                                                                    "EYQ-741", 
-                                                                                    "test", 
-                                                                                    "Pearson",
-                                                                                    4, 
-                                                                                    null, 
-                                                                                    "Aug-19", 
-                                                                                    "def/456/951", 
-                                                                                    "requirements"),
-                                                                                   new Qualification(
-                                                                                    "EYQ-752", 
-                                                                                    "test", 
-                                                                                    "CACHE",
-                                                                                    4, 
-                                                                                    "Sep-21", 
-                                                                                    null, 
-                                                                                    "ghi/456/951", 
-                                                                                    "requirements")
-                                                                               }};
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-741",
+                                                        "test",
+                                                        "Pearson",
+                                                        4,
+                                                        null,
+                                                        "Aug-19",
+                                                        "def/456/951",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-752",
+                                                        "test",
+                                                        "CACHE",
+                                                        4,
+                                                        "Sep-21",
+                                                        null,
+                                                        "ghi/456/951",
+                                                        "requirements")
+                                  }
+                      };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
                                                      It.IsAny<QueryBuilder<Qualification>>(),
                                                      It.IsAny<CancellationToken>()))
                             .ReturnsAsync(results);
-        
+
         var mockQueryBuilder = new MockQueryBuilder();
         var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
         var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
@@ -194,53 +216,58 @@ public class ContentfulContentFilterServiceTests
         filteredQualifications[1].QualificationId.Should().Be("EYQ-741");
         filteredQualifications[2].QualificationId.Should().Be("EYQ-752");
     }
-    
+
     [TestMethod]
     public async Task GetFilteredQualifications_FilterOnDates_ReturnsFilteredQualifications()
     {
-        var results = new ContentfulCollection<Qualification>(){ Items = new[] { new Qualification(
-                                                                                "EYQ-123", 
-                                                                                "test", 
-                                                                                "NCFE",
-                                                                                4, 
-                                                                                "Apr-15", 
-                                                                                "Aug-19", 
-                                                                                "abc/123/987", 
-                                                                                "requirements"),
-                                                                                   new Qualification(
-                                                                                    "EYQ-741", 
-                                                                                    "test", 
-                                                                                    "Pearson",
-                                                                                    4, 
-                                                                                    null, 
-                                                                                    "Sep-19", 
-                                                                                    "def/456/951", 
-                                                                                    "requirements"),
-                                                                                   new Qualification(
-                                                                                    "EYQ-746", 
-                                                                                    "test", 
-                                                                                    "CACHE",
-                                                                                    4, 
-                                                                                    "Sep-15", 
-                                                                                    null, 
-                                                                                    "ghi/456/951", 
-                                                                                    "requirements"),
-                                                                                   new Qualification(
-                                                                                    "EYQ-752", 
-                                                                                    "test", 
-                                                                                    "CACHE",
-                                                                                    4, 
-                                                                                    "Sep-21", 
-                                                                                    null, 
-                                                                                    "ghi/456/951", 
-                                                                                    "requirements")
-                                                                               }};
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-741",
+                                                        "test",
+                                                        "Pearson",
+                                                        4,
+                                                        null,
+                                                        "Sep-19",
+                                                        "def/456/951",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-746",
+                                                        "test",
+                                                        "CACHE",
+                                                        4,
+                                                        "Sep-15",
+                                                        null,
+                                                        "ghi/456/951",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-752",
+                                                        "test",
+                                                        "CACHE",
+                                                        4,
+                                                        "Sep-21",
+                                                        null,
+                                                        "ghi/456/951",
+                                                        "requirements")
+                                  }
+                      };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
                                                      It.IsAny<QueryBuilder<Qualification>>(),
                                                      It.IsAny<CancellationToken>()))
                             .ReturnsAsync(results);
-        
+
         var mockQueryBuilder = new MockQueryBuilder();
         var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
         var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
@@ -265,7 +292,7 @@ public class ContentfulContentFilterServiceTests
                                                      It.IsAny<QueryBuilder<Qualification>>(),
                                                      It.IsAny<CancellationToken>()))
                             .ThrowsAsync(new Exception());
-        
+
         var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
         var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object);
 
@@ -278,7 +305,7 @@ public class ContentfulContentFilterServiceTests
 
 public class MockQueryBuilder : QueryBuilder<Qualification>
 {
-    public List<KeyValuePair<string,string>> GetQueryString()
+    public List<KeyValuePair<string, string>> GetQueryString()
     {
         return _querystringValues;
     }

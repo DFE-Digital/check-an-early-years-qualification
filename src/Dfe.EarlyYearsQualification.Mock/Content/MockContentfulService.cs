@@ -203,16 +203,16 @@ public class MockContentfulService : IContentService
 
     public async Task<QualificationListPage?> GetQualificationListPage()
     {
-        return await Task.FromResult(new QualificationListPage()
-                                   {
-                                       Header = "Test Header",
-                                       BackButton = new NavigationLink()
-                                                    {
-                                                        DisplayText = "TEST",
-                                                        Href = "/questions/what-is-the-awarding-organisation",
-                                                        OpenInNewTab = false
-                                                    }
-                                   });
+        return await Task.FromResult(new QualificationListPage
+                                     {
+                                         Header = "Test Header",
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "TEST",
+                                                          Href = "/questions/what-is-the-awarding-organisation",
+                                                          OpenInNewTab = false
+                                                      }
+                                     });
     }
 
     public async Task<StartPage?> GetStartPage()
@@ -291,10 +291,12 @@ public class MockContentfulService : IContentService
                               Label = "Level 3", Value = "3"
                           }
                       };
-        return CreateRadioQuestionPage("What level is the qualification?", options, "/questions/when-was-the-qualification-started");
+        return CreateRadioQuestionPage("What level is the qualification?", options,
+                                       "/questions/when-was-the-qualification-started");
     }
 
-    private static RadioQuestionPage CreateRadioQuestionPage(string question, List<Option> options, string backButtonURL)
+    private static RadioQuestionPage CreateRadioQuestionPage(string question, List<Option> options,
+                                                             string backButtonUrl)
     {
         return new RadioQuestionPage
                {
@@ -305,7 +307,7 @@ public class MockContentfulService : IContentService
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",
-                                    Href = backButtonURL,
+                                    Href = backButtonUrl,
                                     OpenInNewTab = false
                                 }
                };

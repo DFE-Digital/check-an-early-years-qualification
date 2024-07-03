@@ -677,7 +677,7 @@ public class QuestionsControllerTests
                                                          null, null, null),
                                        new("4", "TEST",
                                                          "All Higher Education Institutes", 123, null,
-                                                         null, null, null),
+                                                         null, null, null)
                                    };
         
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
