@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Globalization;
 using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
@@ -15,24 +14,23 @@ public class ContentfulContentFilterService(
     : IContentFilterService
 {
     private const int Day = 28;
-    private static readonly DateTimeFormatInfo CurrentFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
 
-    private readonly ReadOnlyDictionary<int, string>
+    private readonly ReadOnlyDictionary<string, int>
         _months = new(
-                      new Dictionary<int, string>
+                      new Dictionary<string, int>
                       {
-                          { 1, CurrentFormatInfo.AbbreviatedMonthNames[0] },
-                          { 2, CurrentFormatInfo.AbbreviatedMonthNames[1] },
-                          { 3, CurrentFormatInfo.AbbreviatedMonthNames[2] },
-                          { 4, CurrentFormatInfo.AbbreviatedMonthNames[3] },
-                          { 5, CurrentFormatInfo.AbbreviatedMonthNames[4] },
-                          { 6, CurrentFormatInfo.AbbreviatedMonthNames[5] },
-                          { 7, CurrentFormatInfo.AbbreviatedMonthNames[6] },
-                          { 8, CurrentFormatInfo.AbbreviatedMonthNames[7] },
-                          { 9, CurrentFormatInfo.AbbreviatedMonthNames[8] },
-                          { 10, CurrentFormatInfo.AbbreviatedMonthNames[9] },
-                          { 11, CurrentFormatInfo.AbbreviatedMonthNames[10] },
-                          { 12, CurrentFormatInfo.AbbreviatedMonthNames[11] }
+                          { "Jan", 1 },
+                          { "Feb", 2 },
+                          { "Mar", 3 },
+                          { "Apr", 4 },
+                          { "May", 5 },
+                          { "Jun", 6 },
+                          { "Jul", 7 },
+                          { "Aug", 8 },
+                          { "Sep", 9 },
+                          { "Oct", 10 },
+                          { "Nov", 11 },
+                          { "Dec", 12 }
                       });
 
     // Used by the unit tests to inject a mock builder that returns the query params
@@ -94,6 +92,7 @@ public class ContentfulContentFilterService(
             }
             else if (qualificationStartDate is null
                      && qualificationEndDate is not null
+                     // ReSharper disable once MergeSequentialChecks
                      && enteredStartDate <= qualificationEndDate)
             {
                 // if qualification start date is null, check entered start date is <= ToWhichYear & add to results
@@ -127,7 +126,9 @@ public class ContentfulContentFilterService(
         var splitQualificationDate = qualificationDate.Split('-');
         if (splitQualificationDate.Length != 2) return null;
 
-        var month = _months.FirstOrDefault(x => x.Value == splitQualificationDate[0]).Key;
+        var abbreviatedMonth = splitQualificationDate[0];
+
+        var month = _months[abbreviatedMonth];
         var year = Convert.ToInt32(splitQualificationDate[1]) + 2000;
 
         return new DateOnly(year, month, Day);
