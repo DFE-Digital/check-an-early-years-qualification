@@ -73,20 +73,16 @@ public class ChallengeResourceFilterAttribute(
 
         var cookieIsPresent = context.HttpContext.Request.Cookies.ContainsKey(AuthSecretCookieName);
 
-        if (cookieIsPresent && ConfiguredKeys.Contains(context.HttpContext.Request.Cookies[AuthSecretCookieName]))
+        switch (cookieIsPresent)
         {
-            return;
-        }
-
-        // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-        // ..."the logging message template should not vary between calls to LoggerExtensions.LogWarning(ILogger, string?, params object?[])"
-        if (cookieIsPresent)
-        {
-            logger.LogWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)} (incorrect value submitted)");
-        }
-        else
-        {
-            logger.LogWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)}");
+            case true when ConfiguredKeys.Contains(context.HttpContext.Request.Cookies[AuthSecretCookieName]):
+                return;
+            case true:
+                logger.LogWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)} (incorrect value submitted)");
+                break;
+            default:
+                logger.LogWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)}");
+                break;
         }
 
         var requestedPath = context.HttpContext.Request.Path;
