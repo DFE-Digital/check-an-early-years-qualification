@@ -15,4 +15,5 @@ public static class ContentTypes
     public const string DateQuestionPage = "dateQuestionPage";
     public const string DropdownQuestionPage = "dropdownQuestionPage";
     public const string QualificationListPage = "qualificationListPage";
+    public const string ConfirmQualificationPage = "confirmQualificationPage";
 }

@@ -47,14 +47,28 @@ describe('A spec used to test the main back button route through the journey', (
             expect(loc.pathname).to.eq('/qualifications');
         })
 
-        cy.get('a[href="/qualifications/qualification-details/eyq-240"]').click();
+        cy.get('a[href="/confirm-qualification/eyq-240"]').click();
+
+        // confirm qualification page
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq('/confirm-qualification/eyq-240');
+        })
+
+        cy.get('#yes').click();
+        cy.get('button[id="confirm-qualification-button"]').click();
 
         // qualifications page (This is only a temporary page)
         cy.location().should((loc) => {
-            expect(loc.pathname).to.eq('/qualifications/qualification-details/eyq-240');
+            expect(loc.pathname).to.eq('/qualifications/qualification-details/EYQ-240');
         })
         
         /// Time to go back through the journey!
+        cy.get('#back-button').click();
+
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq('/confirm-qualification/eyq-240');
+        })
+        
         cy.get('#back-button').click();
 
         cy.location().should((loc) => {
