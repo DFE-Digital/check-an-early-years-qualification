@@ -16,7 +16,7 @@ public class DateQuestionModel : BaseQuestionModel
 
     public bool IsModelValid()
     {
-        if (SelectedMonth < 1 || SelectedMonth > 12)
+        if (SelectedMonth is < 1 or > 12)
         {
             return false;
         }
