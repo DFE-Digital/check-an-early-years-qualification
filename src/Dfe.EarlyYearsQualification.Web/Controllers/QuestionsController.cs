@@ -36,6 +36,8 @@ public class QuestionsController(
         if (!ModelState.IsValid)
         {
             var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
+            
+            // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
                 model = await MapRadioModel(model, questionPage, nameof(this.WhereWasTheQualificationAwarded),

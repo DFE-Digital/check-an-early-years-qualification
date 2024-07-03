@@ -35,6 +35,8 @@ public class ContentfulContentService(
     public async Task<StartPage?> GetStartPage()
     {
         var startPageEntries = await GetEntriesByType<StartPage>();
+
+        // ReSharper disable once InvertIf
         if (startPageEntries is null || !startPageEntries.Any())
         {
             logger.LogWarning("No start page entry returned");
@@ -60,6 +62,8 @@ public class ContentfulContentService(
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
         var accessibilityStatementEntities = await GetEntriesByType<AccessibilityStatementPage>();
+
+        // ReSharper disable once InvertIf
         if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
         {
             logger.LogWarning("No accessibility statement page entry returned");
@@ -116,6 +120,8 @@ public class ContentfulContentService(
     public async Task<AdvicePage?> GetAdvicePage(string entryId)
     {
         var advicePage = await GetEntryById<AdvicePage>(entryId);
+
+        // ReSharper disable once InvertIf
         if (advicePage is null)
         {
             logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
@@ -143,6 +149,8 @@ public class ContentfulContentService(
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
         var phaseBannerEntities = await GetEntriesByType<PhaseBanner>();
+
+        // ReSharper disable once InvertIf
         if (phaseBannerEntities is null || !phaseBannerEntities.Any())
         {
             logger.LogWarning("No phase banner entry returned");
@@ -155,6 +163,8 @@ public class ContentfulContentService(
     public async Task<CookiesBanner?> GetCookiesBannerContent()
     {
         var cookiesBannerEntry = await GetEntriesByType<CookiesBanner>();
+
+        // ReSharper disable once InvertIf
         if (cookiesBannerEntry is null || !cookiesBannerEntry.Any())
         {
             logger.LogWarning("No cookies banner entry returned");
@@ -173,6 +183,8 @@ public class ContentfulContentService(
     public async Task<ConfirmQualificationPage?> GetConfirmQualificationPage()
     {
         var confirmQualificationEntities = await GetEntriesByType<ConfirmQualificationPage>();
+
+        // ReSharper disable once InvertIf
         if (confirmQualificationEntities is null || !confirmQualificationEntities.Any())
         {
             logger.LogWarning("No confirm qualification page entry returned");
