@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
@@ -123,14 +124,49 @@ public class ContentfulContentFilterService(
 
     private DateOnly? ConvertToDateTime(string qualificationDate)
     {
-        var splitQualificationDate = qualificationDate.Split('-');
-        if (splitQualificationDate.Length != 2) return null;
+        var (isValid, month, yearMod2000) = ValidateQualificationDate(qualificationDate);
 
-        var abbreviatedMonth = splitQualificationDate[0];
+        if (!isValid)
+        {
+            return null;
+        }
 
-        var month = _months[abbreviatedMonth];
-        var year = Convert.ToInt32(splitQualificationDate[1]) + 2000;
+        var year = yearMod2000 + 2000;
 
         return new DateOnly(year, month, Day);
+    }
+
+    private (bool isValid, int month, int yearMod2000) ValidateQualificationDate(string qualificationDate)
+    {
+        var splitQualificationDate = qualificationDate.Split('-');
+        if (splitQualificationDate.Length != 2)
+        {
+            logger.LogError("Found qualification date {QualificationDate} with unexpected format", qualificationDate);
+            return (false, 0, 0);
+        }
+
+        var abbreviatedMonth = splitQualificationDate[0];
+        var yearFilter = splitQualificationDate[1];
+
+        var yearIsValid = int.TryParse(yearFilter,
+                                       NumberStyles.Integer,
+                                       NumberFormatInfo.InvariantInfo,
+                                       out var yearPart);
+
+        if (!yearIsValid)
+        {
+            logger.LogError("Qualification date {QualificationDate} contains unexpected year value", qualificationDate);
+            return (false, 0, 0);
+        }
+
+        if (!_months.TryGetValue(abbreviatedMonth, out var month))
+        {
+            logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
+                            qualificationDate);
+
+            return (false, 0, 0);
+        }
+
+        return (true, month, yearPart);
     }
 }

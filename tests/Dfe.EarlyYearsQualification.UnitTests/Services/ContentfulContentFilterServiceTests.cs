@@ -3,6 +3,7 @@ using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -300,6 +301,80 @@ public class ContentfulContentFilterServiceTests
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_DataContainsInvalidMonth_LogsError()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Sept-15", // "Sept" in the data should be "Sep"
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(4, 5, 2016);
+
+        mockLogger.VerifyError("Qualification date Sept-15 contains unexpected month value");
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_DataContainsInvalidYear_LogsError()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Sep-15", // "Sept" in the data should be "Sep"
+                                                        "Aug-1a",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(4, 5, 2016);
+
+        mockLogger.VerifyError("Qualification date Aug-1a contains unexpected year value");
     }
 }
 
