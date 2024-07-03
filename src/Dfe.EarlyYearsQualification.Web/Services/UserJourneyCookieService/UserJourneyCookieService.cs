@@ -65,6 +65,7 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         }
         catch
         {
+            logger.LogWarning("Failed to deserialize cookie");
             ResetUserJourneyCookie();
             return new UserJourneyModel();
         }
