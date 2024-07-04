@@ -46,13 +46,13 @@ public static class SecureHeaderConfiguration
                                                 CommandType = CspCommandType.Directive,
                                                 DirectiveOrUri = "sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw="
                                             };
-        
+
         var govukAllMinifiedElement = new ContentSecurityPolicyElement
-                                            {
-                                                CommandType = CspCommandType.Directive,
-                                                DirectiveOrUri = "sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo="
-                                            };
-        
+                                      {
+                                          CommandType = CspCommandType.Directive,
+                                          DirectiveOrUri = "sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo="
+                                      };
+
         var dropdownPageCheckbox = new ContentSecurityPolicyElement
                                    {
                                        CommandType = CspCommandType.Directive,
@@ -71,7 +71,7 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukAllMinifiedElement);
         configuration.ContentSecurityPolicyConfiguration.FrameAncestors.Add(contentfulCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(dropdownPageCheckbox);
-        
+
         return configuration;
     }
 }

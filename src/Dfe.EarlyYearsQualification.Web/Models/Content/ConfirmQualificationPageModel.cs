@@ -13,7 +13,7 @@ public class ConfirmQualificationPageModel
     public string DateAddedLabel { get; init; } = string.Empty;
     public string RadioHeading { get; init; } = string.Empty;
     public List<OptionModel> Options { get; init; } = [];
-    public bool HasErrors { get; set; } = false;
+    public bool HasErrors { get; set; }
     public string ErrorBannerHeading { get; init; } = string.Empty;
     public string ErrorBannerLink { get; init; } = string.Empty;
     public string ErrorText { get; init; } = string.Empty;

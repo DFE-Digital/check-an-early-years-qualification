@@ -33,12 +33,12 @@ public class MockContentfulSetupTests
         _ = ServiceCollectionExtensions.AddMockContentfulServices(services.Object);
 
         serviceList.Count.Should().Be(2);
-        
+
         var service = serviceList.First();
         service.ImplementationType.Should().Be(typeof(MockContentfulService));
         service.ServiceType.Should().Be(typeof(IContentService));
         service.Lifetime.Should().Be(ServiceLifetime.Singleton);
-        
+
         var filterService = serviceList[1];
         filterService.ImplementationType.Should().Be(typeof(MockContentfulFilterService));
         filterService.ServiceType.Should().Be(typeof(IContentFilterService));

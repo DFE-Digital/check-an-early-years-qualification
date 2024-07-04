@@ -212,11 +212,11 @@ public class UserJourneyCookieServiceTests
                         http.HttpContext!.Response.Cookies.Append(CookieKeyNames.UserJourneyKey,
                                                                   serializedModelToCheck,
                                                                   It.Is<CookieOptions>(
-                                                                   options =>
-                                                                       options.Secure
-                                                                       && options.HttpOnly
-                                                                       && options.Expires > in364Days
-                                                                       && options.Expires < inOneYear)
+                                                                       options =>
+                                                                           options.Secure
+                                                                           && options.HttpOnly
+                                                                           && options.Expires > in364Days
+                                                                           && options.Expires < inOneYear)
                                                                  ),
                     Times.Once);
     }
