@@ -17,8 +17,8 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
     {
         return await GetView(AdvicePages.QualificationsAchievedOutsideTheUk);
     }
-
-    [HttpGet("level-2-qualifications-started-between-1-sept-2014-&-31-aug-2019")]
+    
+    [HttpGet("level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019")]
     public async Task<IActionResult> QualificationsStartedBetweenSept2014AndAug2019()
     {
         return await GetView(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019);

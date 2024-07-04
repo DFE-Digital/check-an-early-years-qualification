@@ -506,7 +506,7 @@ public class QuestionsControllerTests
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
-                                                                      Option = "2"
+                                                                      Option = "3"
                                                                   });
 
         result.Should().NotBeNull();
@@ -515,8 +515,35 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ActionName.Should().Be("WhatIsTheAwardingOrganisation");
+        
+        mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification("3"), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task Post_WhatLevelIsTheQualification_Level2WithInDate_ReturnsRedirectResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
 
-        mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification("2"), Times.Once);
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie())
+                                    .Returns(new UserJourneyModel() { WhenWasQualificationAwarded = "06/2015" });
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
+
+        var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
+                                                                  {
+                                                                      Option = "2"
+                                                                  });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
+        resultType!.ControllerName.Should().Be("Advice");
     }
 
     [TestMethod]
