@@ -115,9 +115,29 @@ public class QuestionsController(
         
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
+        if (model.Option == "2" && WithinDateRange())
+        {
+            return RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice");
+        }
+
         return RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation));
     }
-    
+
+    private bool WithinDateRange()
+    {
+        var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
+        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
+        if (qualificationAwardedDateSplit.Length == 2 
+            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth) 
+            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
+        {
+            var date = new DateOnly(parsedStartYear, parsedStartMonth, 1);
+            return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
+        }
+
+        return false;
+    }
+
     [HttpGet("what-is-the-awarding-organisation")]
     public async Task<IActionResult> WhatIsTheAwardingOrganisation()
     {
