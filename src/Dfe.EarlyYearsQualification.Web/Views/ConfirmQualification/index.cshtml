@@ -1,0 +1,94 @@
+﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.ConfirmQualificationPageModel
+
+@{
+    ViewData["Title"] = "Confirm Qualification";
+}
+
+@{
+    await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        @if (Model.HasErrors)
+        {
+            <div id="error-banner" class="govuk-error-summary" data-module="govuk-error-summary">
+                <div role="alert">
+                    <h2 class="govuk-error-summary__title">
+                        @Model.ErrorBannerHeading
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                            <li>
+                                <a id="error-banner-link" href="#confirm-qualification-choice-error">@Model.ErrorBannerLink</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+        <h1 id="heading" class="govuk-heading-xl">@Model.Heading</h1>
+        <dl class="govuk-summary-list">
+            <div id="qualification-name-row" class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @Model.QualificationLabel
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.QualificationName
+                </dd>
+            </div>
+            <div id="qualification-level-row" class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @Model.LevelLabel
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.QualificationLevel
+                </dd>
+            </div>
+            <div id="qualification-org-row" class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @Model.AwardingOrganisationLabel
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.QualificationAwardingOrganisation
+                </dd>
+            </div>
+            <div id="qualification-date-added-row" class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @Model.DateAddedLabel
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.QualificationDateAdded
+                </dd>
+            </div>
+        </dl>
+        <form id="confirm-qualification" asp-controller="ConfirmQualification" asp-action="Confirm" method="post">
+            <input type="hidden" name="qualificationId" value="@Model.QualificationId">
+            <div id="confirm-qualification-form-group" class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+                <h4 id="radio-heading" class="govuk-heading-m">@Model.RadioHeading</h4>
+                <fieldset class="govuk-fieldset" role="group" aria-describedby="confirm-qualification-choice-error">
+                    @if (Model.HasErrors)
+                    {
+                        <p id="confirm-qualification-choice-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorText
+                        </p>
+                    }
+                    @foreach (var option in Model.Options)
+                    {
+                        <div class="govuk-radios__item">
+                            @Html.RadioButtonFor(x => x.ConfirmQualificationAnswer, option.Value, new { @class = "govuk-radios__input", id = option.Value })
+                            <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                @option.Label
+                            </label>
+                        </div>
+                    }
+                </fieldset>
+            </div>
+            <div class="govuk-form-group">
+                <button id="confirm-qualification-button" class="govuk-button" data-module="govuk-button">
+                    @Model.ButtonText
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

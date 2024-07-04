@@ -39,7 +39,7 @@ describe('A spec used to test the main back button route through the journey', (
             expect(loc.pathname).to.eq('/questions/what-is-the-awarding-organisation');
         })
 
-        cy.get('#awarding-organisation-select').select('A awarding organisation');
+        cy.get('#awarding-organisation-select').select(1); // first no-default item in the list
         cy.get('button[id="question-submit"]').click();
 
         // qualifications page (This is only a temporary page) - click a qualification in the list to move us on
@@ -47,14 +47,28 @@ describe('A spec used to test the main back button route through the journey', (
             expect(loc.pathname).to.eq('/qualifications');
         })
 
-        cy.get('a[href="/qualifications/qualification-details/eyq-240"]').click();
+        cy.get('a[href="/confirm-qualification/eyq-240"]').click();
+
+        // confirm qualification page
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq('/confirm-qualification/eyq-240');
+        })
+
+        cy.get('#yes').click();
+        cy.get('button[id="confirm-qualification-button"]').click();
 
         // qualifications page (This is only a temporary page)
         cy.location().should((loc) => {
-            expect(loc.pathname).to.eq('/qualifications/qualification-details/eyq-240');
+            expect(loc.pathname).to.eq('/qualifications/qualification-details/EYQ-240');
         })
         
         /// Time to go back through the journey!
+        cy.get('#back-button').click();
+
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq('/confirm-qualification/eyq-240');
+        })
+        
         cy.get('#back-button').click();
 
         cy.location().should((loc) => {

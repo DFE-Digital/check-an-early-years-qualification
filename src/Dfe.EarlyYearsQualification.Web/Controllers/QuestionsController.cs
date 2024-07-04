@@ -16,7 +16,8 @@ public class QuestionsController(
     ILogger<QuestionsController> logger,
     IContentService contentService,
     IHtmlRenderer renderer,
-    IUserJourneyCookieService userJourneyCookieService)
+    IUserJourneyCookieService userJourneyCookieService,
+    IContentFilterService contentFilterService)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -114,9 +115,29 @@ public class QuestionsController(
         
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
+        if (model.Option == "2" && WithinDateRange())
+        {
+            return RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice");
+        }
+
         return RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation));
     }
-    
+
+    private bool WithinDateRange()
+    {
+        var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
+        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
+        if (qualificationAwardedDateSplit.Length == 2 
+            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth) 
+            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
+        {
+            var date = new DateOnly(parsedStartYear, parsedStartMonth, 1);
+            return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
+        }
+
+        return false;
+    }
+
     [HttpGet("what-is-the-awarding-organisation")]
     public async Task<IActionResult> WhatIsTheAwardingOrganisation()
     {
@@ -127,7 +148,7 @@ public class QuestionsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var qualifications = await contentService.GetQualifications();
+        var qualifications = await GetFilteredQualifications();
 
         var model = MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications, nameof(this.WhatIsTheAwardingOrganisation),
                                  Questions);
@@ -143,7 +164,7 @@ public class QuestionsController(
             var questionPage = await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
             if (questionPage is not null)
             {
-                var qualifications = await contentService.GetQualifications();
+                var qualifications = await GetFilteredQualifications();
                 
                 model = MapDropdownModel(model, questionPage, qualifications, nameof(this.WhatIsTheAwardingOrganisation),
                                          Questions);
@@ -156,6 +177,30 @@ public class QuestionsController(
         userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue);
         
         return RedirectToAction("Get", "QualificationDetails");
+    }
+    
+    private async Task<List<Qualification>> GetFilteredQualifications()
+    {
+        var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
+        
+        int? level = null;
+        if (int.TryParse(cookie.LevelOfQualification, out var parsedLevel))
+        {
+            level = parsedLevel;
+        }
+
+        int? startDateMonth = null;
+        int? startDateYear = null;
+        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
+        if (qualificationAwardedDateSplit.Length == 2 
+            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth) 
+            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
+        {
+            startDateMonth = parsedStartMonth;
+            startDateYear = parsedStartYear;
+        }
+        
+        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear);
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName)
@@ -205,7 +250,12 @@ public class QuestionsController(
     private static DropdownQuestionModel MapDropdownModel(DropdownQuestionModel model, DropdownQuestionPage question, List<Qualification> qualifications, string actionName,
                                                           string controllerName)
     {
-        var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle).Distinct().Order().ToList();
+        var awardingOrganisationExclusions = new [] { "All Higher Education Institutes", "Various Awarding Organisations" };
+        var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle)
+                                                        .Distinct()
+                                                        .Where(x => !awardingOrganisationExclusions.Any(x.Contains))
+                                                        .Order()
+                                                        .ToList();
         
         model.ActionName = actionName;
         model.ControllerName = controllerName;

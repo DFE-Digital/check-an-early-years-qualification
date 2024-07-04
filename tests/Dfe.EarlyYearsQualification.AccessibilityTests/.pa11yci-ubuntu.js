@@ -11,10 +11,12 @@ var config = {
     urls: [
         "http://localhost:5000/",
         "http://localhost:5000/qualifications/qualification-details/eyq-240",
-        "http://localhost:5000/questions/where-was-the-qualification-awarded",
+        "http://localhost:5000/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019",
         "http://localhost:5000/advice/qualification-outside-the-united-kingdom",
+        "http://localhost:5000/questions/where-was-the-qualification-awarded",
         "http://localhost:5000/questions/when-was-the-qualification-started",
-        "http://localhost:5000/questions/what-level-is-the-qualification"
+        "http://localhost:5000/questions/what-level-is-the-qualification",
+        "http://localhost:5000/questions/what-is-the-awarding-organisation"
     ]
 };
 
