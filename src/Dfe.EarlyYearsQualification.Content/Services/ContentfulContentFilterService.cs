@@ -15,25 +15,24 @@ public class ContentfulContentFilterService(
     : IContentFilterService
 {
     private const int Day = 28;
-    private static readonly DateTimeFormatInfo CurrentFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
 
-    private readonly ReadOnlyDictionary<int, string>
-        _months = new(
-                      new Dictionary<int, string>
-                      {
-                          { 1, CurrentFormatInfo.AbbreviatedMonthNames[0] },
-                          { 2, CurrentFormatInfo.AbbreviatedMonthNames[1] },
-                          { 3, CurrentFormatInfo.AbbreviatedMonthNames[2] },
-                          { 4, CurrentFormatInfo.AbbreviatedMonthNames[3] },
-                          { 5, CurrentFormatInfo.AbbreviatedMonthNames[4] },
-                          { 6, CurrentFormatInfo.AbbreviatedMonthNames[5] },
-                          { 7, CurrentFormatInfo.AbbreviatedMonthNames[6] },
-                          { 8, CurrentFormatInfo.AbbreviatedMonthNames[7] },
-                          { 9, CurrentFormatInfo.AbbreviatedMonthNames[8] },
-                          { 10, CurrentFormatInfo.AbbreviatedMonthNames[9] },
-                          { 11, CurrentFormatInfo.AbbreviatedMonthNames[10] },
-                          { 12, CurrentFormatInfo.AbbreviatedMonthNames[11] }
-                      });
+    private static readonly ReadOnlyDictionary<string, int>
+        Months = new(
+                     new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase)
+                     {
+                         { "Jan", 1 },
+                         { "Feb", 2 },
+                         { "Mar", 3 },
+                         { "Apr", 4 },
+                         { "May", 5 },
+                         { "Jun", 6 },
+                         { "Jul", 7 },
+                         { "Aug", 8 },
+                         { "Sep", 9 },
+                         { "Oct", 10 },
+                         { "Nov", 11 },
+                         { "Dec", 12 }
+                     });
 
     // Used by the unit tests to inject a mock builder that returns the query params
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
@@ -94,6 +93,8 @@ public class ContentfulContentFilterService(
             }
             else if (qualificationStartDate is null
                      && qualificationEndDate is not null
+                     // ReSharper disable once MergeSequentialChecks
+                     // ...reveals the intention more clearly this way
                      && enteredStartDate <= qualificationEndDate)
             {
                 // if qualification start date is null, check entered start date is <= ToWhichYear & add to results
@@ -124,12 +125,49 @@ public class ContentfulContentFilterService(
 
     private DateOnly? ConvertToDateTime(string qualificationDate)
     {
-        var splitQualificationDate = qualificationDate.Split('-');
-        if (splitQualificationDate.Length != 2) return null;
+        var (isValid, month, yearMod2000) = ValidateQualificationDate(qualificationDate);
 
-        var month = _months.FirstOrDefault(x => x.Value == splitQualificationDate[0]).Key;
-        var year = Convert.ToInt32(splitQualificationDate[1]) + 2000;
+        if (!isValid)
+        {
+            return null;
+        }
+
+        var year = yearMod2000 + 2000;
 
         return new DateOnly(year, month, Day);
+    }
+
+    private (bool isValid, int month, int yearMod2000) ValidateQualificationDate(string qualificationDate)
+    {
+        var splitQualificationDate = qualificationDate.Split('-');
+        if (splitQualificationDate.Length != 2)
+        {
+            logger.LogError("Qualification date {QualificationDate} has unexpected format", qualificationDate);
+            return (false, 0, 0);
+        }
+
+        var abbreviatedMonth = splitQualificationDate[0];
+        var yearFilter = splitQualificationDate[1];
+
+        var yearIsValid = int.TryParse(yearFilter,
+                                       NumberStyles.Integer,
+                                       NumberFormatInfo.InvariantInfo,
+                                       out var yearPart);
+
+        if (!yearIsValid)
+        {
+            logger.LogError("Qualification date {QualificationDate} contains unexpected year value", qualificationDate);
+            return (false, 0, 0);
+        }
+
+        if (!Months.TryGetValue(abbreviatedMonth, out var month))
+        {
+            logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
+                            qualificationDate);
+
+            return (false, 0, 0);
+        }
+
+        return (true, month, yearPart);
     }
 }

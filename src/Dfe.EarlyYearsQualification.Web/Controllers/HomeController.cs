@@ -27,9 +27,9 @@ public class HomeController(
         }
 
         var model = await Map(startPageContent);
-        
+
         userJourneyCookieService.ResetUserJourneyCookie();
-        
+
         return View(model);
     }
 

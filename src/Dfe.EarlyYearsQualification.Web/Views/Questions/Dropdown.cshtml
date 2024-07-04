@@ -16,13 +16,13 @@
 </script>
 
 @{
-    await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
+    await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
-        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
+        <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+            @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
             {
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -37,20 +37,20 @@
                             <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
                         </p>
                     }
-                    
+
                 </fieldset>
-                
+
                 <h1 class="govuk-label-wrapper">
                     @Html.Label(Model.DropdownId, Model.DropdownHeading, new { @class = "govuk-label govuk-fieldset__legend--m" })
                 </h1>
-                
+
                 <div class="govuk-form-group">
                     @Html.DropDownListFor(x => x.SelectedValue, Model.Values, new { @class = Model.HasErrors ? "govuk-select govuk-select--error" : "govuk-select", id = Model.DropdownId })
                 </div>
-                
+
                 <div class="govuk-form-group">
                     <div class="govuk-checkboxes__item">
-                        @Html.CheckBoxFor(x => x.NotInTheList, new { @class = "govuk-checkboxes__input", id=Model.CheckboxId, name="awarding-organisation" })
+                        @Html.CheckBoxFor(x => x.NotInTheList, new { @class = "govuk-checkboxes__input", id = Model.CheckboxId, name = "awarding-organisation" })
                         @Html.Label(Model.CheckboxId, Model.NotInListText, new { @class = "govuk-label govuk-checkboxes__label" })
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                         @Model.CtaButtonText
                     </button>
                 </div>
-                }
-            </div>
+            }
+        </div>
     </div>
 </div>

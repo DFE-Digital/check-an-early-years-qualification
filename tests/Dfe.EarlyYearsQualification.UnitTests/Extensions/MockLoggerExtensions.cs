@@ -17,7 +17,7 @@ public static class MockLoggerExtensions
 
     public static void VerifyCritical<T>(this Mock<ILogger<T>> mockLogger, string expectedMessage)
     {
-      Verify(mockLogger, LogLevel.Critical, expectedMessage, Times.Once);
+        Verify(mockLogger, LogLevel.Critical, expectedMessage, Times.Once);
     }
 
     private static void Verify<T>(Mock<ILogger<T>> mockLogger,

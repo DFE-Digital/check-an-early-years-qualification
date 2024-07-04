@@ -50,7 +50,7 @@ public class MockContentfulServiceTests
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
-        
+
         var page = await contentfulService.GetAdvicePage("Invalid entry Id");
 
         page.Should().BeNull();
