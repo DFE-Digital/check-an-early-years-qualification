@@ -24,33 +24,35 @@
         @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
         {
             <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
-                <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+
                         <h1 class="govuk-heading-l" id="question">
                             @Model.Question
                         </h1>
-                    </legend>
 
-                    <h1 class="govuk-label-wrapper">
-                        @Html.Label(Model.DropdownId, Model.DropdownHeading, new { @class = "govuk-label govuk-fieldset__legend--m" })
-                    </h1>
 
-                    @if (Model.HasErrors)
-                    {
-                        <p id="dropdown-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
-                        </p>
-                    }
+                        <h1 class="govuk-label-wrapper">
+                            @Html.Label(Model.DropdownId, Model.DropdownHeading, new { @class = "govuk-label govuk-fieldset__legend--m" })
+                        </h1>
 
-                    <div class="govuk-form-group">
-                        @Html.DropDownListFor(x => x.SelectedValue, Model.Values, new { @class = Model.HasErrors ? "govuk-select govuk-select--error" : "govuk-select", id = Model.DropdownId })
+                        @if (Model.HasErrors)
+                        {
+                            <p id="dropdown-error" class="govuk-error-message">
+                                <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
+                            </p>
+                        }
+
+                        <div class="govuk-form-group">
+                            @Html.DropDownListFor(x => x.SelectedValue, Model.Values, new { @class = Model.HasErrors ? "govuk-select govuk-select--error" : "govuk-select", id = Model.DropdownId })
+                        </div>
+
+                        <div class="govuk-checkboxes__item">
+                            @Html.CheckBoxFor(x => x.NotInTheList, new { @class = "govuk-checkboxes__input", id = Model.CheckboxId, name = "awarding-organisation" })
+                            @Html.Label(Model.CheckboxId, Model.NotInListText, new { @class = "govuk-label govuk-checkboxes__label" })
+                        </div>
                     </div>
-
-                    <div class="govuk-checkboxes__item">
-                        @Html.CheckBoxFor(x => x.NotInTheList, new { @class = "govuk-checkboxes__input", id = Model.CheckboxId, name = "awarding-organisation" })
-                        @Html.Label(Model.CheckboxId, Model.NotInListText, new { @class = "govuk-label govuk-checkboxes__label" })
-                    </div>
-                </div>
+                </legend>
 
                 <div class="govuk-form-group">
                     <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
