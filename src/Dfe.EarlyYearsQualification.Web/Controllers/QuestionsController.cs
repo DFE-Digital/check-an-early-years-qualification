@@ -207,7 +207,7 @@ public class QuestionsController(
             startDateYear = parsedStartYear;
         }
 
-        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear);
+        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null);
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName)
