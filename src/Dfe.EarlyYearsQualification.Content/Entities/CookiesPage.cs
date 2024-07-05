@@ -19,4 +19,6 @@ public class CookiesPage
     public string ErrorText { get; init; } = string.Empty;
 
     public NavigationLink? BackButton { get; init; }
+
+    public string FormHeading { get; init; } = string.Empty;
 }

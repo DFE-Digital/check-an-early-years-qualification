@@ -16,20 +16,25 @@
 </script>
 
 @{
-    await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
-            @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
-            {
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
+        {
+            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading" id="question">
+                        <h1 class="govuk-heading-l" id="question">
                             @Model.Question
                         </h1>
                     </legend>
+
+
+                    <h1 class="govuk-label-wrapper">
+                        @Html.Label(Model.DropdownId, Model.DropdownHeading, new { @class = "govuk-label govuk-fieldset__legend--m" })
+                    </h1>
 
                     @if (Model.HasErrors)
                     {
@@ -38,29 +43,23 @@
                         </p>
                     }
 
-                </fieldset>
+                    <div class="govuk-form-group">
+                        @Html.DropDownListFor(x => x.SelectedValue, Model.Values, new { @class = Model.HasErrors ? "govuk-select govuk-select--error" : "govuk-select", id = Model.DropdownId })
+                    </div>
 
-                <h1 class="govuk-label-wrapper">
-                    @Html.Label(Model.DropdownId, Model.DropdownHeading, new { @class = "govuk-label govuk-fieldset__legend--m" })
-                </h1>
-
-                <div class="govuk-form-group">
-                    @Html.DropDownListFor(x => x.SelectedValue, Model.Values, new { @class = Model.HasErrors ? "govuk-select govuk-select--error" : "govuk-select", id = Model.DropdownId })
-                </div>
-
-                <div class="govuk-form-group">
                     <div class="govuk-checkboxes__item">
                         @Html.CheckBoxFor(x => x.NotInTheList, new { @class = "govuk-checkboxes__input", id = Model.CheckboxId, name = "awarding-organisation" })
                         @Html.Label(Model.CheckboxId, Model.NotInListText, new { @class = "govuk-label govuk-checkboxes__label" })
                     </div>
-                </div>
+                </fieldset>
+            </div>
 
-                <div class="govuk-form-group">
-                    <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
-                        @Model.CtaButtonText
-                    </button>
-                </div>
-            }
-        </div>
+            <div class="govuk-form-group">
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        }
+
     </div>
 </div>
