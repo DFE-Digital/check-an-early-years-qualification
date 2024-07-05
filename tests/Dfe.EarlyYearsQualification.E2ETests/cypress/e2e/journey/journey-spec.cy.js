@@ -65,11 +65,11 @@ describe('A spec used to test the various routes through the journey', () => {
       expect(loc.pathname).to.eq('/qualifications');
     })
 
-    cy.get('a[href="/confirm-qualification/eyq-240"]').click();
+    cy.get('a[href="/confirm-qualification/EYQ-102"]').click();
 
     // confirm qualification page
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/confirm-qualification/eyq-240');
+      expect(loc.pathname).to.eq('/confirm-qualification/EYQ-102');
     })
 
     cy.get('#yes').click();
