@@ -25,3 +25,24 @@ body {
 .govuk-radios__input {
     z-index: 1;
 }
+
+.chevron-card__wrapper {
+    padding: 19px 0 4px;
+    position: relative;
+}
+
+.chevron-card__link:after {
+    border-right: 3px solid #1d70b8;
+    border-top: 3px solid #1d70b8;
+    content: "";
+    display: block;
+    height: 14px;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    margin-top: 5px;
+    -webkit-transform: translateY(0) rotate(45deg) scale(1);
+    -ms-transform: translateY(0) rotate(45deg) scale(1);
+    transform: translateY(0) rotate(45deg) scale(1);
+    width: 14px;
+}

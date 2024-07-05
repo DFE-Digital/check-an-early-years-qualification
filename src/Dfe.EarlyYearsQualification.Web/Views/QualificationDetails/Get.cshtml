@@ -38,8 +38,8 @@
         </div>
             @foreach (var qualification in Model.Qualifications)
             {
-                <div>
-                    <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })" class="govuk-link govuk-heading-m">
+                <div class="chevron-card__wrapper">
+                    <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })" class="govuk-link govuk-heading-m chevron-card__link">
                         @qualification.QualificationName
                     </a>
                     <dl class="govuk-summary-list govuk-summary-list--no-border">
