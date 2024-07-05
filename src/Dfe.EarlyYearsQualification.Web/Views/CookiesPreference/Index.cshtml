@@ -58,7 +58,7 @@
 
                     <div class="govuk-radios" data-module="govuk-radios">
                         <p id="cookies-choice-error" class="govuk-error-message" hidden>
-                            <span class="govuk-visually-hidden">Error:</span> Please select a preference
+                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorText
                         </p>
                         @foreach (var option in Model.Options)
                         {
