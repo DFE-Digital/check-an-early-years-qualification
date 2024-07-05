@@ -50,7 +50,7 @@ public class MockContentfulServiceTests
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
-        
+
         var page = await contentfulService.GetAdvicePage("Invalid entry Id");
 
         page.Should().BeNull();
@@ -255,6 +255,44 @@ public class MockContentfulServiceTests
                                                       Href = "/questions/what-is-the-awarding-organisation",
                                                       OpenInNewTab = false
                                                   });
+    }
+
+    [TestMethod]
+    public async Task GetConfirmQualificationPage_ReturnsCorrectMockData()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetConfirmQualificationPage();
+
+        result.Should().NotBeNull();
+        result!.Options.Should().BeEquivalentTo([
+                                                    new Option
+                                                    {
+                                                        Label = "yes",
+                                                        Value = "yes"
+                                                    },
+                                                    new Option
+                                                    {
+                                                        Label = "no",
+                                                        Value = "no"
+                                                    }
+                                                ]);
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "Test back button",
+                                                      OpenInNewTab = false,
+                                                      Href = "/qualifications"
+                                                  });
+        result.LevelLabel.Should().Be("Test level label");
+        result.ButtonText.Should().Be("Test button text");
+        result.ErrorText.Should().Be("Test error text");
+        result.Heading.Should().Be("Test heading");
+        result.QualificationLabel.Should().Be("Test qualification label");
+        result.RadioHeading.Should().Be("Test radio heading");
+        result.AwardingOrganisationLabel.Should().Be("Test awarding organisation label");
+        result.DateAddedLabel.Should().Be("Test date added label");
+        result.ErrorBannerHeading.Should().Be("Test error banner heading");
+        result.ErrorBannerLink.Should().Be("Test error banner link");
     }
 
     [TestMethod]

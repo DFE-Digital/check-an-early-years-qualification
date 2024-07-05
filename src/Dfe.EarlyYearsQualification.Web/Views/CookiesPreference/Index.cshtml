@@ -22,56 +22,54 @@
 }
 
 @{
-    await Html.RenderPartialAsync("Partials/BackButton", @Model.BackButton);
+    await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
 }
 
-<main class="govuk-main-wrapper pb-3" role="main">
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-            @{
-                bool userPreferenceSet = TempData["UserPreferenceRecorded"] as bool? ?? false;
-                if (userPreferenceSet)
-                {
-                    <div id="cookies-set-banner" class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                        <div class="govuk-notification-banner__header">
-                            <h2 id="cookies-set-banner-heading" class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                                @Model.SuccessBannerHeading
-                            </h2>
-                        </div>
-                        <div class="govuk-notification-banner__content">
-                            <p id="cookies-set-banner-content" class="govuk-notification-banner__heading">
-                                @Html.Raw(Model.SuccessBannerContent)
-                            </p>
-                        </div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        @{
+            var userPreferenceSet = TempData["UserPreferenceRecorded"] as bool? ?? false;
+            if (userPreferenceSet)
+            {
+                <div id="cookies-set-banner" class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                    <div class="govuk-notification-banner__header">
+                        <h2 id="cookies-set-banner-heading" class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                            @Model.SuccessBannerHeading
+                        </h2>
                     </div>
-                }
-            }
-
-            <h2 id="cookies-heading" class="govuk-heading-xl">@Model.Heading</h2>
-            <div id="cookies-body">@Html.Raw(Model.BodyContent)</div>
-            <form id="cookies-form" asp-controller="CookiesPreference" asp-action="CookiePreference" method="post">
-                <div id="cookies-form-group" class="govuk-form-group">
-                    <fieldset class="govuk-fieldset" role="group" aria-describedby="cookies-choice-error">
-                        <p id="cookies-choice-error" class="govuk-error-message" hidden>
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorText
+                    <div class="govuk-notification-banner__content">
+                        <p id="cookies-set-banner-content" class="govuk-notification-banner__heading">
+                            @Html.Raw(Model.SuccessBannerContent)
                         </p>
-                        @foreach (var option in Model.Options)
-                        {
-                            <div class="govuk-radios__item">
-                                @Html.RadioButtonFor(x => x.CookiesAnswer, option.Value, new { @class = "govuk-radios__input", id = option.Value })
-                                <label class="govuk-label govuk-radios__label" for="@option.Value">
-                                    @option.Label
-                                </label>
-                            </div>
-                        }
-                    </fieldset>
+                    </div>
                 </div>
-                <div class="govuk-form-group">
-                    <button id="cookies-button" class="govuk-button" data-module="govuk-button">
-                        @Model.ButtonText
-                    </button>
-                </div>
-            </form>
-        </div>
+            }
+        }
+
+        <h2 id="cookies-heading" class="govuk-heading-xl">@Model.Heading</h2>
+        <div id="cookies-body">@Html.Raw(Model.BodyContent)</div>
+        <form id="cookies-form" asp-controller="CookiesPreference" asp-action="CookiePreference" method="post">
+            <div id="cookies-form-group" class="govuk-form-group">
+                <fieldset class="govuk-fieldset" role="group" aria-describedby="cookies-choice-error">
+                    <p id="cookies-choice-error" class="govuk-error-message" hidden>
+                        <span class="govuk-visually-hidden">Error:</span> @Model.ErrorText
+                    </p>
+                    @foreach (var option in Model.Options)
+                    {
+                        <div class="govuk-radios__item">
+                            @Html.RadioButtonFor(x => x.CookiesAnswer, option.Value, new { @class = "govuk-radios__input", id = option.Value })
+                            <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                @option.Label
+                            </label>
+                        </div>
+                    }
+                </fieldset>
+            </div>
+            <div class="govuk-form-group">
+                <button id="cookies-button" class="govuk-button" data-module="govuk-button">
+                    @Model.ButtonText
+                </button>
+            </div>
+        </form>
     </div>
-</main>
+</div>

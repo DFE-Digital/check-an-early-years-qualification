@@ -16,12 +16,12 @@ public class MockContentfulSetupTests
         var services = new ServiceCollection();
 
         // ReSharper disable once InvokeAsExtensionMethod
-        ServiceCollectionExtensions.AddMockContentfulService(services)
+        ServiceCollectionExtensions.AddMockContentfulServices(services)
                                    .Should().BeSameAs(services);
     }
 
     [TestMethod]
-    public void MockContentfulSetup_AddsMockContentfulSingleton()
+    public void MockContentfulSetup_AddsMockContentfulSingletons()
     {
         var serviceList = new List<ServiceDescriptor>();
 
@@ -30,13 +30,18 @@ public class MockContentfulSetupTests
                 .Callback((ServiceDescriptor d) => serviceList.Add(d));
 
         // ReSharper disable once InvokeAsExtensionMethod
-        _ = ServiceCollectionExtensions.AddMockContentfulService(services.Object);
+        _ = ServiceCollectionExtensions.AddMockContentfulServices(services.Object);
 
-        serviceList.Count.Should().Be(1);
-        var service = serviceList.Single();
+        serviceList.Count.Should().Be(2);
 
+        var service = serviceList.First();
         service.ImplementationType.Should().Be(typeof(MockContentfulService));
         service.ServiceType.Should().Be(typeof(IContentService));
         service.Lifetime.Should().Be(ServiceLifetime.Singleton);
+
+        var filterService = serviceList[1];
+        filterService.ImplementationType.Should().Be(typeof(MockContentfulFilterService));
+        filterService.ServiceType.Should().Be(typeof(IContentFilterService));
+        filterService.Lifetime.Should().Be(ServiceLifetime.Singleton);
     }
 }

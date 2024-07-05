@@ -2,6 +2,7 @@
 using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -15,24 +16,27 @@ public class ContentfulContentService(
     private readonly Dictionary<object, string> _contentTypes
         = new()
           {
-              { typeof(StartPage), "startPage" },
-              { typeof(Qualification), "Qualification" },
-              { typeof(DetailsPage), "detailsPage" },
-              { typeof(AdvicePage), "advicePage" },
-              { typeof(RadioQuestionPage), "radioQuestionPage" },
-              { typeof(AccessibilityStatementPage), "accessibilityStatementPage" },
-              { typeof(NavigationLinks), "navigationLinks" },
-              { typeof(CookiesPage), "cookiesPage" },
-              { typeof(PhaseBanner), "phaseBanner" },
-              { typeof(CookiesBanner), "cookiesBanner" },
-              { typeof(DateQuestionPage), "dateQuestionPage" },
-              { typeof(DropdownQuestionPage), "dropdownQuestionPage" },
-              { typeof(QualificationListPage), "qualificationListPage"}
+              { typeof(StartPage), ContentTypes.StartPage },
+              { typeof(Qualification), ContentTypes.Qualification },
+              { typeof(DetailsPage), ContentTypes.DetailsPage },
+              { typeof(AdvicePage), ContentTypes.AdvicePage },
+              { typeof(RadioQuestionPage), ContentTypes.RadioQuestionPage },
+              { typeof(AccessibilityStatementPage), ContentTypes.AccessibilityStatementPage },
+              { typeof(NavigationLinks), ContentTypes.NavigationLinks },
+              { typeof(CookiesPage), ContentTypes.CookiesPage },
+              { typeof(PhaseBanner), ContentTypes.PhaseBanner },
+              { typeof(CookiesBanner), ContentTypes.CookiesBanner },
+              { typeof(DateQuestionPage), ContentTypes.DateQuestionPage },
+              { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
+              { typeof(QualificationListPage), ContentTypes.QualificationListPage },
+              { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage }
           };
 
     public async Task<StartPage?> GetStartPage()
     {
         var startPageEntries = await GetEntriesByType<StartPage>();
+
+        // ReSharper disable once InvertIf
         if (startPageEntries is null || !startPageEntries.Any())
         {
             logger.LogWarning("No start page entry returned");
@@ -58,6 +62,8 @@ public class ContentfulContentService(
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
         var accessibilityStatementEntities = await GetEntriesByType<AccessibilityStatementPage>();
+
+        // ReSharper disable once InvertIf
         if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
         {
             logger.LogWarning("No accessibility statement page entry returned");
@@ -114,6 +120,8 @@ public class ContentfulContentService(
     public async Task<AdvicePage?> GetAdvicePage(string entryId)
     {
         var advicePage = await GetEntryById<AdvicePage>(entryId);
+
+        // ReSharper disable once InvertIf
         if (advicePage is null)
         {
             logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
@@ -141,6 +149,8 @@ public class ContentfulContentService(
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
         var phaseBannerEntities = await GetEntriesByType<PhaseBanner>();
+
+        // ReSharper disable once InvertIf
         if (phaseBannerEntities is null || !phaseBannerEntities.Any())
         {
             logger.LogWarning("No phase banner entry returned");
@@ -153,6 +163,8 @@ public class ContentfulContentService(
     public async Task<CookiesBanner?> GetCookiesBannerContent()
     {
         var cookiesBannerEntry = await GetEntriesByType<CookiesBanner>();
+
+        // ReSharper disable once InvertIf
         if (cookiesBannerEntry is null || !cookiesBannerEntry.Any())
         {
             logger.LogWarning("No cookies banner entry returned");
@@ -166,6 +178,20 @@ public class ContentfulContentService(
     {
         var qualifications = await GetEntriesByType<Qualification>();
         return qualifications!.ToList();
+    }
+
+    public async Task<ConfirmQualificationPage?> GetConfirmQualificationPage()
+    {
+        var confirmQualificationEntities = await GetEntriesByType<ConfirmQualificationPage>();
+
+        // ReSharper disable once InvertIf
+        if (confirmQualificationEntities is null || !confirmQualificationEntities.Any())
+        {
+            logger.LogWarning("No confirm qualification page entry returned");
+            return default;
+        }
+
+        return confirmQualificationEntities.First();
     }
 
     public async Task<QualificationListPage?> GetQualificationListPage()

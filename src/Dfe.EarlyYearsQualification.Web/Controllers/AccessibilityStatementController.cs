@@ -36,7 +36,7 @@ public class AccessibilityStatementController(
                {
                    Heading = content.Heading,
                    BodyContent = await renderer.ToHtml(content.Body),
-                   BackButton = content.BackButton,
+                   BackButton = content.BackButton
                };
     }
 }

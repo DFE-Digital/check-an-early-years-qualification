@@ -4,7 +4,8 @@ using Dfe.EarlyYearsQualification.Web.Models;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
-public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<UserJourneyCookieService> logger) : IUserJourneyCookieService
+public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<UserJourneyCookieService> logger)
+    : IUserJourneyCookieService
 {
     private readonly CookieOptions _options = new()
                                               {
@@ -45,7 +46,7 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         var model = GetUserJourneyModelFromCookie();
 
         model.WhatIsTheAwardingOrganisation = awardingOrganisation;
-        
+
         SetJourneyCookie(model);
     }
 
@@ -65,6 +66,7 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         }
         catch
         {
+            logger.LogWarning("Failed to deserialize cookie");
             ResetUserJourneyCookie();
             return new UserJourneyModel();
         }

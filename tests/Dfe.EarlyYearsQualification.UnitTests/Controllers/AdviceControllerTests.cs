@@ -72,9 +72,10 @@ public class AdviceControllerTests
 
         mockHtmlRenderer.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
-    
+
     [TestMethod]
-    public async Task QualificationsStartedBetweenSept2014AndAug2019_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    public async Task
+        QualificationsStartedBetweenSept2014AndAug2019_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
@@ -99,7 +100,8 @@ public class AdviceControllerTests
     }
 
     [TestMethod]
-    public async Task QualificationsStartedBetweenSept2014AndAug2019_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    public async Task
+        QualificationsStartedBetweenSept2014AndAug2019_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();

@@ -1,9 +1,11 @@
 using Contentful.Core;
+using Contentful.Core.Configuration;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
 using FluentAssertions;
 using Moq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
@@ -58,7 +60,7 @@ public class InsetTextRendererTests
     }
 
     [TestMethod]
-    public void InsetTextRenderer_DataTargetIsCustomNodeWithJObject_OtherId_Supported()
+    public void InsetTextRenderer_DataTargetIsCustomNodeWithJObject_OtherId_NotSupported()
     {
         var contentClientMock = new Mock<IContentfulClient>();
 
@@ -95,7 +97,7 @@ public class InsetTextRendererTests
     }
 
     [TestMethod]
-    public void InsetTextRenderer_DataTargetIsCustomNodeWithJObject_Supported()
+    public void InsetTextRenderer_DataTargetIsCustomNodeWithJObject_IsSupported()
     {
         var contentClientMock = new Mock<IContentfulClient>();
 
@@ -149,5 +151,71 @@ public class InsetTextRendererTests
         var list = new Hyperlink();
 
         new InsetTextRenderer(contentClientMock.Object).SupportsContent(list).Should().BeFalse();
+    }
+
+    [TestMethod]
+    public async Task InsetTextRenderer_RendersDivWithId()
+    {
+        var innerDocument = new Document { Content = [] };
+        // ...we haven't worked out yet how to test this _with_ inner content,
+        // there is some Contentful SDK inner magic involved that is hard to replicate.
+
+        var govUkInsetTextModel = new GovUkInsetTextModel
+                                  {
+                                      Content = JObject.FromObject(innerDocument),
+                                      Sys =
+                                      {
+                                          ContentType = new ContentType
+                                                        {
+                                                            SystemProperties = new SystemProperties
+                                                                               {
+                                                                                   Id = "govUkInsetText"
+                                                                               }
+                                                        }
+                                      }
+                                  };
+
+        var jObject = JObject.FromObject(govUkInsetTextModel);
+
+        var customNode = new CustomNode
+                         {
+                             JObject = jObject
+                         };
+
+        var content = new EntryStructure
+                      {
+                          Data = new EntryStructureData
+                                 {
+                                     Target = customNode
+                                 }
+                      };
+
+        var renderer = new InsetTextRenderer(CreateMockContentfulContentClient());
+
+        var result = await renderer.RenderAsync(content);
+
+        result.Should().Be("<div class=\"govuk-inset-text\"></div>");
+    }
+
+    private static IContentfulClient CreateMockContentfulContentClient()
+    {
+        var contentClientMock = new Mock<IContentfulClient>();
+
+        var serializerSettings = new JsonSerializerSettings
+                                 {
+                                     Converters =
+                                     [
+                                         new AssetJsonConverter(),
+                                         new ContentJsonConverter()
+                                     ],
+                                     TypeNameHandling = TypeNameHandling.All
+                                 }; // This is what a real ContentfulClient would have
+
+        contentClientMock.SetupGet(c => c.SerializerSettings)
+                         .Returns(serializerSettings);
+
+        contentClientMock.SetupGet(c => c.ResolveEntriesSelectively).Returns(true);
+
+        return contentClientMock.Object;
     }
 }

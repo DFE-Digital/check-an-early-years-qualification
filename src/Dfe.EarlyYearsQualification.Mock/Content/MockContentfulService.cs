@@ -98,7 +98,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "TEST",
-                                                          Href = "/qualifications",
+                                                          Href = "/confirm-qualification/eyq-240",
                                                           OpenInNewTab = false
                                                       }
                                      });
@@ -203,16 +203,52 @@ public class MockContentfulService : IContentService
 
     public async Task<QualificationListPage?> GetQualificationListPage()
     {
-        return await Task.FromResult(new QualificationListPage()
-                                   {
-                                       Header = "Test Header",
-                                       BackButton = new NavigationLink()
-                                                    {
-                                                        DisplayText = "TEST",
-                                                        Href = "/questions/what-is-the-awarding-organisation",
-                                                        OpenInNewTab = false
-                                                    }
-                                   });
+        return await Task.FromResult(new QualificationListPage
+                                     {
+                                         Header = "Test Header",
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "TEST",
+                                                          Href = "/questions/what-is-the-awarding-organisation",
+                                                          OpenInNewTab = false
+                                                      }
+                                     });
+    }
+
+    public async Task<ConfirmQualificationPage?> GetConfirmQualificationPage()
+    {
+        return await Task.FromResult(new ConfirmQualificationPage
+                                     {
+                                         QualificationLabel = "Test qualification label",
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "Test back button",
+                                                          OpenInNewTab = false,
+                                                          Href = "/qualifications"
+                                                      },
+                                         ErrorText = "Test error text",
+                                         ButtonText = "Test button text",
+                                         LevelLabel = "Test level label",
+                                         DateAddedLabel = "Test date added label",
+                                         Heading = "Test heading",
+                                         Options =
+                                         [
+                                             new Option
+                                             {
+                                                 Label = "yes",
+                                                 Value = "yes"
+                                             },
+                                             new Option
+                                             {
+                                                 Label = "no",
+                                                 Value = "no"
+                                             }
+                                         ],
+                                         RadioHeading = "Test radio heading",
+                                         AwardingOrganisationLabel = "Test awarding organisation label",
+                                         ErrorBannerHeading = "Test error banner heading",
+                                         ErrorBannerLink = "Test error banner link"
+                                     });
     }
 
     public async Task<StartPage?> GetStartPage()
@@ -291,10 +327,12 @@ public class MockContentfulService : IContentService
                               Label = "Level 3", Value = "3"
                           }
                       };
-        return CreateRadioQuestionPage("What level is the qualification?", options, "/questions/when-was-the-qualification-started");
+        return CreateRadioQuestionPage("What level is the qualification?", options,
+                                       "/questions/when-was-the-qualification-started");
     }
 
-    private static RadioQuestionPage CreateRadioQuestionPage(string question, List<Option> options, string backButtonURL)
+    private static RadioQuestionPage CreateRadioQuestionPage(string question, List<Option> options,
+                                                             string backButtonUrl)
     {
         return new RadioQuestionPage
                {
@@ -305,7 +343,7 @@ public class MockContentfulService : IContentService
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",
-                                    Href = backButtonURL,
+                                    Href = backButtonUrl,
                                     OpenInNewTab = false
                                 }
                };

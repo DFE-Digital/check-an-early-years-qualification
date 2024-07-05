@@ -2,7 +2,6 @@ namespace Dfe.EarlyYearsQualification.Content.Constants;
 
 public static class QuestionPages
 {
-
     //// Radio Button Pages
 
     /// <summary>
@@ -21,7 +20,7 @@ public static class QuestionPages
     ///     Entry ID for the "When was the qualification started" question page.
     /// </summary>
     public const string WhenWasTheQualificationStarted = "2o331MBr0R6nsZNBem4yvk";
-    
+
     //// Dropdown Pages
 
     /// <summary>

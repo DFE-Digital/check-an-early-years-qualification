@@ -11,10 +11,10 @@ public class DropdownQuestionModel : BaseQuestionModel
     public string DropdownHeading { get; set; } = string.Empty;
 
     public string NotInListText { get; set; } = string.Empty;
-    
+
     public string DropdownId { get; init; } = "awarding-organisation-select";
 
     public string CheckboxId { get; init; } = "awarding-organisation-not-in-list";
-    
+
     public bool NotInTheList { get; init; }
 }

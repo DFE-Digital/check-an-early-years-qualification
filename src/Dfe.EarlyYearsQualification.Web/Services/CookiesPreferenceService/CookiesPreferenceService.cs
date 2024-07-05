@@ -9,7 +9,8 @@ public class CookiesPreferenceService(IHttpContextAccessor context) : ICookiesPr
     {
         var currentCookie = GetCookie();
         DeleteCookie();
-        CreateCookie(CookieKeyNames.CookiesPreferenceKey, currentCookie.HasApproved, visibility, currentCookie.IsRejected);
+        CreateCookie(CookieKeyNames.CookiesPreferenceKey, currentCookie.HasApproved, visibility,
+                     currentCookie.IsRejected);
     }
 
     public void RejectCookies()
