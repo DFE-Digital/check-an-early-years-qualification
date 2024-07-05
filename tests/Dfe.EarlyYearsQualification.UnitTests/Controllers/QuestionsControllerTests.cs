@@ -528,8 +528,8 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
 
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie())
-                                    .Returns(new UserJourneyModel() { WhenWasQualificationAwarded = "06/2015" });
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded())
+                                    .Returns((6,2015));
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel

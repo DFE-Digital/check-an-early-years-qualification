@@ -3,7 +3,6 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -67,30 +66,9 @@ public class QualificationDetailsController(
     
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
-        var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
-
-        int? level = null;
-        if (int.TryParse(cookie.LevelOfQualification, out var parsedLevel))
-        {
-            level = parsedLevel;
-        }
-
-        int? startDateMonth = null;
-        int? startDateYear = null;
-        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
-        if (qualificationAwardedDateSplit.Length == 2
-            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
-            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
-        {
-            startDateMonth = parsedStartMonth;
-            startDateYear = parsedStartYear;
-        }
-
-        string? awardingOrganisation = null;
-        if (!string.IsNullOrEmpty(cookie.WhatIsTheAwardingOrganisation))
-        {
-            awardingOrganisation = cookie.WhatIsTheAwardingOrganisation;
-        }
+        var level = userJourneyCookieService.GetLevelOfQualification();
+        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
 
         return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, awardingOrganisation);
     }
@@ -124,28 +102,25 @@ public class QualificationDetailsController(
         var filterModel = new FilterModel();
         
         var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
-        filterModel.Country = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cookie.WhereWasQualificationAwarded);
-        
-        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
-        if (qualificationAwardedDateSplit.Length == 2
-            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
-            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
+        filterModel.Country = userJourneyCookieService.GetWhereWasQualificationAwarded()!;
+
+        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        if (startDateMonth is not null && startDateYear is not null)
         {
-            var date = new DateOnly(parsedStartYear, parsedStartMonth, 1);
-            filterModel.StartDate = $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {parsedStartYear}";
-        }
-        
-        if (int.TryParse(cookie.LevelOfQualification, out var parsedLevel))
-        {
-            if (parsedLevel > 0)
-            {
-                filterModel.Level = $"Level {parsedLevel}";
-            }
+            var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+            filterModel.StartDate = $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
         }
 
-        if (!string.IsNullOrEmpty(cookie.WhatIsTheAwardingOrganisation))
+        var level = userJourneyCookieService.GetLevelOfQualification();
+        if (level is not null && level > 0)
         {
-            filterModel.AwardingOrganisation = cookie.WhatIsTheAwardingOrganisation;
+            filterModel.Level = $"Level {level}";
+        }
+
+        var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
+        if (!string.IsNullOrEmpty(awardingOrganisation))
+        {
+            filterModel.AwardingOrganisation = awardingOrganisation;
         }
 
         return filterModel;

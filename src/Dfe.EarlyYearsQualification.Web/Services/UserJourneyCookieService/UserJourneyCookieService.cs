@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Models;
@@ -75,6 +76,60 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
     public void ResetUserJourneyCookie()
     {
         SetJourneyCookie(new UserJourneyModel());
+    }
+
+    public string? GetWhereWasQualificationAwarded()
+    {
+        var cookie = GetUserJourneyModelFromCookie();
+        string? awardingCountry = null;
+        if (!string.IsNullOrEmpty(cookie.WhereWasQualificationAwarded))
+        {
+            awardingCountry = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cookie.WhereWasQualificationAwarded);
+        }
+
+        return awardingCountry;
+    }
+
+    public (int? startMonth, int? startYear) GetWhenWasQualificationAwarded()
+    {
+        var cookie = GetUserJourneyModelFromCookie();
+
+        int? startDateMonth = null;
+        int? startDateYear = null;
+        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
+        if (qualificationAwardedDateSplit.Length == 2
+            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
+            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
+        {
+            startDateMonth = parsedStartMonth;
+            startDateYear = parsedStartYear;
+        }
+
+        return (startDateMonth, startDateYear);
+    }
+
+    public int? GetLevelOfQualification()
+    {
+        var cookie = GetUserJourneyModelFromCookie();
+        int? level = null;
+        if (int.TryParse(cookie.LevelOfQualification, out var parsedLevel))
+        {
+            level = parsedLevel;
+        }
+
+        return level;
+    }
+
+    public string? GetAwardingOrganisation()
+    {
+        var cookie = GetUserJourneyModelFromCookie();
+        string? awardingOrganisation = null;
+        if (!string.IsNullOrEmpty(cookie.WhatIsTheAwardingOrganisation))
+        {
+            awardingOrganisation = cookie.WhatIsTheAwardingOrganisation;
+        }
+
+        return awardingOrganisation;
     }
 
     private void SetJourneyCookie(UserJourneyModel model)
