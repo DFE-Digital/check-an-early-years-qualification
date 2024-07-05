@@ -4,9 +4,9 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class QualificationListModel
 {
-    public string Header { get; set; } = string.Empty;
-    
-    public UserJourneyModel? Filters { get; set; }
-    
-    public NavigationLink? BackButton { get; set; }
+    public string Header { get; init; } = string.Empty;
+
+    public UserJourneyModel? Filters { get; init; }
+
+    public NavigationLink? BackButton { get; init; }
 }

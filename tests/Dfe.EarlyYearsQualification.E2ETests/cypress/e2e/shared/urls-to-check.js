@@ -2,7 +2,7 @@ export const pages = [
   "/",
   "/accessibility-statement",
   "/advice/qualification-outside-the-united-kingdom",
-  "/advice/level-2-qualifications-started-between-1-sept-2014-&-31-aug-2019",
+  "/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019",
   "/cookies",
   "/questions/where-was-the-qualification-awarded",
   "/questions/when-was-the-qualification-started",
@@ -22,7 +22,7 @@ export const pagesWithoutForms = [
   "/",
   "/accessibility-statement",
   "/advice/qualification-outside-the-united-kingdom",
-  "/advice/level-2-qualifications-started-between-1-sept-2014-&-31-aug-2019",
+  "/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019",
   "/qualifications",
   "/qualifications/qualification-details/eyq-240"
 ]

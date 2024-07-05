@@ -24,7 +24,7 @@ public class HomeControllerTests
         var mockSideRenderer = new Mock<ISideContentRenderer>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        
+
         var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                             mockSideRenderer.Object, mockUserJourneyCookieService.Object);
 
@@ -50,7 +50,7 @@ public class HomeControllerTests
         var mockSideRenderer = new Mock<ISideContentRenderer>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        
+
         var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                             mockSideRenderer.Object, mockUserJourneyCookieService.Object);
 
@@ -92,7 +92,7 @@ public class HomeControllerTests
         model.PreCtaButtonContent.Should().Be(preCtaContentText);
         model.RightHandSideContent.Should().Be(sideContentText);
         model.RightHandSideContentHeader.Should().Be(startPageResult.RightHandSideContentHeader);
-        
+
         mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
     }
 }

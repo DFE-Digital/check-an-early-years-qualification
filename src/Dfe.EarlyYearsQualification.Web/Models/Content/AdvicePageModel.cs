@@ -7,6 +7,6 @@ public class AdvicePageModel
     public string Heading { get; init; } = string.Empty;
 
     public string BodyContent { get; init; } = string.Empty;
-    
+
     public NavigationLink? BackButton { get; init; }
 }

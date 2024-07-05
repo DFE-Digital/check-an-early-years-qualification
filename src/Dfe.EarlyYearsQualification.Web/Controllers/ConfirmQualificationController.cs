@@ -21,7 +21,7 @@ public class ConfirmQualificationController(
         {
             return BadRequest();
         }
-        
+
         var content = await contentService.GetConfirmQualificationPage();
 
         if (content is null)
@@ -48,41 +48,44 @@ public class ConfirmQualificationController(
     [HttpPost]
     public async Task<IActionResult> Confirm(ConfirmQualificationPageModel model)
     {
-        if (!ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            var content = await contentService.GetConfirmQualificationPage();
-
-            if (content is null)
-            {
-                logger.LogError("No content for the cookies page");
-                return RedirectToAction("Index", "Error");
-            }
-
-            if (string.IsNullOrEmpty(model.QualificationId))
-            {
-                logger.LogError("No qualification id provided");
-                return RedirectToAction("Index", "Error");
-            }
-
-            var qualification = await contentService.GetQualificationById(model.QualificationId);
-            if (qualification is null)
-            {
-                var loggedQualificationId = model.QualificationId.Replace(Environment.NewLine, "");
-                logger.LogError("Could not find details for qualification with ID: {QualificationId}",
-                                loggedQualificationId);
-
-                return RedirectToAction("Index", "Error");
-            }
-
-            model = Map(content, qualification);
-            model.HasErrors = true;
-
-            return View("Index", model);
+            return model.ConfirmQualificationAnswer == "yes"
+                       ? RedirectToAction("Index", "QualificationDetails",
+                                          new { qualificationId = model.QualificationId })
+                       : RedirectToAction("Get", "QualificationDetails");
         }
-        
-        return model.ConfirmQualificationAnswer == "yes" ? RedirectToAction("Index", "QualificationDetails", new { qualificationId = model.QualificationId }) : RedirectToAction("Get", "QualificationDetails");
+
+        var content = await contentService.GetConfirmQualificationPage();
+
+        if (content is null)
+        {
+            logger.LogError("No content for the cookies page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        if (string.IsNullOrEmpty(model.QualificationId))
+        {
+            logger.LogError("No qualification id provided");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var qualification = await contentService.GetQualificationById(model.QualificationId);
+        if (qualification is null)
+        {
+            var loggedQualificationId = model.QualificationId.Replace(Environment.NewLine, "");
+            logger.LogError("Could not find details for qualification with ID: {QualificationId}",
+                            loggedQualificationId);
+
+            return RedirectToAction("Index", "Error");
+        }
+
+        model = Map(content, qualification);
+        model.HasErrors = true;
+
+        return View("Index", model);
     }
-    
+
     private static ConfirmQualificationPageModel Map(ConfirmQualificationPage content, Qualification qualification)
     {
         return new ConfirmQualificationPageModel
@@ -104,7 +107,7 @@ public class ConfirmQualificationController(
                    QualificationId = qualification.QualificationId,
                    QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle,
                    QualificationDateAdded = qualification.FromWhichYear!,
-                   BackButton = content.BackButton,
+                   BackButton = content.BackButton
                };
     }
 }
