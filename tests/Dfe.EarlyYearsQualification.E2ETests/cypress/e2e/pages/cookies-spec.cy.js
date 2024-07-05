@@ -12,6 +12,8 @@ describe("A spec that tests the cookies page", () => {
     cy.get("#cookies-heading").should("contain.text", "Test Cookies Heading");
     cy.get("#cookies-body").should("contain.text", "Test Cookies Page Body");
 
+    cy.get("#cookies-form-heading").should("contain.text", "Test Form Heading");
+    
     cy.get("#test-option-value-1").should("exist");
     cy.get("#test-option-value-2").should("exist");
 
