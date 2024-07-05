@@ -99,10 +99,10 @@ public class QualificationDetailsController(
 
     private FilterModel GetFilterModel()
     {
-        var filterModel = new FilterModel();
-        
-        var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
-        filterModel.Country = userJourneyCookieService.GetWhereWasQualificationAwarded()!;
+        var filterModel = new FilterModel
+                          {
+                              Country = userJourneyCookieService.GetWhereWasQualificationAwarded()!
+                          };
 
         (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         if (startDateMonth is not null && startDateYear is not null)

@@ -10,26 +10,26 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-        <h2 class="govuk-label-wrapper">
+        <h2 id="your-search-header" class="govuk-label-wrapper">
             <label class="govuk-label govuk-label--m">@Model.SearchCriteriaHeading</label>
         </h2>
         <ul class="govuk-list govuk-list--bullet">
-            <li>@Model.Filters.Country</li>
-            <li>@Model.Filters.StartDate</li>
-            <li>@Model.Filters.Level</li>
-            <li>@Model.Filters.AwardingOrganisation</li>
+            <li id="filter-country">@Model.Filters.Country</li>
+            <li id="filter-start-date">@Model.Filters.StartDate</li>
+            <li id="filter-level">@Model.Filters.Level</li>
+            <li id="filter-org">@Model.Filters.AwardingOrganisation</li>
         </ul>
 
-        @Html.Raw(Model.PostSearchCriteriaContent)
+        <div id="post-filter-content">@Html.Raw(Model.PostSearchCriteriaContent)</div>
     </div>
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">@Model.Header</h1>
-        <h3 class="govuk-body-l">
+        <h1 id="heading" class="govuk-heading-l">@Model.Header</h1>
+        <h3 id="found-heading" class="govuk-body-l">
             <strong>
                 @Model.Qualifications.Count @(Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText)
             </strong>
         </h3>
-        @Html.Raw(Model.PreSearchBoxContent)
+        <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
         <div class="govuk-form-group">
             <input class="govuk-input govuk-!-width-three-quarters" id="three-quarters" name="threeQuarters" type="text">
             <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
@@ -44,7 +44,7 @@
                     </a>
                     <dl class="govuk-summary-list govuk-summary-list--no-border">
                         <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">
+                            <dt class="govuk-summary-list__key level">
                                 @Model.LevelHeading
                             </dt>
                             <dd class="govuk-summary-list__value">
@@ -52,7 +52,7 @@
                             </dd>
                         </div>
                         <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">
+                            <dt class="govuk-summary-list__key awarding-org">
                                 @Model.AwardingOrganisationHeading
                             </dt>
                             <dd class="govuk-summary-list__value">
@@ -63,6 +63,6 @@
                     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                 </div>
             }
-        @Html.Raw(Model.PostQualificationListContent)
+        <div id="post-list-content">@Html.Raw(Model.PostQualificationListContent)</div>
     </div>
 </div>

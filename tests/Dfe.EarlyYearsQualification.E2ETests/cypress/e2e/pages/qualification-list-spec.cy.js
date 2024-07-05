@@ -1,0 +1,29 @@
+describe("A spec used to test the qualification list page", () => {
+
+    beforeEach(() => {
+        cy.setCookie('auth-secret', Cypress.env('auth_secret'));
+        // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationAwarded":"6/2022","LevelOfQualification":"3","WhatIsTheAwardingOrganisation":"NCFE"}' encoded
+        cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationAwarded%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D');
+    })
+
+    // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService.  
+    it("Checks the details are showing on the page", () => {
+        cy.visit("/qualifications");
+
+        cy.get("#your-search-header").should("contain.text", "Your search");
+        cy.get("#filter-country").should("contain.text", "England");
+        cy.get("#filter-start-date").should("contain.text", "June 2022");
+        cy.get("#filter-level").should("contain.text", "Level 3");
+        cy.get("#filter-org").should("contain.text", "NCFE");
+        
+        cy.get("#heading").should("contain.text", "Test Header");
+        cy.get("#found-heading").should("contain.text", "2 qualifications found");
+        
+        cy.get("#pre-search-content").should("contain.text", "Pre search box content");
+        cy.get("#post-list-content").should("contain.text", "Post qualification list content");
+        cy.get("#post-filter-content").should("contain.text", "Post search criteria content");
+        
+        cy.get(".level").first().should("contain.text", "Level");
+        cy.get(".awarding-org").first().should("contain.text", "Awarding organisation");
+    })
+})
