@@ -38,7 +38,7 @@ public class QualificationDetailsController(
     [HttpGet("qualification-details/{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
     {
-        if (string.IsNullOrEmpty(qualificationId))
+        if (!ModelState.IsValid || string.IsNullOrEmpty(qualificationId))
         {
             return BadRequest();
         }
@@ -63,17 +63,19 @@ public class QualificationDetailsController(
         var model = await MapDetails(qualification, detailsPageContent);
         return View(model);
     }
-    
+
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
-        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
 
-        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, awardingOrganisation);
+        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear,
+                                                                    awardingOrganisation);
     }
 
-    private async Task<QualificationListModel> MapList(QualificationListPage content, List<Qualification>? qualifications)
+    private async Task<QualificationListModel> MapList(QualificationListPage content,
+                                                       List<Qualification>? qualifications)
     {
         var basicQualificationsModels = GetBasicQualificationsModels(qualifications);
 
@@ -104,7 +106,7 @@ public class QualificationDetailsController(
                               Country = userJourneyCookieService.GetWhereWasQualificationAwarded()!
                           };
 
-        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         if (startDateMonth is not null && startDateYear is not null)
         {
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
@@ -133,11 +135,11 @@ public class QualificationDetailsController(
         {
             foreach (var qualification in qualifications)
             {
-                basicQualificationsModels.Add(new BasicQualificationModel()
+                basicQualificationsModels.Add(new BasicQualificationModel
                                               {
-                                                  QualificationId = qualification.QualificationId, 
-                                                  QualificationLevel = qualification.QualificationLevel, 
-                                                  QualificationName = qualification.QualificationName, 
+                                                  QualificationId = qualification.QualificationId,
+                                                  QualificationLevel = qualification.QualificationLevel,
+                                                  QualificationName = qualification.QualificationName,
                                                   AwardingOrganisationTitle = qualification.AwardingOrganisationTitle
                                               });
             }

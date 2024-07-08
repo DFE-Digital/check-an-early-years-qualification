@@ -2,7 +2,7 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class FilterModel
 {
-    public string Country { get; set; } = string.Empty;
+    public string Country { get; init; } = string.Empty;
 
     public string StartDate { get; set; } = string.Empty;
 
