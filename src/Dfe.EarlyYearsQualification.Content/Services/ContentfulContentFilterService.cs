@@ -5,6 +5,7 @@ using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using FuzzySharp;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
@@ -38,13 +39,14 @@ public class ContentfulContentFilterService(
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
 
     public async Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth,
-                                                                     int? startDateYear, string? awardingOrganisation)
+                                                                     int? startDateYear, string? awardingOrganisation, string? qualificationName)
     {
-        logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}",
+        logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {qualificationName}",
                               level,
                               startDateMonth,
                               startDateYear,
-                              awardingOrganisation);
+                              awardingOrganisation,
+                              qualificationName);
 
         // create query builder
         var queryBuilder = QueryBuilder.ContentTypeIs(ContentTypes.Qualification);
@@ -56,7 +58,13 @@ public class ContentfulContentFilterService(
 
         if (!string.IsNullOrEmpty(awardingOrganisation))
         {
-            queryBuilder = queryBuilder.FieldEquals("fields.awardingOrganisationTitle", awardingOrganisation);
+            var awardingOrganisations = new List<string>
+                                        {
+                                            awardingOrganisation, 
+                                            "All Higher Education Institutes",
+                                            "Various Awarding Organisations"
+                                        };
+            queryBuilder = queryBuilder.FieldIncludes("fields.awardingOrganisationTitle", awardingOrganisations);
         }
 
         // get qualifications
@@ -70,20 +78,43 @@ public class ContentfulContentFilterService(
             logger.LogError(e, "Error getting qualifications");
             return [];
         }
-
-        if (!startDateMonth.HasValue || !startDateYear.HasValue) return qualifications.ToList();
-
+        
         // apply start date filtering
-        var results = FilterQualificationsByDate(startDateMonth.Value, startDateYear.Value, qualifications);
+        var filteredQualifications = FilterQualificationsByDate(startDateMonth, startDateYear, qualifications.ToList());
+        
+        // Filter based on qualification name
+        filteredQualifications = FilterQualificationsByName(filteredQualifications, qualificationName);
 
-        return results;
+        return filteredQualifications;
     }
 
-    private List<Qualification> FilterQualificationsByDate(int startDateMonth, int startDateYear,
-                                                           ContentfulCollection<Qualification> qualifications)
+    private List<Qualification> FilterQualificationsByName(List<Qualification> qualifications, string? qualificationName)
     {
+        if (string.IsNullOrEmpty(qualificationName))
+        {
+            return qualifications;
+        }
+
+        var matchedQualifications = new List<Qualification>();
+        foreach (var qualification in qualifications)
+        {
+            var weight = Fuzz.PartialRatio(qualificationName, qualification.QualificationName);
+            if (weight > 70)
+            {
+                matchedQualifications.Add(qualification);
+            }
+        }
+
+        return matchedQualifications;
+    }
+
+    private List<Qualification> FilterQualificationsByDate(int? startDateMonth, int? startDateYear,
+                                                           List<Qualification> qualifications)
+    {
+        if (!startDateMonth.HasValue || !startDateYear.HasValue) return qualifications.ToList();
+        
         var results = new List<Qualification>();
-        var enteredStartDate = new DateOnly(startDateYear, startDateMonth, Day);
+        var enteredStartDate = new DateOnly(startDateYear.Value, startDateMonth.Value, Day);
         foreach (var qualification in qualifications)
         {
             var qualificationStartDate = GetQualificationDate(qualification.FromWhichYear);

@@ -174,7 +174,7 @@ public class QualificationDetailsControllerTests
 
         mockContentFilterService
             .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
-                                                    It.IsAny<string?>())).ReturnsAsync(new List<Qualification>());
+                                                    It.IsAny<string?>(), It.IsAny<string?>())).ReturnsAsync(new List<Qualification>());
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 

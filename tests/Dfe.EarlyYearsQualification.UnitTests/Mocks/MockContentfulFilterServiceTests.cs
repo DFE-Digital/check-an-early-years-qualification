@@ -22,7 +22,7 @@ public class MockContentfulFilterServiceTests
         int level, string[] expectedQualifications)
     {
         var mockContentFilterService = new MockContentfulFilterService();
-        var results = await mockContentFilterService.GetFilteredQualifications(level, null, null, null);
+        var results = await mockContentFilterService.GetFilteredQualifications(level, null, null, null, null);
 
         results.Count.Should().Be(2);
         results[0].QualificationId.Should().Be(expectedQualifications[0]);

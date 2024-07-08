@@ -5,7 +5,7 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockContentfulFilterService : IContentFilterService
 {
-    public Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth, int? startDateYear, string? awardingOrganisation)
+    public Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth, int? startDateYear, string? awardingOrganisation, string? qualificationName)
     {
         var qualifications =
             new List<Qualification>

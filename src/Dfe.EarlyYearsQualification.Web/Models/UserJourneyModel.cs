@@ -6,4 +6,6 @@ public class UserJourneyModel
     public string WhenWasQualificationAwarded { get; set; } = string.Empty;
     public string LevelOfQualification { get; set; } = string.Empty;
     public string WhatIsTheAwardingOrganisation { get; set; } = string.Empty;
+
+    public string SearchCriteria { get; set; } = string.Empty;
 }

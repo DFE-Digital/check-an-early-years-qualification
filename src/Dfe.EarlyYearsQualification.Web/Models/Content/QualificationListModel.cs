@@ -28,5 +28,7 @@ public class QualificationListModel
 
     public string PostSearchCriteriaContent { get; init; } = string.Empty;
 
+    public string? SearchCriteria { get; set; } = string.Empty;
+
     public List<BasicQualificationModel> Qualifications { get; init; } = [];
 }

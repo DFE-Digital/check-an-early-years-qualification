@@ -33,10 +33,13 @@
         </h3>
         <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
         <div class="govuk-form-group">
-            <input class="govuk-input govuk-!-width-three-quarters" id="refine-search" name="refine-search" aria-label="refine searYch box" type="text">
-            <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-                @Model.SearchButtonText
-            </button>
+            @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post))
+            {
+                <input class="govuk-input govuk-!-width-three-quarters" id="refineSearch" name="refineSearch" aria-label="refine search box" type="text" value="@Model.SearchCriteria">
+                <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                    @Model.SearchButtonText
+                </button>
+            }
         </div>
             @foreach (var qualification in Model.Qualifications)
             {

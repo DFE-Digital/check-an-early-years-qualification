@@ -187,7 +187,7 @@ public class QuestionsController(
     {
         int? level = userJourneyCookieService.GetLevelOfQualification();
         (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null);
+        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName)

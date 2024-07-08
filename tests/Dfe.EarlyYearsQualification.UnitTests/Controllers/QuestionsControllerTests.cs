@@ -605,6 +605,7 @@ public class QuestionsControllerTests
                                                     It.IsAny<int?>(),
                                                     It.IsAny<int?>(),
                                                     It.IsAny<int?>(),
+                                                    It.IsAny<string?>(), 
                                                     It.IsAny<string?>()))
             .ReturnsAsync([]);
 
@@ -672,7 +673,7 @@ public class QuestionsControllerTests
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
             .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
-                                                    It.IsAny<string?>()))
+                                                    It.IsAny<string?>(), It.IsAny<string?>()))
             .ReturnsAsync(listOfQualifications);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
@@ -738,7 +739,7 @@ public class QuestionsControllerTests
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
             .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
-                                                    It.IsAny<string?>()))
+                                                    It.IsAny<string?>(), It.IsAny<string?>()))
             .ReturnsAsync(listOfQualifications);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
@@ -789,7 +790,7 @@ public class QuestionsControllerTests
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
             .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
-                                                    It.IsAny<string?>()))
+                                                    It.IsAny<string?>(), It.IsAny<string?>()))
             .ReturnsAsync([]);
 
         controller.ModelState.AddModelError("option", "test error");
