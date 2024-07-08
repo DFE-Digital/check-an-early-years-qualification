@@ -10,4 +10,9 @@ public interface IUserJourneyCookieService
     public void SetAwardingOrganisation(string awardingOrganisation);
     public UserJourneyModel GetUserJourneyModelFromCookie();
     public void ResetUserJourneyCookie();
+
+    public string? GetWhereWasQualificationAwarded();
+    public (int? startMonth, int? startYear) GetWhenWasQualificationAwarded();
+    public int? GetLevelOfQualification();
+    public string? GetAwardingOrganisation();
 }

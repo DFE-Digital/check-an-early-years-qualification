@@ -178,6 +178,162 @@ public class UserJourneyCookieServiceTests
         var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
+    
+    [TestMethod]
+    public void GetWhereWasQualificationAwarded_CookieValueIsEmpty_ReturnsNull()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                WhereWasQualificationAwarded = string.Empty
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var model = service.GetWhereWasQualificationAwarded();
+
+        model.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public void GetWhereWasQualificationAwarded_CookieHasValue_ReturnsValueWithUpperCaseFirstLetter()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                WhereWasQualificationAwarded = "england"
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var model = service.GetWhereWasQualificationAwarded();
+
+        model.Should().Be("England");
+    }
+    
+    [TestMethod]
+    public void GetAwardingOrganisation_CookieValueIsEmpty_ReturnsNull()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                WhatIsTheAwardingOrganisation = string.Empty
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var model = service.GetAwardingOrganisation();
+
+        model.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public void GetAwardingOrganisation_CookieHasValue_ReturnsValue()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                WhatIsTheAwardingOrganisation = "NCFE"
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var model = service.GetAwardingOrganisation();
+
+        model.Should().Be("NCFE");
+    }
+    
+    [TestMethod]
+    public void GetLevelOfQualification_CookieValueIsEmpty_ReturnsNull()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                LevelOfQualification = string.Empty
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var model = service.GetLevelOfQualification();
+
+        model.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public void GetLevelOfQualification_CookieHasValue_ReturnsValue()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                LevelOfQualification = "4"
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var model = service.GetLevelOfQualification();
+
+        model.Should().Be(4);
+    }
+    
+    [TestMethod]
+    public void GetWhenWasQualificationAwarded_CookieValueIsEmpty_ReturnsNull()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                WhenWasQualificationAwarded = string.Empty
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        (int? startMonth, int? startYear)  = service.GetWhenWasQualificationAwarded();
+
+        startMonth.Should().BeNull();
+        startYear.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public void GetWhenWasQualificationAwarded_CookieHasInvalidValue_ReturnsNull()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                WhenWasQualificationAwarded = "4"
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        (int? startMonth, int? startYear)  = service.GetWhenWasQualificationAwarded();
+
+        startMonth.Should().BeNull();
+        startYear.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public void GetWhenWasQualificationAwarded_CookieHasValidValue_ReturnsValue()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                WhenWasQualificationAwarded = "4/2015"
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        (int? startMonth, int? startYear)  = service.GetWhenWasQualificationAwarded();
+
+        startMonth.Should().Be(4);
+        startYear.Should().Be(2015);
+    }
 
     private static Mock<IHttpContextAccessor> SetHttpContextWithExistingCookie(object? model)
     {

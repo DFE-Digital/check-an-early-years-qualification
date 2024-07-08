@@ -4,8 +4,10 @@
     ViewData["Title"] = $"Qualification Details - {Model.QualificationId}";
 }
 
-@{
-    await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
 }
 
 <div class="govuk-grid-row">

@@ -4,21 +4,25 @@
     ViewData["Title"] = "Questions";
 }
 
-@{
-    await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
-            @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
-            {
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
+        {
+            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading" id="question">
                             @Model.Question
                         </h1>
                     </legend>
+
+
                     <div id="date-format-hint" class="govuk-hint">@Model.QuestionHint</div>
 
                     @if (Model.HasErrors)
@@ -32,23 +36,25 @@
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
                                 <label class="govuk-label govuk-date-input__label" for="date-started-month">@Model.MonthLabel</label>
-                                @Html.TextBoxFor(x => x.SelectedMonth, "{0:#.#}", new { id = "date-started-month", @class = "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = "date-started-month", type = "text", inputmode = "numeric", Value = "" })
+                                @Html.TextBoxFor(x => x.SelectedMonth, "{0:#.#}", new { id = "date-started-month", @class = Model.HasErrors ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = "date-started-month", type = "text", inputmode = "numeric", Value = "" })
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
                                 <label class="govuk-label govuk-date-input__label" for="date-started-year">@Model.YearLabel</label>
-                                @Html.TextBoxFor(x => x.SelectedYear, "{0:#.#}", new { id = "date-started-year", @class = "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = "date-started-month", type = "text", inputmode = "numeric", Value = "" })
+                                @Html.TextBoxFor(x => x.SelectedYear, "{0:#.#}", new { id = "date-started-year", @class = Model.HasErrors ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = "date-started-month", type = "text", inputmode = "numeric", Value = "" })
                             </div>
                         </div>
                     </div>
                 </fieldset>
-                <div class="govuk-form-group">
-                    <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
-                        @Model.CtaButtonText
-                    </button>
-                </div>
-            }
-        </div>
+            </div>
+
+
+            <div class="govuk-form-group">
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        }
     </div>
 </div>
