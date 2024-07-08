@@ -19,6 +19,7 @@
 }
 
 <div class="govuk-width-container">
+    @await RenderSectionAsync("BeforeMainContent", false)
     <main class="govuk-main-wrapper" role="main" class="pb-3">
         @RenderBody()
     </main>
