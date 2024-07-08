@@ -1,8 +1,8 @@
+using System.Globalization;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -14,7 +14,9 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class QualificationDetailsController(
     ILogger<QualificationDetailsController> logger,
     IContentService contentService,
-    IGovUkInsetTextRenderer renderer,
+    IContentFilterService contentFilterService,
+    IGovUkInsetTextRenderer govUkInsetTextRenderer,
+    IHtmlRenderer htmlRenderer,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
@@ -28,9 +30,7 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var filterParams = userJourneyCookieService.GetUserJourneyModelFromCookie();
-
-        var model = MapList(listPageContent, filterParams);
+        var model = await MapList(listPageContent, await GetFilteredQualifications());
 
         return View(model);
     }
@@ -38,7 +38,7 @@ public class QualificationDetailsController(
     [HttpGet("qualification-details/{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
     {
-        if (string.IsNullOrEmpty(qualificationId))
+        if (!ModelState.IsValid || string.IsNullOrEmpty(qualificationId))
         {
             return BadRequest();
         }
@@ -64,14 +64,88 @@ public class QualificationDetailsController(
         return View(model);
     }
 
-    private static QualificationListModel MapList(QualificationListPage content, UserJourneyModel? filters)
+    private async Task<List<Qualification>> GetFilteredQualifications()
     {
+        var level = userJourneyCookieService.GetLevelOfQualification();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
+
+        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear,
+                                                                    awardingOrganisation);
+    }
+
+    private async Task<QualificationListModel> MapList(QualificationListPage content,
+                                                       List<Qualification>? qualifications)
+    {
+        var basicQualificationsModels = GetBasicQualificationsModels(qualifications);
+
+        var filterModel = GetFilterModel();
+
         return new QualificationListModel
                {
                    BackButton = content.BackButton,
-                   Filters = filters,
-                   Header = content.Header
+                   Filters = filterModel,
+                   Header = content.Header,
+                   SingleQualificationFoundText = content.SingleQualificationFoundText,
+                   MultipleQualificationsFoundText = content.MultipleQualificationsFoundText,
+                   PreSearchBoxContent = await htmlRenderer.ToHtml(content.PreSearchBoxContent),
+                   SearchButtonText = content.SearchButtonText,
+                   LevelHeading = content.LevelHeading,
+                   AwardingOrganisationHeading = content.AwardingOrganisationHeading,
+                   PostSearchCriteriaContent = await htmlRenderer.ToHtml(content.PostSearchCriteriaContent),
+                   PostQualificationListContent = await htmlRenderer.ToHtml(content.PostQualificationListContent),
+                   SearchCriteriaHeading = content.SearchCriteriaHeading,
+                   Qualifications = basicQualificationsModels.OrderBy(x => x.QualificationName).ToList()
                };
+    }
+
+    private FilterModel GetFilterModel()
+    {
+        var filterModel = new FilterModel
+                          {
+                              Country = userJourneyCookieService.GetWhereWasQualificationAwarded()!
+                          };
+
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        if (startDateMonth is not null && startDateYear is not null)
+        {
+            var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+            filterModel.StartDate = $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
+        }
+
+        var level = userJourneyCookieService.GetLevelOfQualification();
+        if (level is not null && level > 0)
+        {
+            filterModel.Level = $"Level {level}";
+        }
+
+        var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
+        if (!string.IsNullOrEmpty(awardingOrganisation))
+        {
+            filterModel.AwardingOrganisation = awardingOrganisation;
+        }
+
+        return filterModel;
+    }
+
+    private static List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification>? qualifications)
+    {
+        var basicQualificationsModels = new List<BasicQualificationModel>();
+        if (qualifications is not null && qualifications.Count > 0)
+        {
+            foreach (var qualification in qualifications)
+            {
+                basicQualificationsModels.Add(new BasicQualificationModel
+                                              {
+                                                  QualificationId = qualification.QualificationId,
+                                                  QualificationLevel = qualification.QualificationLevel,
+                                                  QualificationName = qualification.QualificationName,
+                                                  AwardingOrganisationTitle = qualification.AwardingOrganisationTitle
+                                              });
+            }
+        }
+
+        return basicQualificationsModels;
     }
 
     private async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content)
@@ -95,11 +169,11 @@ public class QualificationDetailsController(
                                  BookmarkText = content.BookmarkText,
                                  CheckAnotherQualificationHeading = content.CheckAnotherQualificationHeading,
                                  CheckAnotherQualificationText =
-                                     await renderer.ToHtml(content.CheckAnotherQualificationText),
+                                     await govUkInsetTextRenderer.ToHtml(content.CheckAnotherQualificationText),
                                  DateAddedLabel = content.DateAddedLabel,
                                  DateOfCheckLabel = content.DateOfCheckLabel,
                                  FurtherInfoHeading = content.FurtherInfoHeading,
-                                 FurtherInfoText = await renderer.ToHtml(content.FurtherInfoText),
+                                 FurtherInfoText = await govUkInsetTextRenderer.ToHtml(content.FurtherInfoText),
                                  LevelLabel = content.LevelLabel,
                                  MainHeader = content.MainHeader,
                                  QualificationNumberLabel = content.QualificationNumberLabel

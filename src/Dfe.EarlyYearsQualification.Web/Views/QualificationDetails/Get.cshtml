@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Qualifications";
-    string[] qualifications = ["eyq-140", "eyq-150", "eyq-160", "eyq-170", "eyq-180", "eyq-220", "eyq-240"];
 }
 
 @{
@@ -11,51 +10,59 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-        <h1 class="govuk-label-wrapper">
-            <label class="govuk-label govuk-label--m">Your Search</label>
-        </h1>
+        <h2 id="your-search-header" class="govuk-label-wrapper">
+            <label class="govuk-label govuk-label--m">@Model.SearchCriteriaHeading</label>
+        </h2>
         <ul class="govuk-list govuk-list--bullet">
-            @if (!string.IsNullOrEmpty(Model.Filters?.WhereWasQualificationAwarded))
-            {
-                <li>@Model.Filters!.WhereWasQualificationAwarded</li>
-            }
-
-            @if (!string.IsNullOrEmpty(Model.Filters?.WhenWasQualificationAwarded))
-            {
-                <li>@Model.Filters!.WhenWasQualificationAwarded</li>
-            }
-
-            @if (!string.IsNullOrEmpty(Model.Filters?.LevelOfQualification))
-            {
-                <li>@Model.Filters!.LevelOfQualification</li>
-            }
-
-            @if (!string.IsNullOrEmpty(Model.Filters?.WhatIsTheAwardingOrganisation))
-            {
-                <li>@Model.Filters!.WhatIsTheAwardingOrganisation</li>
-            }
+            <li id="filter-country">@Model.Filters.Country</li>
+            <li id="filter-start-date">@Model.Filters.StartDate</li>
+            <li id="filter-level">@Model.Filters.Level</li>
+            <li id="filter-org">@Model.Filters.AwardingOrganisation</li>
         </ul>
 
-        <p class="govuk-body">
-            <a href="/" class="govuk-link">Change my search</a>
-        </p>
+        <div id="post-filter-content">@Html.Raw(Model.PostSearchCriteriaContent)</div>
     </div>
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">@Model.Header</h1>
-        <table class="govuk-table">
-            <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">Qualification link</th>
-            </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-            @foreach (var qualification in qualifications)
+        <h1 id="heading" class="govuk-heading-l">@Model.Header</h1>
+        <h3 id="found-heading" class="govuk-body-l">
+            <strong>
+                @Model.Qualifications.Count @(Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText)
+            </strong>
+        </h3>
+        <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
+        <div class="govuk-form-group">
+            <input class="govuk-input govuk-!-width-three-quarters" id="refine-search" name="refine-search" aria-label="refine searYch box" type="text">
+            <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                @Model.SearchButtonText
+            </button>
+        </div>
+            @foreach (var qualification in Model.Qualifications)
             {
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">@Html.ActionLink(qualification, "Index", "ConfirmQualification", new { qualificationId = qualification })</td>
-                </tr>
+                <div class="chevron-card__wrapper">
+                    <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })" class="govuk-link govuk-heading-m chevron-card__link">
+                        @qualification.QualificationName
+                    </a>
+                    <dl class="govuk-summary-list govuk-summary-list--no-border">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key level">
+                                @Model.LevelHeading
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                @qualification.QualificationLevel
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key awarding-org">
+                                @Model.AwardingOrganisationHeading
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                @qualification.AwardingOrganisationTitle
+                            </dd>
+                        </div>
+                    </dl>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                </div>
             }
-            </tbody>
-        </table>
+        <div id="post-list-content">@Html.Raw(Model.PostQualificationListContent)</div>
     </div>
 </div>

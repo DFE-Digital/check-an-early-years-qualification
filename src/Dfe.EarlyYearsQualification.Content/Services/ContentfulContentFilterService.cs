@@ -38,12 +38,13 @@ public class ContentfulContentFilterService(
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
 
     public async Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth,
-                                                                     int? startDateYear)
+                                                                     int? startDateYear, string? awardingOrganisation)
     {
-        logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}",
+        logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}",
                               level,
                               startDateMonth,
-                              startDateYear);
+                              startDateYear,
+                              awardingOrganisation);
 
         // create query builder
         var queryBuilder = QueryBuilder.ContentTypeIs(ContentTypes.Qualification);
@@ -51,6 +52,11 @@ public class ContentfulContentFilterService(
         if (level is > 0)
         {
             queryBuilder = queryBuilder.FieldEquals("fields.qualificationLevel", level.Value.ToString());
+        }
+
+        if (!string.IsNullOrEmpty(awardingOrganisation))
+        {
+            queryBuilder = queryBuilder.FieldEquals("fields.awardingOrganisationTitle", awardingOrganisation);
         }
 
         // get qualifications

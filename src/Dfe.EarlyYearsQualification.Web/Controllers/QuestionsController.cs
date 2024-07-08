@@ -127,21 +127,6 @@ public class QuestionsController(
         return RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation));
     }
 
-    private bool WithinDateRange()
-    {
-        var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
-        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
-        if (qualificationAwardedDateSplit.Length == 2 
-            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth) 
-            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
-        {
-            var date = new DateOnly(parsedStartYear, parsedStartMonth, 1);
-            return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
-        }
-
-        return false;
-    }
-
     [HttpGet("what-is-the-awarding-organisation")]
     public async Task<IActionResult> WhatIsTheAwardingOrganisation()
     {
@@ -186,28 +171,23 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
+    private bool WithinDateRange()
+    {
+        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        if (startDateMonth is not null && startDateYear is not null)
+        {
+            var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+            return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
+        }
+
+        return false;
+    }
+    
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
-        var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
-
-        int? level = null;
-        if (int.TryParse(cookie.LevelOfQualification, out var parsedLevel))
-        {
-            level = parsedLevel;
-        }
-
-        int? startDateMonth = null;
-        int? startDateYear = null;
-        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
-        if (qualificationAwardedDateSplit.Length == 2
-            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
-            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
-        {
-            startDateMonth = parsedStartMonth;
-            startDateYear = parsedStartYear;
-        }
-
-        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear);
+        int? level = userJourneyCookieService.GetLevelOfQualification();
+        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null);
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName)

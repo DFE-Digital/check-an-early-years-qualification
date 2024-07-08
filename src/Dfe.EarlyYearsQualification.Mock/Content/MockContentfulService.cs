@@ -212,7 +212,16 @@ public class MockContentfulService : IContentService
                                                           DisplayText = "TEST",
                                                           Href = "/questions/what-is-the-awarding-organisation",
                                                           OpenInNewTab = false
-                                                      }
+                                                      },
+                                         LevelHeading = "Level",
+                                         AwardingOrganisationHeading = "Awarding organisation",
+                                         SearchButtonText = "Refine",
+                                         SearchCriteriaHeading = "Your search",
+                                         MultipleQualificationsFoundText = "qualifications found",
+                                         SingleQualificationFoundText = "qualification found",
+                                         PreSearchBoxContent = ContentfulContentHelper.Text("Pre search box content"),
+                                         PostQualificationListContent = ContentfulContentHelper.Text("Post qualification list content"),
+                                         PostSearchCriteriaContent = ContentfulContentHelper.Text("Post search criteria content")
                                      });
     }
 

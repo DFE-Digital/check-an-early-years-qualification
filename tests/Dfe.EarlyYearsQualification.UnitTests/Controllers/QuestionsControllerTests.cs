@@ -515,10 +515,10 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ActionName.Should().Be("WhatIsTheAwardingOrganisation");
-        
+
         mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification("3"), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task Post_WhatLevelIsTheQualification_Level2WithInDate_ReturnsRedirectResponse()
     {
@@ -528,9 +528,10 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
 
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie())
-                                    .Returns(new UserJourneyModel() { WhenWasQualificationAwarded = "06/2015" });
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object, mockUserJourneyCookieService.Object, mockContentFilterService.Object);
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded())
+                                    .Returns((6, 2015));
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
+                                                 mockUserJourneyCookieService.Object, mockContentFilterService.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -543,7 +544,7 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
-        resultType!.ControllerName.Should().Be("Advice");
+        resultType.ControllerName.Should().Be("Advice");
     }
 
     [TestMethod]
@@ -600,7 +601,11 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
-            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>()))
+            .Setup(x => x.GetFilteredQualifications(
+                                                    It.IsAny<int?>(),
+                                                    It.IsAny<int?>(),
+                                                    It.IsAny<int?>(),
+                                                    It.IsAny<string?>()))
             .ReturnsAsync([]);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
@@ -666,7 +671,8 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
-            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>()))
+            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
+                                                    It.IsAny<string?>()))
             .ReturnsAsync(listOfQualifications);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
@@ -731,7 +737,8 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
-            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>()))
+            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
+                                                    It.IsAny<string?>()))
             .ReturnsAsync(listOfQualifications);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
@@ -781,7 +788,8 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
-            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>()))
+            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
+                                                    It.IsAny<string?>()))
             .ReturnsAsync([]);
 
         controller.ModelState.AddModelError("option", "test error");

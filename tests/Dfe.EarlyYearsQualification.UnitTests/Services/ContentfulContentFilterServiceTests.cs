@@ -53,7 +53,7 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        var filteredQualifications = await filterService.GetFilteredQualifications(null, null, null);
+        var filteredQualifications = await filterService.GetFilteredQualifications(null, null, null, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(2);
@@ -94,12 +94,52 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        await filterService.GetFilteredQualifications(4, null, null);
+        await filterService.GetFilteredQualifications(4, null, null, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.qualificationLevel", "4");
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInAwardingOrganisation_ClientContainsAwardingOrganisationInQuery()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, null, null, "NCFE");
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle", "NCFE");
     }
 
     [TestMethod]
@@ -151,7 +191,7 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        var filteredQualifications = await filterService.GetFilteredQualifications(4, 9, null);
+        var filteredQualifications = await filterService.GetFilteredQualifications(4, 9, null, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(3);
@@ -209,7 +249,7 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        var filteredQualifications = await filterService.GetFilteredQualifications(4, null, 2014);
+        var filteredQualifications = await filterService.GetFilteredQualifications(4, null, 2014, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(3);
@@ -276,7 +316,7 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        var filteredQualifications = await filterService.GetFilteredQualifications(4, 5, 2016);
+        var filteredQualifications = await filterService.GetFilteredQualifications(4, 5, 2016, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(3);
@@ -343,7 +383,7 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        var filteredQualifications = await filterService.GetFilteredQualifications(4, 5, 2016);
+        var filteredQualifications = await filterService.GetFilteredQualifications(4, 5, 2016, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(3);
@@ -364,7 +404,7 @@ public class ContentfulContentFilterServiceTests
         var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
         var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object);
 
-        var filteredQualifications = await filterService.GetFilteredQualifications(4, 5, 2016);
+        var filteredQualifications = await filterService.GetFilteredQualifications(4, 5, 2016, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Should().BeEmpty();
@@ -402,7 +442,7 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        await filterService.GetFilteredQualifications(4, 5, 2016);
+        await filterService.GetFilteredQualifications(4, 5, 2016, null);
 
         mockLogger.VerifyError("Qualification date Sep15 has unexpected format");
     }
@@ -439,7 +479,7 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        await filterService.GetFilteredQualifications(4, 5, 2016);
+        await filterService.GetFilteredQualifications(4, 5, 2016, null);
 
         mockLogger.VerifyError("Qualification date Sept-15 contains unexpected month value");
     }
@@ -476,7 +516,7 @@ public class ContentfulContentFilterServiceTests
                                 QueryBuilder = mockQueryBuilder
                             };
 
-        await filterService.GetFilteredQualifications(4, 5, 2016);
+        await filterService.GetFilteredQualifications(4, 5, 2016, null);
 
         mockLogger.VerifyError("Qualification date Aug-1a contains unexpected year value");
     }
