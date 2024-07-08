@@ -46,3 +46,11 @@ body {
     transform: translateY(0) rotate(45deg) scale(1);
     width: 14px;
 }
+
+.chevron-card__link:hover::after {
+    border-color: #003078;
+}
+
+.chevron-card__link:visited::after {
+    border-color: #4C2C92;
+}
