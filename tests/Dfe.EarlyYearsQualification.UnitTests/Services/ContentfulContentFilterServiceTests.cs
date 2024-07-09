@@ -1,6 +1,7 @@
 using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
@@ -139,7 +140,7 @@ public class ContentfulContentFilterServiceTests
         var queryString = mockQueryBuilder.GetQueryString();
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
-        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "NCFE,All Higher Education Institutes,Various Awarding Organisations");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,NCFE");
     }
 
     [TestMethod]
@@ -519,6 +520,373 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(4, 5, 2016, null, null);
 
         mockLogger.VerifyError("Qualification date Aug-1a contains unexpected year value");
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInEdexcel_QueryIncludesPearson()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "Pearson",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Edexcel, null);
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,Edexcel (now Pearson Education Ltd),Pearson Education Ltd");
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInPearson_QueryIncludesEdexcel()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "Pearson",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Pearson, null);
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,Edexcel (now Pearson Education Ltd),Pearson Education Ltd");
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInNCFEAndNoStartDate_QueryDoesntContainCache()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Ncfe, null);
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,NCFE");
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInCACHEAndNoStartDate_QueryDoesntContainNCFE()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "CACHE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Cache, null);
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,CACHE Council for Awards in Care Health and Education");
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInNCFEAndStartDateLessThanSept14_QueryDoesntContainCache()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, 8, 2014, AwardingOrganisations.Ncfe, null);
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,NCFE");
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInCACHEAndStartDateLessThanSept14_QueryDoesntContainNCFE()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "CACHE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, 8, 2014, AwardingOrganisations.Cache, null);
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,CACHE Council for Awards in Care Health and Education");
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInNCFEAndStartDateGreaterThanSept14_QueryContainsCache()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "NCFE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, 9, 2014, AwardingOrganisations.Ncfe, null);
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,NCFE,CACHE Council for Awards in Care Health and Education");
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInCACHEAndStartDateGreaterThanSept14_QueryContainsNCFE()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "test",
+                                                        "CACHE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        await filterService.GetFilteredQualifications(null, 9, 2014, AwardingOrganisations.Cache, null);
+
+        var queryString = mockQueryBuilder.GetQueryString();
+        queryString.Count.Should().Be(2);
+        queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("fields.awardingOrganisationTitle[in]", "All Higher Education Institutes,Various Awarding Organisations,NCFE,CACHE Council for Awards in Care Health and Education");
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_PassInQualificationNameThatProducesWeightAbove70_ReturnsQualification()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "Technical Diploma in Child Care",
+                                                        "CACHE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "Diploma in Early Years Child Care",
+                                                        "CACHE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService = new ContentfulContentFilterService(mockContentfulClient.Object, mockLogger.Object)
+                            {
+                                QueryBuilder = mockQueryBuilder
+                            };
+
+        var qualifications = await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Cache, "tecnical");
+
+        qualifications.Should().NotBeNull();
+        qualifications.Count.Should().Be(1);
     }
 }
 

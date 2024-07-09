@@ -60,10 +60,11 @@ public class ContentfulContentFilterService(
         {
             var awardingOrganisations = new List<string>
                                         {
-                                            awardingOrganisation, 
                                             "All Higher Education Institutes",
                                             "Various Awarding Organisations"
                                         };
+            awardingOrganisations.AddRange(IncludeLinkedOrganisations(awardingOrganisation, startDateMonth, startDateYear));
+            
             queryBuilder = queryBuilder.FieldIncludes("fields.awardingOrganisationTitle", awardingOrganisations);
         }
 
@@ -88,12 +89,39 @@ public class ContentfulContentFilterService(
         return filteredQualifications;
     }
 
-    private List<Qualification> FilterQualificationsByName(List<Qualification> qualifications, string? qualificationName)
+    private static List<string> IncludeLinkedOrganisations(string awardingOrganisation, int? startDateMonth, int? startDateYear)
     {
-        if (string.IsNullOrEmpty(qualificationName))
+        var result = new List<string>();
+
+        if (awardingOrganisation is AwardingOrganisations.Edexcel or AwardingOrganisations.Pearson)
         {
-            return qualifications;
+            result.AddRange(new List<string>{AwardingOrganisations.Edexcel, AwardingOrganisations.Pearson});
         }
+        else if (awardingOrganisation is AwardingOrganisations.Ncfe or AwardingOrganisations.Cache
+                 && startDateMonth.HasValue && startDateYear.HasValue)
+        {
+            var cutOffDate = new DateOnly(2014, 9, 1);
+            var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+            if (date >= cutOffDate)
+            {
+                result.AddRange(new List<string>{AwardingOrganisations.Ncfe, AwardingOrganisations.Cache});
+            }
+            else
+            {
+                result.Add(awardingOrganisation);
+            }
+        }
+        else
+        {
+            result.Add(awardingOrganisation);
+        }
+        
+        return result;
+    }
+
+    private static List<Qualification> FilterQualificationsByName(List<Qualification> qualifications, string? qualificationName)
+    {
+        if (string.IsNullOrEmpty(qualificationName)) return qualifications;
 
         var matchedQualifications = new List<Qualification>();
         foreach (var qualification in qualifications)
@@ -111,7 +139,7 @@ public class ContentfulContentFilterService(
     private List<Qualification> FilterQualificationsByDate(int? startDateMonth, int? startDateYear,
                                                            List<Qualification> qualifications)
     {
-        if (!startDateMonth.HasValue || !startDateYear.HasValue) return qualifications.ToList();
+        if (!startDateMonth.HasValue || !startDateYear.HasValue) return qualifications;
         
         var results = new List<Qualification>();
         var enteredStartDate = new DateOnly(startDateYear.Value, startDateMonth.Value, Day);

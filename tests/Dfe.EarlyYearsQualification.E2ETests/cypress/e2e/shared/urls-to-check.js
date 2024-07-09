@@ -7,6 +7,7 @@ export const pages = [
   "/questions/where-was-the-qualification-awarded",
   "/questions/when-was-the-qualification-started",
   "/questions/what-level-is-the-qualification",
+  "/questions/what-is-the-awarding-organisation",
   "/qualifications",
   "/qualifications/qualification-details/EYQ-240"
 ];
@@ -15,6 +16,7 @@ export const pagesWithForms = [
   "/questions/where-was-the-qualification-awarded",
   "/questions/when-was-the-qualification-started",
   "/questions/what-level-is-the-qualification",
+  "/questions/what-is-the-awarding-organisation",
   "/cookies",
   "/qualifications",
 ];
