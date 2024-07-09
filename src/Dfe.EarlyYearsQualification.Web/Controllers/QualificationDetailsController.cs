@@ -34,6 +34,14 @@ public class QualificationDetailsController(
 
         return View(model);
     }
+    
+    [HttpPost]
+    public IActionResult Refine(string refineSearch)
+    {
+        userJourneyCookieService.SetQualificationNameSearchCriteria(refineSearch);
+
+        return RedirectToAction("Get");
+    }
 
     [HttpGet("qualification-details/{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
@@ -69,9 +77,10 @@ public class QualificationDetailsController(
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
+        var searchCriteria = userJourneyCookieService.GetSearchCriteria();
 
         return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear,
-                                                                    awardingOrganisation);
+                                                                    awardingOrganisation, searchCriteria);
     }
 
     private async Task<QualificationListModel> MapList(QualificationListPage content,
@@ -95,6 +104,7 @@ public class QualificationDetailsController(
                    PostSearchCriteriaContent = await htmlRenderer.ToHtml(content.PostSearchCriteriaContent),
                    PostQualificationListContent = await htmlRenderer.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
+                   SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
                    Qualifications = basicQualificationsModels.OrderBy(x => x.QualificationName).ToList()
                };
     }

@@ -51,6 +51,15 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         SetJourneyCookie(model);
     }
 
+    public void SetQualificationNameSearchCriteria(string searchCriteria)
+    {
+        var model = GetUserJourneyModelFromCookie();
+
+        model.SearchCriteria = searchCriteria;
+
+        SetJourneyCookie(model);
+    }
+
     public UserJourneyModel GetUserJourneyModelFromCookie()
     {
         var cookie = context.HttpContext?.Request.Cookies[CookieKeyNames.UserJourneyKey];
@@ -130,6 +139,18 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         }
 
         return awardingOrganisation;
+    }
+
+    public string? GetSearchCriteria()
+    {
+        var cookie = GetUserJourneyModelFromCookie();
+        string? searchCriteria = null;
+        if (!string.IsNullOrEmpty(cookie.SearchCriteria))
+        {
+            searchCriteria = cookie.SearchCriteria;
+        }
+
+        return searchCriteria;
     }
 
     private void SetJourneyCookie(UserJourneyModel model)

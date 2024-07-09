@@ -9,7 +9,7 @@ public class QualificationListModel
     public FilterModel Filters { get; init; } = new();
 
     public NavigationLink? BackButton { get; init; }
-    
+
     public string SingleQualificationFoundText { get; init; } = string.Empty;
 
     public string MultipleQualificationsFoundText { get; init; } = string.Empty;
@@ -27,6 +27,8 @@ public class QualificationListModel
     public string SearchCriteriaHeading { get; init; } = string.Empty;
 
     public string PostSearchCriteriaContent { get; init; } = string.Empty;
+
+    public string? SearchCriteria { get; init; } = string.Empty;
 
     public List<BasicQualificationModel> Qualifications { get; init; } = [];
 }
