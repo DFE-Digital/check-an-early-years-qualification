@@ -38,7 +38,7 @@ public class QualificationDetailsController(
     [HttpPost]
     public IActionResult Refine(string refineSearch)
     {
-        userJourneyCookieService.SetNameSearchCriteria(refineSearch);
+        userJourneyCookieService.SetQualificationNameSearchCriteria(refineSearch);
 
         return RedirectToAction("Get");
     }

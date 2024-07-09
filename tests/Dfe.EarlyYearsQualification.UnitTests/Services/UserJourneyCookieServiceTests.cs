@@ -293,7 +293,7 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
-        (int? startMonth, int? startYear)  = service.GetWhenWasQualificationAwarded();
+        (int? startMonth, int? startYear) = service.GetWhenWasQualificationAwarded();
 
         startMonth.Should().BeNull();
         startYear.Should().BeNull();
@@ -311,7 +311,7 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
-        (int? startMonth, int? startYear)  = service.GetWhenWasQualificationAwarded();
+        (int? startMonth, int? startYear) = service.GetWhenWasQualificationAwarded();
 
         startMonth.Should().BeNull();
         startYear.Should().BeNull();
@@ -329,10 +329,64 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
-        (int? startMonth, int? startYear)  = service.GetWhenWasQualificationAwarded();
+        (int? startMonth, int? startYear) = service.GetWhenWasQualificationAwarded();
 
         startMonth.Should().Be(4);
         startYear.Should().Be(2015);
+    }
+    
+    [TestMethod]
+    public void SetNameSearchCriteria_StringProvided_SetsCookieCorrectly()
+    {
+        var modelInCookie = new UserJourneyModel();
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(modelInCookie);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var searchCriteria = "This is a test";
+        service.SetQualificationNameSearchCriteria(searchCriteria);
+
+        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
+                                                              {
+                                                                  SearchCriteria = searchCriteria
+                                                              });
+
+        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+    }
+    
+    [TestMethod]
+    public void GetSearchCriteria_CookieHasInvalidValue_ReturnsNull()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                SearchCriteria = ""
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var searchCriteria = service.GetSearchCriteria();
+
+        searchCriteria.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public void GetSearchCriteria_CookieHasValidValue_ReturnsValue()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                SearchCriteria = "Test"
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var searchCriteria = service.GetSearchCriteria();
+
+        searchCriteria.Should().Be("Test");
     }
 
     private static Mock<IHttpContextAccessor> SetHttpContextWithExistingCookie(object? model)

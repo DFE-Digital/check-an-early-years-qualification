@@ -51,7 +51,7 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         SetJourneyCookie(model);
     }
 
-    public void SetNameSearchCriteria(string searchCriteria)
+    public void SetQualificationNameSearchCriteria(string searchCriteria)
     {
         var model = GetUserJourneyModelFromCookie();
 

@@ -238,4 +238,34 @@ public class QualificationDetailsControllerTests
 
         mockLogger.VerifyError("No content for the qualification list page");
     }
+
+    [TestMethod]
+    public void Refine_SaveQualificationName_RedirectsToGet()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockContentFilterService.Object, mockInsetTextRenderer.Object,
+                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+
+        var result = controller.Refine("Test");
+
+        result.Should().BeOfType<RedirectToActionResult>();
+
+        var actionResult = (RedirectToActionResult)result;
+
+        actionResult.ActionName.Should().Be("Get");
+        mockUserJourneyCookieService.Verify(x => x.SetQualificationNameSearchCriteria("Test"), Times.Once);
+    }
 }

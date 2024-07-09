@@ -9,7 +9,7 @@ public interface IUserJourneyCookieService
     public void SetLevelOfQualification(string level);
     public void SetAwardingOrganisation(string awardingOrganisation);
     
-    public void SetNameSearchCriteria(string searchCriteria);
+    public void SetQualificationNameSearchCriteria(string searchCriteria);
     public UserJourneyModel GetUserJourneyModelFromCookie();
     public void ResetUserJourneyCookie();
 
