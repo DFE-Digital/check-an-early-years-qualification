@@ -240,7 +240,7 @@ public class QuestionsController(
                                                           string controllerName)
     {
         var awardingOrganisationExclusions =
-            new[] { "All Higher Education Institutes", "Various Awarding Organisations" };
+            new[] { AwardingOrganisations.AllHigherEducation, AwardingOrganisations.Various };
         var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle)
                                                         .Distinct()
                                                         .Where(x => !awardingOrganisationExclusions.Any(x.Contains))

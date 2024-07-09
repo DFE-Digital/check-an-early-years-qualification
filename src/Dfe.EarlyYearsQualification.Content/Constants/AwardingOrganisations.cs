@@ -9,4 +9,8 @@ public static class AwardingOrganisations
     public const string Ncfe = "NCFE";
 
     public const string Cache = "CACHE Council for Awards in Care Health and Education";
+
+    public const string Various = "Various Awarding Organisations";
+
+    public const string AllHigherEducation = "All Higher Education Institutes";
 }
