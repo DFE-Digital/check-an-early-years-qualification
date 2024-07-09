@@ -64,6 +64,8 @@ builder.Services.AddScoped(x =>
                                return factory.GetUrlHelper(actionContext!);
                            });
 
+builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
+
 var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
 
@@ -104,7 +106,6 @@ app.MapControllerRoute(
                        "{controller=Home}/{action=Index}/{id?}");
 
 await app.RunAsync();
-
 
 [ExcludeFromCodeCoverage]
 // ReSharper disable once UnusedType.Global

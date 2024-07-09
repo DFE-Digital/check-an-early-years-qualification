@@ -5,13 +5,13 @@ using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using FuzzySharp;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentFilterService(
     IContentfulClient contentfulClient,
+    IFuzzyAdapter fuzzyAdapter,
     ILogger<ContentfulContentFilterService> logger)
     : IContentFilterService
 {
@@ -39,9 +39,10 @@ public class ContentfulContentFilterService(
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
 
     public async Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth,
-                                                                     int? startDateYear, string? awardingOrganisation, string? qualificationName)
+                                                                     int? startDateYear, string? awardingOrganisation,
+                                                                     string? qualificationName)
     {
-        logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {qualificationName}",
+        logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}",
                               level,
                               startDateMonth,
                               startDateYear,
@@ -63,8 +64,9 @@ public class ContentfulContentFilterService(
                                             "All Higher Education Institutes",
                                             "Various Awarding Organisations"
                                         };
-            awardingOrganisations.AddRange(IncludeLinkedOrganisations(awardingOrganisation, startDateMonth, startDateYear));
-            
+            awardingOrganisations.AddRange(IncludeLinkedOrganisations(awardingOrganisation, startDateMonth,
+                                                                      startDateYear));
+
             queryBuilder = queryBuilder.FieldIncludes("fields.awardingOrganisationTitle", awardingOrganisations);
         }
 
@@ -79,23 +81,24 @@ public class ContentfulContentFilterService(
             logger.LogError(e, "Error getting qualifications");
             return [];
         }
-        
+
         // apply start date filtering
         var filteredQualifications = FilterQualificationsByDate(startDateMonth, startDateYear, qualifications.ToList());
-        
+
         // Filter based on qualification name
         filteredQualifications = FilterQualificationsByName(filteredQualifications, qualificationName);
 
         return filteredQualifications;
     }
 
-    private static List<string> IncludeLinkedOrganisations(string awardingOrganisation, int? startDateMonth, int? startDateYear)
+    private static List<string> IncludeLinkedOrganisations(string awardingOrganisation, int? startDateMonth,
+                                                           int? startDateYear)
     {
         var result = new List<string>();
 
         if (awardingOrganisation is AwardingOrganisations.Edexcel or AwardingOrganisations.Pearson)
         {
-            result.AddRange(new List<string>{AwardingOrganisations.Edexcel, AwardingOrganisations.Pearson});
+            result.AddRange(new List<string> { AwardingOrganisations.Edexcel, AwardingOrganisations.Pearson });
         }
         else if (awardingOrganisation is AwardingOrganisations.Ncfe or AwardingOrganisations.Cache
                  && startDateMonth.HasValue && startDateYear.HasValue)
@@ -104,7 +107,7 @@ public class ContentfulContentFilterService(
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
             if (date >= cutOffDate)
             {
-                result.AddRange(new List<string>{AwardingOrganisations.Ncfe, AwardingOrganisations.Cache});
+                result.AddRange(new List<string> { AwardingOrganisations.Ncfe, AwardingOrganisations.Cache });
             }
             else
             {
@@ -115,18 +118,20 @@ public class ContentfulContentFilterService(
         {
             result.Add(awardingOrganisation);
         }
-        
+
         return result;
     }
 
-    private static List<Qualification> FilterQualificationsByName(List<Qualification> qualifications, string? qualificationName)
+    private List<Qualification> FilterQualificationsByName(
+        List<Qualification> qualifications,
+        string? qualificationName)
     {
         if (string.IsNullOrEmpty(qualificationName)) return qualifications;
 
         var matchedQualifications = new List<Qualification>();
         foreach (var qualification in qualifications)
         {
-            var weight = Fuzz.PartialRatio(qualificationName, qualification.QualificationName);
+            var weight = fuzzyAdapter.PartialRatio(qualificationName, qualification.QualificationName);
             if (weight > 70)
             {
                 matchedQualifications.Add(qualification);
@@ -140,7 +145,7 @@ public class ContentfulContentFilterService(
                                                            List<Qualification> qualifications)
     {
         if (!startDateMonth.HasValue || !startDateYear.HasValue) return qualifications;
-        
+
         var results = new List<Qualification>();
         var enteredStartDate = new DateOnly(startDateYear.Value, startDateMonth.Value, Day);
         foreach (var qualification in qualifications)
