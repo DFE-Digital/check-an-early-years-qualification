@@ -965,6 +965,65 @@ public class ContentfulContentFilterServiceTests
         qualifications.Should().NotBeNull();
         qualifications.Count.Should().Be(1);
     }
+
+    [TestMethod]
+    public async Task
+        GetFilteredQualifications_PassInQualificationNameThatProducesWeightEqual70_DoesNotReturnQualification()
+    {
+        // ReSharper disable once StringLiteralTypo
+        const string qualificationSearch = "teknical";
+
+        const string technicalDiplomaInChildCare = "Technical Diploma in Child Care";
+
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        technicalDiplomaInChildCare,
+                                                        "CACHE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements"),
+                                      new Qualification(
+                                                        "EYQ-123",
+                                                        "Diploma in Early Years Child Care",
+                                                        "CACHE",
+                                                        4,
+                                                        "Apr-15",
+                                                        "Aug-19",
+                                                        "abc/123/987",
+                                                        "requirements")
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
+        mockFuzzyAdapter.Setup(a => a.PartialRatio(qualificationSearch, technicalDiplomaInChildCare)).Returns(70);
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService =
+            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            {
+                QueryBuilder = mockQueryBuilder
+            };
+
+        var qualifications =
+            await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Cache,
+                                                          qualificationSearch);
+
+        qualifications.Should().NotBeNull();
+        qualifications.Should().BeEmpty();
+    }
 }
 
 public class MockQueryBuilder : QueryBuilder<Qualification>
