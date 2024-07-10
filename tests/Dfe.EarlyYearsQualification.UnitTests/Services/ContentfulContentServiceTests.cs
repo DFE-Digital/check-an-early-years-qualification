@@ -477,6 +477,25 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
+    public async Task GetConfirmQualificationPage_NoData_ReturnsNull()
+    {
+        var content = new ContentfulCollection<ConfirmQualificationPage> { Items = [] };
+
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<ConfirmQualificationPage>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetConfirmQualificationPage();
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
     public async Task GetQualificationListPage_ReturnsContent()
     {
         var content = new ContentfulCollection<QualificationListPage>
@@ -506,6 +525,25 @@ public class ContentfulContentServiceTests
         result!.Header.Should().Be("Header");
         result.AwardingOrganisationHeading.Should().Be("AO Heading");
         result.MultipleQualificationsFoundText.Should().Be("Multiple qualifications found");
+    }
+
+    [TestMethod]
+    public async Task GetQualificationListPage_NoData_ReturnsNull()
+    {
+        var content = new ContentfulCollection<QualificationListPage> { Items = [] };
+
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<QualificationListPage>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetQualificationListPage();
+
+        result.Should().BeNull();
     }
 
     [TestMethod]
