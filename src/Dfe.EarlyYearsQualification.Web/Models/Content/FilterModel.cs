@@ -8,5 +8,5 @@ public class FilterModel
 
     public string Level { get; set; } = "Any level";
 
-    public string AwardingOrganisation { get; set; } = "Any organisation";
+    public string AwardingOrganisation { get; set; } = "Various awarding organisations";
 }
