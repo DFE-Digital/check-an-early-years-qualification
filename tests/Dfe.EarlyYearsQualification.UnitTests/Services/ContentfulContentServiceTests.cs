@@ -36,7 +36,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetStartPage_PageFound_ReturnsExpectedResult()
+    public async Task GetStartPage_PageFound_ReturnsExpectedResult()
     {
         var startPage = new StartPage { CtaButtonText = "CtaButton" };
 
@@ -51,14 +51,14 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetStartPage().Result;
+        var result = await service.GetStartPage();
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(startPage);
     }
 
     [TestMethod]
-    public void GetStartPage_NoContent_ReturnsNull()
+    public async Task GetStartPage_NoContent_ReturnsNull()
     {
         var pages = new ContentfulCollection<StartPage> { Items = new List<StartPage>() };
         // NB: If "pages.Items" is ever null, the iterator built into ContentfulCollection will throw an exception
@@ -72,7 +72,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetStartPage().Result;
+        var result = await service.GetStartPage();
 
         _logger.VerifyWarning("No start page entry returned");
 
@@ -80,7 +80,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetStartPage_NullPages_ReturnsNull()
+    public async Task GetStartPage_NullPages_ReturnsNull()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -91,7 +91,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetStartPage().Result;
+        var result = await service.GetStartPage();
 
         _logger.VerifyWarning("No start page entry returned");
 
@@ -99,7 +99,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetAccessibilityStatementPage_NoContent_ReturnsNull()
+    public async Task GetAccessibilityStatementPage_NoContent_ReturnsNull()
     {
         var pages = new ContentfulCollection<AccessibilityStatementPage>
                     { Items = new List<AccessibilityStatementPage>() };
@@ -113,7 +113,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetAccessibilityStatementPage().Result;
+        var result = await service.GetAccessibilityStatementPage();
 
         _logger.VerifyWarning("No accessibility statement page entry returned");
 
@@ -121,7 +121,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetAccessibilityStatementPage_NullPages_ReturnsNull()
+    public async Task GetAccessibilityStatementPage_NullPages_ReturnsNull()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -132,7 +132,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetAccessibilityStatementPage().Result;
+        var result = await service.GetAccessibilityStatementPage();
 
         _logger.VerifyWarning("No accessibility statement page entry returned");
 
@@ -140,7 +140,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetAccessibilityStatementPage_PageFound_ReturnsExpectedResult()
+    public async Task GetAccessibilityStatementPage_PageFound_ReturnsExpectedResult()
     {
         var accessibilityStatementPage = new AccessibilityStatementPage { Heading = "Heading" };
 
@@ -156,14 +156,14 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetAccessibilityStatementPage().Result;
+        var result = await service.GetAccessibilityStatementPage();
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(accessibilityStatementPage);
     }
 
     [TestMethod]
-    public void GetCookiesPage_NoContent_ReturnsNull()
+    public async Task GetCookiesPage_NoContent_ReturnsNull()
     {
         var pages = new ContentfulCollection<CookiesPage> { Items = new List<CookiesPage>() };
 
@@ -176,7 +176,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetCookiesPage().Result;
+        var result = await service.GetCookiesPage();
 
         _logger.VerifyWarning("No cookies page entry returned");
 
@@ -184,7 +184,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetCookiesPage_NullPages_ReturnsNull()
+    public async Task GetCookiesPage_NullPages_ReturnsNull()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -195,7 +195,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetCookiesPage().Result;
+        var result = await service.GetCookiesPage();
 
         _logger.VerifyWarning("No cookies page entry returned");
 
@@ -203,7 +203,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetCookiesPage_PageFound_ReturnsExpectedResult()
+    public async Task GetCookiesPage_PageFound_ReturnsExpectedResult()
     {
         var cookiesPage = new CookiesPage
                           {
@@ -224,14 +224,14 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetCookiesPage().Result;
+        var result = await service.GetCookiesPage();
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(cookiesPage);
     }
 
     [TestMethod]
-    public void GetNavigationLinks_NoContent_LogsWarningAndReturns()
+    public async Task GetNavigationLinks_NoContent_LogsWarningAndReturns()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -242,7 +242,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetNavigationLinks().Result;
+        var result = await service.GetNavigationLinks();
 
         _logger.VerifyWarning("No navigation links returned");
 
@@ -250,7 +250,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetNavigationLinks_Null_LogsWarningAndReturns()
+    public async Task GetNavigationLinks_Null_LogsWarningAndReturns()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -261,7 +261,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetNavigationLinks().Result;
+        var result = await service.GetNavigationLinks();
 
         _logger.VerifyWarning("No navigation links returned");
 
@@ -269,7 +269,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetNavigationLinks_LinksFound_ReturnsListOfLinks()
+    public async Task GetNavigationLinks_LinksFound_ReturnsListOfLinks()
     {
         var links = new List<NavigationLink>
                     {
@@ -298,14 +298,14 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetNavigationLinks().Result;
+        var result = await service.GetNavigationLinks();
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(links);
     }
 
     [TestMethod]
-    public void GetAdvicePage_Null_LogsAndReturnsDefault()
+    public async Task GetAdvicePage_Null_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -316,7 +316,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetAdvicePage("SomeId").Result;
+        var result = await service.GetAdvicePage("SomeId");
 
         _logger.VerifyWarning("Advice page with SomeId could not be found");
 
@@ -324,7 +324,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetAdvicePage_ReturnsContent_RendersHtmlAndReturns()
+    public async Task GetAdvicePage_ReturnsContent_RendersHtmlAndReturns()
     {
         var content = new ContentfulCollection<AdvicePage>
                       {
@@ -347,7 +347,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetAdvicePage("SomeId").Result;
+        var result = await service.GetAdvicePage("SomeId");
 
         result!.Heading.Should().Be("Test Heading");
         result.Body.Should().Be(_testRichText);
@@ -355,7 +355,161 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetDetailsPage_Null_LogsAndReturnsDefault()
+    public async Task GetRadioQuestionPage_ReturnsContent()
+    {
+        var content = new ContentfulCollection<RadioQuestionPage>
+                      {
+                          Items =
+                          [
+                              new RadioQuestionPage
+                              {
+                                  Question = "Question",
+                                  AdditionalInformationHeader = "Additional info"
+                              }
+                          ]
+                      };
+
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<RadioQuestionPage>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetRadioQuestionPage("SomeId");
+
+        result!.Question.Should().Be("Question");
+        result.AdditionalInformationHeader.Should().Be("Additional info");
+    }
+
+    [TestMethod]
+    public async Task GetDateQuestionPage_ReturnsContent()
+    {
+        var content = new ContentfulCollection<DateQuestionPage>
+                      {
+                          Items =
+                          [
+                              new DateQuestionPage
+                              {
+                                  Question = "Question",
+                                  QuestionHint = "Question hint"
+                              }
+                          ]
+                      };
+
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<DateQuestionPage>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetDateQuestionPage("SomeId");
+
+        result!.Question.Should().Be("Question");
+        result.QuestionHint.Should().Be("Question hint");
+    }
+
+    [TestMethod]
+    public async Task GetDropdownQuestionPage_ReturnsContent()
+    {
+        var content = new ContentfulCollection<DropdownQuestionPage>
+                      {
+                          Items =
+                          [
+                              new DropdownQuestionPage
+                              {
+                                  Question = "Question",
+                                  DropdownHeading = "Dropdown heading"
+                              }
+                          ]
+                      };
+
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<DropdownQuestionPage>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetDropdownQuestionPage("SomeId");
+
+        result!.Question.Should().Be("Question");
+        result.DropdownHeading.Should().Be("Dropdown heading");
+    }
+
+    [TestMethod]
+    public async Task GetConfirmQualificationPage_ReturnsContent()
+    {
+        var content = new ContentfulCollection<ConfirmQualificationPage>
+                      {
+                          Items =
+                          [
+                              new ConfirmQualificationPage
+                              {
+                                  Heading = "Heading",
+                                  RadioHeading = "Radio Heading",
+                                  AwardingOrganisationLabel = "AO"
+                              }
+                          ]
+                      };
+
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<ConfirmQualificationPage>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetConfirmQualificationPage();
+
+        result!.Heading.Should().Be("Heading");
+        result.RadioHeading.Should().Be("Radio Heading");
+        result.AwardingOrganisationLabel.Should().Be("AO");
+    }
+
+    [TestMethod]
+    public async Task GetQualificationListPage_ReturnsContent()
+    {
+        var content = new ContentfulCollection<QualificationListPage>
+                      {
+                          Items =
+                          [
+                              new QualificationListPage
+                              {
+                                  Header = "Header",
+                                  AwardingOrganisationHeading = "AO Heading",
+                                  MultipleQualificationsFoundText = "Multiple qualifications found"
+                              }
+                          ]
+                      };
+
+        _clientMock.Setup(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<QualificationListPage>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetQualificationListPage();
+
+        result!.Header.Should().Be("Header");
+        result.AwardingOrganisationHeading.Should().Be("AO Heading");
+        result.MultipleQualificationsFoundText.Should().Be("Multiple qualifications found");
+    }
+
+    [TestMethod]
+    public async Task GetDetailsPage_Null_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -366,7 +520,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetDetailsPage().Result;
+        var result = await service.GetDetailsPage();
 
         _logger.VerifyWarning("No details page entry returned");
 
@@ -374,7 +528,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetDetailsPage_NoContent_LogsAndReturnsDefault()
+    public async Task GetDetailsPage_NoContent_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -385,7 +539,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetDetailsPage().Result;
+        var result = await service.GetDetailsPage();
 
         _logger.VerifyWarning("No details page entry returned");
 
@@ -393,7 +547,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetDetailsPage_Content_RendersHtmlAndReturns()
+    public async Task GetDetailsPage_Content_RendersHtmlAndReturns()
     {
         var content = new ContentfulCollection<DetailsPage>
                       {
@@ -426,7 +580,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetDetailsPage().Result;
+        var result = await service.GetDetailsPage();
 
         result!.AwardingOrgLabel.Should().Be("Test Awarding Org Label");
         result.BookmarkHeading.Should().Be("Test bookmark heading");
@@ -445,7 +599,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetQualificationById_Null_LogsAndReturnsDefault()
+    public async Task GetQualificationById_Null_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -456,7 +610,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetQualificationById("SomeId").Result;
+        var result = await service.GetQualificationById("SomeId");
 
         _logger.VerifyWarning("No qualifications returned for qualificationId: SomeId");
 
@@ -464,7 +618,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetQualificationById_NoContent_LogsAndReturnsDefault()
+    public async Task GetQualificationById_NoContent_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -475,7 +629,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetQualificationById("SomeId").Result;
+        var result = await service.GetQualificationById("SomeId");
 
         _logger.VerifyWarning("No qualifications returned for qualificationId: SomeId");
 
@@ -483,7 +637,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetQualificationById_QualificationExists_Returns()
+    public async Task GetQualificationById_QualificationExists_Returns()
     {
         var qualification = new Qualification("SomeId", "Test qualification name", "Test awarding org", 123,
                                               "Test from which year", "Test to which year", "Test qualification number",
@@ -499,14 +653,14 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetQualificationById("SomeId").Result;
+        var result = await service.GetQualificationById("SomeId");
 
         result.Should().NotBeNull();
         result.Should().Be(qualification);
     }
 
     [TestMethod]
-    public void GetPhaseBannerContent_Null_LogsAndReturnsDefault()
+    public async Task GetPhaseBannerContent_Null_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -517,7 +671,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetPhaseBannerContent().Result;
+        var result = await service.GetPhaseBannerContent();
 
         _logger.VerifyWarning("No phase banner entry returned");
 
@@ -525,7 +679,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetPhaseBannerContent_NoContent_LogsAndReturnsDefault()
+    public async Task GetPhaseBannerContent_NoContent_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -536,7 +690,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetPhaseBannerContent().Result;
+        var result = await service.GetPhaseBannerContent();
 
         _logger.VerifyWarning("No phase banner entry returned");
 
@@ -544,7 +698,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetPhaseBannerContent_PhaseBannerExists_Returns()
+    public async Task GetPhaseBannerContent_PhaseBannerExists_Returns()
     {
         var phaseBanner = new PhaseBanner
                           {
@@ -563,7 +717,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetPhaseBannerContent().Result;
+        var result = await service.GetPhaseBannerContent();
 
         result.Should().NotBeNull();
 
@@ -574,7 +728,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetCookiesBannerContent_Null_LogsAndReturnsDefault()
+    public async Task GetCookiesBannerContent_Null_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -585,7 +739,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetCookiesBannerContent().Result;
+        var result = await service.GetCookiesBannerContent();
 
         _logger.VerifyWarning("No cookies banner entry returned");
 
@@ -593,7 +747,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetCookiesBannerContent_NoContent_LogsAndReturnsDefault()
+    public async Task GetCookiesBannerContent_NoContent_LogsAndReturnsDefault()
     {
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -604,7 +758,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetCookiesBannerContent().Result;
+        var result = await service.GetCookiesBannerContent();
 
         _logger.VerifyWarning("No cookies banner entry returned");
 
@@ -612,7 +766,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public void GetCookiesBannerContent_CookiesBannerExists_Returns()
+    public async Task GetCookiesBannerContent_CookiesBannerExists_Returns()
     {
         var cookiesBanner = new CookiesBanner
                             {
@@ -636,7 +790,7 @@ public class ContentfulContentServiceTests
 
         var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
 
-        var result = service.GetCookiesBannerContent().Result;
+        var result = await service.GetCookiesBannerContent();
 
         result.Should().NotBeNull();
 
@@ -655,5 +809,58 @@ public class ContentfulContentServiceTests
 
         result.RejectedCookiesContent.Should().Be(cookiesBanner.RejectedCookiesContent);
         result.RejectedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_ReturnsQualifications()
+    {
+        var qualification = new Qualification("Id", "Name",
+                                              "AO", 6,
+                                              "2014", "2020",
+                                              "number", "Rq");
+
+        _clientMock.Setup(c =>
+                              c.GetEntriesByType(It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<Qualification>>(),
+                                                 It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [qualification] });
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetQualifications();
+
+        result.Should().HaveCount(1).And.Contain(qualification);
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_ContentfulHasNoQualifications_ReturnsEmpty()
+    {
+        _clientMock.Setup(c =>
+                              c.GetEntriesByType(It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<Qualification>>(),
+                                                 It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [] });
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetQualifications();
+
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public async Task GetPage_WhenContentfulGetEntriesByTypeThrows_LogsError()
+    {
+        _clientMock.Setup(c =>
+                              c.GetEntriesByType(It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<It.IsAnyType>>(),
+                                                 It.IsAny<CancellationToken>()))
+                   .Throws<InvalidOperationException>();
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        await service.GetStartPage();
+
+        _logger.VerifyError($"Exception trying to retrieve {nameof(StartPage)} from Contentful.");
     }
 }
