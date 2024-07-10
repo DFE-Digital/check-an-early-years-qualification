@@ -221,7 +221,9 @@ public class MockContentfulService : IContentService
                                          SingleQualificationFoundText = "qualification found",
                                          PreSearchBoxContent = ContentfulContentHelper.Text("Pre search box content"),
                                          PostQualificationListContent = ContentfulContentHelper.Text("Post qualification list content"),
-                                         PostSearchCriteriaContent = ContentfulContentHelper.Text("Post search criteria content")
+                                         PostSearchCriteriaContent = ContentfulContentHelper.Text("Post search criteria content"),
+                                         AnyLevelHeading = "Any level",
+                                         AnyAwardingOrganisationHeading = "Various awarding organisations"
                                      });
     }
 
