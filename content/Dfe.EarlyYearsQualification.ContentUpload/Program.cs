@@ -66,11 +66,9 @@ public static class Program
     private static async Task SetUpContentModels(ContentfulManagementClient client)
     {
         // Check current version of model
-        var currentModels = await client.GetContentTypes();
+        var contentTypeModel = await client.GetContentType("Qualification");
 
-        var currentModel = currentModels.FirstOrDefault(x => x.SystemProperties.Id == "Qualification");
-
-        var version = currentModel?.SystemProperties.Version ?? 1;
+        var version = contentTypeModel?.SystemProperties.Version ?? 1;
 
         var contentType = new ContentType
                           {
@@ -171,12 +169,12 @@ public static class Program
 
         var typeToActivate = await client.CreateOrUpdateContentType(contentType, version: version);
         await client.ActivateContentType("Qualification", typeToActivate.SystemProperties.Version!.Value);
-
+        
         Thread.Sleep(2000); // Allows the API time to activate the content type
-        //await SetHelpText(client, typeToActivate);
+        await SetHelpText(client);
     }
 
-    private static async Task SetHelpText(ContentfulManagementClient client, ContentType typeToActivate)
+    private static async Task SetHelpText(ContentfulManagementClient client)
     {
         var editorInterface = await client.GetEditorInterface("Qualification");
         SetHelpTextForField(editorInterface, "qualificationId",
@@ -192,9 +190,10 @@ public static class Program
         SetHelpTextForField(editorInterface, "qualificationNumber", "The number of the qualification");
         SetHelpTextForField(editorInterface, "additionalRequirements",
                             "The additional requirements for the qualification", SystemWidgetIds.MultipleLine);
-
-        await client.UpdateEditorInterface(editorInterface, "Qualification",
-                                           typeToActivate.SystemProperties.Version!.Value);
+        SetHelpTextForField(editorInterface, "additionalRequirementQuestions", "The optional additional requirements questions", SystemWidgetIds.EntryMultipleLinksEditor);
+        SetHelpTextForField(editorInterface, "ratioRequirements", "The optional ratio requirements", SystemWidgetIds.EntryMultipleLinksEditor);
+        
+        await client.UpdateEditorInterface(editorInterface, "Qualification", editorInterface.SystemProperties.Version!.Value);
     }
 
     private static void SetHelpTextForField(EditorInterface editorInterface, string fieldId, string helpText,
