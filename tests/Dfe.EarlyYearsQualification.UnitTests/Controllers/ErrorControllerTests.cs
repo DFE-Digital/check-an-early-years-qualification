@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Dfe.EarlyYearsQualification.Web.Controllers;
-using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Error;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

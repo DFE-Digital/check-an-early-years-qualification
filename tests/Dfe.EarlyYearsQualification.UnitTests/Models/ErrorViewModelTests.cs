@@ -1,4 +1,4 @@
-using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Error;
 using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Models;
