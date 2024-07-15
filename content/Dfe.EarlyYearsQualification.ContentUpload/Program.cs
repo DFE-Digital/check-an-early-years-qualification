@@ -292,7 +292,7 @@ public static class Program
 
     private static List<QualificationUpload> GetQualificationsToAddOrUpdate()
     {
-        var lines = ReadCsvFile("./csv/sam-upload-test.csv");
+        var lines = ReadCsvFile("./csv/reference-upload-test.csv");
 
         var listObjResult = new List<QualificationUpload>();
 

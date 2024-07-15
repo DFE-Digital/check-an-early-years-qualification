@@ -23,7 +23,7 @@
       <None Update="csv\ey-quals-full-2024-updated.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="csv\sam-upload-test.csv">
+      <None Update="csv\reference-upload-test.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
