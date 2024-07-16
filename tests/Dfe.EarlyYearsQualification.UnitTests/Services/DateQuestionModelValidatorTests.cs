@@ -57,6 +57,23 @@ public class DateQuestionModelValidatorTests
     }
 
     [TestMethod]
+    public void DateQuestionModelValidator_GivenDateLaterThisYear_ValidatesFalse()
+    {
+        var thisYear = 2024;
+        var thisMonth = 7;
+
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = thisMonth + 1, SelectedYear = thisYear };
+
+        validator.IsValid(model).Should().BeFalse();
+    }
+
+    [TestMethod]
     public void DateQuestionModelValidator_GivenDateInFuture_ValidatesFalse()
     {
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
