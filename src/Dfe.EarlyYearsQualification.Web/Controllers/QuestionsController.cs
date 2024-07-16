@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,7 +18,8 @@ public class QuestionsController(
     IContentService contentService,
     IHtmlRenderer renderer,
     IUserJourneyCookieService userJourneyCookieService,
-    IContentFilterService contentFilterService)
+    IContentFilterService contentFilterService,
+    IDateQuestionModelValidator questionModelValidator)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -36,7 +38,7 @@ public class QuestionsController(
         if (!ModelState.IsValid)
         {
             var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
-            
+
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
@@ -77,7 +79,7 @@ public class QuestionsController(
     [HttpPost("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
     {
-        if (!ModelState.IsValid || !model.IsModelValid())
+        if (!ModelState.IsValid || !questionModelValidator.IsValid(model))
         {
             var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
             if (questionPage is not null)
@@ -173,7 +175,7 @@ public class QuestionsController(
 
     private bool WithinDateRange()
     {
-        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         if (startDateMonth is not null && startDateYear is not null)
         {
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
@@ -182,11 +184,11 @@ public class QuestionsController(
 
         return false;
     }
-    
+
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
-        int? level = userJourneyCookieService.GetLevelOfQualification();
-        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var level = userJourneyCookieService.GetLevelOfQualification();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
     }
 
