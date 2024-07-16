@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
+[CustomValidation(typeof(DateQuestionModelValidator), nameof(DateQuestionModelValidator.IsValid))]
 public class DateQuestionModel : BaseQuestionModel
 {
     public string QuestionHint { get; set; } = string.Empty;

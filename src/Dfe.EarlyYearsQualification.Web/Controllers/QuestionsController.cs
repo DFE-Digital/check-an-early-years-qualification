@@ -5,7 +5,6 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
-using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,8 +17,7 @@ public class QuestionsController(
     IContentService contentService,
     IHtmlRenderer renderer,
     IUserJourneyCookieService userJourneyCookieService,
-    IContentFilterService contentFilterService,
-    IDateQuestionModelValidator questionModelValidator)
+    IContentFilterService contentFilterService)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -79,7 +77,7 @@ public class QuestionsController(
     [HttpPost("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
     {
-        if (!ModelState.IsValid || !questionModelValidator.IsValid(model))
+        if (!ModelState.IsValid)
         {
             var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
             if (questionPage is not null)
