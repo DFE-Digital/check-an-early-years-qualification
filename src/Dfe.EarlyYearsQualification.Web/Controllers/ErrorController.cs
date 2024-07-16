@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using Dfe.EarlyYearsQualification.Web.Models.Error;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
