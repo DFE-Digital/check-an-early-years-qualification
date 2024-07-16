@@ -121,7 +121,7 @@ public class QuestionsController(
 
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
-        if (model.Option == "2" && WithinDateRange())
+        if (model.Option == "2" && WasAwardedBetweenSeptember2014AndAugust2019())
         {
             return RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice");
         }
@@ -173,7 +173,7 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
-    private bool WithinDateRange()
+    private bool WasAwardedBetweenSeptember2014AndAugust2019()
     {
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         if (startDateMonth is not null && startDateYear is not null)
@@ -243,11 +243,13 @@ public class QuestionsController(
     {
         var awardingOrganisationExclusions =
             new[] { AwardingOrganisations.AllHigherEducation, AwardingOrganisations.Various };
-        var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle)
-                                                        .Distinct()
-                                                        .Where(x => !awardingOrganisationExclusions.Any(x.Contains))
-                                                        .Order()
-                                                        .ToList();
+
+        var uniqueAwardingOrganisations =
+            qualifications.Select(x => x.AwardingOrganisationTitle)
+                          .Distinct()
+                          .Where(x => !Array.Exists(awardingOrganisationExclusions, x.Contains))
+                          .Order()
+                          .ToList();
 
         model.ActionName = actionName;
         model.ControllerName = controllerName;
