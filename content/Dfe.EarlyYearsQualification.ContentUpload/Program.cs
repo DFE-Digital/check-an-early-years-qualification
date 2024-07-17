@@ -4,7 +4,6 @@ using Contentful.Core.Configuration;
 using Contentful.Core.Models;
 using Contentful.Core.Models.Management;
 using Contentful.Core.Search;
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Dfe.EarlyYearsQualification.ContentUpload;
@@ -12,7 +11,7 @@ namespace Dfe.EarlyYearsQualification.ContentUpload;
 [ExcludeFromCodeCoverage]
 public static class Program
 {
-    private const string Locale = "en-US";
+    private const string Locale = "en-GB";
     private const string SpaceId = "";
     private const string ManagementApiKey = "";
 
@@ -67,11 +66,9 @@ public static class Program
     private static async Task SetUpContentModels(ContentfulManagementClient client)
     {
         // Check current version of model
-        var currentModels = await client.GetContentTypes();
+        var contentTypeModel = await client.GetContentType("Qualification");
 
-        var currentModel = currentModels.FirstOrDefault(x => x.SystemProperties.Id == "Qualification");
-
-        var version = currentModel?.SystemProperties.Version ?? 1;
+        var version = contentTypeModel?.SystemProperties.Version ?? 1;
 
         var contentType = new ContentType
                           {
@@ -136,18 +133,48 @@ public static class Program
                                       Name = "Additional Requirements",
                                       Id = "additionalRequirements",
                                       Type = "Text"
+                                  },
+                                  new Field
+                                  {
+                                      Name = "Additional Requirement Questions",
+                                      Id = "additionalRequirementQuestions",
+                                      Type = "Array",
+                                      Items = new Schema
+                                              {
+                                                  Type = "Link",
+                                                  LinkType = "Entry",
+                                                  Validations = [new LinkContentTypeValidator
+                                                                 {
+                                                                     ContentTypeIds = ["additionalRequirementQuestion"]
+                                                                 }]
+                                              }
+                                  },
+                                  new Field
+                                  {
+                                      Name = "Ratio Requirements",
+                                      Id = "ratioRequirements",
+                                      Type = "Array",
+                                      Items = new Schema
+                                              {
+                                                  Type = "Link",
+                                                  LinkType = "Entry",
+                                                  Validations = [new LinkContentTypeValidator
+                                                                 {
+                                                                     ContentTypeIds = ["ratioRequirement"]
+                                                                 }]
+                                              }
                                   }
                               ]
                           };
 
         var typeToActivate = await client.CreateOrUpdateContentType(contentType, version: version);
         await client.ActivateContentType("Qualification", typeToActivate.SystemProperties.Version!.Value);
-
+        
         Thread.Sleep(2000); // Allows the API time to activate the content type
-        await SetHelpText(client, typeToActivate);
+        await SetHelpText(client);
     }
 
-    private static async Task SetHelpText(ContentfulManagementClient client, ContentType typeToActivate)
+    private static async Task SetHelpText(ContentfulManagementClient client)
     {
         var editorInterface = await client.GetEditorInterface("Qualification");
         SetHelpTextForField(editorInterface, "qualificationId",
@@ -163,9 +190,10 @@ public static class Program
         SetHelpTextForField(editorInterface, "qualificationNumber", "The number of the qualification");
         SetHelpTextForField(editorInterface, "additionalRequirements",
                             "The additional requirements for the qualification", SystemWidgetIds.MultipleLine);
-
-        await client.UpdateEditorInterface(editorInterface, "Qualification",
-                                           typeToActivate.SystemProperties.Version!.Value);
+        SetHelpTextForField(editorInterface, "additionalRequirementQuestions", "The optional additional requirements questions", SystemWidgetIds.EntryMultipleLinksEditor);
+        SetHelpTextForField(editorInterface, "ratioRequirements", "The optional ratio requirements", SystemWidgetIds.EntryMultipleLinksEditor);
+        
+        await client.UpdateEditorInterface(editorInterface, "Qualification", editorInterface.SystemProperties.Version!.Value);
     }
 
     private static void SetHelpTextForField(EditorInterface editorInterface, string fieldId, string helpText,
@@ -176,8 +204,27 @@ public static class Program
         editorInterface.Controls.First(x => x.FieldId == fieldId).WidgetId = widgetId;
     }
 
-    private static Entry<dynamic> BuildEntryFromQualification(Qualification qualification)
+    private static Entry<dynamic> BuildEntryFromQualification(QualificationUpload qualification)
     {
+        var addtionalRequirementQuestions = new List<Reference>();
+        if (qualification.AdditionalRequirementQuestions is not null)
+        {
+            foreach (var questionId in qualification.AdditionalRequirementQuestions)
+            {
+                addtionalRequirementQuestions.Add(new Reference(SystemLinkTypes.Entry, questionId));
+            }
+        }
+        
+        var ratioRequirements = new List<Reference>();
+        if (qualification.RatioRequirements is not null)
+        {
+            foreach (var ratioId in qualification.RatioRequirements)
+            {
+                ratioRequirements.Add(new Reference(SystemLinkTypes.Entry, ratioId));
+            }
+        }
+        
+        
         var entry = new Entry<dynamic>
                     {
                         SystemProperties = new SystemProperties
@@ -226,18 +273,28 @@ public static class Program
                                      additionalRequirements = new Dictionary<string, string>
                                                               {
                                                                   { Locale, qualification.AdditionalRequirements ?? "" }
-                                                              }
+                                                              },
+                                     
+                                     additionalRequirementQuestions = new Dictionary<string, List<Reference>>()
+                                                                      {
+                                                                          { Locale, addtionalRequirementQuestions }
+                                                                      },
+                                     
+                                     ratioRequirements = new Dictionary<string, List<Reference>>()
+                                                                      {
+                                                                          { Locale, ratioRequirements }
+                                                                      }
                                  }
                     };
 
         return entry;
     }
 
-    private static List<Qualification> GetQualificationsToAddOrUpdate()
+    private static List<QualificationUpload> GetQualificationsToAddOrUpdate()
     {
-        var lines = ReadCsvFile("./csv/ey-quals-full-2024-updated.csv");
+        var lines = ReadCsvFile("./csv/reference-upload-test.csv");
 
-        var listObjResult = new List<Qualification>();
+        var listObjResult = new List<QualificationUpload>();
 
         foreach (var t in lines)
         {
@@ -249,17 +306,33 @@ public static class Program
             var toWhichYear = t[3];
             var qualificationNumber = t[6];
             var additionalRequirements = t[7];
+            var additionalRequirementQuestionString = t[8];
+            var ratioRequirementsString = t[9];
+            
+            string[] additionalRequirementQuestionsArray = [];
+            if (!string.IsNullOrEmpty(additionalRequirementQuestionString))
+            {
+                additionalRequirementQuestionsArray = additionalRequirementQuestionString.Split(':');
+            }
+            
+            string[] ratioRequirementsArray = [];
+            if (!string.IsNullOrEmpty(ratioRequirementsString))
+            {
+                ratioRequirementsArray = ratioRequirementsString.Split(':');
+            }
 
-            listObjResult.Add(new Qualification(
-                                                qualificationId,
-                                                qualificationName,
-                                                awardingOrganisationTitle,
-                                                qualificationLevel,
-                                                fromWhichYear,
-                                                toWhichYear,
-                                                qualificationNumber,
-                                                additionalRequirements
-                                               ));
+            listObjResult.Add(new QualificationUpload(
+                                                      qualificationId,
+                                                      qualificationName,
+                                                      awardingOrganisationTitle,
+                                                      qualificationLevel,
+                                                      fromWhichYear,
+                                                      toWhichYear,
+                                                      qualificationNumber,
+                                                      additionalRequirements,
+                                                      additionalRequirementQuestionsArray,
+                                                      ratioRequirementsArray
+                                                     ));
         }
 
         return listObjResult;
