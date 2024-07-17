@@ -18,12 +18,12 @@ public static class Options
     public const string Scotland = "scotland";
     
     /// <summary>
-    ///     Option for Scotland
+    ///     Option for Wales
     /// </summary>
     public const string Wales = "wales";
     
     /// <summary>
-    ///     Option for Scotland
+    ///     Option for Northern Ireland
     /// </summary>
     public const string NorthernIreland = "northern-ireland";
 
