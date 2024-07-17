@@ -140,7 +140,7 @@ public class MockContentfulServiceTests
         result.CtaButtonText.Should().NotBeNullOrEmpty();
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.Options.Should().NotBeNullOrEmpty();
-        result.Options.Count.Should().Be(3);
+        result.Options.Count.Should().Be(2);
         result.Options[0].Label.Should().Be("England");
         result.Options[0].Value.Should().Be("england");
         result.Options[1].Label.Should().Be("Outside the United Kingdom");
