@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,7 +18,8 @@ public class QuestionsController(
     IContentService contentService,
     IHtmlRenderer renderer,
     IUserJourneyCookieService userJourneyCookieService,
-    IContentFilterService contentFilterService)
+    IContentFilterService contentFilterService,
+    IDateQuestionModelValidator questionModelValidator)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -36,7 +38,7 @@ public class QuestionsController(
         if (!ModelState.IsValid)
         {
             var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
-            
+
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
@@ -77,7 +79,7 @@ public class QuestionsController(
     [HttpPost("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
     {
-        if (!ModelState.IsValid || !model.IsModelValid())
+        if (!ModelState.IsValid || !questionModelValidator.IsValid(model))
         {
             var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
             if (questionPage is not null)
@@ -119,7 +121,7 @@ public class QuestionsController(
 
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
-        if (model.Option == "2" && WithinDateRange())
+        if (model.Option == "2" && WasAwardedBetweenSeptember2014AndAugust2019())
         {
             return RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice");
         }
@@ -171,9 +173,9 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
-    private bool WithinDateRange()
+    private bool WasAwardedBetweenSeptember2014AndAugust2019()
     {
-        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         if (startDateMonth is not null && startDateYear is not null)
         {
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
@@ -182,11 +184,11 @@ public class QuestionsController(
 
         return false;
     }
-    
+
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
-        int? level = userJourneyCookieService.GetLevelOfQualification();
-        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var level = userJourneyCookieService.GetLevelOfQualification();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
     }
 
@@ -241,11 +243,13 @@ public class QuestionsController(
     {
         var awardingOrganisationExclusions =
             new[] { AwardingOrganisations.AllHigherEducation, AwardingOrganisations.Various };
-        var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle)
-                                                        .Distinct()
-                                                        .Where(x => !awardingOrganisationExclusions.Any(x.Contains))
-                                                        .Order()
-                                                        .ToList();
+
+        var uniqueAwardingOrganisations =
+            qualifications.Select(x => x.AwardingOrganisationTitle)
+                          .Distinct()
+                          .Where(x => !Array.Exists(awardingOrganisationExclusions, x.Contains))
+                          .Order()
+                          .ToList();
 
         model.ActionName = actionName;
         model.ControllerName = controllerName;
