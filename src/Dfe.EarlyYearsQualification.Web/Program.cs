@@ -5,8 +5,10 @@ using Dfe.EarlyYearsQualification.Content.Extensions;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Dfe.EarlyYearsQualification.Web.Filters;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Security;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
+using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.AspNetCore.DataProtection;
@@ -65,6 +67,8 @@ builder.Services.AddScoped(x =>
                            });
 
 builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
+builder.Services.AddSingleton<IDateTimeAdapter, DateTimeAdapter>();
+builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelValidator>();
 
 var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
@@ -89,9 +93,15 @@ app.UseSecureHeadersMiddleware(
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Error");
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
+    
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+else
+{
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();

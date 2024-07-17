@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,7 +18,8 @@ public class QuestionsController(
     IContentService contentService,
     IHtmlRenderer renderer,
     IUserJourneyCookieService userJourneyCookieService,
-    IContentFilterService contentFilterService)
+    IContentFilterService contentFilterService,
+    IDateQuestionModelValidator questionModelValidator)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -77,7 +79,7 @@ public class QuestionsController(
     [HttpPost("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
     {
-        if (!ModelState.IsValid || !model.IsModelValid())
+        if (!ModelState.IsValid || !questionModelValidator.IsValid(model))
         {
             var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
             if (questionPage is not null)
@@ -119,7 +121,7 @@ public class QuestionsController(
 
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
-        if (model.Option == "2" && WithinDateRange())
+        if (model.Option == "2" && WasAwardedBetweenSeptember2014AndAugust2019())
         {
             return RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice");
         }
@@ -171,7 +173,7 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
-    private bool WithinDateRange()
+    private bool WasAwardedBetweenSeptember2014AndAugust2019()
     {
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         if (startDateMonth is not null && startDateYear is not null)

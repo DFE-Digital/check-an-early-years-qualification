@@ -93,7 +93,7 @@ public class QualificationDetailsController(
     {
         var basicQualificationsModels = GetBasicQualificationsModels(qualifications);
 
-        var filterModel = GetFilterModel();
+        var filterModel = GetFilterModel(content);
 
         return new QualificationListModel
                {
@@ -114,11 +114,13 @@ public class QualificationDetailsController(
                };
     }
 
-    private FilterModel GetFilterModel()
+    private FilterModel GetFilterModel(QualificationListPage content)
     {
         var filterModel = new FilterModel
                           {
-                              Country = userJourneyCookieService.GetWhereWasQualificationAwarded()!
+                              Country = userJourneyCookieService.GetWhereWasQualificationAwarded()!,
+                              Level = content.AnyLevelHeading,
+                              AwardingOrganisation = content.AnyAwardingOrganisationHeading
                           };
 
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();

@@ -2,12 +2,13 @@ describe("A spec used to test the qualification list page", () => {
 
     beforeEach(() => {
         cy.setCookie('auth-secret', Cypress.env('auth_secret'));
-        // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationAwarded":"6/2022","LevelOfQualification":"3","WhatIsTheAwardingOrganisation":"NCFE"}' encoded
-        cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationAwarded%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D');
     })
 
     // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService.  
     it("Checks the details are showing on the page", () => {
+        // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationAwarded":"6/2022","LevelOfQualification":"3","WhatIsTheAwardingOrganisation":"NCFE"}' encoded
+        cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationAwarded%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D');
+        
         cy.visit("/qualifications");
 
         cy.get("#your-search-header").should("contain.text", "Your search");
@@ -25,5 +26,14 @@ describe("A spec used to test the qualification list page", () => {
         
         cy.get(".level").first().should("contain.text", "Level");
         cy.get(".awarding-org").first().should("contain.text", "Awarding organisation");
+    })
+
+    it("Shows the default headings when any level and no awarding organisation selected", () => {
+        // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationAwarded":"6/2022","LevelOfQualification":"0","WhatIsTheAwardingOrganisation":""}' encoded
+        cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationAwarded%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D');
+        cy.visit("/qualifications");
+        
+        cy.get("#filter-level").should("contain.text", "Any level");
+        cy.get("#filter-org").should("contain.text", "Various awarding organisations");
     })
 })

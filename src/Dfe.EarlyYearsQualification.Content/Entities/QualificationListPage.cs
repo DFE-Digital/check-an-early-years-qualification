@@ -25,4 +25,8 @@ public class QualificationListPage
     public string SearchCriteriaHeading { get; init; } = string.Empty;
 
     public Document? PostSearchCriteriaContent { get; init; }
+
+    public string AnyLevelHeading { get; init; } = string.Empty;
+
+    public string AnyAwardingOrganisationHeading { get; init; } = string.Empty;
 }
