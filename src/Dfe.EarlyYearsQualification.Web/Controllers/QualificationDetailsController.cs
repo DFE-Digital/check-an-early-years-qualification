@@ -36,15 +36,14 @@ public class QualificationDetailsController(
     }
 
     [HttpPost]
-    public IActionResult Refine(string refineSearch)
+    public IActionResult Refine(string? refineSearch)
     {
         if (!ModelState.IsValid)
         {
-            logger.LogError("Invalid model state");
-            return RedirectToAction("Index", "Error");
+            logger.LogError($"Invalid model state in {nameof(QualificationDetailsController)} POST");
         }
 
-        userJourneyCookieService.SetQualificationNameSearchCriteria(refineSearch);
+        userJourneyCookieService.SetQualificationNameSearchCriteria(refineSearch ?? string.Empty);
 
         return RedirectToAction("Get");
     }
