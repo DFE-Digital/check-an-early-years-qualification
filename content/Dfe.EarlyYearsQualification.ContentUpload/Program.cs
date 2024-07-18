@@ -14,6 +14,7 @@ public static class Program
     private const string Locale = "en-GB";
     private const string SpaceId = "";
     private const string ManagementApiKey = "";
+    private const string CsvFile = "./csv/ey-quals-full-2024-with-new-reference-fields.csv";
 
     // ReSharper disable once UnusedParameter.Global
     // ...args standard for Program.Main()
@@ -292,7 +293,7 @@ public static class Program
 
     private static List<QualificationUpload> GetQualificationsToAddOrUpdate()
     {
-        var lines = ReadCsvFile("./csv/reference-upload-test.csv");
+        var lines = ReadCsvFile(CsvFile);
 
         var listObjResult = new List<QualificationUpload>();
 
