@@ -312,7 +312,7 @@ public class QualificationDetailsControllerTests
     }
 
     [TestMethod]
-    public void Refine_InvalidModel_LogsError()
+    public void Refine_InvalidModel_LogsWarning()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -336,6 +336,6 @@ public class QualificationDetailsControllerTests
 
         controller.Refine(null);
 
-        mockLogger.VerifyError($"Invalid model state in {nameof(QualificationDetailsController)} POST");
+        mockLogger.VerifyWarning($"Invalid model state in {nameof(QualificationDetailsController)} POST");
     }
 }

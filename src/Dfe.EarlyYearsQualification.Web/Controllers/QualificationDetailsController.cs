@@ -40,7 +40,7 @@ public class QualificationDetailsController(
     {
         if (!ModelState.IsValid)
         {
-            logger.LogError($"Invalid model state in {nameof(QualificationDetailsController)} POST");
+            logger.LogWarning($"Invalid model state in {nameof(QualificationDetailsController)} POST");
         }
 
         userJourneyCookieService.SetQualificationNameSearchCriteria(refineSearch ?? string.Empty);
