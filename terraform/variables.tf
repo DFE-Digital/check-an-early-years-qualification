@@ -163,6 +163,7 @@ variable "contentful_use_preview_api" {
 }
 
 variable "gtm_tag" {
+  default     = ""
   description = "The Google Analytics tag"
   type        = string
 }
