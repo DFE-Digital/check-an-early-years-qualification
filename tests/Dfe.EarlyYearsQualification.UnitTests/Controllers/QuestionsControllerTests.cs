@@ -149,6 +149,93 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
     }
+    
+    [TestMethod]
+    public async Task Post_WhereWasTheQualificationAwarded_PassInScotland_RedirectsToAdvicePage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
+                                                 mockUserJourneyCookieService.Object, mockContentFilterService.Object,
+                                                 mockQuestionModelValidator.Object);
+
+        var result =
+            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
+                                                             { Option = Options.Scotland });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("QualificationsAchievedInScotland");
+        resultType.ControllerName.Should().Be("Advice");
+
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
+    }
+    
+    [TestMethod]
+    public async Task Post_WhereWasTheQualificationAwarded_PassInWales_RedirectsToAdvicePage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
+                                                 mockUserJourneyCookieService.Object, mockContentFilterService.Object,
+                                                 mockQuestionModelValidator.Object);
+
+        var result =
+            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
+                                                             { Option = Options.Wales });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("QualificationsAchievedInWales");
+        resultType.ControllerName.Should().Be("Advice");
+
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
+    }
+    
+    [TestMethod]
+    public async Task Post_WhereWasTheQualificationAwarded_PassInNorthernIreland_RedirectsToAdvicePage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
+                                                 mockUserJourneyCookieService.Object, mockContentFilterService.Object,
+                                                 mockQuestionModelValidator.Object);
+
+        var result =
+            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
+                                                             { Option = Options.NorthernIreland });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("QualificationsAchievedInNorthernIreland");
+        resultType.ControllerName.Should().Be("Advice");
+
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
+    }
 
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_PassInEngland_RedirectsToQualificationDetails()

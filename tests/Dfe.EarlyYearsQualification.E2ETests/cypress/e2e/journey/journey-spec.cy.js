@@ -24,6 +24,60 @@ describe('A spec used to test the various routes through the journey', () => {
     })
   })
 
+  it("should redirect the user when they select qualification was awarded in Scotland", () => {
+    // home page
+    cy.get('.govuk-button--start').click();
+
+    // where-was-the-qualification-awarded page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+    })
+
+    cy.get('#scotland').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // qualifications-achieved-in-scotland
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/advice/qualifications-achieved-in-scotland');
+    })
+  })
+
+  it("should redirect the user when they select qualification was awarded in Wales", () => {
+    // home page
+    cy.get('.govuk-button--start').click();
+
+    // where-was-the-qualification-awarded page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+    })
+
+    cy.get('#wales').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // qualifications-achieved-in-wales
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/advice/qualifications-achieved-in-wales');
+    })
+  })
+
+  it("should redirect the user when they select qualification was awarded in Northern Ireland", () => {
+    // home page
+    cy.get('.govuk-button--start').click();
+
+    // where-was-the-qualification-awarded page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+    })
+
+    cy.get('#northern-ireland').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // qualifications-achieved-in-scotland
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/advice/qualifications-achieved-in-northern-ireland');
+    })
+  })
+
   it("should redirect the user when they select qualification was awarded in England", () => {
     // home page
     cy.get('.govuk-button--start').click();

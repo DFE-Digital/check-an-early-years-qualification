@@ -50,9 +50,16 @@ public class QuestionsController(
             return View("Radio", model);
         }
 
-        if (model.Option == Options.OutsideOfTheUnitedKingdom)
+        switch (model.Option)
         {
-            return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
+            case Options.OutsideOfTheUnitedKingdom:
+                return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
+            case Options.Scotland:
+                return RedirectToAction("QualificationsAchievedInScotland", "Advice");
+            case Options.Wales:
+                return RedirectToAction("QualificationsAchievedInWales", "Advice");
+            case Options.NorthernIreland:
+                return RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice");
         }
 
         userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option!);

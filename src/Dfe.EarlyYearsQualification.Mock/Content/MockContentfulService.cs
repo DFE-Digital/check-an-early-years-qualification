@@ -38,6 +38,18 @@ public class MockContentfulService : IContentService
                        await
                            Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
                                                             body, "/questions/what-level-is-the-qualification")),
+                   
+                   AdvicePages.QualificationsAchievedInScotland =>
+                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Scotland",
+                                                              body, "/questions/where-was-the-qualification-awarded")),
+                   
+                   AdvicePages.QualificationsAchievedInWales =>
+                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Wales",
+                                                              body, "/questions/where-was-the-qualification-awarded")),
+                   
+                   AdvicePages.QualificationsAchievedInNorthernIreland =>
+                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Northern Ireland",
+                                                              body, "/questions/where-was-the-qualification-awarded")),
                    _ => null
                };
     }
@@ -316,6 +328,18 @@ public class MockContentfulService : IContentService
                           new()
                           {
                               Label = "England", Value = "england"
+                          },
+                          new()
+                          {
+                              Label = "Scotland", Value = "scotland"
+                          },
+                          new()
+                          {
+                              Label = "Wales", Value = "wales"
+                          },
+                          new()
+                          {
+                              Label = "Northern Ireland", Value = "northern-ireland"
                           },
                           new()
                           {

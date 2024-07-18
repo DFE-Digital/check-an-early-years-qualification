@@ -13,9 +13,19 @@ public static class Options
     public const string England = "england";
 
     /// <summary>
-    ///     Option for Scotland, Wales and Northern Ireland.
+    ///     Option for Scotland
     /// </summary>
-    public const string ScotlandWalesNi = "scotland-wales-ni";
+    public const string Scotland = "scotland";
+    
+    /// <summary>
+    ///     Option for Wales
+    /// </summary>
+    public const string Wales = "wales";
+    
+    /// <summary>
+    ///     Option for Northern Ireland
+    /// </summary>
+    public const string NorthernIreland = "northern-ireland";
 
     /// <summary>
     ///     Option for Not Sure.
