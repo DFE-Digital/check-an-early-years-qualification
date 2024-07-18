@@ -12,7 +12,7 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
                                               {
                                                   Secure = true,
                                                   HttpOnly = true,
-                                                  Expires = new DateTimeOffset(DateTime.Now.AddYears(1))
+                                                  Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30))
                                               };
 
     public void SetWhereWasQualificationAwarded(string location)
@@ -106,6 +106,8 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         int? startDateMonth = null;
         int? startDateYear = null;
         var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
+        
+        // ReSharper disable once InvertIf
         if (qualificationAwardedDateSplit.Length == 2
             && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
             && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))

@@ -4,6 +4,7 @@ using Contentful.Core.Configuration;
 using Contentful.Core.Models;
 using Contentful.Core.Models.Management;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Dfe.EarlyYearsQualification.ContentUpload;
@@ -14,6 +15,8 @@ public static class Program
     private const string Locale = "en-GB";
     private const string SpaceId = "";
     private const string ManagementApiKey = "";
+    private const string CsvFile = "./csv/ey-quals-full-2024-with-new-reference-fields.csv";
+    private const string FieldTypeSymbol = "Symbol";
 
     // ReSharper disable once UnusedParameter.Global
     // ...args standard for Program.Main()
@@ -35,10 +38,12 @@ public static class Program
     private static async Task PopulateContentfulWithQualifications(ContentfulManagementClient client)
     {
         // Check existing entries and identify those to update, and those to create.
+        var queryBuilder = new QueryBuilder<Entry<dynamic>>()
+                           .ContentTypeIs(ContentTypes.Qualification)
+                           .Limit(1000);
+
         var currentEntries =
-            await
-                client.GetEntriesForLocale(new QueryBuilder<Entry<dynamic>>().ContentTypeIs("Qualification").Limit(1000),
-                                           Locale);
+            await client.GetEntriesForLocale(queryBuilder, Locale);
 
         var qualificationsToAddOrUpdate = GetQualificationsToAddOrUpdate();
 
@@ -55,7 +60,8 @@ public static class Program
             }
 
             // Create new entry
-            var entryToPublish = await client.CreateOrUpdateEntry(entryToAddOrUpdate, contentTypeId: "Qualification",
+            var entryToPublish = await client.CreateOrUpdateEntry(entryToAddOrUpdate,
+                                                                  contentTypeId: ContentTypes.Qualification,
                                                                   version: entryToAddOrUpdate.SystemProperties.Version);
 
             await client.PublishEntry(entryToPublish.SystemProperties.Id,
@@ -66,7 +72,7 @@ public static class Program
     private static async Task SetUpContentModels(ContentfulManagementClient client)
     {
         // Check current version of model
-        var contentTypeModel = await client.GetContentType("Qualification");
+        var contentTypeModel = await client.GetContentType(ContentTypes.Qualification);
 
         var version = contentTypeModel?.SystemProperties.Version ?? 1;
 
@@ -74,9 +80,9 @@ public static class Program
                           {
                               SystemProperties = new SystemProperties
                                                  {
-                                                     Id = "Qualification"
+                                                     Id = ContentTypes.Qualification
                                                  },
-                              Name = "Qualification",
+                              Name = ContentTypes.Qualification,
                               Description = "Model for storing all the early years qualifications",
                               DisplayField = "qualificationName",
                               Fields =
@@ -85,7 +91,7 @@ public static class Program
                                   {
                                       Name = "Qualification ID",
                                       Id = "qualificationId",
-                                      Type = "Symbol",
+                                      Type = FieldTypeSymbol,
                                       Required = true,
                                       Validations = [new UniqueValidator()]
                                   },
@@ -93,7 +99,7 @@ public static class Program
                                   {
                                       Name = "Qualification Name",
                                       Id = "qualificationName",
-                                      Type = "Symbol",
+                                      Type = FieldTypeSymbol,
                                       Required = true
                                   },
                                   new Field
@@ -107,26 +113,26 @@ public static class Program
                                   {
                                       Name = "Awarding Organisation Title",
                                       Id = "awardingOrganisationTitle",
-                                      Type = "Symbol",
+                                      Type = FieldTypeSymbol,
                                       Required = true
                                   },
                                   new Field
                                   {
                                       Name = "From Which Year",
                                       Id = "fromWhichYear",
-                                      Type = "Symbol"
+                                      Type = FieldTypeSymbol
                                   },
                                   new Field
                                   {
                                       Name = "To Which Year",
                                       Id = "toWhichYear",
-                                      Type = "Symbol"
+                                      Type = FieldTypeSymbol
                                   },
                                   new Field
                                   {
                                       Name = "Qualification Number",
                                       Id = "qualificationNumber",
-                                      Type = "Symbol"
+                                      Type = FieldTypeSymbol
                                   },
                                   new Field
                                   {
@@ -143,10 +149,14 @@ public static class Program
                                               {
                                                   Type = "Link",
                                                   LinkType = "Entry",
-                                                  Validations = [new LinkContentTypeValidator
-                                                                 {
-                                                                     ContentTypeIds = ["additionalRequirementQuestion"]
-                                                                 }]
+                                                  Validations =
+                                                  [
+                                                      new LinkContentTypeValidator
+                                                      {
+                                                          ContentTypeIds =
+                                                              ["additionalRequirementQuestion"]
+                                                      }
+                                                  ]
                                               }
                                   },
                                   new Field
@@ -158,25 +168,28 @@ public static class Program
                                               {
                                                   Type = "Link",
                                                   LinkType = "Entry",
-                                                  Validations = [new LinkContentTypeValidator
-                                                                 {
-                                                                     ContentTypeIds = ["ratioRequirement"]
-                                                                 }]
+                                                  Validations =
+                                                  [
+                                                      new LinkContentTypeValidator
+                                                      {
+                                                          ContentTypeIds = ["ratioRequirement"]
+                                                      }
+                                                  ]
                                               }
                                   }
                               ]
                           };
 
         var typeToActivate = await client.CreateOrUpdateContentType(contentType, version: version);
-        await client.ActivateContentType("Qualification", typeToActivate.SystemProperties.Version!.Value);
-        
+        await client.ActivateContentType(ContentTypes.Qualification, typeToActivate.SystemProperties.Version!.Value);
+
         Thread.Sleep(2000); // Allows the API time to activate the content type
         await SetHelpText(client);
     }
 
     private static async Task SetHelpText(ContentfulManagementClient client)
     {
-        var editorInterface = await client.GetEditorInterface("Qualification");
+        var editorInterface = await client.GetEditorInterface(ContentTypes.Qualification);
         SetHelpTextForField(editorInterface, "qualificationId",
                             "The unique identifier used to reference the qualification");
         SetHelpTextForField(editorInterface, "qualificationName", "The name of the qualification");
@@ -190,10 +203,13 @@ public static class Program
         SetHelpTextForField(editorInterface, "qualificationNumber", "The number of the qualification");
         SetHelpTextForField(editorInterface, "additionalRequirements",
                             "The additional requirements for the qualification", SystemWidgetIds.MultipleLine);
-        SetHelpTextForField(editorInterface, "additionalRequirementQuestions", "The optional additional requirements questions", SystemWidgetIds.EntryMultipleLinksEditor);
-        SetHelpTextForField(editorInterface, "ratioRequirements", "The optional ratio requirements", SystemWidgetIds.EntryMultipleLinksEditor);
-        
-        await client.UpdateEditorInterface(editorInterface, "Qualification", editorInterface.SystemProperties.Version!.Value);
+        SetHelpTextForField(editorInterface, "additionalRequirementQuestions",
+                            "The optional additional requirements questions", SystemWidgetIds.EntryMultipleLinksEditor);
+        SetHelpTextForField(editorInterface, "ratioRequirements", "The optional ratio requirements",
+                            SystemWidgetIds.EntryMultipleLinksEditor);
+
+        await client.UpdateEditorInterface(editorInterface, ContentTypes.Qualification,
+                                           editorInterface.SystemProperties.Version!.Value);
     }
 
     private static void SetHelpTextForField(EditorInterface editorInterface, string fieldId, string helpText,
@@ -206,25 +222,26 @@ public static class Program
 
     private static Entry<dynamic> BuildEntryFromQualification(QualificationUpload qualification)
     {
-        var addtionalRequirementQuestions = new List<Reference>();
+        var additionalRequirementQuestions = new List<Reference>();
         if (qualification.AdditionalRequirementQuestions is not null)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var questionId in qualification.AdditionalRequirementQuestions)
             {
-                addtionalRequirementQuestions.Add(new Reference(SystemLinkTypes.Entry, questionId));
+                additionalRequirementQuestions.Add(new Reference(SystemLinkTypes.Entry, questionId));
             }
         }
-        
+
         var ratioRequirements = new List<Reference>();
         if (qualification.RatioRequirements is not null)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var ratioId in qualification.RatioRequirements)
             {
                 ratioRequirements.Add(new Reference(SystemLinkTypes.Entry, ratioId));
             }
         }
-        
-        
+
         var entry = new Entry<dynamic>
                     {
                         SystemProperties = new SystemProperties
@@ -274,16 +291,16 @@ public static class Program
                                                               {
                                                                   { Locale, qualification.AdditionalRequirements ?? "" }
                                                               },
-                                     
-                                     additionalRequirementQuestions = new Dictionary<string, List<Reference>>()
+
+                                     additionalRequirementQuestions = new Dictionary<string, List<Reference>>
                                                                       {
-                                                                          { Locale, addtionalRequirementQuestions }
+                                                                          { Locale, additionalRequirementQuestions }
                                                                       },
-                                     
-                                     ratioRequirements = new Dictionary<string, List<Reference>>()
-                                                                      {
-                                                                          { Locale, ratioRequirements }
-                                                                      }
+
+                                     ratioRequirements = new Dictionary<string, List<Reference>>
+                                                         {
+                                                             { Locale, ratioRequirements }
+                                                         }
                                  }
                     };
 
@@ -292,7 +309,7 @@ public static class Program
 
     private static List<QualificationUpload> GetQualificationsToAddOrUpdate()
     {
-        var lines = ReadCsvFile("./csv/reference-upload-test.csv");
+        var lines = ReadCsvFile(CsvFile);
 
         var listObjResult = new List<QualificationUpload>();
 
@@ -308,13 +325,13 @@ public static class Program
             var additionalRequirements = t[7];
             var additionalRequirementQuestionString = t[8];
             var ratioRequirementsString = t[9];
-            
+
             string[] additionalRequirementQuestionsArray = [];
             if (!string.IsNullOrEmpty(additionalRequirementQuestionString))
             {
                 additionalRequirementQuestionsArray = additionalRequirementQuestionString.Split(':');
             }
-            
+
             string[] ratioRequirementsArray = [];
             if (!string.IsNullOrEmpty(ratioRequirementsString))
             {
@@ -342,7 +359,7 @@ public static class Program
     {
         var result = new List<string[]>();
         using var csvParser = new TextFieldParser(filePath);
-        csvParser.SetDelimiters([","]);
+        csvParser.SetDelimiters(",");
         csvParser.HasFieldsEnclosedInQuotes = true;
 
         // Skip the row with the column names

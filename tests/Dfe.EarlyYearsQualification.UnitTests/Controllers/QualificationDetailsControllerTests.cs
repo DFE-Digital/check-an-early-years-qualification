@@ -28,7 +28,8 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockContentFilterService.Object, mockInsetTextRenderer.Object,
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
                                                mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
@@ -46,7 +47,6 @@ public class QualificationDetailsControllerTests
         resultType!.StatusCode.Should().Be(400);
     }
 
-
     [TestMethod]
     public async Task Index_ContentServiceReturnsNullDetailsPage_RedirectsToHomeError()
     {
@@ -58,7 +58,8 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockContentFilterService.Object, mockInsetTextRenderer.Object,
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
                                                mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
@@ -93,7 +94,8 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockContentFilterService.Object, mockInsetTextRenderer.Object,
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
                                                mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
@@ -128,7 +130,8 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockContentFilterService.Object, mockInsetTextRenderer.Object,
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
                                                mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
@@ -173,13 +176,19 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         mockContentFilterService
-            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
-                                                    It.IsAny<string?>(), It.IsAny<string?>())).ReturnsAsync(new List<Qualification>());
+            .Setup(x =>
+                       x.GetFilteredQualifications(It.IsAny<int?>(),
+                                                   It.IsAny<int?>(),
+                                                   It.IsAny<int?>(),
+                                                   It.IsAny<string?>(),
+                                                   It.IsAny<string?>()))
+            .ReturnsAsync([]);
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockContentFilterService.Object, mockInsetTextRenderer.Object,
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
                                                mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
@@ -198,7 +207,7 @@ public class QualificationDetailsControllerTests
                                   },
                      Header = "TEST"
                  });
-        
+
         var result = await controller.Get();
 
         result.Should().NotBeNull();
@@ -216,7 +225,8 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockContentFilterService.Object, mockInsetTextRenderer.Object,
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
                                                mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
@@ -250,7 +260,8 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object, mockContentFilterService.Object, mockInsetTextRenderer.Object,
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
                                                mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
@@ -267,5 +278,64 @@ public class QualificationDetailsControllerTests
 
         actionResult.ActionName.Should().Be("Get");
         mockUserJourneyCookieService.Verify(x => x.SetQualificationNameSearchCriteria("Test"), Times.Once);
+    }
+
+    [TestMethod]
+    public void Refine_NullParam_RedirectsToGet()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
+                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+
+        var result = controller.Refine(null);
+
+        result.Should().BeOfType<RedirectToActionResult>();
+
+        var actionResult = (RedirectToActionResult)result;
+
+        actionResult.ActionName.Should().Be("Get");
+        mockUserJourneyCookieService.Verify(x => x.SetQualificationNameSearchCriteria(string.Empty), Times.Once);
+    }
+
+    [TestMethod]
+    public void Refine_InvalidModel_LogsWarning()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
+                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+
+        controller.ModelState.AddModelError("Key", "Error message");
+
+        controller.Refine(null);
+
+        mockLogger.VerifyWarning($"Invalid model state in {nameof(QualificationDetailsController)} POST");
     }
 }
