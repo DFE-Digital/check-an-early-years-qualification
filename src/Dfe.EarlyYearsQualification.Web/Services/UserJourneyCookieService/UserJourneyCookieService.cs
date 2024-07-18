@@ -12,7 +12,7 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
                                               {
                                                   Secure = true,
                                                   HttpOnly = true,
-                                                  Expires = new DateTimeOffset(DateTime.Now.AddYears(1))
+                                                  Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30))
                                               };
 
     public void SetWhereWasQualificationAwarded(string location)

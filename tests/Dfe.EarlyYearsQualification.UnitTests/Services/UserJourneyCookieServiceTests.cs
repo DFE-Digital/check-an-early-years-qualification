@@ -414,8 +414,8 @@ public class UserJourneyCookieServiceTests
     private static void CheckSerializedModelWasSet(Mock<IHttpContextAccessor> mockContext,
                                                    string serializedModelToCheck)
     {
-        var in364Days = new DateTimeOffset(DateTime.Now.AddDays(364));
-        var inOneYear = new DateTimeOffset(DateTime.Now.AddYears(1));
+        var in29Minutes = new DateTimeOffset(DateTime.Now.AddMinutes(29));
+        var in30Minutes = new DateTimeOffset(DateTime.Now.AddMinutes(30));
 
         mockContext
             .Verify(http =>
@@ -425,8 +425,8 @@ public class UserJourneyCookieServiceTests
                                                                        options =>
                                                                            options.Secure
                                                                            && options.HttpOnly
-                                                                           && options.Expires > in364Days
-                                                                           && options.Expires < inOneYear)
+                                                                           && options.Expires > in29Minutes
+                                                                           && options.Expires < in30Minutes)
                                                                  ),
                     Times.Once);
     }
