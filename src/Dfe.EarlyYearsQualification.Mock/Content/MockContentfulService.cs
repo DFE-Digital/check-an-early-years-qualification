@@ -50,6 +50,10 @@ public class MockContentfulService : IContentService
                    AdvicePages.QualificationsAchievedInNorthernIreland =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Northern Ireland",
                                                               body, "/questions/where-was-the-qualification-awarded")),
+                   
+                   AdvicePages.QualificationNotOnTheList =>
+                       await Task.FromResult(CreateAdvicePage("Qualification not on the list",
+                                                              body, "/qualifications")),
                    _ => null
                };
     }
@@ -232,7 +236,7 @@ public class MockContentfulService : IContentService
                                          MultipleQualificationsFoundText = "qualifications found",
                                          SingleQualificationFoundText = "qualification found",
                                          PreSearchBoxContent = ContentfulContentHelper.Text("Pre search box content"),
-                                         PostQualificationListContent = ContentfulContentHelper.Text("Post qualification list content"),
+                                         PostQualificationListContent = ContentfulContentHelper.Link("Link to not on list advice page","/advice/qualification-not-on-the-list"),
                                          PostSearchCriteriaContent = ContentfulContentHelper.Text("Post search criteria content"),
                                          AnyLevelHeading = "Any level",
                                          AnyAwardingOrganisationHeading = "Various awarding organisations"

@@ -23,7 +23,8 @@ var config = {
         "http://localhost:5000/advice/qualification-outside-the-united-kingdom",
         "http://localhost:5000/advice/qualifications-achieved-in-scotland",
         "http://localhost:5000/advice/qualifications-achieved-in-wales",
-        "http://localhost:5000/advice/qualifications-achieved-in-northern-ireland"
+        "http://localhost:5000/advice/qualifications-achieved-in-northern-ireland",
+        "http://localhost:5000/advice/qualification-not-on-the-list",
     ]
 };
 
