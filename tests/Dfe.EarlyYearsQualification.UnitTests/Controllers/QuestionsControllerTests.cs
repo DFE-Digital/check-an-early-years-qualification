@@ -39,6 +39,8 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
+        
+        mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
 
         mockContentService.VerifyAll();
 
@@ -77,6 +79,8 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
+        
+        mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
 
         result.Should().NotBeNull();
 
