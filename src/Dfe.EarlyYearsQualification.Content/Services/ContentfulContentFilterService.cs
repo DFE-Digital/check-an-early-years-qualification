@@ -99,9 +99,12 @@ public class ContentfulContentFilterService(
         switch (awardingOrganisation)
         {
             case AwardingOrganisations.Edexcel or AwardingOrganisations.Pearson:
+            {
                 result.AddRange(new List<string> { AwardingOrganisations.Edexcel, AwardingOrganisations.Pearson });
                 break;
-            case AwardingOrganisations.Ncfe or AwardingOrganisations.Cache  when startDateMonth.HasValue && startDateYear.HasValue:
+            }
+            case AwardingOrganisations.Ncfe or AwardingOrganisations.Cache
+                when startDateMonth.HasValue && startDateYear.HasValue:
             {
                 var cutOffDate = new DateOnly(2014, 9, 1);
                 var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
@@ -117,8 +120,10 @@ public class ContentfulContentFilterService(
                 break;
             }
             default:
+            {
                 result.Add(awardingOrganisation);
                 break;
+            }
         }
 
         return result;
