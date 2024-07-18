@@ -1,4 +1,7 @@
 ﻿@using GovUk.Frontend.AspNetCore
+@using Dfe.EarlyYearsQualification.Web.Helpers
+@inject GtmConfiguration GtmConfiguration
+
 <!DOCTYPE html>
 <html class="govuk-template" lang="en">
 
@@ -11,6 +14,17 @@
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.svg"/>
     @Html.GovUkFrontendStyleImports()
 </head>
+
+@{
+    var gtmTag = GtmConfiguration.GtmTag;
+    if (GtmConfiguration.UseCookies && !string.IsNullOrEmpty(gtmTag))
+    {
+        <!-- Google tag (gtag.js) -->
+        var src = $"https://www.googletagmanager.com/gtag/js?id={gtmTag}"; 
+        <script async src=@src></script>
+        <script src="~/js/google-analytics.js" asp-append-version="true" id="ga-script" data-ga-tag=@gtmTag></script>
+    }
+}
 
 <body>
 @Html.GovUkFrontendJsEnabledScript()
