@@ -30,4 +30,5 @@ export const pagesWithoutForms = [
   "/advice/qualifications-achieved-in-scotland",
   "/advice/qualifications-achieved-in-wales",
   "/advice/qualifications-achieved-in-northern-ireland",
+  "/advice/qualification-not-on-the-list",
 ]
