@@ -106,6 +106,8 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         int? startDateMonth = null;
         int? startDateYear = null;
         var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
+        
+        // ReSharper disable once InvertIf
         if (qualificationAwardedDateSplit.Length == 2
             && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
             && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))

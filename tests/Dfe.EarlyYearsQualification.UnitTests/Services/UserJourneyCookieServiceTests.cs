@@ -178,7 +178,7 @@ public class UserJourneyCookieServiceTests
         var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
-    
+
     [TestMethod]
     public void GetWhereWasQualificationAwarded_CookieValueIsEmpty_ReturnsNull()
     {
@@ -195,7 +195,7 @@ public class UserJourneyCookieServiceTests
 
         model.Should().BeNull();
     }
-    
+
     [TestMethod]
     public void GetWhereWasQualificationAwarded_CookieHasValue_ReturnsValueWithUpperCaseFirstLetter()
     {
@@ -212,7 +212,7 @@ public class UserJourneyCookieServiceTests
 
         model.Should().Be("England");
     }
-    
+
     [TestMethod]
     public void GetAwardingOrganisation_CookieValueIsEmpty_ReturnsNull()
     {
@@ -229,7 +229,7 @@ public class UserJourneyCookieServiceTests
 
         model.Should().BeNull();
     }
-    
+
     [TestMethod]
     public void GetAwardingOrganisation_CookieHasValue_ReturnsValue()
     {
@@ -246,7 +246,7 @@ public class UserJourneyCookieServiceTests
 
         model.Should().Be("NCFE");
     }
-    
+
     [TestMethod]
     public void GetLevelOfQualification_CookieValueIsEmpty_ReturnsNull()
     {
@@ -263,7 +263,7 @@ public class UserJourneyCookieServiceTests
 
         model.Should().BeNull();
     }
-    
+
     [TestMethod]
     public void GetLevelOfQualification_CookieHasValue_ReturnsValue()
     {
@@ -280,7 +280,7 @@ public class UserJourneyCookieServiceTests
 
         model.Should().Be(4);
     }
-    
+
     [TestMethod]
     public void GetWhenWasQualificationAwarded_CookieValueIsEmpty_ReturnsNull()
     {
@@ -293,12 +293,12 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
-        (int? startMonth, int? startYear) = service.GetWhenWasQualificationAwarded();
+        var (startMonth, startYear) = service.GetWhenWasQualificationAwarded();
 
         startMonth.Should().BeNull();
         startYear.Should().BeNull();
     }
-    
+
     [TestMethod]
     public void GetWhenWasQualificationAwarded_CookieHasInvalidValue_ReturnsNull()
     {
@@ -311,12 +311,12 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
-        (int? startMonth, int? startYear) = service.GetWhenWasQualificationAwarded();
+        var (startMonth, startYear) = service.GetWhenWasQualificationAwarded();
 
         startMonth.Should().BeNull();
         startYear.Should().BeNull();
     }
-    
+
     [TestMethod]
     public void GetWhenWasQualificationAwarded_CookieHasValidValue_ReturnsValue()
     {
@@ -329,12 +329,12 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
-        (int? startMonth, int? startYear) = service.GetWhenWasQualificationAwarded();
+        var (startMonth, startYear) = service.GetWhenWasQualificationAwarded();
 
         startMonth.Should().Be(4);
         startYear.Should().Be(2015);
     }
-    
+
     [TestMethod]
     public void SetNameSearchCriteria_StringProvided_SetsCookieCorrectly()
     {
@@ -344,7 +344,7 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
-        var searchCriteria = "This is a test";
+        const string searchCriteria = "This is a test";
         service.SetQualificationNameSearchCriteria(searchCriteria);
 
         var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
@@ -354,7 +354,7 @@ public class UserJourneyCookieServiceTests
 
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
-    
+
     [TestMethod]
     public void GetSearchCriteria_CookieHasInvalidValue_ReturnsNull()
     {
@@ -371,7 +371,7 @@ public class UserJourneyCookieServiceTests
 
         searchCriteria.Should().BeNull();
     }
-    
+
     [TestMethod]
     public void GetSearchCriteria_CookieHasValidValue_ReturnsValue()
     {
