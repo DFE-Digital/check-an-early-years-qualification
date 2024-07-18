@@ -4,6 +4,7 @@ using Contentful.Core.Configuration;
 using Contentful.Core.Models;
 using Contentful.Core.Models.Management;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Dfe.EarlyYearsQualification.ContentUpload;
@@ -15,7 +16,6 @@ public static class Program
     private const string SpaceId = "";
     private const string ManagementApiKey = "";
     private const string CsvFile = "./csv/ey-quals-full-2024-with-new-reference-fields.csv";
-    private const string QualificationContentTypeId = "Qualification";
     private const string FieldTypeSymbol = "Symbol";
 
     // ReSharper disable once UnusedParameter.Global
@@ -38,10 +38,12 @@ public static class Program
     private static async Task PopulateContentfulWithQualifications(ContentfulManagementClient client)
     {
         // Check existing entries and identify those to update, and those to create.
+        var queryBuilder = new QueryBuilder<Entry<dynamic>>()
+                           .ContentTypeIs(ContentTypes.Qualification)
+                           .Limit(1000);
+
         var currentEntries =
-            await
-                client.GetEntriesForLocale(new QueryBuilder<Entry<dynamic>>().ContentTypeIs(QualificationContentTypeId).Limit(1000),
-                                           Locale);
+            await client.GetEntriesForLocale(queryBuilder, Locale);
 
         var qualificationsToAddOrUpdate = GetQualificationsToAddOrUpdate();
 
@@ -59,7 +61,7 @@ public static class Program
 
             // Create new entry
             var entryToPublish = await client.CreateOrUpdateEntry(entryToAddOrUpdate,
-                                                                  contentTypeId: QualificationContentTypeId,
+                                                                  contentTypeId: ContentTypes.Qualification,
                                                                   version: entryToAddOrUpdate.SystemProperties.Version);
 
             await client.PublishEntry(entryToPublish.SystemProperties.Id,
@@ -70,7 +72,7 @@ public static class Program
     private static async Task SetUpContentModels(ContentfulManagementClient client)
     {
         // Check current version of model
-        var contentTypeModel = await client.GetContentType(QualificationContentTypeId);
+        var contentTypeModel = await client.GetContentType(ContentTypes.Qualification);
 
         var version = contentTypeModel?.SystemProperties.Version ?? 1;
 
@@ -78,9 +80,9 @@ public static class Program
                           {
                               SystemProperties = new SystemProperties
                                                  {
-                                                     Id = QualificationContentTypeId
+                                                     Id = ContentTypes.Qualification
                                                  },
-                              Name = QualificationContentTypeId,
+                              Name = ContentTypes.Qualification,
                               Description = "Model for storing all the early years qualifications",
                               DisplayField = "qualificationName",
                               Fields =
@@ -179,7 +181,7 @@ public static class Program
                           };
 
         var typeToActivate = await client.CreateOrUpdateContentType(contentType, version: version);
-        await client.ActivateContentType(QualificationContentTypeId, typeToActivate.SystemProperties.Version!.Value);
+        await client.ActivateContentType(ContentTypes.Qualification, typeToActivate.SystemProperties.Version!.Value);
 
         Thread.Sleep(2000); // Allows the API time to activate the content type
         await SetHelpText(client);
@@ -187,7 +189,7 @@ public static class Program
 
     private static async Task SetHelpText(ContentfulManagementClient client)
     {
-        var editorInterface = await client.GetEditorInterface(QualificationContentTypeId);
+        var editorInterface = await client.GetEditorInterface(ContentTypes.Qualification);
         SetHelpTextForField(editorInterface, "qualificationId",
                             "The unique identifier used to reference the qualification");
         SetHelpTextForField(editorInterface, "qualificationName", "The name of the qualification");
@@ -206,7 +208,7 @@ public static class Program
         SetHelpTextForField(editorInterface, "ratioRequirements", "The optional ratio requirements",
                             SystemWidgetIds.EntryMultipleLinksEditor);
 
-        await client.UpdateEditorInterface(editorInterface, QualificationContentTypeId,
+        await client.UpdateEditorInterface(editorInterface, ContentTypes.Qualification,
                                            editorInterface.SystemProperties.Version!.Value);
     }
 
