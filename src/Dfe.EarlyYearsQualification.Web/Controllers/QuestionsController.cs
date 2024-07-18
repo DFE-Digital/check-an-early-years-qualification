@@ -89,6 +89,8 @@ public class QuestionsController(
         if (!ModelState.IsValid || !questionModelValidator.IsValid(model))
         {
             var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+            
+            // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
                 model = MapDateModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions);
@@ -117,6 +119,8 @@ public class QuestionsController(
         if (!ModelState.IsValid)
         {
             var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification);
+            
+            // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
                 model = await MapRadioModel(model, questionPage, nameof(this.WhatLevelIsTheQualification), Questions);
@@ -162,6 +166,8 @@ public class QuestionsController(
         {
             var questionPage =
                 await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
+            
+            // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
                 var qualifications = await GetFilteredQualifications();
@@ -183,13 +189,14 @@ public class QuestionsController(
     private bool WasAwardedBetweenSeptember2014AndAugust2019()
     {
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        if (startDateMonth is not null && startDateYear is not null)
+
+        if (startDateMonth is null || startDateYear is null)
         {
-            var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-            return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
+            return false;
         }
 
-        return false;
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
     }
 
     private async Task<List<Qualification>> GetFilteredQualifications()

@@ -25,8 +25,8 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void DateQuestionModelValidator_GivenDateEarlierThisMonth_ValidatesTrue()
     {
-        var thisYear = 2024;
-        var thisMonth = 7;
+        const int thisYear = 2024;
+        const int thisMonth = 7;
 
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
         dateTimeAdapter.Setup(d => d.Now())
@@ -42,8 +42,8 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void DateQuestionModelValidator_GivenDateThisMonthOnFirstOfMonth_ValidatesTrue()
     {
-        var thisYear = 2024;
-        var thisMonth = 7;
+        const int thisYear = 2024;
+        const int thisMonth = 7;
 
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
         dateTimeAdapter.Setup(d => d.Now())
@@ -59,8 +59,8 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void DateQuestionModelValidator_GivenDateLaterThisYear_ValidatesFalse()
     {
-        var thisYear = 2024;
-        var thisMonth = 7;
+        const int thisYear = 2024;
+        const int thisMonth = 7;
 
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
         dateTimeAdapter.Setup(d => d.Now())

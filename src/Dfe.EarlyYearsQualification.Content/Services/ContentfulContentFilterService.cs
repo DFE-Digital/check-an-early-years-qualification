@@ -96,27 +96,29 @@ public class ContentfulContentFilterService(
     {
         var result = new List<string>();
 
-        if (awardingOrganisation is AwardingOrganisations.Edexcel or AwardingOrganisations.Pearson)
+        switch (awardingOrganisation)
         {
-            result.AddRange(new List<string> { AwardingOrganisations.Edexcel, AwardingOrganisations.Pearson });
-        }
-        else if (awardingOrganisation is AwardingOrganisations.Ncfe or AwardingOrganisations.Cache
-                 && startDateMonth.HasValue && startDateYear.HasValue)
-        {
-            var cutOffDate = new DateOnly(2014, 9, 1);
-            var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-            if (date >= cutOffDate)
+            case AwardingOrganisations.Edexcel or AwardingOrganisations.Pearson:
+                result.AddRange(new List<string> { AwardingOrganisations.Edexcel, AwardingOrganisations.Pearson });
+                break;
+            case AwardingOrganisations.Ncfe or AwardingOrganisations.Cache  when startDateMonth.HasValue && startDateYear.HasValue:
             {
-                result.AddRange(new List<string> { AwardingOrganisations.Ncfe, AwardingOrganisations.Cache });
+                var cutOffDate = new DateOnly(2014, 9, 1);
+                var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+                if (date >= cutOffDate)
+                {
+                    result.AddRange(new List<string> { AwardingOrganisations.Ncfe, AwardingOrganisations.Cache });
+                }
+                else
+                {
+                    result.Add(awardingOrganisation);
+                }
+
+                break;
             }
-            else
-            {
+            default:
                 result.Add(awardingOrganisation);
-            }
-        }
-        else
-        {
-            result.Add(awardingOrganisation);
+                break;
         }
 
         return result;
@@ -230,14 +232,14 @@ public class ContentfulContentFilterService(
             return (false, 0, 0);
         }
 
-        if (!Months.TryGetValue(abbreviatedMonth, out var month))
+        if (Months.TryGetValue(abbreviatedMonth, out var month))
         {
-            logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
-                            qualificationDate);
-
-            return (false, 0, 0);
+            return (true, month, yearPart);
         }
 
-        return (true, month, yearPart);
+        logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
+                        qualificationDate);
+
+        return (false, 0, 0);
     }
 }

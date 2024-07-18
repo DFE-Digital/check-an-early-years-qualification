@@ -131,7 +131,7 @@ public class QualificationDetailsController(
         }
 
         var level = userJourneyCookieService.GetLevelOfQualification();
-        if (level is not null && level > 0)
+        if (level > 0)
         {
             filterModel.Level = $"Level {level}";
         }
@@ -148,6 +148,8 @@ public class QualificationDetailsController(
     private static List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification>? qualifications)
     {
         var basicQualificationsModels = new List<BasicQualificationModel>();
+        
+        // ReSharper disable once InvertIf
         if (qualifications is not null && qualifications.Count > 0)
         {
             foreach (var qualification in qualifications)

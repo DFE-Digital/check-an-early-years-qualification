@@ -344,7 +344,7 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
 
-        var searchCriteria = "This is a test";
+        const string searchCriteria = "This is a test";
         service.SetQualificationNameSearchCriteria(searchCriteria);
 
         var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
