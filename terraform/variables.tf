@@ -161,3 +161,8 @@ variable "contentful_use_preview_api" {
   description = "Boolean used to set whether content is preview or published"
   type        = bool
 }
+
+variable "gtm_tag" {
+  description = "The Google Analytics tag"
+  type        = string
+}
