@@ -25,4 +25,16 @@ public static class ContentfulContentHelper
                    ]
                };
     }
+
+    public static Document Link(string text, string href)
+    {
+        return new Document
+               {
+                   Content =
+                   [
+                       new Hyperlink
+                       { Data = new HyperlinkData { Uri = href }, Content = [new Text { Value = text }] }
+                   ]
+               };
+    }
 }

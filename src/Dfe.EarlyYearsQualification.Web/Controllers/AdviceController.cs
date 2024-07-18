@@ -41,6 +41,12 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
     {
         return await GetView(AdvicePages.QualificationsAchievedInWales);
     }
+    
+    [HttpGet("qualification-not-on-the-list")]
+    public async Task<IActionResult> QualificationNotOnTheList()
+    {
+        return await GetView(AdvicePages.QualificationNotOnTheList);
+    }
 
     private async Task<IActionResult> GetView(string advicePageId)
     {
