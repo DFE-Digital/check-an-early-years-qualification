@@ -1,6 +1,6 @@
 namespace Dfe.EarlyYearsQualification.Web.Constants;
 
-public static class Options
+public static class QualificationAwardLocation
 {
     /// <summary>
     ///     Option for outside the UK.
