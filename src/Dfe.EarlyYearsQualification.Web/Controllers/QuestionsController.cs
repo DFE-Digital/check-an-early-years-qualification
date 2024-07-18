@@ -27,6 +27,7 @@ public class QuestionsController(
     [HttpGet("where-was-the-qualification-awarded")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
+        userJourneyCookieService.ResetUserJourneyCookie();
         return await GetRadioView(QuestionPages.WhereWasTheQualificationAwarded,
                                   nameof(this.WhereWasTheQualificationAwarded),
                                   Questions);
