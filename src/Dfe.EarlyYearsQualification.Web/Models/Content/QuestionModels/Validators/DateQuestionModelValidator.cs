@@ -1,8 +1,6 @@
-using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
-
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 
-public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDateQuestionModelValidator
+public class DateQuestionModelValidator(TimeProvider timeProvider) : IDateQuestionModelValidator
 {
     public bool IsValid(DateQuestionModel model)
     {
@@ -15,8 +13,8 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
 
         var selectedDate = new DateOnly(model.SelectedYear, model.SelectedMonth, 1);
 
-        var now = dateTimeAdapter.Now();
+        var now = timeProvider.GetUtcNow();
 
-        return selectedDate <= DateOnly.FromDateTime(now);
+        return selectedDate <= DateOnly.FromDateTime(now.DateTime);
     }
 }

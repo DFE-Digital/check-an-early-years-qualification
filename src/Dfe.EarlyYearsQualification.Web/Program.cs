@@ -8,7 +8,6 @@ using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Security;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
-using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.AspNetCore.DataProtection;
@@ -67,7 +66,7 @@ builder.Services.AddScoped(x =>
                            });
 
 builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
-builder.Services.AddSingleton<IDateTimeAdapter, DateTimeAdapter>();
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelValidator>();
 
 var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
