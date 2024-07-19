@@ -141,7 +141,7 @@ public class QuestionsControllerTests
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
-                                                             { Option = Options.OutsideOfTheUnitedKingdom });
+                                                             { Option = QualificationAwardLocation.OutsideOfTheUnitedKingdom });
 
         result.Should().NotBeNull();
 
@@ -170,7 +170,7 @@ public class QuestionsControllerTests
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
-                                                             { Option = Options.Scotland });
+                                                             { Option = QualificationAwardLocation.Scotland });
 
         result.Should().NotBeNull();
 
@@ -199,7 +199,7 @@ public class QuestionsControllerTests
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
-                                                             { Option = Options.Wales });
+                                                             { Option = QualificationAwardLocation.Wales });
 
         result.Should().NotBeNull();
 
@@ -228,7 +228,7 @@ public class QuestionsControllerTests
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
-                                                             { Option = Options.NorthernIreland });
+                                                             { Option = QualificationAwardLocation.NorthernIreland });
 
         result.Should().NotBeNull();
 
@@ -256,7 +256,7 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object);
 
         var result =
-            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel { Option = Options.England });
+            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel { Option = QualificationAwardLocation.England });
 
         result.Should().NotBeNull();
 
@@ -265,7 +265,7 @@ public class QuestionsControllerTests
 
         resultType!.ActionName.Should().Be("WhenWasTheQualificationStarted");
 
-        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(Options.England), Times.Once);
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.England), Times.Once);
     }
 
     [TestMethod]

@@ -53,13 +53,13 @@ public class QuestionsController(
 
         switch (model.Option)
         {
-            case Options.OutsideOfTheUnitedKingdom:
+            case QualificationAwardLocation.OutsideOfTheUnitedKingdom:
                 return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
-            case Options.Scotland:
+            case QualificationAwardLocation.Scotland:
                 return RedirectToAction("QualificationsAchievedInScotland", "Advice");
-            case Options.Wales:
+            case QualificationAwardLocation.Wales:
                 return RedirectToAction("QualificationsAchievedInWales", "Advice");
-            case Options.NorthernIreland:
+            case QualificationAwardLocation.NorthernIreland:
                 return RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice");
         }
 
