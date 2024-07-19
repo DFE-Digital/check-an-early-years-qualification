@@ -22,7 +22,8 @@ using RobotsTxt;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
-if (!builder.Configuration.GetValue<bool>("UseMockContentful"))
+var useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
+if (!useMockContentful)
 {
     var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
@@ -45,7 +46,7 @@ builder.Services.AddContentful(builder.Configuration);
 
 builder.Services.AddGovUkFrontend();
 
-if (builder.Configuration.GetValue<bool>("UseMockContentful"))
+if (useMockContentful)
 {
     builder.Services.AddMockContentfulServices();
 }
@@ -93,7 +94,7 @@ app.UseSecureHeadersMiddleware(
                               );
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment() || useMockContentful)
 {
     app.UseExceptionHandler("/Error");
     app.UseStatusCodePagesWithReExecute("/Error/{0}");
