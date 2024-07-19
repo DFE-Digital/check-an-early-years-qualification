@@ -39,6 +39,8 @@ public class MockContentfulFilterService : IContentFilterService
                                  startDate,
                                  endDate,
                                  "ghi/456/951",
-                                 "additional requirements");
+                                 "additional requirements",
+                                 null,
+                                 null);
     }
 }

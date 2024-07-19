@@ -147,7 +147,7 @@ public class ConfirmQualificationControllerTests
 
         mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(new Qualification("Some ID",
                   "Qualification Name", "NCFE", 2, "2014", "2019",
-                  "ABC/547/900", "additional requirements"));
+                  "ABC/547/900", "additional requirements", null, null));
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
@@ -378,7 +378,7 @@ public class ConfirmQualificationControllerTests
 
         mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(new Qualification("Some ID",
                   "Qualification Name", "NCFE", 2, "2014", "2019",
-                  "ABC/547/900", "additional requirements"));
+                  "ABC/547/900", "additional requirements", null, null));
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 

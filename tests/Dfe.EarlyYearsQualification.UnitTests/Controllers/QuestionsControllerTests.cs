@@ -793,19 +793,19 @@ public class QuestionsControllerTests
                                    {
                                        new("1", "TEST",
                                            "D awarding organisation", 123, null,
-                                           null, null, null),
+                                           null, null, null, null, null),
                                        new("2", "TEST",
                                            "E awarding organisation", 123, null,
-                                           null, null, null),
+                                           null, null, null, null, null),
                                        new("3", "TEST",
                                            "A awarding organisation", 123, null,
-                                           null, null, null),
+                                           null, null, null, null, null),
                                        new("4", "TEST",
                                            "C awarding organisation", 123, null,
-                                           null, null, null),
+                                           null, null, null, null, null),
                                        new("5", "TEST",
                                            "B awarding organisation", 123, null,
-                                           null, null, null)
+                                           null, null, null, null, null)
                                    };
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
@@ -864,16 +864,16 @@ public class QuestionsControllerTests
                                    {
                                        new("1", "TEST",
                                            "D awarding organisation", 123, null,
-                                           null, null, null),
+                                           null, null, null, null, null),
                                        new("2", "TEST",
                                            "E awarding organisation", 123, null,
-                                           null, null, null),
+                                           null, null, null, null, null),
                                        new("3", "TEST",
                                            "Various Awarding Organisations", 123, null,
-                                           null, null, null),
+                                           null, null, null, null, null),
                                        new("4", "TEST",
                                            "All Higher Education Institutes", 123, null,
-                                           null, null, null)
+                                           null, null, null, null, null)
                                    };
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());

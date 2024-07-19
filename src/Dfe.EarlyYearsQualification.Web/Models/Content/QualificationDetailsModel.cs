@@ -14,4 +14,8 @@ public class QualificationDetailsModel : BasicQualificationModel
     public NavigationLink? BackButton { get; init; }
 
     public DetailsPageModel? Content { get; init; }
+
+    public List<AdditionalRequirementQuestionModel>? AdditionalRequirementQuestions { get; set; }
+
+    public RatioRequirementModel RatioRequirements { get; set; } = new ();
 }
