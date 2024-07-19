@@ -61,8 +61,17 @@ public static class SecureHeaderConfiguration
 
         var unsafeHashesElement = new ContentSecurityPolicyElement
                                   { CommandType = CspCommandType.Directive, DirectiveOrUri = "unsafe-hashes" };
+        
         var contentfulCspElement = new ContentSecurityPolicyElement
                                    { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://app.contentful.com" };
+        
+        
+        var gtmCspElement = new ContentSecurityPolicyElement
+                                   { CommandType = CspCommandType.Uri, DirectiveOrUri = "www.googletagmanager.com/gtag/js" };
+        
+        var ga4CspElement = new ContentSecurityPolicyElement
+                            { CommandType = CspCommandType.Uri, DirectiveOrUri = "*.google-analytics.com" };
+        
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowLocationShaCspElement);
@@ -71,6 +80,8 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukAllMinifiedElement);
         configuration.ContentSecurityPolicyConfiguration.FrameAncestors.Add(contentfulCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(dropdownPageCheckbox);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
 
         return configuration;
     }
