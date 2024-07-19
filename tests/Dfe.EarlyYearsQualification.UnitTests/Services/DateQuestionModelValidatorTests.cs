@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using FluentAssertions;
+using Microsoft.Extensions.Time.Testing;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -11,10 +12,12 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void DateQuestionModelValidator_GivenDateInRecentPast_ValidatesTrue()
     {
-        var timeProvider = new Mock<TimeProvider>();
-        timeProvider.Setup(d => d.GetUtcNow()).Returns(new DateTime(2024, 7, 16, 13, 1, 12, DateTimeKind.Local));
-
-        var validator = new DateQuestionModelValidator(timeProvider.Object);
+        var fakeTimeProvider = new FakeTimeProvider();
+        
+        fakeTimeProvider.SetUtcNow(new DateTime(2024, 7, 16, 13, 1, 12, DateTimeKind.Local));
+        fakeTimeProvider.SetLocalTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Greenwich Standard Time"));
+        
+        var validator = new DateQuestionModelValidator(fakeTimeProvider);
 
         var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2023 };
 
@@ -27,11 +30,12 @@ public class DateQuestionModelValidatorTests
         const int thisYear = 2024;
         const int thisMonth = 7;
 
-        var timeProvider = new Mock<TimeProvider>();
-        timeProvider.Setup(d => d.GetUtcNow())
-                    .Returns(new DateTime(thisYear, thisMonth, 16, 13, 1, 12, DateTimeKind.Local));
-
-        var validator = new DateQuestionModelValidator(timeProvider.Object);
+        var fakeTimeProvider = new FakeTimeProvider();
+        
+        fakeTimeProvider.SetUtcNow(new DateTime(thisYear, thisMonth, 16, 13, 1, 12, DateTimeKind.Local));
+        fakeTimeProvider.SetLocalTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Greenwich Standard Time"));
+        
+        var validator = new DateQuestionModelValidator(fakeTimeProvider);
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = thisYear };
 
@@ -44,11 +48,12 @@ public class DateQuestionModelValidatorTests
         const int thisYear = 2024;
         const int thisMonth = 7;
 
-        var timeProvider = new Mock<TimeProvider>();
-        timeProvider.Setup(d => d.GetUtcNow())
-                    .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
-
-        var validator = new DateQuestionModelValidator(timeProvider.Object);
+        var fakeTimeProvider = new FakeTimeProvider();
+        
+        fakeTimeProvider.SetUtcNow(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
+        fakeTimeProvider.SetLocalTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Greenwich Standard Time"));
+        
+        var validator = new DateQuestionModelValidator(fakeTimeProvider);
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = thisYear };
 
@@ -61,11 +66,12 @@ public class DateQuestionModelValidatorTests
         const int thisYear = 2024;
         const int thisMonth = 7;
 
-        var timeProvider = new Mock<TimeProvider>();
-        timeProvider.Setup(d => d.GetUtcNow())
-                    .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
-
-        var validator = new DateQuestionModelValidator(timeProvider.Object);
+        var fakeTimeProvider = new FakeTimeProvider();
+        
+        fakeTimeProvider.SetUtcNow(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
+        fakeTimeProvider.SetLocalTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Greenwich Standard Time"));
+        
+        var validator = new DateQuestionModelValidator(fakeTimeProvider);
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth + 1, SelectedYear = thisYear };
 
@@ -75,10 +81,12 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void DateQuestionModelValidator_GivenDateInFuture_ValidatesFalse()
     {
-        var timeProvider = new Mock<TimeProvider>();
-        timeProvider.Setup(d => d.GetUtcNow()).Returns(new DateTime(2022, 10, 10, 15, 32, 12, DateTimeKind.Local));
-
-        var validator = new DateQuestionModelValidator(timeProvider.Object);
+        var fakeTimeProvider = new FakeTimeProvider();
+        
+        fakeTimeProvider.SetUtcNow(new DateTime(2022, 10, 10, 15, 32, 12, DateTimeKind.Local));
+        fakeTimeProvider.SetLocalTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Greenwich Standard Time"));
+        
+        var validator = new DateQuestionModelValidator(fakeTimeProvider);
 
         var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2023 };
 
@@ -88,9 +96,9 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void DateQuestionModelValidator_GivenDateBefore1900_ValidatesFalse()
     {
-        var timeProvider = new Mock<TimeProvider>();
+        var fakeTimeProvider = new FakeTimeProvider();
 
-        var validator = new DateQuestionModelValidator(timeProvider.Object);
+        var validator = new DateQuestionModelValidator(fakeTimeProvider);
 
         var model = new DateQuestionModel { SelectedMonth = 12, SelectedYear = 1899 };
 
@@ -100,9 +108,9 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void DateQuestionModelValidator_GivenMonthBefore1_ValidatesFalse()
     {
-        var timeProvider = new Mock<TimeProvider>();
+        var fakeTimeProvider = new FakeTimeProvider();
 
-        var validator = new DateQuestionModelValidator(timeProvider.Object);
+        var validator = new DateQuestionModelValidator(fakeTimeProvider);
 
         var model = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 2024 };
 
@@ -112,9 +120,9 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void DateQuestionModelValidator_GivenMonthAfter12_ValidatesFalse()
     {
-        var timeProvider = new Mock<TimeProvider>();
+        var fakeTimeProvider = new FakeTimeProvider();
 
-        var validator = new DateQuestionModelValidator(timeProvider.Object);
+        var validator = new DateQuestionModelValidator(fakeTimeProvider);
 
         var model = new DateQuestionModel { SelectedMonth = 13, SelectedYear = 2024 };
 

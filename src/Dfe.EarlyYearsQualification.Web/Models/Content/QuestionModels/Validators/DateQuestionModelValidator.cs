@@ -13,7 +13,7 @@ public class DateQuestionModelValidator(TimeProvider timeProvider) : IDateQuesti
 
         var selectedDate = new DateOnly(model.SelectedYear, model.SelectedMonth, 1);
 
-        var now = timeProvider.GetUtcNow();
+        var now = timeProvider.GetLocalNow();
 
         return selectedDate <= DateOnly.FromDateTime(now.DateTime);
     }

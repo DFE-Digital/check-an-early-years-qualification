@@ -454,7 +454,7 @@ public class QuestionsControllerTests
         var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
                                                                      {
                                                                          SelectedMonth = 01,
-                                                                         SelectedYear = DateTime.UtcNow.Year + 1
+                                                                         SelectedYear = DateTime.Now.Year + 1
                                                                      });
 
         var resultType = result as ViewResult;
