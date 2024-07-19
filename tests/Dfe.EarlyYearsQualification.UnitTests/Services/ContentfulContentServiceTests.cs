@@ -901,4 +901,38 @@ public class ContentfulContentServiceTests
 
         _logger.VerifyError($"Exception trying to retrieve {nameof(StartPage)} from Contentful.");
     }
+    
+    [TestMethod]
+    public async Task GetCheckAdditionalRequirementsPage_ReturnsPage()
+    {
+        var page = new CheckAdditionalRequirementsPage { Heading = "Test heading" };
+
+        _clientMock.Setup(c =>
+                              c.GetEntriesByType(It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<CheckAdditionalRequirementsPage>>(),
+                                                 It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<CheckAdditionalRequirementsPage> { Items = [page] });
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetCheckAdditionalRequirementsPage();
+
+        result.Should().Be(page);
+    }
+
+    [TestMethod]
+    public async Task GetCheckAdditionalRequirementsPage_ContentfulHasNoPage_ReturnsNull()
+    {
+        _clientMock.Setup(c =>
+                              c.GetEntriesByType(It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<CheckAdditionalRequirementsPage>>(),
+                                                 It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<CheckAdditionalRequirementsPage> { Items = [] });
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetCheckAdditionalRequirementsPage();
+
+        result.Should().BeNull();
+    }
 }

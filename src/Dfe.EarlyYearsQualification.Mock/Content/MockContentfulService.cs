@@ -281,6 +281,25 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public async Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage()
+    {
+        return await Task.FromResult(new CheckAdditionalRequirementsPage
+               {
+                   Heading = "Check the additional requirements",
+                   BackButton = new NavigationLink
+                                {
+                                    DisplayText = "Back",
+                                    Href = "/",
+                                    OpenInNewTab = false
+                                },
+                   CtaButtonText = "Get result",
+                   AwardingOrganisationLabel = "Awarding organisation",
+                   QualificationLabel = "Qualification",
+                   QualificationLevelLabel = "Qualification level",
+                   InformationMessage = "Your result is dependent on the accuracy of the answers you have provided"
+               });
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =
