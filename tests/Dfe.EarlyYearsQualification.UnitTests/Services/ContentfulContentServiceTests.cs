@@ -679,7 +679,7 @@ public class ContentfulContentServiceTests
     {
         var qualification = new Qualification("SomeId", "Test qualification name", "Test awarding org", 123,
                                               "Test from which year", "Test to which year", "Test qualification number",
-                                              "Test additional requirements");
+                                              "Test additional requirements", null, null);
 
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -855,7 +855,7 @@ public class ContentfulContentServiceTests
         var qualification = new Qualification("Id", "Name",
                                               "AO", 6,
                                               "2014", "2020",
-                                              "number", "Rq");
+                                              "number", "Rq", null, null);
 
         _clientMock.Setup(c =>
                               c.GetEntriesByType(It.IsAny<string>(),

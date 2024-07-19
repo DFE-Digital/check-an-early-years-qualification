@@ -181,6 +181,7 @@ public class QualificationDetailsController(
                    AdditionalRequirements = qualification.AdditionalRequirements,
                    BookmarkUrl = HttpContext.Request.GetDisplayUrl(),
                    BackButton = content.BackButton,
+                   AdditionalRequirementQuestions = await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
@@ -198,5 +199,27 @@ public class QualificationDetailsController(
                                  QualificationNumberLabel = content.QualificationNumberLabel
                              }
                };
+    }
+
+    private async Task<List<AdditionalRequirementQuestionModel>?> MapAdditionalRequirementQuestions(List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
+    {
+        if (additionalRequirementQuestions is null) return null;
+
+        var results = new List<AdditionalRequirementQuestionModel>();
+
+        foreach (var additionalRequirementQuestion in additionalRequirementQuestions)
+        {
+            results.Add(new AdditionalRequirementQuestionModel
+                        {
+                            Question = additionalRequirementQuestion.Question,
+                            HintText = additionalRequirementQuestion.HintText,
+                            DetailsHeading = additionalRequirementQuestion.DetailsHeading,
+                            DetailsContent = await htmlRenderer.ToHtml(additionalRequirementQuestion.DetailsContent),
+                            ConfirmationStatement = additionalRequirementQuestion.ConfirmationStatement,
+                            AnswerToBeFullAndRelevant = additionalRequirementQuestion.AnswerToBeFullAndRelevant
+                        });
+        }
+        
+        return results;
     }
 }

@@ -10,7 +10,9 @@ public class Qualification
         string? fromWhichYear,
         string? toWhichYear,
         string? qualificationNumber,
-        string? additionalRequirements)
+        string? additionalRequirements,
+        List<AdditionalRequirementQuestion>? additionalRequirementQuestions,
+        List<RatioRequirement>? ratioRequirements)
     {
         QualificationId = qualificationId;
         QualificationName = qualificationName;
@@ -20,6 +22,8 @@ public class Qualification
         ToWhichYear = toWhichYear;
         QualificationNumber = qualificationNumber;
         AdditionalRequirements = additionalRequirements;
+        AdditionalRequirementQuestions = additionalRequirementQuestions;
+        RatioRequirements = ratioRequirements;
     }
 
     // Required Fields
@@ -33,4 +37,6 @@ public class Qualification
     public string? ToWhichYear { get; }
     public string? QualificationNumber { get; }
     public string? AdditionalRequirements { get; }
+    public List<AdditionalRequirementQuestion>? AdditionalRequirementQuestions { get; }
+    public List<RatioRequirement>? RatioRequirements { get; }
 }

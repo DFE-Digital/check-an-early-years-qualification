@@ -142,7 +142,7 @@ public class QualificationDetailsControllerTests
 
         const string qualificationId = "eyq-145";
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
-                                                    "ABC/547/900", "additonal requirements");
+                                                    "ABC/547/900", "additonal requirements", null, null);
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
         var result = await controller.Index(qualificationId);
