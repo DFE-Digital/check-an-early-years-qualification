@@ -2,7 +2,6 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using FluentAssertions;
 using Microsoft.Extensions.Time.Testing;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
