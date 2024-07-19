@@ -41,7 +41,7 @@ public class GtmConfigurationTests
         var mockCookiePreferenceService = new Mock<ICookiesPreferenceService>();
         var mockConfiguration = new Mock<IConfiguration>();
         var mockSection = new Mock<IConfigurationSection>();
-        mockSection.Setup(x => x.Value).Returns((string)null);
+        mockSection.Setup(x => x.Value).Returns(value: null);
         mockConfiguration.Setup(x => x.GetSection("GTM:Tag")).Returns(mockSection.Object);
         
         var gtmConfiguration = new GtmConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
