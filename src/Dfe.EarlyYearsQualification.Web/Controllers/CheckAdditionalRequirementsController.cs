@@ -11,7 +11,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("qualifications/check-additional-questions")]
 public class CheckAdditionalRequirementsController(
-    ILogger<ConfirmQualificationController> logger,
+    ILogger<CheckAdditionalRequirementsController> logger,
     IContentService contentService,
     IHtmlRenderer htmlRenderer,
     IUserJourneyCookieService userJourneyCookieService)
@@ -66,7 +66,7 @@ public class CheckAdditionalRequirementsController(
         var content = await contentService.GetCheckAdditionalRequirementsPage();
         if (content is null)
         {
-            logger.LogError("No content for the cookies page");
+            logger.LogError("No content for the check additional requirements page");
             return RedirectToAction("Index", "Error");
         }
 
