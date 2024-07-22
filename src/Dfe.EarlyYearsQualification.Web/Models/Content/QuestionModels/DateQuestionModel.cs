@@ -13,14 +13,4 @@ public class DateQuestionModel : BaseQuestionModel
     [Required] public int SelectedMonth { get; init; }
 
     [Required] public int SelectedYear { get; init; }
-
-    public bool IsModelValid()
-    {
-        if (SelectedMonth is < 1 or > 12)
-        {
-            return false;
-        }
-
-        return SelectedYear > 1900 && SelectedYear <= DateTime.UtcNow.Year;
-    }
 }

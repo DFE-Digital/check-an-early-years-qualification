@@ -29,7 +29,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
@@ -38,7 +40,9 @@ public class ContentfulContentFilterServiceTests
                                                         null,
                                                         "Aug-19",
                                                         "def/456/951",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null, 
+                                                        null)
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -81,7 +85,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -124,7 +130,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -168,7 +176,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
@@ -177,7 +187,9 @@ public class ContentfulContentFilterServiceTests
                                                         null,
                                                         "Aug-19",
                                                         "def/456/951",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-752",
                                                         "test",
@@ -186,7 +198,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Sep-21",
                                                         null,
                                                         "ghi/456/951",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -229,7 +243,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
@@ -238,7 +254,9 @@ public class ContentfulContentFilterServiceTests
                                                         null,
                                                         "Aug-19",
                                                         "def/456/951",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-752",
                                                         "test",
@@ -247,7 +265,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Sep-21",
                                                         null,
                                                         "ghi/456/951",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -290,7 +310,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
@@ -299,7 +321,9 @@ public class ContentfulContentFilterServiceTests
                                                         null,
                                                         "Sep-19",
                                                         "def/456/951",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-746",
                                                         "test",
@@ -308,7 +332,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Sep-15",
                                                         null,
                                                         "ghi/456/951",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-752",
                                                         "test",
@@ -317,7 +343,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Sep-21",
                                                         null,
                                                         "ghi/456/951",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -360,7 +388,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "aug-19",
                                                         "abc/123/987",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
@@ -369,7 +399,9 @@ public class ContentfulContentFilterServiceTests
                                                         null,
                                                         "seP-19",
                                                         "def/456/951",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-746",
                                                         "test",
@@ -378,7 +410,9 @@ public class ContentfulContentFilterServiceTests
                                                         "sEp-15",
                                                         null,
                                                         "ghi/456/951",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-752",
                                                         "test",
@@ -387,7 +421,9 @@ public class ContentfulContentFilterServiceTests
                                                         "SEP-21",
                                                         null,
                                                         "ghi/456/951",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -451,7 +487,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Sep15", // We expect Mmm-yy, e.g. "Sep-15"
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -491,7 +529,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Sept-15", // "Sept" in the data: we expect "Sep"
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -531,7 +571,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Sep-15",
                                                         "Aug-1a", // invalid year typo
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -571,7 +613,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -615,7 +659,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -659,7 +705,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -703,7 +751,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -747,7 +797,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -791,7 +843,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -835,7 +889,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -879,7 +935,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -928,7 +986,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-123",
                                                         "Diploma in Early Years Child Care",
@@ -937,7 +997,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 
@@ -987,7 +1049,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements"),
+                                                        "requirements",
+                                                        null,
+                                                        null),
                                       new Qualification(
                                                         "EYQ-123",
                                                         "Diploma in Early Years Child Care",
@@ -996,7 +1060,9 @@ public class ContentfulContentFilterServiceTests
                                                         "Apr-15",
                                                         "Aug-19",
                                                         "abc/123/987",
-                                                        "requirements")
+                                                        "requirements",
+                                                        null,
+                                                        null)
                                   }
                       };
 

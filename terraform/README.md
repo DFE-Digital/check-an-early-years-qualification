@@ -46,6 +46,7 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_contentful_use_preview_api"></a> [contentful\_use\_preview\_api](#input\_contentful\_use\_preview\_api) | Boolean used to set whether content is preview or published | `bool` | n/a | yes |
 | <a name="input_custom_domain_name"></a> [custom\_domain\_name](#input\_custom\_domain\_name) | Custom domain hostname | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | `"development"` | no |
+| <a name="input_gtm_tag"></a> [gtm\_tag](#input\_gtm\_tag) | The Google Analytics tag | `string` | `""` | no |
 | <a name="input_kv_certificate_authority_admin_first_name"></a> [kv\_certificate\_authority\_admin\_first\_name](#input\_kv\_certificate\_authority\_admin\_first\_name) | First Name of the Certificate Authority Admin | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_admin_last_name"></a> [kv\_certificate\_authority\_admin\_last\_name](#input\_kv\_certificate\_authority\_admin\_last\_name) | Last Name of the Certificate Authority Admin | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_admin_phone_no"></a> [kv\_certificate\_authority\_admin\_phone\_no](#input\_kv\_certificate\_authority\_admin\_phone\_no) | Phone No. of the Certificate Authority Admin | `string` | n/a | yes |

@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,7 +18,8 @@ public class QuestionsController(
     IContentService contentService,
     IHtmlRenderer renderer,
     IUserJourneyCookieService userJourneyCookieService,
-    IContentFilterService contentFilterService)
+    IContentFilterService contentFilterService,
+    IDateQuestionModelValidator questionModelValidator)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -25,6 +27,7 @@ public class QuestionsController(
     [HttpGet("where-was-the-qualification-awarded")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
+        userJourneyCookieService.ResetUserJourneyCookie();
         return await GetRadioView(QuestionPages.WhereWasTheQualificationAwarded,
                                   nameof(this.WhereWasTheQualificationAwarded),
                                   Questions);
@@ -36,7 +39,7 @@ public class QuestionsController(
         if (!ModelState.IsValid)
         {
             var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
-            
+
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
@@ -48,9 +51,16 @@ public class QuestionsController(
             return View("Radio", model);
         }
 
-        if (model.Option == Options.OutsideOfTheUnitedKingdom)
+        switch (model.Option)
         {
-            return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
+            case QualificationAwardLocation.OutsideOfTheUnitedKingdom:
+                return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
+            case QualificationAwardLocation.Scotland:
+                return RedirectToAction("QualificationsAchievedInScotland", "Advice");
+            case QualificationAwardLocation.Wales:
+                return RedirectToAction("QualificationsAchievedInWales", "Advice");
+            case QualificationAwardLocation.NorthernIreland:
+                return RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice");
         }
 
         userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option!);
@@ -77,9 +87,11 @@ public class QuestionsController(
     [HttpPost("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
     {
-        if (!ModelState.IsValid || !model.IsModelValid())
+        if (!ModelState.IsValid || !questionModelValidator.IsValid(model))
         {
             var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+            
+            // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
                 model = MapDateModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions);
@@ -108,6 +120,8 @@ public class QuestionsController(
         if (!ModelState.IsValid)
         {
             var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification);
+            
+            // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
                 model = await MapRadioModel(model, questionPage, nameof(this.WhatLevelIsTheQualification), Questions);
@@ -119,7 +133,7 @@ public class QuestionsController(
 
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
-        if (model.Option == "2" && WithinDateRange())
+        if (model.Option == "2" && WasAwardedBetweenSeptember2014AndAugust2019())
         {
             return RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice");
         }
@@ -153,6 +167,8 @@ public class QuestionsController(
         {
             var questionPage =
                 await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
+            
+            // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
                 var qualifications = await GetFilteredQualifications();
@@ -171,22 +187,23 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
-    private bool WithinDateRange()
+    private bool WasAwardedBetweenSeptember2014AndAugust2019()
     {
-        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        if (startDateMonth is not null && startDateYear is not null)
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+
+        if (startDateMonth is null || startDateYear is null)
         {
-            var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-            return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
+            return false;
         }
 
-        return false;
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
     }
-    
+
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
-        int? level = userJourneyCookieService.GetLevelOfQualification();
-        (int? startDateMonth, int? startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var level = userJourneyCookieService.GetLevelOfQualification();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
     }
 
@@ -241,11 +258,12 @@ public class QuestionsController(
     {
         var awardingOrganisationExclusions =
             new[] { AwardingOrganisations.AllHigherEducation, AwardingOrganisations.Various };
-        var uniqueAwardingOrganisations = qualifications.Select(x => x.AwardingOrganisationTitle)
-                                                        .Distinct()
-                                                        .Where(x => !awardingOrganisationExclusions.Any(x.Contains))
-                                                        .Order()
-                                                        .ToList();
+
+        var uniqueAwardingOrganisations
+            = qualifications.Select(x => x.AwardingOrganisationTitle)
+                            .Distinct()
+                            .Where(x => !Array.Exists(awardingOrganisationExclusions, x.Contains))
+                            .Order();
 
         model.ActionName = actionName;
         model.ControllerName = controllerName;

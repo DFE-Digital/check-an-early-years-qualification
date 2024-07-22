@@ -38,6 +38,22 @@ public class MockContentfulService : IContentService
                        await
                            Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
                                                             body, "/questions/what-level-is-the-qualification")),
+                   
+                   AdvicePages.QualificationsAchievedInScotland =>
+                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Scotland",
+                                                              body, "/questions/where-was-the-qualification-awarded")),
+                   
+                   AdvicePages.QualificationsAchievedInWales =>
+                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Wales",
+                                                              body, "/questions/where-was-the-qualification-awarded")),
+                   
+                   AdvicePages.QualificationsAchievedInNorthernIreland =>
+                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Northern Ireland",
+                                                              body, "/questions/where-was-the-qualification-awarded")),
+                   
+                   AdvicePages.QualificationNotOnTheList =>
+                       await Task.FromResult(CreateAdvicePage("Qualification not on the list",
+                                                              body, "/qualifications")),
                    _ => null
                };
     }
@@ -144,7 +160,9 @@ public class MockContentfulService : IContentService
                                                        "2020",
                                                        "2021",
                                                        "603/5829/4",
-                                                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change."
+                                                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
+                                                       null,
+                                                       null
                                                       ));
     }
 
@@ -186,19 +204,19 @@ public class MockContentfulService : IContentService
                                {
                                    new("1", "TEST",
                                        "A awarding organisation", 123, null,
-                                       null, null, null),
+                                       null, null, null, null, null),
                                    new("2", "TEST",
                                        "B awarding organisation", 123, null,
-                                       null, null, null),
+                                       null, null, null, null, null),
                                    new("3", "TEST",
                                        "C awarding organisation", 123, null,
-                                       null, null, null),
+                                       null, null, null, null, null),
                                    new("4", "TEST",
                                        "D awarding organisation", 123, null,
-                                       null, null, null),
+                                       null, null, null, null, null),
                                    new("5", "TEST",
                                        "E awarding organisation", 123, null,
-                                       null, null, null)
+                                       null, null, null, null, null)
                                });
     }
 
@@ -220,7 +238,7 @@ public class MockContentfulService : IContentService
                                          MultipleQualificationsFoundText = "qualifications found",
                                          SingleQualificationFoundText = "qualification found",
                                          PreSearchBoxContent = ContentfulContentHelper.Text("Pre search box content"),
-                                         PostQualificationListContent = ContentfulContentHelper.Text("Post qualification list content"),
+                                         PostQualificationListContent = ContentfulContentHelper.Link("Link to not on list advice page","/advice/qualification-not-on-the-list"),
                                          PostSearchCriteriaContent = ContentfulContentHelper.Text("Post search criteria content"),
                                          AnyLevelHeading = "Any level",
                                          AnyAwardingOrganisationHeading = "Various awarding organisations"
@@ -316,6 +334,18 @@ public class MockContentfulService : IContentService
                           new()
                           {
                               Label = "England", Value = "england"
+                          },
+                          new()
+                          {
+                              Label = "Scotland", Value = "scotland"
+                          },
+                          new()
+                          {
+                              Label = "Wales", Value = "wales"
+                          },
+                          new()
+                          {
+                              Label = "Northern Ireland", Value = "northern-ireland"
                           },
                           new()
                           {

@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using Dfe.EarlyYearsQualification.Web.Controllers;
-using Dfe.EarlyYearsQualification.Web.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,47 +9,49 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 public class ErrorControllerTests
 {
     [TestMethod]
-    public void GetError_ReturnsViewWithTraceId()
+    public void Index_ReturnsProblemWithServiceView()
     {
         var controller = new ErrorController();
-
-        const string traceIdentifier = "Trace";
-
-        controller.ControllerContext = new ControllerContext
-                                       {
-                                           HttpContext = new DefaultHttpContext
-                                                         {
-                                                             TraceIdentifier = traceIdentifier
-                                                         }
-                                       };
 
         var result = controller.Index();
 
         result.Should().BeAssignableTo<ViewResult>()
-              .Which.Model.Should().BeAssignableTo<ErrorViewModel>()
-              .Which.RequestId.Should().Be(traceIdentifier);
+              .Which.ViewName.Should().Be("ProblemWithTheService");
     }
 
     [TestMethod]
-    public void GetError_ReturnsViewWithActivityId()
+    public void HttpStatusCodeHandler_404_ReturnsNotFoundView()
     {
         var controller = new ErrorController();
+        
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       };
 
-        const string operationName = "UnitTest";
+        var result = controller.HttpStatusCodeHandler(404);
+        
+        result.Should().BeAssignableTo<ViewResult>()
+              .Which.ViewName.Should().Be("NotFound");
 
-        var activity = new Activity(operationName).Start();
+        controller.ControllerContext.HttpContext.Response.StatusCode.Should().Be(404);
+    }
+    
+    [TestMethod]
+    public void HttpStatusCodeHandler_Not404_ReturnsProblemWithServiceView()
+    {
+        var controller = new ErrorController();
+        
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       };
 
-        try
-        {
-            var result = controller.Index();
-
-            result.Should().BeAssignableTo<ViewResult>()
-                  .Which.Model.Should().BeAssignableTo<ErrorViewModel>()
-                  .Which.RequestId.Should().Be(activity.Id);
-        }
-        finally
-        {
-            activity.Stop();
-        }
+        var result = controller.HttpStatusCodeHandler(500);
+        
+        result.Should().BeAssignableTo<ViewResult>()
+              .Which.ViewName.Should().Be("ProblemWithTheService");
+        
+        controller.ControllerContext.HttpContext.Response.StatusCode.Should().Be(500);
     }
 }

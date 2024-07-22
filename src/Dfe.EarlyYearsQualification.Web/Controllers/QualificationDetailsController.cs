@@ -34,11 +34,16 @@ public class QualificationDetailsController(
 
         return View(model);
     }
-    
+
     [HttpPost]
-    public IActionResult Refine(string refineSearch)
+    public IActionResult Refine(string? refineSearch)
     {
-        userJourneyCookieService.SetQualificationNameSearchCriteria(refineSearch);
+        if (!ModelState.IsValid)
+        {
+            logger.LogWarning($"Invalid model state in {nameof(QualificationDetailsController)} POST");
+        }
+
+        userJourneyCookieService.SetQualificationNameSearchCriteria(refineSearch ?? string.Empty);
 
         return RedirectToAction("Get");
     }
@@ -126,7 +131,7 @@ public class QualificationDetailsController(
         }
 
         var level = userJourneyCookieService.GetLevelOfQualification();
-        if (level is not null && level > 0)
+        if (level > 0)
         {
             filterModel.Level = $"Level {level}";
         }
@@ -143,6 +148,8 @@ public class QualificationDetailsController(
     private static List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification>? qualifications)
     {
         var basicQualificationsModels = new List<BasicQualificationModel>();
+        
+        // ReSharper disable once InvertIf
         if (qualifications is not null && qualifications.Count > 0)
         {
             foreach (var qualification in qualifications)
@@ -174,6 +181,7 @@ public class QualificationDetailsController(
                    AdditionalRequirements = qualification.AdditionalRequirements,
                    BookmarkUrl = HttpContext.Request.GetDisplayUrl(),
                    BackButton = content.BackButton,
+                   AdditionalRequirementQuestions = await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
@@ -191,5 +199,27 @@ public class QualificationDetailsController(
                                  QualificationNumberLabel = content.QualificationNumberLabel
                              }
                };
+    }
+
+    private async Task<List<AdditionalRequirementQuestionModel>?> MapAdditionalRequirementQuestions(List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
+    {
+        if (additionalRequirementQuestions is null) return null;
+
+        var results = new List<AdditionalRequirementQuestionModel>();
+
+        foreach (var additionalRequirementQuestion in additionalRequirementQuestions)
+        {
+            results.Add(new AdditionalRequirementQuestionModel
+                        {
+                            Question = additionalRequirementQuestion.Question,
+                            HintText = additionalRequirementQuestion.HintText,
+                            DetailsHeading = additionalRequirementQuestion.DetailsHeading,
+                            DetailsContent = await htmlRenderer.ToHtml(additionalRequirementQuestion.DetailsContent),
+                            ConfirmationStatement = additionalRequirementQuestion.ConfirmationStatement,
+                            AnswerToBeFullAndRelevant = additionalRequirementQuestion.AnswerToBeFullAndRelevant
+                        });
+        }
+        
+        return results;
     }
 }

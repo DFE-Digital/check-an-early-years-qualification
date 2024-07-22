@@ -23,6 +23,30 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
     {
         return await GetView(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019);
     }
+    
+    [HttpGet("qualifications-achieved-in-northern-ireland")]
+    public async Task<IActionResult> QualificationsAchievedInNorthernIreland()
+    {
+        return await GetView(AdvicePages.QualificationsAchievedInNorthernIreland);
+    }
+    
+    [HttpGet("qualifications-achieved-in-scotland")]
+    public async Task<IActionResult> QualificationsAchievedInScotland()
+    {
+        return await GetView(AdvicePages.QualificationsAchievedInScotland);
+    }
+    
+    [HttpGet("qualifications-achieved-in-wales")]
+    public async Task<IActionResult> QualificationsAchievedInWales()
+    {
+        return await GetView(AdvicePages.QualificationsAchievedInWales);
+    }
+    
+    [HttpGet("qualification-not-on-the-list")]
+    public async Task<IActionResult> QualificationNotOnTheList()
+    {
+        return await GetView(AdvicePages.QualificationNotOnTheList);
+    }
 
     private async Task<IActionResult> GetView(string advicePageId)
     {

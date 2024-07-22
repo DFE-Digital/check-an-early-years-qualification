@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="contentful.csharp" Version="7.6.0" />
+      <PackageReference Include="contentful.csharp" Version="7.6.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -16,11 +16,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="csv\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="csv\ey-quals-full-2024-updated.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="csv\reference-upload-test.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="csv\ey-quals-full-2024-with-new-reference-fields.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
