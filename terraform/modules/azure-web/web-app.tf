@@ -19,6 +19,10 @@ resource "azurerm_application_insights" "web" {
   application_type    = "web"
   workspace_id        = azurerm_log_analytics_workspace.webapp_logs.id
   tags                = var.tags
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 # Create App Service Plan
@@ -112,7 +116,7 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   lifecycle {
-    ignore_changes = [site_config.0.application_stack]
+    ignore_changes = [site_config.0.application_stack, tags]
   }
 
   tags = var.tags
@@ -326,9 +330,7 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
 
   notification {
     email {
-      send_to_subscription_administrator    = true
-      send_to_subscription_co_administrator = true
-      custom_emails                         = [var.webapp_admin_email_address]
+      custom_emails = [var.webapp_admin_email_address]
     }
   }
 
@@ -357,9 +359,13 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
   key_vault_id = var.kv_id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   # Can be retrieved using 'az ad sp show --id abfa0a7c-a6b6-4736-8310-5855508787cd --query id'
-  object_id               = var.as_service_principal_object_id
+  object_id               = azurerm_linux_web_app.webapp.identity[0].principal_id
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
+
+  lifecycle {
+    ignore_changes = [object_id]
+  }
 }
 
 # References the web app to be used in KV access policy as it already existed when changes needed to be made
@@ -376,6 +382,10 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
+
+  lifecycle {
+    ignore_changes = [object_id]
+  }
 }
 
 # Grants permissions to key vault for the managed identity of the App Service slot
@@ -386,6 +396,10 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
+
+  lifecycle {
+    ignore_changes = [object_id]
+  }
 }
 
 resource "azurerm_app_service_certificate" "webapp_custom_domain_cert" {
