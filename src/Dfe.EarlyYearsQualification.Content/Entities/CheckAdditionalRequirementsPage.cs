@@ -2,17 +2,21 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class CheckAdditionalRequirementsPage
 {
-    public string Heading { get; set; } = string.Empty;
+    public string Heading { get; init; } = string.Empty;
 
     public NavigationLink? BackButton { get; init; }
 
-    public string QualificationLabel { get; set; } = string.Empty;
+    public string QualificationLabel { get; init; } = string.Empty;
 
-    public string QualificationLevelLabel { get; set; } = string.Empty;
+    public string QualificationLevelLabel { get; init; } = string.Empty;
 
-    public string AwardingOrganisationLabel { get; set; } = string.Empty;
+    public string AwardingOrganisationLabel { get; init; } = string.Empty;
 
-    public string InformationMessage { get; set; } = string.Empty;
+    public string InformationMessage { get; init; } = string.Empty;
 
-    public string CtaButtonText { get; set; } = string.Empty;
+    public string CtaButtonText { get; init; } = string.Empty;
+
+    public string QuestionSectionHeading { get; init; } = string.Empty;
+
+    public string ErrorMessage { get; init; } = string.Empty;
 }

@@ -215,8 +215,6 @@ public class QualificationDetailsController(
                             HintText = additionalRequirementQuestion.HintText,
                             DetailsHeading = additionalRequirementQuestion.DetailsHeading,
                             DetailsContent = await htmlRenderer.ToHtml(additionalRequirementQuestion.DetailsContent),
-                            ConfirmationStatement = additionalRequirementQuestion.ConfirmationStatement,
-                            AnswerToBeFullAndRelevant = additionalRequirementQuestion.AnswerToBeFullAndRelevant
                         });
         }
         

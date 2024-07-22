@@ -389,6 +389,43 @@ public class UserJourneyCookieServiceTests
         searchCriteria.Should().Be("Test");
     }
 
+    [TestMethod]
+    public void SetAdditionalQuestionsAnswers_DictionaryProvided_SetsCookie()
+    {
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(new UserJourneyModel());
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        Dictionary<string, string> dictionary = new() { { "This is a test question", "Answer" } };
+        service.SetAdditionalQuestionsAnswers(dictionary);
+
+        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
+                                                              {
+                                                                  AdditionalQuestionsAnswers = dictionary
+                                                              });
+
+        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+    }
+    
+    [TestMethod]
+    public void SetAdditionalQuestionsAnswers_CookieHasValidValue_ReturnsValue()
+    {
+        Dictionary<string, string> dictionary = new() { { "This is a test question", "Answer" } };
+        var existingModel = new UserJourneyModel
+                            {
+                                AdditionalQuestionsAnswers = dictionary
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        var additionalQuestionsAnswers = service.GetAdditionalQuestionsAnswers();
+
+        additionalQuestionsAnswers.Should().Equal(dictionary);
+    }
+
     private static Mock<IHttpContextAccessor> SetHttpContextWithExistingCookie(object? model)
     {
         var serializedModel = JsonSerializer.Serialize(model);

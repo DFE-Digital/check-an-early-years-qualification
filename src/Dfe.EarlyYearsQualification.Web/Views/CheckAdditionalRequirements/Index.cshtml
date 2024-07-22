@@ -1,0 +1,108 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.CheckAdditionalRequirementsPageModel
+
+@{
+    ViewData["Title"] = $"Check additional requirements - {Model.QualificationId}";
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        <h1 class="govuk-heading-xl">@Model.Heading</h1>
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @Model.QualificationLabel
+                </dt>
+                <dd class="govuk-summary-list__value" id="qualification-name-value">
+                    @Model.QualificationName
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @Model.QualificationLevelLabel
+                </dt>
+                <dd class="govuk-summary-list__value" id="qualification-level-value">
+                    @Model.QualificationLevel
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @Model.AwardingOrganisationLabel
+                </dt>
+                <dd class="govuk-summary-list__value" id="awarding-organisation-value">
+                    @Model.AwardingOrganisation
+                </dd>
+            </div>
+        </dl>
+        <form id="check-additional-requirements" asp-controller="CheckAdditionalRequirements" asp-action="Post" method="post">
+            <input type="hidden" name="qualificationId" value="@Model.QualificationId">
+            <div id="confirm-qualification-form-group" class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset" role="group" aria-describedby="confirm-qualification-choice-error">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h4 id="radio-heading" class="govuk-heading-m">@Model.QuestionSectionHeading</h4>
+                    </legend>
+            
+                    @if (Model.HasErrors)
+                    {
+                        <p id="confirm-qualification-choice-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
+                        </p>
+                    }
+                    
+                    @for (var qi = 0; qi < Model.AdditionalRequirementQuestions.Count; qi++)
+                    {
+                        var question = Model.AdditionalRequirementQuestions[qi];
+                        <div class="govuk-form-group">
+                            <h3 class="govuk-heading-s">@question.Question</h3>
+                            @if (!string.IsNullOrEmpty(question.HintText))
+                            {
+                                <p>@question.HintText</p>
+                            }
+                            @if (!string.IsNullOrEmpty(question.DetailsHeading) && !string.IsNullOrEmpty(question.DetailsContent))
+                            {
+                                <details class="govuk-details">
+                                    <summary class="govuk-details__summary">
+                                        <span class="govuk-details__summary-text">
+                                            @question.DetailsHeading
+                                        </span>
+                                    </summary>
+                                    <div class="govuk-details__text">
+                                        @Html.Raw(question.DetailsContent)
+                                    </div>
+                                </details>
+                            }
+                            @for (var i = 0; i < question.Options.Count; i++)
+                            {
+                                var option = question.Options[i];
+                                var id = $"{option.Value}_{qi}_{i}";
+                                <div class="govuk-radios__item">
+                                    @Html.RadioButtonFor(x => x.Answers[question.Question], option.Value, new { @class = "govuk-radios__input", id })
+                                    <label class="govuk-label govuk-radios__label" for="@id">
+                                        @option.Label
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    }
+                </fieldset>
+            </div>
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-visually-hidden">Warning</span>
+                    @Model.InformationMessage
+                </strong>
+            </div>
+            <div class="govuk-form-group">
+                <button id="additional-requirement-button" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

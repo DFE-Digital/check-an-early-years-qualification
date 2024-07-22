@@ -102,6 +102,7 @@ public class ContentfulContentService(
     public async Task<Qualification?> GetQualificationById(string qualificationId)
     {
         var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(_contentTypes[typeof(Qualification)])
+                                                            .Include(2)
                                                             .FieldEquals("fields.qualificationId",
                                                                          qualificationId.ToUpper());
         var qualifications = await GetEntriesByType(queryBuilder);

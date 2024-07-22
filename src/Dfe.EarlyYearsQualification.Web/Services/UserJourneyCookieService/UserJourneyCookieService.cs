@@ -51,6 +51,15 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         SetJourneyCookie(model);
     }
 
+    public void SetAdditionalQuestionsAnswers(Dictionary<string, string> additionalQuestionsAnswers)
+    {
+        var model = GetUserJourneyModelFromCookie();
+
+        model.AdditionalQuestionsAnswers = additionalQuestionsAnswers;
+
+        SetJourneyCookie(model);
+    }
+
     public void SetQualificationNameSearchCriteria(string searchCriteria)
     {
         var model = GetUserJourneyModelFromCookie();
@@ -153,6 +162,12 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         }
 
         return searchCriteria;
+    }
+
+    public Dictionary<string, string>? GetAdditionalQuestionsAnswers()
+    {
+        var cookie = GetUserJourneyModelFromCookie();
+        return cookie.AdditionalQuestionsAnswers;
     }
 
     private void SetJourneyCookie(UserJourneyModel model)
