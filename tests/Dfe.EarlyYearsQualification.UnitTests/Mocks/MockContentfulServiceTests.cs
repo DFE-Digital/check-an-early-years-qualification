@@ -355,4 +355,28 @@ public class MockContentfulServiceTests
         result.RejectButtonText.Should().NotBeNullOrEmpty();
         result.RejectedCookiesContent.Should().NotBeNull();
     }
+
+    [TestMethod]
+    public async Task GetCheckAdditionalRequirementsPageContent_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+        var result = await contentfulService.GetCheckAdditionalRequirementsPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CheckAdditionalRequirementsPage>();
+        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                          {
+                                                              DisplayText = "Back",
+                                                              OpenInNewTab = false,
+                                                              Href = "/"
+                                                          });
+        result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
+        result.InformationMessage.Should().NotBeNullOrEmpty();
+        result.QualificationLabel.Should().NotBeNullOrEmpty();
+        result.AwardingOrganisationLabel.Should().NotBeNullOrEmpty();
+        result.CtaButtonText.Should().NotBeNullOrEmpty();
+        result.QualificationLevelLabel.Should().NotBeNullOrEmpty();
+        result.QuestionSectionHeading.Should().NotBeNullOrEmpty();
+    }
 }

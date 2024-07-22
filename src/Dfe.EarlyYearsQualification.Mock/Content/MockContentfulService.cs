@@ -296,7 +296,9 @@ public class MockContentfulService : IContentService
                    AwardingOrganisationLabel = "Awarding organisation",
                    QualificationLabel = "Qualification",
                    QualificationLevelLabel = "Qualification level",
-                   InformationMessage = "Your result is dependent on the accuracy of the answers you have provided"
+                   InformationMessage = "Your result is dependent on the accuracy of the answers you have provided",
+                   ErrorMessage = "This is a test error message",
+                   QuestionSectionHeading = "This is the question section heading"
                });
     }
 
