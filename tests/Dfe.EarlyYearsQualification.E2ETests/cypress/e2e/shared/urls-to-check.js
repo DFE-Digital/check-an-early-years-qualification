@@ -9,7 +9,9 @@ export const pages = [
   "/questions/what-level-is-the-qualification",
   "/questions/what-is-the-awarding-organisation",
   "/qualifications",
-  "/qualifications/qualification-details/EYQ-240"
+  "/confirm-qualification/EYQ-240",
+  "/qualifications/qualification-details/EYQ-240",
+  "/qualifications/check-additional-questions/EYQ-240"
 ];
 
 export const pagesWithForms = [
@@ -19,6 +21,8 @@ export const pagesWithForms = [
   "/questions/what-is-the-awarding-organisation",
   "/cookies",
   "/qualifications",
+  "/confirm-qualification/EYQ-240",
+  "/qualifications/check-additional-questions/EYQ-240"
 ];
 
 export const pagesWithoutForms = [
