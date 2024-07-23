@@ -355,21 +355,6 @@ resource "azurerm_app_service_custom_hostname_binding" "webapp_custom_domain" {
 
 data "azurerm_client_config" "az_config" {}
 
-/*
-resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
-  key_vault_id = var.kv_id
-  tenant_id    = data.azurerm_client_config.az_config.tenant_id
-  # Can be retrieved using 'az ad sp show --id abfa0a7c-a6b6-4736-8310-5855508787cd --query id'
-  object_id               = azurerm_linux_web_app.webapp.identity[0].principal_id
-  secret_permissions      = ["Get", "List"]
-  certificate_permissions = ["Get"]
-
-  lifecycle {
-    ignore_changes = [object_id]
-  }
-}
-*/
-
 # References the web app to be used in KV access policy as it already existed when changes needed to be made
 data "azurerm_linux_web_app" "ref" {
   name                = azurerm_linux_web_app.webapp.name
