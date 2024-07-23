@@ -355,6 +355,7 @@ resource "azurerm_app_service_custom_hostname_binding" "webapp_custom_domain" {
 
 data "azurerm_client_config" "az_config" {}
 
+/*
 resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
   key_vault_id = var.kv_id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
@@ -367,6 +368,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
     ignore_changes = [object_id]
   }
 }
+*/
 
 # References the web app to be used in KV access policy as it already existed when changes needed to be made
 data "azurerm_linux_web_app" "ref" {
