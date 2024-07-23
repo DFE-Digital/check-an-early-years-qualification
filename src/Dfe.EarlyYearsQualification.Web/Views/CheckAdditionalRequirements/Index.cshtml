@@ -12,10 +12,10 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-        <h1 class="govuk-heading-xl">@Model.Heading</h1>
+        <h1 class="govuk-heading-xl" id="heading">@Model.Heading</h1>
         <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                <dt class="govuk-summary-list__key" id="qualification-name-label">
                     @Model.QualificationLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="qualification-name-value">
@@ -23,7 +23,7 @@
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                <dt class="govuk-summary-list__key" id="qualification-level-label">
                     @Model.QualificationLevelLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="qualification-level-value">
@@ -31,7 +31,7 @@
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                <dt class="govuk-summary-list__key" id="awarding-organisation-label">
                     @Model.AwardingOrganisationLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="awarding-organisation-value">
@@ -49,7 +49,7 @@
             
                     @if (Model.HasErrors)
                     {
-                        <p id="confirm-qualification-choice-error" class="govuk-error-message">
+                        <p id="question-choice-error" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
                         </p>
                     }
@@ -57,21 +57,25 @@
                     @for (var qi = 0; qi < Model.AdditionalRequirementQuestions.Count; qi++)
                     {
                         var question = Model.AdditionalRequirementQuestions[qi];
+                        var questionId = $"question_{qi}";
                         <div class="govuk-form-group">
-                            <h3 class="govuk-heading-s">@question.Question</h3>
+                            <h3 class="govuk-heading-s" id="@questionId">@question.Question</h3>
                             @if (!string.IsNullOrEmpty(question.HintText))
                             {
-                                <p>@question.HintText</p>
+                                var hintId = $"{questionId}_hint";
+                                <p id="@hintId">@question.HintText</p>
                             }
                             @if (!string.IsNullOrEmpty(question.DetailsHeading) && !string.IsNullOrEmpty(question.DetailsContent))
                             {
+                                var detailsHeadingId = $"{questionId}_details_heading";
+                                var detailsContentId = $"{questionId}_details_content";
                                 <details class="govuk-details">
                                     <summary class="govuk-details__summary">
-                                        <span class="govuk-details__summary-text">
+                                        <span class="govuk-details__summary-text" id="@detailsHeadingId">
                                             @question.DetailsHeading
                                         </span>
                                     </summary>
-                                    <div class="govuk-details__text">
+                                    <div class="govuk-details__text" id="@detailsContentId">
                                         @Html.Raw(question.DetailsContent)
                                     </div>
                                 </details>
@@ -93,7 +97,7 @@
             </div>
             <div class="govuk-warning-text">
                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                <strong class="govuk-warning-text__text">
+                <strong class="govuk-warning-text__text" id="additional-requirement-warning">
                     <span class="govuk-visually-hidden">Warning</span>
                     @Model.InformationMessage
                 </strong>
