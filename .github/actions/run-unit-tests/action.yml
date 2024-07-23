@@ -38,7 +38,7 @@ runs:
           Code coverage report
           
     - name: Create Html coverage report
-      uses: danielpalme/ReportGenerator-GitHub-Action@5
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.3.8
       if: github.actor != 'dependabot[bot]' && github.event_name == 'pull_request'
       with:
         reports: 'coverage/**/coverage.cobertura.xml'
