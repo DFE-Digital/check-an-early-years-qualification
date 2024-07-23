@@ -161,7 +161,32 @@ public class MockContentfulService : IContentService
                                                        "2021",
                                                        "603/5829/4",
                                                        "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                                                       null,
+                                                       new List<AdditionalRequirementQuestion>
+                                                       {
+                                                           new()
+                                                           {
+                                                               Question = "Test question",
+                                                               HintText = "This is the hint text",
+                                                               DetailsHeading = "This is the details heading",
+                                                               DetailsContent = ContentfulContentHelper.Paragraph("This is the details content"),
+                                                               Answers =
+                                                               [
+                                                                   new Option
+                                                                   {
+                                                                       Label = "Yes",
+                                                                       Value = "yes"
+                                                                   },
+
+                                                                   new Option
+                                                                   {
+                                                                       Label = "No",
+                                                                       Value = "no"
+                                                                   }
+                                                               ],
+                                                               ConfirmationStatement = "This is the confirmation statement",
+                                                               AnswerToBeFullAndRelevant = true
+                                                           }
+                                                       },
                                                        null
                                                       ));
     }

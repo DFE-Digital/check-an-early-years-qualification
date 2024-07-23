@@ -126,6 +126,19 @@ public class MockContentfulServiceTests
         result.QualificationName.Should().NotBeNullOrEmpty();
         result.QualificationNumber.Should().NotBeNullOrEmpty();
         result.ToWhichYear.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions.Should().NotBeNull();
+        result.AdditionalRequirementQuestions!.Count.Should().Be(1);
+        result.AdditionalRequirementQuestions[0].Question.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].HintText.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].ConfirmationStatement.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers.Should().NotBeNull();
+        result.AdditionalRequirementQuestions[0].Answers.Count.Should().Be(2);
+        result.AdditionalRequirementQuestions[0].Answers[0].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[0].Value.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[1].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[1].Value.Should().NotBeNullOrEmpty();
     }
 
     [TestMethod]
