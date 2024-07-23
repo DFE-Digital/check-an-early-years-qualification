@@ -12,7 +12,7 @@ public class MockContentfulFilterService : IContentFilterService
             {
                 CreateQualification("EYQ-100", "CACHE", 2, null, "Aug-19"),
                 CreateQualification("EYQ-101", "NCFE", 2, "Sep-14", "Aug-19"),
-                CreateQualification("EYQ-102", "Pearson", 3, "Sep-14", "Aug-19"),
+                CreateQualification("EYQ-240", "Pearson", 3, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-103", "NCFE", 3, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-104", "City & Guilds", 4, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-105", "Montessori Centre International", 4, "Sep-14", "Aug-19"),

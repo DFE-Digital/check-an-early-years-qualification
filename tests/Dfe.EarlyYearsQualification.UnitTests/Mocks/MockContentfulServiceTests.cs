@@ -45,6 +45,45 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_QualificationsAchievedInScotland_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInScotland);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().Be("Qualifications achieved in Scotland");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_QualificationsAchievedInWales_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInWales);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().Be("Qualifications achieved in Wales");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_QualificationsAchievedInNorthernIreland_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInNorthernIreland);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().Be("Qualifications achieved in Northern Ireland");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
 
     [TestMethod]
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
@@ -126,6 +165,50 @@ public class MockContentfulServiceTests
         result.QualificationName.Should().NotBeNullOrEmpty();
         result.QualificationNumber.Should().NotBeNullOrEmpty();
         result.ToWhichYear.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions.Should().NotBeNull();
+        result.AdditionalRequirementQuestions!.Count.Should().Be(1);
+        result.AdditionalRequirementQuestions[0].Question.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].HintText.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].ConfirmationStatement.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers.Should().NotBeNull();
+        result.AdditionalRequirementQuestions[0].Answers.Count.Should().Be(2);
+        result.AdditionalRequirementQuestions[0].Answers[0].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[0].Value.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[1].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[1].Value.Should().NotBeNullOrEmpty();
+        result.RatioRequirements.Should().NotBeNullOrEmpty();
+        result.RatioRequirements!.Count.Should().Be(1);
+        result.RatioRequirements[0].RatioRequirementName.Should().Be("Level 2 ratio requirements");
+        result.RatioRequirements[0].FullAndRelevantForLevel2Before2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel2After2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel3Before2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel3After2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel4Before2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel4After2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel5Before2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel5After2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel6Before2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel6After2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel7Before2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel7After2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForQtsEtcBefore2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForQtsEtcAfter2014.Should().BeFalse();
+        result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel2After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel3Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel3After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel4Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel4After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel5Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel5After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel6Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel6After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel7Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
     }
 
     [TestMethod]
@@ -354,5 +437,29 @@ public class MockContentfulServiceTests
         result.HideCookieBannerButtonText.Should().NotBeNullOrEmpty();
         result.RejectButtonText.Should().NotBeNullOrEmpty();
         result.RejectedCookiesContent.Should().NotBeNull();
+    }
+
+    [TestMethod]
+    public async Task GetCheckAdditionalRequirementsPageContent_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+        var result = await contentfulService.GetCheckAdditionalRequirementsPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CheckAdditionalRequirementsPage>();
+        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                          {
+                                                              DisplayText = "Back",
+                                                              OpenInNewTab = false,
+                                                              Href = "/"
+                                                          });
+        result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
+        result.InformationMessage.Should().NotBeNullOrEmpty();
+        result.QualificationLabel.Should().NotBeNullOrEmpty();
+        result.AwardingOrganisationLabel.Should().NotBeNullOrEmpty();
+        result.CtaButtonText.Should().NotBeNullOrEmpty();
+        result.QualificationLevelLabel.Should().NotBeNullOrEmpty();
+        result.QuestionSectionHeading.Should().NotBeNullOrEmpty();
     }
 }

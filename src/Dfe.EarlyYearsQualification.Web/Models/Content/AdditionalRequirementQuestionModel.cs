@@ -1,3 +1,5 @@
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class AdditionalRequirementQuestionModel
@@ -10,7 +12,5 @@ public class AdditionalRequirementQuestionModel
 
     public string DetailsContent { get; set; } = string.Empty;
 
-    public string ConfirmationStatement { get; set; } = string.Empty;
-
-    public bool AnswerToBeFullAndRelevant { get; set; }
+    public List<OptionModel> Options { get; init; } = [];
 }

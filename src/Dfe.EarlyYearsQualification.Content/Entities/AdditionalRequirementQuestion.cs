@@ -15,4 +15,6 @@ public class AdditionalRequirementQuestion
     public string ConfirmationStatement { get; set; } = string.Empty;
 
     public bool AnswerToBeFullAndRelevant { get; set; }
+
+    public List<Option> Answers { get; set; } = [];
 }
