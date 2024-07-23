@@ -187,7 +187,10 @@ public class MockContentfulService : IContentService
                                                                AnswerToBeFullAndRelevant = true
                                                            }
                                                        },
-                                                       null
+                                                       new List<RatioRequirement>()
+                                                       {
+                                                           new() { RatioRequirementName = "Level 2 ratio requirements" }
+                                                       }
                                                       ));
     }
 

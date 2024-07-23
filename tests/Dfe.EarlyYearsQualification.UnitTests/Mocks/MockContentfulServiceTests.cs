@@ -178,6 +178,9 @@ public class MockContentfulServiceTests
         result.AdditionalRequirementQuestions[0].Answers[0].Value.Should().NotBeNullOrEmpty();
         result.AdditionalRequirementQuestions[0].Answers[1].Label.Should().NotBeNullOrEmpty();
         result.AdditionalRequirementQuestions[0].Answers[1].Value.Should().NotBeNullOrEmpty();
+        result.RatioRequirements.Should().NotBeNullOrEmpty();
+        result.RatioRequirements!.Count.Should().Be(1);
+        result.RatioRequirements[0].RatioRequirementName.Should().Be("Level 2 ratio requirements");
     }
 
     [TestMethod]
