@@ -30,9 +30,6 @@ resource "azurerm_user_assigned_identity" "kv_mi" {
 }
 
 resource "azurerm_key_vault_access_policy" "kv_ap" {
-  # Key Vault only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
   object_id    = data.azurerm_client_config.az_config.object_id

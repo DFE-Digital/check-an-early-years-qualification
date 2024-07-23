@@ -13,11 +13,6 @@ provider "azurerm" {
   }
 }
 
-moved {
-  from = module.network.azurerm_key_vault_access_policy.kv_gh_ap
-  to   = module.network.azurerm_key_vault_access_policy.kv_gh_ap[0]
-}
-
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.resource_name_prefix}-rg"
