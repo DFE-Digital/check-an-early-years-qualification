@@ -11,7 +11,7 @@ public class MockContentfulFilterServiceTests
     // An attribute argument must be a constant expression, 'typeof()' expression or array creation
     // expression of an attribute parameter type
     [DataRow(2, new[] { "EYQ-100", "EYQ-101" })]
-    [DataRow(3, new[] { "EYQ-102", "EYQ-103" })]
+    [DataRow(3, new[] { "EYQ-240", "EYQ-103" })]
     [DataRow(4, new[] { "EYQ-104", "EYQ-105" })]
     [DataRow(5, new[] { "EYQ-106", "EYQ-107" })]
     [DataRow(6, new[] { "EYQ-108", "EYQ-109" })]
