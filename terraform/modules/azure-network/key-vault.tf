@@ -12,7 +12,11 @@ resource "azurerm_key_vault" "kv" {
   sku_name                    = "standard"
 
   lifecycle {
-    ignore_changes = [tags["Environment"]]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 
   #checkov:skip=CKV_AZURE_109:Access Policies configured

@@ -21,7 +21,11 @@ resource "azurerm_resource_group" "rg" {
   tags = local.common_tags
 
   lifecycle {
-    ignore_changes = [tags["Environment"]]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 }
 
