@@ -14,6 +14,10 @@ resource "azurerm_public_ip" "agw_pip" {
   idle_timeout_in_minutes = 4
 
   lifecycle {
-    ignore_changes = [tags["Environment"]]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 }
