@@ -38,7 +38,7 @@ resource "azurerm_storage_account" "sa" {
   tags = var.tags
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags["Environment"]]
   }
 
   #checkov:skip=CKV_AZURE_206:GRS not required

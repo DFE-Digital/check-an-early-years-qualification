@@ -60,7 +60,7 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags["Environment"]]
   }
 }
 
@@ -178,7 +178,7 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags["Environment"]]
   }
 
   #checkov:skip=CKV_AZURE_218:Secure transit protocols used

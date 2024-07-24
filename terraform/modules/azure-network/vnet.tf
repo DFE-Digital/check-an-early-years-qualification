@@ -6,7 +6,7 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = ["172.1.0.0/16"]
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags["Environment"]]
   }
 }
 
