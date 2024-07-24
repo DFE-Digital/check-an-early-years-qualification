@@ -28,8 +28,8 @@ describe("A spec that tests the check additional questions page", () => {
 
         cy.get("#additional-requirement-button").click();
 
-        cy.get("#question-choice-error").should("be.visible");
-        cy.get("#question-choice-error").should("contain.text", "This is a test error message");
+        cy.get("#question-choice-error_0").should("be.visible");
+        cy.get("#question-choice-error_0").should("contain.text", "This is a test error message");
 
         cy.get(".govuk-form-group--error").should("be.visible");
     });
