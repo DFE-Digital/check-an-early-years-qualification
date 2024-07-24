@@ -8,7 +8,7 @@ resource "azurerm_log_analytics_workspace" "webapp_logs" {
   daily_quota_gb      = 1
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags["Environment"]]
   }
 }
 
@@ -21,7 +21,7 @@ resource "azurerm_application_insights" "web" {
   tags                = var.tags
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags["Environment"]]
   }
 }
 
@@ -35,7 +35,7 @@ resource "azurerm_service_plan" "asp" {
   worker_count        = var.webapp_worker_count
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags["Environment"]]
   }
 
   #checkov:skip=CKV_AZURE_212:Argument not available
@@ -116,7 +116,7 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   lifecycle {
-    ignore_changes = [site_config.0.application_stack, tags]
+    ignore_changes = [site_config.0.application_stack, tags["Environment"]]
   }
 
   tags = var.tags
@@ -176,7 +176,7 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
   }
 
   lifecycle {
-    ignore_changes = [tags, site_config.0.application_stack]
+    ignore_changes = [tags["Environment"], site_config.0.application_stack]
   }
 }
 
@@ -335,7 +335,7 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags["Environment"]]
   }
 }
 
