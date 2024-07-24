@@ -36,6 +36,21 @@ runs:
         path: code-coverage-results.md
         message: |
           Code coverage report
+          
+    - name: Create Html coverage report
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.3.8
+      if: github.actor != 'dependabot[bot]' && github.event_name == 'pull_request'
+      with:
+        reports: 'coverage/**/coverage.cobertura.xml'
+        targetdir: 'CoverageReports'
+        reporttypes: 'Html'
+        
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      if: github.actor != 'dependabot[bot]' && github.event_name == 'pull_request'
+      with:
+        name: CoverageReports
+        path: CoverageReports
     
     - name: Write to Job Summary
       shell: bash

@@ -161,8 +161,36 @@ public class MockContentfulService : IContentService
                                                        "2021",
                                                        "603/5829/4",
                                                        "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                                                       null,
-                                                       null
+                                                       new List<AdditionalRequirementQuestion>
+                                                       {
+                                                           new()
+                                                           {
+                                                               Question = "Test question",
+                                                               HintText = "This is the hint text",
+                                                               DetailsHeading = "This is the details heading",
+                                                               DetailsContent = ContentfulContentHelper.Paragraph("This is the details content"),
+                                                               Answers =
+                                                               [
+                                                                   new Option
+                                                                   {
+                                                                       Label = "Yes",
+                                                                       Value = "yes"
+                                                                   },
+
+                                                                   new Option
+                                                                   {
+                                                                       Label = "No",
+                                                                       Value = "no"
+                                                                   }
+                                                               ],
+                                                               ConfirmationStatement = "This is the confirmation statement",
+                                                               AnswerToBeFullAndRelevant = true
+                                                           }
+                                                       },
+                                                       new List<RatioRequirement>()
+                                                       {
+                                                           new() { RatioRequirementName = "Level 2 ratio requirements" }
+                                                       }
                                                       ));
     }
 
@@ -279,6 +307,27 @@ public class MockContentfulService : IContentService
                                          ErrorBannerHeading = "Test error banner heading",
                                          ErrorBannerLink = "Test error banner link"
                                      });
+    }
+
+    public async Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage()
+    {
+        return await Task.FromResult(new CheckAdditionalRequirementsPage
+               {
+                   Heading = "Check the additional requirements",
+                   BackButton = new NavigationLink
+                                {
+                                    DisplayText = "Back",
+                                    Href = "/",
+                                    OpenInNewTab = false
+                                },
+                   CtaButtonText = "Get result",
+                   AwardingOrganisationLabel = "Awarding organisation",
+                   QualificationLabel = "Qualification",
+                   QualificationLevelLabel = "Qualification level",
+                   InformationMessage = "Your result is dependent on the accuracy of the answers you have provided",
+                   ErrorMessage = "This is a test error message",
+                   QuestionSectionHeading = "This is the question section heading"
+               });
     }
 
     public async Task<StartPage?> GetStartPage()

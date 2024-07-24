@@ -12,10 +12,3 @@ public class RadioQuestionModel : BaseQuestionModel
 
     public string AdditionalInformationBody { get; set; } = string.Empty;
 }
-
-public class OptionModel
-{
-    public string Label { get; init; } = string.Empty;
-
-    public string Value { get; init; } = string.Empty;
-}

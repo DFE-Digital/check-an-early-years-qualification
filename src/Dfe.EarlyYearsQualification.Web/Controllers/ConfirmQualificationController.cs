@@ -48,28 +48,12 @@ public class ConfirmQualificationController(
     [HttpPost]
     public async Task<IActionResult> Confirm(ConfirmQualificationPageModel model)
     {
-        if (ModelState.IsValid)
-        {
-            return model.ConfirmQualificationAnswer == "yes"
-                       ? RedirectToAction("Index", "QualificationDetails",
-                                          new { qualificationId = model.QualificationId })
-                       : RedirectToAction("Get", "QualificationDetails");
-        }
-
-        var content = await contentService.GetConfirmQualificationPage();
-
-        if (content is null)
-        {
-            logger.LogError("No content for the cookies page");
-            return RedirectToAction("Index", "Error");
-        }
-
         if (string.IsNullOrEmpty(model.QualificationId))
         {
             logger.LogError("No qualification id provided");
             return RedirectToAction("Index", "Error");
         }
-
+        
         var qualification = await contentService.GetQualificationById(model.QualificationId);
         if (qualification is null)
         {
@@ -77,6 +61,27 @@ public class ConfirmQualificationController(
             logger.LogError("Could not find details for qualification with ID: {QualificationId}",
                             loggedQualificationId);
 
+            return RedirectToAction("Index", "Error");
+        }
+        
+        if (ModelState.IsValid)
+        {
+            var hasAdditionalQuestions = qualification.AdditionalRequirementQuestions is not null &&
+                                         qualification.AdditionalRequirementQuestions.Count > 0;
+            return model.ConfirmQualificationAnswer == "yes" && hasAdditionalQuestions 
+                       ? RedirectToAction("Index", "CheckAdditionalRequirements", 
+                                          new { qualificationId = model.QualificationId }) 
+                           : model.ConfirmQualificationAnswer == "yes"
+                           ? RedirectToAction("Index", "QualificationDetails",
+                                              new { qualificationId = model.QualificationId })
+                           : RedirectToAction("Get", "QualificationDetails");
+        }
+
+        var content = await contentService.GetConfirmQualificationPage();
+
+        if (content is null)
+        {
+            logger.LogError("No content for the cookies page");
             return RedirectToAction("Index", "Error");
         }
 

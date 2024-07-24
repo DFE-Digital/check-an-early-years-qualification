@@ -8,4 +8,6 @@ public class UserJourneyModel
     public string WhatIsTheAwardingOrganisation { get; set; } = string.Empty;
 
     public string SearchCriteria { get; set; } = string.Empty;
+
+    public Dictionary<string, string>? AdditionalQuestionsAnswers { get; set; }
 }

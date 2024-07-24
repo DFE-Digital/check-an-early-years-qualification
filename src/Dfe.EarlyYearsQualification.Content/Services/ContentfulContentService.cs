@@ -29,7 +29,8 @@ public class ContentfulContentService(
               { typeof(DateQuestionPage), ContentTypes.DateQuestionPage },
               { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
               { typeof(QualificationListPage), ContentTypes.QualificationListPage },
-              { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage }
+              { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage },
+              { typeof(CheckAdditionalRequirementsPage), ContentTypes.CheckAdditionalRequirementsPage }
           };
 
     public async Task<StartPage?> GetStartPage()
@@ -101,6 +102,7 @@ public class ContentfulContentService(
     public async Task<Qualification?> GetQualificationById(string qualificationId)
     {
         var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(_contentTypes[typeof(Qualification)])
+                                                            .Include(2)
                                                             .FieldEquals("fields.qualificationId",
                                                                          qualificationId.ToUpper());
         var qualifications = await GetEntriesByType(queryBuilder);
@@ -192,6 +194,18 @@ public class ContentfulContentService(
         }
 
         return confirmQualificationEntities.First();
+    }
+
+    public async Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage()
+    {
+        var checkAdditionalRequirementsPageEntities = await GetEntriesByType<CheckAdditionalRequirementsPage>();
+        if (checkAdditionalRequirementsPageEntities is null || !checkAdditionalRequirementsPageEntities.Any())
+        {
+            logger.LogWarning("No CheckAdditionalRequirementsPage entry returned");
+            return default;
+        }
+
+        return checkAdditionalRequirementsPageEntities.First();
     }
 
     public async Task<QualificationListPage?> GetQualificationListPage()
