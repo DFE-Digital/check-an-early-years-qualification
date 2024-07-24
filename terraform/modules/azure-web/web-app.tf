@@ -397,7 +397,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
   certificate_permissions = ["Get"]
 
   lifecycle {
-    ignore_changes = [object_id]
+    ignore_changes = [object_id, tenant_id]
   }
 }
 
@@ -411,7 +411,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   certificate_permissions = ["Get"]
 
   lifecycle {
-    ignore_changes = [object_id]
+    ignore_changes = [object_id, tenant_id]
   }
 }
 
