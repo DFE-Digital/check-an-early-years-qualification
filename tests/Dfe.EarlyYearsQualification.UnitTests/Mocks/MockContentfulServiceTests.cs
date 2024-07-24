@@ -454,6 +454,7 @@ public class MockContentfulServiceTests
                                                               Href = "/"
                                                           });
         result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.ErrorSummaryHeading.Should().NotBeNullOrEmpty();
         result.Heading.Should().NotBeNullOrEmpty();
         result.InformationMessage.Should().NotBeNullOrEmpty();
         result.QualificationLabel.Should().NotBeNullOrEmpty();

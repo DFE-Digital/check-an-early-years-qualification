@@ -32,7 +32,7 @@ public class CheckAdditionalRequirementsPageModel
     public NavigationLink? BackButton { get; set; }
 
     public List<AdditionalRequirementQuestionModel> AdditionalRequirementQuestions { get; set; } = [];
-
+    
     [AnswerValidation]
     // ReSharper disable once PropertyCanBeMadeInitOnly.Global
     public Dictionary<string, string> Answers { get; set; } = [];
@@ -40,4 +40,11 @@ public class CheckAdditionalRequirementsPageModel
     public bool HasErrors { get; set; }
 
     public string ErrorMessage { get; set; } = string.Empty;
+
+    public string ErrorSummaryHeading { get; set; } = string.Empty;
+
+    public int SpecifiedAnswersCount => Answers.Count;
+    
+    [Required, Compare("SpecifiedAnswersCount")]
+    public int QuestionCount { get; set; }
 }

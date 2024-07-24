@@ -19,4 +19,6 @@ public class CheckAdditionalRequirementsPage
     public string QuestionSectionHeading { get; init; } = string.Empty;
 
     public string ErrorMessage { get; init; } = string.Empty;
+
+    public string ErrorSummaryHeading { get; init; } = string.Empty;
 }
