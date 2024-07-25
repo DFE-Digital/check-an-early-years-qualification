@@ -74,8 +74,9 @@
                 {
                     var question = Model.AdditionalRequirementQuestions[qi];
                     var questionId = $"question_{qi}";
+                    var fieldsetName = $"{questionId}_fieldset";
                     <div class="govuk-form-group @(Model.AdditionalRequirementQuestions[qi].HasError ? "govuk-form-group--error" : "")">
-                        <fieldset class="govuk-fieldset">
+                        <fieldset class="govuk-fieldset" name="@fieldsetName">
                             @if (Model.AdditionalRequirementQuestions[qi].HasError)
                             {
                                 var errorId = $"question-choice-error_{qi}";
@@ -83,8 +84,9 @@
                                     <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
                                 </p>
                             }
-
-                            <h3 class="govuk-heading-s" id="@questionId">@question.Question</h3>
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                <h3 class="govuk-heading-s mb-0" id="@questionId">@question.Question</h3>
+                            </legend>
                             @if (!string.IsNullOrEmpty(question.HintText))
                             {
                                 var hintId = $"{questionId}_hint";
