@@ -185,6 +185,29 @@ public class MockContentfulService : IContentService
                                                                ],
                                                                ConfirmationStatement = "This is the confirmation statement",
                                                                AnswerToBeFullAndRelevant = true
+                                                           },
+                                                           new()
+                                                           {
+                                                               Question = "Test question 2",
+                                                               HintText = "This is the hint text",
+                                                               DetailsHeading = "This is the details heading",
+                                                               DetailsContent = ContentfulContentHelper.Paragraph("This is the details content"),
+                                                               Answers =
+                                                               [
+                                                                   new Option
+                                                                   {
+                                                                       Label = "Yes",
+                                                                       Value = "yes"
+                                                                   },
+
+                                                                   new Option
+                                                                   {
+                                                                       Label = "No",
+                                                                       Value = "no"
+                                                                   }
+                                                               ],
+                                                               ConfirmationStatement = "This is the confirmation statement",
+                                                               AnswerToBeFullAndRelevant = true
                                                            }
                                                        },
                                                        new List<RatioRequirement>()
@@ -326,6 +349,7 @@ public class MockContentfulService : IContentService
                    QualificationLevelLabel = "Qualification level",
                    InformationMessage = "Your result is dependent on the accuracy of the answers you have provided",
                    ErrorMessage = "This is a test error message",
+                   ErrorSummaryHeading = "There was a problem",
                    QuestionSectionHeading = "This is the question section heading"
                });
     }

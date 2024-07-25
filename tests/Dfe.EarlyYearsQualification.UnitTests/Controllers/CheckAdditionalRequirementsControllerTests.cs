@@ -151,6 +151,7 @@ public class CheckAdditionalRequirementsControllerTests
         model.Answers.Should().NotBeNull();
         model.Answers.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
         model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);
+        model.ErrorSummaryHeading.Should().BeSameAs(pageContent.ErrorSummaryHeading);
         model.InformationMessage.Should().BeSameAs(pageContent.InformationMessage);
         model.QualificationId.Should().BeSameAs(qualification.QualificationId);
         model.QualificationLevel.Should().Be(qualification.QualificationLevel);
@@ -265,7 +266,7 @@ public class CheckAdditionalRequirementsControllerTests
         mockLogger.VerifyError("No content for the check additional requirements page");
     }
     
-        [TestMethod]
+    [TestMethod]
     public async Task Post_PageContentIsReturned_MapsModelAndReturnsView()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
@@ -301,6 +302,7 @@ public class CheckAdditionalRequirementsControllerTests
         model.Answers.Should().NotBeNull();
         model.Answers.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
         model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);
+        model.ErrorSummaryHeading.Should().BeSameAs(pageContent.ErrorSummaryHeading);
         model.InformationMessage.Should().BeSameAs(pageContent.InformationMessage);
         model.QualificationId.Should().BeSameAs(qualification.QualificationId);
         model.QualificationLevel.Should().Be(qualification.QualificationLevel);
@@ -367,7 +369,8 @@ public class CheckAdditionalRequirementsControllerTests
                    InformationMessage = "This is the information message",
                    CtaButtonText = "Get result",
                    QualificationLevelLabel = "Qualification level",
-                   QuestionSectionHeading = "Answer the following questions"
+                   QuestionSectionHeading = "Answer the following questions",
+                   ErrorSummaryHeading = "There was a problem"
                };
     }
 }
