@@ -12,7 +12,7 @@ on:
         options:
           - development
           - staging
-        #   - production
+          - production
 
 defaults:
   run:

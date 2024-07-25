@@ -38,7 +38,6 @@ This module provisions a new Azure Resource Group that assembles together the in
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_admin_email_address"></a> [admin\_email\_address](#input\_admin\_email\_address) | Email Address of the Admin | `string` | n/a | yes |
-| <a name="input_as_service_principal_object_id"></a> [as\_service\_principal\_object\_id](#input\_as\_service\_principal\_object\_id) | Object ID of the service principal for App Service | `string` | n/a | yes |
 | <a name="input_asp_sku"></a> [asp\_sku](#input\_asp\_sku) | SKU name for the App Service Plan | `string` | `"S1"` | no |
 | <a name="input_azure_region"></a> [azure\_region](#input\_azure\_region) | Name of the Azure region to deploy resources | `string` | `"westeurope"` | no |
 | <a name="input_contentful_delivery_api_key"></a> [contentful\_delivery\_api\_key](#input\_contentful\_delivery\_api\_key) | Contentful delivery API key | `string` | n/a | yes |

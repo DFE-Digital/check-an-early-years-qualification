@@ -120,3 +120,45 @@ jobs:
       - name: Swap to the production slot
         run: |
           az webapp deployment slot swap --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --slot ${{ vars.WEBAPP_SLOT_NAME }} --target-slot production
+
+  deploy-to-production:
+    runs-on: ubuntu-22.04
+    needs: [create-and-publish-image, deploy-to-staging]
+    name: Deploy to production
+    environment: production
+    # Permissions for OIDC authentication
+    permissions:
+      id-token: write
+      contents: write
+      issues: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Login to Azure using OIDC
+      - name: Login to Azure CLI
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Deploy Web Application
+      - name: Deploy to Azure App Services
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.WEBAPP_NAME }}
+          images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          slot-name: "${{ vars.WEBAPP_SLOT_NAME }}"
+
+      # Make a request to the health check endpoint
+      - name: Make request to health check endpoint 
+        uses: ./.github/actions/health-check
+        with:
+          webapp_name: ${{ vars.WEBAPP_NAME }}  
+          slot_name: ${{ vars.WEBAPP_SLOT_NAME }}
+      
+      # Swap the slots
+      - name: Swap to the production slot
+        run: |
+          az webapp deployment slot swap --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --slot ${{ vars.WEBAPP_SLOT_NAME }} --target-slot production
