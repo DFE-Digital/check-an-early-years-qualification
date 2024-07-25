@@ -71,6 +71,10 @@ public class CheckAdditionalRequirementsController(
         }
 
         var mappedModel = await MapModel(content, qualification, model);
+        if (mappedModel.HasErrors)
+        {
+            SetQuestionErrorFlag(mappedModel);
+        }
 
         return View("Index", mappedModel);
     }
@@ -93,8 +97,10 @@ public class CheckAdditionalRequirementsController(
         mappedModel.BackButton = content.BackButton;
         mappedModel.AdditionalRequirementQuestions =
             await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions!);
-        mappedModel.Answers = MapQuestionsToDictionary(qualification.AdditionalRequirementQuestions!);
+        mappedModel.Answers = MapQuestionsToDictionary(qualification.AdditionalRequirementQuestions!, model);
         mappedModel.ErrorMessage = content.ErrorMessage;
+        mappedModel.ErrorSummaryHeading = content.ErrorSummaryHeading;
+        mappedModel.QuestionCount = mappedModel.AdditionalRequirementQuestions.Count;
         return mappedModel;
     }
     
@@ -122,8 +128,24 @@ public class CheckAdditionalRequirementsController(
         return options.Select(option => new OptionModel { Label = option.Label, Value = option.Value }).ToList();
     }
     
-    private static Dictionary<string, string> MapQuestionsToDictionary(List<AdditionalRequirementQuestion> additionalRequirementQuestions)
+    private static Dictionary<string, string> MapQuestionsToDictionary(List<AdditionalRequirementQuestion> additionalRequirementQuestions, CheckAdditionalRequirementsPageModel? previousModel)
     {
-        return additionalRequirementQuestions.ToDictionary(additionalRequirementQuestion => additionalRequirementQuestion.Question, additionalRequirementQuestion => string.Empty);
+        var result = additionalRequirementQuestions.ToDictionary(additionalRequirementQuestion => additionalRequirementQuestion.Question, _ => string.Empty);
+        if (previousModel is null) return result;
+        
+        foreach (var answer in previousModel.Answers.Where(answer => !string.IsNullOrEmpty(answer.Value)))
+        {
+            result[answer.Key] = answer.Value;
+        }
+
+        return result;
+    }
+    
+    private static void SetQuestionErrorFlag(CheckAdditionalRequirementsPageModel model)
+    {
+        foreach (var answer in model.Answers.Where(answer => string.IsNullOrEmpty(answer.Value)))
+        {
+            model.AdditionalRequirementQuestions.First(x => x.Question == answer.Key).HasError = true;
+        }
     }
 }
