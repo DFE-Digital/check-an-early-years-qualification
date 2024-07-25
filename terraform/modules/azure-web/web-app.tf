@@ -8,7 +8,11 @@ resource "azurerm_log_analytics_workspace" "webapp_logs" {
   daily_quota_gb      = 1
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 }
 
@@ -19,6 +23,14 @@ resource "azurerm_application_insights" "web" {
   application_type    = "web"
   workspace_id        = azurerm_log_analytics_workspace.webapp_logs.id
   tags                = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
 }
 
 # Create App Service Plan
@@ -31,7 +43,11 @@ resource "azurerm_service_plan" "asp" {
   worker_count        = var.webapp_worker_count
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 
   #checkov:skip=CKV_AZURE_212:Argument not available
@@ -112,7 +128,12 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   lifecycle {
-    ignore_changes = [site_config.0.application_stack]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"],
+      site_config.0.application_stack
+    ]
   }
 
   tags = var.tags
@@ -172,7 +193,12 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
   }
 
   lifecycle {
-    ignore_changes = [tags, site_config.0.application_stack]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"],
+      site_config.0.application_stack
+    ]
   }
 }
 
@@ -326,14 +352,16 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
 
   notification {
     email {
-      send_to_subscription_administrator    = true
-      send_to_subscription_co_administrator = true
-      custom_emails                         = [var.webapp_admin_email_address]
+      custom_emails = [var.webapp_admin_email_address]
     }
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 }
 
@@ -353,15 +381,6 @@ resource "azurerm_app_service_custom_hostname_binding" "webapp_custom_domain" {
 
 data "azurerm_client_config" "az_config" {}
 
-resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
-  key_vault_id = var.kv_id
-  tenant_id    = data.azurerm_client_config.az_config.tenant_id
-  # Can be retrieved using 'az ad sp show --id abfa0a7c-a6b6-4736-8310-5855508787cd --query id'
-  object_id               = var.as_service_principal_object_id
-  secret_permissions      = ["Get", "List"]
-  certificate_permissions = ["Get"]
-}
-
 # References the web app to be used in KV access policy as it already existed when changes needed to be made
 data "azurerm_linux_web_app" "ref" {
   name                = azurerm_linux_web_app.webapp.name
@@ -376,6 +395,10 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
+
+  lifecycle {
+    ignore_changes = [object_id, tenant_id]
+  }
 }
 
 # Grants permissions to key vault for the managed identity of the App Service slot
@@ -386,6 +409,10 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
+
+  lifecycle {
+    ignore_changes = [object_id, tenant_id]
+  }
 }
 
 resource "azurerm_app_service_certificate" "webapp_custom_domain_cert" {
