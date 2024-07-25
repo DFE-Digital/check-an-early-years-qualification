@@ -123,8 +123,8 @@ jobs:
 
   deploy-to-production:
     runs-on: ubuntu-22.04
-    needs: [create-and-publish-image, deploy-to-dev]
-    name: Deploy to staging
+    needs: [create-and-publish-image, deploy-to-staging]
+    name: Deploy to production
     environment: production
     # Permissions for OIDC authentication
     permissions:
