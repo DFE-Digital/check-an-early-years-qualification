@@ -37,4 +37,6 @@ public class DetailsPage
     public string RequirementsHeading { get; init; } = string.Empty;
     
     public Document? RequirementsText { get; init; }
+    
+    public NavigationLink? CheckAnotherQualificationLink { get; init; }
 }

@@ -1,3 +1,5 @@
+using Dfe.EarlyYearsQualification.Content.Entities;
+
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class DetailsPageModel
@@ -33,4 +35,6 @@ public class DetailsPageModel
     public string FurtherInfoHeading { get; init; } = string.Empty;
 
     public string FurtherInfoText { get; init; } = string.Empty;
+
+    public NavigationLink? CheckAnotherQualificationLink { get; init; }
 }

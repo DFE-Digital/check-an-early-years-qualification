@@ -100,17 +100,11 @@ public class QualificationDetailsController(
                     return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId });
                 }
 
-                foreach (var question in qualification.AdditionalRequirementQuestions)
+                if ((from question in qualification.AdditionalRequirementQuestions from answer in additionalRequirementsAnswers where question.Question == answer.Key where (question.AnswerToBeFullAndRelevant || answer.Value == "no") &&
+                         (!question.AnswerToBeFullAndRelevant || answer.Value == "yes") select question).Any())
                 {
-                    foreach (var answer in additionalRequirementsAnswers)
-                    {
-                        // If any questions are answered incorrectly, then we mark all levels as not full and relevant and do not check any more requirements
-                        if (question.Question != answer.Key) continue;
-                        if ((!question.AnswerToBeFullAndRelevant && answer.Value != "no") ||
-                            (question.AnswerToBeFullAndRelevant && answer.Value != "yes")) continue;
-                        model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
-                        return View(model);
-                    }
+                    model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
+                    return View(model);
                 }
             }
         }
@@ -281,7 +275,8 @@ public class QualificationDetailsController(
                                  RequirementsHeading = content.RequirementsHeading,
                                  RequirementsText = await htmlRenderer.ToHtml(content.RequirementsText),
                                  RatiosHeading = content.RatiosHeading,
-                                 RatiosText = await htmlRenderer.ToHtml(content.RatiosText)
+                                 RatiosText = await htmlRenderer.ToHtml(content.RatiosText),
+                                 CheckAnotherQualificationLink = content.CheckAnotherQualificationLink
                              }
                };
     }
