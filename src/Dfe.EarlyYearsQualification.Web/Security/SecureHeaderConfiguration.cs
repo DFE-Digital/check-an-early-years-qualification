@@ -67,7 +67,7 @@ public static class SecureHeaderConfiguration
         
         
         var gtmCspElement = new ContentSecurityPolicyElement
-                                   { CommandType = CspCommandType.Uri, DirectiveOrUri = "www.googletagmanager.com/gtag/js" };
+                                   { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://www.googletagmanager.com/gtm.js" };
         
         var ga4CspElement = new ContentSecurityPolicyElement
                             { CommandType = CspCommandType.Uri, DirectiveOrUri = "*.google-analytics.com" };
