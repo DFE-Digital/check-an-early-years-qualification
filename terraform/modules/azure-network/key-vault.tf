@@ -12,7 +12,11 @@ resource "azurerm_key_vault" "kv" {
   sku_name                    = "standard"
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 
   #checkov:skip=CKV_AZURE_109:Access Policies configured
@@ -21,50 +25,12 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_user_assigned_identity" "kv_mi" {
-  # Key Vault only deployed to the Test and Production subscription
+  # Identity for App Gateway, only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
   name                = "${var.resource_name_prefix}-agw-mi"
   location            = var.location
   resource_group_name = var.resource_group
-}
-
-resource "azurerm_key_vault_access_policy" "kv_ap" {
-  # Key Vault only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = data.azurerm_client_config.az_config.tenant_id
-  object_id    = data.azurerm_client_config.az_config.object_id
-
-  key_permissions = [
-    "Create",
-    "Delete",
-    "Get",
-    "UnwrapKey",
-    "WrapKey"
-  ]
-
-  secret_permissions = [
-    "Get"
-  ]
-
-  certificate_permissions = [
-    "Create",
-    "Get",
-    "GetIssuers",
-    "Import",
-    "List",
-    "ListIssuers",
-    "ManageContacts",
-    "ManageIssuers",
-    "SetIssuers",
-    "Update"
-  ]
-
-  lifecycle {
-    ignore_changes = [object_id]
-  }
 }
 
 # Access Policy for GitHub Actions
@@ -100,6 +66,10 @@ resource "azurerm_key_vault_access_policy" "kv_gh_ap" {
     "SetIssuers",
     "Update"
   ]
+
+  lifecycle {
+    ignore_changes = [object_id]
+  }
 }
 
 resource "azurerm_key_vault_access_policy" "kv_mi_ap" {
@@ -120,7 +90,7 @@ resource "azurerm_key_vault_access_policy" "kv_mi_ap" {
 }
 
 resource "azurerm_key_vault_certificate_issuer" "kv_ca" {
-  # Key Vault only deployed to the Test and Production subscription
+  # Certificate issuer only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
   name          = var.kv_certificate_authority_label
@@ -138,7 +108,7 @@ resource "azurerm_key_vault_certificate_issuer" "kv_ca" {
 }
 
 resource "azurerm_key_vault_certificate" "kv_cert" {
-  # Key Vault only deployed to the Test and Production subscription
+  # Certificate only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
   name         = var.kv_certificate_label

@@ -26,7 +26,6 @@ No modules.
 | [azurerm_app_service_custom_hostname_binding.webapp_custom_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_custom_hostname_binding) | resource |
 | [azurerm_application_gateway.agw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway) | resource |
 | [azurerm_application_insights.web](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights) | resource |
-| [azurerm_key_vault_access_policy.webapp_kv_ap](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.webapp_kv_app_service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.webapp_kv_app_service_slot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_linux_web_app.webapp](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app) | resource |
@@ -47,7 +46,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_agw_pip_id"></a> [agw\_pip\_id](#input\_agw\_pip\_id) | ID of the Public IP address for the App Gateway | `string` | n/a | yes |
 | <a name="input_agw_subnet_id"></a> [agw\_subnet\_id](#input\_agw\_subnet\_id) | ID of the Subnet for the App Gateway | `string` | n/a | yes |
-| <a name="input_as_service_principal_object_id"></a> [as\_service\_principal\_object\_id](#input\_as\_service\_principal\_object\_id) | Object ID of the service principal for App Service | `string` | n/a | yes |
 | <a name="input_asp_sku"></a> [asp\_sku](#input\_asp\_sku) | SKU name for the App Service Plan | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | n/a | yes |
 | <a name="input_kv_cert_secret_id"></a> [kv\_cert\_secret\_id](#input\_kv\_cert\_secret\_id) | SSL certificate Secret ID | `string` | n/a | yes |
