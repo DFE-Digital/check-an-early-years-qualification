@@ -166,7 +166,7 @@ public class MockContentfulServiceTests
         result.QualificationNumber.Should().NotBeNullOrEmpty();
         result.ToWhichYear.Should().NotBeNullOrEmpty();
         result.AdditionalRequirementQuestions.Should().NotBeNull();
-        result.AdditionalRequirementQuestions!.Count.Should().Be(1);
+        result.AdditionalRequirementQuestions!.Count.Should().Be(2);
         result.AdditionalRequirementQuestions[0].Question.Should().NotBeNullOrEmpty();
         result.AdditionalRequirementQuestions[0].HintText.Should().NotBeNullOrEmpty();
         result.AdditionalRequirementQuestions[0].ConfirmationStatement.Should().NotBeNullOrEmpty();
@@ -178,6 +178,17 @@ public class MockContentfulServiceTests
         result.AdditionalRequirementQuestions[0].Answers[0].Value.Should().NotBeNullOrEmpty();
         result.AdditionalRequirementQuestions[0].Answers[1].Label.Should().NotBeNullOrEmpty();
         result.AdditionalRequirementQuestions[0].Answers[1].Value.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Question.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].HintText.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].ConfirmationStatement.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Answers.Should().NotBeNull();
+        result.AdditionalRequirementQuestions[1].Answers.Count.Should().Be(2);
+        result.AdditionalRequirementQuestions[1].Answers[0].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Answers[0].Value.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Answers[1].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Answers[1].Value.Should().NotBeNullOrEmpty();
         result.RatioRequirements.Should().NotBeNullOrEmpty();
         result.RatioRequirements!.Count.Should().Be(1);
         result.RatioRequirements[0].RatioRequirementName.Should().Be("Level 2 ratio requirements");

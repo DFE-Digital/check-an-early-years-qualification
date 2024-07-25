@@ -27,8 +27,9 @@
                                 if (question.HasError)
                                 {
                                     var href = $"#question-choice-error_{i}";
+                                    var errorBannerLinkId = $"error-banner-link_{i}";
                                     <li>
-                                        <a id="error-banner-link" href="@href">@Model.ErrorMessage</a>
+                                        <a id="@errorBannerLinkId" href="@href">@Model.ErrorMessage</a>
                                     </li>
                                 }
                             }
