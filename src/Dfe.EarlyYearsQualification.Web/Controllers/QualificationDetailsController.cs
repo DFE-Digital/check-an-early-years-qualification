@@ -72,9 +72,90 @@ public class QualificationDetailsController(
 
             return RedirectToAction("Index", "Error");
         }
-
+        
+        // Grab the level and start date of the qualification
+        var levelSelected = userJourneyCookieService.GetLevelOfQualification();
+        var (_, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        
+        // Check that the user has chosen a level and a start date, if not then redirect them back to the start of the journey
+        if (levelSelected == null || startDateYear == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        
         var model = await MapDetails(qualification, detailsPageContent);
+        
+        // Get additional requirements questions if any and check answers from previous page
+        
+        // If the qualification has no additional requirements then skip this check
+        if (qualification.AdditionalRequirementQuestions != null &&  qualification.AdditionalRequirementQuestions.Count != 0)
+        {
+            var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+
+            if (additionalRequirementsAnswers != null)
+            {
+                // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
+                if (qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count)
+                {
+                    return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId });
+                }
+
+                foreach (var question in qualification.AdditionalRequirementQuestions)
+                {
+                    foreach (var answer in additionalRequirementsAnswers)
+                    {
+                        // If any questions are answered incorrectly, then we mark all levels as not full and relevant and do not check any more requirements
+                        if (question.Question != answer.Key) continue;
+                        if ((!question.AnswerToBeFullAndRelevant && answer.Value != "no") ||
+                            (question.AnswerToBeFullAndRelevant && answer.Value != "yes")) continue;
+                        model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
+                        return View(model);
+                    }
+                }
+            }
+        }
+
+        // If all the additional requirement checks pass, then we can go to check each level individually
+        
+        // Build up property name to check for each level
+        var propertyToCheck =
+            $"FullAndRelevantForLevel{levelSelected}{(startDateYear > 2014 ? "After" : "Before")}2014";
+        
+        // Check level 2 requirements are met
+        var level2Requirements =
+            qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 2 Ratio Requirements");
+        model.RatioRequirements.ApprovedForLevel2 =
+            (bool)level2Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level2Requirements, null)!;
+        
+        // Check level 3 requirements are met
+        var level3Requirements =
+            qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 3 Ratio Requirements");
+        model.RatioRequirements.ApprovedForLevel3 =
+            (bool)level3Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level3Requirements, null)!;
+        
+        // Check level 6 requirements are met
+        var level6Requirements =
+            qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 3 Ratio Requirements");
+        model.RatioRequirements.ApprovedForLevel6 =
+            (bool)level6Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level6Requirements, null)!;
+        
+        // Check unqualified requirements are met
+        var unqualifiedRequirements =
+            qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Unqualified Ratio Requirements");
+        model.RatioRequirements.ApprovedForUnqualified =
+            (bool)unqualifiedRequirements!.GetType().GetProperty(propertyToCheck)!.GetValue(unqualifiedRequirements, null)!;
+        
         return View(model);
+    }
+
+    private RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
+    {
+        model.ApprovedForLevel2 = false;
+        model.ApprovedForLevel3 = false;
+        model.ApprovedForLevel6 = false;
+        model.ApprovedForUnqualified = false;
+
+        return model;
     }
 
     private async Task<List<Qualification>> GetFilteredQualifications()
@@ -196,7 +277,11 @@ public class QualificationDetailsController(
                                  FurtherInfoText = await govUkInsetTextRenderer.ToHtml(content.FurtherInfoText),
                                  LevelLabel = content.LevelLabel,
                                  MainHeader = content.MainHeader,
-                                 QualificationNumberLabel = content.QualificationNumberLabel
+                                 QualificationNumberLabel = content.QualificationNumberLabel,
+                                 RequirementsHeading = content.RequirementsHeading,
+                                 RequirementsText = await htmlRenderer.ToHtml(content.RequirementsText),
+                                 RatiosHeading = content.RatiosHeading,
+                                 RatiosText = await htmlRenderer.ToHtml(content.RatiosText)
                              }
                };
     }

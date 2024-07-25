@@ -21,6 +21,14 @@ public class DetailsPageModel
     public string CheckAnotherQualificationHeading { get; init; } = string.Empty;
 
     public string CheckAnotherQualificationText { get; init; } = string.Empty;
+    
+    public string RatiosHeading { get; init; } = string.Empty;
+    
+    public string RatiosText { get; init; } = string.Empty;
+    
+    public string RequirementsHeading { get; init; } = string.Empty;
+    
+    public string RequirementsText { get; init; } = string.Empty;
 
     public string FurtherInfoHeading { get; init; } = string.Empty;
 

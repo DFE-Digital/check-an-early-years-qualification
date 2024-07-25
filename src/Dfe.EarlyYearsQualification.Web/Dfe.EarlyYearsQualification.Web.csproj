@@ -26,7 +26,6 @@
 
     <ItemGroup>
       <Folder Include="Views\Shared\Components\BackButton\" />
-      <Folder Include="Views\Shared\Partials\" />
     </ItemGroup>
 
 </Project>
