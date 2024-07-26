@@ -58,6 +58,7 @@ module "storage" {
 
   location       = var.azure_region
   resource_group = azurerm_resource_group.rg.name
+  kv_id          = module.network.kv_id
   tags           = local.common_tags
 }
 
