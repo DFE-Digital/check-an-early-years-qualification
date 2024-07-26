@@ -65,7 +65,7 @@
         <table class="govuk-table">
             <tbody class="govuk-table__body">
                 @{
-                    if (Model.RatioRequirements.ApprovedForLevel2 || Model.RatioRequirements.ApprovedForLevel3 || Model.RatioRequirements.ApprovedForUnqualified || Model.RatioRequirements.ApprovedForLevel6)
+                    if (Model.RatioRequirements.ApprovedForLevel2 || Model.RatioRequirements.ApprovedForLevel3 || Model.RatioRequirements.ApprovedForLevel6)
                     {
                         if (Model.RatioRequirements.ApprovedForLevel6)
                         {
@@ -93,18 +93,16 @@
                                                                                    IsAccepted = Model.RatioRequirements.ApprovedForLevel2
                                                                                });
                         }
-                        
-                        if (Model.RatioRequirements.ApprovedForUnqualified)
-                        {
-                            await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
-                                                                               {
-                                                                                   LevelText = "Unqualified",
-                                                                                   IsAccepted = Model.RatioRequirements.ApprovedForUnqualified
-                                                                               });
-                        }
                     }
                     
-                    if (!Model.RatioRequirements.ApprovedForLevel2 || !Model.RatioRequirements.ApprovedForLevel3 || !Model.RatioRequirements.ApprovedForUnqualified || !Model.RatioRequirements.ApprovedForLevel6)
+                    // Unqualified ratio should always show as approved 
+                    await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
+                                                                       {
+                                                                           LevelText = "Unqualified",
+                                                                           IsAccepted = true
+                                                                       });
+                    
+                    if (!Model.RatioRequirements.ApprovedForLevel2 || !Model.RatioRequirements.ApprovedForLevel3 || !Model.RatioRequirements.ApprovedForLevel6)
                     {
                         if (!Model.RatioRequirements.ApprovedForLevel6)
                         {
@@ -130,15 +128,6 @@
                                                                                {
                                                                                    LevelText = "Level 2",
                                                                                    IsAccepted = Model.RatioRequirements.ApprovedForLevel2
-                                                                               });
-                        }
-                        
-                        if (!Model.RatioRequirements.ApprovedForUnqualified)
-                        {
-                            await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
-                                                                               {
-                                                                                   LevelText = "Unqualified",
-                                                                                   IsAccepted = Model.RatioRequirements.ApprovedForUnqualified
                                                                                });
                         }
                     }

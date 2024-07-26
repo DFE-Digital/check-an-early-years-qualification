@@ -116,28 +116,48 @@ public class QualificationDetailsController(
             $"FullAndRelevantForLevel{levelSelected}{(startDateYear > 2014 ? "After" : "Before")}2014";
         
         // Check level 2 requirements are met
-        var level2Requirements =
-            qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 2 Ratio Requirements");
-        model.RatioRequirements.ApprovedForLevel2 =
-            (bool)level2Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level2Requirements, null)!;
+        try
+        {
+            var level2Requirements =
+                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName ==
+                                                                     "Level 2 Ratio Requirements");
+            model.RatioRequirements.ApprovedForLevel2 =
+                (bool)level2Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level2Requirements, null)!;
+        }
+        catch (Exception e)
+        {
+            logger.LogError($"Could not find property: {propertyToCheck} within level 2 ratio for qualification: {qualificationId}");
+            throw;
+        }
         
-        // Check level 3 requirements are met
-        var level3Requirements =
-            qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 3 Ratio Requirements");
-        model.RatioRequirements.ApprovedForLevel3 =
-            (bool)level3Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level3Requirements, null)!;
-        
-        // Check level 6 requirements are met
-        var level6Requirements =
-            qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 3 Ratio Requirements");
-        model.RatioRequirements.ApprovedForLevel6 =
-            (bool)level6Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level6Requirements, null)!;
-        
-        // Check unqualified requirements are met
-        var unqualifiedRequirements =
-            qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Unqualified Ratio Requirements");
-        model.RatioRequirements.ApprovedForUnqualified =
-            (bool)unqualifiedRequirements!.GetType().GetProperty(propertyToCheck)!.GetValue(unqualifiedRequirements, null)!;
+        try
+        {
+            // Check level 3 requirements are met
+            var level3Requirements =
+                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName ==
+                                                                     "Level 3 Ratio Requirements");
+            model.RatioRequirements.ApprovedForLevel3 =
+                (bool)level3Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level3Requirements, null)!;
+        }
+        catch (Exception e)
+        {
+            logger.LogError($"Could not find property: {propertyToCheck} within level 3 ratio for qualification: {qualificationId}");
+            throw;
+        }
+
+        try
+        {
+            // Check level 6 requirements are met
+            var level6Requirements =
+                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 3 Ratio Requirements");
+            model.RatioRequirements.ApprovedForLevel6 =
+                (bool)level6Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level6Requirements, null)!;
+        }
+        catch (Exception e)
+        {
+            logger.LogError($"Could not find property: {propertyToCheck} within level 6 ratio for qualification: {qualificationId}");
+            throw;
+        }
         
         return View(model);
     }
@@ -147,7 +167,7 @@ public class QualificationDetailsController(
         model.ApprovedForLevel2 = false;
         model.ApprovedForLevel3 = false;
         model.ApprovedForLevel6 = false;
-        model.ApprovedForUnqualified = false;
+        model.ApprovedForUnqualified = true;
 
         return model;
     }
