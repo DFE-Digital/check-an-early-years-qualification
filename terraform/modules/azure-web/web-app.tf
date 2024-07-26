@@ -387,6 +387,25 @@ data "azurerm_linux_web_app" "ref" {
   resource_group_name = azurerm_linux_web_app.webapp.resource_group_name
 }
 
+data "azuread_service_principal" "ms_resource_manager" {
+  # This is the Azure Resource Manager itself
+  client_id = "abfa0a7c-a6b6-4736-8310-5855508787cd"
+}
+
+# Grants permissions to key vault for the Azure Resource Manager
+resource "azurerm_key_vault_access_policy" "ms_resource_manager_kv" {
+  key_vault_id            = var.kv_id
+  tenant_id               = data.azurerm_client_config.az_config.tenant_id
+  object_id               = data.azuread_service_principal.ms_resource_manager.object_id
+  key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
+  secret_permissions      = ["Get", "List"]
+  certificate_permissions = ["Get"]
+
+  lifecycle {
+    ignore_changes = [object_id, tenant_id]
+  }
+}
+
 # Grants permissions to key vault for the managed identity of the App Service
 resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
   key_vault_id            = var.kv_id
@@ -423,6 +442,7 @@ resource "azurerm_app_service_certificate" "webapp_custom_domain_cert" {
   resource_group_name = var.resource_group
   location            = var.location
   key_vault_secret_id = var.kv_cert_secret_id
+  depends_on          = [azurerm_key_vault_access_policy.ms_resource_manager_kv]
 }
 
 resource "azurerm_app_service_certificate_binding" "webapp_custom_domain_cert_bind" {
