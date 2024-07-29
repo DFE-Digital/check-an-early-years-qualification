@@ -199,6 +199,8 @@ public class ContentfulContentService(
     public async Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage()
     {
         var checkAdditionalRequirementsPageEntities = await GetEntriesByType<CheckAdditionalRequirementsPage>();
+
+        // ReSharper disable once InvertIf
         if (checkAdditionalRequirementsPageEntities is null || !checkAdditionalRequirementsPageEntities.Any())
         {
             logger.LogWarning("No CheckAdditionalRequirementsPage entry returned");

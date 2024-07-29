@@ -1,9 +1,9 @@
 @using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService
 @model Dfe.EarlyYearsQualification.Web.Models.Content.CookiesBannerModel;
-@inject ICookiesPreferenceService cookieService
+@inject ICookiesPreferenceService CookieService
 
 @{
-    var cookie = cookieService.GetCookie();
+    var cookie = CookieService.GetCookie();
 }
 
 <script>
