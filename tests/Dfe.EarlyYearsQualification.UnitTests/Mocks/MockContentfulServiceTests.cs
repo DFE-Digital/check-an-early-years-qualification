@@ -21,7 +21,7 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_ReturnsExpectedDetails()
+    public async Task GetAdvicePage_QualificationsAchievedOutsideTheUk_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
@@ -81,6 +81,19 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
         result!.Heading.Should().Be("Qualifications achieved in Northern Ireland");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_QualificationNotOnTheList_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationNotOnTheList);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }

@@ -175,7 +175,7 @@ public class CheckAdditionalRequirementsControllerTests
         
         var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                                                    mockUserJourneyCookieService.Object);
-
+        
         var result = await controller.Post(new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
         result.Should().NotBeNull();
 
@@ -283,7 +283,10 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockUserJourneyCookieService.Object);
 
         controller.ModelState.AddModelError("test", "test");
-        var result = await controller.Post(new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
+        var answers = new Dictionary<string, string>();
+        answers.Add("Test question", "yes");
+        var result = await controller.Post(new CheckAdditionalRequirementsPageModel
+                                           { QualificationId = "Test-123", Answers = answers });
 
         result.Should().NotBeNull();
 
@@ -330,6 +333,28 @@ public class CheckAdditionalRequirementsControllerTests
             new AdditionalRequirementQuestion
             {
                 Question = "Test question",
+                Answers =
+                [
+                    new Option
+                    {
+                        Label = "Yes",
+                        Value = "yes"
+                    },
+                    new Option
+                    {
+                        Label = "No",
+                        Value = "no"
+                    }
+                ],
+                DetailsContent = new Document(),
+                DetailsHeading = "Details heading",
+                HintText = "Hint text",
+                ConfirmationStatement = "Confirmation statement",
+                AnswerToBeFullAndRelevant = true
+            },
+            new AdditionalRequirementQuestion
+            {
+                Question = "Test question 2",
                 Answers =
                 [
                     new Option
