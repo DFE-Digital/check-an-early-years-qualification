@@ -12,21 +12,21 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-        <span class="govuk-caption-xl gem-c-title__context">
+        <span class="govuk-caption-xl gem-c-title__context" id="page-header">
             @Model.Content!.MainHeader
         </span>
         <h1 class="govuk-heading-xl" id="qualification-name-value">@Model.QualificationName</h1>
         <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                <dt class="govuk-summary-list__key" id="awarding-organisation-label">
                     @Model.Content.AwardingOrgLabel
                 </dt>
-                <dd class="govuk-summary-list__value" id="awarding-qualification-value">
+                <dd class="govuk-summary-list__value" id="awarding-organisation-value">
                     @Model.AwardingOrganisationTitle
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                <dt class="govuk-summary-list__key" id="qualification-level-label">
                     @Model.Content.LevelLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="qualification-level-value">
@@ -34,7 +34,7 @@
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                <dt class="govuk-summary-list__key" id="qualification-number-label">
                     @Model.Content.QualificationNumberLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="qualification-number-value">
@@ -42,7 +42,7 @@
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                <dt class="govuk-summary-list__key" id="from-which-year-label">
                     @Model.Content.DateAddedLabel
                 </dt>
                 <dd class="govuk-summary-list__value" id="from-which-year-value">
@@ -50,18 +50,18 @@
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                <dt class="govuk-summary-list__key" id="date-of-check-label">
                     @Model.Content.DateOfCheckLabel
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value" id="date-of-check-value">
                     @DateTime.UtcNow.ToString("dd MMMM yyyy")
                 </dd>
             </div>
         </dl>
     </div>
     <div class="govuk-grid-column-full govuk-!-static-margin-top-6">
-        <h1 class="govuk-heading-l">@Model.Content!.RatiosHeading</h1>
-        @Html.Raw(@Model.Content!.RatiosText)
+        <h2 class="govuk-heading-l" id="ratio-heading">@Model.Content.RatiosHeading</h2>
+        @Html.Raw(Model.Content.RatiosText)
         <table class="govuk-table">
             <tbody class="govuk-table__body">
                 @{
@@ -134,8 +134,8 @@
                 }
             </tbody>
         </table>
-        <h1 class="govuk-heading-l govuk-!-static-margin-top-9">@Model.Content!.RequirementsHeading</h1>
-        @Html.Raw(@Model.Content!.RequirementsText)
+        <h2 class="govuk-heading-l govuk-!-static-margin-top-9" id="requirements-heading">@Model.Content!.RequirementsHeading</h2>
+        @Html.Raw(Model.Content!.RequirementsText)
         <p class="govuk-body govuk-!-static-margin-top-9">
             <a id="check-another-qualification-link" href="@Model.Content.CheckAnotherQualificationLink?.Href" class="govuk-link">@Model.Content.CheckAnotherQualificationLink?.DisplayText</a>
         </p>
