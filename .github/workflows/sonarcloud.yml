@@ -57,7 +57,6 @@ jobs:
             /o:"DfE-EYQ" \
             /d:sonar.qualitygate.wait=true \
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
-            /d:sonar.exclusions="" \
             /d:sonar.test.exclusions="Childrens-Social-Care-CPD-Tests/**/*" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.host.url="https://sonarcloud.io"
