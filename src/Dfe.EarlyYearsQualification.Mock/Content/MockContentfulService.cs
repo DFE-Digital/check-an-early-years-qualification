@@ -224,7 +224,10 @@ public class MockContentfulService : IContentService
                                                        },
                                                        new List<RatioRequirement>()
                                                        {
-                                                           new() { RatioRequirementName = "Level 2 ratio requirements" }
+                                                           new() { RatioRequirementName = "Level 2 Ratio Requirements", FullAndRelevantForLevel3After2014 = true },
+                                                           new() { RatioRequirementName = "Level 3 Ratio Requirements", FullAndRelevantForLevel3After2014 = true },
+                                                           new() { RatioRequirementName = "Level 6 Ratio Requirements" },
+                                                           new() { RatioRequirementName = "Unqualified Ratio Requirements", FullAndRelevantForLevel3After2014 = true },
                                                        }
                                                       ));
     }

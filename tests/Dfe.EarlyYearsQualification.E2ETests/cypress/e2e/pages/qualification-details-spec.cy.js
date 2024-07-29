@@ -25,10 +25,31 @@ describe("A spec used to test the qualification details page", () => {
     
     cy.get("#ratio-heading").should("contain.text", "Test ratio heading");
     cy.get("#ratio-heading + p[class='govuk-body']").should("contain.text", "This is the ratio text");
-
+    
     cy.get("#requirements-heading").should("contain.text", "Test requirements heading");
     cy.get("#requirements-heading + p[class='govuk-body']").should("contain.text", "This is the requirements text");
 
     cy.get("#check-another-qualification-link").should("contain.text", "Check another qualification");
+  })
+
+  it("Checks the order of the ratios on the page", () => {
+    cy.visit("/qualifications/qualification-details/eyq-240");
+
+    cy.get(".ratio-row").should('have.length', 4);
+    cy.get(".ratio-heading").eq(0).should("contain.text", "Level 3");
+    cy.get(".ratio-heading").eq(1).should("contain.text", "Level 2");
+    cy.get(".ratio-heading").eq(2).should("contain.text", "Unqualified");
+    cy.get(".ratio-heading").eq(3).should("contain.text", "Level 6");
+
+    // Phase Banner uses govuk-tag also hence index starting at 1
+    cy.get(".govuk-tag").eq(1).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(2).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(3).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(4).should("contain.text", "Not Approved");
+
+    cy.get(".govuk-tag").eq(1).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(2).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(3).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(4).should("have.class", "govuk-tag--red");
   })
 })

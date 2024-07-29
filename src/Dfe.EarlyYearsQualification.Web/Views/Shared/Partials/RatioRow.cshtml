@@ -1,9 +1,9 @@
 @model Dfe.EarlyYearsQualification.Web.Models.RatioRowModel
 
-<tr class="govuk-table__row ">
+<tr class="govuk-table__row ratio-row" id="@{@Model.LevelText}_row">
     <td class="govuk-table__cell">
         <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
-            <b class="govuk-!-text-align-left">@Model.LevelText</b>
+            <b class="govuk-!-text-align-left ratio-heading" id="@{@Model.LevelText}_heading">@Model.LevelText</b>
         </div>
     </td>
     <td class="govuk-table__cell">
