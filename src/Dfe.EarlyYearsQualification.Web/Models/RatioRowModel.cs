@@ -4,5 +4,5 @@ public class RatioRowModel
 {
     public string LevelText { get; init; } = string.Empty;
     
-    public bool IsAccepted { get; init; } 
+    public bool IsApproved { get; init; } 
 }
