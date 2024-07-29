@@ -11,7 +11,6 @@ locals {
   webapp_app_settings = {
     "ENVIRONMENT"                         = var.environment
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-    "TRACKING_ID"                         = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
     "KeyVault__Endpoint"                  = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
     "ContentfulOptions__UsePreviewApi"    = var.contentful_use_preview_api
@@ -27,7 +26,6 @@ locals {
   webapp_slot_app_settings = {
     "ENVIRONMENT"                         = var.environment
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-    "TRACKING_ID"                         = var.tracking_id
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
     "KeyVault__Endpoint"                  = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
     "ContentfulOptions__UsePreviewApi"    = var.contentful_use_preview_api
