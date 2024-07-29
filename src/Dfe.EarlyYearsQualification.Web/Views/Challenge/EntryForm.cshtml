@@ -18,7 +18,7 @@
 @using (Html.BeginForm("Post", "Challenge", new { }, FormMethod.Post))
 {
     <input type="hidden" id="redirectAddress" name="redirectAddress" value="@Model.RedirectAddress"/>
-    <input type="text" id="value" name="value" placeholder="key" size="50"/>
+    <input type="password" id="value" name="value" placeholder="key" size="50"/>
     <input type="submit" value="Submit"/>
 }
 </body>
