@@ -14,9 +14,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Check an Early Years qualification</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.svg"/>
     @Html.GovUkFrontendStyleImports()
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     @{
         if (GtmConfiguration.UseCookies && !string.IsNullOrEmpty(gtmTag))
         {
@@ -38,7 +38,7 @@
         <!-- End Google Tag Manager (noscript) -->
     }
 }
-
+<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 @Html.GovUkFrontendJsEnabledScript()
 @{
     await Html.RenderPartialAsync("_Header");
@@ -46,7 +46,7 @@
 
 <div class="govuk-width-container">
     @await RenderSectionAsync("BeforeMainContent", false)
-    <main class="govuk-main-wrapper" role="main" class="pb-3">
+    <main class="govuk-main-wrapper" role="main" class="pb-3" id="main-content">
         @RenderBody()
     </main>
 </div>
