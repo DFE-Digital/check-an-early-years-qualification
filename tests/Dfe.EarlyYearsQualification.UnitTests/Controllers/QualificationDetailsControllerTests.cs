@@ -124,7 +124,8 @@ public class QualificationDetailsControllerTests
     [DataRow(null, null)]
     [DataRow(2, null)]
     [DataRow(null, 2022)]
-    public async Task Index_NoLevelOrDateOfQualificationSelectedPriorInTheJourney_RedirectToHome(int? level, int? startDateYear)
+    public async Task Index_NoLevelOrDateOfQualificationSelectedPriorInTheJourney_RedirectToHome(
+        int? level, int? startDateYear)
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -132,7 +133,7 @@ public class QualificationDetailsControllerTests
         var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        
+
         const string qualificationId = "eyq-145";
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, null);
@@ -141,7 +142,7 @@ public class QualificationDetailsControllerTests
 
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
-        
+
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object, mockInsetTextRenderer.Object,
@@ -152,10 +153,9 @@ public class QualificationDetailsControllerTests
                                         HttpContext = new DefaultHttpContext()
                                     }
             };
-        
-        
+
         var result = await controller.Index(qualificationId);
-        
+
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
         resultType!.ActionName.Should().Be("Index");
@@ -171,7 +171,7 @@ public class QualificationDetailsControllerTests
         var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        
+
         const string qualificationId = "eyq-145";
 
         var listOfAdditionalReqs = new List<AdditionalRequirementQuestion>
@@ -184,18 +184,19 @@ public class QualificationDetailsControllerTests
 
         // Mismatch between the two lists here to simulate questions not being answered
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>();
-        
+
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", listOfAdditionalReqs, null);
-        
+                                                    "ABC/547/900", "additional requirements", listOfAdditionalReqs,
+                                                    null);
+
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        
+
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(2);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
-        
+
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object, mockInsetTextRenderer.Object,
@@ -206,9 +207,9 @@ public class QualificationDetailsControllerTests
                                         HttpContext = new DefaultHttpContext()
                                     }
             };
-        
+
         var result = await controller.Index(qualificationId);
-        
+
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
         resultType!.ActionName.Should().Be("Index");
@@ -226,7 +227,7 @@ public class QualificationDetailsControllerTests
         var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        
+
         const string qualificationId = "eyq-145";
 
         var listOfAdditionalReqs = new List<AdditionalRequirementQuestion>
@@ -241,20 +242,21 @@ public class QualificationDetailsControllerTests
         // Question has been answered, but the answer is not what we want for the qualification to be full and relevant
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>()
                                            {
-                                               {"Some Question", "no"}
+                                               { "Some Question", "no" }
                                            };
-        
+
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", listOfAdditionalReqs, null);
-        
+                                                    "ABC/547/900", "additional requirements", listOfAdditionalReqs,
+                                                    null);
+
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        
+
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(2);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
-        
+
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object, mockInsetTextRenderer.Object,
@@ -265,17 +267,17 @@ public class QualificationDetailsControllerTests
                                         HttpContext = new DefaultHttpContext()
                                     }
             };
-        
+
         var result = await controller.Index(qualificationId);
-        
+
         result.Should().NotBeNull();
-        
+
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
-        
+
         var model = resultType!.Model as QualificationDetailsModel;
         model.Should().NotBeNull();
-        
+
         model!.QualificationId.Should().Be(qualificationResult.QualificationId);
         model.QualificationName.Should().Be(qualificationResult.QualificationName);
         model.AwardingOrganisationTitle.Should().Be(qualificationResult.AwardingOrganisationTitle);
@@ -288,7 +290,7 @@ public class QualificationDetailsControllerTests
         model.RatioRequirements.ApprovedForLevel2.Should().BeFalse();
         model.RatioRequirements.ApprovedForLevel3.Should().BeFalse();
         model.RatioRequirements.ApprovedForLevel6.Should().BeFalse();
-        
+
         //Note unqualified ratios will always be approved no matter the answers
         model.RatioRequirements.ApprovedForUnqualified.Should().BeTrue();
     }
@@ -302,22 +304,22 @@ public class QualificationDetailsControllerTests
         var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        
+
         const string qualificationId = "eyq-145";
         const int level = 2;
         const int startDateYear = 2022;
-        
+
         var ratioRequirements = new List<RatioRequirement>();
-        
+
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
-        
+
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        
+
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
-        
+
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object, mockInsetTextRenderer.Object,
@@ -329,11 +331,10 @@ public class QualificationDetailsControllerTests
                                     }
             };
 
-        
         await Assert.ThrowsExceptionAsync<NullReferenceException>(() => controller.Index(qualificationId));
-        mockLogger.VerifyError($"Could not find property: FullAndRelevantForLevel{level}After2014 within level 2 ratio for qualification: {qualificationId}");
+        mockLogger.VerifyError($"Could not find property: FullAndRelevantForLevel{level}After2014 within Level 2 Ratio Requirements for qualification: {qualificationId}");
     }
-    
+
     [TestMethod]
     public async Task Index_BuildUpRatioRequirements_CantFindLevel3_LogsAndThrows()
     {
@@ -343,7 +344,7 @@ public class QualificationDetailsControllerTests
         var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        
+
         const string qualificationId = "eyq-145";
         const int level = 2;
         const int startDateYear = 2022;
@@ -356,16 +357,16 @@ public class QualificationDetailsControllerTests
                                         FullAndRelevantForLevel2After2014 = true
                                     }
                                 };
-        
+
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
-        
+
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        
+
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
-        
+
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object, mockInsetTextRenderer.Object,
@@ -377,63 +378,144 @@ public class QualificationDetailsControllerTests
                                     }
             };
 
-        
         await Assert.ThrowsExceptionAsync<NullReferenceException>(() => controller.Index(qualificationId));
-        mockLogger.VerifyError($"Could not find property: FullAndRelevantForLevel{level}After2014 within level 3 ratio for qualification: {qualificationId}");
+        mockLogger.VerifyError($"Could not find property: FullAndRelevantForLevel{level}After2014 within Level 3 Ratio Requirements for qualification: {qualificationId}");
     }
-    
+
     [TestMethod]
-        public async Task Index_BuildUpRatioRequirements_CantFindLevel6_LogsAndThrows()
-        {
-            var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-            var mockContentService = new Mock<IContentService>();
-            var mockContentFilterService = new Mock<IContentFilterService>();
-            var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
-            var mockHtmlRenderer = new Mock<IHtmlRenderer>();
-            var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-            
-            const string qualificationId = "eyq-145";
-            const int level = 2;
-            const int startDateYear = 2022;
-    
-            var ratioRequirements = new List<RatioRequirement>
+    public async Task Index_BuildUpRatioRequirements_CantFindLevel6_LogsAndThrows()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        const string qualificationId = "eyq-145";
+        const int level = 2;
+        const int startDateYear = 2022;
+
+        var ratioRequirements = new List<RatioRequirement>
+                                {
+                                    new()
                                     {
-                                        new()
-                                        {
-                                            RatioRequirementName = "Level 2 Ratio Requirements",
-                                            FullAndRelevantForLevel2After2014 = true
-                                        },
-                                        new()
-                                        {
-                                            RatioRequirementName = "Level 3 Ratio Requirements",
-                                            FullAndRelevantForLevel2After2014 = true
-                                        }
-                                    };
-            
-            var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
-                                                        "ABC/547/900", "additional requirements", null, ratioRequirements);
-            
-            mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-            mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-            
-            mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
-            mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
-            
-            var controller =
-                new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                                   mockContentFilterService.Object, mockInsetTextRenderer.Object,
-                                                   mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
-                {
-                    ControllerContext = new ControllerContext
-                                        {
-                                            HttpContext = new DefaultHttpContext()
-                                        }
-                };
-    
-            
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(() => controller.Index(qualificationId));
-            mockLogger.VerifyError($"Could not find property: FullAndRelevantForLevel{level}After2014 within level 6 ratio for qualification: {qualificationId}");
-        }
+                                        RatioRequirementName = "Level 2 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 3 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true
+                                    }
+                                };
+
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+                                                    "ABC/547/900", "additional requirements", null, ratioRequirements);
+
+        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
+        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+
+        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
+
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
+                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+
+        await Assert.ThrowsExceptionAsync<NullReferenceException>(() => controller.Index(qualificationId));
+        mockLogger.VerifyError($"Could not find property: FullAndRelevantForLevel{level}After2014 within Level 6 Ratio Requirements for qualification: {qualificationId}");
+    }
+
+    [TestMethod]
+    public async Task Index_AllRatiosFound_ReturnsView()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        const string qualificationId = "eyq-145";
+        const int level = 2;
+        const int startDateYear = 2022;
+
+        var ratioRequirements = new List<RatioRequirement>
+                                {
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 2 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 3 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 6 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 6 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true
+                                    }
+                                };
+
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+                                                    "ABC/547/900", "additional requirements", null, ratioRequirements);
+
+        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
+        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+
+        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
+
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
+                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+        
+        var result = await controller.Index(qualificationId);
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as QualificationDetailsModel;
+        model.Should().NotBeNull();
+
+        model!.QualificationId.Should().Be(qualificationResult.QualificationId);
+        model.QualificationName.Should().Be(qualificationResult.QualificationName);
+        model.AwardingOrganisationTitle.Should().Be(qualificationResult.AwardingOrganisationTitle);
+        model.QualificationLevel.Should().Be(qualificationResult.QualificationLevel);
+        model.FromWhichYear.Should().Be(qualificationResult.FromWhichYear);
+        model.ToWhichYear.Should().Be(qualificationResult.ToWhichYear);
+        model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
+        model.AdditionalRequirements.Should().Be(qualificationResult.AdditionalRequirements);
+
+        model.RatioRequirements.ApprovedForLevel2.Should().BeTrue();
+        model.RatioRequirements.ApprovedForLevel3.Should().BeTrue();
+        model.RatioRequirements.ApprovedForLevel6.Should().BeTrue();
+        model.RatioRequirements.ApprovedForUnqualified.Should().BeTrue();
+    }
 
     [TestMethod]
     public async Task Get_ReturnsView()
@@ -468,15 +550,15 @@ public class QualificationDetailsControllerTests
             };
 
         mockContentService.Setup(x => x.GetQualificationListPage()).ReturnsAsync(new QualificationListPage
-                 {
-                     BackButton = new NavigationLink
-                                  {
-                                      DisplayText = "TEST",
-                                      Href = "/",
-                                      OpenInNewTab = false
-                                  },
-                     Header = "TEST"
-                 });
+            {
+                BackButton = new NavigationLink
+                             {
+                                 DisplayText = "TEST",
+                                 Href = "/",
+                                 OpenInNewTab = false
+                             },
+                Header = "TEST"
+            });
 
         var result = await controller.Get();
 

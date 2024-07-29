@@ -72,34 +72,39 @@ public class QualificationDetailsController(
 
             return RedirectToAction("Index", "Error");
         }
-        
+
         // Grab the level and start date of the qualification
         var levelSelected = userJourneyCookieService.GetLevelOfQualification();
         var (_, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        
+
         // Check that the user has chosen a level and a start date, if not then redirect them back to the start of the journey
         if (levelSelected == null || startDateYear == null)
         {
             return RedirectToAction("Index", "Home");
         }
-        
+
         var model = await MapDetails(qualification, detailsPageContent);
-        
+
         // Get additional requirements questions if any and check answers from previous page
-        
+
         // If the qualification has no additional requirements then skip this check
-        if (qualification.AdditionalRequirementQuestions != null &&  qualification.AdditionalRequirementQuestions.Count != 0)
+        if (qualification.AdditionalRequirementQuestions != null &&
+            qualification.AdditionalRequirementQuestions.Count != 0)
         {
             var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
-            
+
             // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
-            if (additionalRequirementsAnswers == null || (qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count))
+            if (additionalRequirementsAnswers == null ||
+                (qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count))
             {
                 return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId });
             }
 
-            if ((from question in qualification.AdditionalRequirementQuestions from answer in additionalRequirementsAnswers where (question.AnswerToBeFullAndRelevant && answer.Value == "no") ||
-                     (!question.AnswerToBeFullAndRelevant && answer.Value == "yes") select question).Any())
+            if ((from question in qualification.AdditionalRequirementQuestions
+                 from answer in additionalRequirementsAnswers
+                 where (question.AnswerToBeFullAndRelevant && answer.Value == "no") ||
+                       (!question.AnswerToBeFullAndRelevant && answer.Value == "yes")
+                 select question).Any())
             {
                 model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
                 return View(model);
@@ -108,59 +113,45 @@ public class QualificationDetailsController(
 
         // If all the additional requirement checks pass, then we can go to check each level individually
         CheckRatioRequirements(levelSelected.Value, startDateYear.Value, qualification, model);
-        
+
         return View(model);
     }
-    
-    private void CheckRatioRequirements(int levelSelected, int startDateYear, Qualification qualification, QualificationDetailsModel model)
+
+    private void CheckRatioRequirements(int levelSelected, int startDateYear, Qualification qualification,
+                                        QualificationDetailsModel model)
     {
         // Build up property name to check for each level
-        var propertyToCheck = $"FullAndRelevantForLevel{levelSelected}{(startDateYear > 2014 ? "After" : "Before")}2014";
-        
-        // Check level 2 requirements are met
-        try
-        {
-            var level2Requirements =
-                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName ==
-                                                                     "Level 2 Ratio Requirements");
-            model.RatioRequirements.ApprovedForLevel2 =
-                (bool)level2Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level2Requirements, null)!;
-        }
-        catch
-        {
-            logger.LogError($"Could not find property: {propertyToCheck} within level 2 ratio for qualification: {qualification.QualificationId}");
-            throw;
-        }
-        
-        try
-        {
-            // Check level 3 requirements are met
-            var level3Requirements =
-                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName ==
-                                                                     "Level 3 Ratio Requirements");
-            model.RatioRequirements.ApprovedForLevel3 =
-                (bool)level3Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level3Requirements, null)!;
-        }
-        catch
-        {
-            logger.LogError($"Could not find property: {propertyToCheck} within level 3 ratio for qualification: {qualification.QualificationId}");
-            throw;
-        }
+        var propertyToCheck =
+            $"FullAndRelevantForLevel{levelSelected}{(startDateYear > 2014 ? "After" : "Before")}2014";
 
+        model.RatioRequirements.ApprovedForLevel2 =
+            CheckRatio(propertyToCheck, "Level 2 Ratio Requirements", qualification);
+        
+        model.RatioRequirements.ApprovedForLevel3 =
+            CheckRatio(propertyToCheck, "Level 3 Ratio Requirements", qualification);
+        
+        model.RatioRequirements.ApprovedForLevel6 =
+            CheckRatio(propertyToCheck, "Level 6 Ratio Requirements", qualification);
+        
+        model.RatioRequirements.ApprovedForUnqualified = true;
+    }
+
+    private bool CheckRatio(string propertyToCheck, string ratioName, Qualification qualification)
+    {
         try
         {
-            // Check level 6 requirements are met
-            var level6Requirements =
-                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 6 Ratio Requirements");
-            model.RatioRequirements.ApprovedForLevel6 =
-                (bool)level6Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level6Requirements, null)!;
+            var requirement =
+                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == ratioName);
+
+            return (bool)requirement!.GetType().GetProperty(propertyToCheck)!.GetValue(requirement, null)!;
         }
         catch
         {
-            logger.LogError($"Could not find property: {propertyToCheck} within level 6 ratio for qualification: {qualification.QualificationId}");
+            logger.LogError($"Could not find property: {propertyToCheck} within {ratioName} for qualification: {qualification.QualificationId}");
             throw;
         }
     }
+
 
     private RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
     {
@@ -243,7 +234,7 @@ public class QualificationDetailsController(
     private static List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification>? qualifications)
     {
         var basicQualificationsModels = new List<BasicQualificationModel>();
-        
+
         // ReSharper disable once InvertIf
         if (qualifications is not null && qualifications.Count > 0)
         {
@@ -276,7 +267,8 @@ public class QualificationDetailsController(
                    AdditionalRequirements = qualification.AdditionalRequirements,
                    BookmarkUrl = HttpContext.Request.GetDisplayUrl(),
                    BackButton = content.BackButton,
-                   AdditionalRequirementQuestions = await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
+                   AdditionalRequirementQuestions =
+                       await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
@@ -301,7 +293,8 @@ public class QualificationDetailsController(
                };
     }
 
-    private async Task<List<AdditionalRequirementQuestionModel>?> MapAdditionalRequirementQuestions(List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
+    private async Task<List<AdditionalRequirementQuestionModel>?> MapAdditionalRequirementQuestions(
+        List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
     {
         if (additionalRequirementQuestions is null) return null;
 
@@ -317,7 +310,7 @@ public class QualificationDetailsController(
                             DetailsContent = await htmlRenderer.ToHtml(additionalRequirementQuestion.DetailsContent),
                         });
         }
-        
+
         return results;
     }
 }
