@@ -1,11 +1,11 @@
 using System.Globalization;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -134,13 +134,13 @@ public class QualificationDetailsController(
             $"FullAndRelevantForLevel{levelSelected}{(startDateYear > 2014 ? "After" : "Before")}2014";
 
         model.RatioRequirements.ApprovedForLevel2 =
-            CheckRatio(propertyToCheck, "Level 2 Ratio Requirements", qualification);
+            CheckRatio(propertyToCheck, RatioRequirements.Level2RatioRequirementName, qualification);
         
         model.RatioRequirements.ApprovedForLevel3 =
-            CheckRatio(propertyToCheck, "Level 3 Ratio Requirements", qualification);
+            CheckRatio(propertyToCheck, RatioRequirements.Level3RatioRequirementName, qualification);
         
         model.RatioRequirements.ApprovedForLevel6 =
-            CheckRatio(propertyToCheck, "Level 6 Ratio Requirements", qualification);
+            CheckRatio(propertyToCheck, RatioRequirements.Level6RatioRequirementName, qualification);
         
         model.RatioRequirements.ApprovedForUnqualified = true;
     }

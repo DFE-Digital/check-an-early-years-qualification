@@ -191,7 +191,7 @@ public class MockContentfulServiceTests
         result.AdditionalRequirementQuestions[1].Answers[1].Value.Should().NotBeNullOrEmpty();
         result.RatioRequirements.Should().NotBeNullOrEmpty();
         result.RatioRequirements!.Count.Should().Be(4);
-        result.RatioRequirements[0].RatioRequirementName.Should().Be("Level 2 Ratio Requirements");
+        result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
         result.RatioRequirements[0].FullAndRelevantForLevel2Before2014.Should().BeFalse();
         result.RatioRequirements[0].FullAndRelevantForLevel2After2014.Should().BeFalse();
         result.RatioRequirements[0].FullAndRelevantForLevel3Before2014.Should().BeFalse();
