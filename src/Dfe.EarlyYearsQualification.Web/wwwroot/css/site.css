@@ -54,3 +54,7 @@ body {
 .chevron-card__link:visited::after {
     border-color: #4C2C92;
 }
+
+.govuk-skip-link:focus {
+    margin-bottom: 0!important;
+}
