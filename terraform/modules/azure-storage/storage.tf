@@ -37,6 +37,14 @@ resource "azurerm_storage_account" "sa" {
 
   tags = var.tags
 
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
+
   #checkov:skip=CKV_AZURE_206:GRS not required
   #checkov:skip=CKV_AZURE_59:Argument has been deprecated
   #checkov:skip=CKV2_AZURE_18:Microsoft Managed keys are sufficient
@@ -52,3 +60,10 @@ resource "azurerm_storage_container" "data_protection" {
 
   #checkov:skip=CKV2_AZURE_21:Logging not required
 }
+
+resource "azurerm_key_vault_secret" "storage_connection_string" {
+  name         = "Storage--ConnectionString"
+  value        = azurerm_storage_account.sa.primary_connection_string
+  key_vault_id = var.kv_id
+}
+

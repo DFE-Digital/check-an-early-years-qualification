@@ -5,6 +5,10 @@
 <!DOCTYPE html>
 <html class="govuk-template" lang="en">
 
+@{
+    var gtmTag = GtmConfiguration.GtmTag;
+}
+
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -13,20 +17,28 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.svg"/>
     @Html.GovUkFrontendStyleImports()
+    @{
+        if (GtmConfiguration.UseCookies && !string.IsNullOrEmpty(gtmTag))
+        {
+            <script src="~/js/gtm/head-script.js" asp-append-version="true" id="ga-script" data-ga-tag=@gtmTag></script>
+        }
+    }
 </head>
 
+<body>
 @{
-    var gtmTag = GtmConfiguration.GtmTag;
     if (GtmConfiguration.UseCookies && !string.IsNullOrEmpty(gtmTag))
     {
-        <!-- Google tag (gtag.js) -->
-        var src = $"https://www.googletagmanager.com/gtag/js?id={gtmTag}"; 
-        <script async src=@src></script>
-        <script src="~/js/google-analytics.js" asp-append-version="true" id="ga-script" data-ga-tag=@gtmTag></script>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src=`https://www.googletagmanager.com/ns.html?id=@gtmTag`
+                    height="0" width="0" style="display:none;visibility:hidden">
+            </iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
     }
 }
 
-<body>
 @Html.GovUkFrontendJsEnabledScript()
 @{
     await Html.RenderPartialAsync("_Header");

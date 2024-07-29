@@ -63,6 +63,7 @@ describe('A spec used to test the main back button route through the journey', (
         })
 
         cy.get('#yes_0_0').click();
+        cy.get('#yes_1_0').click();
         cy.get('button[id="additional-requirement-button"]').click();
 
         // qualifications page

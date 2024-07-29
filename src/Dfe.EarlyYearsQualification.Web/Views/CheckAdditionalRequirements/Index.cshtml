@@ -12,6 +12,33 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        @if (Model.HasErrors)
+        {
+            <div id="error-banner" class="govuk-error-summary" data-module="govuk-error-summary">
+                <div role="alert">
+                    <h2 class="govuk-error-summary__title">
+                        @Model.ErrorSummaryHeading
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                            @for (var i = 0; i < Model.AdditionalRequirementQuestions.Count; i++)
+                            {
+                                var question = Model.AdditionalRequirementQuestions[i];
+                                if (question.HasError)
+                                {
+                                    var href = $"#question-choice-error_{i}";
+                                    var errorBannerLinkId = $"error-banner-link_{i}";
+                                    <li>
+                                        <a id="@errorBannerLinkId" href="@href">@Model.ErrorMessage</a>
+                                    </li>
+                                }
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
         <h1 class="govuk-heading-xl" id="heading">@Model.Heading</h1>
         <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
@@ -41,25 +68,26 @@
         </dl>
         <form id="check-additional-requirements" asp-controller="CheckAdditionalRequirements" asp-action="Post" method="post">
             <input type="hidden" name="qualificationId" value="@Model.QualificationId">
-            <div id="confirm-qualification-form-group" class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
-                <fieldset class="govuk-fieldset" role="group" aria-describedby="confirm-qualification-choice-error">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h4 id="radio-heading" class="govuk-heading-m">@Model.QuestionSectionHeading</h4>
-                    </legend>
-            
-                    @if (Model.HasErrors)
-                    {
-                        <p id="question-choice-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
-                        </p>
-                    }
-                    
-                    @for (var qi = 0; qi < Model.AdditionalRequirementQuestions.Count; qi++)
-                    {
-                        var question = Model.AdditionalRequirementQuestions[qi];
-                        var questionId = $"question_{qi}";
-                        <div class="govuk-form-group">
-                            <h3 class="govuk-heading-s" id="@questionId">@question.Question</h3>
+            <div id="additional-requirements-form-group" class="govuk-form-group">
+                <h4 id="radio-heading" class="govuk-heading-m">@Model.QuestionSectionHeading</h4>
+                <input type="hidden" name="QuestionCount" value="@Model.QuestionCount"/>
+                @for (var qi = 0; qi < Model.AdditionalRequirementQuestions.Count; qi++)
+                {
+                    var question = Model.AdditionalRequirementQuestions[qi];
+                    var questionId = $"question_{qi}";
+                    var fieldsetName = $"{questionId}_fieldset";
+                    <div class="govuk-form-group @(Model.AdditionalRequirementQuestions[qi].HasError ? "govuk-form-group--error" : "")">
+                        <fieldset class="govuk-fieldset" name="@fieldsetName">
+                            @if (Model.AdditionalRequirementQuestions[qi].HasError)
+                            {
+                                var errorId = $"question-choice-error_{qi}";
+                                <p id="@errorId" class="govuk-error-message">
+                                    <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
+                                </p>
+                            }
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                <h3 class="govuk-heading-s mb-0" id="@questionId">@question.Question</h3>
+                            </legend>
                             @if (!string.IsNullOrEmpty(question.HintText))
                             {
                                 var hintId = $"{questionId}_hint";
@@ -84,16 +112,17 @@
                             {
                                 var option = question.Options[i];
                                 var id = $"{option.Value}_{qi}_{i}";
+                                var @checked = Model.Answers.GetValueOrDefault(question.Question) == option.Value ? "checked" : "";
                                 <div class="govuk-radios__item">
-                                    @Html.RadioButtonFor(x => x.Answers[question.Question], option.Value, new { @class = "govuk-radios__input", id })
+                                    @Html.RadioButtonFor(x => x.Answers[question.Question], option.Value, new { @class = "govuk-radios__input", id, @checked })
                                     <label class="govuk-label govuk-radios__label" for="@id">
                                         @option.Label
                                     </label>
                                 </div>
                             }
-                        </div>
-                    }
-                </fieldset>
+                        </fieldset>
+                    </div>
+                }
             </div>
             <div class="govuk-warning-text">
                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>

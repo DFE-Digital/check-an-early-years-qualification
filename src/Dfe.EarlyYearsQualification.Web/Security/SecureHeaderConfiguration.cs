@@ -67,7 +67,10 @@ public static class SecureHeaderConfiguration
         
         
         var gtmCspElement = new ContentSecurityPolicyElement
-                                   { CommandType = CspCommandType.Uri, DirectiveOrUri = "www.googletagmanager.com/gtag/js" };
+                                   { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://www.googletagmanager.com/gtm.js" };
+        
+        var gtmInjectedScriptCspElement = new ContentSecurityPolicyElement
+                            { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://www.googletagmanager.com/gtag/js" };
         
         var ga4CspElement = new ContentSecurityPolicyElement
                             { CommandType = CspCommandType.Uri, DirectiveOrUri = "*.google-analytics.com" };
@@ -81,6 +84,7 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.FrameAncestors.Add(contentfulCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(dropdownPageCheckbox);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmInjectedScriptCspElement);
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
 
         return configuration;
