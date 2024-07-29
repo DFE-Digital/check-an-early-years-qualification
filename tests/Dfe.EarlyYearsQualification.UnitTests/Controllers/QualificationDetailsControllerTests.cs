@@ -283,9 +283,7 @@ public class QualificationDetailsControllerTests
         model.AwardingOrganisationTitle.Should().Be(qualificationResult.AwardingOrganisationTitle);
         model.QualificationLevel.Should().Be(qualificationResult.QualificationLevel);
         model.FromWhichYear.Should().Be(qualificationResult.FromWhichYear);
-        model.ToWhichYear.Should().Be(qualificationResult.ToWhichYear);
         model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
-        model.AdditionalRequirements.Should().Be(qualificationResult.AdditionalRequirements);
 
         model.RatioRequirements.ApprovedForLevel2.Should().BeFalse();
         model.RatioRequirements.ApprovedForLevel3.Should().BeFalse();
@@ -507,9 +505,7 @@ public class QualificationDetailsControllerTests
         model.AwardingOrganisationTitle.Should().Be(qualificationResult.AwardingOrganisationTitle);
         model.QualificationLevel.Should().Be(qualificationResult.QualificationLevel);
         model.FromWhichYear.Should().Be(qualificationResult.FromWhichYear);
-        model.ToWhichYear.Should().Be(qualificationResult.ToWhichYear);
         model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
-        model.AdditionalRequirements.Should().Be(qualificationResult.AdditionalRequirements);
 
         model.RatioRequirements.ApprovedForLevel2.Should().BeTrue();
         model.RatioRequirements.ApprovedForLevel3.Should().BeTrue();

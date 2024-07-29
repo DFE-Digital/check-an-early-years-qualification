@@ -263,9 +263,6 @@ public class QualificationDetailsController(
                    QualificationNumber = qualification.QualificationNumber,
                    AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
                    FromWhichYear = qualification.FromWhichYear,
-                   ToWhichYear = qualification.ToWhichYear,
-                   AdditionalRequirements = qualification.AdditionalRequirements,
-                   BookmarkUrl = HttpContext.Request.GetDisplayUrl(),
                    BackButton = content.BackButton,
                    AdditionalRequirementQuestions =
                        await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
