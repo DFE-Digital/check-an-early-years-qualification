@@ -53,11 +53,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet-sonarscanner begin \
-            /k:"DFE-Digital_childrens-social-care-cpd" \
-            /o:"dfe-digital" \
+            /k:"check-an-early-years-qualification" \
+            /o:"DfE-EYQ" \
             /d:sonar.qualitygate.wait=true \
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
-            /d:sonar.exclusions="**/*.css,**/*.scss,**/Models/*,**/Program.cs,**/WebApplicationBuilderExtensions.cs,**/GraphQL/Queries/*" \
+            /d:sonar.exclusions="" \
             /d:sonar.test.exclusions="Childrens-Social-Care-CPD-Tests/**/*" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.host.url="https://sonarcloud.io"
