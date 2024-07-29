@@ -55,7 +55,6 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_kv_certificate_label"></a> [kv\_certificate\_label](#input\_kv\_certificate\_label) | Label for the Certificate | `string` | n/a | yes |
 | <a name="input_kv_certificate_subject"></a> [kv\_certificate\_subject](#input\_kv\_certificate\_subject) | Subject of the Certificate | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
-| <a name="input_tracking_id"></a> [tracking\_id](#input\_tracking\_id) | Google Tag Manager tracking ID | `string` | n/a | yes |
 | <a name="input_webapp_access_is_public"></a> [webapp\_access\_is\_public](#input\_webapp\_access\_is\_public) | Web app service is public, and access is unchallenged | `bool` | `false` | no |
 | <a name="input_webapp_access_key_1"></a> [webapp\_access\_key\_1](#input\_webapp\_access\_key\_1) | Web app access key for invited access 1 | `string` | n/a | yes |
 | <a name="input_webapp_access_key_2"></a> [webapp\_access\_key\_2](#input\_webapp\_access\_key\_2) | Web app access key for invited access 2 | `string` | n/a | yes |

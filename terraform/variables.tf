@@ -131,11 +131,6 @@ variable "custom_domain_name" {
   type        = string
 }
 
-variable "tracking_id" {
-  description = "Google Tag Manager tracking ID"
-  type        = string
-}
-
 variable "contentful_delivery_api_key" {
   description = "Contentful delivery API key"
   type        = string
