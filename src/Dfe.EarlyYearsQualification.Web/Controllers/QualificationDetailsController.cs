@@ -91,29 +91,31 @@ public class QualificationDetailsController(
         if (qualification.AdditionalRequirementQuestions != null &&  qualification.AdditionalRequirementQuestions.Count != 0)
         {
             var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
-
-            if (additionalRequirementsAnswers != null)
+            
+            // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
+            if (additionalRequirementsAnswers == null || (qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count))
             {
-                // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
-                if (qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count)
-                {
-                    return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId });
-                }
+                return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId });
+            }
 
-                if ((from question in qualification.AdditionalRequirementQuestions from answer in additionalRequirementsAnswers where question.Question == answer.Key where (question.AnswerToBeFullAndRelevant || answer.Value == "no") &&
-                         (!question.AnswerToBeFullAndRelevant || answer.Value == "yes") select question).Any())
-                {
-                    model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
-                    return View(model);
-                }
+            if ((from question in qualification.AdditionalRequirementQuestions from answer in additionalRequirementsAnswers where (question.AnswerToBeFullAndRelevant && answer.Value == "no") ||
+                     (!question.AnswerToBeFullAndRelevant && answer.Value == "yes") select question).Any())
+            {
+                model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
+                return View(model);
             }
         }
 
         // If all the additional requirement checks pass, then we can go to check each level individually
+        CheckRatioRequirements(levelSelected.Value, startDateYear.Value, qualification, model);
         
+        return View(model);
+    }
+    
+    private void CheckRatioRequirements(int levelSelected, int startDateYear, Qualification qualification, QualificationDetailsModel model)
+    {
         // Build up property name to check for each level
-        var propertyToCheck =
-            $"FullAndRelevantForLevel{levelSelected}{(startDateYear > 2014 ? "After" : "Before")}2014";
+        var propertyToCheck = $"FullAndRelevantForLevel{levelSelected}{(startDateYear > 2014 ? "After" : "Before")}2014";
         
         // Check level 2 requirements are met
         try
@@ -124,9 +126,9 @@ public class QualificationDetailsController(
             model.RatioRequirements.ApprovedForLevel2 =
                 (bool)level2Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level2Requirements, null)!;
         }
-        catch (Exception e)
+        catch
         {
-            logger.LogError($"Could not find property: {propertyToCheck} within level 2 ratio for qualification: {qualificationId}");
+            logger.LogError($"Could not find property: {propertyToCheck} within level 2 ratio for qualification: {qualification.QualificationId}");
             throw;
         }
         
@@ -139,9 +141,9 @@ public class QualificationDetailsController(
             model.RatioRequirements.ApprovedForLevel3 =
                 (bool)level3Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level3Requirements, null)!;
         }
-        catch (Exception e)
+        catch
         {
-            logger.LogError($"Could not find property: {propertyToCheck} within level 3 ratio for qualification: {qualificationId}");
+            logger.LogError($"Could not find property: {propertyToCheck} within level 3 ratio for qualification: {qualification.QualificationId}");
             throw;
         }
 
@@ -149,17 +151,15 @@ public class QualificationDetailsController(
         {
             // Check level 6 requirements are met
             var level6Requirements =
-                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 3 Ratio Requirements");
+                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == "Level 6 Ratio Requirements");
             model.RatioRequirements.ApprovedForLevel6 =
                 (bool)level6Requirements!.GetType().GetProperty(propertyToCheck)!.GetValue(level6Requirements, null)!;
         }
-        catch (Exception e)
+        catch
         {
-            logger.LogError($"Could not find property: {propertyToCheck} within level 6 ratio for qualification: {qualificationId}");
+            logger.LogError($"Could not find property: {propertyToCheck} within level 6 ratio for qualification: {qualification.QualificationId}");
             throw;
         }
-        
-        return View(model);
     }
 
     private RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
