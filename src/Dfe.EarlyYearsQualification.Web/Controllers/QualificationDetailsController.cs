@@ -85,8 +85,20 @@ public class QualificationDetailsController(
 
         var model = await MapDetails(qualification, detailsPageContent);
 
-        // Get additional requirements questions if any and check answers from previous page
+        var validateAdditionalRequirementQuestions = ValidateAdditionalQuestions(qualification, model);
 
+        if (!validateAdditionalRequirementQuestions.isValid)
+            return validateAdditionalRequirementQuestions.actionResult!;
+
+        // If all the additional requirement checks pass, then we can go to check each level individually
+        CheckRatioRequirements(levelSelected.Value, startDateYear.Value, qualification, model);
+
+        return View(model);
+    }
+    
+    private (bool isValid, IActionResult? actionResult) ValidateAdditionalQuestions(Qualification qualification,
+        QualificationDetailsModel model)
+    {
         // If the qualification has no additional requirements then skip this check
         if (qualification.AdditionalRequirementQuestions != null &&
             qualification.AdditionalRequirementQuestions.Count != 0)
@@ -95,9 +107,9 @@ public class QualificationDetailsController(
 
             // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
             if (additionalRequirementsAnswers == null ||
-                (qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count))
+                qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count)
             {
-                return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId });
+                return (false, RedirectToAction("Index", "CheckAdditionalRequirements", new { qualification.QualificationId }));
             }
 
             if ((from question in qualification.AdditionalRequirementQuestions
@@ -107,14 +119,11 @@ public class QualificationDetailsController(
                  select question).Any())
             {
                 model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
-                return View(model);
+                return (false, View(model));
             }
         }
-
-        // If all the additional requirement checks pass, then we can go to check each level individually
-        CheckRatioRequirements(levelSelected.Value, startDateYear.Value, qualification, model);
-
-        return View(model);
+        
+        return (true, null);
     }
 
     private void CheckRatioRequirements(int levelSelected, int startDateYear, Qualification qualification,
@@ -152,8 +161,7 @@ public class QualificationDetailsController(
         }
     }
 
-
-    private RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
+    private static RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
     {
         model.ApprovedForLevel2 = false;
         model.ApprovedForLevel3 = false;
