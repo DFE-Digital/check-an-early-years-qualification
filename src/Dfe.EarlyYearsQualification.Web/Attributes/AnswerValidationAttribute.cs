@@ -17,16 +17,11 @@ public class AnswerValidationAttribute : ValidationAttribute
             return new ValidationResult("Answers are required");
         }
 
-        Func<KeyValuePair<string, string>, bool> isEmptyPredicate =
-            keyValuePair => string.IsNullOrEmpty(keyValuePair.Value);
-
-        // ReSharper disable once ConvertIfStatementToReturnStatement
-        if (dictionary.Any(isEmptyPredicate))
+        foreach (var keyValuePair in dictionary.Where(keyValuePair => string.IsNullOrEmpty(keyValuePair.Value)))
         {
-            var key = dictionary.First(isEmptyPredicate).Key;
-            return new ValidationResult($"Value is required for key: {key}");
+            return new ValidationResult($"Value is required for key: {keyValuePair.Key}");
         }
-
+        
         return ValidationResult.Success;
     }
 }

@@ -58,37 +58,37 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-            {
-                QualificationLabel = "Test qualification label",
-                BackButton = new NavigationLink
-                             {
-                                 DisplayText = "Test back button",
-                                 OpenInNewTab = false,
-                                 Href = "/qualifications"
-                             },
-                ErrorText = "Test error text",
-                ButtonText = "Test button text",
-                LevelLabel = "Test level label",
-                DateAddedLabel = "Test date added label",
-                Heading = "Test heading",
-                Options =
-                [
-                    new Option
-                    {
-                        Label = "yes",
-                        Value = "yes"
-                    },
-                    new Option
-                    {
-                        Label = "no",
-                        Value = "no"
-                    }
-                ],
-                RadioHeading = "Test radio heading",
-                AwardingOrganisationLabel = "Test awarding organisation label",
-                ErrorBannerHeading = "Test error banner heading",
-                ErrorBannerLink = "Test error banner link"
-            });
+                 {
+                     QualificationLabel = "Test qualification label",
+                     BackButton = new NavigationLink
+                                  {
+                                      DisplayText = "Test back button",
+                                      OpenInNewTab = false,
+                                      Href = "/qualifications"
+                                  },
+                     ErrorText = "Test error text",
+                     ButtonText = "Test button text",
+                     LevelLabel = "Test level label",
+                     DateAddedLabel = "Test date added label",
+                     Heading = "Test heading",
+                     Options =
+                     [
+                         new Option
+                         {
+                             Label = "yes",
+                             Value = "yes"
+                         },
+                         new Option
+                         {
+                             Label = "no",
+                             Value = "no"
+                         }
+                     ],
+                     RadioHeading = "Test radio heading",
+                     AwardingOrganisationLabel = "Test awarding organisation label",
+                     ErrorBannerHeading = "Test error banner heading",
+                     ErrorBannerLink = "Test error banner link"
+                 });
 
         mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(default(Qualification?));
 
@@ -113,41 +113,41 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-            {
-                QualificationLabel = "Test qualification label",
-                BackButton = new NavigationLink
-                             {
-                                 DisplayText = "Test back button",
-                                 OpenInNewTab = false,
-                                 Href = "/qualifications"
-                             },
-                ErrorText = "Test error text",
-                ButtonText = "Test button text",
-                LevelLabel = "Test level label",
-                DateAddedLabel = "Test date added label",
-                Heading = "Test heading",
-                Options =
-                [
-                    new Option
-                    {
-                        Label = "yes",
-                        Value = "yes"
-                    },
-                    new Option
-                    {
-                        Label = "no",
-                        Value = "no"
-                    }
-                ],
-                RadioHeading = "Test radio heading",
-                AwardingOrganisationLabel = "Test awarding organisation label",
-                ErrorBannerHeading = "Test error banner heading",
-                ErrorBannerLink = "Test error banner link"
-            });
+                 {
+                     QualificationLabel = "Test qualification label",
+                     BackButton = new NavigationLink
+                                  {
+                                      DisplayText = "Test back button",
+                                      OpenInNewTab = false,
+                                      Href = "/qualifications"
+                                  },
+                     ErrorText = "Test error text",
+                     ButtonText = "Test button text",
+                     LevelLabel = "Test level label",
+                     DateAddedLabel = "Test date added label",
+                     Heading = "Test heading",
+                     Options =
+                     [
+                         new Option
+                         {
+                             Label = "yes",
+                             Value = "yes"
+                         },
+                         new Option
+                         {
+                             Label = "no",
+                             Value = "no"
+                         }
+                     ],
+                     RadioHeading = "Test radio heading",
+                     AwardingOrganisationLabel = "Test awarding organisation label",
+                     ErrorBannerHeading = "Test error banner heading",
+                     ErrorBannerLink = "Test error banner link"
+                 });
 
         mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(new Qualification("Some ID",
-         "Qualification Name", "NCFE", 2, "2014", "2019",
-         "ABC/547/900", "additional requirements", null, null));
+                  "Qualification Name", "NCFE", 2, "2014", "2019",
+                  "ABC/547/900", "additional requirements", null, null));
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
@@ -213,7 +213,7 @@ public class ConfirmQualificationControllerTests
 
         controller.ModelState.AddModelError("test", "error");
 
-        var result = await controller.Confirm(new ConfirmQualificationPageModel { QualificationId = "Some ID" });
+        var result = await controller.Confirm(new ConfirmQualificationPageModel() { QualificationId = "Some ID"});
 
         result.Should().BeOfType<RedirectToActionResult>();
 
@@ -279,41 +279,41 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-            {
-                QualificationLabel = "Test qualification label",
-                BackButton = new NavigationLink
-                             {
-                                 DisplayText = "Test back button",
-                                 OpenInNewTab = false,
-                                 Href = "/qualifications"
-                             },
-                ErrorText = "Test error text",
-                ButtonText = "Test button text",
-                LevelLabel = "Test level label",
-                DateAddedLabel = "Test date added label",
-                Heading = "Test heading",
-                Options =
-                [
-                    new Option
-                    {
-                        Label = "yes",
-                        Value = "yes"
-                    },
-                    new Option
-                    {
-                        Label = "no",
-                        Value = "no"
-                    }
-                ],
-                RadioHeading = "Test radio heading",
-                AwardingOrganisationLabel = "Test awarding organisation label",
-                ErrorBannerHeading = "Test error banner heading",
-                ErrorBannerLink = "Test error banner link"
-            });
+                 {
+                     QualificationLabel = "Test qualification label",
+                     BackButton = new NavigationLink
+                                  {
+                                      DisplayText = "Test back button",
+                                      OpenInNewTab = false,
+                                      Href = "/qualifications"
+                                  },
+                     ErrorText = "Test error text",
+                     ButtonText = "Test button text",
+                     LevelLabel = "Test level label",
+                     DateAddedLabel = "Test date added label",
+                     Heading = "Test heading",
+                     Options =
+                     [
+                         new Option
+                         {
+                             Label = "yes",
+                             Value = "yes"
+                         },
+                         new Option
+                         {
+                             Label = "no",
+                             Value = "no"
+                         }
+                     ],
+                     RadioHeading = "Test radio heading",
+                     AwardingOrganisationLabel = "Test awarding organisation label",
+                     ErrorBannerHeading = "Test error banner heading",
+                     ErrorBannerLink = "Test error banner link"
+                 });
 
         mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(new Qualification("Some ID",
-         "Qualification Name", "NCFE", 2, "2014", "2019",
-         "ABC/547/900", "additional requirements", null, null));
+                  "Qualification Name", "NCFE", 2, "2014", "2019",
+                  "ABC/547/900", "additional requirements", null, null));
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
@@ -370,16 +370,15 @@ public class ConfirmQualificationControllerTests
     }
 
     [TestMethod]
-    public async Task
-        Post_ValidModel_PassedYesAndQualificationHasAdditionalRequirements_RedirectsToCheckAdditionalRequirements()
+    public async Task Post_ValidModel_PassedYesAndQualificationHasAdditionalRequirements_RedirectsToCheckAdditionalRequirements()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
         var mockContentService = new Mock<IContentService>();
-        var additionalRequirements = new List<AdditionalRequirementQuestion> { new() };
+        var additionalRequirements = new List<AdditionalRequirementQuestion> { new () };
         mockContentService.Setup(x => x.GetQualificationById("TEST-123")).ReturnsAsync(new Qualification("Some ID",
          "Qualification Name", "NCFE", 2, "2014", "2019",
          "ABC/547/900", "additional requirements", additionalRequirements, null));
-
+        
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
@@ -396,7 +395,7 @@ public class ConfirmQualificationControllerTests
         actionResult.ControllerName.Should().Be("CheckAdditionalRequirements");
         actionResult.RouteValues.Should().ContainSingle("qualificationId", "TEST-123");
     }
-
+    
     [TestMethod]
     public async Task Post_ValidModel_PassedYes_RedirectsToQualificationDetailsAction()
     {
@@ -405,7 +404,7 @@ public class ConfirmQualificationControllerTests
         mockContentService.Setup(x => x.GetQualificationById("TEST-123")).ReturnsAsync(new Qualification("Some ID",
          "Qualification Name", "NCFE", 2, "2014", "2019",
          "ABC/547/900", "additional requirements", null, null));
-
+        
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel

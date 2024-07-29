@@ -4,17 +4,17 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class AdditionalRequirementQuestion
 {
-    public string Question { get; init; } = string.Empty;
+    public string Question { get; set; } = string.Empty;
 
-    public string HintText { get; init; } = string.Empty;
+    public string HintText { get; set; } = string.Empty;
 
-    public string DetailsHeading { get; init; } = string.Empty;
+    public string DetailsHeading { get; set; } = string.Empty;
 
-    public Document? DetailsContent { get; init; }
+    public Document? DetailsContent { get; set; }
 
-    public string ConfirmationStatement { get; init; } = string.Empty;
+    public string ConfirmationStatement { get; set; } = string.Empty;
 
     public bool AnswerToBeFullAndRelevant { get; set; }
 
-    public List<Option> Answers { get; init; } = [];
+    public List<Option> Answers { get; set; } = [];
 }

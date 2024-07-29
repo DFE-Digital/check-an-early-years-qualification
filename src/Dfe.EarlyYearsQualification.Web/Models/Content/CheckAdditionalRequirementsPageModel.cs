@@ -6,8 +6,9 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class CheckAdditionalRequirementsPageModel
 {
-    [Required] public string QualificationId { get; set; } = string.Empty;
-
+    [Required]
+    public string QualificationId { get; set; } = string.Empty;
+    
     public string Heading { get; set; } = string.Empty;
 
     public string QualificationLabel { get; set; } = string.Empty;
@@ -27,27 +28,23 @@ public class CheckAdditionalRequirementsPageModel
     public string InformationMessage { get; set; } = string.Empty;
 
     public string CtaButtonText { get; set; } = string.Empty;
-
+    
     public NavigationLink? BackButton { get; set; }
 
     public List<AdditionalRequirementQuestionModel> AdditionalRequirementQuestions { get; set; } = [];
-
+    
     [AnswerValidation]
     // ReSharper disable once PropertyCanBeMadeInitOnly.Global
     public Dictionary<string, string> Answers { get; set; } = [];
-
+    
     public bool HasErrors { get; set; }
 
     public string ErrorMessage { get; set; } = string.Empty;
 
     public string ErrorSummaryHeading { get; set; } = string.Empty;
 
-    public int SpecifiedAnswersCount
-    {
-        get { return Answers.Count; }
-    }
-
-    [Required]
-    [Compare("SpecifiedAnswersCount")]
+    public int SpecifiedAnswersCount => Answers.Count;
+    
+    [Required, Compare("SpecifiedAnswersCount")]
     public int QuestionCount { get; set; }
 }

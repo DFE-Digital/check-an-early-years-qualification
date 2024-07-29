@@ -148,7 +148,7 @@ public class QualificationDetailsController(
     private static List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification>? qualifications)
     {
         var basicQualificationsModels = new List<BasicQualificationModel>();
-
+        
         // ReSharper disable once InvertIf
         if (qualifications is not null && qualifications.Count > 0)
         {
@@ -181,8 +181,7 @@ public class QualificationDetailsController(
                    AdditionalRequirements = qualification.AdditionalRequirements,
                    BookmarkUrl = HttpContext.Request.GetDisplayUrl(),
                    BackButton = content.BackButton,
-                   AdditionalRequirementQuestions =
-                       await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
+                   AdditionalRequirementQuestions = await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
@@ -202,8 +201,7 @@ public class QualificationDetailsController(
                };
     }
 
-    private async Task<List<AdditionalRequirementQuestionModel>?> MapAdditionalRequirementQuestions(
-        List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
+    private async Task<List<AdditionalRequirementQuestionModel>?> MapAdditionalRequirementQuestions(List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
     {
         if (additionalRequirementQuestions is null) return null;
 
@@ -216,10 +214,10 @@ public class QualificationDetailsController(
                             Question = additionalRequirementQuestion.Question,
                             HintText = additionalRequirementQuestion.HintText,
                             DetailsHeading = additionalRequirementQuestion.DetailsHeading,
-                            DetailsContent = await htmlRenderer.ToHtml(additionalRequirementQuestion.DetailsContent)
+                            DetailsContent = await htmlRenderer.ToHtml(additionalRequirementQuestion.DetailsContent),
                         });
         }
-
+        
         return results;
     }
 }
