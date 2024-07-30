@@ -149,14 +149,14 @@ public class QualificationDetailsController(
     {
         try
         {
-            var requirement =
-                qualification.RatioRequirements!.FirstOrDefault(x => x.RatioRequirementName == ratioName);
+            var requirement = qualification.RatioRequirements!.Find(x => x.RatioRequirementName == ratioName);
 
             return (bool)requirement!.GetType().GetProperty(propertyToCheck)!.GetValue(requirement, null)!;
         }
         catch
         {
-            logger.LogError($"Could not find property: {propertyToCheck} within {ratioName} for qualification: {qualification.QualificationId}");
+            logger.LogError("Could not find property: {PropertyToCheck} within {RatioName} for qualification: {QualificationId}",
+                            propertyToCheck, ratioName, qualification.QualificationId); 
             throw;
         }
     }
