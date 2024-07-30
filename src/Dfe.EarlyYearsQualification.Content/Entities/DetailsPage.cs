@@ -29,4 +29,14 @@ public class DetailsPage
     public Document? FurtherInfoText { get; init; }
 
     public NavigationLink? BackButton { get; init; }
+
+    public string RatiosHeading { get; init; } = string.Empty;
+    
+    public Document? RatiosText { get; init; }
+
+    public string RequirementsHeading { get; init; } = string.Empty;
+    
+    public Document? RequirementsText { get; init; }
+    
+    public NavigationLink? CheckAnotherQualificationLink { get; init; }
 }

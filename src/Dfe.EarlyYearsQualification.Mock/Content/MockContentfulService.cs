@@ -98,6 +98,8 @@ public class MockContentfulService : IContentService
     {
         var checkAnotherQualificationText = ContentfulContentHelper.Paragraph("Test Check Another Qualification Text");
         var furtherInfoText = ContentfulContentHelper.Paragraph("Test Further Info Text");
+        var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
+        var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
         return await Task.FromResult(new DetailsPage
                                      {
                                          AwardingOrgLabel = "Awarding Org Label",
@@ -117,7 +119,17 @@ public class MockContentfulService : IContentService
                                                           DisplayText = "TEST",
                                                           Href = "/confirm-qualification/eyq-240",
                                                           OpenInNewTab = false
-                                                      }
+                                                      },
+                                         RatiosHeading = "Test ratio heading",
+                                         RatiosText = ratioText,
+                                         RequirementsHeading = "Test requirements heading",
+                                         RequirementsText = requirementsText,
+                                         CheckAnotherQualificationLink = new NavigationLink
+                                                                         {
+                                                                             DisplayText = "Check another qualification",
+                                                                             Href = "/",
+                                                                             OpenInNewTab = false
+                                                                         }
                                      });
     }
 
@@ -212,7 +224,10 @@ public class MockContentfulService : IContentService
                                                        },
                                                        new List<RatioRequirement>()
                                                        {
-                                                           new() { RatioRequirementName = "Level 2 ratio requirements" }
+                                                           new() { RatioRequirementName = RatioRequirements.Level2RatioRequirementName, FullAndRelevantForLevel3After2014 = true },
+                                                           new() { RatioRequirementName = RatioRequirements.Level3RatioRequirementName, FullAndRelevantForLevel3After2014 = true },
+                                                           new() { RatioRequirementName = RatioRequirements.Level6RatioRequirementName },
+                                                           new() { RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName, FullAndRelevantForLevel3After2014 = true },
                                                        }
                                                       ));
     }

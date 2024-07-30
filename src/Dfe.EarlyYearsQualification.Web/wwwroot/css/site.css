@@ -55,6 +55,10 @@ body {
     border-color: #4C2C92;
 }
 
+.tag-align-right {
+    float: right;
+}
+
 .govuk-skip-link:focus {
     margin-bottom: 0!important;
 }

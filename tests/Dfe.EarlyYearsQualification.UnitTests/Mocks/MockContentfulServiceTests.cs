@@ -21,7 +21,7 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_ReturnsExpectedDetails()
+    public async Task GetAdvicePage_QualificationsAchievedOutsideTheUk_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
@@ -81,6 +81,19 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
         result!.Heading.Should().Be("Qualifications achieved in Northern Ireland");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_QualificationNotOnTheList_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationNotOnTheList);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
@@ -190,12 +203,12 @@ public class MockContentfulServiceTests
         result.AdditionalRequirementQuestions[1].Answers[1].Label.Should().NotBeNullOrEmpty();
         result.AdditionalRequirementQuestions[1].Answers[1].Value.Should().NotBeNullOrEmpty();
         result.RatioRequirements.Should().NotBeNullOrEmpty();
-        result.RatioRequirements!.Count.Should().Be(1);
-        result.RatioRequirements[0].RatioRequirementName.Should().Be("Level 2 ratio requirements");
+        result.RatioRequirements!.Count.Should().Be(4);
+        result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
         result.RatioRequirements[0].FullAndRelevantForLevel2Before2014.Should().BeFalse();
         result.RatioRequirements[0].FullAndRelevantForLevel2After2014.Should().BeFalse();
         result.RatioRequirements[0].FullAndRelevantForLevel3Before2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel3After2014.Should().BeFalse();
+        result.RatioRequirements[0].FullAndRelevantForLevel3After2014.Should().BeTrue();
         result.RatioRequirements[0].FullAndRelevantForLevel4Before2014.Should().BeFalse();
         result.RatioRequirements[0].FullAndRelevantForLevel4After2014.Should().BeFalse();
         result.RatioRequirements[0].FullAndRelevantForLevel5Before2014.Should().BeFalse();
