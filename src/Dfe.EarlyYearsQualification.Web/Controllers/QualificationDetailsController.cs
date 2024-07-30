@@ -76,7 +76,7 @@ public class QualificationDetailsController(
         // Grab the start date of the qualification
         var (_, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
 
-        // Check that the user has chosen a level and a start date, if not then redirect them back to the start of the journey
+        // Check that the user has chosen a start date, if not then redirect them back to the start of the journey
         if (startDateYear == null)
         {
             return RedirectToAction("Index", "Home");
