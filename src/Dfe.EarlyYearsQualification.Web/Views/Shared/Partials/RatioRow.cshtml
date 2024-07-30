@@ -1,30 +1,6 @@
 @model Dfe.EarlyYearsQualification.Web.Models.RatioRowModel
 
-<div class="govuk-summary-list__row" id="@{@Model.LevelText}_row">
-    @* <td class="govuk-table__cell"> *@
-    @*     <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6"> *@
-    @*         <b class="govuk-!-text-align-left ratio-heading" id="@{@Model.LevelText}_heading">@Model.LevelText</b> *@
-    @*     </div> *@
-    @* </td> *@
-    @* <td class="govuk-table__cell"> *@
-    @*     <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6"> *@
-    @*         @{ *@
-    @*             if (Model.IsApproved) *@
-    @*             { *@
-    @*                 <strong class="govuk-tag govuk-tag--green tag-align-right"> *@
-    @*                     Approved *@
-    @*                 </strong> *@
-    @*             } *@
-    @*             else *@
-    @*             { *@
-    @*                 <strong class="govuk-tag govuk-tag--red tag-align-right"> *@
-    @*                     Not Approved *@
-    @*                 </strong> *@
-    @*             } *@
-    @*         } *@
-    @*     </div> *@
-    @* </td> *@
-
+<div class="govuk-summary-list__row ratio-row" id="@{@Model.LevelText}_row">
     <dt class="govuk-summary-list__key govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
         <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
             <b class="govuk-!-text-align-left ratio-heading" id="@{@Model.LevelText}_heading">@Model.LevelText</b>
