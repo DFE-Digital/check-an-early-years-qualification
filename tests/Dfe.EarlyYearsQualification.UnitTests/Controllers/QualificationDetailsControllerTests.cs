@@ -1,4 +1,3 @@
-using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
@@ -121,11 +120,7 @@ public class QualificationDetailsControllerTests
     }
 
     [TestMethod]
-    [DataRow(null, null)]
-    [DataRow(2, null)]
-    [DataRow(null, 2022)]
-    public async Task Index_NoLevelOrDateOfQualificationSelectedPriorInTheJourney_RedirectToHome(
-        int? level, int? startDateYear)
+    public async Task Index_NoDateOfQualificationSelectedPriorInTheJourney_RedirectToHome()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -135,13 +130,13 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
+        
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, null);
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-
-        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
+        
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, null));
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
@@ -191,8 +186,7 @@ public class QualificationDetailsControllerTests
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-
-        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(2);
+        
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
@@ -251,8 +245,7 @@ public class QualificationDetailsControllerTests
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-
-        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(2);
+        
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
@@ -309,13 +302,12 @@ public class QualificationDetailsControllerTests
 
         var ratioRequirements = new List<RatioRequirement>();
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", level, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
 
         var controller =
@@ -356,13 +348,12 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", level, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
 
         var controller =
@@ -408,13 +399,12 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", level, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
 
         var controller =
@@ -470,13 +460,12 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", level, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
 
         var controller =

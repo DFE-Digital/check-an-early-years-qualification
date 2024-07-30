@@ -73,12 +73,11 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
 
-        // Grab the level and start date of the qualification
-        var levelSelected = userJourneyCookieService.GetLevelOfQualification();
+        // Grab the start date of the qualification
         var (_, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
 
         // Check that the user has chosen a level and a start date, if not then redirect them back to the start of the journey
-        if (levelSelected == null || startDateYear == null)
+        if (startDateYear == null)
         {
             return RedirectToAction("Index", "Home");
         }
@@ -91,7 +90,7 @@ public class QualificationDetailsController(
             return validateAdditionalRequirementQuestions.actionResult!;
 
         // If all the additional requirement checks pass, then we can go to check each level individually
-        CheckRatioRequirements(levelSelected.Value, startDateYear.Value, qualification, model);
+        CheckRatioRequirements(startDateYear.Value, qualification, model);
 
         return View(model);
     }
@@ -126,12 +125,11 @@ public class QualificationDetailsController(
         return (true, null);
     }
 
-    private void CheckRatioRequirements(int levelSelected, int startDateYear, Qualification qualification,
-                                        QualificationDetailsModel model)
+    private void CheckRatioRequirements(int startDateYear, Qualification qualification, QualificationDetailsModel model)
     {
         // Build up property name to check for each level
         var propertyToCheck =
-            $"FullAndRelevantForLevel{levelSelected}{(startDateYear > 2014 ? "After" : "Before")}2014";
+            $"FullAndRelevantForLevel{qualification.QualificationLevel}{(startDateYear > 2014 ? "After" : "Before")}2014";
 
         model.RatioRequirements.ApprovedForLevel2 =
             CheckRatio(propertyToCheck, RatioRequirements.Level2RatioRequirementName, qualification);
