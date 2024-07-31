@@ -94,35 +94,77 @@ public class QualificationDetailsController(
 
         return View(model);
     }
-    
+
     private (bool isValid, IActionResult? actionResult) ValidateAdditionalQuestions(Qualification qualification,
         QualificationDetailsModel model)
     {
-        // If the qualification has no additional requirements then skip this check
-        if (qualification.AdditionalRequirementQuestions != null &&
-            qualification.AdditionalRequirementQuestions.Count != 0)
+        var additionalRequirementQuestions = qualification.AdditionalRequirementQuestions;
+
+        // If the qualification has no additional requirements then skip the checks
+        if (additionalRequirementQuestions == null ||
+            additionalRequirementQuestions.Count == 0) return (true, null);
+
+        var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+
+        // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
+        if (additionalRequirementsAnswers == null ||
+            additionalRequirementQuestions.Count != additionalRequirementsAnswers.Count)
         {
-            var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+            return (false,
+                    RedirectToAction("Index", "CheckAdditionalRequirements", new { qualification.QualificationId }));
+        }
 
-            // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
-            if (additionalRequirementsAnswers == null ||
-                qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count)
-            {
-                return (false, RedirectToAction("Index", "CheckAdditionalRequirements", new { qualification.QualificationId }));
-            }
+        // Before we go ahead and check the 'regular' additional requirements, we check to see if the qualification
+        // contains the QTS, EYTS and EYPS requirement. If so then we have to check if this requirement is met first.
+        if (CheckForQtsAndRelatedRequirements(additionalRequirementQuestions, additionalRequirementsAnswers))
+        {
+            model.RatioRequirements = MarkAllAsFullAndRelevant(model.RatioRequirements);
+            // We mark the isValid property as false here, so that the request does not continue through to
+            // the CheckRatioRequirements method in the parent method!
+            return (false, View(model));
+        }
 
-            if ((from question in qualification.AdditionalRequirementQuestions
-                 from answer in additionalRequirementsAnswers
-                 where (question.AnswerToBeFullAndRelevant && answer.Value == "no") ||
-                       (!question.AnswerToBeFullAndRelevant && answer.Value == "yes")
-                 select question).Any())
-            {
-                model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
-                return (false, View(model));
-            }
+        // After performing the checks for the QTS question, we can look at any more additional requirements.
+        // Loop through each question, and then each answer, and if the user has answered negatively to any
+        // of the questions, then we can mark the ratio requirements as not full and relevant (excluding unqualified) and return.
+        if ((from question in additionalRequirementQuestions
+             from answer in additionalRequirementsAnswers
+             where  answer.Key == question.Question && ((question.AnswerToBeFullAndRelevant && answer.Value == "no") ||
+                    (!question.AnswerToBeFullAndRelevant && answer.Value == "yes"))
+             select question).Any())
+        {
+            model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
+            return (false, View(model));
         }
         
+        //At this point, the user will have passed all checks and we can return isValid so that the ratio checks can commence.
         return (true, null);
+    }
+
+    private bool CheckForQtsAndRelatedRequirements(List<AdditionalRequirementQuestion> questions,
+                                                   Dictionary<string, string> answers)
+    {
+        // Loop through all the questions and see if the qualification contains the QTS question
+        foreach (var question in questions.Where(question => question.Sys.Id ==
+                                                             AdditionalRequirementQuestions
+                                                                 .DidTheQualificationLeadToQtsEytsOrEyps))
+        {
+            // Once we find it we can remove if from the shared list, this will stop it being evaluated later on in the journey
+            questions.Remove(question);
+
+            // If the user has answered the question, and have answered positively, then return true
+            if (answers.Any(answer => answer.Key == question.Question && ((question.AnswerToBeFullAndRelevant && answer.Value == "yes") ||
+                                                                          (!question.AnswerToBeFullAndRelevant && answer.Value == "no"))))
+            {
+                return true;
+            }
+
+            // Do not check any more questions after finding the QTS question.
+            break;
+        }
+
+        // If we can't find the question, or the user has not answered it correctly then we return false
+        return false;
     }
 
     private void CheckRatioRequirements(int startDateYear, Qualification qualification, QualificationDetailsModel model)
@@ -133,13 +175,13 @@ public class QualificationDetailsController(
 
         model.RatioRequirements.ApprovedForLevel2 =
             CheckRatio(propertyToCheck, RatioRequirements.Level2RatioRequirementName, qualification);
-        
+
         model.RatioRequirements.ApprovedForLevel3 =
             CheckRatio(propertyToCheck, RatioRequirements.Level3RatioRequirementName, qualification);
-        
+
         model.RatioRequirements.ApprovedForLevel6 =
             CheckRatio(propertyToCheck, RatioRequirements.Level6RatioRequirementName, qualification);
-        
+
         model.RatioRequirements.ApprovedForUnqualified = true;
     }
 
@@ -154,7 +196,7 @@ public class QualificationDetailsController(
         catch
         {
             logger.LogError("Could not find property: {PropertyToCheck} within {RatioName} for qualification: {QualificationId}",
-                            propertyToCheck, ratioName, qualification.QualificationId); 
+                            propertyToCheck, ratioName, qualification.QualificationId);
             throw;
         }
     }
@@ -164,6 +206,16 @@ public class QualificationDetailsController(
         model.ApprovedForLevel2 = false;
         model.ApprovedForLevel3 = false;
         model.ApprovedForLevel6 = false;
+        model.ApprovedForUnqualified = true;
+
+        return model;
+    }
+
+    private static RatioRequirementModel MarkAllAsFullAndRelevant(RatioRequirementModel model)
+    {
+        model.ApprovedForLevel2 = true;
+        model.ApprovedForLevel3 = true;
+        model.ApprovedForLevel6 = true;
         model.ApprovedForUnqualified = true;
 
         return model;
