@@ -12,6 +12,15 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        @if (Model.HasErrors)
+        {
+            await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
+                                                                   {
+                                                                       ErrorBannerHeading = Model.ErrorBannerHeading,
+                                                                       ErrorBannerLinkText = Model.ErrorBannerLinkText,
+                                                                       ElementLinkId = "date-started-month"
+                                                                   });
+        }
         @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
         {
             <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">

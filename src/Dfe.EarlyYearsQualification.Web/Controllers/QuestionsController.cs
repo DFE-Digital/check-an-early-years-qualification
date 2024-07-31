@@ -234,6 +234,8 @@ public class QuestionsController(
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
         model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
         model.BackButton = question.BackButton;
+        model.ErrorBannerHeading = question.ErrorBannerHeading;
+        model.ErrorBannerLinkText = question.ErrorBannerLinkText;
         return model;
     }
 
@@ -249,6 +251,8 @@ public class QuestionsController(
         model.MonthLabel = question.MonthLabel;
         model.YearLabel = question.YearLabel;
         model.BackButton = question.BackButton;
+        model.ErrorBannerHeading = question.ErrorBannerHeading;
+        model.ErrorBannerLinkText = question.ErrorBannerLinkText;
         return model;
     }
 
@@ -288,7 +292,9 @@ public class QuestionsController(
                                  Text = awardingOrg
                              });
         }
-
+        
+        model.ErrorBannerHeading = question.ErrorBannerHeading;
+        model.ErrorBannerLinkText = question.ErrorBannerLinkText;
         return model;
     }
 }

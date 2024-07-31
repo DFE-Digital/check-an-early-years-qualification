@@ -15,4 +15,8 @@ public class DateQuestionPage
     public string YearLabel { get; init; } = string.Empty;
 
     public NavigationLink? BackButton { get; init; }
+    
+    public string ErrorBannerHeading { get; init; } = string.Empty;
+
+    public string ErrorBannerLinkText { get; init; } = string.Empty;
 }
