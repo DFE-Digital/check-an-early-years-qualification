@@ -17,4 +17,8 @@ public abstract class BaseQuestionModel
     public bool HasErrors { get; set; }
 
     public NavigationLink? BackButton { get; set; }
+    
+    public string ErrorBannerHeading { get; set; } = string.Empty;
+
+    public string ErrorBannerLinkText { get; set; } = string.Empty;
 }

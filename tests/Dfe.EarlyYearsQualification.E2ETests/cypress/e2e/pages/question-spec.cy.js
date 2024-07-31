@@ -17,6 +17,7 @@ describe("A spec that tests question pages", () => {
     it("shows an error message when a user doesnt select an option on the where-was-the-qualification-awarded page", () => {
         cy.visit("/questions/where-was-the-qualification-awarded");
 
+        cy.get(".govuk-error-summary").should("not.exist");
         cy.get("#option-error").should("not.exist");
         cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
 
@@ -25,6 +26,10 @@ describe("A spec that tests question pages", () => {
             expect(loc.pathname).to.eq("/questions/where-was-the-qualification-awarded");
         })
 
+        cy.get(".govuk-error-summary").should("be.visible");
+        cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+        cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
+        
         cy.get('#option-error').should("exist");
         cy.get('#option-error').should("contain.text", "Test error message");
         cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
@@ -43,6 +48,7 @@ describe("A spec that tests question pages", () => {
     it("shows an error message when a user doesnt type a date on the when-was-the-qualification-started page", () => {
       cy.visit("/questions/when-was-the-qualification-started");
 
+      cy.get(".govuk-error-summary").should("not.exist");
       cy.get("#date-error").should("not.exist");
       cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
 
@@ -50,6 +56,10 @@ describe("A spec that tests question pages", () => {
       cy.location().should((loc) => {
         expect(loc.pathname).to.eq("/questions/when-was-the-qualification-started");
       })
+        
+      cy.get(".govuk-error-summary").should("be.visible");
+      cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+      cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
 
       cy.get('#date-error').should("exist");
       cy.get('#date-error').should("contain.text", "Test Error Message");
@@ -68,6 +78,7 @@ describe("A spec that tests question pages", () => {
     it("shows an error message when a user doesnt select an option on the what-level-is-the-qualification page", () => {
         cy.visit("/questions/what-level-is-the-qualification");
 
+        cy.get(".govuk-error-summary").should("not.exist");
         cy.get("#option-error").should("not.exist");
         cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
 
@@ -76,6 +87,10 @@ describe("A spec that tests question pages", () => {
             expect(loc.pathname).to.eq("/questions/what-level-is-the-qualification");
         })
 
+        cy.get(".govuk-error-summary").should("be.visible");
+        cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+        cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
+        
         cy.get('#option-error').should("exist");
         cy.get('#option-error').should("contain.text", "Test error message");
         cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
@@ -95,6 +110,7 @@ describe("A spec that tests question pages", () => {
         "and also does not check 'not in the list' on the what-is-the-awarding-organisation", () => {
         cy.visit("/questions/what-is-the-awarding-organisation");
 
+        cy.get(".govuk-error-summary").should("not.exist");
         cy.get("#dropdown-error").should("not.exist");
         cy.get("#awarding-organisation-select").should("not.have.class", "govuk-select--error");
 
@@ -103,6 +119,10 @@ describe("A spec that tests question pages", () => {
             expect(loc.pathname).to.eq("/questions/what-is-the-awarding-organisation");
         })
 
+        cy.get(".govuk-error-summary").should("be.visible");
+        cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+        cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
+        
         cy.get('#dropdown-error').should("exist");
         cy.get('#dropdown-error').should("contain.text", "Test Error Message");
         cy.get("#awarding-organisation-select").should("have.class", "govuk-select--error");

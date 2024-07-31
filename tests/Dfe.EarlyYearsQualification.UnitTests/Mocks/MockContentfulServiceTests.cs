@@ -246,6 +246,8 @@ public class MockContentfulServiceTests
         result!.Question.Should().NotBeNullOrEmpty();
         result.CtaButtonText.Should().NotBeNullOrEmpty();
         result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.ErrorBannerHeading.Should().NotBeNull();
+        result.ErrorBannerLinkText.Should().NotBeNull();
         result.Options.Should().NotBeNullOrEmpty();
         result.Options.Count.Should().Be(5);
         result.Options[0].Label.Should().Be("England");
@@ -271,6 +273,8 @@ public class MockContentfulServiceTests
         result!.Question.Should().NotBeNullOrEmpty();
         result.CtaButtonText.Should().NotBeNullOrEmpty();
         result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.ErrorBannerHeading.Should().NotBeNull();
+        result.ErrorBannerLinkText.Should().NotBeNull();
         result.Options.Should().NotBeNullOrEmpty();
         result.Options.Count.Should().Be(2);
         result.Options[0].Label.Should().Be("Level 2");
@@ -300,6 +304,8 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result!.CtaButtonText.Should().Be("Continue");
         result.ErrorMessage.Should().Be("Test Error Message");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.ErrorBannerLinkText.Should().Be("Test error banner link text");
         result.MonthLabel.Should().Be("Test Month Label");
         result.YearLabel.Should().Be("Test Year Label");
         result.QuestionHint.Should().Be("Test Question Hint");
@@ -326,6 +332,8 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result!.CtaButtonText.Should().Be("Test Button Text");
         result.ErrorMessage.Should().Be("Test Error Message");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.ErrorBannerLinkText.Should().Be("Test error banner link text");
         result.Question.Should().Be("Test Dropdown Question");
         result.DefaultText.Should().Be("Test Default Dropdown Text");
         result.DropdownHeading.Should().Be("Test Dropdown Heading");

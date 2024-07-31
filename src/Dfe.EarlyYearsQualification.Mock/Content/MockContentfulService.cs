@@ -475,7 +475,9 @@ public class MockContentfulService : IContentService
                                     DisplayText = "TEST",
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
-                                }
+                                },
+                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerLinkText = "Test error banner link text"
                };
     }
 
@@ -494,7 +496,9 @@ public class MockContentfulService : IContentService
                                     DisplayText = "TEST",
                                     Href = "/questions/where-was-the-qualification-awarded",
                                     OpenInNewTab = false
-                                }
+                                },
+                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerLinkText = "Test error banner link text"
                };
     }
 
@@ -513,7 +517,9 @@ public class MockContentfulService : IContentService
                                     DisplayText = "TEST",
                                     Href = "/questions/what-level-is-the-qualification",
                                     OpenInNewTab = false
-                                }
+                                },
+                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerLinkText = "Test error banner link text"
                };
     }
 
