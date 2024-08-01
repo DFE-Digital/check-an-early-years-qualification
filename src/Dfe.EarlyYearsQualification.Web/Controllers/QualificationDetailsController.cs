@@ -94,35 +94,51 @@ public class QualificationDetailsController(
 
         return View(model);
     }
-    
+
     private (bool isValid, IActionResult? actionResult) ValidateAdditionalQuestions(Qualification qualification,
         QualificationDetailsModel model)
     {
-        // If the qualification has no additional requirements then skip this check
-        if (qualification.AdditionalRequirementQuestions != null &&
-            qualification.AdditionalRequirementQuestions.Count != 0)
-        {
-            var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
-
-            // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
-            if (additionalRequirementsAnswers == null ||
-                qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count)
-            {
-                return (false, RedirectToAction("Index", "CheckAdditionalRequirements", new { qualification.QualificationId }));
-            }
-
-            if ((from question in qualification.AdditionalRequirementQuestions
-                 from answer in additionalRequirementsAnswers
-                 where (question.AnswerToBeFullAndRelevant && answer.Value == "no") ||
-                       (!question.AnswerToBeFullAndRelevant && answer.Value == "yes")
-                 select question).Any())
-            {
-                model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
-                return (false, View(model));
-            }
-        }
+        // If the qualification has no additional requirements then skip all checks and return.
+        if (qualification.AdditionalRequirementQuestions == null ||
+            qualification.AdditionalRequirementQuestions.Count == 0) return (true, null);
         
-        return (true, null);
+        var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+
+        // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
+        if (additionalRequirementsAnswers == null ||
+            qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count)
+        {
+            return (false,
+                    RedirectToAction("Index", "CheckAdditionalRequirements",
+                                     new { qualification.QualificationId }));
+        }
+
+        // If there are not any answers to the questions that are not full and relevant we can continue back to check the ratios.
+        if (!CheckForAnyNonFAndRAnswers(qualification.AdditionalRequirementQuestions,
+                                        additionalRequirementsAnswers)) return (true, null);
+        
+        // At this point, there will be at least one question answered in a non full and relevant way.
+        // we mark the ratios as not full and relevant and return.
+        model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
+        return (false, View(model));
+
+    }
+
+    /// <summary>
+    /// A function to take in the additional requirement questions and answers, match them up and check to see if the
+    /// user has answered any in a non full and relevant way.
+    /// </summary>
+    /// <param name="additionalRequirementQuestions">This should come from the qualification model</param>
+    /// <param name="additionalRequirementsAnswers">This should come from the user's selected answers</param>
+    /// <returns>True if we find any question answered in a non full and relevant way, false if none are found</returns>
+    private static bool CheckForAnyNonFAndRAnswers(List<AdditionalRequirementQuestion> additionalRequirementQuestions,
+                                                    Dictionary<string, string> additionalRequirementsAnswers)
+    {
+        return (from question in additionalRequirementQuestions
+                 from answer in additionalRequirementsAnswers
+                 where question.Question == answer.Key && ((question.AnswerToBeFullAndRelevant && answer.Value == "no") ||
+                        (!question.AnswerToBeFullAndRelevant && answer.Value == "yes"))
+                 select question).Any();
     }
 
     private void CheckRatioRequirements(int startDateYear, Qualification qualification, QualificationDetailsModel model)
@@ -133,13 +149,13 @@ public class QualificationDetailsController(
 
         model.RatioRequirements.ApprovedForLevel2 =
             CheckRatio(propertyToCheck, RatioRequirements.Level2RatioRequirementName, qualification);
-        
+
         model.RatioRequirements.ApprovedForLevel3 =
             CheckRatio(propertyToCheck, RatioRequirements.Level3RatioRequirementName, qualification);
-        
+
         model.RatioRequirements.ApprovedForLevel6 =
             CheckRatio(propertyToCheck, RatioRequirements.Level6RatioRequirementName, qualification);
-        
+
         model.RatioRequirements.ApprovedForUnqualified = true;
     }
 
@@ -154,7 +170,7 @@ public class QualificationDetailsController(
         catch
         {
             logger.LogError("Could not find property: {PropertyToCheck} within {RatioName} for qualification: {QualificationId}",
-                            propertyToCheck, ratioName, qualification.QualificationId); 
+                            propertyToCheck, ratioName, qualification.QualificationId);
             throw;
         }
     }

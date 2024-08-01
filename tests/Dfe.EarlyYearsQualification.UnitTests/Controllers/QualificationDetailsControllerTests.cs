@@ -212,8 +212,11 @@ public class QualificationDetailsControllerTests
     }
 
     [TestMethod]
+    [DataRow("no", "no")]
+    [DataRow("yes", "yes")]
+    [DataRow("no", "yes")]
     public async Task
-        Index_Index_QualificationHasAdditionalQuestionsButAnswersAreNotCorrect_MarkAsNotRelevantAndReturn()
+        Index_Index_QualificationHasAdditionalQuestionsButAnswersAreNotCorrect_MarkAsNotRelevantAndReturn(string answer1, string answer2)
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -221,7 +224,7 @@ public class QualificationDetailsControllerTests
         var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-
+        
         const string qualificationId = "eyq-145";
 
         var listOfAdditionalReqs = new List<AdditionalRequirementQuestion>
@@ -230,13 +233,19 @@ public class QualificationDetailsControllerTests
                                        {
                                            Question = "Some Question",
                                            AnswerToBeFullAndRelevant = true
+                                       },
+                                       new()
+                                       {
+                                           Question = "Another Question",
+                                           AnswerToBeFullAndRelevant = false
                                        }
                                    };
 
         // Question has been answered, but the answer is not what we want for the qualification to be full and relevant
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>()
                                            {
-                                               { "Some Question", "no" }
+                                               { "Some Question", answer1 },
+                                               { "Another Question", answer2 }
                                            };
 
         var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
