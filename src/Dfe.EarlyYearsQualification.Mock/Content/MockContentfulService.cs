@@ -8,6 +8,8 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockContentfulService : IContentService
 {
+    private const string WhereQualificationAwardedPagePath = "/questions/where-was-the-qualification-awarded";
+
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
         var body = ContentfulContentHelper.Paragraph("Test Accessibility Statement Body");
@@ -33,24 +35,24 @@ public class MockContentfulService : IContentService
                {
                    AdvicePages.QualificationsAchievedOutsideTheUk =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved outside the United Kingdom",
-                                                              body, "/questions/where-was-the-qualification-awarded")),
+                                                              body, WhereQualificationAwardedPagePath)),
                    AdvicePages.QualificationsStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
                                                             body, "/questions/what-level-is-the-qualification")),
-                   
+
                    AdvicePages.QualificationsAchievedInScotland =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Scotland",
-                                                              body, "/questions/where-was-the-qualification-awarded")),
-                   
+                                                              body, WhereQualificationAwardedPagePath)),
+
                    AdvicePages.QualificationsAchievedInWales =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Wales",
-                                                              body, "/questions/where-was-the-qualification-awarded")),
-                   
+                                                              body, WhereQualificationAwardedPagePath)),
+
                    AdvicePages.QualificationsAchievedInNorthernIreland =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Northern Ireland",
-                                                              body, "/questions/where-was-the-qualification-awarded")),
-                   
+                                                              body, WhereQualificationAwardedPagePath)),
+
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
                                                               body, "/qualifications")),
@@ -168,7 +170,9 @@ public class MockContentfulService : IContentService
                                                                Question = "Test question",
                                                                HintText = "This is the hint text",
                                                                DetailsHeading = "This is the details heading",
-                                                               DetailsContent = ContentfulContentHelper.Paragraph("This is the details content"),
+                                                               DetailsContent =
+                                                                   ContentfulContentHelper
+                                                                       .Paragraph("This is the details content"),
                                                                Answers =
                                                                [
                                                                    new Option
@@ -183,7 +187,8 @@ public class MockContentfulService : IContentService
                                                                        Value = "no"
                                                                    }
                                                                ],
-                                                               ConfirmationStatement = "This is the confirmation statement",
+                                                               ConfirmationStatement =
+                                                                   "This is the confirmation statement",
                                                                AnswerToBeFullAndRelevant = true
                                                            },
                                                            new()
@@ -191,7 +196,9 @@ public class MockContentfulService : IContentService
                                                                Question = "Test question 2",
                                                                HintText = "This is the hint text",
                                                                DetailsHeading = "This is the details heading",
-                                                               DetailsContent = ContentfulContentHelper.Paragraph("This is the details content"),
+                                                               DetailsContent =
+                                                                   ContentfulContentHelper
+                                                                       .Paragraph("This is the details content"),
                                                                Answers =
                                                                [
                                                                    new Option
@@ -206,11 +213,12 @@ public class MockContentfulService : IContentService
                                                                        Value = "no"
                                                                    }
                                                                ],
-                                                               ConfirmationStatement = "This is the confirmation statement",
+                                                               ConfirmationStatement =
+                                                                   "This is the confirmation statement",
                                                                AnswerToBeFullAndRelevant = true
                                                            }
                                                        },
-                                                       new List<RatioRequirement>()
+                                                       new List<RatioRequirement>
                                                        {
                                                            new() { RatioRequirementName = "Level 2 ratio requirements" }
                                                        }
@@ -289,8 +297,11 @@ public class MockContentfulService : IContentService
                                          MultipleQualificationsFoundText = "qualifications found",
                                          SingleQualificationFoundText = "qualification found",
                                          PreSearchBoxContent = ContentfulContentHelper.Text("Pre search box content"),
-                                         PostQualificationListContent = ContentfulContentHelper.Link("Link to not on list advice page","/advice/qualification-not-on-the-list"),
-                                         PostSearchCriteriaContent = ContentfulContentHelper.Text("Post search criteria content"),
+                                         PostQualificationListContent =
+                                             ContentfulContentHelper.Link("Link to not on list advice page",
+                                                                          "/advice/qualification-not-on-the-list"),
+                                         PostSearchCriteriaContent =
+                                             ContentfulContentHelper.Text("Post search criteria content"),
                                          AnyLevelHeading = "Any level",
                                          AnyAwardingOrganisationHeading = "Various awarding organisations"
                                      });
@@ -335,23 +346,24 @@ public class MockContentfulService : IContentService
     public async Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage()
     {
         return await Task.FromResult(new CheckAdditionalRequirementsPage
-               {
-                   Heading = "Check the additional requirements",
-                   BackButton = new NavigationLink
-                                {
-                                    DisplayText = "Back",
-                                    Href = "/",
-                                    OpenInNewTab = false
-                                },
-                   CtaButtonText = "Get result",
-                   AwardingOrganisationLabel = "Awarding organisation",
-                   QualificationLabel = "Qualification",
-                   QualificationLevelLabel = "Qualification level",
-                   InformationMessage = "Your result is dependent on the accuracy of the answers you have provided",
-                   ErrorMessage = "This is a test error message",
-                   ErrorSummaryHeading = "There was a problem",
-                   QuestionSectionHeading = "This is the question section heading"
-               });
+                                     {
+                                         Heading = "Check the additional requirements",
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "Back",
+                                                          Href = "/",
+                                                          OpenInNewTab = false
+                                                      },
+                                         CtaButtonText = "Get result",
+                                         AwardingOrganisationLabel = "Awarding organisation",
+                                         QualificationLabel = "Qualification",
+                                         QualificationLevelLabel = "Qualification level",
+                                         InformationMessage =
+                                             "Your result is dependent on the accuracy of the answers you have provided",
+                                         ErrorMessage = "This is a test error message",
+                                         ErrorSummaryHeading = "There was a problem",
+                                         QuestionSectionHeading = "This is the question section heading"
+                                     });
     }
 
     public async Task<StartPage?> GetStartPage()
@@ -477,7 +489,7 @@ public class MockContentfulService : IContentService
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",
-                                    Href = "/questions/where-was-the-qualification-awarded",
+                                    Href = WhereQualificationAwardedPagePath,
                                     OpenInNewTab = false
                                 }
                };
