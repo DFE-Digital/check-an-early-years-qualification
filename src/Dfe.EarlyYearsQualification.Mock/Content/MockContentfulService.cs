@@ -477,7 +477,9 @@ public class MockContentfulService : IContentService
                                     OpenInNewTab = false
                                 },
                    ErrorBannerHeading = "There is a problem",
-                   ErrorBannerLinkText = "Test error banner link text"
+                   ErrorBannerLinkText = "Test error banner link text",
+                   AdditionalInformationBody = ContentfulContentHelper.Paragraph("This is the additional information body"),
+                   AdditionalInformationHeader = "This is the additional information header"
                };
     }
 
@@ -498,7 +500,9 @@ public class MockContentfulService : IContentService
                                     OpenInNewTab = false
                                 },
                    ErrorBannerHeading = "There is a problem",
-                   ErrorBannerLinkText = "Test error banner link text"
+                   ErrorBannerLinkText = "Test error banner link text",
+                   AdditionalInformationBody = ContentfulContentHelper.Paragraph("This is the additional information body"),
+                   AdditionalInformationHeader = "This is the additional information header"
                };
     }
 
@@ -519,7 +523,9 @@ public class MockContentfulService : IContentService
                                     OpenInNewTab = false
                                 },
                    ErrorBannerHeading = "There is a problem",
-                   ErrorBannerLinkText = "Test error banner link text"
+                   ErrorBannerLinkText = "Test error banner link text",
+                   AdditionalInformationBody = ContentfulContentHelper.Paragraph("This is the additional information body"),
+                   AdditionalInformationHeader = "This is the additional information header"
                };
     }
 

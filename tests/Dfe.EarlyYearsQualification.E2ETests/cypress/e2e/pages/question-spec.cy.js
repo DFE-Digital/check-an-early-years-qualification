@@ -14,6 +14,17 @@ describe("A spec that tests question pages", () => {
         cy.get("#outside-uk").should("exist");
     })
 
+    it("Checks additional information on the where-was-the-qualification-awarded page", () => {
+        cy.visit("/questions/where-was-the-qualification-awarded");
+
+        cy.get(".govuk-details").should("not.have.attr", "open");
+        cy.get(".govuk-details__summary-text").should("contain.text", "This is the additional information header");
+        cy.get(".govuk-details__text").should("contain.text", "This is the additional information body");
+
+        cy.get(".govuk-details__summary-text").click();
+        cy.get(".govuk-details").should("have.attr", "open");
+    })
+
     it("shows an error message when a user doesnt select an option on the where-was-the-qualification-awarded page", () => {
         cy.visit("/questions/where-was-the-qualification-awarded");
 
@@ -43,6 +54,17 @@ describe("A spec that tests question pages", () => {
 
         cy.get("#date-started-month").should("exist");
         cy.get("#date-started-year").should("exist");
+    })
+
+    it("Checks additional information on the when-was-the-qualification-started page", () => {
+        cy.visit("/questions/when-was-the-qualification-started");
+
+        cy.get(".govuk-details").should("not.have.attr", "open");
+        cy.get(".govuk-details__summary-text").should("contain.text", "This is the additional information header");
+        cy.get(".govuk-details__text").should("contain.text", "This is the additional information body");
+
+        cy.get(".govuk-details__summary-text").click();
+        cy.get(".govuk-details").should("have.attr", "open");
     })
 
     it("shows an error message when a user doesnt type a date on the when-was-the-qualification-started page", () => {
@@ -75,6 +97,17 @@ describe("A spec that tests question pages", () => {
         cy.get("#3").should("exist");
     })
 
+    it("Checks additional information on the what-level-is-the-qualification page", () => {
+        cy.visit("/questions/what-level-is-the-qualification");
+
+        cy.get(".govuk-details").should("not.have.attr", "open");
+        cy.get(".govuk-details__summary-text").should("contain.text", "This is the additional information header");
+        cy.get(".govuk-details__text").should("contain.text", "This is the additional information body");
+
+        cy.get(".govuk-details__summary-text").click();
+        cy.get(".govuk-details").should("have.attr", "open");
+    })
+
     it("shows an error message when a user doesnt select an option on the what-level-is-the-qualification page", () => {
         cy.visit("/questions/what-level-is-the-qualification");
 
@@ -104,6 +137,17 @@ describe("A spec that tests question pages", () => {
         cy.get("#awarding-organisation-select").should("exist");
         cy.get("#awarding-organisation-not-in-list").should("exist");
         cy.get('button[id="question-submit"]').should("exist");
+    })
+
+    it("Checks additional information on the what-is-the-awarding-organisation page", () => {
+        cy.visit("/questions/what-is-the-awarding-organisation");
+
+        cy.get(".govuk-details").should("not.have.attr", "open");
+        cy.get(".govuk-details__summary-text").should("contain.text", "This is the additional information header");
+        cy.get(".govuk-details__text").should("contain.text", "This is the additional information body");
+
+        cy.get(".govuk-details__summary-text").click();
+        cy.get(".govuk-details").should("have.attr", "open");
     })
 
     it("shows an error message when a user doesnt select an option from the dropdown list" +

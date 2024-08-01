@@ -34,17 +34,13 @@
 
                     @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
                     {
-                        <details class="govuk-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">
-                                    @Model.AdditionalInformationHeader
-                                </span>
-                            </summary>
-                            <div class="govuk-details__text">
-                                @Html.Raw(Model.AdditionalInformationBody)
-                            </div>
-                        </details>
+                        await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
+                                                                                {
+                                                                                    AdditionalInformationHeader = Model.AdditionalInformationHeader,
+                                                                                    AdditionalInformationBody = Model.AdditionalInformationBody
+                                                                                });
                     }
+                    
                     @if (Model.HasErrors)
                     {
                         <p id="option-error" class="govuk-error-message">

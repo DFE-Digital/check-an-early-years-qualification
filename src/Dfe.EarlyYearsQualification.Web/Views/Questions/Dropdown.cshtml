@@ -42,6 +42,14 @@
                         </h1>
                     </legend>
 
+                    @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
+                    {
+                        await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
+                                                                                        {
+                                                                                            AdditionalInformationHeader = Model.AdditionalInformationHeader,
+                                                                                            AdditionalInformationBody = Model.AdditionalInformationBody
+                                                                                        });
+                    }
 
                     <h1 class="govuk-label-wrapper">
                         @Html.Label(Model.DropdownId, Model.DropdownHeading, new { @class = "govuk-label govuk-fieldset__legend--m" })
