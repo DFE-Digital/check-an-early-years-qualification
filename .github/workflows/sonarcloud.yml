@@ -52,8 +52,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet-sonarscanner begin \
-            /k:"dfe-eyq_check-an-early-years-qualification" \
-            /o:"DfE-EYQ" \
+            /k:dfe-eyq_check-an-early-years-qualification \
+            /o:dfe-eyq \
             /d:sonar.qualitygate.wait=true \
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
             /d:sonar.test.exclusions="Childrens-Social-Care-CPD-Tests/**/*" \
