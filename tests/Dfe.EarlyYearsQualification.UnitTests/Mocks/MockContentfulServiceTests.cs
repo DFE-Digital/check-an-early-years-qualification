@@ -275,6 +275,9 @@ public class MockContentfulServiceTests
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorBannerHeading.Should().NotBeNull();
         result.ErrorBannerLinkText.Should().NotBeNull();
+        result.AdditionalInformationHeader.Should().Be("This is the additional information header");
+        result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.Options.Should().NotBeNullOrEmpty();
         result.Options.Count.Should().Be(2);
         result.Options[0].Label.Should().Be("Level 2");
@@ -306,6 +309,9 @@ public class MockContentfulServiceTests
         result.ErrorMessage.Should().Be("Test Error Message");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.ErrorBannerLinkText.Should().Be("Test error banner link text");
+        result.AdditionalInformationHeader.Should().Be("This is the additional information header");
+        result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.MonthLabel.Should().Be("Test Month Label");
         result.YearLabel.Should().Be("Test Year Label");
         result.QuestionHint.Should().Be("Test Question Hint");
@@ -334,6 +340,9 @@ public class MockContentfulServiceTests
         result.ErrorMessage.Should().Be("Test Error Message");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.ErrorBannerLinkText.Should().Be("Test error banner link text");
+        result.AdditionalInformationHeader.Should().Be("This is the additional information header");
+        result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.Question.Should().Be("Test Dropdown Question");
         result.DefaultText.Should().Be("Test Default Dropdown Text");
         result.DropdownHeading.Should().Be("Test Dropdown Heading");

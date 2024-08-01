@@ -21,4 +21,8 @@ public abstract class BaseQuestionModel
     public string ErrorBannerHeading { get; set; } = string.Empty;
 
     public string ErrorBannerLinkText { get; set; } = string.Empty;
+    
+    public string AdditionalInformationHeader { get; set; } = string.Empty;
+
+    public string AdditionalInformationBody { get; set; } = string.Empty;
 }

@@ -79,7 +79,7 @@ public class QuestionsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = MapDateModel(new DateQuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted),
+        var model = await MapDateModel(new DateQuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted),
                                  Questions);
         return View("Date", model);
     }
@@ -94,7 +94,7 @@ public class QuestionsController(
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
-                model = MapDateModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions);
+                model = await MapDateModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions);
                 model.HasErrors = true;
             }
 
@@ -153,7 +153,7 @@ public class QuestionsController(
 
         var qualifications = await GetFilteredQualifications();
 
-        var model = MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications,
+        var model = await MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications,
                                      nameof(this.WhatIsTheAwardingOrganisation),
                                      Questions);
 
@@ -173,7 +173,7 @@ public class QuestionsController(
             {
                 var qualifications = await GetFilteredQualifications();
 
-                model = MapDropdownModel(model, questionPage, qualifications,
+                model = await MapDropdownModel(model, questionPage, qualifications,
                                          nameof(this.WhatIsTheAwardingOrganisation),
                                          Questions);
                 model.HasErrors = true;
@@ -239,7 +239,7 @@ public class QuestionsController(
         return model;
     }
 
-    private static DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestionPage question, string actionName,
+    private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question, string actionName,
                                                   string controllerName)
     {
         model.Question = question.Question;
@@ -253,10 +253,12 @@ public class QuestionsController(
         model.BackButton = question.BackButton;
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
+        model.AdditionalInformationHeader = question.AdditionalInformationHeader;
+        model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
         return model;
     }
 
-    private static DropdownQuestionModel MapDropdownModel(DropdownQuestionModel model, DropdownQuestionPage question,
+    private async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model, DropdownQuestionPage question,
                                                           List<Qualification> qualifications, string actionName,
                                                           string controllerName)
     {
@@ -295,6 +297,8 @@ public class QuestionsController(
         
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
+        model.AdditionalInformationHeader = question.AdditionalInformationHeader;
+        model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
         return model;
     }
 }
