@@ -52,7 +52,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet-sonarscanner begin \
-            /k:"check-an-early-years-qualification" \
+            /k:"dfe-eyq_check-an-early-years-qualification" \
             /o:"DfE-EYQ" \
             /d:sonar.qualitygate.wait=true \
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
