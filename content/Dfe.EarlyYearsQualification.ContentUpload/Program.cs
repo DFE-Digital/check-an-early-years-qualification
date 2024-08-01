@@ -342,14 +342,17 @@ public static class Program
                                                       qualificationId,
                                                       qualificationName,
                                                       awardingOrganisationTitle,
-                                                      qualificationLevel,
-                                                      fromWhichYear,
-                                                      toWhichYear,
-                                                      qualificationNumber,
-                                                      additionalRequirements,
-                                                      additionalRequirementQuestionsArray,
-                                                      ratioRequirementsArray
-                                                     ));
+                                                      qualificationLevel)
+                              {
+                                  FromWhichYear = fromWhichYear,
+                                  ToWhichYear = toWhichYear,
+                                  QualificationNumber = qualificationNumber,
+                                  AdditionalRequirements =
+                                      additionalRequirements,
+                                  AdditionalRequirementQuestions =
+                                      additionalRequirementQuestionsArray,
+                                  RatioRequirements = ratioRequirementsArray
+                              });
         }
 
         return listObjResult;

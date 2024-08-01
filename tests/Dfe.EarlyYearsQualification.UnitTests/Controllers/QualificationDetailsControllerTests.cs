@@ -141,8 +141,13 @@ public class QualificationDetailsControllerTests
             };
 
         const string qualificationId = "eyq-145";
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
-                                                    "ABC/547/900", "additonal requirements", null, null);
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements =
+                                          "additonal requirements" // Don't correct this typo -- "additonal requirements" -- it's intentional
+                                  };
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
         var result = await controller.Index(qualificationId);

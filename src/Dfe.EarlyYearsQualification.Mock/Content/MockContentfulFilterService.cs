@@ -39,12 +39,12 @@ public class MockContentfulFilterService : IContentFilterService
         return new Qualification(qualificationId,
                                  $"{qualificationId}-test",
                                  awardingOrganisation,
-                                 level,
-                                 startDate,
-                                 endDate,
-                                 "ghi/456/951",
-                                 "additional requirements",
-                                 null,
-                                 null);
+                                 level)
+               {
+                   FromWhichYear = startDate,
+                   ToWhichYear = endDate,
+                   QualificationNumber = "ghi/456/951",
+                   AdditionalRequirements = "additional requirements"
+               };
     }
 }
