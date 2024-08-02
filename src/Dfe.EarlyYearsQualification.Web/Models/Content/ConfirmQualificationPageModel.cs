@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -24,5 +23,5 @@ public class ConfirmQualificationPageModel
     public string QualificationLevel { get; init; } = string.Empty;
     public string QualificationAwardingOrganisation { get; init; } = string.Empty;
     public string QualificationDateAdded { get; init; } = string.Empty;
-    public NavigationLink? BackButton { get; init; }
+    public NavigationLinkModel? BackButton { get; init; }
 }

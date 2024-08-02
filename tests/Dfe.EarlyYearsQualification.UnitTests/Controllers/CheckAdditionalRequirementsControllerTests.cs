@@ -147,7 +147,11 @@ public class CheckAdditionalRequirementsControllerTests
         model!.Heading.Should().BeSameAs(pageContent.Heading);
         model.AwardingOrganisationLabel.Should().BeSameAs(pageContent.AwardingOrganisationLabel);
         model.AwardingOrganisation.Should().BeSameAs(qualification.AwardingOrganisationTitle);
-        model.BackButton.Should().BeSameAs(pageContent.BackButton);
+        model.BackButton.Should().NotBeNull();
+        model.BackButton.Should().BeOfType<NavigationLinkModel>();
+        model.BackButton!.Href.Should().BeSameAs(pageContent.BackButton!.Href);
+        model.BackButton.DisplayText.Should().BeSameAs(pageContent.BackButton.DisplayText);
+        model.BackButton.OpenInNewTab.Should().Be(pageContent.BackButton.OpenInNewTab);
         model.Answers.Should().NotBeNull();
         model.Answers.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
         model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);
@@ -301,7 +305,11 @@ public class CheckAdditionalRequirementsControllerTests
         model!.Heading.Should().BeSameAs(pageContent.Heading);
         model.AwardingOrganisationLabel.Should().BeSameAs(pageContent.AwardingOrganisationLabel);
         model.AwardingOrganisation.Should().BeSameAs(qualification.AwardingOrganisationTitle);
-        model.BackButton.Should().BeSameAs(pageContent.BackButton);
+        model.BackButton.Should().NotBeNull();
+        model.BackButton.Should().BeOfType<NavigationLinkModel>();
+        model.BackButton!.Href.Should().BeSameAs(pageContent.BackButton!.Href);
+        model.BackButton.DisplayText.Should().BeSameAs(pageContent.BackButton.DisplayText);
+        model.BackButton.OpenInNewTab.Should().Be(pageContent.BackButton.OpenInNewTab);
         model.Answers.Should().NotBeNull();
         model.Answers.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
         model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);

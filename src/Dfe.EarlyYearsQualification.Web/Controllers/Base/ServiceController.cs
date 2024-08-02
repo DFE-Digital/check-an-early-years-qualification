@@ -1,4 +1,6 @@
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Filters;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -11,4 +13,17 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Base;
 ///     and <see cref="HealthController" /> should derive from this type.
 /// </summary>
 [ServiceFilter<IChallengeResourceFilterAttribute>]
-public class ServiceController : Controller;
+public class ServiceController : Controller
+{
+    protected static NavigationLinkModel? MapToNavigationLinkModel(NavigationLink? navigationLink)
+    {
+        if (navigationLink is null) return null;
+        
+        return new NavigationLinkModel
+               {
+                   Href = navigationLink.Href,
+                   DisplayText = navigationLink.DisplayText,
+                   OpenInNewTab = navigationLink.OpenInNewTab
+               };
+    }
+}

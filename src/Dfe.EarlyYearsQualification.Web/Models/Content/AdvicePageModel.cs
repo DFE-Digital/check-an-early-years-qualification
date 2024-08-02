@@ -1,6 +1,4 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities;
-
-namespace Dfe.EarlyYearsQualification.Web.Models.Content;
+﻿namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class AdvicePageModel
 {
@@ -8,5 +6,5 @@ public class AdvicePageModel
 
     public string BodyContent { get; init; } = string.Empty;
 
-    public NavigationLink? BackButton { get; init; }
+    public NavigationLinkModel? BackButton { get; init; }
 }

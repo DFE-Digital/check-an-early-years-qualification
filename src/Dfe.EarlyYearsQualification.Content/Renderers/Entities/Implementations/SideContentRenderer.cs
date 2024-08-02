@@ -9,7 +9,7 @@ public class SideContentRenderer : HtmlModelRendererBase, ISideContentRenderer
     public SideContentRenderer()
     {
         Renderer.AddCommonRenderers()
-                .AddRenderer(new UnorderedListHyperlinksRenderer { Order = 18 });
+                .AddRenderer(new UnorderedListHyperlinksRenderer { Order = 19 });
     }
 
     public Task<string> ToHtml(Document? content)
