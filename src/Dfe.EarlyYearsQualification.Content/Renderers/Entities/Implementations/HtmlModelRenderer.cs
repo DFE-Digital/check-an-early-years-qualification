@@ -12,7 +12,7 @@ public class HtmlModelRenderer : HtmlModelRendererBase, IHtmlRenderer
     public HtmlModelRenderer()
     {
         Renderer.AddCommonRenderers()
-                .AddRenderer(new UnorderedListRenderer { Order = 18 });
+                .AddRenderer(new UnorderedListRenderer { Order = 19 });
     }
 
     public async Task<string> ToHtml(Document? content)

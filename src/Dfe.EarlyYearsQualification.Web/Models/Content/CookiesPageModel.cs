@@ -1,4 +1,3 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -13,10 +12,7 @@ public class CookiesPageModel
 
     public string ButtonText { get; init; } = string.Empty;
 
-    public string CookiesAnswer
-    {
-        get { return "CookiesAnswer"; }
-    }
+    public string CookiesAnswer => "CookiesAnswer";
 
     public string SuccessBannerHeading { get; init; } = string.Empty;
 
@@ -24,7 +20,7 @@ public class CookiesPageModel
 
     public string ErrorText { get; init; } = string.Empty;
 
-    public NavigationLink? BackButton { get; init; }
+    public NavigationLinkModel? BackButton { get; init; }
 
     public string FormHeading { get; init; } = string.Empty;
 }

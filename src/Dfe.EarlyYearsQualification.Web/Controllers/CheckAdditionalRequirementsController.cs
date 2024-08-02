@@ -94,7 +94,7 @@ public class CheckAdditionalRequirementsController(
         mappedModel.InformationMessage = content.InformationMessage;
         mappedModel.QualificationLevelLabel = content.QualificationLevelLabel;
         mappedModel.QuestionSectionHeading = content.QuestionSectionHeading;
-        mappedModel.BackButton = content.BackButton;
+        mappedModel.BackButton = MapToNavigationLinkModel(content.BackButton);
         mappedModel.AdditionalRequirementQuestions =
             await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions!);
         mappedModel.Answers = MapQuestionsToDictionary(qualification.AdditionalRequirementQuestions!, model);

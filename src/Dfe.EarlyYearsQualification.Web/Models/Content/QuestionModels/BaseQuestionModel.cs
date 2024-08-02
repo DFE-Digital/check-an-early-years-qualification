@@ -1,5 +1,3 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 public abstract class BaseQuestionModel
@@ -16,7 +14,7 @@ public abstract class BaseQuestionModel
 
     public bool HasErrors { get; set; }
 
-    public NavigationLink? BackButton { get; set; }
+    public NavigationLinkModel? BackButton { get; set; }
     
     public string ErrorBannerHeading { get; set; } = string.Empty;
 

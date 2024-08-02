@@ -1,7 +1,14 @@
+using Contentful.Core.Models;
+
 namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class NavigationLink
 {
+    /// <summary>
+    /// Contentful system properties
+    /// </summary>
+    public SystemProperties Sys { get; init; } = new();
+    
     /// <summary>
     ///     Display text (i.e. <a>{DisplayText}</a>)
     /// </summary>

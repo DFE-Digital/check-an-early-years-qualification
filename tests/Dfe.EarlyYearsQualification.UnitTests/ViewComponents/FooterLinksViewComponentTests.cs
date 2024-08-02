@@ -1,6 +1,7 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
@@ -32,7 +33,7 @@ public class FooterLinksViewComponentTests
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
         model.Should().NotBeNull();
 
-        var data = model as List<NavigationLink>;
+        var data = model as List<NavigationLinkModel>;
         data.Should().NotBeNull();
 
         data![0].DisplayText.Should().Be(navigationLink.DisplayText);
@@ -52,9 +53,9 @@ public class FooterLinksViewComponentTests
         result.Should().NotBeNull();
 
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
-        model.Should().NotBeNull().And.BeAssignableTo<IEnumerable<NavigationLink>>();
+        model.Should().NotBeNull().And.BeAssignableTo<IEnumerable<NavigationLinkModel>>();
 
-        var data = ((IEnumerable<NavigationLink>)model!).ToList();
+        var data = ((IEnumerable<NavigationLinkModel>)model!).ToList();
 
         data.Should().BeEmpty();
 

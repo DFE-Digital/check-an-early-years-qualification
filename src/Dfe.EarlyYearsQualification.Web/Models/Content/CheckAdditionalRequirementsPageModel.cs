@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -29,7 +28,7 @@ public class CheckAdditionalRequirementsPageModel
 
     public string CtaButtonText { get; set; } = string.Empty;
     
-    public NavigationLink? BackButton { get; set; }
+    public NavigationLinkModel? BackButton { get; set; }
 
     public List<AdditionalRequirementQuestionModel> AdditionalRequirementQuestions { get; set; } = [];
     
