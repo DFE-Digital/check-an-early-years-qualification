@@ -44,16 +44,15 @@ public class ChallengeResourceFilterAttribute(
     {
         get
         {
-            Thread.CurrentThread.Suspend();
+            lock (this)
+            {
+                var keys = configuration
+                           .GetSection("ServiceAccess")
+                           .GetSection("Keys")
+                           .Get<string[]>();
 
-            Thread.CurrentThread.Resume();
-            
-            var keys = configuration
-                       .GetSection("ServiceAccess")
-                       .GetSection("Keys")
-                       .Get<string[]>();
-
-            return keys == null ? [] : keys.Where(k => !string.IsNullOrWhiteSpace(k));
+                return keys == null ? [] : keys.Where(k => !string.IsNullOrWhiteSpace(k));
+            }
         }
     }
 
