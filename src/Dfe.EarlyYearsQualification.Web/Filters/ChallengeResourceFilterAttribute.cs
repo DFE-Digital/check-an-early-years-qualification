@@ -44,6 +44,10 @@ public class ChallengeResourceFilterAttribute(
     {
         get
         {
+            Thread.CurrentThread.Suspend();
+
+            Thread.CurrentThread.Resume();
+            
             var keys = configuration
                        .GetSection("ServiceAccess")
                        .GetSection("Keys")
