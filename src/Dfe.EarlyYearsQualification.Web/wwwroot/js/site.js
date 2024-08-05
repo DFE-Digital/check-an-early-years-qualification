@@ -4,12 +4,10 @@
 // Write your JavaScript code.
 function printButtonClicked()
 {
-    console.log('button clicked');
     $('.govuk-details').attr('open', 'open');
     window.print();
 }
 
 window.addEventListener("afterprint", (event) => {
-    console.log('after print');
     $('.govuk-details').removeAttr('open');
 })
