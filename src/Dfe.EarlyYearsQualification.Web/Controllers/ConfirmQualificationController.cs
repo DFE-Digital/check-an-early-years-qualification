@@ -112,7 +112,7 @@ public class ConfirmQualificationController(
                    QualificationId = qualification.QualificationId,
                    QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle,
                    QualificationDateAdded = qualification.FromWhichYear!,
-                   BackButton = content.BackButton
+                   BackButton = MapToNavigationLinkModel(content.BackButton)
                };
     }
 }

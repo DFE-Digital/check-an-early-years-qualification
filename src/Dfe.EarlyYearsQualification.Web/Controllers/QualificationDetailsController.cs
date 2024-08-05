@@ -205,7 +205,7 @@ public class QualificationDetailsController(
 
         return new QualificationListModel
                {
-                   BackButton = content.BackButton,
+                   BackButton = MapToNavigationLinkModel(content.BackButton),
                    Filters = filterModel,
                    Header = content.Header,
                    SingleQualificationFoundText = content.SingleQualificationFoundText,
@@ -285,7 +285,7 @@ public class QualificationDetailsController(
                    QualificationNumber = qualification.QualificationNumber,
                    AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
                    FromWhichYear = qualification.FromWhichYear,
-                   BackButton = content.BackButton,
+                   BackButton = MapToNavigationLinkModel(content.BackButton),
                    AdditionalRequirementQuestions =
                        await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
                    Content = new DetailsPageModel
@@ -307,7 +307,7 @@ public class QualificationDetailsController(
                                  RequirementsText = await htmlRenderer.ToHtml(content.RequirementsText),
                                  RatiosHeading = content.RatiosHeading,
                                  RatiosText = await htmlRenderer.ToHtml(content.RatiosText),
-                                 CheckAnotherQualificationLink = content.CheckAnotherQualificationLink,
+                                 CheckAnotherQualificationLink = MapToNavigationLinkModel(content.CheckAnotherQualificationLink),
                                  PrintButtonText = content.PrintButtonText,
                              }
                };

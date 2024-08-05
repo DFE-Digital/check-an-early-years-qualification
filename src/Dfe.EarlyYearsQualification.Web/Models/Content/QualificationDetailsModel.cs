@@ -8,7 +8,7 @@ public class QualificationDetailsModel : BasicQualificationModel
     
     public string? QualificationNumber { get; init; }
 
-    public NavigationLink? BackButton { get; init; }
+    public NavigationLinkModel? BackButton { get; init; }
 
     public DetailsPageModel? Content { get; init; }
 

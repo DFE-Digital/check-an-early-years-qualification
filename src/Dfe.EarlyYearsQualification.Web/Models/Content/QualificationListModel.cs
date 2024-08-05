@@ -1,5 +1,3 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class QualificationListModel
@@ -8,7 +6,7 @@ public class QualificationListModel
 
     public FilterModel Filters { get; init; } = new();
 
-    public NavigationLink? BackButton { get; init; }
+    public NavigationLinkModel? BackButton { get; init; }
 
     public string SingleQualificationFoundText { get; init; } = string.Empty;
 

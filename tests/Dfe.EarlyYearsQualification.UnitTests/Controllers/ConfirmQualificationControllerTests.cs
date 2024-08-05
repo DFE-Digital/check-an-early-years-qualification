@@ -161,7 +161,7 @@ public class ConfirmQualificationControllerTests
         var model = resultType!.Model as ConfirmQualificationPageModel;
         model.Should().NotBeNull();
 
-        model!.BackButton.Should().BeEquivalentTo(new NavigationLink
+        model!.BackButton.Should().BeEquivalentTo(new NavigationLinkModel
                                                   {
                                                       DisplayText = "Test back button",
                                                       OpenInNewTab = false,
@@ -332,7 +332,7 @@ public class ConfirmQualificationControllerTests
         var model = resultType!.Model as ConfirmQualificationPageModel;
         model.Should().NotBeNull();
 
-        model!.BackButton.Should().BeEquivalentTo(new NavigationLink
+        model!.BackButton.Should().BeEquivalentTo(new NavigationLinkModel
                                                   {
                                                       DisplayText = "Test back button",
                                                       OpenInNewTab = false,

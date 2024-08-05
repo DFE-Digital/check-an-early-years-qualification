@@ -30,6 +30,15 @@ public static class NestedContentHelper
                 case Text t:
                     sb.Append(t.Value);
                     continue;
+                
+                case EntryStructure cn:
+                    if (new ExternalNavigationLinkRenderer().SupportsContent(cn))
+                    {
+                        var renderer = new ExternalNavigationLinkRenderer();
+                        var text = await renderer.RenderAsync(cn);
+                        sb.Append(text);
+                    }
+                    continue;
             }
         }
 

@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
@@ -10,8 +11,9 @@ public class FooterLinksViewComponent(IContentService contentService, ILogger<Fo
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var navigationLinks = await GetNavigationLinksAsync();
+        var navigationLinkModels = MapToNavigationLinkModels(navigationLinks);
 
-        return View(navigationLinks);
+        return View(navigationLinkModels);
     }
 
     private async Task<IEnumerable<NavigationLink>> GetNavigationLinksAsync()
@@ -26,5 +28,21 @@ public class FooterLinksViewComponent(IContentService contentService, ILogger<Fo
 
             return await Task.FromResult(Array.Empty<NavigationLink>().AsEnumerable());
         }
+    }
+    
+    private static IEnumerable<NavigationLinkModel> MapToNavigationLinkModels(IEnumerable<NavigationLink> navigationLinks)
+    {
+        var results = new List<NavigationLinkModel>();
+        foreach (var navigationLink in navigationLinks)
+        {
+            results.Add(new NavigationLinkModel()
+                        {
+                            DisplayText = navigationLink.DisplayText,
+                            OpenInNewTab = navigationLink.OpenInNewTab,
+                            Href = navigationLink.Href
+                        });
+        }
+
+        return results.AsEnumerable();
     }
 }
