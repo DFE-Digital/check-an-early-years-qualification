@@ -62,3 +62,14 @@ body {
 .govuk-skip-link:focus {
     margin-bottom: 0!important;
 }
+
+.print-button {
+    background: url(../assets/images/icon-print.png) no-repeat 10px 50%;
+    background-size: 16px 18px;
+    padding: 10px 10px 10px 36px;
+    text-decoration: none;
+    border: 1px solid #b1b4b6;
+    color: #1d70b8;
+    cursor: pointer;
+    margin: 0;
+}

@@ -74,6 +74,12 @@ public static class SecureHeaderConfiguration
         
         var ga4CspElement = new ContentSecurityPolicyElement
                             { CommandType = CspCommandType.Uri, DirectiveOrUri = "*.google-analytics.com" };
+
+        var windowPrint = new ContentSecurityPolicyElement
+                          {
+                              CommandType = CspCommandType.Directive,
+                              DirectiveOrUri = "sha256-/rCCQAYo5nH3kqWMvdaSato3ShxLfLrkODJIMZPKHSg="
+                          };
         
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
@@ -86,7 +92,8 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmInjectedScriptCspElement);
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
-
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowPrint);
+        
         return configuration;
     }
 }

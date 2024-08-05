@@ -39,4 +39,6 @@ public class DetailsPage
     public Document? RequirementsText { get; init; }
     
     public NavigationLink? CheckAnotherQualificationLink { get; init; }
+
+    public string PrintButtonText { get; init; } = string.Empty;
 }
