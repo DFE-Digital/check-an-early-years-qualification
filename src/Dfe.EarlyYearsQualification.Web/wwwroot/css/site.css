@@ -83,9 +83,3 @@ body {
 .no-padding-right {
     padding-right: 0 !important;
 }
-
-@media print {
-    details {
-        display: block;
-    }
-}
