@@ -1,4 +1,5 @@
 using System.Globalization;
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
@@ -90,7 +91,7 @@ public class QualificationDetailsController(
             return validateAdditionalRequirementQuestions.actionResult!;
 
         // If all the additional requirement checks pass, then we can go to check each level individually
-        CheckRatioRequirements(startDateYear.Value, qualification, model);
+        await CheckRatioRequirements(startDateYear.Value, qualification, model);
 
         return View(model);
     }
@@ -141,31 +142,70 @@ public class QualificationDetailsController(
                  select question).Any();
     }
 
-    private void CheckRatioRequirements(int startDateYear, Qualification qualification, QualificationDetailsModel model)
+    private async Task CheckRatioRequirements(int startDateYear, Qualification qualification, QualificationDetailsModel model)
     {
         // Build up property name to check for each level
-        var propertyToCheck =
-            $"FullAndRelevantForLevel{qualification.QualificationLevel}{(startDateYear > 2014 ? "After" : "Before")}2014";
+        var beforeOrAfter = startDateYear > 2014 ? "After" : "Before";
+        var fullAndRelevantPropertyToCheck =
+            $"FullAndRelevantForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
+
+        var additionalRequirementDetailPropertyToCheck =
+            $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
+
+        const string additionalRequirementHeading = "RequirementHeading";
 
         model.RatioRequirements.ApprovedForLevel2 =
-            CheckRatio(propertyToCheck, RatioRequirements.Level2RatioRequirementName, qualification);
+            GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level2RatioRequirementName, qualification);
+
+        var requirementsForLevel2 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
+                                                             RatioRequirements.Level2RatioRequirementName,
+                                                             qualification);
+        model.RatioRequirements.RequirementsForLevel2 = await htmlRenderer.ToHtml(requirementsForLevel2);
+        
+        model.RatioRequirements.RequirementsHeadingForLevel2 =
+            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level2RatioRequirementName, qualification);
 
         model.RatioRequirements.ApprovedForLevel3 =
-            CheckRatio(propertyToCheck, RatioRequirements.Level3RatioRequirementName, qualification);
+            GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level3RatioRequirementName, qualification);
+        
+        var requirementsForLevel3 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
+                                                               RatioRequirements.Level3RatioRequirementName,
+                                                               qualification);
+        model.RatioRequirements.RequirementsForLevel3 = await htmlRenderer.ToHtml(requirementsForLevel3);
+        
+        model.RatioRequirements.RequirementsHeadingForLevel3 =
+            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level3RatioRequirementName, qualification);
 
         model.RatioRequirements.ApprovedForLevel6 =
-            CheckRatio(propertyToCheck, RatioRequirements.Level6RatioRequirementName, qualification);
+            GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level6RatioRequirementName, qualification);
+        
+        var requirementsForLevel6 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
+                                                               RatioRequirements.Level6RatioRequirementName,
+                                                               qualification);
+        model.RatioRequirements.RequirementsForLevel6 = await htmlRenderer.ToHtml(requirementsForLevel6);
+        
+        model.RatioRequirements.RequirementsHeadingForLevel6 =
+            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level6RatioRequirementName, qualification);
 
-        model.RatioRequirements.ApprovedForUnqualified = true;
+        model.RatioRequirements.ApprovedForUnqualified = 
+            GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.UnqualifiedRatioRequirementName, qualification);
+        
+        var requirementsForUnqualified = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
+                                                               RatioRequirements.UnqualifiedRatioRequirementName,
+                                                               qualification);
+        model.RatioRequirements.RequirementsForUnqualified = await htmlRenderer.ToHtml(requirementsForUnqualified);
+        
+        model.RatioRequirements.RequirementsHeadingForUnqualified =
+            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName, qualification);
     }
-
-    private bool CheckRatio(string propertyToCheck, string ratioName, Qualification qualification)
+    
+    private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
     {
         try
         {
             var requirement = qualification.RatioRequirements!.Find(x => x.RatioRequirementName == ratioName);
 
-            return (bool)requirement!.GetType().GetProperty(propertyToCheck)!.GetValue(requirement, null)!;
+            return (T)requirement!.GetType().GetProperty(propertyToCheck)!.GetValue(requirement, null)!;
         }
         catch
         {

@@ -1,5 +1,6 @@
 @model Dfe.EarlyYearsQualification.Web.Models.RatioRowModel
 
+
 <div class="govuk-summary-list__row ratio-row" id="@{@Model.LevelText}_row">
     <dt class="govuk-summary-list__key govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
         <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
@@ -24,4 +25,12 @@
             }
         </div>
     </dd>
+    @if (!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody) && !string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationHeader))
+    {
+        /*<div class="govuk-summary-list__row">
+            <dd class="govuk-summary-list__value govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">*/
+        await Html.RenderPartialAsync("Partials/AdditionalInformation", Model.AdditionalInformation);
+        /*</dd>
+    </div>*/
+    }
 </div>

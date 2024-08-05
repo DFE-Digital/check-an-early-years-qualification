@@ -64,14 +64,22 @@
         @Html.Raw(Model.Content.RatiosText)
         <dl class="govuk-summary-list">
             @{
-                if (Model.RatioRequirements.ApprovedForLevel2 || Model.RatioRequirements.ApprovedForLevel3 || Model.RatioRequirements.ApprovedForLevel6)
+                if (Model.RatioRequirements.ApprovedForLevel2 
+                    || Model.RatioRequirements.ApprovedForLevel3 
+                    || Model.RatioRequirements.ApprovedForLevel6 
+                    || Model.RatioRequirements.ApprovedForUnqualified)
                 {
                     if (Model.RatioRequirements.ApprovedForLevel6)
                     {
                         await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                            {
                                                                                LevelText = "Level 6",
-                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel6
+                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel6,
+                                                                               AdditionalInformation = new AdditionalInformationModel
+                                                                                                       {
+                                                                                                           AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel6,
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel6
+                                                                                                       }
                                                                            });
                     }
                     
@@ -80,7 +88,12 @@
                         await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                            {
                                                                                LevelText = "Level 3",
-                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel3
+                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel3,
+                                                                               AdditionalInformation = new AdditionalInformationModel
+                                                                                                       {
+                                                                                                           AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel3,
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel3
+                                                                                                       }
                                                                            });
                     }
                     
@@ -89,26 +102,46 @@
                         await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                            {
                                                                                LevelText = "Level 2",
-                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel2
+                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel2,
+                                                                               AdditionalInformation = new AdditionalInformationModel
+                                                                                                       {
+                                                                                                           AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel2,
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel2
+                                                                                                       }
+                                                                           });
+                    }
+                    
+                    if (Model.RatioRequirements.ApprovedForUnqualified)
+                    {
+                        await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
+                                                                           {
+                                                                               LevelText = "Unqualified",
+                                                                               IsApproved = Model.RatioRequirements.ApprovedForUnqualified,
+                                                                               AdditionalInformation = new AdditionalInformationModel
+                                                                                                       {
+                                                                                                           AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForUnqualified,
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForUnqualified
+                                                                                                       }
                                                                            });
                     }
                 }
                 
-                // Unqualified ratio should always show as approved 
-                await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
-                                                                   {
-                                                                       LevelText = "Unqualified",
-                                                                       IsApproved = true
-                                                                   });
-                
-                if (!Model.RatioRequirements.ApprovedForLevel2 || !Model.RatioRequirements.ApprovedForLevel3 || !Model.RatioRequirements.ApprovedForLevel6)
+                if (!Model.RatioRequirements.ApprovedForLevel2 
+                    || !Model.RatioRequirements.ApprovedForLevel3 
+                    || !Model.RatioRequirements.ApprovedForLevel6
+                    || !Model.RatioRequirements.ApprovedForUnqualified)
                 {
                     if (!Model.RatioRequirements.ApprovedForLevel6)
                     {
                         await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                            {
                                                                                LevelText = "Level 6",
-                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel6
+                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel6,
+                                                                               AdditionalInformation = new AdditionalInformationModel
+                                                                                                       {
+                                                                                                           AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel6,
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel6
+                                                                                                       }
                                                                            });
                     }
                     
@@ -117,7 +150,12 @@
                         await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                            {
                                                                                LevelText = "Level 3",
-                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel3
+                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel3,
+                                                                               AdditionalInformation = new AdditionalInformationModel
+                                                                                                       {
+                                                                                                           AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel3,
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel3
+                                                                                                       }
                                                                            });
                     }
                     
@@ -126,7 +164,26 @@
                         await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                            {
                                                                                LevelText = "Level 2",
-                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel2
+                                                                               IsApproved = Model.RatioRequirements.ApprovedForLevel2,
+                                                                               AdditionalInformation = new AdditionalInformationModel
+                                                                                                       {
+                                                                                                           AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel2,
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel2
+                                                                                                       }
+                                                                           });
+                    }
+                    
+                    if (!Model.RatioRequirements.ApprovedForUnqualified)
+                    {
+                        await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
+                                                                           {
+                                                                               LevelText = "Unqualified",
+                                                                               IsApproved = Model.RatioRequirements.ApprovedForUnqualified,
+                                                                               AdditionalInformation = new AdditionalInformationModel
+                                                                                                       {
+                                                                                                           AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForUnqualified,
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForUnqualified
+                                                                                                       }
                                                                            });
                     }
                 }

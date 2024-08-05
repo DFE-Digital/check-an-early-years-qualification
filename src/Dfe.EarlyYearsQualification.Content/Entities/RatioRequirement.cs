@@ -34,6 +34,8 @@ public class RatioRequirement
     
     public bool FullAndRelevantForLevel7After2014 { get; set; }
 
+    public string RequirementHeading { get; set; } = string.Empty;
+
     public Document? RequirementForLevel2Before2014 { get; set; }
     
     public Document? RequirementForLevel2After2014 { get; set; }
