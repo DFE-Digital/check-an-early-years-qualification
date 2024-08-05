@@ -77,7 +77,7 @@ describe("A spec used to test the qualification details page", () => {
     cy.get(".govuk-tag").eq(4).should("have.class", "govuk-tag--red");
   })
   
-  it("Clicking the print button bring up the print dialog", () => {
+  it("Clicking the print button brings up the print dialog", () => {
     cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D');
     cy.visit("/qualifications/qualification-details/eyq-240");
 
