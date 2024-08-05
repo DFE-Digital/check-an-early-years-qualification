@@ -37,4 +37,6 @@ public class DetailsPageModel
     public string FurtherInfoText { get; init; } = string.Empty;
 
     public NavigationLink? CheckAnotherQualificationLink { get; init; }
+
+    public string PrintButtonText { get; init; } = string.Empty;
 }

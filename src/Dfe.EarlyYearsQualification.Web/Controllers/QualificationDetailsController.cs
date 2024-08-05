@@ -307,7 +307,8 @@ public class QualificationDetailsController(
                                  RequirementsText = await htmlRenderer.ToHtml(content.RequirementsText),
                                  RatiosHeading = content.RatiosHeading,
                                  RatiosText = await htmlRenderer.ToHtml(content.RatiosText),
-                                 CheckAnotherQualificationLink = content.CheckAnotherQualificationLink
+                                 CheckAnotherQualificationLink = content.CheckAnotherQualificationLink,
+                                 PrintButtonText = content.PrintButtonText,
                              }
                };
     }
