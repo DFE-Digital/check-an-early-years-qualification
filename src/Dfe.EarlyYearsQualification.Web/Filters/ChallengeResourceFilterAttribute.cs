@@ -44,15 +44,12 @@ public class ChallengeResourceFilterAttribute(
     {
         get
         {
-            lock (this)
-            {
-                var keys = configuration
+            var keys = configuration
                            .GetSection("ServiceAccess")
                            .GetSection("Keys")
                            .Get<string[]>();
 
-                return keys == null ? [] : keys.Where(k => !string.IsNullOrWhiteSpace(k));
-            }
+            return keys == null ? [] : keys.Where(k => !string.IsNullOrWhiteSpace(k));
         }
     }
 
