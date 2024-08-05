@@ -10,7 +10,7 @@ public class Heading2Renderer : IContentRenderer
     {
         var heading = content as Heading2;
         var headingText = heading!.Content[0] as Text;
-        return Task.FromResult($"<h2 class='govuk-heading-m'>{headingText!.Value}</h2>");
+        return Task.FromResult($"<h2 class='govuk-heading-l'>{headingText!.Value}</h2>");
     }
 
     public bool SupportsContent(IContent content)

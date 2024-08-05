@@ -73,3 +73,13 @@ body {
     cursor: pointer;
     margin: 0;
 }
+
+.govuk-\!-width-one-half {
+    width: 49% !important;
+    padding: 0 15px;
+    display: inline-block;
+}
+
+.no-padding-right {
+    padding-right: 0 !important;
+}
