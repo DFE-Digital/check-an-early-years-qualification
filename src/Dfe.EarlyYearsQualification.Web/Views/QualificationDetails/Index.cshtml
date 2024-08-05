@@ -193,7 +193,7 @@
         @Html.Raw(Model.Content!.RequirementsText)
 
         <div class="govuk-!-static-margin-top-6">
-            <button id="print-button" onclick="window.print();" class="govuk-link govuk-body-s print-button">@Model.Content!.PrintButtonText</button>
+            <button id="print-button" onclick="printButtonClicked();" class="govuk-link govuk-body-s print-button">@Model.Content!.PrintButtonText</button>
         </div>
 
         <p class="govuk-body govuk-!-static-margin-top-6">
