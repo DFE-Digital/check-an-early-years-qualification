@@ -68,7 +68,7 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
                {
                    Heading = advicePage.Heading,
                    BodyContent = await renderer.ToHtml(advicePage.Body),
-                   BackButton = advicePage.BackButton
+                   BackButton = MapToNavigationLinkModel(advicePage.BackButton)
                };
     }
 }
