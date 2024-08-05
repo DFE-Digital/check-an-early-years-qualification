@@ -45,9 +45,9 @@ public class ChallengeResourceFilterAttribute(
         get
         {
             var keys = configuration
-                           .GetSection("ServiceAccess")
-                           .GetSection("Keys")
-                           .Get<string[]>();
+                       .GetSection("ServiceAccess")
+                       .GetSection("Keys")
+                       .Get<string[]>();
 
             return keys == null ? [] : keys.Where(k => !string.IsNullOrWhiteSpace(k));
         }
