@@ -24,7 +24,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -35,13 +35,13 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
-                                                        "Pearson",
+                                                        AwardingOrganisations.Pearson,
                                                         3,
                                                         null,
                                                         "Aug-19",
                                                         "def/456/951",
                                                         "requirements",
-                                                        null, 
+                                                        null,
                                                         null)
                                   }
                       };
@@ -80,7 +80,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -125,7 +125,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -152,7 +152,7 @@ public class ContentfulContentFilterServiceTests
                 QueryBuilder = mockQueryBuilder
             };
 
-        await filterService.GetFilteredQualifications(null, null, null, "NCFE", null);
+        await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Ncfe, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
         queryString.Count.Should().Be(2);
@@ -171,7 +171,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -182,7 +182,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
-                                                        "Pearson",
+                                                        AwardingOrganisations.Pearson,
                                                         4,
                                                         null,
                                                         "Aug-19",
@@ -193,7 +193,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-752",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Sep-21",
                                                         null,
@@ -238,7 +238,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -249,7 +249,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
-                                                        "Pearson",
+                                                        AwardingOrganisations.Pearson,
                                                         4,
                                                         null,
                                                         "Aug-19",
@@ -260,7 +260,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-752",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Sep-21",
                                                         null,
@@ -305,7 +305,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -316,7 +316,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
-                                                        "Pearson",
+                                                        AwardingOrganisations.Pearson,
                                                         4,
                                                         null,
                                                         "Sep-19",
@@ -327,7 +327,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-746",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Sep-15",
                                                         null,
@@ -338,7 +338,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-752",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Sep-21",
                                                         null,
@@ -383,7 +383,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "aug-19",
@@ -394,7 +394,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-741",
                                                         "test",
-                                                        "Pearson",
+                                                        AwardingOrganisations.Pearson,
                                                         4,
                                                         null,
                                                         "seP-19",
@@ -405,7 +405,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-746",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "sEp-15",
                                                         null,
@@ -416,7 +416,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-752",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "SEP-21",
                                                         null,
@@ -482,7 +482,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Sep15", // We expect Mmm-yy, e.g. "Sep-15"
                                                         "Aug-19",
@@ -524,7 +524,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Sept-15", // "Sept" in the data: we expect "Sep"
                                                         "Aug-19",
@@ -566,7 +566,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Sep-15",
                                                         "Aug-1a", // invalid year typo
@@ -608,7 +608,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "Pearson",
+                                                        AwardingOrganisations.Pearson,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -654,7 +654,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "Pearson",
+                                                        AwardingOrganisations.Pearson,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -746,7 +746,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -838,7 +838,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -930,7 +930,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -981,7 +981,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         technicalDiplomaInChildCare,
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -992,7 +992,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "Diploma in Early Years Child Care",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -1044,7 +1044,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         technicalDiplomaInChildCare,
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -1055,7 +1055,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "Diploma in Early Years Child Care",
-                                                        "CACHE",
+                                                        AwardingOrganisations.Cache,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
