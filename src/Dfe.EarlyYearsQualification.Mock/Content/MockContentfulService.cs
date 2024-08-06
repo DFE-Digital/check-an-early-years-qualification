@@ -9,6 +9,7 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 public class MockContentfulService : IContentService
 {
     private const string WhereWasTheQualificationAwardedPath = "/questions/where-was-the-qualification-awarded";
+    private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -39,7 +40,7 @@ public class MockContentfulService : IContentService
                    AdvicePages.QualificationsStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
-                                                            body, "/questions/what-level-is-the-qualification")),
+                                                            body, WhatLevelIsTheQualificationPath)),
 
                    AdvicePages.QualificationsAchievedInScotland =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Scotland",
@@ -56,6 +57,12 @@ public class MockContentfulService : IContentService
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
                                                               body, "/qualifications")),
+                   
+                   AdvicePages.QualificationLevel7 =>
+                       await Task.FromResult(CreateAdvicePage("Qualification at Level 7",
+                                                              body,
+                                                              WhatLevelIsTheQualificationPath)),
+
                    _ => null
                };
     }
