@@ -187,19 +187,50 @@ describe('A spec used to test the various routes through the journey', () => {
 
     // click not on the list link
     cy.get('a[href="/advice/qualification-not-on-the-list"]').click();
-    
+
     // qualification not on the list page
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/advice/qualification-not-on-the-list');
     })
 
-    cy.get('#advice-page-heading').should("contain.text", "Qualification not on the list");
+    it("Selecting qualification level 7 should navigate to the level 7 advice page", () => {
+      // home page
+      cy.get('.govuk-button--start').click();
+
+      // where-was-the-qualification-awarded page
+      cy.location().should((loc) => {
+        expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+      })
+
+      cy.get('#england').click();
+      cy.get('button[id="question-submit"]').click();
+
+      // when-was-the-qualification-started page
+      cy.location().should((loc) => {
+        expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
+      })
+
+      cy.get('#date-started-month').type("6");
+      cy.get('#date-started-year').type("2022");
+      cy.get('button[id="question-submit"]').click();
+
+      // what-level-is-the-qualification page
+      cy.location().should((loc) => {
+        expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+      })
+      cy.get('#7').click();
+      cy.get('button[id="question-submit"]').click();
+
+      // level 7 advice page
+      cy.location().should((loc) => {
+        expect(loc.pathname).to.eq('/advice/qualification-level-7');
+      })
     
-    // check back button goes back to the qualifications list page
+    // check back button goes back to the what level is the qualification page
     cy.get('#back-button').click();
 
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/qualifications');
+      expect(loc.pathname).to.eq('questions/what-level-is-the-qualification');
     })
   })
 
