@@ -45,7 +45,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_QualificationsAchievedInScotland_ReturnsExpectedDetails()
     {
@@ -58,7 +58,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_QualificationsAchievedInWales_ReturnsExpectedDetails()
     {
@@ -71,7 +71,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_QualificationsAchievedInNorthernIreland_ReturnsExpectedDetails()
     {
@@ -84,7 +84,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_QualificationNotOnTheList_ReturnsExpectedDetails()
     {
@@ -97,7 +97,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_QualificationLevel7_ReturnsExpectedDetails()
     {
@@ -292,11 +292,13 @@ public class MockContentfulServiceTests
         result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.Options.Should().NotBeNullOrEmpty();
-        result.Options.Count.Should().Be(2);
+        result.Options.Count.Should().Be(3);
         result.Options[0].Label.Should().Be("Level 2");
         result.Options[0].Value.Should().Be("2");
         result.Options[1].Label.Should().Be("Level 3");
         result.Options[1].Value.Should().Be("3");
+        result.Options[2].Label.Should().Be("Level 7");
+        result.Options[2].Value.Should().Be("7");
     }
 
     [TestMethod]
@@ -502,11 +504,11 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CheckAdditionalRequirementsPage>();
         result!.BackButton.Should().BeEquivalentTo(new NavigationLink
-                                                          {
-                                                              DisplayText = "Back",
-                                                              OpenInNewTab = false,
-                                                              Href = "/"
-                                                          });
+                                                   {
+                                                       DisplayText = "Back",
+                                                       OpenInNewTab = false,
+                                                       Href = "/"
+                                                   });
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorSummaryHeading.Should().NotBeNullOrEmpty();
         result.Heading.Should().NotBeNullOrEmpty();

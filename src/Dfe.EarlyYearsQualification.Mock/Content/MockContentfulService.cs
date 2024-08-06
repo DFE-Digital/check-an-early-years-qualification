@@ -57,7 +57,7 @@ public class MockContentfulService : IContentService
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
                                                               body, "/qualifications")),
-                   
+
                    AdvicePages.QualificationLevel7 =>
                        await Task.FromResult(CreateAdvicePage("Qualification at Level 7",
                                                               body,
@@ -495,6 +495,10 @@ public class MockContentfulService : IContentService
                           new()
                           {
                               Label = "Level 3", Value = "3"
+                          },
+                          new()
+                          {
+                              Label = "Level 7", Value = "7"
                           }
                       };
         return CreateRadioQuestionPage("What level is the qualification?", options,
