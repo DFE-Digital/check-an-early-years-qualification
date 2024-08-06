@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -235,7 +236,7 @@ public class UserJourneyCookieServiceTests
     {
         var existingModel = new UserJourneyModel
                             {
-                                WhatIsTheAwardingOrganisation = "NCFE"
+                                WhatIsTheAwardingOrganisation = AwardingOrganisations.Ncfe
                             };
         var mockHttpContextAccessor = SetHttpContextWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
@@ -244,7 +245,7 @@ public class UserJourneyCookieServiceTests
 
         var model = service.GetAwardingOrganisation();
 
-        model.Should().Be("NCFE");
+        model.Should().Be(AwardingOrganisations.Ncfe);
     }
 
     [TestMethod]
@@ -407,7 +408,7 @@ public class UserJourneyCookieServiceTests
 
         CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
     }
-    
+
     [TestMethod]
     public void SetAdditionalQuestionsAnswers_CookieHasValidValue_ReturnsValue()
     {

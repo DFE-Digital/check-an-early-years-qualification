@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
@@ -131,12 +132,13 @@ public class QualificationDetailsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
-        
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
+                                                    2, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, null);
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        
+
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, null));
 
         var controller =
@@ -181,13 +183,14 @@ public class QualificationDetailsControllerTests
         // Mismatch between the two lists here to simulate questions not being answered
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>();
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
+                                                    2, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", listOfAdditionalReqs,
                                                     null);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        
+
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
@@ -217,7 +220,8 @@ public class QualificationDetailsControllerTests
     [DataRow("yes", "yes")]
     [DataRow("no", "yes")]
     public async Task
-        Index_Index_QualificationHasAdditionalQuestionsButAnswersAreNotCorrect_MarkAsNotRelevantAndReturn(string answer1, string answer2)
+        Index_Index_QualificationHasAdditionalQuestionsButAnswersAreNotCorrect_MarkAsNotRelevantAndReturn(
+            string answer1, string answer2)
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -225,7 +229,7 @@ public class QualificationDetailsControllerTests
         var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
         var mockHtmlRenderer = new Mock<IHtmlRenderer>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        
+
         const string qualificationId = "eyq-145";
 
         var listOfAdditionalReqs = new List<AdditionalRequirementQuestion>
@@ -243,19 +247,20 @@ public class QualificationDetailsControllerTests
                                    };
 
         // Question has been answered, but the answer is not what we want for the qualification to be full and relevant
-        var listOfAdditionalReqsAnswered = new Dictionary<string, string>()
+        var listOfAdditionalReqsAnswered = new Dictionary<string, string>
                                            {
                                                { "Some Question", answer1 },
                                                { "Another Question", answer2 }
                                            };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", 2, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
+                                                    2, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", listOfAdditionalReqs,
                                                     null);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
-        
+
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
@@ -312,7 +317,8 @@ public class QualificationDetailsControllerTests
 
         var ratioRequirements = new List<RatioRequirement>();
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", level, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
+                                                    level, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
@@ -358,7 +364,8 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", level, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
+                                                    level, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
@@ -409,7 +416,8 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", level, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
+                                                    level, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
@@ -474,7 +482,8 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", "NCFE", level, "2014", "2019",
+        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
+                                                    level, "2014", "2019",
                                                     "ABC/547/900", "additional requirements", null, ratioRequirements);
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
@@ -492,7 +501,7 @@ public class QualificationDetailsControllerTests
                                         HttpContext = new DefaultHttpContext()
                                     }
             };
-        
+
         var result = await controller.Index(qualificationId);
 
         result.Should().NotBeNull();
