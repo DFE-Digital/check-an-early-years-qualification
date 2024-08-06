@@ -158,7 +158,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,NCFE");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe}");
     }
 
     [TestMethod]
@@ -641,7 +641,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,Edexcel (now Pearson Education Ltd),Pearson Education Ltd");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Edexcel},{AwardingOrganisations.Pearson}");
     }
 
     [TestMethod]
@@ -687,7 +687,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,Edexcel (now Pearson Education Ltd),Pearson Education Ltd");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Edexcel},{AwardingOrganisations.Pearson}");
     }
 
     [TestMethod]
@@ -700,7 +700,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -733,7 +733,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,NCFE");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe}");
     }
 
     [TestMethod]
@@ -779,7 +779,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,CACHE Council for Awards in Care Health and Education");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Cache}");
     }
 
     [TestMethod]
@@ -792,7 +792,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -825,7 +825,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,NCFE");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe}");
     }
 
     [TestMethod]
@@ -871,7 +871,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,CACHE Council for Awards in Care Health and Education");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Cache}");
     }
 
     [TestMethod]
@@ -884,7 +884,7 @@ public class ContentfulContentFilterServiceTests
                                       new Qualification(
                                                         "EYQ-123",
                                                         "test",
-                                                        "NCFE",
+                                                        AwardingOrganisations.Ncfe,
                                                         4,
                                                         "Apr-15",
                                                         "Aug-19",
@@ -917,7 +917,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,NCFE,CACHE Council for Awards in Care Health and Education");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe},{AwardingOrganisations.Cache}");
     }
 
     [TestMethod]
@@ -963,7 +963,7 @@ public class ContentfulContentFilterServiceTests
         queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     "All Higher Education Institutes,Various Awarding Organisations,NCFE,CACHE Council for Awards in Care Health and Education");
+                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe},{AwardingOrganisations.Cache}");
     }
 
     [TestMethod]
