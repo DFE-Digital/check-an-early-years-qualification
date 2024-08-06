@@ -38,4 +38,11 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Qualifications achieved in Northern Ireland");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
     })
+    
+    it("Checks the Qualifications level 7 details are on the page", () => {
+        cy.visit("/advice/qualification-level-7");
+        
+        cy.get("#advice-page-heading").should("contain.text", "Qualification at Level 7");
+        cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
+    })
 })
