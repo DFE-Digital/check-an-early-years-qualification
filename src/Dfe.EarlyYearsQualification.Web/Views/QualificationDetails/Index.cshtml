@@ -1,4 +1,5 @@
-﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.QualificationDetailsModel
+﻿@using System.Globalization
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QualificationDetailsModel
 
 @{
     ViewData["Title"] = $"Qualification Details - {Model.QualificationId}";
@@ -49,6 +50,20 @@
                     @Model.FromWhichYear
                 </dd>
             </div>
+            @if (Model.AdditionalRequirementAnswers != null)
+            {
+                foreach (var answer in Model.AdditionalRequirementAnswers)
+                {
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key" id="@answer.Question-label">
+                            @answer.Question
+                        </dt>
+                        <dd class="govuk-summary-list__value" id="@answer.Question-value">
+                            @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(answer.Answer!.ToLower())
+                        </dd>
+                    </div>
+                }
+            }
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key" id="date-of-check-label">
                     @Model.Content.DateOfCheckLabel
