@@ -11,7 +11,13 @@ export const pages = [
   "/qualifications",
   "/confirm-qualification/EYQ-240",
   "/qualifications/qualification-details/EYQ-240",
-  "/qualifications/check-additional-questions/EYQ-240"
+  "/qualifications/check-additional-questions/EYQ-240",
+  "/advice/qualifications-achieved-in-scotland",
+  "/advice/qualifications-achieved-in-wales",
+  "/advice/qualifications-achieved-in-northern-ireland",
+  "/advice/qualification-not-on-the-list",
+  "/advice/level-6-qualification-pre-2014",
+  "/advice/level-6-qualification-post-2014"
 ];
 
 export const pagesWithForms = [
@@ -35,4 +41,6 @@ export const pagesWithoutForms = [
   "/advice/qualifications-achieved-in-wales",
   "/advice/qualifications-achieved-in-northern-ireland",
   "/advice/qualification-not-on-the-list",
+  "/advice/level-6-qualification-pre-2014",
+  "/advice/level-6-qualification-post-2014"
 ]

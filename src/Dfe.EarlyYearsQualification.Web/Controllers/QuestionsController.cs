@@ -138,6 +138,12 @@ public class QuestionsController(
             return RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice");
         }
 
+        if (model.Option == "6")
+        {
+            var isPre2014 = WasAwardedBeforeSeptember2014();
+            return RedirectToAction(isPre2014 ? "Level6QualificationPre2014" : "Level6QualificationPost2014", "Advice");
+        }
+
         return RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation));
     }
 
@@ -187,6 +193,19 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
+    private bool WasAwardedBeforeSeptember2014()
+    {
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+
+        if (startDateMonth is null || startDateYear is null)
+        {
+            return false;
+        }
+
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date < new DateOnly(2014, 9, 1);
+    }
+    
     private bool WasAwardedBetweenSeptember2014AndAugust2019()
     {
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();

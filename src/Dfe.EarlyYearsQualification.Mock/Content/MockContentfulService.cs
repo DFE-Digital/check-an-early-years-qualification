@@ -56,6 +56,14 @@ public class MockContentfulService : IContentService
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
                                                               body, "/qualifications")),
+                   
+                   AdvicePages.Level6QualificationPre2014 =>
+                       await Task.FromResult(CreateAdvicePage("Level 6 qualification pre 2014",
+                                                              body, "/questions/what-level-is-the-qualification")),
+                   
+                   AdvicePages.Level6QualificationPost2014 =>
+                       await Task.FromResult(CreateAdvicePage("Level 6 qualification post 2014",
+                                                              body, "/questions/what-level-is-the-qualification")),
                    _ => null
                };
     }
