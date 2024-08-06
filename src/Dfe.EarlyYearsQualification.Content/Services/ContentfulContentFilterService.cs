@@ -61,8 +61,8 @@ public class ContentfulContentFilterService(
         {
             var awardingOrganisations = new List<string>
                                         {
-                                            "All Higher Education Institutes",
-                                            "Various Awarding Organisations"
+                                            AwardingOrganisations.AllHigherEducation,
+                                            AwardingOrganisations.Various
                                         };
             awardingOrganisations.AddRange(IncludeLinkedOrganisations(awardingOrganisation, startDateMonth,
                                                                       startDateYear));
