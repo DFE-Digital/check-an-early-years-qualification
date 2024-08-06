@@ -10,7 +10,7 @@ public static class AwardingOrganisations
 
     public const string Cache = "CACHE Council for Awards in Care Health and Education";
 
-    public const string Various = "Various Awarding Organisations";
+    public const string Various = "Various awarding organisations";
 
     public const string AllHigherEducation = "All Higher Education Institutes";
 }
