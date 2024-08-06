@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models;
@@ -450,22 +451,26 @@ public class QualificationDetailsControllerTests
                                     new()
                                     {
                                         RatioRequirementName = "Level 2 Ratio Requirements",
-                                        FullAndRelevantForLevel2After2014 = true
+                                        FullAndRelevantForLevel2After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
                                     },
                                     new()
                                     {
                                         RatioRequirementName = "Level 3 Ratio Requirements",
-                                        FullAndRelevantForLevel2After2014 = true
+                                        FullAndRelevantForLevel2After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
                                     },
                                     new()
                                     {
                                         RatioRequirementName = "Level 6 Ratio Requirements",
-                                        FullAndRelevantForLevel2After2014 = true
+                                        FullAndRelevantForLevel2After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
                                     },
                                     new()
                                     {
-                                        RatioRequirementName = "Level 6 Ratio Requirements",
-                                        FullAndRelevantForLevel2After2014 = true
+                                        RatioRequirementName = "Unqualified Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
                                     }
                                 };
 
