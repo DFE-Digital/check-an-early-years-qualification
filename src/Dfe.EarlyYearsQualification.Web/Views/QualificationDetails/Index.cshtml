@@ -52,14 +52,14 @@
             </div>
             @if (Model.AdditionalRequirementAnswers != null)
             {
-                foreach (var answer in Model.AdditionalRequirementAnswers)
+                for (var count = 0; count < Model.AdditionalRequirementAnswers.Count; count++)
                 {
                     <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key" id="@answer.Question-label">
-                            @answer.Question
+                        <dt class="govuk-summary-list__key" id="additional-requirement-@count-label">
+                            @Model.AdditionalRequirementAnswers[count].Question
                         </dt>
-                        <dd class="govuk-summary-list__value" id="@answer.Question-value">
-                            @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(answer.Answer!.ToLower())
+                        <dd class="govuk-summary-list__value" id="additional-requirement-@count-value">
+                            @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.AdditionalRequirementAnswers[count].Answer!.ToLower())
                         </dd>
                     </div>
                 }

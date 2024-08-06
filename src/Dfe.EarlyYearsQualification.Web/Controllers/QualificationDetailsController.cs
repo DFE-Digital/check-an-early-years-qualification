@@ -99,11 +99,10 @@ public class QualificationDetailsController(
     private (bool isValid, IActionResult? actionResult) ValidateAdditionalQuestions(QualificationDetailsModel model)
     {
         // If the qualification has no additional requirements then skip all checks and return.
-        if (model.AdditionalRequirementAnswers == null ||
-            model.AdditionalRequirementAnswers.Count == 0) return (true, null);
+        if (model.AdditionalRequirementAnswers == null) return (true, null);
 
         // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
-        if (model.AdditionalRequirementAnswers.Any(answer => answer.Answer == null))
+        if (model.AdditionalRequirementAnswers.Count == 0 || model.AdditionalRequirementAnswers.Any(answer => string.IsNullOrEmpty(answer.Answer)))
         {
             return (false,
                     RedirectToAction("Index", "CheckAdditionalRequirements",
@@ -320,8 +319,7 @@ public class QualificationDetailsController(
                    AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
                    FromWhichYear = qualification.FromWhichYear,
                    BackButton = MapToNavigationLinkModel(content.BackButton),
-                   AdditionalRequirementAnswers = 
-                       await MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions),
+                   AdditionalRequirementAnswers = MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions),
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
@@ -347,16 +345,16 @@ public class QualificationDetailsController(
                };
     }
 
-    private async Task<List<AdditionalRequirementAnswerModel>?> MapAdditionalRequirementAnswers(
+    private List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
         List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
     {
         if (additionalRequirementQuestions is null) return null;
 
         var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
-
-        if (additionalRequirementsAnswers is null) return null;
         
         var results = new List<AdditionalRequirementAnswerModel>();
+        
+        if (additionalRequirementsAnswers is null) return results;
 
         foreach (var additionalRequirementQuestion in additionalRequirementQuestions)
         {
