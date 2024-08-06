@@ -207,9 +207,9 @@ public class QualificationDetailsController(
 
             return (T)requirement!.GetType().GetProperty(propertyToCheck)!.GetValue(requirement, null)!;
         }
-        catch
+        catch(Exception ex)
         {
-            logger.LogError("Could not find property: {PropertyToCheck} within {RatioName} for qualification: {QualificationId}",
+            logger.LogError(ex,"Could not find property: {PropertyToCheck} within {RatioName} for qualification: {QualificationId}",
                             propertyToCheck, ratioName, qualification.QualificationId);
             throw;
         }
