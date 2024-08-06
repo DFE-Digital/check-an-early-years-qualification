@@ -26,6 +26,7 @@ var config = {
         "http://localhost:5000/advice/qualifications-achieved-in-wales",
         "http://localhost:5000/advice/qualifications-achieved-in-northern-ireland",
         "http://localhost:5000/advice/qualification-not-on-the-list",
+        "http://localhost:5000/advice/qualification-level-7"
     ]
 };
 

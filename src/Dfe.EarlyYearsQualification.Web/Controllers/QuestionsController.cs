@@ -79,8 +79,9 @@ public class QuestionsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await MapDateModel(new DateQuestionModel(), questionPage, nameof(this.WhenWasTheQualificationStarted),
-                                 Questions);
+        var model = await MapDateModel(new DateQuestionModel(), questionPage,
+                                       nameof(this.WhenWasTheQualificationStarted),
+                                       Questions);
         return View("Date", model);
     }
 
@@ -90,7 +91,7 @@ public class QuestionsController(
         if (!ModelState.IsValid || !questionModelValidator.IsValid(model))
         {
             var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
-            
+
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
@@ -120,7 +121,7 @@ public class QuestionsController(
         if (!ModelState.IsValid)
         {
             var questionPage = await contentService.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification);
-            
+
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
@@ -133,12 +134,13 @@ public class QuestionsController(
 
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
 
-        if (model.Option == "2" && WasAwardedBetweenSeptember2014AndAugust2019())
-        {
-            return RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice");
-        }
-
-        return RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation));
+        return model.Option switch
+               {
+                   "2" when WasAwardedBetweenSeptember2014AndAugust2019() =>
+                       RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice"),
+                   "7" => RedirectToAction(nameof(AdviceController.QualificationLevel7), "Advice"),
+                   _ => RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation))
+               };
     }
 
     [HttpGet("what-is-the-awarding-organisation")]
@@ -154,8 +156,8 @@ public class QuestionsController(
         var qualifications = await GetFilteredQualifications();
 
         var model = await MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications,
-                                     nameof(this.WhatIsTheAwardingOrganisation),
-                                     Questions);
+                                           nameof(this.WhatIsTheAwardingOrganisation),
+                                           Questions);
 
         return View("Dropdown", model);
     }
@@ -167,15 +169,15 @@ public class QuestionsController(
         {
             var questionPage =
                 await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
-            
+
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
                 var qualifications = await GetFilteredQualifications();
 
                 model = await MapDropdownModel(model, questionPage, qualifications,
-                                         nameof(this.WhatIsTheAwardingOrganisation),
-                                         Questions);
+                                               nameof(this.WhatIsTheAwardingOrganisation),
+                                               Questions);
                 model.HasErrors = true;
             }
 
@@ -239,8 +241,9 @@ public class QuestionsController(
         return model;
     }
 
-    private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question, string actionName,
-                                                  string controllerName)
+    private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question,
+                                                       string actionName,
+                                                       string controllerName)
     {
         model.Question = question.Question;
         model.CtaButtonText = question.CtaButtonText;
@@ -258,9 +261,10 @@ public class QuestionsController(
         return model;
     }
 
-    private async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model, DropdownQuestionPage question,
-                                                          List<Qualification> qualifications, string actionName,
-                                                          string controllerName)
+    private async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model,
+                                                               DropdownQuestionPage question,
+                                                               List<Qualification> qualifications, string actionName,
+                                                               string controllerName)
     {
         var awardingOrganisationExclusions =
             new[] { AwardingOrganisations.AllHigherEducation, AwardingOrganisations.Various };
@@ -294,7 +298,7 @@ public class QuestionsController(
                                  Text = awardingOrg
                              });
         }
-        
+
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
