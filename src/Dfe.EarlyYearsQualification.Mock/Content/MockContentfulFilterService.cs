@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 
@@ -16,11 +17,11 @@ public class MockContentfulFilterService : IContentFilterService
                 CreateQualification("EYQ-103", "NCFE", 3, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-104", "City & Guilds", 4, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-105", "Montessori Centre International", 4, "Sep-14", "Aug-19"),
-                CreateQualification("EYQ-106", "Various Awarding Organisations", 5, "Sep-14", "Aug-19"),
+                CreateQualification("EYQ-106", AwardingOrganisations.Various, 5, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-107", "Edexcel (now Pearson Education Ltd)", 5, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-108", "Kent Sussex Montessori Centre", 6, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-109", "NNEB National Nursery Examination Board", 6, "Sep-14", "Aug-19"),
-                CreateQualification("EYQ-110", "Various Awarding Organisations", 7, "Sep-14", "Aug-19"),
+                CreateQualification("EYQ-110", AwardingOrganisations.Various, 7, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-111", "City & Guilds", 7, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-112", "Pearson", 8, "Sep-14", "Aug-19"),
                 CreateQualification("EYQ-113", "CACHE", 8, "Sep-14", "Aug-19")

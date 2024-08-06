@@ -78,7 +78,7 @@ public static class SecureHeaderConfiguration
         var windowPrint = new ContentSecurityPolicyElement
                           {
                               CommandType = CspCommandType.Directive,
-                              DirectiveOrUri = "sha256-/rCCQAYo5nH3kqWMvdaSato3ShxLfLrkODJIMZPKHSg="
+                              DirectiveOrUri = "sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I="
                           };
         
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);

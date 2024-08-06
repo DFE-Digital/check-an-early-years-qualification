@@ -869,10 +869,10 @@ public class QuestionsControllerTests
                                            "E awarding organisation", 123, null,
                                            null, null, null, null, null),
                                        new("3", "TEST",
-                                           "Various Awarding Organisations", 123, null,
+                                           AwardingOrganisations.Various, 123, null,
                                            null, null, null, null, null),
                                        new("4", "TEST",
-                                           "All Higher Education Institutes", 123, null,
+                                           AwardingOrganisations.AllHigherEducation, 123, null,
                                            null, null, null, null, null)
                                    };
 

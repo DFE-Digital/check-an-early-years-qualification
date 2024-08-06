@@ -42,6 +42,6 @@ public class Heading2RendererTests
 
         var result = new Heading2Renderer().RenderAsync(heading).Result;
 
-        result.Should().Be("<h2 class='govuk-heading-m'>Heading text</h2>");
+        result.Should().Be("<h2 class='govuk-heading-l'>Heading text</h2>");
     }
 }

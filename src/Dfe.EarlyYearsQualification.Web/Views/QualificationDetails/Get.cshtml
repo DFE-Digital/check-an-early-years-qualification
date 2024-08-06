@@ -26,11 +26,11 @@
     </div>
     <div class="govuk-grid-column-two-thirds">
         <h1 id="heading" class="govuk-heading-xl mb-8">@Model.Header</h1>
-        <h2 id="found-heading" class="govuk-!-static-margin-bottom-8">
+        <h3 id="found-heading" class="govuk-heading-m govuk-!-static-margin-bottom-8">
             <strong>
                 @Model.Qualifications.Count @(Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText)
             </strong>
-        </h2>
+        </h3>
         <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
         <div class="govuk-form-group">
             @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post))
