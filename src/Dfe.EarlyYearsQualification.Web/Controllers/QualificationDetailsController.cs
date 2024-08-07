@@ -110,7 +110,7 @@ public class QualificationDetailsController(
         }
 
         // If there are not any answers to the questions that are not full and relevant we can continue back to check the ratios.
-        if (!CheckForAnyNonFAndRAnswers(model.AdditionalRequirementAnswers)) return (true, null);
+        if (!AnswersIndicateNotFullAndRelevant(model.AdditionalRequirementAnswers)) return (true, null);
         
         // At this point, there will be at least one question answered in a non full and relevant way.
         // we mark the ratios as not full and relevant and return.
@@ -125,7 +125,7 @@ public class QualificationDetailsController(
     /// </summary>
     /// <param name="additionalRequirementsAnswers">This should come from the pre mapped questions and answers</param>
     /// <returns>True if we find any question answered in a non full and relevant way, false if none are found</returns>
-    private static bool CheckForAnyNonFAndRAnswers(List<AdditionalRequirementAnswerModel> additionalRequirementsAnswers)
+    private static bool AnswersIndicateNotFullAndRelevant(List<AdditionalRequirementAnswerModel> additionalRequirementsAnswers)
     {
         return additionalRequirementsAnswers.Any(answer => answer is { AnswerToBeFullAndRelevant: true, Answer: "no" }
                                                                      or
