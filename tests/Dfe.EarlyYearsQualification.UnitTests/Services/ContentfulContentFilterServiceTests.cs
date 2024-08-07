@@ -21,28 +21,25 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-741",
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-741",
                                                         "test",
                                                         AwardingOrganisations.Pearson,
-                                                        3,
-                                                        null,
-                                                        "Aug-19",
-                                                        "def/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        3)
+                                      {
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "def/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -77,17 +74,16 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -122,17 +118,16 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -168,39 +163,34 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-741",
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-741",
                                                         "test",
                                                         AwardingOrganisations.Pearson,
-                                                        4,
-                                                        null,
-                                                        "Aug-19",
-                                                        "def/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-752",
+                                                        4)
+                                      {
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "def/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-752",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Sep-21",
-                                                        null,
-                                                        "ghi/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Sep-21",
+                                          QualificationNumber = "ghi/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -235,39 +225,34 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-741",
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-741",
                                                         "test",
                                                         AwardingOrganisations.Pearson,
-                                                        4,
-                                                        null,
-                                                        "Aug-19",
-                                                        "def/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-752",
+                                                        4)
+                                      {
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "def/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-752",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Sep-21",
-                                                        null,
-                                                        "ghi/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Sep-21",
+                                          QualificationNumber = "ghi/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -302,50 +287,43 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-741",
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-741",
                                                         "test",
                                                         AwardingOrganisations.Pearson,
-                                                        4,
-                                                        null,
-                                                        "Sep-19",
-                                                        "def/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-746",
+                                                        4)
+                                      {
+                                          ToWhichYear = "Sep-19",
+                                          QualificationNumber = "def/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-746",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Sep-15",
-                                                        null,
-                                                        "ghi/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-752",
+                                                        4)
+                                      {
+                                          FromWhichYear = "Sep-15",
+                                          QualificationNumber = "ghi/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-752",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Sep-21",
-                                                        null,
-                                                        "ghi/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Sep-21",
+                                          QualificationNumber = "ghi/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -380,50 +358,43 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-741",
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-741",
                                                         "test",
                                                         AwardingOrganisations.Pearson,
-                                                        4,
-                                                        null,
-                                                        "seP-19",
-                                                        "def/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-746",
+                                                        4)
+                                      {
+                                          ToWhichYear = "seP-19",
+                                          QualificationNumber = "def/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-746",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "sEp-15",
-                                                        null,
-                                                        "ghi/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-752",
+                                                        4)
+                                      {
+                                          FromWhichYear = "sEp-15",
+                                          QualificationNumber = "ghi/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-752",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "SEP-21",
-                                                        null,
-                                                        "ghi/456/951",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "SEP-21",
+                                          QualificationNumber = "ghi/456/951",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -479,17 +450,17 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Sep15", // We expect Mmm-yy, e.g. "Sep-15"
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear =
+                                              "Sep15", // We expect Mmm-yy, e.g. "Sep-15"
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -521,17 +492,17 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Sept-15", // "Sept" in the data: we expect "Sep"
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear =
+                                              "Sept-15", // "Sept" in the data: we expect "Sep"
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -563,17 +534,16 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Sep-15",
-                                                        "Aug-1a", // invalid year typo
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Sep-15",
+                                          ToWhichYear = "Aug-1a", // invalid year typo
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -605,17 +575,16 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Pearson,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -651,17 +620,16 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Pearson,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -691,23 +659,22 @@ public class ContentfulContentFilterServiceTests
     }
 
     [TestMethod]
-    public async Task GetFilteredQualifications_PassInNCFEAndNoStartDate_QueryDoesntContainCache()
+    public async Task GetFilteredQualifications_PassInNcfeAndNoStartDate_QueryDoesntContainCache()
     {
         var results = new ContentfulCollection<Qualification>
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -737,23 +704,22 @@ public class ContentfulContentFilterServiceTests
     }
 
     [TestMethod]
-    public async Task GetFilteredQualifications_PassInCACHEAndNoStartDate_QueryDoesntContainNCFE()
+    public async Task GetFilteredQualifications_PassInCacheAndNoStartDate_QueryDoesntContainNcfe()
     {
         var results = new ContentfulCollection<Qualification>
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -783,23 +749,22 @@ public class ContentfulContentFilterServiceTests
     }
 
     [TestMethod]
-    public async Task GetFilteredQualifications_PassInNCFEAndStartDateLessThanSept14_QueryDoesntContainCache()
+    public async Task GetFilteredQualifications_PassInNcfeAndStartDateLessThanSept14_QueryDoesntContainCache()
     {
         var results = new ContentfulCollection<Qualification>
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -829,23 +794,22 @@ public class ContentfulContentFilterServiceTests
     }
 
     [TestMethod]
-    public async Task GetFilteredQualifications_PassInCACHEAndStartDateLessThanSept14_QueryDoesntContainNCFE()
+    public async Task GetFilteredQualifications_PassInCacheAndStartDateLessThanSept14_QueryDoesntContainNcfe()
     {
         var results = new ContentfulCollection<Qualification>
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -875,23 +839,22 @@ public class ContentfulContentFilterServiceTests
     }
 
     [TestMethod]
-    public async Task GetFilteredQualifications_PassInNCFEAndStartDateGreaterThanSept14_QueryContainsCache()
+    public async Task GetFilteredQualifications_PassInNcfeAndStartDateGreaterThanSept14_QueryContainsCache()
     {
         var results = new ContentfulCollection<Qualification>
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Ncfe,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -921,23 +884,22 @@ public class ContentfulContentFilterServiceTests
     }
 
     [TestMethod]
-    public async Task GetFilteredQualifications_PassInCACHEAndStartDateGreaterThanSept14_QueryContainsNCFE()
+    public async Task GetFilteredQualifications_PassInCacheAndStartDateGreaterThanSept14_QueryContainsNcfe()
     {
         var results = new ContentfulCollection<Qualification>
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         "test",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -978,28 +940,26 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         technicalDiplomaInChildCare,
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-123",
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-123",
                                                         "Diploma in Early Years Child Care",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 
@@ -1041,28 +1001,26 @@ public class ContentfulContentFilterServiceTests
                       {
                           Items = new[]
                                   {
-                                      new Qualification(
-                                                        "EYQ-123",
+                                      new Qualification("EYQ-123",
                                                         technicalDiplomaInChildCare,
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null),
-                                      new Qualification(
-                                                        "EYQ-123",
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      },
+                                      new Qualification("EYQ-123",
                                                         "Diploma in Early Years Child Care",
                                                         AwardingOrganisations.Cache,
-                                                        4,
-                                                        "Apr-15",
-                                                        "Aug-19",
-                                                        "abc/123/987",
-                                                        "requirements",
-                                                        null,
-                                                        null)
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
                                   }
                       };
 

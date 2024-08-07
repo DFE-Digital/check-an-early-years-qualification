@@ -63,11 +63,10 @@ public class MockContentfulService : IContentService
                                                               body,
                                                               WhatLevelIsTheQualificationPath)),
 
-                   
                    AdvicePages.Level6QualificationPre2014 =>
                        await Task.FromResult(CreateAdvicePage("Level 6 qualification pre 2014",
                                                               body, WhatLevelIsTheQualificationPath)),
-                   
+
                    AdvicePages.Level6QualificationPost2014 =>
                        await Task.FromResult(CreateAdvicePage("Level 6 qualification post 2014",
                                                               body, WhatLevelIsTheQualificationPath)),
@@ -182,98 +181,104 @@ public class MockContentfulService : IContentService
 
     public async Task<Qualification?> GetQualificationById(string qualificationId)
     {
-        return await Task.FromResult(new Qualification(
-                                                       "EYQ-240",
+        return await Task.FromResult(new Qualification("EYQ-240",
                                                        "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
                                                        AwardingOrganisations.Ncfe,
-                                                       3,
-                                                       "2020",
-                                                       "2021",
-                                                       "603/5829/4",
-                                                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                                                       new List<AdditionalRequirementQuestion>
-                                                       {
-                                                           new()
-                                                           {
-                                                               Question = "Test question",
-                                                               HintText = "This is the hint text",
-                                                               DetailsHeading = "This is the details heading",
-                                                               DetailsContent =
-                                                                   ContentfulContentHelper
-                                                                       .Paragraph("This is the details content"),
-                                                               Answers =
-                                                               [
-                                                                   new Option
-                                                                   {
-                                                                       Label = "Yes",
-                                                                       Value = "yes"
-                                                                   },
+                                                       3)
+                                     {
+                                         FromWhichYear = "2020",
+                                         ToWhichYear = "2021",
+                                         QualificationNumber = "603/5829/4",
+                                         AdditionalRequirements =
+                                             "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
+                                         AdditionalRequirementQuestions =
+                                             new List<AdditionalRequirementQuestion>
+                                             {
+                                                 new()
+                                                 {
+                                                     Question = "Test question",
+                                                     HintText = "This is the hint text",
+                                                     DetailsHeading =
+                                                         "This is the details heading",
+                                                     DetailsContent =
+                                                         ContentfulContentHelper
+                                                             .Paragraph("This is the details content"),
+                                                     Answers =
+                                                     [
+                                                         new Option
+                                                         {
+                                                             Label = "Yes",
+                                                             Value = "yes"
+                                                         },
 
-                                                                   new Option
-                                                                   {
-                                                                       Label = "No",
-                                                                       Value = "no"
-                                                                   }
-                                                               ],
-                                                               ConfirmationStatement =
-                                                                   "This is the confirmation statement 1",
-                                                               AnswerToBeFullAndRelevant = true
-                                                           },
-                                                           new()
-                                                           {
-                                                               Question = "Test question 2",
-                                                               HintText = "This is the hint text",
-                                                               DetailsHeading = "This is the details heading",
-                                                               DetailsContent =
-                                                                   ContentfulContentHelper
-                                                                       .Paragraph("This is the details content"),
-                                                               Answers =
-                                                               [
-                                                                   new Option
-                                                                   {
-                                                                       Label = "Yes",
-                                                                       Value = "yes"
-                                                                   },
+                                                         new Option
+                                                         {
+                                                             Label = "No",
+                                                             Value = "no"
+                                                         }
+                                                     ],
+                                                     ConfirmationStatement =
+                                                         "This is the confirmation statement 1",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 },
+                                                 new()
+                                                 {
+                                                     Question = "Test question 2",
+                                                     HintText = "This is the hint text",
+                                                     DetailsHeading =
+                                                         "This is the details heading",
+                                                     DetailsContent =
+                                                         ContentfulContentHelper
+                                                             .Paragraph("This is the details content"),
+                                                     Answers =
+                                                     [
+                                                         new Option
+                                                         {
+                                                             Label = "Yes",
+                                                             Value = "yes"
+                                                         },
 
-                                                                   new Option
-                                                                   {
-                                                                       Label = "No",
-                                                                       Value = "no"
-                                                                   }
-                                                               ],
-                                                               ConfirmationStatement =
-                                                                   "This is the confirmation statement 2",
-                                                               AnswerToBeFullAndRelevant = true
-                                                           }
-                                                       },
-                                                       new List<RatioRequirement>
-                                                       {
-                                                           new()
-                                                           {
-                                                               RatioRequirementName =
-                                                                   RatioRequirements.Level2RatioRequirementName,
-                                                               FullAndRelevantForLevel3After2014 = true
-                                                           },
-                                                           new()
-                                                           {
-                                                               RatioRequirementName =
-                                                                   RatioRequirements.Level3RatioRequirementName,
-                                                               FullAndRelevantForLevel3After2014 = true
-                                                           },
-                                                           new()
-                                                           {
-                                                               RatioRequirementName = RatioRequirements
-                                                                   .Level6RatioRequirementName
-                                                           },
-                                                           new()
-                                                           {
-                                                               RatioRequirementName =
-                                                                   RatioRequirements
-                                                                       .UnqualifiedRatioRequirementName,
-                                                               FullAndRelevantForLevel3After2014 = true
-                                                           }
-                                                       }
-                                                      ));
+                                                         new Option
+                                                         {
+                                                             Label = "No",
+                                                             Value = "no"
+                                                         }
+                                                     ],
+                                                     ConfirmationStatement =
+                                                         "This is the confirmation statement 2",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 }
+                                             },
+                                         RatioRequirements = new List<RatioRequirement>
+                                                             {
+                                                                 new()
+                                                                 {
+                                                                     RatioRequirementName =
+                                                                         RatioRequirements
+                                                                             .Level2RatioRequirementName,
+                                                                     FullAndRelevantForLevel3After2014 = true
+                                                                 },
+                                                                 new()
+                                                                 {
+                                                                     RatioRequirementName =
+                                                                         RatioRequirements
+                                                                             .Level3RatioRequirementName,
+                                                                     FullAndRelevantForLevel3After2014 = true
+                                                                 },
+                                                                 new()
+                                                                 {
+                                                                     RatioRequirementName = RatioRequirements
+                                                                         .Level6RatioRequirementName
+                                                                 },
+                                                                 new()
+                                                                 {
+                                                                     RatioRequirementName =
+                                                                         RatioRequirements
+                                                                             .UnqualifiedRatioRequirementName,
+                                                                     FullAndRelevantForLevel3After2014 = true
+                                                                 }
+                                                             }
+                                     });
     }
 
     public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
@@ -313,20 +318,15 @@ public class MockContentfulService : IContentService
         return Task.FromResult(new List<Qualification>
                                {
                                    new("1", "TEST",
-                                       "A awarding organisation", 123, null,
-                                       null, null, null, null, null),
+                                       "A awarding organisation", 123),
                                    new("2", "TEST",
-                                       "B awarding organisation", 123, null,
-                                       null, null, null, null, null),
+                                       "B awarding organisation", 123),
                                    new("3", "TEST",
-                                       "C awarding organisation", 123, null,
-                                       null, null, null, null, null),
+                                       "C awarding organisation", 123),
                                    new("4", "TEST",
-                                       "D awarding organisation", 123, null,
-                                       null, null, null, null, null),
+                                       "D awarding organisation", 123),
                                    new("5", "TEST",
-                                       "E awarding organisation", 123, null,
-                                       null, null, null, null, null)
+                                       "E awarding organisation", 123)
                                });
     }
 
@@ -347,7 +347,8 @@ public class MockContentfulService : IContentService
                                          SearchCriteriaHeading = "Your search",
                                          MultipleQualificationsFoundText = "qualifications found",
                                          SingleQualificationFoundText = "qualification found",
-                                         PreSearchBoxContent = ContentfulContentHelper.Text("Pre search box content"),
+                                         PreSearchBoxContent =
+                                             ContentfulContentHelper.Text("Pre search box content"),
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
                                                                           "/advice/qualification-not-on-the-list"),

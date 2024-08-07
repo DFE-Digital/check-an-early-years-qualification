@@ -39,7 +39,7 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
-        
+
         mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
 
         mockContentService.VerifyAll();
@@ -79,7 +79,7 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
-        
+
         mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
 
         result.Should().NotBeNull();
@@ -143,7 +143,10 @@ public class QuestionsControllerTests
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
-                                                             { Option = QualificationAwardLocation.OutsideOfTheUnitedKingdom });
+                                                             {
+                                                                 Option = QualificationAwardLocation
+                                                                     .OutsideOfTheUnitedKingdom
+                                                             });
 
         result.Should().NotBeNull();
 
@@ -155,7 +158,7 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
     }
-    
+
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_PassInScotland_RedirectsToAdvicePage()
     {
@@ -184,7 +187,7 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
     }
-    
+
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_PassInWales_RedirectsToAdvicePage()
     {
@@ -213,7 +216,7 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
     }
-    
+
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_PassInNorthernIreland_RedirectsToAdvicePage()
     {
@@ -258,7 +261,8 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object);
 
         var result =
-            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel { Option = QualificationAwardLocation.England });
+            await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
+                                                             { Option = QualificationAwardLocation.England });
 
         result.Should().NotBeNull();
 
@@ -267,7 +271,8 @@ public class QuestionsControllerTests
 
         resultType!.ActionName.Should().Be("WhenWasTheQualificationStarted");
 
-        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.England), Times.Once);
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.England),
+                                            Times.Once);
     }
 
     [TestMethod]
@@ -683,7 +688,7 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
-    
+
     [TestMethod]
     public async Task Post_WhatLevelIsTheQualification_Level6Pre2014_ReturnsRedirectResponse()
     {
@@ -713,7 +718,7 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("Level6QualificationPre2014");
         resultType.ControllerName.Should().Be("Advice");
     }
-    
+
     [TestMethod]
     public async Task Post_WhatLevelIsTheQualification_Level6Post2014_ReturnsRedirectResponse()
     {
@@ -886,20 +891,15 @@ public class QuestionsControllerTests
         var listOfQualifications = new List<Qualification>
                                    {
                                        new("1", "TEST",
-                                           "D awarding organisation", 123, null,
-                                           null, null, null, null, null),
+                                           "D awarding organisation", 123),
                                        new("2", "TEST",
-                                           "E awarding organisation", 123, null,
-                                           null, null, null, null, null),
+                                           "E awarding organisation", 123),
                                        new("3", "TEST",
-                                           "A awarding organisation", 123, null,
-                                           null, null, null, null, null),
+                                           "A awarding organisation", 123),
                                        new("4", "TEST",
-                                           "C awarding organisation", 123, null,
-                                           null, null, null, null, null),
+                                           "C awarding organisation", 123),
                                        new("5", "TEST",
-                                           "B awarding organisation", 123, null,
-                                           null, null, null, null, null)
+                                           "B awarding organisation", 123)
                                    };
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
@@ -957,17 +957,13 @@ public class QuestionsControllerTests
         var listOfQualifications = new List<Qualification>
                                    {
                                        new("1", "TEST",
-                                           "D awarding organisation", 123, null,
-                                           null, null, null, null, null),
+                                           "D awarding organisation", 123),
                                        new("2", "TEST",
-                                           "E awarding organisation", 123, null,
-                                           null, null, null, null, null),
+                                           "E awarding organisation", 123),
                                        new("3", "TEST",
-                                           AwardingOrganisations.Various, 123, null,
-                                           null, null, null, null, null),
+                                           AwardingOrganisations.Various, 123),
                                        new("4", "TEST",
-                                           AwardingOrganisations.AllHigherEducation, 123, null,
-                                           null, null, null, null, null)
+                                           AwardingOrganisations.AllHigherEducation, 123)
                                    };
 
         mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());

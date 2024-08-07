@@ -680,9 +680,16 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetQualificationById_QualificationExists_Returns()
     {
-        var qualification = new Qualification("SomeId", "Test qualification name", "Test awarding org", 123,
-                                              "Test from which year", "Test to which year", "Test qualification number",
-                                              "Test additional requirements", null, null);
+        var qualification = new Qualification("SomeId",
+                                              "Test qualification name",
+                                              "Test awarding org",
+                                              123)
+                            {
+                                FromWhichYear = "Test from which year",
+                                ToWhichYear = "Test to which year",
+                                QualificationNumber = "Test qualification number",
+                                AdditionalRequirements = "Test additional requirements"
+                            };
 
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -855,10 +862,14 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetQualifications_ReturnsQualifications()
     {
-        var qualification = new Qualification("Id", "Name",
-                                              "AO", 6,
-                                              "2014", "2020",
-                                              "number", "Rq", null, null);
+        var qualification = new Qualification("Id",
+                                              "Name",
+                                              "AO",
+                                              6)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2020",
+                                QualificationNumber = "number", AdditionalRequirements = "Rq"
+                            };
 
         _clientMock.Setup(c =>
                               c.GetEntriesByType(It.IsAny<string>(),
@@ -904,7 +915,7 @@ public class ContentfulContentServiceTests
 
         _logger.VerifyError($"Exception trying to retrieve {nameof(StartPage)} from Contentful.");
     }
-    
+
     [TestMethod]
     public async Task GetCheckAdditionalRequirementsPage_ReturnsPage()
     {
