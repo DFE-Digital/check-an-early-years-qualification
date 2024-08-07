@@ -4,13 +4,7 @@ public class QualificationUpload(
     string qualificationId,
     string qualificationName,
     string awardingOrganisationTitle,
-    int qualificationLevel,
-    string? fromWhichYear,
-    string? toWhichYear,
-    string? qualificationNumber,
-    string? additionalRequirements,
-    string[]? additionalRequirementQuestions,
-    string[]? ratioRequirements)
+    int qualificationLevel)
 {
     // Required Fields
     public string QualificationId { get; } = qualificationId;
@@ -19,12 +13,12 @@ public class QualificationUpload(
     public int QualificationLevel { get; } = qualificationLevel;
 
     // Optional Fields
-    public string? FromWhichYear { get; } = fromWhichYear;
-    public string? ToWhichYear { get; } = toWhichYear;
-    public string? QualificationNumber { get; } = qualificationNumber;
-    public string? AdditionalRequirements { get; } = additionalRequirements;
+    public string? FromWhichYear { get; init; }
+    public string? ToWhichYear { get; init; }
+    public string? QualificationNumber { get; init; }
+    public string? AdditionalRequirements { get; init; }
 
-    public string[]? AdditionalRequirementQuestions { get; } = additionalRequirementQuestions;
+    public string[]? AdditionalRequirementQuestions { get; init; }
 
-    public string[]? RatioRequirements { get; } = ratioRequirements;
+    public string[]? RatioRequirements { get; init; }
 }

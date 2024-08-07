@@ -146,9 +146,17 @@ public class ConfirmQualificationControllerTests
                 ErrorBannerLink = "Test error banner link"
             });
 
-        mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(new Qualification("Some ID",
-         "Qualification Name", AwardingOrganisations.Ncfe, 2, "2014", "2019",
-         "ABC/547/900", "additional requirements", null, null));
+        var qualification = new Qualification("Some ID",
+                                              "Qualification Name",
+                                              AwardingOrganisations.Ncfe,
+                                              2)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2019",
+                                QualificationNumber = "ABC/547/900",
+                                AdditionalRequirements = "additional requirements"
+                            };
+
+        mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
@@ -206,9 +214,17 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(default(ConfirmQualificationPage?));
-        mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(new Qualification("Some ID",
-         "Qualification Name", AwardingOrganisations.Ncfe, 2, "2014", "2019",
-         "ABC/547/900", "additional requirements", null, null));
+
+        var qualification = new Qualification("Some ID",
+                                              "Qualification Name",
+                                              AwardingOrganisations.Ncfe,
+                                              2)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2019",
+                                QualificationNumber = "ABC/547/900",
+                                AdditionalRequirements = "additional requirements"
+                            };
+        mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
@@ -312,9 +328,16 @@ public class ConfirmQualificationControllerTests
                 ErrorBannerLink = "Test error banner link"
             });
 
-        mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(new Qualification("Some ID",
-         "Qualification Name", AwardingOrganisations.Ncfe, 2, "2014", "2019",
-         "ABC/547/900", "additional requirements", null, null));
+        var qualification = new Qualification("Some ID",
+                                              "Qualification Name",
+                                              AwardingOrganisations.Ncfe,
+                                              2)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2019",
+                                QualificationNumber = "ABC/547/900",
+                                AdditionalRequirements = "additional requirements"
+                            };
+        mockContentService.Setup(x => x.GetQualificationById("Some ID")).ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
@@ -377,9 +400,18 @@ public class ConfirmQualificationControllerTests
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
         var mockContentService = new Mock<IContentService>();
         var additionalRequirements = new List<AdditionalRequirementQuestion> { new() };
-        mockContentService.Setup(x => x.GetQualificationById("TEST-123")).ReturnsAsync(new Qualification("Some ID",
-         "Qualification Name", AwardingOrganisations.Ncfe, 2, "2014", "2019",
-         "ABC/547/900", "additional requirements", additionalRequirements, null));
+
+        var qualification = new Qualification("Some ID",
+                                              "Qualification Name",
+                                              AwardingOrganisations.Ncfe,
+                                              2)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2019",
+                                QualificationNumber = "ABC/547/900",
+                                AdditionalRequirements = "additional requirements",
+                                AdditionalRequirementQuestions = additionalRequirements
+                            };
+        mockContentService.Setup(x => x.GetQualificationById("TEST-123")).ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
@@ -403,9 +435,17 @@ public class ConfirmQualificationControllerTests
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
         var mockContentService = new Mock<IContentService>();
-        mockContentService.Setup(x => x.GetQualificationById("TEST-123")).ReturnsAsync(new Qualification("Some ID",
-         "Qualification Name", AwardingOrganisations.Ncfe, 2, "2014", "2019",
-         "ABC/547/900", "additional requirements", null, null));
+
+        var qualification = new Qualification("Some ID",
+                                              "Qualification Name",
+                                              AwardingOrganisations.Ncfe,
+                                              2)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2019",
+                                QualificationNumber = "ABC/547/900",
+                                AdditionalRequirements = "additional requirements"
+                            };
+        mockContentService.Setup(x => x.GetQualificationById("TEST-123")).ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 
@@ -429,9 +469,17 @@ public class ConfirmQualificationControllerTests
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
         var mockContentService = new Mock<IContentService>();
-        mockContentService.Setup(x => x.GetQualificationById("TEST-123")).ReturnsAsync(new Qualification("Some ID",
-         "Qualification Name", AwardingOrganisations.Ncfe, 2, "2014", "2019",
-         "ABC/547/900", "additional requirements", null, null));
+
+        var qualification = new Qualification("Some ID",
+                                              "Qualification Name",
+                                              AwardingOrganisations.Ncfe,
+                                              2)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2019",
+                                QualificationNumber = "ABC/547/900",
+                                AdditionalRequirements = "additional requirements"
+                            };
+        mockContentService.Setup(x => x.GetQualificationById("TEST-123")).ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockContentService.Object);
 

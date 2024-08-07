@@ -338,18 +338,23 @@ public static class Program
                 ratioRequirementsArray = ratioRequirementsString.Split(':');
             }
 
-            listObjResult.Add(new QualificationUpload(
-                                                      qualificationId,
-                                                      qualificationName,
-                                                      awardingOrganisationTitle,
-                                                      qualificationLevel,
-                                                      fromWhichYear,
-                                                      toWhichYear,
-                                                      qualificationNumber,
-                                                      additionalRequirements,
-                                                      additionalRequirementQuestionsArray,
-                                                      ratioRequirementsArray
-                                                     ));
+            var qualificationUpload =
+                new QualificationUpload(qualificationId,
+                                        qualificationName,
+                                        awardingOrganisationTitle,
+                                        qualificationLevel)
+                {
+                    FromWhichYear = fromWhichYear,
+                    ToWhichYear = toWhichYear,
+                    QualificationNumber = qualificationNumber,
+                    AdditionalRequirements =
+                        additionalRequirements,
+                    AdditionalRequirementQuestions =
+                        additionalRequirementQuestionsArray,
+                    RatioRequirements = ratioRequirementsArray
+                };
+
+            listObjResult.Add(qualificationUpload);
         }
 
         return listObjResult;
