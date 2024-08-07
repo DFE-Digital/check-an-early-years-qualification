@@ -361,7 +361,8 @@ public class QualificationDetailsController(
             var answerToAdd = new AdditionalRequirementAnswerModel
                               {
                                   Question = additionalRequirementQuestion.Question,
-                                  AnswerToBeFullAndRelevant = additionalRequirementQuestion.AnswerToBeFullAndRelevant
+                                  AnswerToBeFullAndRelevant = additionalRequirementQuestion.AnswerToBeFullAndRelevant,
+                                  ConfirmationStatement = additionalRequirementQuestion.ConfirmationStatement
                               };
             
             if (additionalRequirementsAnswers.TryGetValue(additionalRequirementQuestion.Question, out var answer))

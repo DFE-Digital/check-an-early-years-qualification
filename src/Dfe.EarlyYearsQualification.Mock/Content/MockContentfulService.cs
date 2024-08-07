@@ -208,7 +208,7 @@ public class MockContentfulService : IContentService
                                                                    }
                                                                ],
                                                                ConfirmationStatement =
-                                                                   "This is the confirmation statement",
+                                                                   "This is the confirmation statement 1",
                                                                AnswerToBeFullAndRelevant = true
                                                            },
                                                            new()
@@ -234,7 +234,7 @@ public class MockContentfulService : IContentService
                                                                    }
                                                                ],
                                                                ConfirmationStatement =
-                                                                   "This is the confirmation statement",
+                                                                   "This is the confirmation statement 2",
                                                                AnswerToBeFullAndRelevant = true
                                                            }
                                                        },

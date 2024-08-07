@@ -22,9 +22,9 @@ describe("A spec used to test the qualification details page", () => {
     cy.get("#from-which-year-value").should("contain.text", "2020");
     
     // Check that the additional requirements and the answers are present
-    cy.get("#additional-requirement-0-label").should("contain.text", "Test question");
+    cy.get("#additional-requirement-0-label").should("contain.text", "This is the confirmation statement 1");
     cy.get("#additional-requirement-0-value").should("contain.text", "Yes");
-    cy.get("#additional-requirement-1-label").should("contain.text", "Test question 2");
+    cy.get("#additional-requirement-1-label").should("contain.text", "This is the confirmation statement 2");
     cy.get("#additional-requirement-1-value").should("contain.text", "Yes");
     
     cy.get("#date-of-check-label").should("contain.text", "Test Date Of Check Label");
