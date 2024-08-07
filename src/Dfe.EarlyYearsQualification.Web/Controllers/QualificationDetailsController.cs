@@ -85,7 +85,7 @@ public class QualificationDetailsController(
 
         var model = await MapDetails(qualification, detailsPageContent);
 
-        var validateAdditionalRequirementQuestions = ValidateAdditionalQuestions(qualification, model);
+        var validateAdditionalRequirementQuestions = ValidateAdditionalQuestions(model);
 
         if (!validateAdditionalRequirementQuestions.isValid)
             return validateAdditionalRequirementQuestions.actionResult!;
@@ -96,27 +96,21 @@ public class QualificationDetailsController(
         return View(model);
     }
 
-    private (bool isValid, IActionResult? actionResult) ValidateAdditionalQuestions(Qualification qualification,
-        QualificationDetailsModel model)
+    private (bool isValid, IActionResult? actionResult) ValidateAdditionalQuestions(QualificationDetailsModel model)
     {
         // If the qualification has no additional requirements then skip all checks and return.
-        if (qualification.AdditionalRequirementQuestions == null ||
-            qualification.AdditionalRequirementQuestions.Count == 0) return (true, null);
-        
-        var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+        if (model.AdditionalRequirementAnswers == null) return (true, null);
 
         // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
-        if (additionalRequirementsAnswers == null ||
-            qualification.AdditionalRequirementQuestions.Count != additionalRequirementsAnswers.Count)
+        if (model.AdditionalRequirementAnswers.Count == 0 || model.AdditionalRequirementAnswers.Any(answer => string.IsNullOrEmpty(answer.Answer)))
         {
             return (false,
                     RedirectToAction("Index", "CheckAdditionalRequirements",
-                                     new { qualification.QualificationId }));
+                                     new { model.QualificationId }));
         }
 
         // If there are not any answers to the questions that are not full and relevant we can continue back to check the ratios.
-        if (!CheckForAnyNonFAndRAnswers(qualification.AdditionalRequirementQuestions,
-                                        additionalRequirementsAnswers)) return (true, null);
+        if (!AnswersIndicateNotFullAndRelevant(model.AdditionalRequirementAnswers)) return (true, null);
         
         // At this point, there will be at least one question answered in a non full and relevant way.
         // we mark the ratios as not full and relevant and return.
@@ -129,17 +123,16 @@ public class QualificationDetailsController(
     /// A function to take in the additional requirement questions and answers, match them up and check to see if the
     /// user has answered any in a non full and relevant way.
     /// </summary>
-    /// <param name="additionalRequirementQuestions">This should come from the qualification model</param>
-    /// <param name="additionalRequirementsAnswers">This should come from the user's selected answers</param>
+    /// <param name="additionalRequirementsAnswers">This should come from the pre mapped questions and answers</param>
     /// <returns>True if we find any question answered in a non full and relevant way, false if none are found</returns>
-    private static bool CheckForAnyNonFAndRAnswers(List<AdditionalRequirementQuestion> additionalRequirementQuestions,
-                                                    Dictionary<string, string> additionalRequirementsAnswers)
+    private static bool AnswersIndicateNotFullAndRelevant(List<AdditionalRequirementAnswerModel> additionalRequirementsAnswers)
     {
-        return (from question in additionalRequirementQuestions
-                 from answer in additionalRequirementsAnswers
-                 where question.Question == answer.Key && ((question.AnswerToBeFullAndRelevant && answer.Value == "no") ||
-                        (!question.AnswerToBeFullAndRelevant && answer.Value == "yes"))
-                 select question).Any();
+        return additionalRequirementsAnswers.Any(answer => answer is { AnswerToBeFullAndRelevant: true, Answer: "no" }
+                                                                     or
+                                                                     {
+                                                                         AnswerToBeFullAndRelevant: false,
+                                                                         Answer: "yes"
+                                                                     });
     }
 
     private async Task CheckRatioRequirements(int startDateYear, Qualification qualification, QualificationDetailsModel model)
@@ -326,8 +319,7 @@ public class QualificationDetailsController(
                    AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
                    FromWhichYear = qualification.FromWhichYear,
                    BackButton = MapToNavigationLinkModel(content.BackButton),
-                   AdditionalRequirementQuestions =
-                       await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions),
+                   AdditionalRequirementAnswers = MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions),
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
@@ -353,22 +345,33 @@ public class QualificationDetailsController(
                };
     }
 
-    private async Task<List<AdditionalRequirementQuestionModel>?> MapAdditionalRequirementQuestions(
+    private List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
         List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
     {
         if (additionalRequirementQuestions is null) return null;
 
-        var results = new List<AdditionalRequirementQuestionModel>();
+        var additionalRequirementsAnswers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+        
+        var results = new List<AdditionalRequirementAnswerModel>();
+        
+        if (additionalRequirementsAnswers is null) return results;
 
         foreach (var additionalRequirementQuestion in additionalRequirementQuestions)
         {
-            results.Add(new AdditionalRequirementQuestionModel
-                        {
-                            Question = additionalRequirementQuestion.Question,
-                            HintText = additionalRequirementQuestion.HintText,
-                            DetailsHeading = additionalRequirementQuestion.DetailsHeading,
-                            DetailsContent = await htmlRenderer.ToHtml(additionalRequirementQuestion.DetailsContent),
-                        });
+            var answerToAdd = new AdditionalRequirementAnswerModel
+                              {
+                                  Question = additionalRequirementQuestion.Question,
+                                  AnswerToBeFullAndRelevant = additionalRequirementQuestion.AnswerToBeFullAndRelevant,
+                                  ConfirmationStatement = additionalRequirementQuestion.ConfirmationStatement
+                              };
+            
+            if (additionalRequirementsAnswers.TryGetValue(additionalRequirementQuestion.Question, out var answer))
+            {
+                answerToAdd.Answer = answer;
+            }
+            
+            results.Add(answerToAdd);
+            
         }
 
         return results;
