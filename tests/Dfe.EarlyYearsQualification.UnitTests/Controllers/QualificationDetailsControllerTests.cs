@@ -133,9 +133,15 @@ public class QualificationDetailsControllerTests
 
         const string qualificationId = "eyq-145";
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
-                                                    2, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", null, null);
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    2)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements"
+                                  };
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
@@ -183,10 +189,16 @@ public class QualificationDetailsControllerTests
         // Mismatch between the two lists here to simulate questions not being answered
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>();
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
-                                                    2, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", listOfAdditionalReqs,
-                                                    null);
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    2)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements",
+                                      AdditionalRequirementQuestions = listOfAdditionalReqs
+                                  };
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
@@ -253,10 +265,16 @@ public class QualificationDetailsControllerTests
                                                { "Another Question", answer2 }
                                            };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
-                                                    2, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", listOfAdditionalReqs,
-                                                    null);
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    2)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements",
+                                      AdditionalRequirementQuestions = listOfAdditionalReqs
+                                  };
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
@@ -317,9 +335,16 @@ public class QualificationDetailsControllerTests
 
         var ratioRequirements = new List<RatioRequirement>();
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
-                                                    level, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", null, ratioRequirements);
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    level)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements",
+                                      RatioRequirements = ratioRequirements
+                                  };
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
@@ -364,9 +389,16 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
-                                                    level, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", null, ratioRequirements);
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    level)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements",
+                                      RatioRequirements = ratioRequirements
+                                  };
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
@@ -416,9 +448,16 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
-                                                    level, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", null, ratioRequirements);
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    level)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements",
+                                      RatioRequirements = ratioRequirements
+                                  };
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
@@ -482,9 +521,16 @@ public class QualificationDetailsControllerTests
                                     }
                                 };
 
-        var qualificationResult = new Qualification(qualificationId, "Qualification Name", AwardingOrganisations.Ncfe,
-                                                    level, "2014", "2019",
-                                                    "ABC/547/900", "additional requirements", null, ratioRequirements);
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    level)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements",
+                                      RatioRequirements = ratioRequirements
+                                  };
 
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
