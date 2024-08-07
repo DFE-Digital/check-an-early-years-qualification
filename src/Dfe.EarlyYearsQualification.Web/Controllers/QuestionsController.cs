@@ -133,11 +133,13 @@ public class QuestionsController(
         }
 
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
-
+        
         return model.Option switch
                {
                    "2" when WasAwardedBetweenSeptember2014AndAugust2019() =>
                        RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice"),
+                   "6" => 
+                       RedirectToAction(WasStartedBeforeSeptember2014() ? "Level6QualificationPre2014" : "Level6QualificationPost2014", "Advice"),
                    "7" => RedirectToAction(nameof(AdviceController.QualificationLevel7), "Advice"),
                    _ => RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation))
                };
@@ -189,6 +191,19 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
+    private bool WasStartedBeforeSeptember2014()
+    {
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+
+        if (startDateMonth is null || startDateYear is null)
+        {
+            return false;
+        }
+
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date < new DateOnly(2014, 9, 1);
+    }
+    
     private bool WasAwardedBetweenSeptember2014AndAugust2019()
     {
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();

@@ -203,6 +203,88 @@ describe('A spec used to test the various routes through the journey', () => {
     })
   })
 
+  it("Selecting qualification level 6 started before 1 Sept 2014 should navigate to the level 6 pre 2014 advice page", () => {
+    // home page
+    cy.get('.govuk-button--start').click();
+
+    // where-was-the-qualification-awarded page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+    })
+
+    cy.get('#england').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // when-was-the-qualification-started page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
+    })
+
+    cy.get('#date-started-month').type("8");
+    cy.get('#date-started-year').type("2014");
+    cy.get('button[id="question-submit"]').click();
+
+    // what-level-is-the-qualification page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+    })
+    cy.get('#6').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // level 6 pre 2014 advice page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/advice/level-6-qualification-pre-2014');
+    })
+
+    // check back button goes back to the what level is the qualification page
+    cy.get('#back-button').click();
+
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+    })
+  })
+
+  it("Selecting qualification level 6 started after 1 Sept 2014 should navigate to the level 6 post 2014 advice page", () => {
+    // home page
+    cy.get('.govuk-button--start').click();
+
+    // where-was-the-qualification-awarded page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+    })
+
+    cy.get('#england').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // when-was-the-qualification-started page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
+    })
+
+    cy.get('#date-started-month').type("8");
+    cy.get('#date-started-year').type("2015");
+    cy.get('button[id="question-submit"]').click();
+
+    // what-level-is-the-qualification page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+    })
+    cy.get('#6').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // level 6 post 2014 advice page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/advice/level-6-qualification-post-2014');
+    })
+
+    // check back button goes back to the what level is the qualification page
+    cy.get('#back-button').click();
+
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+    })
+  })
+
   it("Selecting qualification level 7 should navigate to the level 7 advice page", () => {
     // home page
     cy.get('.govuk-button--start').click();

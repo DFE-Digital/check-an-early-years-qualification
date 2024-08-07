@@ -63,6 +63,14 @@ public class MockContentfulService : IContentService
                                                               body,
                                                               WhatLevelIsTheQualificationPath)),
 
+                   
+                   AdvicePages.Level6QualificationPre2014 =>
+                       await Task.FromResult(CreateAdvicePage("Level 6 qualification pre 2014",
+                                                              body, WhatLevelIsTheQualificationPath)),
+                   
+                   AdvicePages.Level6QualificationPost2014 =>
+                       await Task.FromResult(CreateAdvicePage("Level 6 qualification post 2014",
+                                                              body, WhatLevelIsTheQualificationPath)),
                    _ => null
                };
     }
@@ -495,6 +503,10 @@ public class MockContentfulService : IContentService
                           new()
                           {
                               Label = "Level 3", Value = "3"
+                          },
+                          new()
+                          {
+                              Label = "Level 6", Value = "6"
                           },
                           new()
                           {
