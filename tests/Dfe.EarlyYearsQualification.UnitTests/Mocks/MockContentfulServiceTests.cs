@@ -288,17 +288,18 @@ public class MockContentfulServiceTests
         result.ErrorBannerHeading.Should().NotBeNull();
         result.ErrorBannerLinkText.Should().NotBeNull();
         result.Options.Should().NotBeNullOrEmpty();
-        result.Options.Count.Should().Be(5);
-        result.Options[0].Label.Should().Be("England");
-        result.Options[0].Value.Should().Be("england");
-        result.Options[1].Label.Should().Be("Scotland");
-        result.Options[1].Value.Should().Be("scotland");
-        result.Options[2].Label.Should().Be("Wales");
-        result.Options[2].Value.Should().Be("wales");
-        result.Options[3].Label.Should().Be("Northern Ireland");
-        result.Options[3].Value.Should().Be("northern-ireland");
-        result.Options[4].Label.Should().Be("Outside the United Kingdom");
-        result.Options[4].Value.Should().Be("outside-uk");
+        result.Options.Count.Should().Be(6);
+        (result.Options[0] as Option)!.Label.Should().Be("England");
+        (result.Options[0] as Option)!.Value.Should().Be("england");
+        (result.Options[1] as Option)!.Label.Should().Be("Scotland");
+        (result.Options[1] as Option)!.Value.Should().Be("scotland");
+        (result.Options[2] as Option)!.Label.Should().Be("Wales");
+        (result.Options[2] as Option)!.Value.Should().Be("wales");
+        (result.Options[3] as Option)!.Label.Should().Be("Northern Ireland");
+        (result.Options[3] as Option)!.Value.Should().Be("northern-ireland");
+        (result.Options[4] as Divider)!.Text.Should().Be("or");
+        (result.Options[5] as Option)!.Label.Should().Be("Outside the United Kingdom");
+        (result.Options[5] as Option)!.Value.Should().Be("outside-uk");
     }
 
     [TestMethod]
@@ -319,14 +320,14 @@ public class MockContentfulServiceTests
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.Options.Should().NotBeNullOrEmpty();
         result.Options.Count.Should().Be(4);
-        result.Options[0].Label.Should().Be("Level 2");
-        result.Options[0].Value.Should().Be("2");
-        result.Options[1].Label.Should().Be("Level 3");
-        result.Options[1].Value.Should().Be("3");
-        result.Options[2].Label.Should().Be("Level 6");
-        result.Options[2].Value.Should().Be("6");
-        result.Options[3].Label.Should().Be("Level 7");
-        result.Options[3].Value.Should().Be("7");
+        (result.Options[0] as Option)!.Label.Should().Be("Level 2");
+        (result.Options[0] as Option)!.Value.Should().Be("2");
+        (result.Options[1] as Option)!.Label.Should().Be("Level 3");
+        (result.Options[1] as Option)!.Value.Should().Be("3");
+        (result.Options[2] as Option)!.Label.Should().Be("Level 6");
+        (result.Options[2] as Option)!.Value.Should().Be("6");
+        (result.Options[3] as Option)!.Label.Should().Be("Level 7");
+        (result.Options[3] as Option)!.Value.Should().Be("7");
     }
 
     [TestMethod]

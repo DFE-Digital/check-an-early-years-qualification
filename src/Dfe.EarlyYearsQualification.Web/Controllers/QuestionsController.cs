@@ -243,7 +243,7 @@ public class QuestionsController(
                                                          string controllerName)
     {
         model.Question = question.Question;
-        model.Options = question.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList();
+        model.OptionsItems = MapOptionItems(question.Options); // question.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList();
         model.CtaButtonText = question.CtaButtonText;
         model.ActionName = actionName;
         model.ControllerName = controllerName;
@@ -254,6 +254,27 @@ public class QuestionsController(
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
         return model;
+    }
+
+    private static List<IOptionItemModel> MapOptionItems(List<IOptionItem> questionOptions)
+    {
+        var results = new List<IOptionItemModel>();
+
+        foreach (var optionItem in questionOptions)
+        {
+            if (optionItem.GetType() == typeof(Option))
+            {
+                var option = (Option)optionItem;
+                results.Add(new OptionModel { Hint = option.Hint, Value = option.Value, Label = option.Label });
+            }
+            else if (optionItem.GetType() == typeof(Divider))
+            {
+                var divider = (Divider)optionItem;
+                results.Add(new DividerModel { Text = divider.Text });
+            }
+        }
+
+        return results;
     }
 
     private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question,
