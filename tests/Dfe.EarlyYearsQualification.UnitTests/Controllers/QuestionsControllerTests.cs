@@ -741,6 +741,36 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
+    public async Task Post_WhatLevelIsTheQualification_Level7_ReturnsRedirectResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded())
+                                    .Returns((6, 2015));
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
+                                                 mockUserJourneyCookieService.Object, mockContentFilterService.Object,
+                                                 mockQuestionModelValidator.Object);
+
+        var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
+                                                                  {
+                                                                      Option = "7"
+                                                                  });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be(nameof(AdviceController.QualificationLevel7));
+        resultType.ControllerName.Should().Be("Advice");
+    }
+
+    [TestMethod]
     public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();

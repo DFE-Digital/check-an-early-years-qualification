@@ -21,16 +21,21 @@ public static class AdvicePages
     ///     Entry ID for the "Qualifications achieved in Scotland" advice page.
     /// </summary>
     public const string QualificationsAchievedInScotland = "3deQYTynsM9iLnJ5fgFqk";
-        
+
     /// <summary>
     ///     Entry ID for the "Qualifications achieved in Northern Ireland" advice page.
     /// </summary>
     public const string QualificationsAchievedInWales = "1Xu4FPcZDxFb5yDCI6lLCj";
-    
+
     /// <summary>
     ///     Entry ID for the "Qualification not on the list" advice page.
     /// </summary>
     public const string QualificationNotOnTheList = "XU6vhxIHdeasGLwueCGel";
+
+    /// <summary>
+    ///     Entry ID for the "Qualification Level 7" advice page
+    /// </summary>
+    public const string QualificationLevel7 = "1bGiyvwsJZPd14dwrVtWCM";
     
     /// <summary>
     ///     Entry ID for the "Level 6 qualification pre-2014" advice page.
