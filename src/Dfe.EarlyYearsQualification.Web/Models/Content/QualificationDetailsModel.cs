@@ -12,7 +12,7 @@ public class QualificationDetailsModel : BasicQualificationModel
 
     public DetailsPageModel? Content { get; init; }
 
-    public List<AdditionalRequirementQuestionModel>? AdditionalRequirementQuestions { get; init; }
+    public List<AdditionalRequirementAnswerModel>? AdditionalRequirementAnswers { get; init; }
 
     public RatioRequirementModel RatioRequirements { get; set; } = new ();
 }

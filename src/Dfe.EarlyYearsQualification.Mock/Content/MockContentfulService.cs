@@ -218,7 +218,7 @@ public class MockContentfulService : IContentService
                                                          }
                                                      ],
                                                      ConfirmationStatement =
-                                                         "This is the confirmation statement",
+                                                         "This is the confirmation statement 1",
                                                      AnswerToBeFullAndRelevant = true
                                                  },
                                                  new()
@@ -245,40 +245,39 @@ public class MockContentfulService : IContentService
                                                          }
                                                      ],
                                                      ConfirmationStatement =
-                                                         "This is the confirmation statement",
+                                                         "This is the confirmation statement 2",
                                                      AnswerToBeFullAndRelevant = true
                                                  }
                                              },
-                                         RatioRequirements =
-                                             new List<RatioRequirement>
-                                             {
-                                                 new()
-                                                 {
-                                                     RatioRequirementName =
-                                                         RatioRequirements
-                                                             .Level2RatioRequirementName,
-                                                     FullAndRelevantForLevel3After2014 = true
-                                                 },
-                                                 new()
-                                                 {
-                                                     RatioRequirementName =
-                                                         RatioRequirements
-                                                             .Level3RatioRequirementName,
-                                                     FullAndRelevantForLevel3After2014 = true
-                                                 },
-                                                 new()
-                                                 {
-                                                     RatioRequirementName = RatioRequirements
-                                                         .Level6RatioRequirementName
-                                                 },
-                                                 new()
-                                                 {
-                                                     RatioRequirementName =
-                                                         RatioRequirements
-                                                             .UnqualifiedRatioRequirementName,
-                                                     FullAndRelevantForLevel3After2014 = true
-                                                 }
-                                             }
+                                         RatioRequirements = new List<RatioRequirement>
+                                                             {
+                                                                 new()
+                                                                 {
+                                                                     RatioRequirementName =
+                                                                         RatioRequirements
+                                                                             .Level2RatioRequirementName,
+                                                                     FullAndRelevantForLevel3After2014 = true
+                                                                 },
+                                                                 new()
+                                                                 {
+                                                                     RatioRequirementName =
+                                                                         RatioRequirements
+                                                                             .Level3RatioRequirementName,
+                                                                     FullAndRelevantForLevel3After2014 = true
+                                                                 },
+                                                                 new()
+                                                                 {
+                                                                     RatioRequirementName = RatioRequirements
+                                                                         .Level6RatioRequirementName
+                                                                 },
+                                                                 new()
+                                                                 {
+                                                                     RatioRequirementName =
+                                                                         RatioRequirements
+                                                                             .UnqualifiedRatioRequirementName,
+                                                                     FullAndRelevantForLevel3After2014 = true
+                                                                 }
+                                                             }
                                      });
     }
 
