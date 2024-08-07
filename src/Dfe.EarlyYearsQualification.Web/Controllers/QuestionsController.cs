@@ -133,17 +133,13 @@ public class QuestionsController(
         }
 
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
-
-        if (model.Option == "6")
-        {
-            var isPre2014 = WasAwardedBeforeSeptember2014();
-            return RedirectToAction(isPre2014 ? "Level6QualificationPre2014" : "Level6QualificationPost2014", "Advice");
-        }
         
         return model.Option switch
                {
                    "2" when WasAwardedBetweenSeptember2014AndAugust2019() =>
                        RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice"),
+                   "6" => 
+                       RedirectToAction(WasStartedBeforeSeptember2014() ? "Level6QualificationPre2014" : "Level6QualificationPost2014", "Advice"),
                    "7" => RedirectToAction(nameof(AdviceController.QualificationLevel7), "Advice"),
                    _ => RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation))
                };
@@ -195,7 +191,7 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
-    private bool WasAwardedBeforeSeptember2014()
+    private bool WasStartedBeforeSeptember2014()
     {
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
 

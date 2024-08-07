@@ -506,6 +506,10 @@ public class MockContentfulService : IContentService
                           },
                           new()
                           {
+                              Label = "Level 6", Value = "6"
+                          },
+                          new()
+                          {
                               Label = "Level 7", Value = "7"
                           }
                       };
