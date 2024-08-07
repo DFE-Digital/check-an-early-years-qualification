@@ -36,4 +36,14 @@ public static class AdvicePages
     ///     Entry ID for the "Qualification Level 7" advice page
     /// </summary>
     public const string QualificationLevel7 = "1bGiyvwsJZPd14dwrVtWCM";
+    
+    /// <summary>
+    ///     Entry ID for the "Level 6 qualification pre-2014" advice page.
+    /// </summary>
+    public const string Level6QualificationPre2014 = "2TT7k2J5KUNmUQ3f8A56tw";
+    
+    /// <summary>
+    ///     Entry ID for the "Level 6 qualification post-2014" advice page.
+    /// </summary>
+    public const string Level6QualificationPost2014 = "5aoy3C3jIEKdMo8fauvyvk";
 }

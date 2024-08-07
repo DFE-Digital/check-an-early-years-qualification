@@ -110,6 +110,32 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_Level6QualificationPre2014_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.Level6QualificationPre2014);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_Level6QualificationPost2014_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.Level6QualificationPost2014);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
 
     [TestMethod]
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
@@ -292,13 +318,15 @@ public class MockContentfulServiceTests
         result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.Options.Should().NotBeNullOrEmpty();
-        result.Options.Count.Should().Be(3);
+        result.Options.Count.Should().Be(4);
         result.Options[0].Label.Should().Be("Level 2");
         result.Options[0].Value.Should().Be("2");
         result.Options[1].Label.Should().Be("Level 3");
         result.Options[1].Value.Should().Be("3");
-        result.Options[2].Label.Should().Be("Level 7");
-        result.Options[2].Value.Should().Be("7");
+        result.Options[2].Label.Should().Be("Level 6");
+        result.Options[2].Value.Should().Be("6");
+        result.Options[3].Label.Should().Be("Level 7");
+        result.Options[3].Value.Should().Be("7");
     }
 
     [TestMethod]
