@@ -11,6 +11,10 @@ describe("A spec that tests question pages", () => {
 
         cy.get("#question").should("contain.text", "Where was the qualification awarded?");
         cy.get("#england").should("exist");
+        cy.get("#scotland").should("exist");
+        cy.get("#wales").should("exist");
+        cy.get("#northern-ireland").should("exist");
+        cy.get(".govuk-radios__divider").should("contain.text", "or");
         cy.get("#outside-uk").should("exist");
     })
 
@@ -95,6 +99,10 @@ describe("A spec that tests question pages", () => {
         cy.get("#question").should("contain.text", "What level is the qualification?");
         cy.get("#2").should("exist");
         cy.get("#3").should("exist");
+        cy.get("#6").should("exist");
+        cy.get("#6_hint").should("exist");
+        cy.get("#6_hint").should("contain.text", "Some hint text");
+        cy.get("#7").should("exist");
     })
 
     it("Checks additional information on the what-level-is-the-qualification page", () => {

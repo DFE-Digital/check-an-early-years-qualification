@@ -62,9 +62,10 @@
                                     </label>
                                     @if (!string.IsNullOrEmpty(optionModel.Hint))
                                     {
-                                        <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
-                                            @optionModel.Hint
-                                        </div>
+                                         var hintId = $"{optionModel.Value}_hint";
+                                         <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                             @optionModel.Hint
+                                         </div>
                                     }
                                 </div>
                             }
