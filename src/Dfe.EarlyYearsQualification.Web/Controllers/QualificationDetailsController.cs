@@ -364,10 +364,9 @@ public class QualificationDetailsController(
 
     private NavigationLink? CalculateBackButton(DetailsPage content)
     {
-        if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions()
-            && content.BackToAdditionalQuestionsLink != null)
+        if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions())
         {
-            return content.BackToAdditionalQuestionsLink;
+            return content.BackToAdditionalQuestionsLink ?? content.BackButton;
         }
 
         var level = userJourneyCookieService.GetLevelOfQualification();
