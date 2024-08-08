@@ -9,7 +9,7 @@ public interface IUserJourneyCookieService
     public void SetLevelOfQualification(string level);
     public void SetAwardingOrganisation(string awardingOrganisation);
     public void SetAdditionalQuestionsAnswers(Dictionary<string, string> additionalQuestionsAnswers);
-    
+
     public void SetQualificationNameSearchCriteria(string searchCriteria);
     public UserJourneyModel GetUserJourneyModelFromCookie();
     public void ResetUserJourneyCookie();
@@ -18,7 +18,8 @@ public interface IUserJourneyCookieService
     public (int? startMonth, int? startYear) GetWhenWasQualificationAwarded();
     public int? GetLevelOfQualification();
     public string? GetAwardingOrganisation();
-    
+
     public string? GetSearchCriteria();
     public Dictionary<string, string>? GetAdditionalQuestionsAnswers();
+    public bool UserHasAnsweredAdditionalQuestions();
 }

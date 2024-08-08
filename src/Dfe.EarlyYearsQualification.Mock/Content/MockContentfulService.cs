@@ -136,6 +136,30 @@ public class MockContentfulService : IContentService
                                                           Href = "/confirm-qualification/eyq-240",
                                                           OpenInNewTab = false
                                                       },
+                                         BackToAdditionalQuestionsLink = new NavigationLink
+                                                                         {
+                                                                             DisplayText =
+                                                                                 "TEST (back to additional questions",
+                                                                             Href =
+                                                                                 "check-additional-questions/EYQ-240",
+                                                                             OpenInNewTab = false
+                                                                         },
+                                         BackToLevelSixAdvice = new NavigationLink
+                                                                {
+                                                                    DisplayText =
+                                                                        "TEST (back to level 6 advice post 2014)",
+                                                                    Href =
+                                                                        "/advice/level-6-qualification-post-2014",
+                                                                    OpenInNewTab = false
+                                                                },
+                                         BackToLevelSixAdviceBefore2014 = new NavigationLink
+                                                                          {
+                                                                              DisplayText =
+                                                                                  "TEST (back to level 6 advice pre 2014)",
+                                                                              Href =
+                                                                                  "/advice/level-6-qualification-pre-2014",
+                                                                              OpenInNewTab = false
+                                                                          },
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
                                          RequirementsHeading = "Test requirements heading",
