@@ -3,6 +3,7 @@ using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
+using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -135,6 +136,7 @@ public class ContentfulContentService(
 
     public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
     {
+        contentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
         return await GetEntryById<RadioQuestionPage>(entryId);
     }
 

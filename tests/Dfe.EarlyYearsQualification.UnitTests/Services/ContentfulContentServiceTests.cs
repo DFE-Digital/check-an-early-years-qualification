@@ -8,6 +8,7 @@ using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -33,6 +34,7 @@ public class ContentfulContentServiceTests
     {
         _logger = new Mock<ILogger<ContentfulContentService>>();
         _clientMock = new Mock<IContentfulClient>();
+        _clientMock.Setup(x => x.SerializerSettings).Returns(new JsonSerializerSettings { Converters = new List<JsonConverter>()});
     }
 
     [TestMethod]
@@ -369,6 +371,7 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
+        
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
                                                       It.IsAny<string>(),

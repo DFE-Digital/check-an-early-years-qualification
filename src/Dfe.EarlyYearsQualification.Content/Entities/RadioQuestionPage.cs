@@ -6,7 +6,7 @@ public class RadioQuestionPage
 {
     public string Question { get; init; } = string.Empty;
 
-    public List<Option> Options { get; init; } = [];
+    public List<IOptionItem> Options { get; init; } = [];
 
     public string CtaButtonText { get; init; } = string.Empty;
 

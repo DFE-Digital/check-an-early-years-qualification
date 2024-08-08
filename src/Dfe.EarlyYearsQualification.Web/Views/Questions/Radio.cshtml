@@ -1,3 +1,4 @@
+@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
 @model Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.RadioQuestionModel
 
 @{
@@ -14,11 +15,12 @@
     <div class="govuk-grid-column-two-thirds">
         @if (Model.HasErrors)
         {
+            var elementLinkId = Model.OptionsItems.First(x => x.GetType() == typeof(OptionModel)) as OptionModel;
             await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
                                                                     {
                                                                         ErrorBannerHeading = Model.ErrorBannerHeading,
                                                                         ErrorBannerLinkText = Model.ErrorBannerLinkText,
-                                                                        ElementLinkId = Model.Options[0].Value
+                                                                        ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
                                                                     });
         }
         @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
@@ -48,14 +50,30 @@
                         </p>
                     }
                     <div class="govuk-radios" data-module="govuk-radios">
-                        @foreach (var option in Model.Options)
+                        @foreach (var option in Model.OptionsItems)
                         {
-                            <div class="govuk-radios__item">
-                                @Html.RadioButtonFor(x => x.Option, option.Value, new { @class = "govuk-radios__input", id = option.Value })
-                                <label class="govuk-label govuk-radios__label" for="@option.Value">
-                                    @option.Label
-                                </label>
-                            </div>
+                            if (option.GetType() == typeof(OptionModel))
+                            {
+                                var optionModel = option as OptionModel;
+                                 <div class="govuk-radios__item">
+                                    @Html.RadioButtonFor(x => x.Option, optionModel!.Value, new { @class = "govuk-radios__input", id = optionModel.Value })
+                                    <label class="govuk-label govuk-radios__label" for="@optionModel.Value">
+                                        @optionModel.Label
+                                    </label>
+                                    @if (!string.IsNullOrEmpty(optionModel.Hint))
+                                    {
+                                         var hintId = $"{optionModel.Value}_hint";
+                                         <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                             @optionModel.Hint
+                                         </div>
+                                    }
+                                </div>
+                            }
+                            else if (option.GetType() == typeof(DividerModel))
+                            {
+                                var optionModel = option as DividerModel;
+                                <div class="govuk-radios__divider">@optionModel!.Text</div>
+                            }
                         }
                     </div>
                 </fieldset>
