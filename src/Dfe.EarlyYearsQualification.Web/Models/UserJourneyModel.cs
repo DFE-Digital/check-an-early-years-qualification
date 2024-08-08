@@ -9,5 +9,5 @@ public class UserJourneyModel
 
     public string SearchCriteria { get; set; } = string.Empty;
 
-    public Dictionary<string, string>? AdditionalQuestionsAnswers { get; set; }
+    public Dictionary<string, string> AdditionalQuestionsAnswers { get; init; } = new();
 }

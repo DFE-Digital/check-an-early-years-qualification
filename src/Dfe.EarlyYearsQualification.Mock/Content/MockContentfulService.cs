@@ -197,7 +197,8 @@ public class MockContentfulService : IContentService
                                                  new()
                                                  {
                                                      Question = "Test question",
-                                                     HintText = "This is the hint text",
+                                                     HintText =
+                                                         "This is the hint text: answer yes for full and relevant",
                                                      DetailsHeading =
                                                          "This is the details heading",
                                                      DetailsContent =
@@ -224,7 +225,8 @@ public class MockContentfulService : IContentService
                                                  new()
                                                  {
                                                      Question = "Test question 2",
-                                                     HintText = "This is the hint text",
+                                                     HintText =
+                                                         "This is the hint text: answer no for full and relevant",
                                                      DetailsHeading =
                                                          "This is the details heading",
                                                      DetailsContent =
@@ -246,7 +248,7 @@ public class MockContentfulService : IContentService
                                                      ],
                                                      ConfirmationStatement =
                                                          "This is the confirmation statement 2",
-                                                     AnswerToBeFullAndRelevant = true
+                                                     AnswerToBeFullAndRelevant = false
                                                  }
                                              },
                                          RatioRequirements = new List<RatioRequirement>
@@ -325,8 +327,35 @@ public class MockContentfulService : IContentService
                                        "C awarding organisation", 123),
                                    new("4", "TEST",
                                        "D awarding organisation", 123),
-                                   new("5", "TEST",
+                                   new("5", "TEST with additional requirements",
                                        "E awarding organisation", 123)
+                                   {
+                                       AdditionalRequirements = "Additional requirements",
+                                       AdditionalRequirementQuestions = new List<AdditionalRequirementQuestion>
+                                                                        {
+                                                                            new()
+                                                                            {
+                                                                                Question =
+                                                                                    "Answer 'yes' for this to be full and relevant",
+                                                                                AnswerToBeFullAndRelevant = true,
+                                                                                Answers =
+                                                                                [
+                                                                                    new Option
+                                                                                    {
+                                                                                        Label = "Yes",
+                                                                                        Value = "yes"
+                                                                                    },
+
+                                                                                    new Option
+                                                                                    {
+                                                                                        Label = "No",
+                                                                                        Value = "no"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                       QualificationNumber = "Q/22/2427"
+                                   }
                                });
     }
 

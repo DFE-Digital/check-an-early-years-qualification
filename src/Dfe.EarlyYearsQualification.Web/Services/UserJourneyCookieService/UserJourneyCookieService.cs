@@ -2,10 +2,11 @@ using System.Globalization;
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
-public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<UserJourneyCookieService> logger)
+public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<UserJourneyCookieService> logger)
     : IUserJourneyCookieService
 {
     private readonly CookieOptions _options = new()
@@ -51,11 +52,20 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         SetJourneyCookie(model);
     }
 
+    /// <summary>
+    ///     Replaces all the existing question answers in the user journey with <paramref name="additionalQuestionsAnswers" />
+    /// </summary>
+    /// <param name="additionalQuestionsAnswers"></param>
     public void SetAdditionalQuestionsAnswers(Dictionary<string, string> additionalQuestionsAnswers)
     {
         var model = GetUserJourneyModelFromCookie();
 
-        model.AdditionalQuestionsAnswers = additionalQuestionsAnswers;
+        model.AdditionalQuestionsAnswers.Clear();
+
+        foreach (var answer in additionalQuestionsAnswers)
+        {
+            model.AdditionalQuestionsAnswers[answer.Key] = answer.Value;
+        }
 
         SetJourneyCookie(model);
     }
@@ -71,17 +81,18 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
 
     public UserJourneyModel GetUserJourneyModelFromCookie()
     {
-        var cookie = context.HttpContext?.Request.Cookies[CookieKeyNames.UserJourneyKey];
-        if (cookie is null)
+        var cookies = cookieManager.ReadInboundCookies();
+
+        if (cookies?.TryGetValue(CookieKeyNames.UserJourneyKey, out var cookie) != true)
         {
             ResetUserJourneyCookie();
             return new UserJourneyModel();
         }
 
+        UserJourneyModel? userJourneyModel;
         try
         {
-            var toReturn = JsonSerializer.Deserialize<UserJourneyModel>(cookie);
-            return toReturn!;
+            userJourneyModel = JsonSerializer.Deserialize<UserJourneyModel>(cookie!);
         }
         catch
         {
@@ -89,6 +100,8 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
             ResetUserJourneyCookie();
             return new UserJourneyModel();
         }
+
+        return userJourneyModel ?? new UserJourneyModel();
     }
 
     public void ResetUserJourneyCookie()
@@ -115,7 +128,7 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         int? startDateMonth = null;
         int? startDateYear = null;
         var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
-        
+
         // ReSharper disable once InvertIf
         if (qualificationAwardedDateSplit.Length == 2
             && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
@@ -164,15 +177,21 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         return searchCriteria;
     }
 
-    public Dictionary<string, string>? GetAdditionalQuestionsAnswers()
+    public Dictionary<string, string> GetAdditionalQuestionsAnswers()
     {
         var cookie = GetUserJourneyModelFromCookie();
         return cookie.AdditionalQuestionsAnswers;
     }
 
+    public bool UserHasAnsweredAdditionalQuestions()
+    {
+        var cookie = GetUserJourneyModelFromCookie();
+        return cookie.AdditionalQuestionsAnswers.Count > 0;
+    }
+
     private void SetJourneyCookie(UserJourneyModel model)
     {
         var serializedCookie = JsonSerializer.Serialize(model);
-        context.HttpContext?.Response.Cookies.Append(CookieKeyNames.UserJourneyKey, serializedCookie, _options);
+        cookieManager.SetOutboundCookie(CookieKeyNames.UserJourneyKey, serializedCookie, _options);
     }
 }
