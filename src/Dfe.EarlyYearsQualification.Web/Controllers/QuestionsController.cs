@@ -243,7 +243,7 @@ public class QuestionsController(
                                                          string controllerName)
     {
         model.Question = question.Question;
-        model.OptionsItems = MapOptionItems(question.Options); // question.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList();
+        model.OptionsItems = MapOptionItems(question.Options);
         model.CtaButtonText = question.CtaButtonText;
         model.ActionName = actionName;
         model.ControllerName = controllerName;
