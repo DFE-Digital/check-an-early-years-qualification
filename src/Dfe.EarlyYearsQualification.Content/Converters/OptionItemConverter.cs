@@ -6,15 +6,15 @@ namespace Dfe.EarlyYearsQualification.Content.Converters;
 
 public class OptionItemConverter : JsonConverter
 {
-    public override bool CanConvert(Type typeToConvert)
+    public override bool CanConvert(Type objectType)
     {
-        return typeToConvert == typeof(IOptionItem);
+        return objectType == typeof(IOptionItem);
     }
 
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
         var jo = JObject.Load(reader);
-        var hasLabel = jo.ContainsKey("label");
+        var hasLabel = jo.ContainsKey("label") || jo.ContainsKey("Label");
         IOptionItem model = hasLabel ? new Option() : new Divider();
         serializer.Populate(jo.CreateReader(), model);
         return model;
