@@ -251,7 +251,8 @@ public class QualificationDetailsController(
                    PostQualificationListContent = await htmlRenderer.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
                    SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
-                   Qualifications = basicQualificationsModels.OrderBy(x => x.QualificationName).ToList()
+                   Qualifications = basicQualificationsModels.OrderBy(x => x.QualificationName).ToList(),
+                   NoResultText = await htmlRenderer.ToHtml(content.NoResultsText)
                };
     }
 

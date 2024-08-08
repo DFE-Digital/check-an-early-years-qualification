@@ -28,6 +28,14 @@ public static class NestedContentHelper
                     continue;
 
                 case Text t:
+                    if (t.Marks.Count > 0 && t.Marks.Any(mark => mark.Type == "bold"))
+                    {
+                        sb.Append("<b>");
+                        sb.Append(t.Value);
+                        sb.Append("</b>");
+                        continue;
+                    }
+                    
                     sb.Append(t.Value);
                     continue;
                 

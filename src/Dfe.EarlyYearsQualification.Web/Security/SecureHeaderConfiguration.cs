@@ -46,7 +46,6 @@ public static class SecureHeaderConfiguration
                                                 CommandType = CspCommandType.Directive,
                                                 DirectiveOrUri = "sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw="
                                             };
-
         var govukAllMinifiedElement = new ContentSecurityPolicyElement
                                       {
                                           CommandType = CspCommandType.Directive,
@@ -80,6 +79,18 @@ public static class SecureHeaderConfiguration
                               CommandType = CspCommandType.Directive,
                               DirectiveOrUri = "sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I="
                           };
+
+        var qualificationSearchClear = new ContentSecurityPolicyElement
+                                       {
+                                           CommandType = CspCommandType.Directive,
+                                           DirectiveOrUri = "sha256-srtO38mCTBDNIatd8nPrAAqKznor3jlT5dLCS/P4iF4="
+                                       };
+        
+        var test = new ContentSecurityPolicyElement
+                   {
+                       CommandType = CspCommandType.Directive,
+                       DirectiveOrUri = "sha256-8gEdNcDa9WCfzOPJMd78il56oDlvutN74/V/ZuZUYqc="
+                   };
         
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
@@ -93,6 +104,8 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmInjectedScriptCspElement);
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowPrint);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(qualificationSearchClear);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(test);
         
         return configuration;
     }

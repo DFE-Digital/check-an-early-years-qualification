@@ -10,8 +10,15 @@
     }
 }
 
+<script type="text/javascript">
+    function ClearSearch() {
+        $('#refineSearch').val('');
+        $('#search-button').click();
+    }
+</script>
+
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
+    <div class="govuk-grid-column-one-quarter">
         <h2 id="your-search-header" class="govuk-label-wrapper">
             <label class="govuk-label govuk-label--m">@Model.SearchCriteriaHeading</label>
         </h2>
@@ -24,24 +31,37 @@
 
         <div id="post-filter-content">@Html.Raw(Model.PostSearchCriteriaContent)</div>
     </div>
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-three-quarters">
         <h1 id="heading" class="govuk-heading-xl mb-8">@Model.Header</h1>
         <h3 id="found-heading" class="govuk-heading-m govuk-!-static-margin-bottom-8">
             <strong>
-                @Model.Qualifications.Count @(Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText)
+                @if (Model.Qualifications.Count > 0)
+                {
+                    @Model.Qualifications.Count
+                }
+                else
+                {
+                    <span>No</span>
+                } @(Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText)
             </strong>
         </h3>
         <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
         <div class="govuk-form-group">
             @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post))
             {
-                <input class="govuk-input govuk-!-width-three-quarters" id="refineSearch" name="refineSearch" aria-label="refine search box" type="text" value="@Model.SearchCriteria">
-                <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                <input class="govuk-input govuk-!-width-two-thirds" id="refineSearch" name="refineSearch" aria-label="refine search box" type="text" value="@Model.SearchCriteria">
+                <button id="search-button" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
                     @Model.SearchButtonText
                 </button>
+                <a id="clear-search" onclick="ClearSearch()" class="govuk-link govuk-!-static-padding-left-3 govuk-!-font-size-19">Clear Search</a>
             }
         </div>
-            @foreach (var qualification in Model.Qualifications)
+        @if (Model.Qualifications.Count == 0)
+        {
+            @Html.Raw(Model.NoResultText)
+        }
+
+        @foreach (var qualification in Model.Qualifications)
             {
                 <div class="chevron-card__wrapper">
                     <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })" class="govuk-link govuk-heading-m chevron-card__link">
