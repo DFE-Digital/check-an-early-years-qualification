@@ -364,7 +364,8 @@ public class QualificationDetailsController(
 
     private NavigationLink? CalculateBackButton(DetailsPage content)
     {
-        if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions())
+        if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions()
+            && content.BackToAdditionalQuestionsLink != null)
         {
             return content.BackToAdditionalQuestionsLink;
         }
@@ -377,7 +378,9 @@ public class QualificationDetailsController(
         }
 
         var (_, yearStarted) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        return yearStarted < 2014 ? content.BackToLevelSixAdviceBefore2014 : content.BackToLevelSixAdvice;
+        var result = yearStarted < 2014 ? content.BackToLevelSixAdviceBefore2014 : content.BackToLevelSixAdvice;
+
+        return result ?? content.BackButton;
     }
 
     private List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
