@@ -7,6 +7,7 @@ using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -446,6 +447,33 @@ public class UserJourneyCookieServiceTests
         var additionalQuestionsAnswers = service.GetAdditionalQuestionsAnswers();
 
         additionalQuestionsAnswers.Should().Equal(dictionary);
+    }
+
+    [TestMethod]
+    public void NoAdditionalQuestions_HasAdditionalQuestionsAnswers_ReturnsFalse()
+    {
+        var model = new UserJourneyModel();
+
+        var mockCookieManager = SetCookieManagerWithExistingCookie(model);
+
+        var service = new UserJourneyCookieService(mockCookieManager.Object,
+                                                   NullLogger<UserJourneyCookieService>.Instance);
+
+        service.UserHasAnsweredAdditionalQuestions().Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void AdditionalQuestions_HasAdditionalQuestionsAnswers_ReturnsTrue()
+    {
+        Dictionary<string, string> dictionary = new() { { "This is a test question", "Answer" } };
+        var model = new UserJourneyModel { AdditionalQuestionsAnswers = dictionary };
+
+        var mockCookieManager = SetCookieManagerWithExistingCookie(model);
+
+        var service = new UserJourneyCookieService(mockCookieManager.Object,
+                                                   NullLogger<UserJourneyCookieService>.Instance);
+
+        service.UserHasAnsweredAdditionalQuestions().Should().BeTrue();
     }
 
     private static Mock<ICookieManager> SetCookieManagerWithExistingCookie(object? model)
