@@ -20,4 +20,17 @@ public class CookieManager(IHttpContextAccessor context) : ICookieManager
 
         return cookies?.ToDictionary();
     }
+
+    public void DeleteOutboundCookie(string key)
+    {
+        var httpContext = context.HttpContext;
+
+        if (httpContext is null)
+        {
+            // no context, no outbound cookies!
+            return;
+        }
+
+        httpContext.Response.Cookies.Delete(key);
+    }
 }

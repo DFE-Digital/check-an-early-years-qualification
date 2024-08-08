@@ -53,6 +53,20 @@ public class CookieManagerTests
         result.Should().ContainSingle(kvp => kvp.Key == "key" && kvp.Value == "value");
     }
 
+    [TestMethod]
+    public void CookieManager_Delete_CallsDeleteCookieOnContext()
+    {
+        var mockContext = new Mock<IHttpContextAccessor>();
+        mockContext.Setup(c => c.HttpContext!.Response.Cookies.Delete(It.IsAny<string>()))
+                   .Verifiable();
+
+        var service = new CookieManager(mockContext.Object);
+
+        service.DeleteOutboundCookie("key");
+
+        mockContext.Verify(c => c.HttpContext!.Response.Cookies.Delete("key"), Times.Once);
+    }
+
     private class CookieCollection : Dictionary<string, string>, IRequestCookieCollection
     {
         private readonly Dictionary<string, string> _store;
