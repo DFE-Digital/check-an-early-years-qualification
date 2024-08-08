@@ -12,6 +12,7 @@ public interface IUserJourneyCookieService
     
     public void SetQualificationNameSearchCriteria(string searchCriteria);
     public UserJourneyModel GetUserJourneyModelFromCookie();
+    public void SetUserJourneyModelCookie(UserJourneyModel model);
     public void ResetUserJourneyCookie();
 
     public string? GetWhereWasQualificationAwarded();

@@ -1103,6 +1103,7 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -1119,7 +1120,9 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("Get");
         resultType.ControllerName.Should().Be("QualificationDetails");
 
-        mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
+        mockUserJourneyCookieService
+            .Verify(x => x.SetUserJourneyModelCookie(It.Is<UserJourneyModel>(m => m.SearchCriteria == string.Empty && m.WhatIsTheAwardingOrganisation == "Some Awarding Organisation")),
+                    Times.Once);
     }
 
     [TestMethod]
@@ -1151,6 +1154,7 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -1167,6 +1171,8 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("Get");
         resultType.ControllerName.Should().Be("QualificationDetails");
 
-        mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);
+        mockUserJourneyCookieService
+            .Verify(x => x.SetUserJourneyModelCookie(It.Is<UserJourneyModel>(m => m.SearchCriteria == string.Empty && m.WhatIsTheAwardingOrganisation == string.Empty)),
+                    Times.Once);
     }
 }
