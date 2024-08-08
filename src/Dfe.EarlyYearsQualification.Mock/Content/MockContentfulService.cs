@@ -139,7 +139,7 @@ public class MockContentfulService : IContentService
                                          BackToAdditionalQuestionsLink = new NavigationLink
                                                                          {
                                                                              DisplayText =
-                                                                                 "TEST (back to additional questions",
+                                                                                 "TEST (back to additional questions)",
                                                                              Href =
                                                                                  "check-additional-questions/EYQ-240",
                                                                              OpenInNewTab = false
