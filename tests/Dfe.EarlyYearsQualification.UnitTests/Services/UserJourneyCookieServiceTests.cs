@@ -157,7 +157,7 @@ public class UserJourneyCookieServiceTests
                                 WhenWasQualificationAwarded = "test when was qualification awarded",
                                 WhereWasQualificationAwarded = "test where was qualification awarded"
                             };
-        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(null);
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(null);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
         var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
