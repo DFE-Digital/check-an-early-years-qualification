@@ -417,4 +417,122 @@ public class AdviceControllerTests
 
         mockHtmlRenderer.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task Level6QualificationPre2014_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
+
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level6QualificationPre2014))
+                          .ReturnsAsync((AdvicePage?)default).Verifiable();
+        
+        var result = await controller.Level6QualificationPre2014();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the advice page");
+    }
+
+    [TestMethod]
+    public async Task Level6QualificationPre2014_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
+
+        var renderedHtmlBody = "Test html body (level 6 pre 2014)";
+        
+        var advicePage = new AdvicePage { Heading = "Heading (level 6 pre 2014)", Body = ContentfulContentHelper.Text("Anything") };
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level6QualificationPre2014))
+                          .ReturnsAsync(advicePage);
+
+        mockHtmlRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(renderedHtmlBody);
+
+        var result = await controller.Level6QualificationPre2014();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as AdvicePageModel;
+        model.Should().NotBeNull();
+
+        model!.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be(renderedHtmlBody);
+
+        mockHtmlRenderer.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+    }
+    
+        [TestMethod]
+    public async Task Level6QualificationPost2014_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
+
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level6QualificationPost2014))
+                          .ReturnsAsync((AdvicePage?)default).Verifiable();
+        
+        var result = await controller.Level6QualificationPost2014();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the advice page");
+    }
+
+    [TestMethod]
+    public async Task Level6QualificationPost2014_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object);
+
+        var renderedHtmlBody = "Test html body (level 6 post 2014)";
+        
+        var advicePage = new AdvicePage { Heading = "Heading (level 6 post 2014)", Body = ContentfulContentHelper.Text("Anything") };
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level6QualificationPost2014))
+                          .ReturnsAsync(advicePage);
+
+        mockHtmlRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(renderedHtmlBody);
+
+        var result = await controller.Level6QualificationPost2014();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as AdvicePageModel;
+        model.Should().NotBeNull();
+
+        model!.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be(renderedHtmlBody);
+
+        mockHtmlRenderer.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+    }
 }

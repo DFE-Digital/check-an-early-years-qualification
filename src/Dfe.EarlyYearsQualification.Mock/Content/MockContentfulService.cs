@@ -468,25 +468,29 @@ public class MockContentfulService : IContentService
 
     private static RadioQuestionPage CreateWhereWasTheQualificationAwardedPage()
     {
-        var options = new List<Option>
+        var options = new List<IOptionItem>
                       {
-                          new()
+                          new Option
                           {
                               Label = "England", Value = "england"
                           },
-                          new()
+                          new Option
                           {
                               Label = "Scotland", Value = "scotland"
                           },
-                          new()
+                          new Option
                           {
                               Label = "Wales", Value = "wales"
                           },
-                          new()
+                          new Option
                           {
                               Label = "Northern Ireland", Value = "northern-ireland"
                           },
-                          new()
+                          new Divider
+                          {
+                              Text = "or"
+                          },
+                          new Option
                           {
                               Label = "Outside the United Kingdom",
                               Value = "outside-uk"
@@ -497,21 +501,21 @@ public class MockContentfulService : IContentService
 
     private static RadioQuestionPage CreateWhatLevelIsTheQualificationPage()
     {
-        var options = new List<Option>
+        var options = new List<IOptionItem>
                       {
-                          new()
+                          new Option
                           {
                               Label = "Level 2", Value = "2"
                           },
-                          new()
+                          new Option
                           {
                               Label = "Level 3", Value = "3"
                           },
-                          new()
+                          new Option
                           {
-                              Label = "Level 6", Value = "6"
+                              Label = "Level 6", Value = "6", Hint = "Some hint text"
                           },
-                          new()
+                          new Option
                           {
                               Label = "Level 7", Value = "7"
                           }
@@ -520,7 +524,7 @@ public class MockContentfulService : IContentService
                                        "/questions/when-was-the-qualification-started");
     }
 
-    private static RadioQuestionPage CreateRadioQuestionPage(string question, List<Option> options,
+    private static RadioQuestionPage CreateRadioQuestionPage(string question, List<IOptionItem> options,
                                                              string backButtonUrl)
     {
         return new RadioQuestionPage

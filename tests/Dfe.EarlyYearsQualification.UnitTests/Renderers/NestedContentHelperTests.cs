@@ -1,6 +1,8 @@
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
 using FluentAssertions;
+using Newtonsoft.Json.Linq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
 
@@ -103,5 +105,47 @@ public class NestedContentHelperTests
 
         output.Should()
               .Be("<p class=\"govuk-body\">Text</p><a href='https://my.uri' class='govuk-link'>Hyperlink Content</a>Some text");
+    }
+
+    [TestMethod]
+    public void ContentHelper_RenderExternalNavigationLink()
+    {
+        var navigationLink = new NavigationLink
+                             {
+                                 Sys =
+                                 {
+                                     ContentType = new ContentType
+                                                   {
+                                                       SystemProperties = new SystemProperties
+                                                                          {
+                                                                              Id = "externalNavigationLink"
+                                                                          }
+                                                   }
+                                 },
+                                 Href = "/",
+                                 DisplayText = "Display text",
+                                 OpenInNewTab = true
+                             };
+
+        var jObject = JObject.FromObject(navigationLink);
+
+        var customNode = new CustomNode
+                         {
+                             JObject = jObject
+                         };
+
+        var entryStructure = new EntryStructure
+                      {
+                          Data = new EntryStructureData
+                                 {
+                                     Target = customNode
+                                 }
+                      };
+        
+        var content = new List<IContent> { entryStructure };
+        
+        var output = NestedContentHelper.Render(content).Result;
+        
+        output.Should().Be($"<a href='/' target='_blank' class='govuk-link'>Display text</a>");
     }
 }
