@@ -104,6 +104,11 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         return userJourneyModel ?? new UserJourneyModel();
     }
 
+    public void SetUserJourneyModelCookie(UserJourneyModel model)
+    {
+        SetJourneyCookie(model);
+    }
+
     public void ResetUserJourneyCookie()
     {
         SetJourneyCookie(new UserJourneyModel());

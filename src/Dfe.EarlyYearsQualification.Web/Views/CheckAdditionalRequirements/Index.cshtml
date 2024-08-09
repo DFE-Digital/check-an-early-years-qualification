@@ -118,6 +118,13 @@
                                     <label class="govuk-label govuk-radios__label" for="@id">
                                         @option.Label
                                     </label>
+                                    @if (!string.IsNullOrEmpty(option.Hint))
+                                    {
+                                        var hintId = $"{option.Value}_{qi}_{i}_hint";
+                                        <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                            @option.Hint
+                                        </div>
+                                    }
                                 </div>
                             }
                         </fieldset>

@@ -149,6 +149,26 @@ public class UserJourneyCookieServiceTests
     }
 
     [TestMethod]
+    public void SetUserJourneyCookie_SetsCookieAsProvidedModel()
+    {
+        var existingModel = new UserJourneyModel
+                            {
+                                LevelOfQualification = "test level of qualification",
+                                WhenWasQualificationAwarded = "test when was qualification awarded",
+                                WhereWasQualificationAwarded = "test where was qualification awarded"
+                            };
+        var mockHttpContextAccessor = SetHttpContextWithExistingCookie(null);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+
+        service.SetUserJourneyModelCookie(existingModel);
+
+        var serialisedModelToCheck = JsonSerializer.Serialize(existingModel);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+    }
+
+    [TestMethod]
     public void ResetUserJourneyCookie_NoCookieSet_AddsBaseModelAsCookie()
     {
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(null);

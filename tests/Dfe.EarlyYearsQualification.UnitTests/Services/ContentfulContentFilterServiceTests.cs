@@ -970,7 +970,7 @@ public class ContentfulContentFilterServiceTests
                             .ReturnsAsync(results);
 
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
-        mockFuzzyAdapter.Setup(a => a.PartialRatio(qualificationSearch, technicalDiplomaInChildCare)).Returns(80);
+        mockFuzzyAdapter.Setup(a => a.PartialRatio(qualificationSearch.ToLower(), technicalDiplomaInChildCare.ToLower())).Returns(80);
 
         var mockQueryBuilder = new MockQueryBuilder();
         var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();

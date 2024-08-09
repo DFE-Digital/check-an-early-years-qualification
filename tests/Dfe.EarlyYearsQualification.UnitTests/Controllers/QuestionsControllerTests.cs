@@ -92,9 +92,11 @@ public class QuestionsControllerTests
 
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.Options.Count.Should().Be(1);
-        model.Options[0].Label.Should().Be(questionPage.Options[0].Label);
-        model.Options[0].Value.Should().Be(questionPage.Options[0].Value);
+        model.OptionsItems.Count.Should().Be(1);
+        model.OptionsItems.First().Should().BeAssignableTo<OptionModel>();
+        var modelOption = model.OptionsItems[0] as OptionModel;
+        modelOption!.Label.Should().Be((questionPage.Options[0] as Option)!.Label);
+        modelOption.Value.Should().Be((questionPage.Options[0] as Option)!.Value);
         model.HasErrors.Should().BeFalse();
     }
 
@@ -589,9 +591,11 @@ public class QuestionsControllerTests
 
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.Options.Count.Should().Be(1);
-        model.Options[0].Label.Should().Be(questionPage.Options[0].Label);
-        model.Options[0].Value.Should().Be(questionPage.Options[0].Value);
+        model.OptionsItems.Count.Should().Be(1);
+        model.OptionsItems.First().Should().BeAssignableTo<OptionModel>();
+        var modelOption = model.OptionsItems[0] as OptionModel;
+        modelOption!.Label.Should().Be((questionPage.Options[0] as Option)!.Label);
+        modelOption.Value.Should().Be((questionPage.Options[0] as Option)!.Value);
         model.HasErrors.Should().BeFalse();
         model.AdditionalInformationHeader.Should().Be(questionPage.AdditionalInformationHeader);
         model.AdditionalInformationBody.Should().Be("Test html body");
@@ -1099,6 +1103,7 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -1115,7 +1120,9 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("Get");
         resultType.ControllerName.Should().Be("QualificationDetails");
 
-        mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
+        mockUserJourneyCookieService
+            .Verify(x => x.SetUserJourneyModelCookie(It.Is<UserJourneyModel>(m => m.SearchCriteria == string.Empty && m.WhatIsTheAwardingOrganisation == "Some Awarding Organisation")),
+                    Times.Once);
     }
 
     [TestMethod]
@@ -1147,6 +1154,7 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
+        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -1163,6 +1171,8 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("Get");
         resultType.ControllerName.Should().Be("QualificationDetails");
 
-        mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);
+        mockUserJourneyCookieService
+            .Verify(x => x.SetUserJourneyModelCookie(It.Is<UserJourneyModel>(m => m.SearchCriteria == string.Empty && m.WhatIsTheAwardingOrganisation == string.Empty)),
+                    Times.Once);
     }
 }
