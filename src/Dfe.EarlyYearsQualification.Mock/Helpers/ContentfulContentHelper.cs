@@ -37,4 +37,30 @@ public static class ContentfulContentHelper
                    ]
                };
     }
+    
+    public static Document ParagraphWithBold(string text)
+    {
+        return new Document
+               {
+                   Content =
+                   [
+                       new Paragraph
+                       {
+                           Content =
+                           [
+                               new Text
+                               {
+                                   Value = text, Marks =
+                                   [
+                                       new Mark()
+                                       {
+                                           Type = "bold"
+                                       }
+                                   ]
+                               }
+                           ]
+                       }
+                   ]
+               };
+    }
 }
