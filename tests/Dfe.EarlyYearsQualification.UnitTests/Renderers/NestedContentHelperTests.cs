@@ -57,6 +57,21 @@ public class NestedContentHelperTests
 
         output.Should().Be("Some text");
     }
+    
+    [TestMethod]
+    public void ContentHelper_RenderBoldText()
+    {
+        var text = new Text { Value = "Some text", Marks = [ new Mark
+                                                             {
+                                                                 Type = "bold"
+                                                             }]};
+
+        var content = new List<IContent> { text };
+
+        var output = NestedContentHelper.Render(content).Result;
+
+        output.Should().Be("<b>Some text</b>");
+    }
 
     [TestMethod]
     public void ContentHelper_RenderCollection()

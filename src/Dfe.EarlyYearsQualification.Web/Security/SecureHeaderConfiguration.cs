@@ -86,11 +86,11 @@ public static class SecureHeaderConfiguration
                                            DirectiveOrUri = "sha256-srtO38mCTBDNIatd8nPrAAqKznor3jlT5dLCS/P4iF4="
                                        };
         
-        var test = new ContentSecurityPolicyElement
-                   {
-                       CommandType = CspCommandType.Directive,
-                       DirectiveOrUri = "sha256-8gEdNcDa9WCfzOPJMd78il56oDlvutN74/V/ZuZUYqc="
-                   };
+        var inlineSearchInvocation = new ContentSecurityPolicyElement
+                                       {
+                                           CommandType = CspCommandType.Directive,
+                                           DirectiveOrUri = "sha256-8gEdNcDa9WCfzOPJMd78il56oDlvutN74/V/ZuZUYqc="
+                                       };
         
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
@@ -105,7 +105,7 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowPrint);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(qualificationSearchClear);
-        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(test);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(inlineSearchInvocation);
         
         return configuration;
     }

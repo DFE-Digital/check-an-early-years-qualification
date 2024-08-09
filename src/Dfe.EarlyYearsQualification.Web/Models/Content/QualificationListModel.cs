@@ -31,4 +31,6 @@ public class QualificationListModel
     public List<BasicQualificationModel> Qualifications { get; init; } = [];
     
     public string NoResultText { get; init; } = string.Empty;
+
+    public string ClearSearchText { get; init; } = string.Empty;
 }

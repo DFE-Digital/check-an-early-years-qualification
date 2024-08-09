@@ -355,7 +355,9 @@ public class MockContentfulService : IContentService
                                          PostSearchCriteriaContent =
                                              ContentfulContentHelper.Text("Post search criteria content"),
                                          AnyLevelHeading = "Any level",
-                                         AnyAwardingOrganisationHeading = "Various awarding organisations"
+                                         AnyAwardingOrganisationHeading = "Various awarding organisations",
+                                         NoResultsText = ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
+                                         ClearSearchText = "Clear search"
                                      });
     }
 
