@@ -50,7 +50,7 @@
             @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post))
             {
                 <input class="govuk-input govuk-!-width-two-thirds" id="refineSearch" name="refineSearch" aria-label="refine search box" type="text" value="@Model.SearchCriteria">
-                <button id="search-button" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                <button id="refineSearchButton" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
                     @Model.SearchButtonText
                 </button>
                 <a id="clear-search" onclick="ClearSearch()" class="govuk-link govuk-!-static-padding-left-3 govuk-!-font-size-19">@Model.ClearSearchText</a>

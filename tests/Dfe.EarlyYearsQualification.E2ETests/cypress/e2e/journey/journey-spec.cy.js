@@ -385,7 +385,7 @@ describe('A spec used to test the various routes through the journey', () => {
     })
   
     cy.get('#refineSearch').type('test');
-    cy.get('#search-button').click();
+    cy.get('#refineSearchButton').click();
 
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/qualifications');
