@@ -16,13 +16,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="csv\ey-quals-full-2024-updated.csv">
+      <None Update="csv\1-ey-quals-full-2024-with-new-reference-fields.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="csv\reference-upload-test.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="csv\ey-quals-full-2024-with-new-reference-fields.csv">
+      <None Update="csv\2-ey-quals-updates-09-08-24.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
