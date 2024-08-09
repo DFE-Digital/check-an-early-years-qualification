@@ -91,6 +91,11 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         }
     }
 
+    public void SetUserJourneyModelCookie(UserJourneyModel model)
+    {
+        SetJourneyCookie(model);
+    }
+
     public void ResetUserJourneyCookie()
     {
         SetJourneyCookie(new UserJourneyModel());

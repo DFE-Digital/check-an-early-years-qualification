@@ -138,7 +138,7 @@ public class ContentfulContentFilterService(
         var matchedQualifications = new List<Qualification>();
         foreach (var qualification in qualifications)
         {
-            var weight = fuzzyAdapter.PartialRatio(qualificationName, qualification.QualificationName);
+            var weight = fuzzyAdapter.PartialRatio(qualificationName.ToLower(), qualification.QualificationName.ToLower());
             if (weight > 70)
             {
                 matchedQualifications.Add(qualification);
