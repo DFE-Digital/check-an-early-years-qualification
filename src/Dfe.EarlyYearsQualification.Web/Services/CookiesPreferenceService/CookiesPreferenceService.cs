@@ -1,9 +1,10 @@
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
+using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 
-public class CookiesPreferenceService(IHttpContextAccessor context) : ICookiesPreferenceService
+public class CookiesPreferenceService(ICookieManager cookieManager) : ICookiesPreferenceService
 {
     public void SetVisibility(bool visibility)
     {
@@ -26,15 +27,21 @@ public class CookiesPreferenceService(IHttpContextAccessor context) : ICookiesPr
 
     public DfeCookie GetCookie()
     {
-        var cookie = context.HttpContext?.Request.Cookies[CookieKeyNames.CookiesPreferenceKey];
-        if (cookie is null)
+        var cookies = cookieManager.ReadInboundCookies();
+        if (cookies is null)
+        {
+            return new DfeCookie();
+        }
+
+        var cookieFound = cookies.TryGetValue(CookieKeyNames.CookiesPreferenceKey, out var cookie);
+        if (!cookieFound)
         {
             return new DfeCookie();
         }
 
         try
         {
-            var dfeCookie = JsonSerializer.Deserialize<DfeCookie>(cookie);
+            var dfeCookie = JsonSerializer.Deserialize<DfeCookie>(cookie!);
             return dfeCookie ?? new DfeCookie();
         }
         catch
@@ -45,7 +52,7 @@ public class CookiesPreferenceService(IHttpContextAccessor context) : ICookiesPr
 
     private void DeleteCookie()
     {
-        context.HttpContext?.Response.Cookies.Delete(CookieKeyNames.CookiesPreferenceKey);
+        cookieManager.DeleteOutboundCookie(CookieKeyNames.CookiesPreferenceKey);
     }
 
     private void CreateCookie(string key, bool value, bool visibility = true, bool rejected = false)
@@ -59,6 +66,7 @@ public class CookiesPreferenceService(IHttpContextAccessor context) : ICookiesPr
 
         var cookie = new DfeCookie { IsVisible = visibility, HasApproved = value, IsRejected = rejected };
         var serializedCookie = JsonSerializer.Serialize(cookie);
-        context.HttpContext?.Response.Cookies.Append(key, serializedCookie, cookieOptions);
+
+        cookieManager.SetOutboundCookie(key, serializedCookie, cookieOptions);
     }
 }

@@ -18,7 +18,7 @@ describe("A spec used to test the qualification list page", () => {
         cy.get("#filter-org").should("contain.text", "NCFE");
         
         cy.get("#heading").should("contain.text", "Test Header");
-        cy.get("#found-heading").should("contain.text", "2 qualifications found");
+        cy.get("#found-heading").should("contain.text", "3 qualifications found");
         
         cy.get("#pre-search-content").should("contain.text", "Pre search box content");
         cy.get("#post-list-content").should("contain.text", "Link to not on list advice page");

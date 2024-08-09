@@ -28,15 +28,17 @@ public class MockContentfulFilterService : IContentFilterService
                 CreateQualification("EYQ-110", AwardingOrganisations.Various, 7, startDate, endDate),
                 CreateQualification("EYQ-111", "City & Guilds", 7, startDate, endDate),
                 CreateQualification("EYQ-112", AwardingOrganisations.Pearson, 8, startDate, endDate),
-                CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate)
+                CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate),
+                CreateQualificationWithAdditionalRequirements("EYQ-909", AwardingOrganisations.Ncfe, 3, startDate,
+                                                              endDate)
             };
 
         // For now, inbound parameters startDateMonth and startDateYear are ignored
         return Task.FromResult(qualifications.Where(x => x.QualificationLevel == level).ToList());
     }
 
-    private static Qualification CreateQualification(string qualificationId, string awardingOrganisation, int level,
-                                                     string? startDate, string endDate)
+    private static Qualification CreateQualification(string qualificationId, string awardingOrganisation,
+                                                     int level, string? startDate, string endDate)
     {
         return new Qualification(qualificationId,
                                  $"{qualificationId}-test",
@@ -47,6 +49,48 @@ public class MockContentfulFilterService : IContentFilterService
                    ToWhichYear = endDate,
                    QualificationNumber = "ghi/456/951",
                    AdditionalRequirements = "additional requirements"
+               };
+    }
+
+    private static Qualification CreateQualificationWithAdditionalRequirements(
+        string qualificationId,
+        string awardingOrganisation,
+        int level,
+        string? startDate,
+        string endDate)
+    {
+        return new Qualification(qualificationId,
+                                 $"{qualificationId}-test",
+                                 awardingOrganisation,
+                                 level)
+               {
+                   FromWhichYear = startDate,
+                   ToWhichYear = endDate,
+                   QualificationNumber = "ghi/456/123",
+                   AdditionalRequirements = "Additional requirements",
+                   AdditionalRequirementQuestions = new List<AdditionalRequirementQuestion>
+                                                    {
+                                                        new()
+                                                        {
+                                                            Question =
+                                                                "Answer 'yes' for this to be full and relevant",
+                                                            AnswerToBeFullAndRelevant = true,
+                                                            Answers =
+                                                            [
+                                                                new Option
+                                                                {
+                                                                    Label = "Yes",
+                                                                    Value = "yes"
+                                                                },
+
+                                                                new Option
+                                                                {
+                                                                    Label = "No",
+                                                                    Value = "no"
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
                };
     }
 }

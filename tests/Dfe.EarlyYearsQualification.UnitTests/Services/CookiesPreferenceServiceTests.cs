@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
+using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +23,7 @@ public class CookieServiceTests
 
         cookieService.SetVisibility(valueToSet);
 
-        mockContext.Verify(x => x.HttpContext!.Response.Cookies.Delete("cookies_preferences_set"), Times.Once);
+        mockContext.Verify(x => x.DeleteOutboundCookie("cookies_preferences_set"), Times.Once);
 
         var serializedCookieToCheck = JsonSerializer.Serialize(new DfeCookie
                                                                {
@@ -44,7 +45,7 @@ public class CookieServiceTests
 
         cookieService.RejectCookies();
 
-        mockContext.Verify(x => x.HttpContext!.Response.Cookies.Delete("cookies_preferences_set"), Times.Once);
+        mockContext.Verify(x => x.DeleteOutboundCookie("cookies_preferences_set"), Times.Once);
 
         var serializedCookieToCheck = JsonSerializer.Serialize(new DfeCookie
                                                                {
@@ -98,11 +99,15 @@ public class CookieServiceTests
     public void GetCookie_CurrentCookieMalformed_ReturnsDefaultCookie()
     {
         var cookie = JsonSerializer.Serialize("Some randomness");
+
+        var dictionary = new Dictionary<string, string> { { "cookies_preferences_set", cookie } };
+
         var cookiesMock = new Mock<IRequestCookieCollection>();
         cookiesMock.SetupGet(cookiesCollection => cookiesCollection["cookies_preferences_set"]).Returns(cookie);
 
-        var mockContext = new Mock<IHttpContextAccessor>();
-        mockContext.Setup(contextAccessor => contextAccessor.HttpContext!.Request.Cookies).Returns(cookiesMock.Object);
+        var mockContext = new Mock<ICookieManager>();
+        mockContext.Setup(contextAccessor => contextAccessor.ReadInboundCookies()).Returns(dictionary);
+
         var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         var result = cookieService.GetCookie();
@@ -117,11 +122,11 @@ public class CookieServiceTests
     public void GetCookie_CurrentCookieNull_ReturnsDefaultCookie()
     {
         var cookie = JsonSerializer.Serialize<DfeCookie?>(null);
-        var cookiesMock = new Mock<IRequestCookieCollection>();
-        cookiesMock.SetupGet(cookiesCollection => cookiesCollection["cookies_preferences_set"]).Returns(cookie);
+        var dictionary = new Dictionary<string, string> { { "cookies_preferences_set", cookie } };
 
-        var mockContext = new Mock<IHttpContextAccessor>();
-        mockContext.Setup(contextAccessor => contextAccessor.HttpContext!.Request.Cookies).Returns(cookiesMock.Object);
+        var mockContext = new Mock<ICookieManager>();
+        mockContext.Setup(contextAccessor => contextAccessor.ReadInboundCookies()).Returns(dictionary);
+
         var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         var result = cookieService.GetCookie();
@@ -135,7 +140,9 @@ public class CookieServiceTests
     [TestMethod]
     public void GetCookie_NoCookieFound_ReturnDefaultCookie()
     {
-        var mockContext = new Mock<IHttpContextAccessor>();
+        var mockContext = new Mock<ICookieManager>();
+        mockContext.Setup(c => c.ReadInboundCookies()).Returns(new Dictionary<string, string>());
+
         var cookieService = new CookiesPreferenceService(mockContext.Object);
 
         var result = cookieService.GetCookie();
@@ -146,42 +153,41 @@ public class CookieServiceTests
         result.IsRejected.Should().BeFalse();
     }
 
-    private static Mock<IHttpContextAccessor> SetContextWithPreferenceCookie(DfeCookie cookie)
+    private static Mock<ICookieManager> SetContextWithPreferenceCookie(DfeCookie model)
     {
-        var serializedCookie = JsonSerializer.Serialize(cookie);
+        var serializedModel = JsonSerializer.Serialize(model);
 
-        var requestCookiesMock = new Mock<IRequestCookieCollection>();
-        var responseCookiesMock = new Mock<IResponseCookies>();
+        var mockManager = new Mock<ICookieManager>();
 
-        requestCookiesMock.Setup(cookiesCollection => cookiesCollection[CookieKeyNames.CookiesPreferenceKey])
-                          .Returns(serializedCookie);
-        responseCookiesMock.Setup(x => x.Delete(It.IsAny<string>())).Verifiable();
+        var cookies = new Dictionary<string, string> { { CookieKeyNames.CookiesPreferenceKey, serializedModel } };
 
-        var httpContextMock = new Mock<IHttpContextAccessor>();
-        httpContextMock.Setup(contextAccessor => contextAccessor.HttpContext!.Request.Cookies)
-                       .Returns(requestCookiesMock.Object);
-        httpContextMock.Setup(contextAccessor => contextAccessor.HttpContext!.Response.Cookies)
-                       .Returns(responseCookiesMock.Object);
-        return httpContextMock;
+        mockManager.Setup(m => m.ReadInboundCookies())
+                   .Returns(cookies);
+
+        mockManager.Setup(m => m.SetOutboundCookie(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CookieOptions>()))
+                   .Callback((string key, string value, CookieOptions _) => cookies[key] = value)
+                   .Verifiable();
+
+        return mockManager;
     }
 
-    private static void CheckSerializedCookieWasSet(Mock<IHttpContextAccessor> mockContext,
+    private static void CheckSerializedCookieWasSet(Mock<ICookieManager> mockContext,
                                                     string serializedCookieToCheck)
     {
         var in364Days = new DateTimeOffset(DateTime.Now.AddDays(364));
         var inOneYear = new DateTimeOffset(DateTime.Now.AddYears(1));
 
         mockContext
-            .Verify(http =>
-                        http.HttpContext!.Response.Cookies.Append(CookieKeyNames.CookiesPreferenceKey,
-                                                                  serializedCookieToCheck,
-                                                                  It.Is<CookieOptions>(
-                                                                       options =>
-                                                                           options.Secure
-                                                                           && options.HttpOnly
-                                                                           && options.Expires > in364Days
-                                                                           && options.Expires < inOneYear)
-                                                                 ),
+            .Verify(cookieManager =>
+                        cookieManager.SetOutboundCookie(CookieKeyNames.CookiesPreferenceKey,
+                                                        serializedCookieToCheck,
+                                                        It.Is<CookieOptions>(
+                                                                             options =>
+                                                                                 options.Secure
+                                                                                 && options.HttpOnly
+                                                                                 && options.Expires > in364Days
+                                                                                 && options.Expires < inOneYear)
+                                                       ),
                     Times.Once);
     }
 }

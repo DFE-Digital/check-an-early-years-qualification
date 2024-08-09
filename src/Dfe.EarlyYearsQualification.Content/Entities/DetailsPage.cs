@@ -30,14 +30,20 @@ public class DetailsPage
 
     public NavigationLink? BackButton { get; init; }
 
+    public NavigationLink? BackToAdditionalQuestionsLink { get; init; }
+
+    public NavigationLink? BackToLevelSixAdviceBefore2014 { get; init; }
+
+    public NavigationLink? BackToLevelSixAdvice { get; init; }
+
     public string RatiosHeading { get; init; } = string.Empty;
-    
+
     public Document? RatiosText { get; init; }
 
     public string RequirementsHeading { get; init; } = string.Empty;
-    
+
     public Document? RequirementsText { get; init; }
-    
+
     public NavigationLink? CheckAnotherQualificationLink { get; init; }
 
     public string PrintButtonText { get; init; } = string.Empty;
