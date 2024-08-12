@@ -33,4 +33,6 @@ public class QualificationListPage
     public Document? NoResultsText { get; init; }
 
     public string ClearSearchText { get; init; } = string.Empty;
+
+    public string NoQualificationsFoundText { get; init; } = string.Empty;
 }

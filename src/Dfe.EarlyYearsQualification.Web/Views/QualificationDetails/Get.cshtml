@@ -10,13 +10,6 @@
     }
 }
 
-<script type="text/javascript">
-    function ClearSearch() {
-        $('#refineSearch').val('');
-        $('#search-button').click();
-    }
-</script>
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">
         <h2 id="your-search-header" class="govuk-label-wrapper">
@@ -41,21 +34,33 @@
                 }
                 else
                 {
-                    @("No")
+                    @Model.NoQualificationsFoundText
                 } @(Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText)
             </strong>
         </h3>
         <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
-        <div class="govuk-form-group">
-            @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post))
-            {
-                <input class="govuk-input govuk-!-width-two-thirds" id="refineSearch" name="refineSearch" aria-label="refine search box" type="text" value="@Model.SearchCriteria">
-                <button id="refineSearchButton" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-                    @Model.SearchButtonText
-                </button>
-                <a id="clear-search" onclick="ClearSearch()" class="govuk-link govuk-!-static-padding-left-3 govuk-!-font-size-19">@Model.ClearSearchText</a>
-            }
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post))
+                {
+                    <div class="display-flex">
+                        <input class="govuk-input" id="refineSearch" name="refineSearch" aria-label="refine search box" type="text" value="@Model.SearchCriteria">
+                        <button id="refineSearchButton" type="submit" class="govuk-button govuk-button--secondary govuk-!-static-margin-left-1" data-module="govuk-button">
+                            @Model.SearchButtonText
+                        </button>
+                    </div>
+
+                }
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+                @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post))
+                {
+                    <input name="refineSearch" type="hidden" value="">
+                    <button id="clear-search" type="submit" class="govuk-link button-as-link float-left govuk-!-static-margin-left-3 govuk-!-static-margin-top-1 govuk-!-font-size-19">@Model.ClearSearchText</button>
+                }
+            </div>
         </div>
+        
         @if (Model.Qualifications.Count == 0)
         {
             <div id="no-result-content">
