@@ -26,6 +26,9 @@ describe("A spec used to test the qualification list page", () => {
         
         cy.get(".level").first().should("contain.text", "Level");
         cy.get(".awarding-org").first().should("contain.text", "Awarding organisation");
+        
+        cy.get("#clear-search").should("contain.text", "Clear search");
+        cy.get("#no-result-content").should("not.exist");
     })
 
     it("Shows the default headings when any level and no awarding organisation selected", () => {
@@ -35,5 +38,14 @@ describe("A spec used to test the qualification list page", () => {
         
         cy.get("#filter-level").should("contain.text", "Any level");
         cy.get("#filter-org").should("contain.text", "Various awarding organisations");
+    })
+    
+    it("Shows the correct no results content when there are no results in the search", () => {
+        cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationAwarded%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D');
+
+        cy.visit("/qualifications");
+
+        cy.get("#found-heading").should("contain.text", "No qualifications found");
+        cy.get("#no-result-content").should("contain.text", "Test no qualifications text");
     })
 })
