@@ -357,7 +357,8 @@ public class MockContentfulService : IContentService
                                          AnyLevelHeading = "Any level",
                                          AnyAwardingOrganisationHeading = "Various awarding organisations",
                                          NoResultsText = ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
-                                         ClearSearchText = "Clear search"
+                                         ClearSearchText = "Clear search",
+                                         NoQualificationsFoundText = "No"
                                      });
     }
 
