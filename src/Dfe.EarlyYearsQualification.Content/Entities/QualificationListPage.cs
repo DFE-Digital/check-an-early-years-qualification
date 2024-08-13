@@ -29,4 +29,10 @@ public class QualificationListPage
     public string AnyLevelHeading { get; init; } = string.Empty;
 
     public string AnyAwardingOrganisationHeading { get; init; } = string.Empty;
+    
+    public Document? NoResultsText { get; init; }
+
+    public string ClearSearchText { get; init; } = string.Empty;
+
+    public string NoQualificationsFoundText { get; init; } = string.Empty;
 }

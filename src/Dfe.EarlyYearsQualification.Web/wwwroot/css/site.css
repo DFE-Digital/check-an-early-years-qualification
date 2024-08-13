@@ -83,3 +83,25 @@ body {
 .no-padding-right {
     padding-right: 0 !important;
 }
+
+.display-flex {
+    display: flex;
+}
+
+.float-left {
+    float: left;
+}
+
+.button-as-link {
+    background: none!important;
+    border: none;
+    color: #1d70b8;
+}
+
+.button-as-link:focus {
+    outline: 3px solid #0000 !important;
+    background-color: #fd0 !important;
+    box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important;
+    text-decoration: none !important;
+    -webkit-box-decoration-break: clone !important;
+}
