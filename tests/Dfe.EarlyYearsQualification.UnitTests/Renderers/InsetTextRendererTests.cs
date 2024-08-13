@@ -214,8 +214,6 @@ public class InsetTextRendererTests
         contentClientMock.SetupGet(c => c.SerializerSettings)
                          .Returns(serializerSettings);
 
-        contentClientMock.SetupGet(c => c.ResolveEntriesSelectively).Returns(true);
-
         return contentClientMock.Object;
     }
 }
