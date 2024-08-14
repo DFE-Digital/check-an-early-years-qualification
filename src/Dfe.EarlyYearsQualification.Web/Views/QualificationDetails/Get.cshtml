@@ -33,13 +33,12 @@
                 <strong>
                     @if (Model.Qualifications.Count > 0)
                     {
-                        @Model.Qualifications.Count
+                        @(Model.Qualifications.Count + " " + Model.MultipleQualificationsFoundText)
                     }
                     else
                     {
-                        @Model.NoQualificationsFoundText
+                        @(Model.NoQualificationsFoundText + " " + (Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText))
                     }
-                    @(Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText)
                 </strong>
             </h3>
         </div>
