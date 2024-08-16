@@ -14,7 +14,7 @@ runs:
 
   steps:
     - name: Run Chrome Tests
-      uses: cypress-io/github-action@v6.7.2
+      uses: cypress-io/github-action@master
       if: success() || failure()
       with:
         env: auth_secret="${{ inputs.auth_secret }}"
@@ -23,7 +23,7 @@ runs:
         config: baseUrl="${{ inputs.url }}"
 
     - name: Run Firefox Tests
-      uses: cypress-io/github-action@v6.7.2
+      uses: cypress-io/github-action@master
       if: success() || failure()
       with:
         env: auth_secret="${{ inputs.auth_secret }}"
