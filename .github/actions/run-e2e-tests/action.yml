@@ -13,23 +13,23 @@ runs:
   using: composite
 
   steps:
-#    - name: Run Chrome Tests
-#      uses: cypress-io/github-action@master
-#      if: success() || failure()
-#      with:
-#        env: auth_secret="${{ inputs.auth_secret }}"
-#        working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
-#        browser: chrome
-#        config: baseUrl="${{ inputs.url }}"
-
-    - name: Run Firefox Tests
+    - name: Run Chrome Tests
       uses: cypress-io/github-action@master
       if: success() || failure()
       with:
         env: auth_secret="${{ inputs.auth_secret }}"
         working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
-        browser: firefox
+        browser: chrome
         config: baseUrl="${{ inputs.url }}"
+
+#    - name: Run Firefox Tests
+#      uses: cypress-io/github-action@master
+#      if: success() || failure()
+#      with:
+#        env: auth_secret="${{ inputs.auth_secret }}"
+#        working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/
+#        browser: firefox
+#        config: baseUrl="${{ inputs.url }}"
 
     - name: Store screenshots on test failure
       uses: actions/upload-artifact@v4
