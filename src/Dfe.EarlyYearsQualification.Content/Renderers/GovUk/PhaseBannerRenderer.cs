@@ -13,6 +13,8 @@ public class PhaseBannerRenderer : IContentRenderer
 
         var sb = new StringBuilder();
 
+        var externalLinkRenderer = new ExternalNavigationLinkRenderer();
+        
         foreach (var item in paragraph!.Content)
         {
             switch (item)
@@ -27,6 +29,12 @@ public class PhaseBannerRenderer : IContentRenderer
                     sb.Append(t.Value);
                     continue;
             }
+
+            if (externalLinkRenderer.SupportsContent(item))
+            {
+                sb.Append(await externalLinkRenderer.RenderAsync(item));
+            }
+            
         }
 
         return sb.ToString();
