@@ -36,6 +36,6 @@ public class ExternalNavigationLinkRenderer : IContentRenderer
 
         var navigationLinkModel = model!.JObject.ToObject<NavigationLink>();
         
-        return await Task.FromResult($"<a href='{navigationLinkModel!.Href}' { (navigationLinkModel.OpenInNewTab ? "target='_blank'" : "") } class='govuk-link'>{navigationLinkModel.DisplayText}</a>");
+        return await Task.FromResult($"<a href='{navigationLinkModel!.Href}' { (navigationLinkModel.OpenInNewTab ? "target='_blank' " : "") }class='govuk-link'>{navigationLinkModel.DisplayText}</a>");
     }
 }

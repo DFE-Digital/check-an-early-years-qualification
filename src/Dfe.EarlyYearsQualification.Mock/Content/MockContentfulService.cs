@@ -169,7 +169,14 @@ public class MockContentfulService : IContentService
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
-        var content = ContentfulContentHelper.Text("Test phase banner content");
+        var content = new Document()
+                      {
+                          Content =
+                          [
+                              ContentfulContentHelper.ParagraphWithEmbeddedLink("Some Text", "Link Text",
+                                                                                "LinkHref")
+                          ]
+                      };
 
         return await Task.FromResult(new PhaseBanner
                                      {
