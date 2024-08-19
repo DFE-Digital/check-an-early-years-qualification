@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -19,7 +20,8 @@ public class QuestionsController(
     IHtmlRenderer renderer,
     IUserJourneyCookieService userJourneyCookieService,
     IContentFilterService contentFilterService,
-    IDateQuestionModelValidator questionModelValidator)
+    IDateQuestionModelValidator questionModelValidator,
+    IPlaceholderUpdater placeholderUpdater)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -71,7 +73,6 @@ public class QuestionsController(
     [HttpGet("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted()
     {
-        // This is just a temporary page until the design is finalised through UR
         var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
         if (questionPage is null)
         {
@@ -81,21 +82,26 @@ public class QuestionsController(
 
         var model = await MapDateModel(new DateQuestionModel(), questionPage,
                                        nameof(this.WhenWasTheQualificationStarted),
-                                       Questions);
+                                       Questions,
+                                       null);
         return View("Date", model);
     }
 
     [HttpPost("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
     {
-        if (!ModelState.IsValid || !questionModelValidator.IsValid(model))
+        var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+        var dateModelValidationResult = questionModelValidator.IsValid(model, questionPage!);
+        if (!dateModelValidationResult.IsValid)
         {
-            var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
-
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
-                model = await MapDateModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions);
+                model = await MapDateModel(model, 
+                                           questionPage, 
+                                           nameof(this.WhenWasTheQualificationStarted), 
+                                           Questions, 
+                                           dateModelValidationResult);
                 model.HasErrors = true;
             }
 
@@ -282,19 +288,20 @@ public class QuestionsController(
 
     private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question,
                                                        string actionName,
-                                                       string controllerName)
+                                                       string controllerName,
+                                                       ValidationResult? validationResult)
     {
         model.Question = question.Question;
         model.CtaButtonText = question.CtaButtonText;
         model.ActionName = actionName;
         model.ControllerName = controllerName;
-        model.ErrorMessage = question.ErrorMessage;
         model.QuestionHint = question.QuestionHint;
         model.MonthLabel = question.MonthLabel;
         model.YearLabel = question.YearLabel;
         model.BackButton = MapToNavigationLinkModel(question.BackButton);
         model.ErrorBannerHeading = question.ErrorBannerHeading;
-        model.ErrorBannerLinkText = question.ErrorBannerLinkText;
+        model.ErrorBannerLinkText = placeholderUpdater.Replace(validationResult?.BannerErrorMessage ?? question.ErrorBannerLinkText);
+        model.ErrorMessage = placeholderUpdater.Replace(validationResult is not null ? validationResult.ErrorMessage : question.ErrorMessage);
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
         model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
         return model;

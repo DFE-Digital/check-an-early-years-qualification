@@ -554,7 +554,6 @@ public class MockContentfulService : IContentService
                {
                    Question = "Test Date Question",
                    CtaButtonText = "Continue",
-                   ErrorMessage = "Test Error Message",
                    MonthLabel = "Test Month Label",
                    YearLabel = "Test Year Label",
                    QuestionHint = "Test Question Hint",
@@ -564,11 +563,16 @@ public class MockContentfulService : IContentService
                                     Href = WhereWasTheQualificationAwardedPath,
                                     OpenInNewTab = false
                                 },
-                   ErrorBannerHeading = "There is a problem",
-                   ErrorBannerLinkText = "Test error banner link text",
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),
-                   AdditionalInformationHeader = "This is the additional information header"
+                   AdditionalInformationHeader = "This is the additional information header",
+                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerLinkText = "Test error banner link text",
+                   ErrorMessage = "Test Error Message",
+                   FutureDateErrorBannerLinkText = "Future date error message banner link",
+                   FutureDateErrorMessage = "Future date error message",
+                   IncorrectFormatErrorBannerLinkText = "Enter a month between 1 and 12 and a year between 1900 and $[actual-year]$",
+                   IncorrectFormatErrorMessage = "Incorrect format error message banner link"
                };
     }
 
