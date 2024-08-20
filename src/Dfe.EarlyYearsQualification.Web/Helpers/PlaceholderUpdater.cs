@@ -4,23 +4,15 @@ namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
 public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter) : IPlaceholderUpdater
 {
-    
-    private readonly Dictionary<string, string> _placeholders = new()
-                                                                {
-                                                                    { "$[actual-year]$", dateTimeAdapter.Now().Year.ToString() }
-                                                                };
-
+    private const string ActualYearPlaceholder = "$[actual-year]$";
     public string Replace(string text)
     {
         if (string.IsNullOrEmpty(text)) return text;
         
         var result = text;
-        foreach (var placeholder in _placeholders)
+        if (text.Contains(ActualYearPlaceholder))
         {
-            if (text.Contains(placeholder.Key))
-            {
-                result = result.Replace(placeholder.Key, placeholder.Value);
-            }
+            result = result.Replace(ActualYearPlaceholder, dateTimeAdapter.Now().Year.ToString());
         }
 
         return result;
