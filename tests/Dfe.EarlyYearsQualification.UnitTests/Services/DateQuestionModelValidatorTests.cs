@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
@@ -18,8 +19,10 @@ public class DateQuestionModelValidatorTests
         var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2023 };
+        var questionPage = new DateQuestionPage();
 
-        validator.IsValid(model).Should().BeTrue();
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeTrue();
     }
 
     [TestMethod]
@@ -36,7 +39,10 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = thisYear };
 
-        validator.IsValid(model).Should().BeTrue();
+        var questionPage = new DateQuestionPage();
+
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeTrue();
     }
 
     [TestMethod]
@@ -53,7 +59,10 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = thisYear };
 
-        validator.IsValid(model).Should().BeTrue();
+        var questionPage = new DateQuestionPage();
+
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeTrue();
     }
 
     [TestMethod]
@@ -70,7 +79,10 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth + 1, SelectedYear = thisYear };
 
-        validator.IsValid(model).Should().BeFalse();
+        var questionPage = new DateQuestionPage();
+
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeFalse();
     }
 
     [TestMethod]
@@ -83,7 +95,16 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2023 };
 
-        validator.IsValid(model).Should().BeFalse();
+        var questionPage = new DateQuestionPage
+                           {
+                               FutureDateErrorMessage = "Future date error message",
+                               FutureDateErrorBannerLinkText = "Future date banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeFalse();
+        result.ErrorMessage.Should().Match(questionPage.FutureDateErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.FutureDateErrorBannerLinkText);
     }
 
     [TestMethod]
@@ -95,7 +116,16 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = 12, SelectedYear = 1899 };
 
-        validator.IsValid(model).Should().BeFalse();
+        var questionPage = new DateQuestionPage
+                           {
+                               IncorrectFormatErrorMessage = "Incorrect format error message",
+                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeFalse();
+        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
     }
 
     [TestMethod]
@@ -107,7 +137,16 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 2024 };
 
-        validator.IsValid(model).Should().BeFalse();
+        var questionPage = new DateQuestionPage
+                           {
+                               IncorrectFormatErrorMessage = "Incorrect format error message",
+                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeFalse();
+        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
     }
 
     [TestMethod]
@@ -119,6 +158,36 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = 13, SelectedYear = 2024 };
 
-        validator.IsValid(model).Should().BeFalse();
+        var questionPage = new DateQuestionPage
+                           {
+                               IncorrectFormatErrorMessage = "Incorrect format error message",
+                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeFalse();
+        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
+    }
+    
+    [TestMethod]
+    public void DateQuestionModelValidator_GivenMonthAndYearAre0_ValidatesFalse()
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 0 };
+
+        var questionPage = new DateQuestionPage
+                           {
+                               ErrorMessage = "Generic error message",
+                               ErrorBannerLinkText = "Generic banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.IsValid.Should().BeFalse();
+        result.ErrorMessage.Should().Match(questionPage.ErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.ErrorBannerLinkText);
     }
 }

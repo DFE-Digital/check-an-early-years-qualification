@@ -1,4 +1,6 @@
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Entities;
+using Newtonsoft.Json.Linq;
 
 namespace Dfe.EarlyYearsQualification.Mock.Helpers;
 
@@ -60,6 +62,49 @@ public static class ContentfulContentHelper
                                }
                            ]
                        }
+                   ]
+               };
+    }
+
+    public static Paragraph ParagraphWithEmbeddedLink(string text, string linkText, string linkHref)
+    {
+        var navigationLink = new NavigationLink
+                             {
+                                 Sys =
+                                 {
+                                     ContentType = new ContentType
+                                                   {
+                                                       SystemProperties = new SystemProperties
+                                                                          {
+                                                                              Id = "externalNavigationLink"
+                                                                          }
+                                                   }
+                                 },
+                                 DisplayText = linkText,
+                                 Href = linkHref
+                             };
+
+        var jObject = JObject.FromObject(navigationLink);
+
+        var customNode = new CustomNode
+                         {
+                             JObject = jObject
+                         };
+
+        var externalNavigationLink = new EntryStructure
+                      {
+                          Data = new EntryStructureData
+                                 {
+                                     Target = customNode
+                                 }
+                      };
+
+        return new Paragraph
+               {
+                   Content =
+                   [
+                       new Text { Value = text },
+                       externalNavigationLink
                    ]
                };
     }

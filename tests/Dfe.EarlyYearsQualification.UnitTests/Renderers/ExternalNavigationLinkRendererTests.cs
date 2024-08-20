@@ -195,6 +195,6 @@ public class ExternalNavigationLinkRendererTests
         var renderer = new ExternalNavigationLinkRenderer();
         var result = await renderer.RenderAsync(content);
 
-        result.Should().Be($"<a href='/'  class='govuk-link'>Display text</a>");
+        result.Should().Be($"<a href='/' class='govuk-link'>Display text</a>");
     }
 }

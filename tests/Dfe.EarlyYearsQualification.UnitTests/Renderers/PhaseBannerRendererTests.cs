@@ -1,5 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
@@ -29,7 +30,18 @@ public class PhaseBannerRendererTests
     }
 
     [TestMethod]
-    public void PhaseBannerRendererTests_RemovesPTags()
+    public void PhaseBannerRendererTests_HandlesExternalNavigationLinks()
+    {
+        var content = ContentfulContentHelper.ParagraphWithEmbeddedLink("Some text", "Link text", "linkHref");
+        
+        var renderer = new PhaseBannerRenderer();
+        var result = renderer.RenderAsync(content).Result;
+        
+        result.Should().Be("Some text<a href='linkHref' class='govuk-link'>Link text</a>");
+    }
+
+    [TestMethod]
+    public void PhaseBannerRendererTests_HandlesHyperLink()
     {
         var para = new Paragraph
                    {
