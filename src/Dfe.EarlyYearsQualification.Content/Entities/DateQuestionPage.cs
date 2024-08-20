@@ -7,9 +7,7 @@ public class DateQuestionPage
     public string Question { get; init; } = string.Empty;
 
     public string CtaButtonText { get; init; } = string.Empty;
-
-    public string ErrorMessage { get; init; } = string.Empty;
-
+    
     public string QuestionHint { get; init; } = string.Empty;
 
     public string MonthLabel { get; init; } = string.Empty;
@@ -18,11 +16,21 @@ public class DateQuestionPage
 
     public NavigationLink? BackButton { get; init; }
     
+    public string AdditionalInformationHeader { get; init; } = string.Empty;
+
+    public Document? AdditionalInformationBody { get; init; }
+    
     public string ErrorBannerHeading { get; init; } = string.Empty;
 
     public string ErrorBannerLinkText { get; init; } = string.Empty;
     
-    public string AdditionalInformationHeader { get; init; } = string.Empty;
-
-    public Document? AdditionalInformationBody { get; init; }
+    public string ErrorMessage { get; init; } = string.Empty;
+    
+    public string FutureDateErrorBannerLinkText { get; init; } = string.Empty;
+    
+    public string FutureDateErrorMessage { get; init; } = string.Empty;
+    
+    public string IncorrectFormatErrorBannerLinkText { get; init; } = string.Empty;
+    
+    public string IncorrectFormatErrorMessage { get; init; } = string.Empty;
 }
