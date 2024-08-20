@@ -1,5 +1,7 @@
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using FluentAssertions;
+using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Helpers;
 
@@ -7,37 +9,53 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Helpers;
 public class PlaceholderUpdaterTests
 {
     [TestMethod]
-    public void Replace_ValueToCheckIsEmptyString_ReturnsEmptyString()
+    public void Replace_TextIsEmptyString_ReturnsEmptyString()
     {
-        var placeholderUpdater = new PlaceholderUpdater();
+        var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
+        var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object);
         var result = placeholderUpdater.Replace(string.Empty);
         result.Should().BeEmpty();
     }
     
     [TestMethod]
-    public void Replace_ValueToCheckIsNull_ReturnsNullString()
+    public void Replace_TextIsNull_ReturnsNullString()
     {
-        var placeholderUpdater = new PlaceholderUpdater();
+        var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
+        var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object);
         var result = placeholderUpdater.Replace(null!);
         result.Should().BeNull();
     }
     
     [TestMethod]
-    public void Replace_ValueToCheckContainsNoPlaceholders_ReturnsString()
+    public void Replace_TextContainsNoPlaceholders_ReturnsString()
     {
-        var placeholderUpdater = new PlaceholderUpdater();
-        const string valueToCheck = "This contains no placeholders";
-        var result = placeholderUpdater.Replace(valueToCheck);
-        result.Should().Match(valueToCheck);
+        var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
+        mockDateTimeAdapter.Setup(x => x.Now()).Returns(new DateTime(2024, 11, 01));
+        var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object);
+        const string text = "This contains no placeholders";
+        var result = placeholderUpdater.Replace(text);
+        result.Should().Match(text);
     }
     
     [TestMethod]
-    public void Replace_ValueToCheckContainsActualYearPlaceholder_ReturnsString()
+    public void Replace_TextContainsActualYearPlaceholder_ReturnsString()
     {
-        var placeholderUpdater = new PlaceholderUpdater();
-        const string valueToCheck = "The year is $[actual-year]$";
-        var result = placeholderUpdater.Replace(valueToCheck);
-        var expectedResult = $"The year is {DateTimeOffset.Now.Year}"; 
-        result.Should().Match(expectedResult);
+        var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
+        mockDateTimeAdapter.Setup(x => x.Now()).Returns(new DateTime(2024, 11, 01));
+        var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object);
+        const string text = "The year is $[actual-year]$";
+        var result = placeholderUpdater.Replace(text);
+        result.Should().Match("The year is 2024");
+    }
+    
+    [TestMethod]
+    public void Replace_TextContainsMultiplePlaceholders_ReturnsString()
+    {
+        var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
+        mockDateTimeAdapter.Setup(x => x.Now()).Returns(new DateTime(2024, 11, 01));
+        var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object);
+        const string text = "Year is $[actual-year]$ and year again is $[actual-year]$";
+        var result = placeholderUpdater.Replace(text);
+        result.Should().Match("Year is 2024 and year again is 2024");
     }
 }
