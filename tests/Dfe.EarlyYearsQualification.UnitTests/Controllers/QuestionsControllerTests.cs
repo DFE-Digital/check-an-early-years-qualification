@@ -7,6 +7,7 @@ using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -30,13 +31,14 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                           .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
 
@@ -64,6 +66,7 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var questionPage = new RadioQuestionPage
                            {
@@ -76,7 +79,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
 
@@ -109,10 +112,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         controller.ModelState.AddModelError("option", "test error");
         var result = await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel());
@@ -136,10 +140,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -168,10 +173,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -197,10 +203,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -226,10 +233,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -255,10 +263,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -284,6 +293,7 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var questionPage = new DateQuestionPage
                            {
@@ -296,10 +306,12 @@ public class QuestionsControllerTests
                            };
         mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
                           .ReturnsAsync(questionPage);
+        
+        mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns<string>(x => x);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhenWasTheQualificationStarted();
 
@@ -310,9 +322,7 @@ public class QuestionsControllerTests
 
         var model = resultType!.Model as DateQuestionModel;
         model.Should().NotBeNull();
-
-        // The following will need to be replaced once the page has been created in Contentful.
-        // The model is currently hard coded in the action and doesn't call the content service.
+        
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.HasErrors.Should().BeFalse();
@@ -331,13 +341,14 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
                           .ReturnsAsync((DateQuestionPage?)default).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhenWasTheQualificationStarted();
 
@@ -360,12 +371,29 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
+        var questionPage = new DateQuestionPage
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               ErrorMessage = "Test error message",
+                               MonthLabel = "Test month label",
+                               YearLabel = "Test year label",
+                               QuestionHint = "Test question hint"
+                           };
+        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
+                          .ReturnsAsync(questionPage);
+        
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
-        controller.ModelState.AddModelError("option", "test error");
+        mockQuestionModelValidator.Setup(x => x.IsValid(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestionPage>()))
+                                  .Returns(new ValidationResult { IsValid = false, ErrorMessage = "Test error message" });
+
+        mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns<string>(x => x);
+        
         var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel());
 
         result.Should().NotBeNull();
@@ -374,100 +402,8 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ViewName.Should().Be("Date");
-
-        mockUserJourneyCookieService.Verify(x => x.SetWhenWasQualificationAwarded(It.IsAny<string>()), Times.Never);
-    }
-
-    [TestMethod]
-    [DataRow(-1, 2020)]
-    [DataRow(13, 2020)]
-    [DataRow(0, 2020)]
-    [DataRow(1, 1899)]
-    public async Task Post_WhenWasTheQualificationStarted_PassedInvalidValues_ReturnsBackToPageWithErrorTag(
-        int month, int year)
-    {
-        var mockLogger = new Mock<ILogger<QuestionsController>>();
-        var mockContentService = new Mock<IContentService>();
-        var mockRenderer = new Mock<IHtmlRenderer>();
-        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
-
-        var questionPage = new DateQuestionPage
-                           {
-                               Question = "Test question",
-                               CtaButtonText = "Continue",
-                               ErrorMessage = "Test error message",
-                               MonthLabel = "Test month label",
-                               YearLabel = "Test year label",
-                               QuestionHint = "Test question hint"
-                           };
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
-                          .ReturnsAsync(questionPage);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
-                                                 mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
-
-        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
-                                                                     {
-                                                                         SelectedMonth = month,
-                                                                         SelectedYear = year
-                                                                     });
-
-        var resultType = result as ViewResult;
-        resultType.Should().NotBeNull();
-
-        var model = resultType!.Model as DateQuestionModel;
-        model.Should().NotBeNull();
-
-        model!.Question.Should().Be(questionPage.Question);
-        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.HasErrors.Should().BeTrue();
-        model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
-        model.MonthLabel.Should().Be(questionPage.MonthLabel);
-        model.YearLabel.Should().Be(questionPage.YearLabel);
-        model.QuestionHint.Should().Be(questionPage.QuestionHint);
-
-        mockUserJourneyCookieService.Verify(x => x.SetWhenWasQualificationAwarded(It.IsAny<string>()), Times.Never);
-    }
-
-    [TestMethod]
-    public async Task Post_WhenWasTheQualificationStarted_YearProvidedIsNextYear_ReturnsRedirectResponse()
-    {
-        var mockLogger = new Mock<ILogger<QuestionsController>>();
-        var mockContentService = new Mock<IContentService>();
-        var mockRenderer = new Mock<IHtmlRenderer>();
-        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
-
-        var questionPage = new DateQuestionPage
-                           {
-                               Question = "Test question",
-                               CtaButtonText = "Continue",
-                               ErrorMessage = "Test error message",
-                               MonthLabel = "Test month label",
-                               YearLabel = "Test year label",
-                               QuestionHint = "Test question hint"
-                           };
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
-                          .ReturnsAsync(questionPage);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
-                                                 mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
-
-        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
-                                                                     {
-                                                                         SelectedMonth = 01,
-                                                                         SelectedYear = DateTime.UtcNow.Year + 1
-                                                                     });
-
-        var resultType = result as ViewResult;
-        resultType.Should().NotBeNull();
-
-        var model = resultType!.Model as DateQuestionModel;
+        
+        var model = resultType.Model as DateQuestionModel;
         model.Should().NotBeNull();
 
         model!.Question.Should().Be(questionPage.Question);
@@ -490,14 +426,15 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockQuestionModelValidator
-            .Setup(x => x.IsValid(It.IsAny<DateQuestionModel>()))
-            .Returns(true);
+            .Setup(x => x.IsValid(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestionPage>()))
+            .Returns(new ValidationResult { IsValid = true });
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         const int selectedMonth = 12;
         const int selectedYear = 2024;
@@ -529,13 +466,14 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
                           .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification();
 
@@ -561,6 +499,7 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var questionPage = new RadioQuestionPage
                            {
@@ -577,7 +516,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification();
 
@@ -612,10 +551,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         controller.ModelState.AddModelError("option", "test error");
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel());
@@ -639,10 +579,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -668,12 +609,13 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded())
                                     .Returns((6, 2015));
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -698,12 +640,13 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded())
                                     .Returns((7, 2014));
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -728,12 +671,13 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded())
                                     .Returns((7, 2015));
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -758,12 +702,13 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded())
                                     .Returns((6, 2015));
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -788,13 +733,14 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync((DropdownQuestionPage?)default).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -820,6 +766,7 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -846,7 +793,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -879,6 +826,7 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -910,7 +858,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -945,6 +893,7 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -974,7 +923,7 @@ public class QuestionsControllerTests
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -1002,10 +951,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -1053,10 +1003,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -1084,10 +1035,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -1135,10 +1087,11 @@ public class QuestionsControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
-                                                 mockQuestionModelValidator.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var questionPage = new DropdownQuestionPage
                            {

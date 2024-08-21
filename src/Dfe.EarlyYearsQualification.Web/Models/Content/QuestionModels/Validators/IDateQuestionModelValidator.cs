@@ -1,6 +1,8 @@
+using Dfe.EarlyYearsQualification.Content.Entities;
+
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 
 public interface IDateQuestionModelValidator
 {
-    bool IsValid(DateQuestionModel model);
+    ValidationResult IsValid(DateQuestionModel model, DateQuestionPage questionPage);
 }
