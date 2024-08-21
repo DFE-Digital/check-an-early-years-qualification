@@ -7,9 +7,9 @@ namespace Dfe.EarlyYearsQualification.Web.Attributes;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class RedirectIfDateMissingAttribute() : TypeFilterAttribute(typeof(RedirectIfDateMissingFilter))
 {
-    public class RedirectIfDateMissingFilter(IUserJourneyCookieService userJourneyCookieService) : IAuthorizationFilter
+    public class RedirectIfDateMissingFilter(IUserJourneyCookieService userJourneyCookieService) : ActionFilterAttribute
     {
-        public void OnAuthorization(AuthorizationFilterContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
 

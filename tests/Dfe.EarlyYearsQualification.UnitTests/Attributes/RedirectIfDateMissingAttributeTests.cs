@@ -23,12 +23,12 @@ public class RedirectIfDateMissingAttributeTests
         var filter = new RedirectIfDateMissingAttribute.RedirectIfDateMissingFilter(userJourneyCookieService.Object);
         
         var actionContext = new ActionContext(new DefaultHttpContext(), new RouteData(), new ActionDescriptor());
-        var authorizationFilterContext = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata> { filter });
+        var actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata> { filter }, new Dictionary<string, object?>(), null);
 
-        filter.OnAuthorization(authorizationFilterContext);
+        filter.OnActionExecuting(actionExecutingContext);
 
-        authorizationFilterContext.Result.Should()
-                                  .BeEquivalentTo(new RedirectResult("/questions/when-was-the-qualification-started"));
+        actionExecutingContext.Result.Should()
+                              .BeEquivalentTo(new RedirectResult("/questions/when-was-the-qualification-started"));
     }
     
     [TestMethod]
@@ -43,10 +43,10 @@ public class RedirectIfDateMissingAttributeTests
         var filter = new RedirectIfDateMissingAttribute.RedirectIfDateMissingFilter(userJourneyCookieService.Object);
         
         var actionContext = new ActionContext(new DefaultHttpContext(), new RouteData(), new ActionDescriptor());
-        var authorizationFilterContext = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata> { filter });
+        var actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata> { filter }, new Dictionary<string, object?>(), null);
 
-        filter.OnAuthorization(authorizationFilterContext);
+        filter.OnActionExecuting(actionExecutingContext);
 
-        authorizationFilterContext.Result.Should().BeNull();
+        actionExecutingContext.Result.Should().BeNull();
     }
 }
