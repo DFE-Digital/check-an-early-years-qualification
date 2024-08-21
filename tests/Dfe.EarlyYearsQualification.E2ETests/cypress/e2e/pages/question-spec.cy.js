@@ -143,6 +143,7 @@ describe("A spec that tests question pages", () => {
 
     /// What level is the qualification page
     it("Checks the content on what-level-is-the-qualification page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-level-is-the-qualification");
 
         cy.get("#question").should("contain.text", "What level is the qualification?");
@@ -155,6 +156,7 @@ describe("A spec that tests question pages", () => {
     })
 
     it("Checks additional information on the what-level-is-the-qualification page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-level-is-the-qualification");
 
         cy.get(".govuk-details").should("not.have.attr", "open");
@@ -166,6 +168,7 @@ describe("A spec that tests question pages", () => {
     })
 
     it("shows an error message when a user doesnt select an option on the what-level-is-the-qualification page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-level-is-the-qualification");
 
         cy.get(".govuk-error-summary").should("not.exist");
@@ -188,6 +191,7 @@ describe("A spec that tests question pages", () => {
     
     /// What is the awarding organisation page
     it("Checks the content on what-is-the-awarding-organisation page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-is-the-awarding-organisation");
 
         cy.get("#question").should("contain.text", "Test Dropdown Question");
@@ -197,6 +201,7 @@ describe("A spec that tests question pages", () => {
     })
 
     it("Checks additional information on the what-is-the-awarding-organisation page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-is-the-awarding-organisation");
 
         cy.get(".govuk-details").should("not.have.attr", "open");
@@ -209,6 +214,7 @@ describe("A spec that tests question pages", () => {
 
     it("shows an error message when a user doesnt select an option from the dropdown list" +
         "and also does not check 'not in the list' on the what-is-the-awarding-organisation", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-is-the-awarding-organisation");
 
         cy.get(".govuk-error-summary").should("not.exist");
