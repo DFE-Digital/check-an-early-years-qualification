@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
     }
 
     [HttpGet("level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019")]
+    [RedirectIfDateMissing]
     public async Task<IActionResult> QualificationsStartedBetweenSept2014AndAug2019()
     {
         return await GetView(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019);
@@ -49,18 +51,21 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
     }
     
     [HttpGet("level-6-qualification-pre-2014")]
+    [RedirectIfDateMissing]
     public async Task<IActionResult> Level6QualificationPre2014()
     {
         return await GetView(AdvicePages.Level6QualificationPre2014);
     }
     
     [HttpGet("level-6-qualification-post-2014")]
+    [RedirectIfDateMissing]
     public async Task<IActionResult> Level6QualificationPost2014()
     {
         return await GetView(AdvicePages.Level6QualificationPost2014);
     }
 
     [HttpGet("qualification-level-7")]
+    [RedirectIfDateMissing]
     public async Task<IActionResult> QualificationLevel7()
     {
         return await GetView(AdvicePages.QualificationLevel7);

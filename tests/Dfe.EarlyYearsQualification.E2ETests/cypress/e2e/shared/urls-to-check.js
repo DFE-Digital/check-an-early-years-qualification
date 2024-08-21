@@ -46,3 +46,16 @@ export const pagesWithoutForms = [
   "/advice/level-6-qualification-pre-2014",
   "/advice/level-6-qualification-post-2014"
 ]
+
+export const pagesThatRedirectIfDateMissing = [
+  "/questions/what-level-is-the-qualification",
+  "/questions/what-is-the-awarding-organisation",
+  "/qualifications",
+  "/confirm-qualification/EYQ-240",
+  "/qualifications/qualification-details/EYQ-240",
+  "/qualifications/check-additional-questions/EYQ-240",
+  "/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019",
+  "/advice/qualification-level-7",
+  "/advice/level-6-qualification-pre-2014",
+  "/advice/level-6-qualification-post-2014"
+]
