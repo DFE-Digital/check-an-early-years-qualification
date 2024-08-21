@@ -124,8 +124,8 @@ describe("A spec that checks for security headers in the response", () => {
   pagesWithoutFormsWithRedirects.forEach((page) => {
     it(`pages without forms that will redirect if no date - no cookie banner - ${page} contains the expected response headers`, () => {
 
-      cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
-      
+      cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D');
+
       // Set cookie preference to hide banner
       cy.setCookie(
           "cookies_preferences_set",
