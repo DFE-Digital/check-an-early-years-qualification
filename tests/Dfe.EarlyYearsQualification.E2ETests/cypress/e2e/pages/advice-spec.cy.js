@@ -1,7 +1,6 @@
 describe("A spec that tests advice pages", () => {
     beforeEach(() => {
         cy.setCookie('auth-secret', Cypress.env('auth_secret'));
-        
     })
 
     // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService.  
