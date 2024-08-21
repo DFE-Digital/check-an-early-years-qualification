@@ -21,7 +21,7 @@
                                                                        ElementLinkId = "date-started-month"
                                                                    });
         }
-        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "date-question-form"}))
         {
             <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">

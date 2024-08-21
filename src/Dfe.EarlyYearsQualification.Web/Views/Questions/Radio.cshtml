@@ -17,13 +17,13 @@
         {
             var elementLinkId = Model.OptionsItems.First(x => x.GetType() == typeof(OptionModel)) as OptionModel;
             await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
-                                                                    {
-                                                                        ErrorBannerHeading = Model.ErrorBannerHeading,
-                                                                        ErrorBannerLinkText = Model.ErrorBannerLinkText,
-                                                                        ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
-                                                                    });
+                                                                   {
+                                                                       ErrorBannerHeading = Model.ErrorBannerHeading,
+                                                                       ErrorBannerLinkText = Model.ErrorBannerLinkText,
+                                                                       ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
+                                                                   });
         }
-        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post))
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "radio-question-form"}))
         {
             <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
@@ -37,10 +37,10 @@
                     @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
                     {
                         await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
-                                                                                {
-                                                                                    AdditionalInformationHeader = Model.AdditionalInformationHeader,
-                                                                                    AdditionalInformationBody = Model.AdditionalInformationBody
-                                                                                });
+                                                                                        {
+                                                                                            AdditionalInformationHeader = Model.AdditionalInformationHeader,
+                                                                                            AdditionalInformationBody = Model.AdditionalInformationBody
+                                                                                        });
                     }
                     
                     @if (Model.HasErrors)
@@ -55,17 +55,17 @@
                             if (option.GetType() == typeof(OptionModel))
                             {
                                 var optionModel = option as OptionModel;
-                                 <div class="govuk-radios__item">
+                                <div class="govuk-radios__item">
                                     @Html.RadioButtonFor(x => x.Option, optionModel!.Value, new { @class = "govuk-radios__input", id = optionModel.Value })
                                     <label class="govuk-label govuk-radios__label" for="@optionModel.Value">
                                         @optionModel.Label
                                     </label>
                                     @if (!string.IsNullOrEmpty(optionModel.Hint))
                                     {
-                                         var hintId = $"{optionModel.Value}_hint";
-                                         <div id="@hintId" class="govuk-hint govuk-radios__hint">
-                                             @optionModel.Hint
-                                         </div>
+                                        var hintId = $"{optionModel.Value}_hint";
+                                        <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                            @optionModel.Hint
+                                        </div>
                                     }
                                 </div>
                             }
