@@ -31,3 +31,41 @@ $("#dropdown-question-form").on("submit", function(){
         'isNotOnTheListChecked': isNotOnTheListChecked
     });
 });
+
+$("#confirm-qualification").on("submit", function(){
+    let question = $("#radio-heading").text();
+    let qualificationId = $("input[name='qualificationId']").val();
+    let answer = $("input[name='ConfirmQualificationAnswer']:checked").val();
+    window.dataLayer.push({
+        'event': 'confirmQualificationFormSubmission',
+        'qualificationId': qualificationId,
+        'answer': answer,
+        'question': question
+    });
+});
+
+$("#check-additional-requirements").on("submit", function() {
+    let questionCount = $("input[name='QuestionCount']").val();
+    let qualificationId = $("input[name='qualificationId']").val();
+    let questions = new Map();
+    let answers = new Map();
+    for (let i = 0; i < questionCount; i++) {
+        const questionId = `question_${i}`;
+        const answerId = `answer_${i}`;
+        
+        let question = $(`#${questionId}`).text();
+        const answerName = `Answers[${question}]`;
+        let selectedAnswer = $(`input[name='${answerName}']:checked`).val();
+        
+        questions.set(questionId, question);
+        answers.set(answerId, selectedAnswer)
+    }
+    let questionsObj = Object.fromEntries(questions);
+    let answersObj = Object.fromEntries(answers);
+    window.dataLayer.push({
+        'event': 'checkAdditionalRequirementsFormSubmission',
+        'qualificationId': qualificationId,
+        ...questionsObj,
+        ...answersObj
+    });
+});
