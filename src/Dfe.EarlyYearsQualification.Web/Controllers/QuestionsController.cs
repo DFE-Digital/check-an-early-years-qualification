@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
@@ -114,6 +115,7 @@ public class QuestionsController(
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
 
+    [RedirectIfDateMissing]
     [HttpGet("what-level-is-the-qualification")]
     public async Task<IActionResult> WhatLevelIsTheQualification()
     {
@@ -121,6 +123,7 @@ public class QuestionsController(
                                   Questions);
     }
 
+    [RedirectIfDateMissing]
     [HttpPost("what-level-is-the-qualification")]
     public async Task<IActionResult> WhatLevelIsTheQualification(RadioQuestionModel model)
     {
@@ -151,6 +154,7 @@ public class QuestionsController(
                };
     }
 
+    [RedirectIfDateMissing]
     [HttpGet("what-is-the-awarding-organisation")]
     public async Task<IActionResult> WhatIsTheAwardingOrganisation()
     {
@@ -170,6 +174,7 @@ public class QuestionsController(
         return View("Dropdown", model);
     }
 
+    [RedirectIfDateMissing]
     [HttpPost("what-is-the-awarding-organisation")]
     public async Task<IActionResult> WhatIsTheAwardingOrganisation(DropdownQuestionModel model)
     {

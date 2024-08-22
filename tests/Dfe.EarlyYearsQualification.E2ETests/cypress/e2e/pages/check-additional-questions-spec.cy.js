@@ -1,6 +1,7 @@
 describe("A spec that tests the check additional questions page", () => {
     beforeEach(() => {
         cy.setCookie('auth-secret', Cypress.env('auth_secret'));
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
     })
 
     // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService.  

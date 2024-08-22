@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("qualifications/check-additional-questions")]
+[RedirectIfDateMissing]
 public class CheckAdditionalRequirementsController(
     ILogger<CheckAdditionalRequirementsController> logger,
     IContentService contentService,
