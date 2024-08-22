@@ -36,6 +36,7 @@ if (!useMockContentful)
 }
 
 // Add services to the container.
+builder.Services.AddAntiforgery(options => options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest);
 builder.Services.AddControllersWithViews(options =>
                                          {
                                              // Ensures that all POST actions are protected by default.
