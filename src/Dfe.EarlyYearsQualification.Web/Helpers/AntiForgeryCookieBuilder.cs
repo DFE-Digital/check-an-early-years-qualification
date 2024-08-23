@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
-[ExcludeFromCodeCoverage]
 public class AntiForgeryCookieBuilder : CookieBuilder
 {
     public override CookieOptions Build(HttpContext context, DateTimeOffset expiresFrom)
