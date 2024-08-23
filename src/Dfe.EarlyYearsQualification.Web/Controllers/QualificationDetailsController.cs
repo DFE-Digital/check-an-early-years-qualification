@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/qualifications")]
+[RedirectIfDateMissing]
 public class QualificationDetailsController(
     ILogger<QualificationDetailsController> logger,
     IContentService contentService,
@@ -21,6 +23,7 @@ public class QualificationDetailsController(
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
+    
     [HttpGet]
     public async Task<IActionResult> Get()
     {

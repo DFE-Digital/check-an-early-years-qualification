@@ -12,6 +12,7 @@ describe("A spec that tests advice pages", () => {
     })
 
     it("Checks the level 2 between 1 Sept 2014 and 31 Aug 2019 details are on the page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019");
         
         cy.get("#advice-page-heading").should("contain.text", "Level 2 qualifications started between 1 September 2014 and 31 August 2019");
@@ -40,6 +41,7 @@ describe("A spec that tests advice pages", () => {
     })
 
     it("Checks the Level 6 qualification pre 2014 details are on the page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/advice/level-6-qualification-pre-2014");
 
         cy.get("#advice-page-heading").should("contain.text", "Level 6 qualification pre 2014");
@@ -47,6 +49,7 @@ describe("A spec that tests advice pages", () => {
     })
 
     it("Checks the Level 6 qualification post 2014 details are on the page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/advice/level-6-qualification-post-2014");
 
         cy.get("#advice-page-heading").should("contain.text", "Level 6 qualification post 2014");
@@ -54,6 +57,7 @@ describe("A spec that tests advice pages", () => {
     })
     
     it("Checks the Qualifications level 7 details are on the page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
         cy.visit("/advice/qualification-level-7");
         
         cy.get("#advice-page-heading").should("contain.text", "Qualification at Level 7");
