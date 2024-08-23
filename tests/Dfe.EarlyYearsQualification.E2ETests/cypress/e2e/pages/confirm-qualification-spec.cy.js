@@ -1,7 +1,7 @@
 describe("A spec that tests the confirm qualification page", () => {
     beforeEach(() => {
         cy.setCookie('auth-secret', Cypress.env('auth_secret'));
-        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
     })
 
     // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService.
@@ -18,16 +18,16 @@ describe("A spec that tests the confirm qualification page", () => {
 
         cy.get('input[value="yes"]').should("exist");
         cy.get('input[value="no"]').should("exist");
-        
+
         cy.get('label[for="yes"]').should("contain.text", "yes");
         cy.get('label[for="no"]').should("contain.text", "no");
-        
+
         cy.get("#confirm-qualification-button").should("contain.text", "Test button text");
-        
+
         cy.get(".govuk-error-summary").should("not.exist");
         cy.get("#confirm-qualification-choice-error").should("not.exist");
     });
-    
+
     it("Shows errors if user does not select an option", () => {
         cy.visit("/confirm-qualification/eyq-240");
 
@@ -36,7 +36,7 @@ describe("A spec that tests the confirm qualification page", () => {
         cy.get(".govuk-error-summary").should("be.visible");
         cy.get(".govuk-error-summary__title").should("contain.text", "Test error banner heading");
         cy.get("#error-banner-link").should("contain.text", "Test error banner link");
-        
+
         cy.get("#confirm-qualification-choice-error").should("contain.text", "Test error text");
         cy.get(".govuk-form-group--error").should("be.visible");
     });

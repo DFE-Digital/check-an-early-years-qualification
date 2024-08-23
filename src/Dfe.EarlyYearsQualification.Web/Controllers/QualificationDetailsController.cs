@@ -23,7 +23,6 @@ public class QualificationDetailsController(
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
-    
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -78,15 +77,17 @@ public class QualificationDetailsController(
         }
 
         // Grab the start date of the qualification
-        var (_, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
 
         // Check that the user has chosen a start date, if not then redirect them back to the start of the journey
-        if (startDateYear == null)
+        if (startDateYear == null || startDateMonth == null)
         {
             return RedirectToAction("Index", "Home");
         }
 
-        var model = await MapDetails(qualification, detailsPageContent);
+        var qualificationStartedBeforeSeptember2014 = userJourneyCookieService.WasStartedBeforeSeptember2014();
+
+        var model = await MapDetails(qualificationStartedBeforeSeptember2014, qualification, detailsPageContent);
 
         var validateAdditionalRequirementQuestions = ValidateAdditionalQuestions(model);
 
@@ -96,7 +97,7 @@ public class QualificationDetailsController(
         }
 
         // If all the additional requirement checks pass, then we can go to check each level individually
-        await CheckRatioRequirements(startDateYear.Value, qualification, model);
+        await CheckRatioRequirements(qualificationStartedBeforeSeptember2014, qualification, model);
 
         return View(model);
     }
@@ -141,11 +142,16 @@ public class QualificationDetailsController(
                                                                      });
     }
 
-    private async Task CheckRatioRequirements(int startDateYear, Qualification qualification,
+    private async Task CheckRatioRequirements(bool qualificationStartedBeforeSeptember2014,
+                                              Qualification qualification,
                                               QualificationDetailsModel model)
     {
         // Build up property name to check for each level
-        var beforeOrAfter = startDateYear > 2014 ? "After" : "Before";
+        var beforeOrAfter =
+            qualificationStartedBeforeSeptember2014
+                ? "Before"
+                : "After";
+
         var fullAndRelevantPropertyToCheck =
             $"FullAndRelevantForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
 
@@ -237,7 +243,7 @@ public class QualificationDetailsController(
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
-        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
         var searchCriteria = userJourneyCookieService.GetSearchCriteria();
 
@@ -283,7 +289,7 @@ public class QualificationDetailsController(
                               AwardingOrganisation = content.AnyAwardingOrganisationHeading
                           };
 
-        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         if (startDateMonth is not null && startDateYear is not null)
         {
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
@@ -327,9 +333,12 @@ public class QualificationDetailsController(
         return basicQualificationsModels;
     }
 
-    private async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content)
+    private async Task<QualificationDetailsModel> MapDetails(
+        bool qualificationStartedBeforeSeptember2014,
+        Qualification qualification,
+        DetailsPage content)
     {
-        var backNavLink = CalculateBackButton(content);
+        var backNavLink = CalculateBackButton(qualificationStartedBeforeSeptember2014, content);
 
         return new QualificationDetailsModel
                {
@@ -368,7 +377,9 @@ public class QualificationDetailsController(
                };
     }
 
-    private NavigationLink? CalculateBackButton(DetailsPage content)
+    private NavigationLink? CalculateBackButton(
+        bool qualificationStartedBeforeSeptember2014,
+        DetailsPage content)
     {
         if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions())
         {
@@ -382,8 +393,11 @@ public class QualificationDetailsController(
             return content.BackButton;
         }
 
-        var (_, yearStarted) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        var result = yearStarted < 2014 ? content.BackToLevelSixAdviceBefore2014 : content.BackToLevelSixAdvice;
+        // Advice is different for qualifications started before September 2014
+        var result =
+            qualificationStartedBeforeSeptember2014
+                ? content.BackToLevelSixAdviceBefore2014
+                : content.BackToLevelSixAdvice;
 
         return result ?? content.BackButton;
     }

@@ -25,11 +25,11 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         SetJourneyCookie(model);
     }
 
-    public void SetWhenWasQualificationAwarded(string date)
+    public void SetWhenWasQualificationStarted(string date)
     {
         var model = GetUserJourneyModelFromCookie();
 
-        model.WhenWasQualificationAwarded = date;
+        model.WhenWasQualificationStarted = date;
 
         SetJourneyCookie(model);
     }
@@ -126,13 +126,13 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         return awardingCountry;
     }
 
-    public (int? startMonth, int? startYear) GetWhenWasQualificationAwarded()
+    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
     {
         var cookie = GetUserJourneyModelFromCookie();
 
         int? startDateMonth = null;
         int? startDateYear = null;
-        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
+        var qualificationAwardedDateSplit = cookie.WhenWasQualificationStarted.Split('/');
 
         // ReSharper disable once InvertIf
         if (qualificationAwardedDateSplit.Length == 2
@@ -144,6 +144,34 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         }
 
         return (startDateMonth, startDateYear);
+    }
+
+    public bool WasStartedBetweenSeptember2014AndAugust2019()
+    {
+        var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
+
+        if (startDateMonth is null || startDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was started between 09-2014 and 08-2019");
+        }
+
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
+    }
+
+    public bool WasStartedBeforeSeptember2014()
+    {
+        var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
+
+        if (startDateMonth is null || startDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was started before 09-2014");
+        }
+
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date < new DateOnly(2014, 9, 1);
     }
 
     public int? GetLevelOfQualification()
