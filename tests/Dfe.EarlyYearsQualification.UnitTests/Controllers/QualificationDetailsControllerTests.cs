@@ -145,7 +145,52 @@ public class QualificationDetailsControllerTests
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, null));
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((null, null));
+
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
+                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+
+        var result = await controller.Index(qualificationId);
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Home");
+    }
+
+    [TestMethod]
+    public async Task Index_NoDateMonthOfQualificationSelectedPriorInTheJourney_RedirectToHome()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        const string qualificationId = "eyq-145";
+
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    2)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements"
+                                  };
+        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
+        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((null, 2012));
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
@@ -203,7 +248,7 @@ public class QualificationDetailsControllerTests
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, 2022));
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
 
@@ -279,7 +324,7 @@ public class QualificationDetailsControllerTests
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, 2022));
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
 
@@ -349,7 +394,9 @@ public class QualificationDetailsControllerTests
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
+                                    .Returns(false);
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
@@ -403,7 +450,9 @@ public class QualificationDetailsControllerTests
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
+                                    .Returns(false);
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
@@ -462,7 +511,9 @@ public class QualificationDetailsControllerTests
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
+                                    .Returns(false);
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
@@ -535,7 +586,9 @@ public class QualificationDetailsControllerTests
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((null, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
+                                    .Returns(false);
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
@@ -604,15 +657,15 @@ public class QualificationDetailsControllerTests
             };
 
         mockContentService.Setup(x => x.GetQualificationListPage()).ReturnsAsync(new QualificationListPage
-            {
-                BackButton = new NavigationLink
-                             {
-                                 DisplayText = "TEST",
-                                 Href = "/",
-                                 OpenInNewTab = false
-                             },
-                Header = "TEST"
-            });
+                 {
+                     BackButton = new NavigationLink
+                                  {
+                                      DisplayText = "TEST",
+                                      Href = "/",
+                                      OpenInNewTab = false
+                                  },
+                     Header = "TEST"
+                 });
 
         var result = await controller.Get();
 

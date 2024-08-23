@@ -110,7 +110,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_Level6QualificationPre2014_ReturnsExpectedDetails()
     {
@@ -123,7 +123,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_Level6QualificationPost2014_ReturnsExpectedDetails()
     {
@@ -419,6 +419,31 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetQualifications_ReturnsAQualificationWithAnAdditionalRequirementsQuestion()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetQualifications();
+
+        result.Count.Should().Be(5);
+
+        var qualificationWithAdditionalRequirements = result[4];
+        qualificationWithAdditionalRequirements.AdditionalRequirementQuestions.Should().HaveCount(1);
+
+        var additionalRequirementQuestions = qualificationWithAdditionalRequirements.AdditionalRequirementQuestions;
+
+        additionalRequirementQuestions.Should().HaveCount(1);
+        additionalRequirementQuestions![0].AnswerToBeFullAndRelevant.Should().Be(true);
+
+        var answers = additionalRequirementQuestions[0].Answers;
+
+        answers[0].Label.Should().Be("Yes");
+        answers[0].Value.Should().Be("yes");
+        answers[1].Label.Should().Be("No");
+        answers[1].Value.Should().Be("no");
+    }
+
+    [TestMethod]
     public async Task GetQualificationListPage_ReturnsCorrectMockData()
     {
         var contentfulService = new MockContentfulService();
@@ -540,7 +565,7 @@ public class MockContentfulServiceTests
                                                    {
                                                        DisplayText = "Back",
                                                        OpenInNewTab = false,
-                                                       Href = "/"
+                                                       Href = "/qualifications"
                                                    });
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorSummaryHeading.Should().NotBeNullOrEmpty();

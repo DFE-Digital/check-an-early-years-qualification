@@ -136,6 +136,30 @@ public class MockContentfulService : IContentService
                                                           Href = "/confirm-qualification/eyq-240",
                                                           OpenInNewTab = false
                                                       },
+                                         BackToAdditionalQuestionsLink = new NavigationLink
+                                                                         {
+                                                                             DisplayText =
+                                                                                 "TEST (back to additional questions)",
+                                                                             Href =
+                                                                                 "/qualifications/check-additional-questions/EYQ-240",
+                                                                             OpenInNewTab = false
+                                                                         },
+                                         BackToLevelSixAdvice = new NavigationLink
+                                                                {
+                                                                    DisplayText =
+                                                                        "TEST (back to level 6 advice post 2014)",
+                                                                    Href =
+                                                                        "/advice/level-6-qualification-post-2014",
+                                                                    OpenInNewTab = false
+                                                                },
+                                         BackToLevelSixAdviceBefore2014 = new NavigationLink
+                                                                          {
+                                                                              DisplayText =
+                                                                                  "TEST (back to level 6 advice pre 2014)",
+                                                                              Href =
+                                                                                  "/advice/level-6-qualification-pre-2014",
+                                                                              OpenInNewTab = false
+                                                                          },
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
                                          RequirementsHeading = "Test requirements heading",
@@ -204,7 +228,8 @@ public class MockContentfulService : IContentService
                                                  new()
                                                  {
                                                      Question = "Test question",
-                                                     HintText = "This is the hint text",
+                                                     HintText =
+                                                         "This is the hint text: answer yes for full and relevant",
                                                      DetailsHeading =
                                                          "This is the details heading",
                                                      DetailsContent =
@@ -231,7 +256,8 @@ public class MockContentfulService : IContentService
                                                  new()
                                                  {
                                                      Question = "Test question 2",
-                                                     HintText = "This is the hint text",
+                                                     HintText =
+                                                         "This is the hint text: answer no for full and relevant",
                                                      DetailsHeading =
                                                          "This is the details heading",
                                                      DetailsContent =
@@ -253,7 +279,7 @@ public class MockContentfulService : IContentService
                                                      ],
                                                      ConfirmationStatement =
                                                          "This is the confirmation statement 2",
-                                                     AnswerToBeFullAndRelevant = true
+                                                     AnswerToBeFullAndRelevant = false
                                                  }
                                              },
                                          RatioRequirements = new List<RatioRequirement>
@@ -332,8 +358,35 @@ public class MockContentfulService : IContentService
                                        "C awarding organisation", 123),
                                    new("4", "TEST",
                                        "D awarding organisation", 123),
-                                   new("5", "TEST",
+                                   new("5", "TEST with additional requirements",
                                        "E awarding organisation", 123)
+                                   {
+                                       AdditionalRequirements = "Additional requirements",
+                                       AdditionalRequirementQuestions = new List<AdditionalRequirementQuestion>
+                                                                        {
+                                                                            new()
+                                                                            {
+                                                                                Question =
+                                                                                    "Answer 'yes' for this to be full and relevant",
+                                                                                AnswerToBeFullAndRelevant = true,
+                                                                                Answers =
+                                                                                [
+                                                                                    new Option
+                                                                                    {
+                                                                                        Label = "Yes",
+                                                                                        Value = "yes"
+                                                                                    },
+
+                                                                                    new Option
+                                                                                    {
+                                                                                        Label = "No",
+                                                                                        Value = "no"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                       QualificationNumber = "Q/22/2427"
+                                   }
                                });
     }
 
@@ -413,7 +466,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "Back",
-                                                          Href = "/",
+                                                          Href = "/qualifications",
                                                           OpenInNewTab = false
                                                       },
                                          CtaButtonText = "Get result",

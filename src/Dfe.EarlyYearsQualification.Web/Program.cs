@@ -8,6 +8,7 @@ using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Security;
+using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -70,6 +71,7 @@ else
 
 builder.Services.AddModelRenderers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICookieManager, CookieManager>();
 builder.Services.AddTransient<ICookiesPreferenceService, CookiesPreferenceService>();
 builder.Services.AddTransient<IUserJourneyCookieService, UserJourneyCookieService>();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();

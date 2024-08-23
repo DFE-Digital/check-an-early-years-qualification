@@ -13,11 +13,10 @@ public class RedirectIfDateMissingAttribute() : TypeFilterAttribute(typeof(Redir
         {
             var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
 
-            if (string.IsNullOrEmpty(cookie.WhenWasQualificationAwarded))
+            if (string.IsNullOrEmpty(cookie.WhenWasQualificationStarted))
             {
                 context.Result = new RedirectResult("/questions/when-was-the-qualification-started");
             }
         }
     }
 }
-

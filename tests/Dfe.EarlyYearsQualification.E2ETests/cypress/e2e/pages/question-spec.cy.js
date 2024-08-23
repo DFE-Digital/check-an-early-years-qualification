@@ -44,7 +44,7 @@ describe("A spec that tests question pages", () => {
         cy.get(".govuk-error-summary").should("be.visible");
         cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
         cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
-        
+
         cy.get('#option-error').should("exist");
         cy.get('#option-error').should("contain.text", "Test error message");
         cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
@@ -72,24 +72,24 @@ describe("A spec that tests question pages", () => {
     })
 
     it("shows an error message when a user doesnt type a date on the when-was-the-qualification-started page", () => {
-      cy.visit("/questions/when-was-the-qualification-started");
+        cy.visit("/questions/when-was-the-qualification-started");
 
-      cy.get(".govuk-error-summary").should("not.exist");
-      cy.get("#date-error").should("not.exist");
-      cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
+        cy.get(".govuk-error-summary").should("not.exist");
+        cy.get("#date-error").should("not.exist");
+        cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
 
-      cy.get('button[id="question-submit"]').click();
-      cy.location().should((loc) => {
-        expect(loc.pathname).to.eq("/questions/when-was-the-qualification-started");
-      })
-        
-      cy.get(".govuk-error-summary").should("be.visible");
-      cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
-      cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
+        cy.get('button[id="question-submit"]').click();
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq("/questions/when-was-the-qualification-started");
+        })
 
-      cy.get('#date-error').should("exist");
-      cy.get('#date-error').should("contain.text", "Test Error Message");
-      cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
+        cy.get(".govuk-error-summary").should("be.visible");
+        cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+        cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
+
+        cy.get('#date-error').should("exist");
+        cy.get('#date-error').should("contain.text", "Test Error Message");
+        cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
     })
 
     it("shows an error message when a user puts a date in the future on when-was-the-qualification-started page", () => {
@@ -101,7 +101,7 @@ describe("A spec that tests question pages", () => {
 
         cy.get('#date-started-month').type(10);
         cy.get('#date-started-year').type(3000);
-        
+
         cy.get('button[id="question-submit"]').click();
         cy.location().should((loc) => {
             expect(loc.pathname).to.eq("/questions/when-was-the-qualification-started");
@@ -143,7 +143,7 @@ describe("A spec that tests question pages", () => {
 
     /// What level is the qualification page
     it("Checks the content on what-level-is-the-qualification page", () => {
-        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-level-is-the-qualification");
 
         cy.get("#question").should("contain.text", "What level is the qualification?");
@@ -156,7 +156,7 @@ describe("A spec that tests question pages", () => {
     })
 
     it("Checks additional information on the what-level-is-the-qualification page", () => {
-        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-level-is-the-qualification");
 
         cy.get(".govuk-details").should("not.have.attr", "open");
@@ -168,7 +168,7 @@ describe("A spec that tests question pages", () => {
     })
 
     it("shows an error message when a user doesnt select an option on the what-level-is-the-qualification page", () => {
-        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-level-is-the-qualification");
 
         cy.get(".govuk-error-summary").should("not.exist");
@@ -183,15 +183,15 @@ describe("A spec that tests question pages", () => {
         cy.get(".govuk-error-summary").should("be.visible");
         cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
         cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
-        
+
         cy.get('#option-error').should("exist");
         cy.get('#option-error').should("contain.text", "Test error message");
         cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
     })
-    
+
     /// What is the awarding organisation page
     it("Checks the content on what-is-the-awarding-organisation page", () => {
-        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-is-the-awarding-organisation");
 
         cy.get("#question").should("contain.text", "Test Dropdown Question");
@@ -201,7 +201,7 @@ describe("A spec that tests question pages", () => {
     })
 
     it("Checks additional information on the what-is-the-awarding-organisation page", () => {
-        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
         cy.visit("/questions/what-is-the-awarding-organisation");
 
         cy.get(".govuk-details").should("not.have.attr", "open");
@@ -214,24 +214,24 @@ describe("A spec that tests question pages", () => {
 
     it("shows an error message when a user doesnt select an option from the dropdown list" +
         "and also does not check 'not in the list' on the what-is-the-awarding-organisation", () => {
-        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
-        cy.visit("/questions/what-is-the-awarding-organisation");
+            cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
+            cy.visit("/questions/what-is-the-awarding-organisation");
 
-        cy.get(".govuk-error-summary").should("not.exist");
-        cy.get("#dropdown-error").should("not.exist");
-        cy.get("#awarding-organisation-select").should("not.have.class", "govuk-select--error");
+            cy.get(".govuk-error-summary").should("not.exist");
+            cy.get("#dropdown-error").should("not.exist");
+            cy.get("#awarding-organisation-select").should("not.have.class", "govuk-select--error");
 
-        cy.get('button[id="question-submit"]').click();
-        cy.location().should((loc) => {
-            expect(loc.pathname).to.eq("/questions/what-is-the-awarding-organisation");
+            cy.get('button[id="question-submit"]').click();
+            cy.location().should((loc) => {
+                expect(loc.pathname).to.eq("/questions/what-is-the-awarding-organisation");
+            })
+
+            cy.get(".govuk-error-summary").should("be.visible");
+            cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+            cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
+
+            cy.get('#dropdown-error').should("exist");
+            cy.get('#dropdown-error').should("contain.text", "Test Error Message");
+            cy.get("#awarding-organisation-select").should("have.class", "govuk-select--error");
         })
-
-        cy.get(".govuk-error-summary").should("be.visible");
-        cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
-        cy.get("#error-banner-link").should("contain.text", "Test error banner link text");
-        
-        cy.get('#dropdown-error').should("exist");
-        cy.get('#dropdown-error').should("contain.text", "Test Error Message");
-        cy.get("#awarding-organisation-select").should("have.class", "govuk-select--error");
-    })
 })

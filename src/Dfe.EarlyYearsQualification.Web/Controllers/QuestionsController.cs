@@ -98,10 +98,10 @@ public class QuestionsController(
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
-                model = await MapDateModel(model, 
-                                           questionPage, 
-                                           nameof(this.WhenWasTheQualificationStarted), 
-                                           Questions, 
+                model = await MapDateModel(model,
+                                           questionPage,
+                                           nameof(this.WhenWasTheQualificationStarted),
+                                           Questions,
                                            dateModelValidationResult);
                 model.HasErrors = true;
             }
@@ -109,7 +109,7 @@ public class QuestionsController(
             return View("Date", model);
         }
 
-        userJourneyCookieService.SetWhenWasQualificationAwarded(model.SelectedMonth.ToString() + '/' +
+        userJourneyCookieService.SetWhenWasQualificationStarted(model.SelectedMonth.ToString() + '/' +
                                                                 model.SelectedYear);
 
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
@@ -142,13 +142,16 @@ public class QuestionsController(
         }
 
         userJourneyCookieService.SetLevelOfQualification(model.Option!);
-        
+
         return model.Option switch
                {
-                   "2" when WasAwardedBetweenSeptember2014AndAugust2019() =>
+                   "2" when userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() =>
                        RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice"),
-                   "6" => 
-                       RedirectToAction(WasStartedBeforeSeptember2014() ? "Level6QualificationPre2014" : "Level6QualificationPost2014", "Advice"),
+                   "6" =>
+                       RedirectToAction(userJourneyCookieService.WasStartedBeforeSeptember2014()
+                                            ? "Level6QualificationPre2014"
+                                            : "Level6QualificationPost2014",
+                                        "Advice"),
                    "7" => RedirectToAction(nameof(AdviceController.QualificationLevel7), "Advice"),
                    _ => RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation))
                };
@@ -205,36 +208,10 @@ public class QuestionsController(
         return RedirectToAction("Get", "QualificationDetails");
     }
 
-    private bool WasStartedBeforeSeptember2014()
-    {
-        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-
-        if (startDateMonth is null || startDateYear is null)
-        {
-            return false;
-        }
-
-        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-        return date < new DateOnly(2014, 9, 1);
-    }
-    
-    private bool WasAwardedBetweenSeptember2014AndAugust2019()
-    {
-        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-
-        if (startDateMonth is null || startDateYear is null)
-        {
-            return false;
-        }
-
-        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-        return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
-    }
-
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
-        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
     }
 
@@ -305,7 +282,8 @@ public class QuestionsController(
         model.YearLabel = question.YearLabel;
         model.BackButton = MapToNavigationLinkModel(question.BackButton);
         model.ErrorBannerHeading = question.ErrorBannerHeading;
-        model.ErrorBannerLinkText = placeholderUpdater.Replace(validationResult?.BannerErrorMessage ?? question.ErrorBannerLinkText);
+        model.ErrorBannerLinkText =
+            placeholderUpdater.Replace(validationResult?.BannerErrorMessage ?? question.ErrorBannerLinkText);
         model.ErrorMessage = placeholderUpdater.Replace(validationResult?.ErrorMessage ?? question.ErrorMessage);
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
         model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
