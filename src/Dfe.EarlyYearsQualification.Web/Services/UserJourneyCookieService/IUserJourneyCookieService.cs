@@ -8,7 +8,8 @@ public interface IUserJourneyCookieService
     public void SetWhenWasQualificationStarted(string date);
     public void SetLevelOfQualification(string level);
     public void SetAwardingOrganisation(string awardingOrganisation);
-    public void SetAdditionalQuestionsAnswers(Dictionary<string, string> additionalQuestionsAnswers);
+    public void SetAdditionalQuestionsAnswers(IDictionary<string, string> additionalQuestionsAnswers);
+    public void ClearAdditionalQuestionsAnswers();
 
     public void SetQualificationNameSearchCriteria(string searchCriteria);
     public UserJourneyModel GetUserJourneyModelFromCookie();

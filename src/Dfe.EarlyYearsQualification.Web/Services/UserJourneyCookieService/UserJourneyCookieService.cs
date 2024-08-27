@@ -56,18 +56,17 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
     ///     Replaces all the existing question answers in the user journey with <paramref name="additionalQuestionsAnswers" />
     /// </summary>
     /// <param name="additionalQuestionsAnswers"></param>
-    public void SetAdditionalQuestionsAnswers(Dictionary<string, string> additionalQuestionsAnswers)
+    public void SetAdditionalQuestionsAnswers(IDictionary<string, string> additionalQuestionsAnswers)
     {
-        var model = GetUserJourneyModelFromCookie();
+        SetAdditionalQuestionsAnswersInternal(additionalQuestionsAnswers);
+    }
 
-        model.AdditionalQuestionsAnswers.Clear();
-
-        foreach (var answer in additionalQuestionsAnswers)
-        {
-            model.AdditionalQuestionsAnswers[answer.Key] = answer.Value;
-        }
-
-        SetJourneyCookie(model);
+    /// <summary>
+    ///     Removes existing question answers in the user journey
+    /// </summary>
+    public void ClearAdditionalQuestionsAnswers()
+    {
+        SetAdditionalQuestionsAnswersInternal([]);
     }
 
     public void SetQualificationNameSearchCriteria(string searchCriteria)
@@ -220,6 +219,21 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
     {
         var cookie = GetUserJourneyModelFromCookie();
         return cookie.AdditionalQuestionsAnswers.Count > 0;
+    }
+
+    private void SetAdditionalQuestionsAnswersInternal(
+        IEnumerable<KeyValuePair<string, string>> additionalQuestionsAnswers)
+    {
+        var model = GetUserJourneyModelFromCookie();
+
+        model.AdditionalQuestionsAnswers.Clear();
+
+        foreach (var answer in additionalQuestionsAnswers)
+        {
+            model.AdditionalQuestionsAnswers[answer.Key] = answer.Value;
+        }
+
+        SetJourneyCookie(model);
     }
 
     private void SetJourneyCookie(UserJourneyModel model)
