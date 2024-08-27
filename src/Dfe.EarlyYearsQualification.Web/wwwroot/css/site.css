@@ -33,6 +33,7 @@ body {
 
 .chevron-card__link {
     width: 95%;
+    margin-bottom: 40px;
 }
 
 .chevron-card__link:after {
