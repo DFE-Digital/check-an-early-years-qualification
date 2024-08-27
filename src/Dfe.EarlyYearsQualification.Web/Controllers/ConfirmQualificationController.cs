@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -12,7 +13,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [RedirectIfDateMissing]
 public class ConfirmQualificationController(
     ILogger<ConfirmQualificationController> logger,
-    IContentService contentService)
+    IContentService contentService,
+    IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
     [HttpGet]
@@ -55,7 +57,7 @@ public class ConfirmQualificationController(
             logger.LogError("No qualification id provided");
             return RedirectToAction("Index", "Error");
         }
-        
+
         var qualification = await contentService.GetQualificationById(model.QualificationId);
         if (qualification is null)
         {
@@ -65,18 +67,29 @@ public class ConfirmQualificationController(
 
             return RedirectToAction("Index", "Error");
         }
-        
+
         if (ModelState.IsValid)
         {
+            userJourneyCookieService.ClearAdditionalQuestionsAnswers();
+
             var hasAdditionalQuestions = qualification.AdditionalRequirementQuestions is not null &&
                                          qualification.AdditionalRequirementQuestions.Count > 0;
-            return model.ConfirmQualificationAnswer == "yes" && hasAdditionalQuestions 
-                       ? RedirectToAction("Index", "CheckAdditionalRequirements", 
-                                          new { qualificationId = model.QualificationId }) 
-                           : model.ConfirmQualificationAnswer == "yes"
-                           ? RedirectToAction("Index", "QualificationDetails",
-                                              new { qualificationId = model.QualificationId })
-                           : RedirectToAction("Get", "QualificationDetails");
+
+            return model.ConfirmQualificationAnswer switch
+                   {
+                       "yes" when hasAdditionalQuestions => RedirectToAction("Index",
+                                                                             "CheckAdditionalRequirements",
+                                                                             new
+                                                                             {
+                                                                                 qualificationId = model.QualificationId
+                                                                             }),
+
+                       "yes" => RedirectToAction("Index",
+                                                 "QualificationDetails",
+                                                 new { qualificationId = model.QualificationId }),
+
+                       _ => RedirectToAction("Get", "QualificationDetails")
+                   };
         }
 
         var content = await contentService.GetConfirmQualificationPage();

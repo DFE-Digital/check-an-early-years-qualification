@@ -583,8 +583,16 @@ public class QualificationDetailsControllerTests
                                       RatioRequirements = ratioRequirements
                                   };
 
+        var detailsPage = new DetailsPage
+                          {
+                              BackToAdditionalQuestionsLink = new NavigationLink
+                                                              {
+                                                                  Href = "/api/qualifications"
+                                                              }
+                          };
+
         mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(detailsPage);
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
         mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
@@ -622,6 +630,103 @@ public class QualificationDetailsControllerTests
         model.RatioRequirements.ApprovedForLevel3.Should().BeTrue();
         model.RatioRequirements.ApprovedForLevel6.Should().BeTrue();
         model.RatioRequirements.ApprovedForUnqualified.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task Index_BackToAdditionalQuestionsLinkIncludesQualificationId()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        mockUserJourneyCookieService.Setup(x => x.UserHasAnsweredAdditionalQuestions())
+                                    .Returns(true);
+
+        const string qualificationId = "eyq-145";
+        const int level = 2;
+        const int startDateYear = 2022;
+
+        var ratioRequirements = new List<RatioRequirement>
+                                {
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 2 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 3 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 6 Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Unqualified Ratio Requirements",
+                                        FullAndRelevantForLevel2After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
+                                    }
+                                };
+
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    level)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements",
+                                      RatioRequirements = ratioRequirements
+                                  };
+
+        var detailsPage = new DetailsPage
+                          {
+                              BackToAdditionalQuestionsLink = new NavigationLink
+                                                              {
+                                                                  Href = "/api/qualifications"
+                                                              }
+                          };
+
+        mockContentService.Setup(x => x.GetQualificationById(qualificationId))
+                          .ReturnsAsync(qualificationResult);
+
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(detailsPage);
+
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
+                                    .Returns(false);
+
+        var controller =
+            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
+                                               mockContentFilterService.Object, mockInsetTextRenderer.Object,
+                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+
+        var result = await controller.Index(qualificationId);
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as QualificationDetailsModel;
+
+        model!.BackButton!.Href.Should().Be("/api/qualifications/eyq-145");
     }
 
     [TestMethod]

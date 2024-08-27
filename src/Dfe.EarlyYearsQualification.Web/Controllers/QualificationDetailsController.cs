@@ -338,7 +338,8 @@ public class QualificationDetailsController(
         Qualification qualification,
         DetailsPage content)
     {
-        var backNavLink = CalculateBackButton(qualificationStartedBeforeSeptember2014, content);
+        var backNavLink = CalculateBackButton(qualificationStartedBeforeSeptember2014,
+                                              content, qualification.QualificationId);
 
         return new QualificationDetailsModel
                {
@@ -379,11 +380,12 @@ public class QualificationDetailsController(
 
     private NavigationLink? CalculateBackButton(
         bool qualificationStartedBeforeSeptember2014,
-        DetailsPage content)
+        DetailsPage content,
+        string qualificationId)
     {
         if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions())
         {
-            return content.BackToAdditionalQuestionsLink ?? content.BackButton;
+            return ContentBackButtonLinkForAdditionalQuestions(content, qualificationId);
         }
 
         var level = userJourneyCookieService.GetLevelOfQualification();
@@ -400,6 +402,24 @@ public class QualificationDetailsController(
                 : content.BackToLevelSixAdvice;
 
         return result ?? content.BackButton;
+    }
+
+    private static NavigationLink? ContentBackButtonLinkForAdditionalQuestions(
+        DetailsPage content, string qualificationId)
+    {
+        var link = content.BackToAdditionalQuestionsLink;
+
+        if (link == null)
+        {
+            return content.BackButton;
+        }
+
+        if (!link.Href.EndsWith($"/{qualificationId}", StringComparison.OrdinalIgnoreCase))
+        {
+            link.Href = $"{link.Href}/{qualificationId}";
+        }
+
+        return link;
     }
 
     private List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
