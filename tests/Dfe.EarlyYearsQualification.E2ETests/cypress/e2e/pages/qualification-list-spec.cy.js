@@ -24,9 +24,6 @@ describe("A spec used to test the qualification list page", () => {
         cy.get("#post-list-content").should("contain.text", "Link to not on list advice page");
         cy.get("#post-filter-content").should("contain.text", "Post search criteria content");
 
-        cy.get(".level").first().should("contain.text", "Level");
-        cy.get(".awarding-org").first().should("contain.text", "Awarding organisation");
-
         cy.get("#clear-search").should("contain.text", "Clear search");
         cy.get("#no-result-content").should("not.exist");
     })

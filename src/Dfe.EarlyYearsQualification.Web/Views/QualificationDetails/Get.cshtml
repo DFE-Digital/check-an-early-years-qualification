@@ -75,24 +75,6 @@
                     <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })" class="govuk-link govuk-heading-m chevron-card__link">
                         @qualification.QualificationName
                     </a>
-                    <dl class="govuk-summary-list govuk-summary-list--no-border">
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key level">
-                                @Model.LevelHeading
-                            </dt>
-                            <dd class="govuk-summary-list__value">
-                                @qualification.QualificationLevel
-                            </dd>
-                        </div>
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key awarding-org">
-                                @Model.AwardingOrganisationHeading
-                            </dt>
-                            <dd class="govuk-summary-list__value">
-                                @qualification.AwardingOrganisationTitle
-                            </dd>
-                        </div>
-                    </dl>
                     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                 </div>
             </div>
