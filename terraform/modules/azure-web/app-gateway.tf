@@ -49,6 +49,12 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
       selector                = var.webapp_cookie_user_journey_name
       selector_match_operator = "Equals"
     }
+
+    exclusion {
+      match_variable          = "RequestArgNames"
+      selector                = "__RequestVerificationToken"
+      selector_match_operator = "StartsWith"
+    }
   }
 
   policy_settings {
