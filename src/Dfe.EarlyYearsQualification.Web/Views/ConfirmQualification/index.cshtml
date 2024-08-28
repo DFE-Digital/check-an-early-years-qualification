@@ -1,4 +1,5 @@
-﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.ConfirmQualificationPageModel
+﻿@using Dfe.EarlyYearsQualification.Content.Constants
+@model Dfe.EarlyYearsQualification.Web.Models.Content.ConfirmQualificationPageModel
 
 @{
     ViewData["Title"] = "Confirm Qualification";
@@ -30,6 +31,9 @@
             </div>
         }
         <h1 id="heading" class="govuk-heading-xl">@Model.Heading</h1>
+        <div id="post-heading" class="post-heading-wrapper">
+            @Html.Raw(Model.PostHeadingContent)
+        </div>
         <dl class="govuk-summary-list">
             <div id="qualification-name-row" class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
@@ -55,15 +59,13 @@
                     @Model.QualificationAwardingOrganisation
                 </dd>
             </div>
-            <div id="qualification-date-added-row" class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Model.DateAddedLabel
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @Model.QualificationDateAdded
-                </dd>
-            </div>
         </dl>
+        @if (Model.QualificationAwardingOrganisation == AwardingOrganisations.Various)
+        {
+            <div id="various-ao-content" class="various-ao-content-wrapper">
+                @Html.Raw(Model.VariousAwardingOrganisationsExplanation)
+            </div>
+        }
         <form id="confirm-qualification" asp-controller="ConfirmQualification" asp-action="Confirm" method="post">
             <input type="hidden" name="qualificationId" value="@Model.QualificationId">
             <div id="confirm-qualification-form-group" class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">

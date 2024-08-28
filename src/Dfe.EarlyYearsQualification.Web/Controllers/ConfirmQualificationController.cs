@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -14,7 +15,9 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class ConfirmQualificationController(
     ILogger<ConfirmQualificationController> logger,
     IContentService contentService,
-    IUserJourneyCookieService userJourneyCookieService)
+    IUserJourneyCookieService userJourneyCookieService,
+    IHtmlRenderer htmlRenderer,
+    IGovUkInsetTextRenderer govUkInsetTextRenderer)
     : ServiceController
 {
     [HttpGet]
@@ -44,7 +47,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = Map(content, qualification);
+        var model = await Map(content, qualification);
 
         return View(model);
     }
@@ -100,13 +103,13 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        model = Map(content, qualification);
+        model = await Map(content, qualification);
         model.HasErrors = true;
 
         return View("Index", model);
     }
 
-    private static ConfirmQualificationPageModel Map(ConfirmQualificationPage content, Qualification qualification)
+    private async Task<ConfirmQualificationPageModel> Map(ConfirmQualificationPage content, Qualification qualification)
     {
         return new ConfirmQualificationPageModel
                {
@@ -125,9 +128,11 @@ public class ConfirmQualificationController(
                    QualificationName = qualification.QualificationName,
                    QualificationLevel = qualification.QualificationLevel.ToString(),
                    QualificationId = qualification.QualificationId,
-                   QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle,
+                   QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle.Trim(),
                    QualificationDateAdded = qualification.FromWhichYear!,
-                   BackButton = MapToNavigationLinkModel(content.BackButton)
+                   BackButton = MapToNavigationLinkModel(content.BackButton),
+                   PostHeadingContent = await htmlRenderer.ToHtml(content.PostHeadingContent),
+                   VariousAwardingOrganisationsExplanation = await govUkInsetTextRenderer.ToHtml(content.VariousAwardingOrganisationsExplanation)
                };
     }
 }
