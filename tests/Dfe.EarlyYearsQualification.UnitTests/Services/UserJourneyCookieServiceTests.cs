@@ -26,12 +26,12 @@ public class UserJourneyCookieServiceTests
 
         service.SetWhereWasQualificationAwarded("some test string");
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
-                                                              {
-                                                                  WhereWasQualificationAwarded = "some test string"
-                                                              });
+        var model = new UserJourneyModel
+                    {
+                        WhereWasQualificationAwarded = "some test string"
+                    };
 
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
 
     [TestMethod]
@@ -45,12 +45,12 @@ public class UserJourneyCookieServiceTests
 
         service.SetWhenWasQualificationStarted("some test string");
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
-                                                              {
-                                                                  WhenWasQualificationStarted = "some test string"
-                                                              });
+        var model = new UserJourneyModel
+                    {
+                        WhenWasQualificationStarted = "some test string"
+                    };
 
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
 
     [TestMethod]
@@ -64,12 +64,12 @@ public class UserJourneyCookieServiceTests
 
         service.SetLevelOfQualification("some test string");
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
-                                                              {
-                                                                  LevelOfQualification = "some test string"
-                                                              });
+        var model = new UserJourneyModel
+                    {
+                        LevelOfQualification = "some test string"
+                    };
 
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
 
     [TestMethod]
@@ -83,12 +83,12 @@ public class UserJourneyCookieServiceTests
 
         service.SetAwardingOrganisation("some test string");
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
-                                                              {
-                                                                  WhatIsTheAwardingOrganisation = "some test string"
-                                                              });
+        var model = new UserJourneyModel
+                    {
+                        WhatIsTheAwardingOrganisation = "some test string"
+                    };
 
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
 
     [TestMethod]
@@ -105,8 +105,7 @@ public class UserJourneyCookieServiceTests
         model.WhenWasQualificationStarted.Should().BeEmpty();
         model.WhereWasQualificationAwarded.Should().BeEmpty();
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, new UserJourneyModel());
     }
 
     [TestMethod]
@@ -144,8 +143,7 @@ public class UserJourneyCookieServiceTests
         model.WhenWasQualificationStarted.Should().BeEmpty();
         model.WhereWasQualificationAwarded.Should().BeEmpty();
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, new UserJourneyModel());
     }
 
     [TestMethod]
@@ -164,8 +162,7 @@ public class UserJourneyCookieServiceTests
 
         service.SetUserJourneyModelCookie(existingModel);
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(existingModel);
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, existingModel);
     }
 
     [TestMethod]
@@ -178,8 +175,7 @@ public class UserJourneyCookieServiceTests
 
         service.ResetUserJourneyCookie();
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, new UserJourneyModel());
     }
 
     [TestMethod]
@@ -198,8 +194,7 @@ public class UserJourneyCookieServiceTests
 
         service.ResetUserJourneyCookie();
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel());
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, new UserJourneyModel());
     }
 
     [TestMethod]
@@ -634,12 +629,12 @@ public class UserJourneyCookieServiceTests
         const string searchCriteria = "This is a test";
         service.SetQualificationNameSearchCriteria(searchCriteria);
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
-                                                              {
-                                                                  SearchCriteria = searchCriteria
-                                                              });
+        var model = new UserJourneyModel
+                    {
+                        SearchCriteria = searchCriteria
+                    };
 
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
 
     [TestMethod]
@@ -687,12 +682,12 @@ public class UserJourneyCookieServiceTests
         Dictionary<string, string> dictionary = new() { { "This is a test question", "Answer" } };
         service.SetAdditionalQuestionsAnswers(dictionary);
 
-        var serialisedModelToCheck = JsonSerializer.Serialize(new UserJourneyModel
-                                                              {
-                                                                  AdditionalQuestionsAnswers = dictionary
-                                                              });
+        var model = new UserJourneyModel
+                    {
+                        AdditionalQuestionsAnswers = dictionary
+                    };
 
-        CheckSerializedModelWasSet(mockHttpContextAccessor, serialisedModelToCheck);
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
 
     [TestMethod]
@@ -760,6 +755,56 @@ public class UserJourneyCookieServiceTests
         service.UserHasAnsweredAdditionalQuestions().Should().BeTrue();
     }
 
+    [TestMethod]
+    public void SetSelectedFromList_Yes_SetsCookieToYes()
+    {
+        var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyModel());
+
+        var service = new UserJourneyCookieService(mockCookieManager.Object,
+                                                   NullLogger<UserJourneyCookieService>.Instance);
+
+        service.SetUserSelectedQualificationFromList(YesOrNo.Yes);
+
+        CheckSerializedModelWasSet(mockCookieManager, new UserJourneyModel
+                                                      {
+                                                          QualificationWasSelectedFromList = YesOrNo.Yes
+                                                      });
+    }
+
+    [TestMethod]
+    public void SetSelectedFromList_No_SetsCookieToNo()
+    {
+        var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyModel
+                                                                   {
+                                                                       QualificationWasSelectedFromList = YesOrNo.Yes
+                                                                   });
+
+        var service = new UserJourneyCookieService(mockCookieManager.Object,
+                                                   NullLogger<UserJourneyCookieService>.Instance);
+
+        service.SetUserSelectedQualificationFromList(YesOrNo.No);
+
+        CheckSerializedModelWasSet(mockCookieManager, new UserJourneyModel
+                                                      {
+                                                          QualificationWasSelectedFromList = YesOrNo.No
+                                                      });
+    }
+
+    [TestMethod]
+    public void GetSelectedFromList_GetsValueInCookie()
+    {
+        var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyModel
+                                                                   {
+                                                                       QualificationWasSelectedFromList = YesOrNo.Yes
+                                                                   });
+
+        var service = new UserJourneyCookieService(mockCookieManager.Object,
+                                                   NullLogger<UserJourneyCookieService>.Instance);
+
+        var result = service.GetQualificationWasSelectedFromList();
+        result.Should().Be(YesOrNo.Yes);
+    }
+
     private static Mock<ICookieManager> SetCookieManagerWithExistingCookie(object? model)
     {
         var serializedModel = JsonSerializer.Serialize(model);
@@ -784,15 +829,17 @@ public class UserJourneyCookieServiceTests
     }
 
     private static void CheckSerializedModelWasSet(Mock<ICookieManager> mockContext,
-                                                   string serializedModelToCheck)
+                                                   UserJourneyModel expectedModel)
     {
+        var expectedCookieValue = JsonSerializer.Serialize(expectedModel);
+
         var in29Minutes = new DateTimeOffset(DateTime.Now.AddMinutes(29));
         var in30Minutes = new DateTimeOffset(DateTime.Now.AddMinutes(30));
 
         mockContext
             .Verify(m =>
                         m.SetOutboundCookie(CookieKeyNames.UserJourneyKey,
-                                            serializedModelToCheck,
+                                            expectedCookieValue,
                                             It.Is<CookieOptions>(
                                                                  options =>
                                                                      options.Secure

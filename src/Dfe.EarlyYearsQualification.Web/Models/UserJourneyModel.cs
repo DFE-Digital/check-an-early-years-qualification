@@ -1,3 +1,5 @@
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+
 namespace Dfe.EarlyYearsQualification.Web.Models;
 
 public class UserJourneyModel
@@ -10,4 +12,5 @@ public class UserJourneyModel
     public string SearchCriteria { get; set; } = string.Empty;
 
     public Dictionary<string, string> AdditionalQuestionsAnswers { get; init; } = new();
+    public YesOrNo QualificationWasSelectedFromList { get; set; }
 }

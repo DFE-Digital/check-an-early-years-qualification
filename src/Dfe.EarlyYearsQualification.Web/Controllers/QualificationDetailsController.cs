@@ -109,7 +109,7 @@ public class QualificationDetailsController(
 
         // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
         if (model.AdditionalRequirementAnswers.Count == 0 ||
-            model.AdditionalRequirementAnswers.Any(answer => string.IsNullOrEmpty(answer.Answer)))
+            model.AdditionalRequirementAnswers.Exists(answer => string.IsNullOrEmpty(answer.Answer)))
         {
             return (false,
                     RedirectToAction("Index", "CheckAdditionalRequirements",
@@ -134,12 +134,12 @@ public class QualificationDetailsController(
     private static bool AnswersIndicateNotFullAndRelevant(
         List<AdditionalRequirementAnswerModel> additionalRequirementsAnswers)
     {
-        return additionalRequirementsAnswers.Any(answer => answer is { AnswerToBeFullAndRelevant: true, Answer: "no" }
-                                                                     or
-                                                                     {
-                                                                         AnswerToBeFullAndRelevant: false,
-                                                                         Answer: "yes"
-                                                                     });
+        return additionalRequirementsAnswers
+            .Exists(answer =>
+                        answer is
+                            { AnswerToBeFullAndRelevant: true, Answer: "no" }
+                            or
+                            { AnswerToBeFullAndRelevant: false, Answer: "yes" });
     }
 
     private async Task CheckRatioRequirements(bool qualificationStartedBeforeSeptember2014,
@@ -390,18 +390,18 @@ public class QualificationDetailsController(
 
         var level = userJourneyCookieService.GetLevelOfQualification();
 
-        if (level != 6)
+        NavigationLink? backButton = null;
+
+        if (userJourneyCookieService.GetQualificationWasSelectedFromList() != YesOrNo.Yes
+            && level == 6)
         {
-            return content.BackButton;
+            // Advice is different for qualifications started before September 2014
+            backButton = qualificationStartedBeforeSeptember2014
+                             ? content.BackToLevelSixAdviceBefore2014
+                             : content.BackToLevelSixAdvice;
         }
 
-        // Advice is different for qualifications started before September 2014
-        var result =
-            qualificationStartedBeforeSeptember2014
-                ? content.BackToLevelSixAdviceBefore2014
-                : content.BackToLevelSixAdvice;
-
-        return result ?? content.BackButton;
+        return backButton ?? content.BackButton;
     }
 
     private static NavigationLink? ContentBackButtonLinkForAdditionalQuestions(
