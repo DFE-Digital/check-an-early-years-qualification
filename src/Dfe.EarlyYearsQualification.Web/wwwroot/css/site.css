@@ -110,3 +110,11 @@ body {
     text-decoration: none !important;
     -webkit-box-decoration-break: clone !important;
 }
+
+.post-heading-wrapper {
+    margin-bottom: 40px;
+}
+
+.various-ao-content-wrapper {
+    margin: 40px 0;
+}

@@ -496,6 +496,10 @@ public class MockContentfulServiceTests
         result.DateAddedLabel.Should().Be("Test date added label");
         result.ErrorBannerHeading.Should().Be("Test error banner heading");
         result.ErrorBannerLink.Should().Be("Test error banner link");
+        result.PostHeadingContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "The post heading content");
+        result.VariousAwardingOrganisationsExplanation!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Various awarding organisation explanation text");
     }
 
     [TestMethod]

@@ -24,4 +24,6 @@ public class ConfirmQualificationPageModel
     public string QualificationAwardingOrganisation { get; init; } = string.Empty;
     public string QualificationDateAdded { get; init; } = string.Empty;
     public NavigationLinkModel? BackButton { get; init; }
+    public string PostHeadingContent { get; set; } = string.Empty;
+    public string VariousAwardingOrganisationsExplanation { get; set; } = string.Empty;
 }

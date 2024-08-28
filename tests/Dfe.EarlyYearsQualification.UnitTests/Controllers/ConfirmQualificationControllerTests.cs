@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -23,10 +24,13 @@ public class ConfirmQualificationControllerTests
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         var result = await controller.Index(id);
 
@@ -45,9 +49,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -68,46 +76,50 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-                 {
-                     QualificationLabel = "Test qualification label",
-                     BackButton = new NavigationLink
-                                  {
-                                      DisplayText = "Test back button",
-                                      OpenInNewTab = false,
-                                      Href = "/qualifications"
-                                  },
-                     ErrorText = "Test error text",
-                     ButtonText = "Test button text",
-                     LevelLabel = "Test level label",
-                     DateAddedLabel = "Test date added label",
-                     Heading = "Test heading",
-                     Options =
-                     [
-                         new Option
-                         {
-                             Label = "yes",
-                             Value = "yes"
-                         },
-                         new Option
-                         {
-                             Label = "no",
-                             Value = "no"
-                         }
-                     ],
-                     RadioHeading = "Test radio heading",
-                     AwardingOrganisationLabel = "Test awarding organisation label",
-                     ErrorBannerHeading = "Test error banner heading",
-                     ErrorBannerLink = "Test error banner link"
-                 });
+            {
+                QualificationLabel = "Test qualification label",
+                BackButton = new NavigationLink
+                             {
+                                 DisplayText = "Test back button",
+                                 OpenInNewTab = false,
+                                 Href = "/qualifications"
+                             },
+                ErrorText = "Test error text",
+                ButtonText = "Test button text",
+                LevelLabel = "Test level label",
+                DateAddedLabel = "Test date added label",
+                Heading = "Test heading",
+                Options =
+                [
+                    new Option
+                    {
+                        Label = "yes",
+                        Value = "yes"
+                    },
+                    new Option
+                    {
+                        Label = "no",
+                        Value = "no"
+                    }
+                ],
+                RadioHeading = "Test radio heading",
+                AwardingOrganisationLabel = "Test awarding organisation label",
+                ErrorBannerHeading = "Test error banner heading",
+                ErrorBannerLink = "Test error banner link"
+            });
 
         mockContentService.Setup(x => x.GetQualificationById("Some ID"))
                           .ReturnsAsync(default(Qualification?));
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -128,37 +140,37 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-                 {
-                     QualificationLabel = "Test qualification label",
-                     BackButton = new NavigationLink
-                                  {
-                                      DisplayText = "Test back button",
-                                      OpenInNewTab = false,
-                                      Href = "/qualifications"
-                                  },
-                     ErrorText = "Test error text",
-                     ButtonText = "Test button text",
-                     LevelLabel = "Test level label",
-                     DateAddedLabel = "Test date added label",
-                     Heading = "Test heading",
-                     Options =
-                     [
-                         new Option
-                         {
-                             Label = "yes",
-                             Value = "yes"
-                         },
-                         new Option
-                         {
-                             Label = "no",
-                             Value = "no"
-                         }
-                     ],
-                     RadioHeading = "Test radio heading",
-                     AwardingOrganisationLabel = "Test awarding organisation label",
-                     ErrorBannerHeading = "Test error banner heading",
-                     ErrorBannerLink = "Test error banner link"
-                 });
+            {
+                QualificationLabel = "Test qualification label",
+                BackButton = new NavigationLink
+                             {
+                                 DisplayText = "Test back button",
+                                 OpenInNewTab = false,
+                                 Href = "/qualifications"
+                             },
+                ErrorText = "Test error text",
+                ButtonText = "Test button text",
+                LevelLabel = "Test level label",
+                DateAddedLabel = "Test date added label",
+                Heading = "Test heading",
+                Options =
+                [
+                    new Option
+                    {
+                        Label = "yes",
+                        Value = "yes"
+                    },
+                    new Option
+                    {
+                        Label = "no",
+                        Value = "no"
+                    }
+                ],
+                RadioHeading = "Test radio heading",
+                AwardingOrganisationLabel = "Test awarding organisation label",
+                ErrorBannerHeading = "Test error banner heading",
+                ErrorBannerLink = "Test error banner link"
+            });
 
         var qualification = new Qualification("Some ID",
                                               "Qualification Name",
@@ -175,9 +187,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -248,9 +264,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -273,9 +293,13 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel());
 
@@ -300,9 +324,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -328,37 +356,37 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-                 {
-                     QualificationLabel = "Test qualification label",
-                     BackButton = new NavigationLink
-                                  {
-                                      DisplayText = "Test back button",
-                                      OpenInNewTab = false,
-                                      Href = "/qualifications"
-                                  },
-                     ErrorText = "Test error text",
-                     ButtonText = "Test button text",
-                     LevelLabel = "Test level label",
-                     DateAddedLabel = "Test date added label",
-                     Heading = "Test heading",
-                     Options =
-                     [
-                         new Option
-                         {
-                             Label = "yes",
-                             Value = "yes"
-                         },
-                         new Option
-                         {
-                             Label = "no",
-                             Value = "no"
-                         }
-                     ],
-                     RadioHeading = "Test radio heading",
-                     AwardingOrganisationLabel = "Test awarding organisation label",
-                     ErrorBannerHeading = "Test error banner heading",
-                     ErrorBannerLink = "Test error banner link"
-                 });
+            {
+                QualificationLabel = "Test qualification label",
+                BackButton = new NavigationLink
+                             {
+                                 DisplayText = "Test back button",
+                                 OpenInNewTab = false,
+                                 Href = "/qualifications"
+                             },
+                ErrorText = "Test error text",
+                ButtonText = "Test button text",
+                LevelLabel = "Test level label",
+                DateAddedLabel = "Test date added label",
+                Heading = "Test heading",
+                Options =
+                [
+                    new Option
+                    {
+                        Label = "yes",
+                        Value = "yes"
+                    },
+                    new Option
+                    {
+                        Label = "no",
+                        Value = "no"
+                    }
+                ],
+                RadioHeading = "Test radio heading",
+                AwardingOrganisationLabel = "Test awarding organisation label",
+                ErrorBannerHeading = "Test error banner heading",
+                ErrorBannerLink = "Test error banner link"
+            });
 
         var qualification = new Qualification("Some ID",
                                               "Qualification Name",
@@ -375,9 +403,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -455,9 +487,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -494,9 +530,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -534,9 +574,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -573,9 +617,13 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
+        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockGovUkInsetTextRenderer = new Mock<IGovUkInsetTextRenderer>();
+
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object);
+                                               mockUserJourneyService.Object, mockHtmlRenderer.Object,
+                                               mockGovUkInsetTextRenderer.Object);
 
         await controller.Confirm(new ConfirmQualificationPageModel
                                  {
