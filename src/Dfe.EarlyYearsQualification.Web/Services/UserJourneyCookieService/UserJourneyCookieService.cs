@@ -9,12 +9,12 @@ namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<UserJourneyCookieService> logger)
     : IUserJourneyCookieService
 {
-    private readonly CookieOptions _options = new()
-                                              {
-                                                  Secure = true,
-                                                  HttpOnly = true,
-                                                  Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30))
-                                              };
+    private readonly CookieOptions _cookieOptions = new()
+                                                    {
+                                                        Secure = true,
+                                                        HttpOnly = true,
+                                                        Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30))
+                                                    };
 
     public void SetWhereWasQualificationAwarded(string location)
     {
@@ -48,6 +48,15 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         var model = GetUserJourneyModelFromCookie();
 
         model.WhatIsTheAwardingOrganisation = awardingOrganisation;
+
+        SetJourneyCookie(model);
+    }
+
+    public void SetUserSelectedQualificationFromList(YesOrNo yesOrNo)
+    {
+        var model = GetUserJourneyModelFromCookie();
+
+        model.QualificationWasSelectedFromList = yesOrNo;
 
         SetJourneyCookie(model);
     }
@@ -221,6 +230,13 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         return cookie.AdditionalQuestionsAnswers.Count > 0;
     }
 
+    public YesOrNo GetQualificationWasSelectedFromList()
+    {
+        var model = GetUserJourneyModelFromCookie();
+
+        return model.QualificationWasSelectedFromList;
+    }
+
     private void SetAdditionalQuestionsAnswersInternal(
         IEnumerable<KeyValuePair<string, string>> additionalQuestionsAnswers)
     {
@@ -239,6 +255,6 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
     private void SetJourneyCookie(UserJourneyModel model)
     {
         var serializedCookie = JsonSerializer.Serialize(model);
-        cookieManager.SetOutboundCookie(CookieKeyNames.UserJourneyKey, serializedCookie, _options);
+        cookieManager.SetOutboundCookie(CookieKeyNames.UserJourneyKey, serializedCookie, _cookieOptions);
     }
 }

@@ -8,6 +8,8 @@ public interface IUserJourneyCookieService
     public void SetWhenWasQualificationStarted(string date);
     public void SetLevelOfQualification(string level);
     public void SetAwardingOrganisation(string awardingOrganisation);
+    public void SetUserSelectedQualificationFromList(YesOrNo yesOrNo);
+
     public void SetAdditionalQuestionsAnswers(IDictionary<string, string> additionalQuestionsAnswers);
     public void ClearAdditionalQuestionsAnswers();
 
@@ -28,4 +30,5 @@ public interface IUserJourneyCookieService
     public string? GetSearchCriteria();
     public Dictionary<string, string>? GetAdditionalQuestionsAnswers();
     public bool UserHasAnsweredAdditionalQuestions();
+    public YesOrNo GetQualificationWasSelectedFromList();
 }
