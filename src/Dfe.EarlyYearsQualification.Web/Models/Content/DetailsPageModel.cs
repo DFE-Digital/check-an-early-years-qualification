@@ -37,4 +37,10 @@ public class DetailsPageModel
     public NavigationLinkModel? CheckAnotherQualificationLink { get; init; }
 
     public string PrintButtonText { get; init; } = string.Empty;
+    
+    public string QualificationDetailsSummaryHeader { get; init; } = string.Empty;
+
+    public string QualificationNameLabel { get; init; } = string.Empty;
+
+    public string QualificationStartDateLabel { get; init; } = string.Empty;
 }

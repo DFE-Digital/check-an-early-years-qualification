@@ -13,17 +13,15 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-        <span class="govuk-caption-xl gem-c-title__context" id="page-header">
-            @Model.Content!.MainHeader
-        </span>
-        <h1 class="govuk-heading-xl" id="qualification-name-value">@Model.QualificationName</h1>
+        <h1 class="govuk-heading-xl" id="page-header">@Model.Content!.MainHeader</h1>
+        <h2 class="govuk-heading-l" id="qualification-details-header">@Model.Content.QualificationDetailsSummaryHeader</h2>
         <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="awarding-organisation-label">
-                    @Model.Content.AwardingOrgLabel
+                <dt class="govuk-summary-list__key" id="qualification-name-label">
+                    @Model.Content.QualificationNameLabel
                 </dt>
-                <dd class="govuk-summary-list__value" id="awarding-organisation-value">
-                    @Model.AwardingOrganisationTitle
+                <dd class="govuk-summary-list__value" id="qualification-name-value">
+                    @Model.QualificationName
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
@@ -35,19 +33,19 @@
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="qualification-number-label">
-                    @Model.Content.QualificationNumberLabel
+                <dt class="govuk-summary-list__key" id="awarding-organisation-label">
+                    @Model.Content.AwardingOrgLabel
                 </dt>
-                <dd class="govuk-summary-list__value" id="qualification-number-value">
-                    @Model.QualificationNumber
+                <dd class="govuk-summary-list__value" id="awarding-organisation-value">
+                    @Model.AwardingOrganisationTitle
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="from-which-year-label">
-                    @Model.Content.DateAddedLabel
+                <dt class="govuk-summary-list__key" id="date-started-date-label">
+                    @Model.Content.QualificationStartDateLabel
                 </dt>
-                <dd class="govuk-summary-list__value" id="from-which-year-value">
-                    @Model.FromWhichYear
+                <dd class="govuk-summary-list__value" id="date-started-date-value">
+                    @Model.DateStarted
                 </dd>
             </div>
             @if (Model.AdditionalRequirementAnswers != null)
@@ -145,30 +143,16 @@
                 || !Model.RatioRequirements.ApprovedForLevel6
                 || !Model.RatioRequirements.ApprovedForUnqualified)
             {
-                if (!Model.RatioRequirements.ApprovedForLevel6)
+                if (!Model.RatioRequirements.ApprovedForUnqualified)
                 {
                     await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                        {
-                                                                           LevelText = "Level 6",
-                                                                           IsApproved = Model.RatioRequirements.ApprovedForLevel6,
+                                                                           LevelText = "Unqualified",
+                                                                           IsApproved = Model.RatioRequirements.ApprovedForUnqualified,
                                                                            AdditionalInformation = new AdditionalInformationModel
                                                                                                    {
-                                                                                                       AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel6,
-                                                                                                       AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel6
-                                                                                                   }
-                                                                       });
-                }
-
-                if (!Model.RatioRequirements.ApprovedForLevel3)
-                {
-                    await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
-                                                                       {
-                                                                           LevelText = "Level 3",
-                                                                           IsApproved = Model.RatioRequirements.ApprovedForLevel3,
-                                                                           AdditionalInformation = new AdditionalInformationModel
-                                                                                                   {
-                                                                                                       AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel3,
-                                                                                                       AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel3
+                                                                                                       AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForUnqualified,
+                                                                                                       AdditionalInformationBody = Model.RatioRequirements.RequirementsForUnqualified
                                                                                                    }
                                                                        });
                 }
@@ -186,17 +170,31 @@
                                                                                                    }
                                                                        });
                 }
-
-                if (!Model.RatioRequirements.ApprovedForUnqualified)
+                
+                if (!Model.RatioRequirements.ApprovedForLevel3)
                 {
                     await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                        {
-                                                                           LevelText = "Unqualified",
-                                                                           IsApproved = Model.RatioRequirements.ApprovedForUnqualified,
+                                                                           LevelText = "Level 3",
+                                                                           IsApproved = Model.RatioRequirements.ApprovedForLevel3,
                                                                            AdditionalInformation = new AdditionalInformationModel
                                                                                                    {
-                                                                                                       AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForUnqualified,
-                                                                                                       AdditionalInformationBody = Model.RatioRequirements.RequirementsForUnqualified
+                                                                                                       AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel3,
+                                                                                                       AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel3
+                                                                                                   }
+                                                                       });
+                }
+                
+                if (!Model.RatioRequirements.ApprovedForLevel6)
+                {
+                    await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
+                                                                       {
+                                                                           LevelText = "Level 6",
+                                                                           IsApproved = Model.RatioRequirements.ApprovedForLevel6,
+                                                                           AdditionalInformation = new AdditionalInformationModel
+                                                                                                   {
+                                                                                                       AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel6,
+                                                                                                       AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel6
                                                                                                    }
                                                                        });
                 }
