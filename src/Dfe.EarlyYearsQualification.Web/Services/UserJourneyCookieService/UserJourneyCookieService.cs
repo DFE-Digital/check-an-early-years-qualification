@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
@@ -15,49 +16,62 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
                                                         Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30))
                                                     };
 
+    private readonly object _lockObject = new();
+    private volatile UserJourneyModel? _model;
+
     public void SetWhereWasQualificationAwarded(string location)
     {
-        var model = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
 
-        model.WhereWasQualificationAwarded = location;
+        Debug.Assert(_model != null);
 
-        SetJourneyCookie(model);
+        _model.WhereWasQualificationAwarded = location;
+
+        SetJourneyCookie();
     }
 
     public void SetWhenWasQualificationStarted(string date)
     {
-        var model = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
 
-        model.WhenWasQualificationStarted = date;
+        Debug.Assert(_model != null);
 
-        SetJourneyCookie(model);
+        _model.WhenWasQualificationStarted = date;
+
+        SetJourneyCookie();
     }
 
     public void SetLevelOfQualification(string level)
     {
-        var model = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
 
-        model.LevelOfQualification = level;
+        Debug.Assert(_model != null);
 
-        SetJourneyCookie(model);
+        _model.LevelOfQualification = level;
+
+        SetJourneyCookie();
     }
 
     public void SetAwardingOrganisation(string awardingOrganisation)
     {
-        var model = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
 
-        model.WhatIsTheAwardingOrganisation = awardingOrganisation;
+        Debug.Assert(_model != null);
 
-        SetJourneyCookie(model);
+        _model.WhatIsTheAwardingOrganisation = awardingOrganisation;
+
+        SetJourneyCookie();
     }
 
     public void SetUserSelectedQualificationFromList(YesOrNo yesOrNo)
     {
-        var model = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
 
-        model.QualificationWasSelectedFromList = yesOrNo;
+        Debug.Assert(_model != null);
 
-        SetJourneyCookie(model);
+        _model.QualificationWasSelectedFromList = yesOrNo;
+
+        SetJourneyCookie();
     }
 
     /// <summary>
@@ -79,25 +93,35 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public void SetQualificationNameSearchCriteria(string searchCriteria)
     {
-        var model = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
 
-        model.SearchCriteria = searchCriteria;
+        Debug.Assert(_model != null);
 
-        SetJourneyCookie(model);
+        _model.SearchCriteria = searchCriteria;
+
+        SetJourneyCookie();
     }
 
     public void ResetUserJourneyCookie()
     {
-        SetJourneyCookie(new UserJourneyModel());
+        lock (_lockObject)
+        {
+            _model = new UserJourneyModel();
+        }
+
+        SetJourneyCookie();
     }
 
     public string? GetWhereWasQualificationAwarded()
     {
-        var cookie = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
+
+        Debug.Assert(_model != null);
+
         string? awardingCountry = null;
-        if (!string.IsNullOrEmpty(cookie.WhereWasQualificationAwarded))
+        if (!string.IsNullOrEmpty(_model.WhereWasQualificationAwarded))
         {
-            awardingCountry = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cookie.WhereWasQualificationAwarded);
+            awardingCountry = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_model.WhereWasQualificationAwarded);
         }
 
         return awardingCountry;
@@ -105,11 +129,13 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
     {
-        var cookie = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
+
+        Debug.Assert(_model != null);
 
         int? startDateMonth = null;
         int? startDateYear = null;
-        var qualificationAwardedDateSplit = cookie.WhenWasQualificationStarted.Split('/');
+        var qualificationAwardedDateSplit = _model.WhenWasQualificationStarted.Split('/');
 
         // ReSharper disable once InvertIf
         if (qualificationAwardedDateSplit.Length == 2
@@ -153,9 +179,12 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public int? GetLevelOfQualification()
     {
-        var cookie = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
+
+        Debug.Assert(_model != null);
+
         int? level = null;
-        if (int.TryParse(cookie.LevelOfQualification, out var parsedLevel))
+        if (int.TryParse(_model.LevelOfQualification, out var parsedLevel))
         {
             level = parsedLevel;
         }
@@ -165,11 +194,14 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public string? GetAwardingOrganisation()
     {
-        var cookie = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
+
+        Debug.Assert(_model != null);
+
         string? awardingOrganisation = null;
-        if (!string.IsNullOrEmpty(cookie.WhatIsTheAwardingOrganisation))
+        if (!string.IsNullOrEmpty(_model.WhatIsTheAwardingOrganisation))
         {
-            awardingOrganisation = cookie.WhatIsTheAwardingOrganisation;
+            awardingOrganisation = _model.WhatIsTheAwardingOrganisation;
         }
 
         return awardingOrganisation;
@@ -177,11 +209,14 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public string? GetSearchCriteria()
     {
-        var cookie = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
+
+        Debug.Assert(_model != null);
+
         string? searchCriteria = null;
-        if (!string.IsNullOrEmpty(cookie.SearchCriteria))
+        if (!string.IsNullOrEmpty(_model.SearchCriteria))
         {
-            searchCriteria = cookie.SearchCriteria;
+            searchCriteria = _model.SearchCriteria;
         }
 
         return searchCriteria;
@@ -189,66 +224,88 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public Dictionary<string, string> GetAdditionalQuestionsAnswers()
     {
-        var cookie = GetUserJourneyModelFromCookie();
-        return cookie.AdditionalQuestionsAnswers;
+        EnsureModelLoaded();
+
+        Debug.Assert(_model != null);
+
+        return _model.AdditionalQuestionsAnswers;
     }
 
     public bool UserHasAnsweredAdditionalQuestions()
     {
-        var cookie = GetUserJourneyModelFromCookie();
-        return cookie.AdditionalQuestionsAnswers.Count > 0;
+        EnsureModelLoaded();
+
+        Debug.Assert(_model != null);
+
+        return _model.AdditionalQuestionsAnswers.Count > 0;
     }
 
     public YesOrNo GetQualificationWasSelectedFromList()
     {
-        var model = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
 
-        return model.QualificationWasSelectedFromList;
+        Debug.Assert(_model != null);
+
+        return _model.QualificationWasSelectedFromList;
     }
 
-    private UserJourneyModel GetUserJourneyModelFromCookie()
+    private void EnsureModelLoaded()
     {
-        var cookies = cookieManager.ReadInboundCookies();
-
-        if (cookies?.TryGetValue(CookieKeyNames.UserJourneyKey, out var cookie) != true)
+        if (_model == null)
         {
-            ResetUserJourneyCookie();
-            return new UserJourneyModel();
-        }
+            lock (_lockObject)
+            {
+                if (_model == null)
+                {
+                    var cookies = cookieManager.ReadInboundCookies();
 
-        UserJourneyModel? userJourneyModel;
-        try
-        {
-            userJourneyModel = JsonSerializer.Deserialize<UserJourneyModel>(cookie!);
-        }
-        catch
-        {
-            logger.LogWarning("Failed to deserialize cookie");
-            ResetUserJourneyCookie();
-            return new UserJourneyModel();
-        }
+                    UserJourneyModel? userJourneyModel = null;
 
-        return userJourneyModel ?? new UserJourneyModel();
+                    if (cookies?.TryGetValue(CookieKeyNames.UserJourneyKey, out var cookie) == true)
+                    {
+                        try
+                        {
+                            userJourneyModel = JsonSerializer.Deserialize<UserJourneyModel>(cookie);
+                        }
+                        catch
+                        {
+                            logger.LogWarning("Failed to deserialize cookie");
+                            userJourneyModel = new UserJourneyModel();
+                        }
+                    }
+
+                    _model = userJourneyModel ?? new UserJourneyModel();
+                }
+
+                SetJourneyCookie();
+            }
+        }
     }
 
     private void SetAdditionalQuestionsAnswersInternal(
         IEnumerable<KeyValuePair<string, string>> additionalQuestionsAnswers)
     {
-        var model = GetUserJourneyModelFromCookie();
+        EnsureModelLoaded();
 
-        model.AdditionalQuestionsAnswers.Clear();
+        Debug.Assert(_model != null);
+
+        _model.AdditionalQuestionsAnswers.Clear();
 
         foreach (var answer in additionalQuestionsAnswers)
         {
-            model.AdditionalQuestionsAnswers[answer.Key] = answer.Value;
+            _model.AdditionalQuestionsAnswers[answer.Key] = answer.Value;
         }
 
-        SetJourneyCookie(model);
+        SetJourneyCookie();
     }
 
-    private void SetJourneyCookie(UserJourneyModel model)
+    private void SetJourneyCookie()
     {
-        var serializedCookie = JsonSerializer.Serialize(model);
+        EnsureModelLoaded();
+
+        Debug.Assert(_model != null);
+
+        var serializedCookie = JsonSerializer.Serialize(_model);
         cookieManager.SetOutboundCookie(CookieKeyNames.UserJourneyKey, serializedCookie, _cookieOptions);
     }
 

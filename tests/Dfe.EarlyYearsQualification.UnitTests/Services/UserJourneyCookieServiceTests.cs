@@ -21,7 +21,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.SetWhereWasQualificationAwarded("some test string");
 
@@ -40,7 +40,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.SetWhenWasQualificationStarted("some test string");
 
@@ -59,7 +59,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.SetLevelOfQualification("some test string");
 
@@ -78,7 +78,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.SetAwardingOrganisation("some test string");
 
@@ -96,7 +96,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(null);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.GetAwardingOrganisation().Should().BeNull();
         service.GetWhenWasQualificationStarted().Should().Be((null, null));
@@ -113,7 +113,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(null);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.ResetUserJourneyCookie();
 
@@ -132,7 +132,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(model);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.ResetUserJourneyCookie();
 
@@ -149,7 +149,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var model = service.GetWhereWasQualificationAwarded();
 
@@ -166,7 +166,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var model = service.GetWhereWasQualificationAwarded();
 
@@ -183,7 +183,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var model = service.GetAwardingOrganisation();
 
@@ -200,7 +200,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var model = service.GetAwardingOrganisation();
 
@@ -217,7 +217,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var model = service.GetLevelOfQualification();
 
@@ -234,7 +234,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var model = service.GetLevelOfQualification();
 
@@ -251,7 +251,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var (startMonth, startYear) = service.GetWhenWasQualificationStarted();
 
@@ -269,7 +269,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var (startMonth, startYear) = service.GetWhenWasQualificationStarted();
 
@@ -287,7 +287,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var (startMonth, startYear) = service.GetWhenWasQualificationStarted();
 
@@ -306,7 +306,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var action = () => service.WasStartedBeforeSeptember2014();
 
@@ -324,7 +324,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var action = () => service.WasStartedBeforeSeptember2014();
 
@@ -342,7 +342,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBeforeSeptember2014().Should().BeTrue();
     }
@@ -358,7 +358,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBeforeSeptember2014().Should().BeTrue();
     }
@@ -374,7 +374,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBeforeSeptember2014().Should().BeFalse();
     }
@@ -390,7 +390,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBeforeSeptember2014().Should().BeFalse();
     }
@@ -406,7 +406,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var action = () => service.WasStartedBetweenSeptember2014AndAugust2019();
 
@@ -424,7 +424,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var action = () => service.WasStartedBetweenSeptember2014AndAugust2019();
 
@@ -442,7 +442,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeFalse();
     }
@@ -458,7 +458,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeFalse();
     }
@@ -474,7 +474,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
@@ -490,7 +490,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
@@ -506,7 +506,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
@@ -522,7 +522,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
@@ -538,7 +538,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeFalse();
     }
@@ -554,7 +554,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeFalse();
     }
@@ -566,7 +566,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         const string searchCriteria = "This is a test";
         service.SetQualificationNameSearchCriteria(searchCriteria);
@@ -589,7 +589,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var searchCriteria = service.GetSearchCriteria();
 
@@ -606,7 +606,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var searchCriteria = service.GetSearchCriteria();
 
@@ -620,7 +620,7 @@ public class UserJourneyCookieServiceTests
             SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         Dictionary<string, string> dictionary = new() { { "This is a test question", "Answer" } };
         service.SetAdditionalQuestionsAnswers(dictionary);
@@ -640,7 +640,7 @@ public class UserJourneyCookieServiceTests
             SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         Dictionary<string, string> dictionary1 = new() { { "This is a test question", "Answer" } };
         service.SetAdditionalQuestionsAnswers(dictionary1);
@@ -665,7 +665,7 @@ public class UserJourneyCookieServiceTests
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
-        var service = new UserJourneyCookieService(mockHttpContextAccessor.Object, mockLogger.Object);
+        var service = new UserJourneyCookieService(mockHttpContextAccessor.cookieManager.Object, mockLogger.Object);
 
         var additionalQuestionsAnswers = service.GetAdditionalQuestionsAnswers();
 
@@ -679,7 +679,7 @@ public class UserJourneyCookieServiceTests
 
         var mockCookieManager = SetCookieManagerWithExistingCookie(model);
 
-        var service = new UserJourneyCookieService(mockCookieManager.Object,
+        var service = new UserJourneyCookieService(mockCookieManager.cookieManager.Object,
                                                    NullLogger<UserJourneyCookieService>.Instance);
 
         service.UserHasAnsweredAdditionalQuestions().Should().BeFalse();
@@ -693,7 +693,7 @@ public class UserJourneyCookieServiceTests
 
         var mockCookieManager = SetCookieManagerWithExistingCookie(model);
 
-        var service = new UserJourneyCookieService(mockCookieManager.Object,
+        var service = new UserJourneyCookieService(mockCookieManager.cookieManager.Object,
                                                    NullLogger<UserJourneyCookieService>.Instance);
 
         service.UserHasAnsweredAdditionalQuestions().Should().BeTrue();
@@ -704,7 +704,7 @@ public class UserJourneyCookieServiceTests
     {
         var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
 
-        var service = new UserJourneyCookieService(mockCookieManager.Object,
+        var service = new UserJourneyCookieService(mockCookieManager.cookieManager.Object,
                                                    NullLogger<UserJourneyCookieService>.Instance);
 
         service.SetUserSelectedQualificationFromList(YesOrNo.Yes);
@@ -723,7 +723,7 @@ public class UserJourneyCookieServiceTests
                                                                        QualificationWasSelectedFromList = YesOrNo.Yes
                                                                    });
 
-        var service = new UserJourneyCookieService(mockCookieManager.Object,
+        var service = new UserJourneyCookieService(mockCookieManager.cookieManager.Object,
                                                    NullLogger<UserJourneyCookieService>.Instance);
 
         service.SetUserSelectedQualificationFromList(YesOrNo.No);
@@ -742,56 +742,114 @@ public class UserJourneyCookieServiceTests
                                                                        QualificationWasSelectedFromList = YesOrNo.Yes
                                                                    });
 
-        var service = new UserJourneyCookieService(mockCookieManager.Object,
+        var service = new UserJourneyCookieService(mockCookieManager.cookieManager.Object,
                                                    NullLogger<UserJourneyCookieService>.Instance);
 
         var result = service.GetQualificationWasSelectedFromList();
         result.Should().Be(YesOrNo.Yes);
     }
 
-    private static Mock<ICookieManager> SetCookieManagerWithExistingCookie(
-        UserJourneyCookieService.UserJourneyModel? model)
+    [TestMethod]
+    public static void SetMultipleValues_AllSetInOutboundCookie()
+    {
+        var mockCookieManager =
+            SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
+
+        var service = new UserJourneyCookieService(mockCookieManager.cookieManager.Object,
+                                                   NullLogger<UserJourneyCookieService>.Instance);
+
+        service.SetAwardingOrganisation("Awarding Organisation");
+        service.SetUserSelectedQualificationFromList(YesOrNo.Yes);
+        service.SetAdditionalQuestionsAnswers(new Dictionary<string, string> { { "1", "Answer 1" } });
+        service.SetQualificationNameSearchCriteria("Search Criteria");
+        service.SetLevelOfQualification("6");
+        service.SetWhenWasQualificationStarted("12/2012");
+        service.SetWhereWasQualificationAwarded("York");
+
+        CheckSerializedModelWasSet(mockCookieManager,
+                                   new UserJourneyCookieService.UserJourneyModel());
+    }
+
+    [TestMethod]
+    public void SupportingMethod_ReturnsExpectedTestObjects()
+    {
+        var model = new UserJourneyCookieService.UserJourneyModel
+                    {
+                        AdditionalQuestionsAnswers = [],
+                        SearchCriteria = "Search criteria",
+                        WhenWasQualificationStarted = "12/2012",
+                        WhereWasQualificationAwarded = "York",
+                        LevelOfQualification = "6",
+                        QualificationWasSelectedFromList = YesOrNo.Yes,
+                        WhatIsTheAwardingOrganisation = "Awarding Organisation"
+                    };
+
+        var testObjects =
+            SetCookieManagerWithExistingCookie(model);
+
+        var manager = testObjects.cookieManager;
+        var cookies = testObjects.cookies;
+
+        // Manager mock should be set up to return a dictionary containing the cookie with the cookie value passed in
+        manager.Object.ReadInboundCookies().Should().BeOfType<Dictionary<string, string>>()
+               .Which.Should().ContainKey(CookieKeyNames.UserJourneyKey);
+
+        // Manager mock should be set up to accept any cookie and set it on the cookies dictionary
+        manager.Object.SetOutboundCookie("X", "Y", new CookieOptions());
+
+        cookies["X"].Should().Be("Y");
+    }
+
+    private static (Mock<ICookieManager> cookieManager, Dictionary<string, string> cookies)
+        SetCookieManagerWithExistingCookie(
+            UserJourneyCookieService.UserJourneyModel? model)
     {
         var serializedModel = JsonSerializer.Serialize(model);
 
         var mockManager = new Mock<ICookieManager>();
 
-        var cookies = new Dictionary<string, string>();
+        var cookiesReceived = new Dictionary<string, string>();
 
         if (model != null)
         {
-            cookies.Add(CookieKeyNames.UserJourneyKey, serializedModel);
+            cookiesReceived.Add(CookieKeyNames.UserJourneyKey, serializedModel);
         }
 
         mockManager.Setup(m => m.ReadInboundCookies())
-                   .Returns(cookies);
+                   .Returns(cookiesReceived);
+
+        var cookiesReturned = new Dictionary<string, string>();
 
         mockManager.Setup(m => m.SetOutboundCookie(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CookieOptions>()))
-                   .Callback((string key, string value, CookieOptions _) => cookies[key] = value)
+                   .Callback((string key, string value, CookieOptions _) => cookiesReturned[key] = value)
                    .Verifiable();
 
-        return mockManager;
+        return (mockManager, cookiesReturned);
     }
 
-    private static void CheckSerializedModelWasSet(Mock<ICookieManager> mockContext,
-                                                   UserJourneyCookieService.UserJourneyModel expectedModel)
+    private static void CheckSerializedModelWasSet(
+        (Mock<ICookieManager> mockContext, Dictionary<string, string> cookies) cookies,
+        UserJourneyCookieService.UserJourneyModel expectedModel)
     {
         var expectedCookieValue = JsonSerializer.Serialize(expectedModel);
+
+        cookies.cookies.Should().ContainKey(CookieKeyNames.UserJourneyKey);
+        cookies.cookies[CookieKeyNames.UserJourneyKey].Should().Be(expectedCookieValue);
 
         var in29Minutes = new DateTimeOffset(DateTime.Now.AddMinutes(29));
         var in30Minutes = new DateTimeOffset(DateTime.Now.AddMinutes(30));
 
-        mockContext
-            .Verify(m =>
-                        m.SetOutboundCookie(CookieKeyNames.UserJourneyKey,
-                                            expectedCookieValue,
-                                            It.Is<CookieOptions>(
-                                                                 options =>
-                                                                     options.Secure
-                                                                     && options.HttpOnly
-                                                                     && options.Expires > in29Minutes
-                                                                     && options.Expires < in30Minutes)
-                                           ),
-                    Times.Once);
+        cookies.mockContext
+               .Verify(m =>
+                           m.SetOutboundCookie(CookieKeyNames.UserJourneyKey,
+                                               expectedCookieValue,
+                                               It.Is<CookieOptions>(
+                                                                    options =>
+                                                                        options.Secure
+                                                                        && options.HttpOnly
+                                                                        && options.Expires > in29Minutes
+                                                                        && options.Expires < in30Minutes)
+                                              ),
+                       Times.Once);
     }
 }
