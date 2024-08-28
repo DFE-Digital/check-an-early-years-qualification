@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
-using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -84,36 +83,6 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
         model.SearchCriteria = searchCriteria;
 
-        SetJourneyCookie(model);
-    }
-
-    public UserJourneyModel GetUserJourneyModelFromCookie()
-    {
-        var cookies = cookieManager.ReadInboundCookies();
-
-        if (cookies?.TryGetValue(CookieKeyNames.UserJourneyKey, out var cookie) != true)
-        {
-            ResetUserJourneyCookie();
-            return new UserJourneyModel();
-        }
-
-        UserJourneyModel? userJourneyModel;
-        try
-        {
-            userJourneyModel = JsonSerializer.Deserialize<UserJourneyModel>(cookie!);
-        }
-        catch
-        {
-            logger.LogWarning("Failed to deserialize cookie");
-            ResetUserJourneyCookie();
-            return new UserJourneyModel();
-        }
-
-        return userJourneyModel ?? new UserJourneyModel();
-    }
-
-    public void SetUserJourneyModelCookie(UserJourneyModel model)
-    {
         SetJourneyCookie(model);
     }
 
@@ -237,6 +206,31 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         return model.QualificationWasSelectedFromList;
     }
 
+    private UserJourneyModel GetUserJourneyModelFromCookie()
+    {
+        var cookies = cookieManager.ReadInboundCookies();
+
+        if (cookies?.TryGetValue(CookieKeyNames.UserJourneyKey, out var cookie) != true)
+        {
+            ResetUserJourneyCookie();
+            return new UserJourneyModel();
+        }
+
+        UserJourneyModel? userJourneyModel;
+        try
+        {
+            userJourneyModel = JsonSerializer.Deserialize<UserJourneyModel>(cookie!);
+        }
+        catch
+        {
+            logger.LogWarning("Failed to deserialize cookie");
+            ResetUserJourneyCookie();
+            return new UserJourneyModel();
+        }
+
+        return userJourneyModel ?? new UserJourneyModel();
+    }
+
     private void SetAdditionalQuestionsAnswersInternal(
         IEnumerable<KeyValuePair<string, string>> additionalQuestionsAnswers)
     {
@@ -256,5 +250,26 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
     {
         var serializedCookie = JsonSerializer.Serialize(model);
         cookieManager.SetOutboundCookie(CookieKeyNames.UserJourneyKey, serializedCookie, _cookieOptions);
+    }
+
+    /// <summary>
+    ///     Model used to serialise and deserialise the cookie.
+    /// </summary>
+    /// <remarks>
+    ///     Do not expose an instance of this model in the service's interface. It is made
+    ///     a public type in order to simplify testing that the cookie's value is
+    ///     set correctly by the service's methods.
+    /// </remarks>
+    public class UserJourneyModel
+    {
+        public string WhereWasQualificationAwarded { get; set; } = string.Empty;
+        public string WhenWasQualificationStarted { get; set; } = string.Empty;
+        public string LevelOfQualification { get; set; } = string.Empty;
+        public string WhatIsTheAwardingOrganisation { get; set; } = string.Empty;
+
+        public string SearchCriteria { get; set; } = string.Empty;
+
+        public Dictionary<string, string> AdditionalQuestionsAnswers { get; init; } = new();
+        public YesOrNo QualificationWasSelectedFromList { get; set; }
     }
 }
