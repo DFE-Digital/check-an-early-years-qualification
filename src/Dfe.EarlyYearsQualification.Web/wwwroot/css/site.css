@@ -85,8 +85,14 @@ body {
     display: inline-block;
 }
 
-.no-padding-right {
-    padding-right: 0 !important;
+.tag-padding-right {
+    padding-right: 10px;
+}
+
+@media (min-width: 768px) {
+    .tag-padding-right {
+        padding-right: 0 !important;
+    }
 }
 
 .display-flex {
