@@ -1,25 +1,52 @@
-@model ChallengeModel
+@model Dfe.EarlyYearsQualification.Web.Models.Content.ChallengePageModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = Model.MainHeading;
 }
-
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-    <title>Challenge</title>
-</head>
-<body>
-<p>
-    If you have been invited to view this preview service, you will have been
-    given a value that will grant access. Please type in the value and click 'Submit'.
-</p>
-@using (Html.BeginForm("Post", "Challenge", new { }, FormMethod.Post))
+@section Scripts
 {
-    <input type="hidden" id="redirectAddress" name="redirectAddress" value="@Model.RedirectAddress"/>
-    <input type="password" id="value" name="value" placeholder="key" size="50" aria-label="Password challenge input"/>
-    <input type="submit" value="Submit"/>
+    <script type="text/javascript">
+        $("#togglePassword").click(function() {
+            let e = document.getElementById("challengeKey")
+            if (e.type === "password") {
+                e.type = "text"
+            } else {
+                e.type = "password"
+            }
+        });
+    </script>
 }
-</body>
-</html>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        @if (Model.ErrorSummaryModel != null)
+        {
+            await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel!);
+        }
+        
+        <h1 id="challenge-page-heading" class="govuk-heading-xl">@Model.MainHeading</h1>
+        <div id="challenge-page-body" class="govuk-body">
+            <div class="govuk-!-margin-bottom-6">
+                @Html.Raw(Model.MainContent)
+            </div>
+            @using (Html.BeginForm("Post", "Challenge", FormMethod.Post))
+            {
+                <input type="hidden" id="redirectAddress" name="redirectAddress" value="@Model.RedirectAddress"/>
+                
+                <div class="govuk-form-group @(Model.ErrorSummaryModel != null ? "govuk-form-group--error" : "")">
+                    @if (Model.ErrorSummaryModel != null)
+                    {
+                        <p id="error-message" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorSummaryModel.ErrorBannerLinkText
+                        </p>
+                    }
+                    <label class="govuk-label" for="PasswordValue">@Model.InputHeading</label>
+                    <input class="govuk-input" id="PasswordValue" name="PasswordValue" aria-label="Password challenge input" type="password" style="width: 85%"/>
+                    <button id="togglePassword" type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" style="width: 14%; display: inline-block;">@Model.ShowPasswordButtonText</button>
+                </div>
+                
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">@Model.SubmitButtonText</button>
+            }
+            @Html.Raw(Model.FooterContent)
+        </div>
+    </div>
+</div>

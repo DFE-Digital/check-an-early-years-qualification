@@ -35,4 +35,6 @@ public interface IContentService
     Task<ConfirmQualificationPage?> GetConfirmQualificationPage();
 
     Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage();
+
+    Task<ChallengePage?> GetChallengePage();
 }

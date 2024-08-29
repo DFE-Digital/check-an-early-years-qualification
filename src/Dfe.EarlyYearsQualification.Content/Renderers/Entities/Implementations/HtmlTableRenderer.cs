@@ -16,12 +16,12 @@ public class HtmlTableRenderer : HtmlModelRendererBase, IHtmlTableRenderer
     public HtmlTableRenderer()
     {
         Renderer.AddCommonRenderers()
-                .AddRenderer(new UnorderedListRenderer { Order = 19 });
+                .AddRenderer(new UnorderedListRenderer { Order = 20 });
         
-        Renderer.AddRenderer(new TableRenderer { Order = 20 });
-        Renderer.AddRenderer(new TableRowRenderer { Order = 21 });
-        Renderer.AddRenderer(new TableHeadingRenderer { Order = 22 });
-        Renderer.AddRenderer(new TableCellRenderer { Order = 23 });
+        Renderer.AddRenderer(new TableRenderer { Order = 21 });
+        Renderer.AddRenderer(new TableRowRenderer { Order = 22 });
+        Renderer.AddRenderer(new TableHeadingRenderer { Order = 23 });
+        Renderer.AddRenderer(new TableCellRenderer { Order = 24 });
     }
 
     public async Task<string> ToHtml(Document? content)

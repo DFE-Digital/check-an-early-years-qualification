@@ -31,7 +31,8 @@ public class ContentfulContentService(
               { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
               { typeof(QualificationListPage), ContentTypes.QualificationListPage },
               { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage },
-              { typeof(CheckAdditionalRequirementsPage), ContentTypes.CheckAdditionalRequirementsPage }
+              { typeof(CheckAdditionalRequirementsPage), ContentTypes.CheckAdditionalRequirementsPage },
+              { typeof(ChallengePage), ContentTypes.ChallengePage}
           };
 
     public async Task<StartPage?> GetStartPage()
@@ -221,6 +222,19 @@ public class ContentfulContentService(
 
         var qualificationListPage = qualificationListPageEntities.First();
         return qualificationListPage;
+    }
+
+    public async Task<ChallengePage?> GetChallengePage()
+    {
+        var challengePageEntities = await GetEntriesByType<ChallengePage>();
+        if (challengePageEntities is null || !challengePageEntities.Any())
+        {
+            logger.LogWarning("No challenge page entry returned");
+            return default;
+        }
+
+        var challengePage = challengePageEntities.First();
+        return challengePage;
     }
 
     private async Task<T?> GetEntryById<T>(string entryId)

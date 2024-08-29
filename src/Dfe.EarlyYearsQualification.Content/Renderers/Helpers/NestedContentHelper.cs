@@ -40,12 +40,21 @@ public static class NestedContentHelper
                     continue;
                 
                 case EntryStructure cn:
+                    
                     if (new ExternalNavigationLinkRenderer().SupportsContent(cn))
                     {
                         var renderer = new ExternalNavigationLinkRenderer();
                         var text = await renderer.RenderAsync(cn);
                         sb.Append(text);
                     }
+
+                    if (new MailtoLinkRenderer().SupportsContent(cn))
+                    {
+                        var renderer = new MailtoLinkRenderer();
+                        var text = await renderer.RenderAsync(cn);
+                        sb.Append(text);
+                    }
+                    
                     continue;
             }
         }

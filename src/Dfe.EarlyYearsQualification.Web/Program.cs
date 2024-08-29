@@ -77,6 +77,7 @@ builder.Services.AddSingleton<IDateTimeAdapter, DateTimeAdapter>();
 builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelValidator>();
 builder.Services.AddTransient<GtmConfiguration>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
+builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 
 var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off

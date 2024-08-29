@@ -17,6 +17,8 @@ public static class HtmlRendererExtensions
         htmlRenderer.AddRenderer(new Heading6Renderer { Order = 16 });
         htmlRenderer.AddRenderer(new ParagraphRenderer { Order = 17 });
         htmlRenderer.AddRenderer(new ExternalNavigationLinkRenderer { Order = 18 });
+        htmlRenderer.AddRenderer(new MailtoLinkRenderer { Order = 19 });
+        
         return htmlRenderer;
     }
 }
