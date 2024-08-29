@@ -17,3 +17,8 @@ variable "tags" {
   description = "Resource tags"
   type        = map(string)
 }
+
+variable "webapp_subnet_id" {
+  description = "ID of the delegated Subnet for the Web Application"
+  type        = string
+}

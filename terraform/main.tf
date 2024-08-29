@@ -56,10 +56,11 @@ module "network" {
 module "storage" {
   source = "./modules/azure-storage"
 
-  location       = var.azure_region
-  resource_group = azurerm_resource_group.rg.name
-  kv_id          = module.network.kv_id
-  tags           = local.common_tags
+  location         = var.azure_region
+  resource_group   = azurerm_resource_group.rg.name
+  kv_id            = module.network.kv_id
+  tags             = local.common_tags
+  webapp_subnet_id = module.network.webapp_subnet_id
 }
 
 # Create web application resources
