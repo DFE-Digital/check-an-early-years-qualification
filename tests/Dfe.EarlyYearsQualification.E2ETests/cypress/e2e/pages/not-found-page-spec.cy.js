@@ -13,7 +13,7 @@ describe("A spec used to test the not found page", () => {
         cy.get("#page-not-found-heading").should("contain.text", "Page not found");
         cy.get("#page-not-found-statement-body").should("contain.text", "If you typed out the web address, check it is correct.");
         cy.get("#page-not-found-statement-body").should("contain.text", "If you pasted the web address, check you copied the entire address.");
-        cy.get("#page-not-found-statement-body").should("contain.text", "If the web address is correct or you selected a link or button, contact the check an early years qualification team to report a fault with the service.");
+        cy.get("#page-not-found-statement-body").should("contain.text", "If the web address is correct or you selected a link or button, contact the check an early years qualification team by emailing techsupport.EARLY-YEARS-QUALS@education.gov.uk to report a fault with the service.");
         
         cy.get("#page-not-found-link").should("have.attr", "href", "mailto:techsupport.EARLY-YEARS-QUALS@education.gov.uk");
         
