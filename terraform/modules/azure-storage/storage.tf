@@ -13,6 +13,7 @@ resource "azurerm_storage_account" "sa" {
   account_replication_type         = "LRS"
   allow_nested_items_to_be_public  = false
   cross_tenant_replication_enabled = false
+  shared_access_key_enabled        = false
 
   queue_properties {
     logging {
