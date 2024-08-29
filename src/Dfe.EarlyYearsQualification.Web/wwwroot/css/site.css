@@ -124,3 +124,18 @@ body {
 .various-ao-content-wrapper {
     margin: 40px 0;
 }
+
+@media (max-width: 768px) {
+    #refineSearchButton {
+        margin-left: 0 !important;
+        margin-top: 10px;
+    }
+    
+    #refineSearch {
+        width: 100% !important;
+    }
+    
+    #clear-search {
+        margin-top: 0 !important;
+    }
+}
