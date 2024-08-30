@@ -5,13 +5,15 @@ resource "random_string" "resource_code" {
 }
 
 resource "azurerm_storage_account" "sa" {
-  name                            = "eyqualwebapp${random_string.resource_code.result}sa"
-  resource_group_name             = var.resource_group
-  location                        = var.location
-  account_tier                    = "Standard"
-  min_tls_version                 = "TLS1_2"
-  account_replication_type        = "LRS"
-  allow_nested_items_to_be_public = false
+  name                             = "eyqualwebapp${random_string.resource_code.result}sa"
+  resource_group_name              = var.resource_group
+  location                         = var.location
+  account_tier                     = "Standard"
+  min_tls_version                  = "TLS1_2"
+  account_replication_type         = "LRS"
+  allow_nested_items_to_be_public  = false
+  cross_tenant_replication_enabled = false
+  shared_access_key_enabled        = false
 
   queue_properties {
     logging {
@@ -32,6 +34,15 @@ resource "azurerm_storage_account" "sa" {
       include_apis          = true
       version               = "1.0"
       retention_policy_days = 10
+    }
+  }
+
+  blob_properties {
+    delete_retention_policy {
+      days = 7
+    }
+    container_delete_retention_policy {
+      days = 7
     }
   }
 
@@ -66,4 +77,3 @@ resource "azurerm_key_vault_secret" "storage_connection_string" {
   value        = azurerm_storage_account.sa.primary_connection_string
   key_vault_id = var.kv_id
 }
-
