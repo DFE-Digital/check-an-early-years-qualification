@@ -170,7 +170,10 @@ public class MockContentfulService : IContentService
                                                                                  "Check another qualification",
                                                                              Href = "/",
                                                                              OpenInNewTab = false
-                                                                         }
+                                                                         },
+                                         QualificationDetailsSummaryHeader = "Qualification details",
+                                         QualificationNameLabel = "Qualification",
+                                         QualificationStartDateLabel = "Qualification start date"
                                      });
     }
 

@@ -11,15 +11,15 @@ describe("A spec used to test the qualification details page", () => {
     cy.visit("/qualifications/qualification-details/eyq-240");
 
     cy.get("#page-header").should("contain.text", "Test Main Heading");
+    cy.get("#qualification-details-header").should("contain.text", "Qualification details");
+    cy.get("#qualification-name-label").should("contain.text", "Qualification");
     cy.get("#qualification-name-value").should("contain.text", "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)");
     cy.get("#awarding-organisation-label").should("contain.text", "Awarding Org Label");
     cy.get("#awarding-organisation-value").should("contain.text", "NCFE");
     cy.get("#qualification-level-label").should("contain.text", "Test Level Label");
     cy.get("#qualification-level-value").should("contain.text", "3");
-    cy.get("#qualification-number-label").should("contain.text", "Test Qualification Number Label");
-    cy.get("#qualification-number-value").should("contain.text", "603/5829/4");
-    cy.get("#from-which-year-label").should("contain.text", "Test Date Added Label");
-    cy.get("#from-which-year-value").should("contain.text", "2020");
+    cy.get("#date-started-date-label").should("contain.text", "Qualification start date");
+    cy.get("#date-started-date-value").should("contain.text", "July 2015");
 
     // Check that the additional requirements and the answers are present
     cy.get("#additional-requirement-0-label").should("contain.text", "This is the confirmation statement 1");
@@ -68,9 +68,9 @@ describe("A spec used to test the qualification details page", () => {
 
     cy.get(".ratio-row").should('have.length', 4);
     cy.get(".ratio-heading").eq(0).should("contain.text", "Unqualified");
-    cy.get(".ratio-heading").eq(1).should("contain.text", "Level 6");
+    cy.get(".ratio-heading").eq(1).should("contain.text", "Level 2");
     cy.get(".ratio-heading").eq(2).should("contain.text", "Level 3");
-    cy.get(".ratio-heading").eq(3).should("contain.text", "Level 2");
+    cy.get(".ratio-heading").eq(3).should("contain.text", "Level 6");
 
     // Phase Banner uses govuk-tag also hence index starting at 1
     cy.get(".govuk-tag").eq(1).should("contain.text", "Approved");

@@ -188,6 +188,9 @@ public class MockContentfulServiceTests
         result.LevelLabel.Should().NotBeNullOrEmpty();
         result.MainHeader.Should().NotBeNullOrEmpty();
         result.QualificationNumberLabel.Should().NotBeNullOrEmpty();
+        result.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
+        result.QualificationNameLabel.Should().NotBeNullOrEmpty();
+        result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
     }
 
     [TestMethod]

@@ -341,6 +341,15 @@ public class QualificationDetailsController(
         var backNavLink = CalculateBackButton(qualificationStartedBeforeSeptember2014,
                                               content, qualification.QualificationId);
 
+        var dateStarted = string.Empty;
+        var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+        if (startYear is not null && startMonth is not null)
+        {
+            var dateOnly = new DateOnly(startYear.Value, startMonth.Value, 1);
+            dateStarted = dateOnly.ToString("MMMM yyyy");
+        }
+        
+
         return new QualificationDetailsModel
                {
                    QualificationId = qualification.QualificationId,
@@ -352,6 +361,7 @@ public class QualificationDetailsController(
                    BackButton = MapToNavigationLinkModel(backNavLink),
                    AdditionalRequirementAnswers =
                        MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions),
+                   DateStarted = dateStarted,
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
@@ -373,7 +383,10 @@ public class QualificationDetailsController(
                                  RatiosText = await htmlRenderer.ToHtml(content.RatiosText),
                                  CheckAnotherQualificationLink =
                                      MapToNavigationLinkModel(content.CheckAnotherQualificationLink),
-                                 PrintButtonText = content.PrintButtonText
+                                 PrintButtonText = content.PrintButtonText,
+                                 QualificationNameLabel = content.QualificationNameLabel,
+                                 QualificationStartDateLabel = content.QualificationStartDateLabel,
+                                 QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader
                              }
                };
     }
