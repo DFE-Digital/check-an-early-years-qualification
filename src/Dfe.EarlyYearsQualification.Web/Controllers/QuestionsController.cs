@@ -200,10 +200,8 @@ public class QuestionsController(
             return View("Dropdown", model);
         }
 
-        var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
-        cookie.SearchCriteria = string.Empty;
-        cookie.WhatIsTheAwardingOrganisation = model.NotInTheList ? string.Empty : model.SelectedValue;
-        userJourneyCookieService.SetUserJourneyModelCookie(cookie);
+        userJourneyCookieService.SetQualificationNameSearchCriteria(string.Empty);
+        userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue);
 
         return RedirectToAction("Get", "QualificationDetails");
     }

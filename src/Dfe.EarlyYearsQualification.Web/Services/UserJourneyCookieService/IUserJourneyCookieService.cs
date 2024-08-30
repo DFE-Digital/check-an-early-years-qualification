@@ -1,5 +1,3 @@
-using Dfe.EarlyYearsQualification.Web.Models;
-
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 public interface IUserJourneyCookieService
@@ -14,8 +12,6 @@ public interface IUserJourneyCookieService
     public void ClearAdditionalQuestionsAnswers();
 
     public void SetQualificationNameSearchCriteria(string searchCriteria);
-    public UserJourneyModel GetUserJourneyModelFromCookie();
-    public void SetUserJourneyModelCookie(UserJourneyModel model);
     public void ResetUserJourneyCookie();
 
     public string? GetWhereWasQualificationAwarded();

@@ -5,7 +5,6 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
-using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using FluentAssertions;
@@ -747,8 +746,6 @@ public class QualificationDetailsControllerTests
                                                    It.IsAny<string?>(),
                                                    It.IsAny<string?>()))
             .ReturnsAsync([]);
-
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
