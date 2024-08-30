@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
@@ -21,57 +20,62 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public void SetWhereWasQualificationAwarded(string location)
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
+            _model!.WhereWasQualificationAwarded = location;
 
-        _model.WhereWasQualificationAwarded = location;
-
-        SetJourneyCookie();
+            SetJourneyCookie();
+        }
     }
 
     public void SetWhenWasQualificationStarted(string date)
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
+            _model!.WhenWasQualificationStarted = date;
 
-        _model.WhenWasQualificationStarted = date;
-
-        SetJourneyCookie();
+            SetJourneyCookie();
+        }
     }
 
     public void SetLevelOfQualification(string level)
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
+            _model!.LevelOfQualification = level;
 
-        _model.LevelOfQualification = level;
-
-        SetJourneyCookie();
+            SetJourneyCookie();
+        }
     }
 
     public void SetAwardingOrganisation(string awardingOrganisation)
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
+            _model!.WhatIsTheAwardingOrganisation = awardingOrganisation;
 
-        _model.WhatIsTheAwardingOrganisation = awardingOrganisation;
-
-        SetJourneyCookie();
+            SetJourneyCookie();
+        }
     }
 
     public void SetUserSelectedQualificationFromList(YesOrNo yesOrNo)
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
+            _model!.QualificationWasSelectedFromList = yesOrNo;
 
-        _model.QualificationWasSelectedFromList = yesOrNo;
-
-        SetJourneyCookie();
+            SetJourneyCookie();
+        }
     }
 
     /// <summary>
@@ -93,13 +97,14 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public void SetQualificationNameSearchCriteria(string searchCriteria)
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
+            _model!.SearchCriteria = searchCriteria;
 
-        _model.SearchCriteria = searchCriteria;
-
-        SetJourneyCookie();
+            SetJourneyCookie();
+        }
     }
 
     public void ResetUserJourneyCookie()
@@ -107,46 +112,48 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         lock (_lockObject)
         {
             _model = new UserJourneyModel();
-        }
 
-        SetJourneyCookie();
+            SetJourneyCookie();
+        }
     }
 
     public string? GetWhereWasQualificationAwarded()
     {
-        EnsureModelLoaded();
-
-        Debug.Assert(_model != null);
-
-        string? awardingCountry = null;
-        if (!string.IsNullOrEmpty(_model.WhereWasQualificationAwarded))
+        lock (_lockObject)
         {
-            awardingCountry = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_model.WhereWasQualificationAwarded);
-        }
+            EnsureModelLoaded();
 
-        return awardingCountry;
+            string? awardingCountry = null;
+            if (!string.IsNullOrEmpty(_model!.WhereWasQualificationAwarded))
+            {
+                awardingCountry = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_model.WhereWasQualificationAwarded);
+            }
+
+            return awardingCountry;
+        }
     }
 
     public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
     {
-        EnsureModelLoaded();
-
-        Debug.Assert(_model != null);
-
-        int? startDateMonth = null;
-        int? startDateYear = null;
-        var qualificationAwardedDateSplit = _model.WhenWasQualificationStarted.Split('/');
-
-        // ReSharper disable once InvertIf
-        if (qualificationAwardedDateSplit.Length == 2
-            && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
-            && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
+        lock (_lockObject)
         {
-            startDateMonth = parsedStartMonth;
-            startDateYear = parsedStartYear;
-        }
+            EnsureModelLoaded();
 
-        return (startDateMonth, startDateYear);
+            int? startDateMonth = null;
+            int? startDateYear = null;
+            var qualificationAwardedDateSplit = _model!.WhenWasQualificationStarted.Split('/');
+
+            // ReSharper disable once InvertIf
+            if (qualificationAwardedDateSplit.Length == 2
+                && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
+                && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
+            {
+                startDateMonth = parsedStartMonth;
+                startDateYear = parsedStartYear;
+            }
+
+            return (startDateMonth, startDateYear);
+        }
     }
 
     public bool WasStartedBetweenSeptember2014AndAugust2019()
@@ -179,74 +186,80 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     public int? GetLevelOfQualification()
     {
-        EnsureModelLoaded();
-
-        Debug.Assert(_model != null);
-
-        int? level = null;
-        if (int.TryParse(_model.LevelOfQualification, out var parsedLevel))
+        lock (_lockObject)
         {
-            level = parsedLevel;
-        }
+            EnsureModelLoaded();
 
-        return level;
+            int? level = null;
+            if (int.TryParse(_model!.LevelOfQualification, out var parsedLevel))
+            {
+                level = parsedLevel;
+            }
+
+            return level;
+        }
     }
 
     public string? GetAwardingOrganisation()
     {
-        EnsureModelLoaded();
-
-        Debug.Assert(_model != null);
-
-        string? awardingOrganisation = null;
-        if (!string.IsNullOrEmpty(_model.WhatIsTheAwardingOrganisation))
+        lock (_lockObject)
         {
-            awardingOrganisation = _model.WhatIsTheAwardingOrganisation;
-        }
+            EnsureModelLoaded();
 
-        return awardingOrganisation;
+            string? awardingOrganisation = null;
+            if (!string.IsNullOrEmpty(_model!.WhatIsTheAwardingOrganisation))
+            {
+                awardingOrganisation = _model.WhatIsTheAwardingOrganisation;
+            }
+
+            return awardingOrganisation;
+        }
     }
 
     public string? GetSearchCriteria()
     {
-        EnsureModelLoaded();
-
-        Debug.Assert(_model != null);
-
-        string? searchCriteria = null;
-        if (!string.IsNullOrEmpty(_model.SearchCriteria))
+        lock (_lockObject)
         {
-            searchCriteria = _model.SearchCriteria;
-        }
+            EnsureModelLoaded();
 
-        return searchCriteria;
+            string? searchCriteria = null;
+            if (!string.IsNullOrEmpty(_model!.SearchCriteria))
+            {
+                searchCriteria = _model.SearchCriteria;
+            }
+
+            return searchCriteria;
+        }
     }
 
     public Dictionary<string, string> GetAdditionalQuestionsAnswers()
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
-
-        return _model.AdditionalQuestionsAnswers;
+            return _model!.AdditionalQuestionsAnswers;
+        }
     }
 
     public bool UserHasAnsweredAdditionalQuestions()
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
-
-        return _model.AdditionalQuestionsAnswers.Count > 0;
+            return _model!.AdditionalQuestionsAnswers.Count > 0;
+        }
     }
 
     public YesOrNo GetQualificationWasSelectedFromList()
     {
-        EnsureModelLoaded();
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
 
-        Debug.Assert(_model != null);
-
-        return _model.QualificationWasSelectedFromList;
+            return _model!.QualificationWasSelectedFromList;
+        }
     }
 
     private void EnsureModelLoaded()
@@ -270,14 +283,13 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
                         catch
                         {
                             logger.LogWarning("Failed to deserialize cookie");
-                            userJourneyModel = new UserJourneyModel();
                         }
                     }
 
                     _model = userJourneyModel ?? new UserJourneyModel();
-                }
 
-                SetJourneyCookie();
+                    SetJourneyCookie();
+                }
             }
         }
     }
@@ -285,25 +297,24 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
     private void SetAdditionalQuestionsAnswersInternal(
         IEnumerable<KeyValuePair<string, string>> additionalQuestionsAnswers)
     {
-        EnsureModelLoaded();
-
-        Debug.Assert(_model != null);
-
-        _model.AdditionalQuestionsAnswers.Clear();
-
-        foreach (var answer in additionalQuestionsAnswers)
+        lock (_lockObject)
         {
-            _model.AdditionalQuestionsAnswers[answer.Key] = answer.Value;
-        }
+            EnsureModelLoaded();
 
-        SetJourneyCookie();
+            _model!.AdditionalQuestionsAnswers.Clear();
+
+            foreach (var answer in additionalQuestionsAnswers)
+            {
+                _model.AdditionalQuestionsAnswers[answer.Key] = answer.Value;
+            }
+
+            SetJourneyCookie();
+        }
     }
 
     private void SetJourneyCookie()
     {
         EnsureModelLoaded();
-
-        Debug.Assert(_model != null);
 
         var serializedCookie = JsonSerializer.Serialize(_model);
         cookieManager.SetOutboundCookie(CookieKeyNames.UserJourneyKey, serializedCookie, _cookieOptions);
