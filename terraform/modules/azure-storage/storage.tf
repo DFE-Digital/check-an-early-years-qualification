@@ -77,13 +77,3 @@ resource "azurerm_key_vault_secret" "storage_connection_string" {
   value        = azurerm_storage_account.sa.primary_connection_string
   key_vault_id = var.kv_id
 }
-
-/*
-# With this configured, the Terraform has no access to create the container, even terraform plan fails
-resource "azurerm_storage_account_network_rules" "network_rules" {
-  storage_account_id         = azurerm_storage_account.sa.id
-  default_action             = "Deny"
-  virtual_network_subnet_ids = [var.webapp_subnet_id]
-  ip_rules                   = ["4.245.108.74"]
-}
-*/
