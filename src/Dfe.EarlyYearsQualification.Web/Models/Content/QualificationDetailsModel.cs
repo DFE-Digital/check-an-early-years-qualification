@@ -15,4 +15,6 @@ public class QualificationDetailsModel : BasicQualificationModel
     public List<AdditionalRequirementAnswerModel>? AdditionalRequirementAnswers { get; init; }
 
     public RatioRequirementModel RatioRequirements { get; set; } = new ();
+
+    public string DateStarted { get; init; } = string.Empty;
 }

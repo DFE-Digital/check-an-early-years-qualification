@@ -1,7 +1,7 @@
 describe("A spec that tests the check additional questions page", () => {
     beforeEach(() => {
         cy.setCookie('auth-secret', Cypress.env('auth_secret'));
-        cy.setCookie('user_journey', '%7B%22WhenWasQualificationAwarded%22%3A%227%2F2015%22%7D');
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
     })
 
     // Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService.  
@@ -27,14 +27,14 @@ describe("A spec that tests the check additional questions page", () => {
         cy.get("#question_1_details_content").should("contain.text", "This is the details content");
         cy.get("Label[for='yes_1_0']").should("contain.text", "Yes");
         cy.get("Label[for='no_1_1']").should("contain.text", "No");
-        
+
         cy.get("#additional-requirement-warning").should("contain.text", "Your result is dependent on the accuracy of the answers you have provided");
         cy.get("#additional-requirement-button").should("contain.text", "Get result");
     })
 
     it("Shows errors if user does not select an option", () => {
         cy.visit("/qualifications/check-additional-questions/eyq-240");
-        
+
         cy.get("#additional-requirement-button").click();
 
         cy.get(".govuk-error-summary").should("be.visible");

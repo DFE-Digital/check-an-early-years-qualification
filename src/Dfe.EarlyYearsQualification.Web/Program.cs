@@ -8,6 +8,7 @@ using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Security;
+using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -36,10 +37,18 @@ if (!useMockContentful)
 }
 
 // Add services to the container.
-builder.Services.AddAntiforgery(options => options.Cookie.SecurePolicy =
-                                               builder.Environment.IsDevelopment() || useMockContentful
-                                                   ? CookieSecurePolicy.SameAsRequest
-                                                   : CookieSecurePolicy.Always);
+builder.Services.AddAntiforgery(options =>
+                                {
+                                    options.Cookie = new AntiForgeryCookieBuilder
+                                                     {
+                                                         Name = ".AspNetCore.Antiforgery",
+                                                         SameSite = SameSiteMode.Strict,
+                                                         HttpOnly = true,
+                                                         IsEssential = true,
+                                                         SecurePolicy = CookieSecurePolicy.None
+                                                     };
+                                });
+
 builder.Services.AddControllersWithViews(options =>
                                          {
                                              // Ensures that all POST actions are protected by default.
@@ -62,6 +71,7 @@ else
 
 builder.Services.AddModelRenderers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICookieManager, CookieManager>();
 builder.Services.AddTransient<ICookiesPreferenceService, CookiesPreferenceService>();
 builder.Services.AddTransient<IUserJourneyCookieService, UserJourneyCookieService>();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();

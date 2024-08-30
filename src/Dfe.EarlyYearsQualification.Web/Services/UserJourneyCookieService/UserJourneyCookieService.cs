@@ -2,18 +2,19 @@ using System.Globalization;
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
-public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<UserJourneyCookieService> logger)
+public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<UserJourneyCookieService> logger)
     : IUserJourneyCookieService
 {
-    private readonly CookieOptions _options = new()
-                                              {
-                                                  Secure = true,
-                                                  HttpOnly = true,
-                                                  Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30))
-                                              };
+    private readonly CookieOptions _cookieOptions = new()
+                                                    {
+                                                        Secure = true,
+                                                        HttpOnly = true,
+                                                        Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30))
+                                                    };
 
     public void SetWhereWasQualificationAwarded(string location)
     {
@@ -24,11 +25,11 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         SetJourneyCookie(model);
     }
 
-    public void SetWhenWasQualificationAwarded(string date)
+    public void SetWhenWasQualificationStarted(string date)
     {
         var model = GetUserJourneyModelFromCookie();
 
-        model.WhenWasQualificationAwarded = date;
+        model.WhenWasQualificationStarted = date;
 
         SetJourneyCookie(model);
     }
@@ -51,13 +52,30 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         SetJourneyCookie(model);
     }
 
-    public void SetAdditionalQuestionsAnswers(Dictionary<string, string> additionalQuestionsAnswers)
+    public void SetUserSelectedQualificationFromList(YesOrNo yesOrNo)
     {
         var model = GetUserJourneyModelFromCookie();
 
-        model.AdditionalQuestionsAnswers = additionalQuestionsAnswers;
+        model.QualificationWasSelectedFromList = yesOrNo;
 
         SetJourneyCookie(model);
+    }
+
+    /// <summary>
+    ///     Replaces all the existing question answers in the user journey with <paramref name="additionalQuestionsAnswers" />
+    /// </summary>
+    /// <param name="additionalQuestionsAnswers"></param>
+    public void SetAdditionalQuestionsAnswers(IDictionary<string, string> additionalQuestionsAnswers)
+    {
+        SetAdditionalQuestionsAnswersInternal(additionalQuestionsAnswers);
+    }
+
+    /// <summary>
+    ///     Removes existing question answers in the user journey
+    /// </summary>
+    public void ClearAdditionalQuestionsAnswers()
+    {
+        SetAdditionalQuestionsAnswersInternal([]);
     }
 
     public void SetQualificationNameSearchCriteria(string searchCriteria)
@@ -71,17 +89,18 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
 
     public UserJourneyModel GetUserJourneyModelFromCookie()
     {
-        var cookie = context.HttpContext?.Request.Cookies[CookieKeyNames.UserJourneyKey];
-        if (cookie is null)
+        var cookies = cookieManager.ReadInboundCookies();
+
+        if (cookies?.TryGetValue(CookieKeyNames.UserJourneyKey, out var cookie) != true)
         {
             ResetUserJourneyCookie();
             return new UserJourneyModel();
         }
 
+        UserJourneyModel? userJourneyModel;
         try
         {
-            var toReturn = JsonSerializer.Deserialize<UserJourneyModel>(cookie);
-            return toReturn!;
+            userJourneyModel = JsonSerializer.Deserialize<UserJourneyModel>(cookie!);
         }
         catch
         {
@@ -89,6 +108,8 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
             ResetUserJourneyCookie();
             return new UserJourneyModel();
         }
+
+        return userJourneyModel ?? new UserJourneyModel();
     }
 
     public void SetUserJourneyModelCookie(UserJourneyModel model)
@@ -113,14 +134,14 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         return awardingCountry;
     }
 
-    public (int? startMonth, int? startYear) GetWhenWasQualificationAwarded()
+    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
     {
         var cookie = GetUserJourneyModelFromCookie();
 
         int? startDateMonth = null;
         int? startDateYear = null;
-        var qualificationAwardedDateSplit = cookie.WhenWasQualificationAwarded.Split('/');
-        
+        var qualificationAwardedDateSplit = cookie.WhenWasQualificationStarted.Split('/');
+
         // ReSharper disable once InvertIf
         if (qualificationAwardedDateSplit.Length == 2
             && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
@@ -131,6 +152,34 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         }
 
         return (startDateMonth, startDateYear);
+    }
+
+    public bool WasStartedBetweenSeptember2014AndAugust2019()
+    {
+        var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
+
+        if (startDateMonth is null || startDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was started between 09-2014 and 08-2019");
+        }
+
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2019, 08, 31);
+    }
+
+    public bool WasStartedBeforeSeptember2014()
+    {
+        var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
+
+        if (startDateMonth is null || startDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was started before 09-2014");
+        }
+
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date < new DateOnly(2014, 9, 1);
     }
 
     public int? GetLevelOfQualification()
@@ -169,15 +218,43 @@ public class UserJourneyCookieService(IHttpContextAccessor context, ILogger<User
         return searchCriteria;
     }
 
-    public Dictionary<string, string>? GetAdditionalQuestionsAnswers()
+    public Dictionary<string, string> GetAdditionalQuestionsAnswers()
     {
         var cookie = GetUserJourneyModelFromCookie();
         return cookie.AdditionalQuestionsAnswers;
     }
 
+    public bool UserHasAnsweredAdditionalQuestions()
+    {
+        var cookie = GetUserJourneyModelFromCookie();
+        return cookie.AdditionalQuestionsAnswers.Count > 0;
+    }
+
+    public YesOrNo GetQualificationWasSelectedFromList()
+    {
+        var model = GetUserJourneyModelFromCookie();
+
+        return model.QualificationWasSelectedFromList;
+    }
+
+    private void SetAdditionalQuestionsAnswersInternal(
+        IEnumerable<KeyValuePair<string, string>> additionalQuestionsAnswers)
+    {
+        var model = GetUserJourneyModelFromCookie();
+
+        model.AdditionalQuestionsAnswers.Clear();
+
+        foreach (var answer in additionalQuestionsAnswers)
+        {
+            model.AdditionalQuestionsAnswers[answer.Key] = answer.Value;
+        }
+
+        SetJourneyCookie(model);
+    }
+
     private void SetJourneyCookie(UserJourneyModel model)
     {
         var serializedCookie = JsonSerializer.Serialize(model);
-        context.HttpContext?.Response.Cookies.Append(CookieKeyNames.UserJourneyKey, serializedCookie, _options);
+        cookieManager.SetOutboundCookie(CookieKeyNames.UserJourneyKey, serializedCookie, _cookieOptions);
     }
 }

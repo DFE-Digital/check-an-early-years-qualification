@@ -31,6 +31,11 @@ body {
     position: relative;
 }
 
+.chevron-card__link {
+    width: 95%;
+    margin-bottom: 40px;
+}
+
 .chevron-card__link:after {
     border-right: 3px solid #1d70b8;
     border-top: 3px solid #1d70b8;
@@ -39,7 +44,7 @@ body {
     height: 14px;
     position: absolute;
     right: 5px;
-    top: 50%;
+    top: 20%;
     margin-top: 5px;
     -webkit-transform: translateY(0) rotate(45deg) scale(1);
     -ms-transform: translateY(0) rotate(45deg) scale(1);
@@ -80,8 +85,14 @@ body {
     display: inline-block;
 }
 
-.no-padding-right {
-    padding-right: 0 !important;
+.tag-padding-right {
+    padding-right: 10px;
+}
+
+@media (min-width: 768px) {
+    .tag-padding-right {
+        padding-right: 0 !important;
+    }
 }
 
 .display-flex {
@@ -104,4 +115,27 @@ body {
     box-shadow: 0 -2px #fd0, 0 4px #0b0c0c !important;
     text-decoration: none !important;
     -webkit-box-decoration-break: clone !important;
+}
+
+.post-heading-wrapper {
+    margin-bottom: 40px;
+}
+
+.various-ao-content-wrapper {
+    margin: 40px 0;
+}
+
+@media (max-width: 768px) {
+    #refineSearchButton {
+        margin-left: 0 !important;
+        margin-top: 10px;
+    }
+    
+    #refineSearch {
+        width: 100% !important;
+    }
+    
+    #clear-search {
+        margin-top: 0 !important;
+    }
 }

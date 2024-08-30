@@ -5,14 +5,30 @@ using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/advice")]
-public class AdviceController(ILogger<AdviceController> logger, IContentService contentService, IHtmlRenderer renderer)
+public class AdviceController(
+    ILogger<AdviceController> logger,
+    IContentService contentService,
+    IHtmlRenderer renderer,
+    IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        // user has landed on an Advice page, so is not going to select a qualification from the list,
+        // partly determines where the back button should go when displaying qualification details
+        userJourneyCookieService.SetUserSelectedQualificationFromList(YesOrNo.No);
+        userJourneyCookieService.ClearAdditionalQuestionsAnswers();
+
+        base.OnActionExecuting(context);
+    }
+
     [HttpGet("qualification-outside-the-united-kingdom")]
     public async Task<IActionResult> QualificationOutsideTheUnitedKingdom()
     {
@@ -49,14 +65,14 @@ public class AdviceController(ILogger<AdviceController> logger, IContentService 
     {
         return await GetView(AdvicePages.QualificationNotOnTheList);
     }
-    
+
     [HttpGet("level-6-qualification-pre-2014")]
     [RedirectIfDateMissing]
     public async Task<IActionResult> Level6QualificationPre2014()
     {
         return await GetView(AdvicePages.Level6QualificationPre2014);
     }
-    
+
     [HttpGet("level-6-qualification-post-2014")]
     [RedirectIfDateMissing]
     public async Task<IActionResult> Level6QualificationPost2014()
