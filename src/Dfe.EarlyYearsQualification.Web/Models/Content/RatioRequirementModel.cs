@@ -10,6 +10,8 @@ public class RatioRequirementModel
     
     public bool ApprovedForUnqualified { get; set; }
 
+    public bool IsNotFullAndRelevant => ApprovedForUnqualified && !ApprovedForLevel2 & !ApprovedForLevel3 && !ApprovedForLevel6;
+
     public string RequirementsHeadingForLevel2 { get; set; } = string.Empty;
     
     public string RequirementsForLevel2 { get; set; } = string.Empty;
