@@ -41,8 +41,6 @@ public class QuestionsControllerTests
 
         var result = await controller.WhereWasTheQualificationAwarded();
 
-        mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
-
         mockContentService.VerifyAll();
 
         result.Should().NotBeNull();
@@ -81,8 +79,6 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
-
-        mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
 
         result.Should().NotBeNull();
 
@@ -160,7 +156,8 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("QualificationOutsideTheUnitedKingdom");
         resultType.ControllerName.Should().Be("Advice");
 
-        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.OutsideOfTheUnitedKingdom),
+                                            Times.Once);
     }
 
     [TestMethod]
@@ -190,7 +187,8 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("QualificationsAchievedInScotland");
         resultType.ControllerName.Should().Be("Advice");
 
-        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.Scotland),
+                                            Times.Once);
     }
 
     [TestMethod]
@@ -220,7 +218,8 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("QualificationsAchievedInWales");
         resultType.ControllerName.Should().Be("Advice");
 
-        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.Wales),
+                                            Times.Once);
     }
 
     [TestMethod]
@@ -250,7 +249,8 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("QualificationsAchievedInNorthernIreland");
         resultType.ControllerName.Should().Be("Advice");
 
-        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
+        mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.NorthernIreland),
+                                            Times.Once);
     }
 
     [TestMethod]
