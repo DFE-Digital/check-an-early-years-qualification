@@ -36,6 +36,6 @@ public class MailtoLinkRenderer : IContentRenderer
 
         var mailtoLinkModel = model!.JObject.ToObject<MailtoLink>()!;
         
-        return await Task.FromResult($"<a href='mailto:{mailtoLinkModel.Email}'>{mailtoLinkModel.Text}</a>");
+        return await Task.FromResult($"<a class='govuk-link' href='mailto:{mailtoLinkModel.Email}'>{mailtoLinkModel.Text}</a>");
     }
 }

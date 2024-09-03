@@ -394,9 +394,20 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public Task<ChallengePage?> GetChallengePage()
+    public async Task<ChallengePage?> GetChallengePage()
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(new ChallengePage
+                                     {
+                                        ErrorHeading = "Test Error Heading",
+                                        FooterContent = ContentfulContentHelper.Paragraph("Test Footer Content"),
+                                        InputHeading = "Test Input Heading",
+                                        MainContent = ContentfulContentHelper.Paragraph("Test Main Content"),
+                                        MainHeading = "Test Main Heading",
+                                        IncorrectPasswordText = "Test Incorrect Password Text",
+                                        MissingPasswordText = "Test Missing Password Text",
+                                        SubmitButtonText = "Test Submit Button Text",
+                                        ShowPasswordButtonText = "Test Show Password Button Text"
+                                     });
     }
 
     public async Task<StartPage?> GetStartPage()

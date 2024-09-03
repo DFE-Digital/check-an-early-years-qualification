@@ -1,7 +1,11 @@
+using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Mock.Content;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Filters;
-using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,24 +24,35 @@ public class ChallengeControllerTests
         const string from = "/";
 
         var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(true);
 
+        var mockContentfulService = new MockContentfulService();
+
+        contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
+
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
-                                                 mockUrlHelper.Object);
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
                                            HttpContext = new DefaultHttpContext()
                                        };
 
-        var result = await controller.Index(new ChallengeModel { RedirectAddress = "/", Value = null });
+        var result = await controller.Index(new ChallengePageModel { RedirectAddress = "/" });
 
         result.Should().BeAssignableTo<ViewResult>();
 
         var content = (ViewResult)result;
 
-        content.Model.Should().BeAssignableTo<ChallengeModel>()
+        content.Model.Should().BeAssignableTo<ChallengePageModel>()
                .Which
                .RedirectAddress.Should().Be(from);
     }
@@ -48,24 +63,35 @@ public class ChallengeControllerTests
         const string from = "https://google.co.uk";
 
         var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        
+        var mockContentfulService = new MockContentfulService();
+
+        contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
+        
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(false);
 
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
-                                                 mockUrlHelper.Object);
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
                                            HttpContext = new DefaultHttpContext()
                                        };
 
-        var result = await controller.Index(new ChallengeModel { RedirectAddress = from, Value = null });
+        var result = await controller.Index(new ChallengePageModel { RedirectAddress = from });
 
         result.Should().BeAssignableTo<ViewResult>();
 
         var content = (ViewResult)result;
 
-        content.Model.Should().BeAssignableTo<ChallengeModel>()
+        content.Model.Should().BeAssignableTo<ChallengePageModel>()
                .Which
                .RedirectAddress.Should().Be("/");
     }
@@ -76,9 +102,19 @@ public class ChallengeControllerTests
         var mockLogger = new Mock<ILogger<ChallengeController>>();
 
         var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        
+        var mockContentfulService = new MockContentfulService();
+
+        contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
 
         var controller = new ChallengeController(mockLogger.Object,
-                                                 mockUrlHelper.Object);
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -87,7 +123,7 @@ public class ChallengeControllerTests
 
         controller.ModelState.AddModelError("test", "error");
 
-        await controller.Index(new ChallengeModel { RedirectAddress = "/", Value = null });
+        await controller.Index(new ChallengePageModel { RedirectAddress = "/" });
 
         mockLogger.VerifyWarning("Invalid challenge model (get)");
     }
@@ -99,6 +135,21 @@ public class ChallengeControllerTests
         const string accessKey = "Key";
 
         var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+
+        var accessKeys = new List<string>
+                         {
+                             accessKey
+                         };
+
+        accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
+        
+        var mockContentfulService = new MockContentfulService();
+
+        contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
+        
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(true);
 
@@ -116,16 +167,20 @@ public class ChallengeControllerTests
         mockContext.SetupGet(c => c.Response.Cookies).Returns(cookiesMock.Object);
 
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
-                                                 mockUrlHelper.Object);
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
+        
         controller.ControllerContext = new ControllerContext
                                        {
                                            HttpContext = mockContext.Object
                                        };
 
-        var result = await controller.Post(new ChallengeModel
+        var result = await controller.Post(new ChallengePageModel
                                            {
                                                RedirectAddress = from,
-                                               Value = accessKey
+                                               PasswordValue = accessKey
                                            });
 
         result.Should().BeAssignableTo<RedirectResult>();
@@ -147,6 +202,21 @@ public class ChallengeControllerTests
         const string accessKey = "CX";
 
         var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        
+        var accessKeys = new List<string>
+                         {
+                             accessKey
+                         };
+
+        accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
+        
+        var mockContentfulService = new MockContentfulService();
+
+        contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
+        
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(false); // NB: behaviour relies on UrlHelper correctly determining non-local URLs
 
@@ -164,16 +234,20 @@ public class ChallengeControllerTests
         mockContext.SetupGet(c => c.Response.Cookies).Returns(cookiesMock.Object);
 
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
-                                                 mockUrlHelper.Object);
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
+        
         controller.ControllerContext = new ControllerContext
                                        {
                                            HttpContext = mockContext.Object
                                        };
 
-        var result = await controller.Post(new ChallengeModel
+        var result = await controller.Post(new ChallengePageModel
                                            {
                                                RedirectAddress = from,
-                                               Value = accessKey
+                                               PasswordValue = accessKey
                                            });
 
         result.Should().BeAssignableTo<RedirectResult>();
@@ -189,24 +263,40 @@ public class ChallengeControllerTests
     }
 
     [TestMethod]
-    public async Task PostChallenge_WithEmptySecretValue_ReturnsPage()
+    public async Task PostChallenge_WithEmptySecretValue_ReturnsPageWithErrorMessage()
     {
         var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        
+        var mockContentfulService = new MockContentfulService();
+
+        var content = await mockContentfulService.GetChallengePage();
+
+        contentService.Setup(x => x.GetChallengePage()).ReturnsAsync(content);
+        
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(true);
 
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
-                                                 mockUrlHelper.Object);
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
 
-        var result = await controller.Post(new ChallengeModel { RedirectAddress = "/", Value = " \t " });
+        var result = await controller.Post(new ChallengePageModel { RedirectAddress = "/", PasswordValue = " \t " });
 
         result.Should().BeAssignableTo<ViewResult>();
 
-        var content = (ViewResult)result;
+        var viewResult = result as ViewResult;
 
-        content.Model.Should().BeAssignableTo<ChallengeModel>()
-               .Which
-               .RedirectAddress.Should().Be("/");
+        viewResult!.Model.Should().BeAssignableTo<ChallengePageModel>();
+
+        var modelToReturn = viewResult!.Model as ChallengePageModel;
+
+        modelToReturn!.ErrorSummaryModel.Should().NotBeNull();
+        modelToReturn.ErrorSummaryModel!.ErrorBannerLinkText.Should().Be(content!.MissingPasswordText);
     }
 
     [TestMethod]
@@ -215,9 +305,19 @@ public class ChallengeControllerTests
         var mockLogger = new Mock<ILogger<ChallengeController>>();
 
         var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        
+        var mockContentfulService = new MockContentfulService();
+
+        contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
 
         var controller = new ChallengeController(mockLogger.Object,
-                                                 mockUrlHelper.Object);
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -226,8 +326,109 @@ public class ChallengeControllerTests
 
         controller.ModelState.AddModelError("test", "error");
 
-        await controller.Post(new ChallengeModel { RedirectAddress = "/", Value = null });
+        await controller.Post(new ChallengePageModel { RedirectAddress = "/" });
 
         mockLogger.VerifyWarning("Invalid challenge model (post)");
+    }
+
+    [TestMethod]
+    public async Task Index_NoContent_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<ChallengeController>>();
+
+        var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+
+        var controller = new ChallengeController(mockLogger.Object,
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
+
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       };
+
+        var result = await controller.Index(new ChallengePageModel { RedirectAddress = "/" });
+
+        result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null), options => options.ExcludingMissingMembers());
+
+        mockLogger.VerifyError("No content for the challenge page");
+    }
+    
+    [TestMethod]
+    public async Task Post_NoContent_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<ChallengeController>>();
+
+        var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+
+        var controller = new ChallengeController(mockLogger.Object,
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
+
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       };
+
+        var result = await controller.Post(new ChallengePageModel { RedirectAddress = "/" });
+
+        result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null), options => options.ExcludingMissingMembers());
+
+        mockLogger.VerifyError("No content for the challenge page");
+    }
+
+    [TestMethod]
+    public async Task Post_PasswordPassedIsntCorrect_ReturnsWithErrorMessage()
+    {
+        var mockLogger = new Mock<ILogger<ChallengeController>>();
+
+        var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+
+        var mockContentfulService = new MockContentfulService();
+        var content = await mockContentfulService.GetChallengePage();
+
+        contentService.Setup(x => x.GetChallengePage()).ReturnsAsync(content);
+
+        accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(new List<string>
+                                                              {
+                                                                  "Some Key"
+                                                              });
+        
+        var controller = new ChallengeController(mockLogger.Object,
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
+
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       };
+
+        var result = await controller.Post(new ChallengePageModel { RedirectAddress = "/", PasswordValue = "Not A Correct Key"});
+
+        result.Should().BeAssignableTo<ViewResult>();
+
+        var viewResult = result as ViewResult;
+
+        viewResult!.Model.Should().BeAssignableTo<ChallengePageModel>();
+
+        var modelToReturn = viewResult!.Model as ChallengePageModel;
+
+        modelToReturn!.ErrorSummaryModel.Should().NotBeNull();
+        modelToReturn.ErrorSummaryModel!.ErrorBannerLinkText.Should().Be(content!.IncorrectPasswordText);
     }
 }
