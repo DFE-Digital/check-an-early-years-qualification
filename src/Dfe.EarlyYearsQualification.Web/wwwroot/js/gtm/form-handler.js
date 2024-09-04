@@ -69,3 +69,17 @@ $("#check-additional-requirements").on("submit", function() {
         ...answersObj
     });
 });
+
+$("#refine-search-form").on("submit", function(){
+    let searchTerm = $("#refineSearch").val();
+    window.dataLayer.push({
+        'event': 'refineSearchFormSubmission',
+        'searchTerm': searchTerm
+    });
+});
+
+$("#clear-search-form").on("submit", function(){
+    window.dataLayer.push({
+        'event': 'clearSearchFormSubmission'
+    });
+});

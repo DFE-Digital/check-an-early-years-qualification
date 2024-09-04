@@ -191,6 +191,10 @@ public class MockContentfulServiceTests
         result.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
         result.QualificationNameLabel.Should().NotBeNullOrEmpty();
         result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
+        result.RatiosText!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text");
+        result.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
     }
 
     [TestMethod]

@@ -8,7 +8,6 @@ using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Helpers;
-using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -96,7 +95,7 @@ public class QuestionsControllerTests
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.OptionsItems.Count.Should().Be(1);
-        model.OptionsItems.First().Should().BeAssignableTo<OptionModel>();
+        model.OptionsItems[0].Should().BeAssignableTo<OptionModel>();
         var modelOption = model.OptionsItems[0] as OptionModel;
         modelOption!.Label.Should().Be((questionPage.Options[0] as Option)!.Label);
         modelOption.Value.Should().Be((questionPage.Options[0] as Option)!.Value);
@@ -532,7 +531,7 @@ public class QuestionsControllerTests
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.OptionsItems.Count.Should().Be(1);
-        model.OptionsItems.First().Should().BeAssignableTo<OptionModel>();
+        model.OptionsItems[0].Should().BeAssignableTo<OptionModel>();
         var modelOption = model.OptionsItems[0] as OptionModel;
         modelOption!.Label.Should().Be((questionPage.Options[0] as Option)!.Label);
         modelOption.Value.Should().Be((questionPage.Options[0] as Option)!.Value);
@@ -783,7 +782,6 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync(questionPage);
 
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
             .Setup(x => x.GetFilteredQualifications(
                                                     It.IsAny<int?>(),
@@ -852,7 +850,6 @@ public class QuestionsControllerTests
                                            "B awarding organisation", 123)
                                    };
 
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
             .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
                                                     It.IsAny<string?>(), It.IsAny<string?>()))
@@ -917,7 +914,6 @@ public class QuestionsControllerTests
                                            AwardingOrganisations.AllHigherEducation, 123)
                                    };
 
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
             .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
                                                     It.IsAny<string?>(), It.IsAny<string?>()))
@@ -972,7 +968,6 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync(questionPage);
 
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
         mockContentFilterService
             .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
                                                     It.IsAny<string?>(), It.IsAny<string?>()))
@@ -1057,7 +1052,6 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -1075,13 +1069,12 @@ public class QuestionsControllerTests
         resultType.ControllerName.Should().Be("QualificationDetails");
 
         mockUserJourneyCookieService
-            .Verify(x => x.SetUserJourneyModelCookie(It.Is<UserJourneyModel>(m => m.SearchCriteria == string.Empty && m.WhatIsTheAwardingOrganisation == "Some Awarding Organisation")),
-                    Times.Once);
+            .Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
     }
 
     [TestMethod]
     public async Task
-        Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_DoesNotSetsJourneyCookieAndRedirectsToTheQualificationListPage()
+        Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_SetsJourneyCookieAndRedirectsToTheQualificationListPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -1109,7 +1102,6 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         mockContentService.Setup(x => x.GetQualifications()).ReturnsAsync([]);
-        mockUserJourneyCookieService.Setup(x => x.GetUserJourneyModelFromCookie()).Returns(new UserJourneyModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -1127,7 +1119,6 @@ public class QuestionsControllerTests
         resultType.ControllerName.Should().Be("QualificationDetails");
 
         mockUserJourneyCookieService
-            .Verify(x => x.SetUserJourneyModelCookie(It.Is<UserJourneyModel>(m => m.SearchCriteria == string.Empty && m.WhatIsTheAwardingOrganisation == string.Empty)),
-                    Times.Once);
+            .Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);
     }
 }

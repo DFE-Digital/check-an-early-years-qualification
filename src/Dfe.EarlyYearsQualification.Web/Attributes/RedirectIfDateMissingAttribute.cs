@@ -5,15 +5,17 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace Dfe.EarlyYearsQualification.Web.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class RedirectIfDateMissingAttribute() : TypeFilterAttribute(typeof(RedirectIfDateMissingFilter))
+public class RedirectIfDateMissingAttribute() : TypeFilterAttribute(typeof(RedirectIfDateMissingFilterAttribute))
 {
-    public class RedirectIfDateMissingFilter(IUserJourneyCookieService userJourneyCookieService) : ActionFilterAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class RedirectIfDateMissingFilterAttribute(IUserJourneyCookieService userJourneyCookieService)
+        : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var cookie = userJourneyCookieService.GetUserJourneyModelFromCookie();
+            var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
 
-            if (string.IsNullOrEmpty(cookie.WhenWasQualificationStarted))
+            if (startMonth == null || startYear == null)
             {
                 context.Result = new RedirectResult("/questions/when-was-the-qualification-started");
             }

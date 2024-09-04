@@ -381,6 +381,7 @@ public class QualificationDetailsController(
                                  RequirementsText = await htmlRenderer.ToHtml(content.RequirementsText),
                                  RatiosHeading = content.RatiosHeading,
                                  RatiosText = await htmlRenderer.ToHtml(content.RatiosText),
+                                 RatiosTextNotFullAndRelevant = await htmlRenderer.ToHtml(content.RatiosTextNotFullAndRelevant),
                                  CheckAnotherQualificationLink =
                                      MapToNavigationLinkModel(content.CheckAnotherQualificationLink),
                                  PrintButtonText = content.PrintButtonText,
