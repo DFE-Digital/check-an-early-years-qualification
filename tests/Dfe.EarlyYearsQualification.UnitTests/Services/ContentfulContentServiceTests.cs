@@ -949,4 +949,38 @@ public class ContentfulContentServiceTests
 
         result.Should().BeNull();
     }
+    
+    [TestMethod]
+    public async Task GetChallengePage_ReturnsPage()
+    {
+        var page = new ChallengePage() { MainHeading = "Test heading" };
+
+        _clientMock.Setup(c =>
+                              c.GetEntriesByType(It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<ChallengePage>>(),
+                                                 It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<ChallengePage> { Items = [page] });
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetChallengePage();
+
+        result.Should().Be(page);
+    }
+    
+    [TestMethod]
+    public async Task GetChallengePage_ContentfulHasNoPage_ReturnsNull()
+    {
+        _clientMock.Setup(c =>
+                              c.GetEntriesByType(It.IsAny<string>(),
+                                                 It.IsAny<QueryBuilder<ChallengePage>>(),
+                                                 It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<ChallengePage> { Items = [] });
+
+        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+
+        var result = await service.GetChallengePage();
+
+        result.Should().BeNull();
+    }
 }
