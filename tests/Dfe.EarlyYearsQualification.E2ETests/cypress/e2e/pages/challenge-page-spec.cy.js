@@ -27,4 +27,16 @@ describe('A spec that tests the challenge page', () => {
         cy.get('#error-banner-link').should("contain.text", "Test Incorrect Password Text");
         cy.get('#error-message').should("contain.text", "Test Incorrect Password Text");
     });
+    
+    it("clicking the show password button changes the password input to text, clicking it again turns it back", () => {
+        cy.get("#PasswordValue").should('have.attr', 'type', 'password');
+        
+        cy.get("#togglePassword").click();
+
+        cy.get("#PasswordValue").should('have.attr', 'type', 'text');
+
+        cy.get("#togglePassword").click();
+
+        cy.get("#PasswordValue").should('have.attr', 'type', 'password');
+    });
 })

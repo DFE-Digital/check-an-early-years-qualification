@@ -1,5 +1,13 @@
+@using System
+@using GovUk.Frontend.AspNetCore.TagHelpers
 <header class="govuk-header" role="banner">
-    @await Component.InvokeAsync("CookiesBanner")
+    @{
+        var url = ViewContext.HttpContext.Request.Path.ToString().ToLower();
+        if (url != "/challenge" && url != "/challenge/post")
+        {
+            @(await Component.InvokeAsync("CookiesBanner"))
+        }
+    }
     <div class="govuk-width-container govuk-header__container">
         <div class="govuk-header__logo">
             <a href="/" class="govuk-header__link govuk-header__link--homepage">
