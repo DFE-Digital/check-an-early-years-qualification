@@ -25,7 +25,7 @@ public class CheckAdditionalRequirementsController(
         if (ModelState.IsValid)
         {
             var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
-            var model = new CheckAdditionalRequirementsPageModel { Answers = answers };
+            var model = new CheckAdditionalRequirementsPageModel { Answers = answers ?? [] };
             return await GetResponse(qualificationId, model);
         }
         
@@ -39,7 +39,7 @@ public class CheckAdditionalRequirementsController(
     {
         if (ModelState.IsValid)
         {
-            userJourneyCookieService.SetAdditionalQuestionsAnswers(model.Answers!);
+            userJourneyCookieService.SetAdditionalQuestionsAnswers(model.Answers);
             return RedirectToAction("Index", "QualificationDetails",
                                     new { model.QualificationId });
         }
@@ -138,7 +138,7 @@ public class CheckAdditionalRequirementsController(
     private static Dictionary<string, string> MapQuestionsToDictionary(List<AdditionalRequirementQuestion> additionalRequirementQuestions, CheckAdditionalRequirementsPageModel? previousModel)
     {
         var result = additionalRequirementQuestions.ToDictionary(additionalRequirementQuestion => additionalRequirementQuestion.Question, _ => string.Empty);
-        if (previousModel is null || previousModel.Answers is null) return result;
+        if (previousModel is null) return result;
         
         foreach (var answer in previousModel.Answers.Where(answer => !string.IsNullOrEmpty(answer.Value)))
         {
@@ -150,7 +150,7 @@ public class CheckAdditionalRequirementsController(
     
     private static void SetQuestionErrorFlag(CheckAdditionalRequirementsPageModel model)
     {
-        foreach (var answer in model.Answers!.Where(answer => string.IsNullOrEmpty(answer.Value)))
+        foreach (var answer in model.Answers.Where(answer => string.IsNullOrEmpty(answer.Value)))
         {
             model.AdditionalRequirementQuestions.First(x => x.Question == answer.Key).HasError = true;
         }

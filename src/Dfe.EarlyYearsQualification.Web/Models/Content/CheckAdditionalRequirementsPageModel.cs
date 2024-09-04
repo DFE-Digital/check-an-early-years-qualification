@@ -34,7 +34,7 @@ public class CheckAdditionalRequirementsPageModel
     
     [AnswerValidation]
     // ReSharper disable once PropertyCanBeMadeInitOnly.Global
-    public Dictionary<string, string>? Answers { get; set; } = [];
+    public Dictionary<string, string> Answers { get; set; } = [];
     
     public bool HasErrors { get; set; }
 
@@ -42,7 +42,7 @@ public class CheckAdditionalRequirementsPageModel
 
     public string ErrorSummaryHeading { get; set; } = string.Empty;
 
-    public int SpecifiedAnswersCount => Answers!.Count;
+    public int SpecifiedAnswersCount => Answers.Count;
     
     [Required, Compare("SpecifiedAnswersCount")]
     public int QuestionCount { get; set; }
