@@ -187,6 +187,6 @@ public class NestedContentHelperTests
         
         var output = NestedContentHelper.Render(content).Result;
         
-        output.Should().Be("<a class='govuk-link' href='mailto:Some Email'>Some Text</a>");
+        output.Should().Be("<a class='govuk-link' href='mailto:Some Email'>Display Text</a>");
     }
 }
