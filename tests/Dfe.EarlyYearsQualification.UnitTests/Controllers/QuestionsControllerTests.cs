@@ -22,6 +22,33 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 public class QuestionsControllerTests
 {
     [TestMethod]
+    public void StartNew_ResetsCookie_RedirectsToQuestionPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockContentFilterService = new Mock<IContentFilterService>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
+                                                 mockUserJourneyCookieService.Object, mockContentFilterService.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+
+        var result = controller.StartNew();
+        
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        result.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("WhereWasTheQualificationAwarded");
+
+        mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
+    }
+    
+    [TestMethod]
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
@@ -109,6 +136,9 @@ public class QuestionsControllerTests
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                          .ReturnsAsync(new RadioQuestionPage());
+
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
@@ -122,6 +152,11 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ViewName.Should().Be("Radio");
+
+        var model = resultType.Model as RadioQuestionModel;
+
+        model.Should().NotBeNull();
+        model!.HasErrors.Should().BeTrue();
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
     }
@@ -505,7 +540,7 @@ public class QuestionsControllerTests
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
-                               Options = [new Option { Label = "Label", Value = "Value" }],
+                               Options = [new Option { Label = "Label", Value = "Value" }, new Divider { Text = "Test" }],
                                AdditionalInformationHeader = "Test header",
                                AdditionalInformationBody = ContentfulContentHelper.Text("Test html body")
                            };
@@ -530,11 +565,14 @@ public class QuestionsControllerTests
 
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.OptionsItems.Count.Should().Be(1);
+        model.OptionsItems.Count.Should().Be(2);
         model.OptionsItems[0].Should().BeAssignableTo<OptionModel>();
         var modelOption = model.OptionsItems[0] as OptionModel;
         modelOption!.Label.Should().Be((questionPage.Options[0] as Option)!.Label);
         modelOption.Value.Should().Be((questionPage.Options[0] as Option)!.Value);
+        model.OptionsItems[1].Should().BeAssignableTo<DividerModel>();
+        var dividerOption = model.OptionsItems[1] as DividerModel;
+        dividerOption!.Text.Should().Be((questionPage.Options[1] as Divider)!.Text);
         model.HasErrors.Should().BeFalse();
         model.AdditionalInformationHeader.Should().Be(questionPage.AdditionalInformationHeader);
         model.AdditionalInformationBody.Should().Be("Test html body");
@@ -553,6 +591,9 @@ public class QuestionsControllerTests
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+                          .ReturnsAsync(new RadioQuestionPage());
+        
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockRenderer.Object,
                                                  mockUserJourneyCookieService.Object, mockContentFilterService.Object,
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
@@ -566,6 +607,11 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ViewName.Should().Be("Radio");
+
+        var model = resultType.Model as RadioQuestionModel;
+        
+        model.Should().NotBeNull();
+        model!.HasErrors.Should().BeTrue();
 
         mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification(It.IsAny<string>()), Times.Never);
     }
