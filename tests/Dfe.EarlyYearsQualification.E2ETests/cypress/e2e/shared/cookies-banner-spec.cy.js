@@ -81,4 +81,20 @@ describe("A spec that tests that the cookies banner shows on all pages", () => {
       cy.url().should('include', '/cookies');
     });
   });
+
+  const urlsNotToShowBanner = [
+    '/challenge',
+    '/Challenge',
+    '/challenge/post',
+    '/Challenge/Post'
+  ];
+
+  urlsNotToShowBanner.forEach((url) => {
+    it(`Does not show the cookie banner on the ${url} view`, () => {
+      cy.visit("/challenge");
+
+      cy.get("#choose-cookies-preference").should("not.exist");
+      cy.get("#cookies-preference-chosen").should("not.exist");
+    });
+  });
 });

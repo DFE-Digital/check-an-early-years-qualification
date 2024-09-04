@@ -17,4 +17,5 @@ public static class ContentTypes
     public const string QualificationListPage = "qualificationListPage";
     public const string ConfirmQualificationPage = "confirmQualificationPage";
     public const string CheckAdditionalRequirementsPage = "checkAdditionalRequirementsPage";
+    public const string ChallengePage = "challengePage";
 }

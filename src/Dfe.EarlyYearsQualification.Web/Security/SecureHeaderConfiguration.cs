@@ -82,6 +82,12 @@ public static class SecureHeaderConfiguration
                               DirectiveOrUri = "sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I="
                           };
         
+        var challengePageShowPassword = new ContentSecurityPolicyElement
+                          {
+                              CommandType = CspCommandType.Directive,
+                              DirectiveOrUri = "sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY="
+                          };
+        
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowLocationShaCspElement);
@@ -94,6 +100,7 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmInjectedScriptCspElement);
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowPrint);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(challengePageShowPassword);
         
         return configuration;
     }

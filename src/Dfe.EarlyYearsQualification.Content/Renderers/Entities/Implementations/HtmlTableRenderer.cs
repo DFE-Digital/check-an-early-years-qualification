@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Extensions;
 using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
@@ -11,17 +12,19 @@ namespace Dfe.EarlyYearsQualification.Content.Renderers.Entities.Implementations
 /// <summary>
 ///     A renderer to render out contentful tables as HTML tables + any content within.
 /// </summary>
+/// 
+[ExcludeFromCodeCoverage]
 public class HtmlTableRenderer : HtmlModelRendererBase, IHtmlTableRenderer
 {
     public HtmlTableRenderer()
     {
         Renderer.AddCommonRenderers()
-                .AddRenderer(new UnorderedListRenderer { Order = 19 });
+                .AddRenderer(new UnorderedListRenderer { Order = 20 });
         
-        Renderer.AddRenderer(new TableRenderer { Order = 20 });
-        Renderer.AddRenderer(new TableRowRenderer { Order = 21 });
-        Renderer.AddRenderer(new TableHeadingRenderer { Order = 22 });
-        Renderer.AddRenderer(new TableCellRenderer { Order = 23 });
+        Renderer.AddRenderer(new TableRenderer { Order = 21 });
+        Renderer.AddRenderer(new TableRowRenderer { Order = 22 });
+        Renderer.AddRenderer(new TableHeadingRenderer { Order = 23 });
+        Renderer.AddRenderer(new TableCellRenderer { Order = 24 });
     }
 
     public async Task<string> ToHtml(Document? content)

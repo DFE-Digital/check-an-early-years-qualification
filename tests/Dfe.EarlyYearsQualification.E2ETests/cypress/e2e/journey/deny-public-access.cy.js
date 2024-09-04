@@ -10,6 +10,6 @@ describe('A spec used to check a new user is challenged to enter the secret', ()
     })
 
     cy.get('#redirectAddress').should("have.value", '/');
-    cy.get('#value').should("be.empty");
+    cy.get('#PasswordValue').should("be.empty");
   })
 })

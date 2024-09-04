@@ -148,4 +148,45 @@ public class NestedContentHelperTests
         
         output.Should().Be($"<a href='/' target='_blank' class='govuk-link'>Display text</a>");
     }
+    
+    [TestMethod]
+    public void ContentHelper_RenderMailtoLink()
+    {
+        var navigationLink = new MailtoLink()
+                             {
+                                 Sys =
+                                 {
+                                     ContentType = new ContentType
+                                                   {
+                                                       SystemProperties = new SystemProperties
+                                                                          {
+                                                                              Id = "mailtoLink"
+                                                                          }
+                                                   }
+                                 },
+                                 Text = "Display Text",
+                                 Email = "Some Email"
+                             };
+
+        var jObject = JObject.FromObject(navigationLink);
+
+        var customNode = new CustomNode
+                         {
+                             JObject = jObject
+                         };
+
+        var entryStructure = new EntryStructure
+                             {
+                                 Data = new EntryStructureData
+                                        {
+                                            Target = customNode
+                                        }
+                             };
+        
+        var content = new List<IContent> { entryStructure };
+        
+        var output = NestedContentHelper.Render(content).Result;
+        
+        output.Should().Be("<a class='govuk-link' href='mailto:Some Email'>Display Text</a>");
+    }
 }
