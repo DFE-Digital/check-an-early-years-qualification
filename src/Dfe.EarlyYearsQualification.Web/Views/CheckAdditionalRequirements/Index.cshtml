@@ -112,9 +112,9 @@
                             {
                                 var option = question.Options[i];
                                 var id = $"{option.Value}_{qi}_{i}";
-                                var @checked = Model.Answers.GetValueOrDefault(question.Question) == option.Value ? "checked" : "";
+                                var @checked = Model.Answers!.GetValueOrDefault(question.Question) == option.Value ? "checked" : "";
                                 <div class="govuk-radios__item">
-                                    @Html.RadioButtonFor(x => x.Answers[question.Question], option.Value, new { @class = "govuk-radios__input", id, @checked })
+                                    @Html.RadioButtonFor(x => x.Answers![question.Question], option.Value, new { @class = "govuk-radios__input", id, @checked })
                                     <label class="govuk-label govuk-radios__label" for="@id">
                                         @option.Label
                                     </label>
