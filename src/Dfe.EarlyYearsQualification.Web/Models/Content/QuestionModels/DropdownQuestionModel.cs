@@ -4,7 +4,7 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 public class DropdownQuestionModel : BaseQuestionModel
 {
-    public string SelectedValue { get; init; } = string.Empty;
+    public string? SelectedValue { get; set; } = string.Empty;
 
     public List<SelectListItem> Values { get; init; } = [];
 
@@ -16,5 +16,5 @@ public class DropdownQuestionModel : BaseQuestionModel
 
     public string CheckboxId { get; init; } = "awarding-organisation-not-in-list";
 
-    public bool NotInTheList { get; init; }
+    public bool NotInTheList { get; set; }
 }

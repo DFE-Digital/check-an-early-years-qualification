@@ -22,7 +22,12 @@ public class CheckAdditionalRequirementsController(
     [HttpGet("{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
     {
-        if (ModelState.IsValid) return await GetResponse(qualificationId);
+        if (ModelState.IsValid)
+        {
+            var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+            var model = new CheckAdditionalRequirementsPageModel { Answers = answers ?? [] };
+            return await GetResponse(qualificationId, model);
+        }
         
         logger.LogError("No qualificationId passed in");
         return RedirectToAction("Index", "Error");

@@ -53,13 +53,13 @@
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
                                 <label class="govuk-label govuk-date-input__label" for="date-started-month">@Model.MonthLabel</label>
-                                @Html.TextBoxFor(x => x.SelectedMonth, "{0:#.#}", new { id = "date-started-month", @class = Model.HasErrors ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = "date-started-month", type = "text", inputmode = "numeric", Value = "" })
+                                @Html.TextBoxFor(x => x.SelectedMonth, "{0:#.#}", new { id = "date-started-month", @class = Model.HasErrors ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = "date-started-month", type = "text", inputmode = "numeric", Value = Model.SelectedMonth })
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
                                 <label class="govuk-label govuk-date-input__label" for="date-started-year">@Model.YearLabel</label>
-                                @Html.TextBoxFor(x => x.SelectedYear, "{0:#.#}", new { id = "date-started-year", @class = Model.HasErrors ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = "date-started-month", type = "text", inputmode = "numeric", Value = "" })
+                                @Html.TextBoxFor(x => x.SelectedYear, "{0:#.#}", new { id = "date-started-year", @class = Model.HasErrors ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = "date-started-month", type = "text", inputmode = "numeric", Value = Model.SelectedYear })
                             </div>
                         </div>
                     </div>

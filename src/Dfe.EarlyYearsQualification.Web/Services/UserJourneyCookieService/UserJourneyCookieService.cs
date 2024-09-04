@@ -66,6 +66,18 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         }
     }
 
+    public void SetAwardingOrganisationNotOnList(bool isOnList)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.SelectedAwardingOrganisationNotOnTheList = isOnList;
+
+            SetJourneyCookie();
+        }
+    }
+
     public void SetUserSelectedQualificationFromList(YesOrNo yesOrNo)
     {
         lock (_lockObject)
@@ -216,6 +228,16 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         }
     }
 
+    public bool GetAwardingOrganisationIsNotOnList()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.SelectedAwardingOrganisationNotOnTheList;
+        }
+    }
+
     public string? GetSearchCriteria()
     {
         lock (_lockObject)
@@ -334,6 +356,7 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
         public string WhenWasQualificationStarted { get; set; } = string.Empty;
         public string LevelOfQualification { get; set; } = string.Empty;
         public string WhatIsTheAwardingOrganisation { get; set; } = string.Empty;
+        public bool SelectedAwardingOrganisationNotOnTheList { get; set; }
 
         public string SearchCriteria { get; set; } = string.Empty;
 

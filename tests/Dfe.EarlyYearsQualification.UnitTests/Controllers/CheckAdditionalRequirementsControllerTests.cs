@@ -159,7 +159,7 @@ public class CheckAdditionalRequirementsControllerTests
         model.BackButton.DisplayText.Should().BeSameAs(pageContent.BackButton.DisplayText);
         model.BackButton.OpenInNewTab.Should().Be(pageContent.BackButton.OpenInNewTab);
         model.Answers.Should().NotBeNull();
-        model.Answers.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
+        model.Answers!.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
         model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);
         model.ErrorSummaryHeading.Should().BeSameAs(pageContent.ErrorSummaryHeading);
         model.InformationMessage.Should().BeSameAs(pageContent.InformationMessage);
@@ -325,7 +325,7 @@ public class CheckAdditionalRequirementsControllerTests
         model.BackButton.DisplayText.Should().BeSameAs(pageContent.BackButton.DisplayText);
         model.BackButton.OpenInNewTab.Should().Be(pageContent.BackButton.OpenInNewTab);
         model.Answers.Should().NotBeNull();
-        model.Answers.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
+        model.Answers!.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
         model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);
         model.ErrorSummaryHeading.Should().BeSameAs(pageContent.ErrorSummaryHeading);
         model.InformationMessage.Should().BeSameAs(pageContent.InformationMessage);
