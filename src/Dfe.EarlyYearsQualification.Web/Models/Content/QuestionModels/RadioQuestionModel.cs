@@ -6,5 +6,5 @@ public class RadioQuestionModel : BaseQuestionModel
 {
     public List<IOptionItemModel> OptionsItems { get; set; } = [];
 
-    [Required] public string? Option { get; set; } = string.Empty;
+    [Required] public string Option { get; set; } = string.Empty;
 }

@@ -61,7 +61,7 @@ public class QuestionsController(
             return View("Radio", model);
         }
 
-        userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option!);
+        userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option);
         
         switch (model.Option)
         {
@@ -153,7 +153,7 @@ public class QuestionsController(
             return View("Radio", model);
         }
 
-        userJourneyCookieService.SetLevelOfQualification(model.Option!);
+        userJourneyCookieService.SetLevelOfQualification(model.Option);
 
         return model.Option switch
                {
@@ -260,7 +260,7 @@ public class QuestionsController(
         model.BackButton = MapToNavigationLinkModel(question.BackButton);
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
-        model.Option = selectedAnswer;
+        model.Option = selectedAnswer ?? string.Empty;
         return model;
     }
 
