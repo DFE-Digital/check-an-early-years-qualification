@@ -10,7 +10,7 @@ public class DateQuestionModel : BaseQuestionModel
 
     public string YearLabel { get; set; } = string.Empty;
 
-    [Required] public int SelectedMonth { get; init; }
+    [Required] public int SelectedMonth { get; set; }
 
-    [Required] public int SelectedYear { get; init; }
+    [Required] public int SelectedYear { get; set; }
 }

@@ -10,7 +10,7 @@ public class CookieManager(IHttpContextAccessor context) : ICookieManager
         {
             throw new NullReferenceException("HTTP context cannot be null");
         }
-
+        
         httpContext.Response.Cookies.Append(key, value, options);
     }
 

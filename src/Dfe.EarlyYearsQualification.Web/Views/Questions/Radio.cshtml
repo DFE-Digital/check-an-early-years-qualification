@@ -55,8 +55,10 @@
                             if (option.GetType() == typeof(OptionModel))
                             {
                                 var optionModel = option as OptionModel;
+                                var @checked = optionModel!.Value == Model.Option ? "checked" : "";
                                 <div class="govuk-radios__item">
-                                    @Html.RadioButtonFor(x => x.Option, optionModel!.Value, new { @class = "govuk-radios__input", id = optionModel.Value })
+                                    
+                                    @Html.RadioButtonFor(x => x.Option, optionModel.Value, new { @class = "govuk-radios__input", id = optionModel.Value, @checked })
                                     <label class="govuk-label govuk-radios__label" for="@optionModel.Value">
                                         @optionModel.Label
                                     </label>

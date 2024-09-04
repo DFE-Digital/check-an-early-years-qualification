@@ -9,6 +9,8 @@
         let checkbox = document.getElementById('@Model.CheckboxId');
         let dropdown = document.getElementById('@Model.DropdownId');
 
+        dropdown.disabled = checkbox.checked;
+
         checkbox.addEventListener('click', function() {
             dropdown.disabled = !!checkbox.checked;
         });
