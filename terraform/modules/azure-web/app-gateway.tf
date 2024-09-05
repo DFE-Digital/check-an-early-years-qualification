@@ -50,6 +50,13 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
       selector_match_operator = "Equals"
     }
 
+    /* The two exclusions below allow the anti-forgery to bypass the SQLi 942440 rule */
+    exclusion {
+      match_variable          = "RequestCookieNames"
+      selector                = ".AspNetCore.Antiforgery"
+      selector_match_operator = "Equals"
+    }
+
     exclusion {
       match_variable          = "RequestArgNames"
       selector                = "__RequestVerificationToken"
