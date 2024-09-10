@@ -50,7 +50,7 @@ public class ContentfulContentFilterService(
                               qualificationName);
 
         // create query builder
-        var queryBuilder = QueryBuilder.ContentTypeIs(ContentTypes.Qualification);
+        var queryBuilder = QueryBuilder.ContentTypeIs(ContentTypes.Qualification).Limit(500);
 
         if (level is > 0)
         {
