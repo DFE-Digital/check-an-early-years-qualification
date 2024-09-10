@@ -63,8 +63,9 @@ public class ContentfulContentFilterServiceTests
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(2);
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(1);
+        queryString.Count.Should().Be(2);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
     }
 
     [TestMethod]
@@ -106,8 +107,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(4, null, null, null, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.qualificationLevel", "4");
     }
 
@@ -150,8 +152,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Ncfe, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe}");
     }
@@ -607,8 +610,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Edexcel, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Edexcel},{AwardingOrganisations.Pearson}");
     }
@@ -652,8 +656,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Pearson, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Edexcel},{AwardingOrganisations.Pearson}");
     }
@@ -697,8 +702,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Ncfe, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe}");
     }
@@ -742,8 +748,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Cache, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Cache}");
     }
@@ -787,8 +794,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, 8, 2014, AwardingOrganisations.Ncfe, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe}");
     }
@@ -832,8 +840,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, 8, 2014, AwardingOrganisations.Cache, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Cache}");
     }
@@ -877,8 +886,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, 9, 2014, AwardingOrganisations.Ncfe, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe},{AwardingOrganisations.Cache}");
     }
@@ -922,8 +932,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, 9, 2014, AwardingOrganisations.Cache, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(2);
+        queryString.Count.Should().Be(3);
         queryString.Should().Contain("content_type", "Qualification");
+        queryString.Should().Contain("limit", "500");
         queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
                                      $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe},{AwardingOrganisations.Cache}");
     }
