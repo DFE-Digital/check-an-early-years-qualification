@@ -15,7 +15,7 @@ public static class Program
     private const string Locale = "en-GB";
     private const string SpaceId = "";
     private const string ManagementApiKey = "";
-    private const string CsvFile = "./csv/2-ey-quals-updates-09-08-24.csv";
+    private const string CsvFile = "./csv/3-ey-quals-updates-10-09-24.csv";
     private const string FieldTypeSymbol = "Symbol";
 
     // ReSharper disable once UnusedParameter.Global
