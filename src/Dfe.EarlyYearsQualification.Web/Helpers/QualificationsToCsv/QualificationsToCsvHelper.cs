@@ -24,15 +24,17 @@ public class QualificationsToCsvHelper(ILogger<QualificationsToCsvHelper> logger
         // await using var file = new FileStream("./TestCSV.csv", FileMode.OpenOrCreate);
         // stream.WriteTo(file);
 
+        stream.Position = 0;
+
         var blobStorageConnectionString = configuration
                                           .GetSection("Storage")
                                           .GetValue<string>("ConnectionString");
         
         var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
 
-        var containerClient = blobServiceClient.GetBlobContainerClient("EYQUAL-qualifications");
+        var containerClient = blobServiceClient.GetBlobContainerClient("eyqual-qualifications");
         
-        var blobClient = containerClient.GetBlobClient("TestCSV");
+        var blobClient = containerClient.GetBlobClient("TestCSV.csv");
         
         logger.LogInformation("Uploading to Blob storage");
         
