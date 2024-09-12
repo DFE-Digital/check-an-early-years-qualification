@@ -180,7 +180,9 @@ public class ContentfulContentFilterService(
             else
             {
                 // if qualification end date is null, check entered start date is >= FromWhichYear & add to results
-                if (enteredStartDate >= qualificationStartDate)
+                if (qualificationStartDate is not null
+                    && qualificationEndDate is null
+                    && enteredStartDate >= qualificationStartDate)
                 {
                     results.Add(qualification);
                 }

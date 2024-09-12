@@ -1059,6 +1059,91 @@ public class ContentfulContentFilterServiceTests
         qualifications.Should().NotBeNull();
         qualifications.Should().BeEmpty();
     }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_StartDateAfterExpiryExpiration_ResultsDontIncludeQualification()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification("EYQ-123",
+                                                        "test",
+                                                        AwardingOrganisations.Ncfe,
+                                                        4)
+                                      {
+                                          FromWhichYear = "Apr-15",
+                                          ToWhichYear = "Aug-19",
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService =
+            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            {
+                QueryBuilder = mockQueryBuilder
+            };
+
+        var filteredQualifications = await filterService.GetFilteredQualifications(4, 09, 2024, AwardingOrganisations.Ncfe, null);
+
+        filteredQualifications.Should().NotBeNull();
+        filteredQualifications.Count.Should().Be(0);
+    }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_StartDateIsNotNullEndDateIsNull_ResultIncludesQualification()
+    {
+        var results = new ContentfulCollection<Qualification>
+                      {
+                          Items = new[]
+                                  {
+                                      new Qualification("EYQ-123",
+                                                        "test",
+                                                        AwardingOrganisations.Ncfe,
+                                                        4)
+                                      {
+                                          FromWhichYear = "Aug-15",
+                                          ToWhichYear = null,
+                                          QualificationNumber = "abc/123/987",
+                                          AdditionalRequirements = "requirements"
+                                      }
+                                  }
+                      };
+
+        var mockContentfulClient = new Mock<IContentfulClient>();
+        mockContentfulClient.Setup(x => x.GetEntries(
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                            .ReturnsAsync(results);
+
+        var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
+
+        var mockQueryBuilder = new MockQueryBuilder();
+        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var filterService =
+            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            {
+                QueryBuilder = mockQueryBuilder
+            };
+
+        var filteredQualifications = await filterService.GetFilteredQualifications(4, 08, 2019, AwardingOrganisations.Ncfe, null);
+
+        filteredQualifications.Should().NotBeNull();
+        filteredQualifications.Count.Should().Be(1);
+        filteredQualifications[0].AwardingOrganisationTitle.Should().Be(AwardingOrganisations.Ncfe);
+    }
 }
 
 public class MockQueryBuilder : QueryBuilder<Qualification>
