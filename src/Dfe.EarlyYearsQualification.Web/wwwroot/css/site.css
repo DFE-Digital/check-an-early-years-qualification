@@ -1,5 +1,7 @@
 html {
     font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -10,11 +12,6 @@ html {
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
 }
 
 body {
@@ -65,7 +62,7 @@ body {
 }
 
 .govuk-skip-link:focus {
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
 }
 
 .print-button {
@@ -104,7 +101,7 @@ body {
 }
 
 .button-as-link {
-    background: none!important;
+    background: none !important;
     border: none;
     color: #1d70b8;
 }
@@ -130,11 +127,11 @@ body {
         margin-left: 0 !important;
         margin-top: 10px;
     }
-    
+
     #refineSearch {
         width: 100% !important;
     }
-    
+
     #clear-search {
         margin-top: 0 !important;
     }
