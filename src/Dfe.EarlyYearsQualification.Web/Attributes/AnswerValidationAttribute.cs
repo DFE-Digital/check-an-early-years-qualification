@@ -17,11 +17,16 @@ public class AnswerValidationAttribute : ValidationAttribute
             return new ValidationResult("Answers are required");
         }
 
-        foreach (var keyValuePair in dictionary.Where(keyValuePair => string.IsNullOrEmpty(keyValuePair.Value)))
+        var keyWithNoValue = dictionary
+                             .Where(keyValuePair => string.IsNullOrEmpty(keyValuePair.Value))
+                             .Cast<KeyValuePair<string, string>?>()
+                             .FirstOrDefault();
+
+        if (keyWithNoValue.HasValue)
         {
-            return new ValidationResult($"Value is required for key: {keyValuePair.Key}");
+            return new ValidationResult($"Value is required for key: {keyWithNoValue.Value.Key}");
         }
-        
+
         return ValidationResult.Success;
     }
 }
