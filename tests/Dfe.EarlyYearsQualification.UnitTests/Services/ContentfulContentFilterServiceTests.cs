@@ -1102,8 +1102,8 @@ public class ContentfulContentFilterServiceTests
         filteredQualifications.Count.Should().Be(0);
     }
     
-            [TestMethod]
-    public async Task GetFilteredQualifications_StartDateIsNullEndDateIsNotNull_ResultIncludesQualification()
+    [TestMethod]
+    public async Task GetFilteredQualifications_StartDateIsNotNullEndDateIsNull_ResultIncludesQualification()
     {
         var results = new ContentfulCollection<Qualification>
                       {
@@ -1114,8 +1114,8 @@ public class ContentfulContentFilterServiceTests
                                                         AwardingOrganisations.Ncfe,
                                                         4)
                                       {
-                                          FromWhichYear = null,
-                                          ToWhichYear = "Aug-19",
+                                          FromWhichYear = "Aug-15",
+                                          ToWhichYear = null,
                                           QualificationNumber = "abc/123/987",
                                           AdditionalRequirements = "requirements"
                                       }
