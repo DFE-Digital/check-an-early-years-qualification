@@ -16,11 +16,11 @@ public interface IUserJourneyCookieService
     (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
     bool WasStartedBeforeSeptember2014();
     bool WasStartedBetweenSeptember2014AndAugust2019();
-    public int? GetLevelOfQualification();
-    public string? GetAwardingOrganisation();
-    public bool GetAwardingOrganisationIsNotOnList();
-    public string? GetSearchCriteria();
-    public Dictionary<string, string>? GetAdditionalQuestionsAnswers();
-    public bool UserHasAnsweredAdditionalQuestions();
-    public YesOrNo GetQualificationWasSelectedFromList();
+    int? GetLevelOfQualification();
+    string? GetAwardingOrganisation();
+    bool GetAwardingOrganisationIsNotOnList();
+    string? GetSearchCriteria();
+    Dictionary<string, string>? GetAdditionalQuestionsAnswers();
+    bool UserHasAnsweredAdditionalQuestions();
+    YesOrNo GetQualificationWasSelectedFromList();
 }
