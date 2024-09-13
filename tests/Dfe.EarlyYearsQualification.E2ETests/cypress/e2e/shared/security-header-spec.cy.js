@@ -17,7 +17,7 @@ describe("A spec that checks for security headers in the response", () => {
       cy.request("GET", page).then((response) => {
         expect(response.headers).to.have.property(
           "cache-control",
-          "no-cache, no-store"
+          "no-store,no-cache"
         );
         expect(response.headers).to.have.property(
           "content-security-policy",
@@ -58,7 +58,7 @@ describe("A spec that checks for security headers in the response", () => {
       cy.request("GET", page).then((response) => {
         expect(response.headers).to.have.property(
           "cache-control",
-          "max-age=31536000, private"
+          "no-store,no-cache"
         );
         expect(response.headers).to.have.property(
           "content-security-policy",
@@ -91,8 +91,8 @@ describe("A spec that checks for security headers in the response", () => {
     it(`pages without forms that will not redirect if no date - cookie banner showing - ${page} contains the expected response headers`, () => {
       cy.request("GET", page).then((response) => {
         expect(response.headers).to.have.property(
-          "cache-control",
-          "no-cache, no-store"
+          "cache-control", 
+          "no-store,no-cache"
         );
         expect(response.headers).to.have.property(
           "content-security-policy",
@@ -135,7 +135,7 @@ describe("A spec that checks for security headers in the response", () => {
       cy.request("GET", page).then((response) => {
         expect(response.headers).to.have.property(
           "cache-control",
-          "max-age=31536000, private"
+          "no-store,no-cache"
         );
         expect(response.headers).to.have.property(
           "content-security-policy",
@@ -172,7 +172,7 @@ describe("A spec that checks for security headers in the response", () => {
       cy.request("GET", page).then((response) => {
         expect(response.headers).to.have.property(
           "cache-control",
-          "no-cache, no-store"
+          "no-store,no-cache"
         );
         expect(response.headers).to.have.property(
           "content-security-policy",
