@@ -53,6 +53,11 @@ builder.Services.AddControllersWithViews(options =>
                                          {
                                              // Ensures that all POST actions are protected by default.
                                              options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                                             options.Filters.Add(new ResponseCacheAttribute
+                                                                 {
+                                                                     NoStore = true,
+                                                                     Location = ResponseCacheLocation.None
+                                                                 });
                                          });
 
 builder.Services.AddContentful(builder.Configuration);
@@ -73,7 +78,7 @@ builder.Services.AddModelRenderers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICookieManager, CookieManager>();
 builder.Services.AddTransient<ICookiesPreferenceService, CookiesPreferenceService>();
-builder.Services.AddTransient<IUserJourneyCookieService, UserJourneyCookieService>();
+builder.Services.AddScoped<IUserJourneyCookieService, UserJourneyCookieService>();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddScoped(x =>
                            {
