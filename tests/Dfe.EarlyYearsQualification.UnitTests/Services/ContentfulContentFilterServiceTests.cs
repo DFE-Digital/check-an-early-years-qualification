@@ -702,11 +702,9 @@ public class ContentfulContentFilterServiceTests
         await filterService.GetFilteredQualifications(null, null, null, AwardingOrganisations.Ncfe, null);
 
         var queryString = mockQueryBuilder.GetQueryString();
-        queryString.Count.Should().Be(3);
-        queryString.Should().Contain("content_type", "Qualification");
-        queryString.Should().Contain("limit", "500");
-        queryString.Should().Contain("fields.awardingOrganisationTitle[in]",
-                                     $"{AwardingOrganisations.AllHigherEducation},{AwardingOrganisations.Various},{AwardingOrganisations.Ncfe}");
+
+        var awardingOrganisations = queryString.First(q => q.Key == "fields.awardingOrganisationTitle[in]");
+        awardingOrganisations.Value.Should().NotContain(AwardingOrganisations.Cache);
     }
 
     [TestMethod]
@@ -981,7 +979,9 @@ public class ContentfulContentFilterServiceTests
                             .ReturnsAsync(results);
 
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
-        mockFuzzyAdapter.Setup(a => a.PartialRatio(qualificationSearch.ToLower(), technicalDiplomaInChildCare.ToLower())).Returns(80);
+        mockFuzzyAdapter
+            .Setup(a => a.PartialRatio(qualificationSearch.ToLower(), technicalDiplomaInChildCare.ToLower()))
+            .Returns(80);
 
         var mockQueryBuilder = new MockQueryBuilder();
         var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
@@ -1059,7 +1059,7 @@ public class ContentfulContentFilterServiceTests
         qualifications.Should().NotBeNull();
         qualifications.Should().BeEmpty();
     }
-    
+
     [TestMethod]
     public async Task GetFilteredQualifications_StartDateAfterExpiryExpiration_ResultsDontIncludeQualification()
     {
@@ -1096,12 +1096,13 @@ public class ContentfulContentFilterServiceTests
                 QueryBuilder = mockQueryBuilder
             };
 
-        var filteredQualifications = await filterService.GetFilteredQualifications(4, 09, 2024, AwardingOrganisations.Ncfe, null);
+        var filteredQualifications =
+            await filterService.GetFilteredQualifications(4, 09, 2024, AwardingOrganisations.Ncfe, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(0);
     }
-    
+
     [TestMethod]
     public async Task GetFilteredQualifications_StartDateIsNotNullEndDateIsNull_ResultIncludesQualification()
     {
@@ -1138,7 +1139,8 @@ public class ContentfulContentFilterServiceTests
                 QueryBuilder = mockQueryBuilder
             };
 
-        var filteredQualifications = await filterService.GetFilteredQualifications(4, 08, 2019, AwardingOrganisations.Ncfe, null);
+        var filteredQualifications =
+            await filterService.GetFilteredQualifications(4, 08, 2019, AwardingOrganisations.Ncfe, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(1);

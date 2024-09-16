@@ -11,43 +11,47 @@ public class AnswerValidationAttributeTests
     public void IsValid_InvalidObject_ReturnsErrorMessage()
     {
         var model = new InvalidPropertyModel();
-        List<ValidationResult> validationResults = []; 
-        var result = Validator.TryValidateObject(model, new ValidationContext(model, null, null), validationResults, true );
+        List<ValidationResult> validationResults = [];
+        var result =
+            Validator.TryValidateObject(model, new ValidationContext(model, null, null), validationResults, true);
         result.Should().BeFalse();
         validationResults.Count.Should().Be(1);
         validationResults[0].ErrorMessage.Should().Be("Object is not of type Dictionary<string, string>()");
     }
-    
+
     [TestMethod]
     public void IsValid_DictionaryHasNoKeys_ReturnsErrorMessage()
     {
         var model = new ValidPropertyModel();
-        List<ValidationResult> validationResults = []; 
-        var result = Validator.TryValidateObject(model, new ValidationContext(model, null, null), validationResults, true );
+        List<ValidationResult> validationResults = [];
+        var result =
+            Validator.TryValidateObject(model, new ValidationContext(model, null, null), validationResults, true);
         result.Should().BeFalse();
         validationResults.Count.Should().Be(1);
         validationResults[0].ErrorMessage.Should().Be("Answers are required");
     }
-    
+
     [TestMethod]
     public void IsValid_DictionaryHasMissingValue_ReturnsErrorMessage()
     {
         var model = new ValidPropertyModel();
         model.Answers.Add("Test Key", "");
-        List<ValidationResult> validationResults = []; 
-        var result = Validator.TryValidateObject(model, new ValidationContext(model, null, null), validationResults, true );
+        List<ValidationResult> validationResults = [];
+        var result =
+            Validator.TryValidateObject(model, new ValidationContext(model, null, null), validationResults, true);
         result.Should().BeFalse();
         validationResults.Count.Should().Be(1);
         validationResults[0].ErrorMessage.Should().Be("Value is required for key: Test Key");
     }
-    
+
     [TestMethod]
     public void IsValid_NoIssues_ReturnsSuccessMessage()
     {
         var model = new ValidPropertyModel();
         model.Answers.Add("Test Key", "Test");
-        List<ValidationResult> validationResults = []; 
-        var result = Validator.TryValidateObject(model, new ValidationContext(model, null, null), validationResults, true );
+        List<ValidationResult> validationResults = [];
+        var result =
+            Validator.TryValidateObject(model, new ValidationContext(model, null, null), validationResults, true);
         result.Should().BeTrue();
         validationResults.Count.Should().Be(0);
     }
@@ -55,10 +59,14 @@ public class AnswerValidationAttributeTests
 
 internal class InvalidPropertyModel
 {
+    // ReSharper disable once UnusedMember.Global
+    // This class enables a test, it is not being tested itself.
     [AnswerValidation] public string Answers { get; set; } = string.Empty;
 }
 
 internal class ValidPropertyModel
 {
-    [AnswerValidation] public Dictionary<string,string> Answers { get; set; } = [];
+    // ReSharper disable once CollectionNeverQueried.Global
+    // This class enables a test, it is not being tested itself.
+    [AnswerValidation] public Dictionary<string, string> Answers { get; } = [];
 }

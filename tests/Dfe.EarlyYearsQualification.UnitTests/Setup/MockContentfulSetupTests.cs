@@ -34,7 +34,7 @@ public class MockContentfulSetupTests
 
         serviceList.Count.Should().Be(2);
 
-        var service = serviceList.First();
+        var service = serviceList[0];
         service.ImplementationType.Should().Be(typeof(MockContentfulService));
         service.ServiceType.Should().Be(typeof(IContentService));
         service.Lifetime.Should().Be(ServiceLifetime.Singleton);

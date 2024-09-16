@@ -12,7 +12,7 @@ public class CookiesPageModel
 
     public string ButtonText { get; init; } = string.Empty;
 
-    public string CookiesAnswer
+    public static string CookiesAnswer
     {
         get { return "CookiesAnswer"; }
     }
