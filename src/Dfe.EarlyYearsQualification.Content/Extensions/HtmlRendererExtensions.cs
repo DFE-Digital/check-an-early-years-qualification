@@ -1,6 +1,6 @@
 using Contentful.Core.Models;
-using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
-using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.Renderers.GovUk.ParagraphRenderer;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
+using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.ParagraphRenderer;
 
 namespace Dfe.EarlyYearsQualification.Content.Extensions;
 

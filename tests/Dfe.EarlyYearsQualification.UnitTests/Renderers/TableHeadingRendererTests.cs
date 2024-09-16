@@ -1,6 +1,6 @@
 using Contentful.Core.Models;
 using FluentAssertions;
-using TableHeadingRenderer = Dfe.EarlyYearsQualification.Content.Renderers.GovUk.TableHeadingRenderer;
+using TableHeadingRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableHeadingRenderer;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
 

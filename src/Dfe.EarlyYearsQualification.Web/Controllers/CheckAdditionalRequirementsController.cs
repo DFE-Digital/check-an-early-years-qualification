@@ -1,5 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -15,7 +15,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class CheckAdditionalRequirementsController(
     ILogger<CheckAdditionalRequirementsController> logger,
     IContentService contentService,
-    IHtmlRenderer htmlRenderer,
+    IGovUkContentfulParser contentfulParser,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
@@ -122,7 +122,7 @@ public class CheckAdditionalRequirementsController(
                             Question = additionalRequirementQuestion.Question,
                             HintText = additionalRequirementQuestion.HintText,
                             DetailsHeading = additionalRequirementQuestion.DetailsHeading,
-                            DetailsContent = await htmlRenderer.ToHtml(additionalRequirementQuestion.DetailsContent),
+                            DetailsContent = await contentfulParser.ToHtml(additionalRequirementQuestion.DetailsContent),
                             Options = MapOptions(additionalRequirementQuestion.Answers)
                         });
         }

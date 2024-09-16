@@ -1,5 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
@@ -13,7 +13,7 @@ public class ChallengeController(
     ILogger<ChallengeController> logger,
     IUrlHelper urlHelper,
     IContentService contentService,
-    IHtmlRenderer htmlRenderer,
+    IGovUkContentfulParser contentfulParser,
     ICheckServiceAccessKeysHelper accessKeysHelper)
     : Controller
 {
@@ -117,9 +117,9 @@ public class ChallengeController(
     {
 
         model.RedirectAddress = SanitiseReferralAddress(model.RedirectAddress);
-        model.FooterContent = await htmlRenderer.ToHtml(content.FooterContent);
+        model.FooterContent = await contentfulParser.ToHtml(content.FooterContent);
         model.InputHeading = content.InputHeading;
-        model.MainContent = await htmlRenderer.ToHtml(content.MainContent);
+        model.MainContent = await contentfulParser.ToHtml(content.MainContent);
         model.MainHeading = content.MainHeading;
         model.SubmitButtonText = content.SubmitButtonText;
         model.ShowPasswordButtonText = content.ShowPasswordButtonText;

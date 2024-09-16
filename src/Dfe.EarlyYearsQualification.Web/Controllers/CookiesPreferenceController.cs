@@ -1,5 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -13,8 +13,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class CookiesPreferenceController(
     ILogger<CookiesPreferenceController> logger,
     IContentService contentService,
-    IHtmlTableRenderer tableRenderer,
-    ISuccessBannerRenderer successBannerRenderer,
+    IGovUkContentfulParser contentfulParser,
     ICookiesPreferenceService cookieService,
     IUrlHelper urlHelper)
     : ServiceController
@@ -82,10 +81,10 @@ public class CookiesPreferenceController(
         return new CookiesPageModel
                {
                    Heading = content.Heading,
-                   BodyContent = await tableRenderer.ToHtml(content.Body),
+                   BodyContent = await contentfulParser.ToHtml(content.Body),
                    Options = content.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList(),
                    ButtonText = content.ButtonText,
-                   SuccessBannerContent = await successBannerRenderer.ToHtml(content.SuccessBannerContent),
+                   SuccessBannerContent = await contentfulParser.ToHtml(content.SuccessBannerContent),
                    SuccessBannerHeading = content.SuccessBannerHeading,
                    ErrorText = content.ErrorText,
                    BackButton = MapToNavigationLinkModel(content.BackButton),

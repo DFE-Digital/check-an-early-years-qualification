@@ -1,5 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -16,8 +16,7 @@ public class ConfirmQualificationController(
     ILogger<ConfirmQualificationController> logger,
     IContentService contentService,
     IUserJourneyCookieService userJourneyCookieService,
-    IHtmlRenderer htmlRenderer,
-    IGovUkInsetTextRenderer govUkInsetTextRenderer)
+    IGovUkContentfulParser contentfulParser)
     : ServiceController
 {
     [HttpGet]
@@ -132,8 +131,8 @@ public class ConfirmQualificationController(
                    QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle.Trim(),
                    QualificationDateAdded = qualification.FromWhichYear!,
                    BackButton = MapToNavigationLinkModel(content.BackButton),
-                   PostHeadingContent = await htmlRenderer.ToHtml(content.PostHeadingContent),
-                   VariousAwardingOrganisationsExplanation = await govUkInsetTextRenderer.ToHtml(content.VariousAwardingOrganisationsExplanation)
+                   PostHeadingContent = await contentfulParser.ToHtml(content.PostHeadingContent),
+                   VariousAwardingOrganisationsExplanation = await contentfulParser.ToHtml(content.VariousAwardingOrganisationsExplanation)
                };
     }
 }

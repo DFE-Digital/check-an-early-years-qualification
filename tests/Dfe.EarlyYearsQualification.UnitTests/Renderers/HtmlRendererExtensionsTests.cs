@@ -1,10 +1,10 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Extensions;
-using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
-using GovParagraphRenderer = Dfe.EarlyYearsQualification.Content.Renderers.GovUk.ParagraphRenderer;
+using GovParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.ParagraphRenderer;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
 

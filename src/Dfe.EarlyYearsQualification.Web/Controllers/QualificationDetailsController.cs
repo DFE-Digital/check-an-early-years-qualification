@@ -2,7 +2,7 @@ using System.Globalization;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -18,8 +18,7 @@ public class QualificationDetailsController(
     ILogger<QualificationDetailsController> logger,
     IContentService contentService,
     IContentFilterService contentFilterService,
-    IGovUkInsetTextRenderer govUkInsetTextRenderer,
-    IHtmlRenderer htmlRenderer,
+    IGovUkContentfulParser contentfulParser,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
@@ -167,7 +166,7 @@ public class QualificationDetailsController(
         var requirementsForLevel2 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
                                                                RatioRequirements.Level2RatioRequirementName,
                                                                qualification);
-        model.RatioRequirements.RequirementsForLevel2 = await htmlRenderer.ToHtml(requirementsForLevel2);
+        model.RatioRequirements.RequirementsForLevel2 = await contentfulParser.ToHtml(requirementsForLevel2);
 
         model.RatioRequirements.RequirementsHeadingForLevel2 =
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level2RatioRequirementName,
@@ -180,7 +179,7 @@ public class QualificationDetailsController(
         var requirementsForLevel3 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
                                                                RatioRequirements.Level3RatioRequirementName,
                                                                qualification);
-        model.RatioRequirements.RequirementsForLevel3 = await htmlRenderer.ToHtml(requirementsForLevel3);
+        model.RatioRequirements.RequirementsForLevel3 = await contentfulParser.ToHtml(requirementsForLevel3);
 
         model.RatioRequirements.RequirementsHeadingForLevel3 =
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level3RatioRequirementName,
@@ -193,7 +192,7 @@ public class QualificationDetailsController(
         var requirementsForLevel6 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
                                                                RatioRequirements.Level6RatioRequirementName,
                                                                qualification);
-        model.RatioRequirements.RequirementsForLevel6 = await htmlRenderer.ToHtml(requirementsForLevel6);
+        model.RatioRequirements.RequirementsForLevel6 = await contentfulParser.ToHtml(requirementsForLevel6);
 
         model.RatioRequirements.RequirementsHeadingForLevel6 =
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level6RatioRequirementName,
@@ -206,7 +205,7 @@ public class QualificationDetailsController(
         var requirementsForUnqualified = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
                                                                     RatioRequirements.UnqualifiedRatioRequirementName,
                                                                     qualification);
-        model.RatioRequirements.RequirementsForUnqualified = await htmlRenderer.ToHtml(requirementsForUnqualified);
+        model.RatioRequirements.RequirementsForUnqualified = await contentfulParser.ToHtml(requirementsForUnqualified);
 
         model.RatioRequirements.RequirementsHeadingForUnqualified =
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName,
@@ -265,16 +264,16 @@ public class QualificationDetailsController(
                    Header = content.Header,
                    SingleQualificationFoundText = content.SingleQualificationFoundText,
                    MultipleQualificationsFoundText = content.MultipleQualificationsFoundText,
-                   PreSearchBoxContent = await htmlRenderer.ToHtml(content.PreSearchBoxContent),
+                   PreSearchBoxContent = await contentfulParser.ToHtml(content.PreSearchBoxContent),
                    SearchButtonText = content.SearchButtonText,
                    LevelHeading = content.LevelHeading,
                    AwardingOrganisationHeading = content.AwardingOrganisationHeading,
-                   PostSearchCriteriaContent = await htmlRenderer.ToHtml(content.PostSearchCriteriaContent),
-                   PostQualificationListContent = await htmlRenderer.ToHtml(content.PostQualificationListContent),
+                   PostSearchCriteriaContent = await contentfulParser.ToHtml(content.PostSearchCriteriaContent),
+                   PostQualificationListContent = await contentfulParser.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
                    SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
                    Qualifications = basicQualificationsModels.OrderBy(x => x.QualificationName).ToList(),
-                   NoResultText = await htmlRenderer.ToHtml(content.NoResultsText),
+                   NoResultText = await contentfulParser.ToHtml(content.NoResultsText),
                    ClearSearchText = content.ClearSearchText,
                    NoQualificationsFoundText = content.NoQualificationsFoundText
                };
@@ -369,19 +368,19 @@ public class QualificationDetailsController(
                                  BookmarkText = content.BookmarkText,
                                  CheckAnotherQualificationHeading = content.CheckAnotherQualificationHeading,
                                  CheckAnotherQualificationText =
-                                     await govUkInsetTextRenderer.ToHtml(content.CheckAnotherQualificationText),
+                                     await contentfulParser.ToHtml(content.CheckAnotherQualificationText),
                                  DateAddedLabel = content.DateAddedLabel,
                                  DateOfCheckLabel = content.DateOfCheckLabel,
                                  FurtherInfoHeading = content.FurtherInfoHeading,
-                                 FurtherInfoText = await govUkInsetTextRenderer.ToHtml(content.FurtherInfoText),
+                                 FurtherInfoText = await contentfulParser.ToHtml(content.FurtherInfoText),
                                  LevelLabel = content.LevelLabel,
                                  MainHeader = content.MainHeader,
                                  QualificationNumberLabel = content.QualificationNumberLabel,
                                  RequirementsHeading = content.RequirementsHeading,
-                                 RequirementsText = await htmlRenderer.ToHtml(content.RequirementsText),
+                                 RequirementsText = await contentfulParser.ToHtml(content.RequirementsText),
                                  RatiosHeading = content.RatiosHeading,
-                                 RatiosText = await htmlRenderer.ToHtml(content.RatiosText),
-                                 RatiosTextNotFullAndRelevant = await htmlRenderer.ToHtml(content.RatiosTextNotFullAndRelevant),
+                                 RatiosText = await contentfulParser.ToHtml(content.RatiosText),
+                                 RatiosTextNotFullAndRelevant = await contentfulParser.ToHtml(content.RatiosTextNotFullAndRelevant),
                                  CheckAnotherQualificationLink =
                                      MapToNavigationLinkModel(content.CheckAnotherQualificationLink),
                                  PrintButtonText = content.PrintButtonText,

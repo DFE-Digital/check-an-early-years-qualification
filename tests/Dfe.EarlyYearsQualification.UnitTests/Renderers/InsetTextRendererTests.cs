@@ -2,7 +2,7 @@ using Contentful.Core;
 using Contentful.Core.Configuration;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using FluentAssertions;
 using Moq;
 using Newtonsoft.Json;

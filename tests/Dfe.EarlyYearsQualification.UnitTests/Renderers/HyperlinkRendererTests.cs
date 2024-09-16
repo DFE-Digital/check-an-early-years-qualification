@@ -1,5 +1,5 @@
 using Contentful.Core.Models;
-using Dfe.EarlyYearsQualification.Content.Renderers.GovUk;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;

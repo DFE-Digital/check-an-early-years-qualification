@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -15,7 +15,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class AdviceController(
     ILogger<AdviceController> logger,
     IContentService contentService,
-    IHtmlRenderer renderer,
+    IGovUkContentfulParser contentfulParser,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
@@ -106,7 +106,7 @@ public class AdviceController(
         return new AdvicePageModel
                {
                    Heading = advicePage.Heading,
-                   BodyContent = await renderer.ToHtml(advicePage.Body),
+                   BodyContent = await contentfulParser.ToHtml(advicePage.Body),
                    BackButton = MapToNavigationLinkModel(advicePage.BackButton)
                };
     }
