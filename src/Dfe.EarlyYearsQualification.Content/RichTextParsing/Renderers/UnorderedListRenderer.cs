@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Contentful.Core.Models;
-using Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 

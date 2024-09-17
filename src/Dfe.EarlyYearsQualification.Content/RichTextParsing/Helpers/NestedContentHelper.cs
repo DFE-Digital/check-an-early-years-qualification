@@ -3,7 +3,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.ParagraphRenderer;
 
-namespace Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
+namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Helpers;
 
 public static class NestedContentHelper
 {

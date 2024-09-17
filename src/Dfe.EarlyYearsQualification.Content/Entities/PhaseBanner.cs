@@ -24,12 +24,12 @@ public class PhaseBanner
                 {
                     // TODO: Check that instance of IContent contains node type property instead of casting to paragraph
                     if (content is not Paragraph test) continue;
-                    test.NodeType = "PhaseBanner";
+                    test.NodeType = nameof(PhaseBanner);
 
                     newContent.Add(test);
                 }
                 
-                _content = new Document()
+                _content = new Document
                            {
                                NodeType = value.NodeType,
                                Content = newContent,

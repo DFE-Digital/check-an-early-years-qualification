@@ -1,5 +1,6 @@
 using System.Text;
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Entities;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 
@@ -43,7 +44,7 @@ public class PhaseBannerRenderer : IContentRenderer
     public bool SupportsContent(IContent content)
     {
         var paragraph = content as Paragraph;
-
-        return paragraph?.NodeType == "PhaseBanner";
+        
+        return paragraph?.NodeType == nameof(PhaseBanner);
     }
 }

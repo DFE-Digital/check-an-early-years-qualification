@@ -4,7 +4,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using TableCellRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableCellRenderer;
 using TableRowRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableRowRenderer;
 
-namespace Dfe.EarlyYearsQualification.Content.Renderers.Helpers;
+namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Helpers;
 
 public static class TableHelper
 {
