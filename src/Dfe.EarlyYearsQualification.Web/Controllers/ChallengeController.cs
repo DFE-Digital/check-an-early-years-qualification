@@ -19,7 +19,7 @@ public class ChallengeController(
 {
     private const string DefaultRedirectAddress = "/";
 
-    [HttpGet]
+    [HttpGet("/challenge")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public async Task<IActionResult> Index([FromQuery] ChallengePageModel model)
     {
@@ -43,7 +43,7 @@ public class ChallengeController(
         return View("EntryForm", pageModel);
     }
 
-    [HttpPost]
+    [HttpPost("/challenge")]
     public async Task<IActionResult> Post([FromForm] ChallengePageModel model)
     {
         if (!ModelState.IsValid)
