@@ -22,7 +22,10 @@ public class ConfirmQualificationController(
 {
     [HttpGet]
     [Route("{qualificationId}")]
+#pragma warning disable S6967
+    // ...the model is a string, so no need to check ModelState.IsValid here
     public async Task<IActionResult> Index(string qualificationId)
+#pragma warning restore S6967
     {
         if (string.IsNullOrEmpty(qualificationId))
         {
@@ -133,7 +136,8 @@ public class ConfirmQualificationController(
                    QualificationDateAdded = qualification.FromWhichYear!,
                    BackButton = MapToNavigationLinkModel(content.BackButton),
                    PostHeadingContent = await htmlRenderer.ToHtml(content.PostHeadingContent),
-                   VariousAwardingOrganisationsExplanation = await govUkInsetTextRenderer.ToHtml(content.VariousAwardingOrganisationsExplanation)
+                   VariousAwardingOrganisationsExplanation =
+                       await govUkInsetTextRenderer.ToHtml(content.VariousAwardingOrganisationsExplanation)
                };
     }
 }

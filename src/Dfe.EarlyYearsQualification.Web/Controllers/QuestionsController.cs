@@ -62,7 +62,7 @@ public class QuestionsController(
         }
 
         userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option);
-        
+
         switch (model.Option)
         {
             case QualificationAwardLocation.OutsideOfTheUnitedKingdom:
@@ -88,7 +88,7 @@ public class QuestionsController(
             return RedirectToAction("Index", "Error");
         }
 
-        (int? startMonth, int? startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+        var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         var model = await MapDateModel(new DateQuestionModel(), questionPage,
                                        nameof(this.WhenWasTheQualificationStarted),
                                        Questions,
@@ -99,7 +99,10 @@ public class QuestionsController(
     }
 
     [HttpPost("when-was-the-qualification-started")]
+#pragma warning disable S6967
+    // ...although it doesn't directly use ModelState.IsValid, the validity of the inbound model is checked 
     public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
+#pragma warning restore S6967
     {
         var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
         var dateModelValidationResult = questionModelValidator.IsValid(model, questionPage!);
@@ -146,7 +149,8 @@ public class QuestionsController(
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
-                model = await MapRadioModel(model, questionPage, nameof(this.WhatLevelIsTheQualification), Questions, model.Option);
+                model = await MapRadioModel(model, questionPage, nameof(this.WhatLevelIsTheQualification), Questions,
+                                            model.Option);
                 model.HasErrors = true;
             }
 
@@ -230,7 +234,8 @@ public class QuestionsController(
         return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
     }
 
-    private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName, string? selectedAnswer)
+    private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName,
+                                                   string? selectedAnswer)
     {
         var questionPage = await contentService.GetRadioQuestionPage(questionPageId);
         if (questionPage is null)
@@ -239,7 +244,8 @@ public class QuestionsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await MapRadioModel(new RadioQuestionModel(), questionPage, actionName, controllerName, selectedAnswer);
+        var model = await MapRadioModel(new RadioQuestionModel(), questionPage, actionName, controllerName,
+                                        selectedAnswer);
 
         return View("Radio", model);
     }
@@ -311,7 +317,7 @@ public class QuestionsController(
             model.SelectedMonth = selectedMonth.Value;
             model.SelectedYear = selectedYear.Value;
         }
-        
+
         return model;
     }
 
