@@ -85,7 +85,6 @@ $("#clear-search-form").on("submit", function(){
 });
 
 $("#challenge-form").on("submit", function(){
-    console.log('here')
     let passwordValue = $("#PasswordValue").val();
     window.dataLayer.push({
         'event': 'challengePageFormSubmission',
