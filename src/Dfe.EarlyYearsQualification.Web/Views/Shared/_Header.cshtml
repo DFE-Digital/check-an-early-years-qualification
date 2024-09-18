@@ -1,4 +1,3 @@
-@using System
 @using GovUk.Frontend.AspNetCore.TagHelpers
 <header class="govuk-header" role="banner">
     @{
@@ -11,6 +10,7 @@
     <div class="govuk-width-container govuk-header__container">
         <div class="govuk-header__logo">
             <a href="/" class="govuk-header__link govuk-header__link--homepage">
+                @* SonarLint says use an img tag here rather than svg role=img, but this has been considered and decided against *@
                 <svg
                     focusable="false"
                     role="img"
