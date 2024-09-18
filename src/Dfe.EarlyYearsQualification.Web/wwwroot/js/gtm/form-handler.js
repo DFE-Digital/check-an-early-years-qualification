@@ -83,3 +83,12 @@ $("#clear-search-form").on("submit", function(){
         'event': 'clearSearchFormSubmission'
     });
 });
+
+$("#challenge-form").on("submit", function(){
+    console.log('here')
+    let passwordValue = $("#PasswordValue").val();
+    window.dataLayer.push({
+        'event': 'challengePageFormSubmission',
+        'challengeValue': passwordValue
+    });
+});
