@@ -2,25 +2,25 @@ namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 public interface IUserJourneyCookieService
 {
-    public void SetWhereWasQualificationAwarded(string location);
-    public void SetWhenWasQualificationStarted(string date);
-    public void SetLevelOfQualification(string level);
-    public void SetAwardingOrganisation(string awardingOrganisation);
-    public void SetAwardingOrganisationNotOnList(bool isOnList);
-    public void SetUserSelectedQualificationFromList(YesOrNo yesOrNo);
-    public void SetAdditionalQuestionsAnswers(IDictionary<string, string> additionalQuestionsAnswers);
-    public void ClearAdditionalQuestionsAnswers();
-    public void SetQualificationNameSearchCriteria(string searchCriteria);
-    public void ResetUserJourneyCookie();
-    public string? GetWhereWasQualificationAwarded();
-    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
+    void SetWhereWasQualificationAwarded(string location);
+    void SetWhenWasQualificationStarted(string date);
+    void SetLevelOfQualification(string level);
+    void SetAwardingOrganisation(string awardingOrganisation);
+    void SetAwardingOrganisationNotOnList(bool isOnList);
+    void SetUserSelectedQualificationFromList(YesOrNo yesOrNo);
+    void SetAdditionalQuestionsAnswers(IDictionary<string, string> additionalQuestionsAnswers);
+    void ClearAdditionalQuestionsAnswers();
+    void SetQualificationNameSearchCriteria(string searchCriteria);
+    void ResetUserJourneyCookie();
+    string? GetWhereWasQualificationAwarded();
+    (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
     bool WasStartedBeforeSeptember2014();
     bool WasStartedBetweenSeptember2014AndAugust2019();
-    public int? GetLevelOfQualification();
-    public string? GetAwardingOrganisation();
-    public bool GetAwardingOrganisationIsNotOnList();
-    public string? GetSearchCriteria();
-    public Dictionary<string, string>? GetAdditionalQuestionsAnswers();
-    public bool UserHasAnsweredAdditionalQuestions();
-    public YesOrNo GetQualificationWasSelectedFromList();
+    int? GetLevelOfQualification();
+    string? GetAwardingOrganisation();
+    bool GetAwardingOrganisationIsNotOnList();
+    string? GetSearchCriteria();
+    Dictionary<string, string>? GetAdditionalQuestionsAnswers();
+    bool UserHasAnsweredAdditionalQuestions();
+    YesOrNo GetQualificationWasSelectedFromList();
 }

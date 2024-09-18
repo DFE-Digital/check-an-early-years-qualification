@@ -35,28 +35,40 @@ public class CookiesPreferenceController(
     }
 
     [HttpPost("accept")]
+#pragma warning disable S6967
+    // ...the model is a string, so no need to check ModelState.IsValid here
     public IActionResult Accept([FromForm] string? returnUrl)
+#pragma warning restore S6967
     {
         cookieService.SetPreference(true);
         return Redirect(CheckUrl(returnUrl));
     }
 
     [HttpPost("reject")]
+#pragma warning disable S6967
+    // ...the model is a string, so no need to check ModelState.IsValid here
     public IActionResult Reject([FromForm] string? returnUrl)
+#pragma warning restore S6967
     {
         cookieService.RejectCookies();
         return Redirect(CheckUrl(returnUrl));
     }
 
     [HttpPost("hidebanner")]
+#pragma warning disable S6967
+    // ...the model is a string, so no need to check ModelState.IsValid here
     public IActionResult HideBanner([FromForm] string? returnUrl)
+#pragma warning restore S6967
     {
         cookieService.SetVisibility(false);
         return Redirect(CheckUrl(returnUrl));
     }
 
     [HttpPost]
+#pragma warning disable S6967
+    // ...the model is a string, so no need to check ModelState.IsValid here
     public IActionResult CookiePreference(string cookiesAnswer)
+#pragma warning restore S6967
     {
         if (cookiesAnswer == "all-cookies")
         {

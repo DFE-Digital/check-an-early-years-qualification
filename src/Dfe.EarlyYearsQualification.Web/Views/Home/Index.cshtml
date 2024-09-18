@@ -8,6 +8,7 @@
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <h1 class="govuk-heading-xl">@Model.Header</h1>
         <div id="pre-cta-content" class="govuk-body">@Html.Raw(Model.PreCtaButtonContent)</div>
+        @* SonarLint says turn this into a button, or give it onKeyPress|onKeyDown|onKeyUp attribute -- but this construct is mandated by Gov UK guidelines *@
         <a href="@Url.Action("StartNew", "Questions")" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button" id="start-now-button">
             @Model.CtaButtonText
             <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
@@ -19,7 +20,7 @@
     @if (!string.IsNullOrEmpty(Model.RightHandSideContentHeader) && !string.IsNullOrEmpty(Model.RightHandSideContent))
     {
         <div class="govuk-grid-column-full govuk-grid-column-one-third-from-desktop">
-            <aside role="complementary">
+            <aside>
                 <h2 id="right-hand-content-header" class="govuk-heading-m" id="subsection-title">
                     @Model.RightHandSideContentHeader
                 </h2>
