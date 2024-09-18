@@ -1,4 +1,4 @@
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
@@ -25,7 +25,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
@@ -64,7 +64,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         
         var mockContentfulService = new MockContentfulService();
@@ -103,7 +103,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         
         var mockContentfulService = new MockContentfulService();
@@ -136,7 +136,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var accessKeys = new List<string>
@@ -203,7 +203,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         
         var accessKeys = new List<string>
@@ -267,7 +267,7 @@ public class ChallengeControllerTests
     {
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         
         var mockContentfulService = new MockContentfulService();
@@ -293,7 +293,7 @@ public class ChallengeControllerTests
 
         viewResult!.Model.Should().BeAssignableTo<ChallengePageModel>();
 
-        var modelToReturn = viewResult!.Model as ChallengePageModel;
+        var modelToReturn = viewResult.Model as ChallengePageModel;
 
         modelToReturn!.ErrorSummaryModel.Should().NotBeNull();
         modelToReturn.ErrorSummaryModel!.ErrorBannerLinkText.Should().Be(content!.MissingPasswordText);
@@ -306,7 +306,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         
         var mockContentfulService = new MockContentfulService();
@@ -338,7 +338,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var controller = new ChallengeController(mockLogger.Object,
@@ -366,7 +366,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var controller = new ChallengeController(mockLogger.Object,
@@ -394,7 +394,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var mockContentfulService = new MockContentfulService();
@@ -426,7 +426,7 @@ public class ChallengeControllerTests
 
         viewResult!.Model.Should().BeAssignableTo<ChallengePageModel>();
 
-        var modelToReturn = viewResult!.Model as ChallengePageModel;
+        var modelToReturn = viewResult.Model as ChallengePageModel;
 
         modelToReturn!.ErrorSummaryModel.Should().NotBeNull();
         modelToReturn.ErrorSummaryModel!.ErrorBannerLinkText.Should().Be(content!.IncorrectPasswordText);

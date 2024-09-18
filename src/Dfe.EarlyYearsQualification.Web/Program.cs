@@ -69,6 +69,7 @@ else
     builder.Services.AddTransient<IContentFilterService, ContentfulContentFilterService>();
 }
 
+builder.Services.AddModelRenderers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICookieManager, CookieManager>();
 builder.Services.AddTransient<ICookiesPreferenceService, CookiesPreferenceService>();
@@ -87,8 +88,6 @@ builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelVali
 builder.Services.AddTransient<GtmConfiguration>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
-
-builder.Services.AddModelRenderers();
 
 var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off

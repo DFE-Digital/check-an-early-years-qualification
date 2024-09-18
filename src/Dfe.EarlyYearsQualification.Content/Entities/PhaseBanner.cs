@@ -7,6 +7,7 @@ public class PhaseBanner
     public string PhaseName { get; init; } = string.Empty;
 
     private readonly Document? _content;
+    
     public Document? Content
     {
         get => _content;

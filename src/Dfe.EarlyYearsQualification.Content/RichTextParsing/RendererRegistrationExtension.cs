@@ -13,6 +13,8 @@ public static class RendererRegistrationExtension
     public static void AddModelRenderers(this IServiceCollection services)
     {
         // Register each individual renderer
+        // Check any renderers that rely on a custom NodeType first
+        
         services.AddSingleton<IContentRenderer>(new PhaseBannerRenderer { Order = 1 })
                 .AddSingleton<IContentRenderer>(new ParagraphRenderer { Order = 2 })
                 .AddSingleton<IContentRenderer>(new ExternalNavigationLinkRenderer { Order = 3 })

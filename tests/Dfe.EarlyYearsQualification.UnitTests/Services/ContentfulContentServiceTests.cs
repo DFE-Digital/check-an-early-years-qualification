@@ -15,16 +15,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class ContentfulContentServiceTests
 {
-    private readonly Document _testRichText = new()
-                                              {
-                                                  Content =
-                                                  [
-                                                      new Text
-                                                      {
-                                                          Value = "TEST"
-                                                      }
-                                                  ]
-                                              };
+    private readonly Document _testRichText = ContentfulContentHelper.Paragraph("TEST");
 
     private Mock<IContentfulClient> _clientMock = new();
     private Mock<ILogger<ContentfulContentService>> _logger = new();
@@ -769,9 +760,13 @@ public class ContentfulContentServiceTests
 
         result.Should().NotBeNull();
 
-        result!.Content.Should().Be(phaseBanner.Content);
-        result.PhaseName.Should().Be(phaseBanner.PhaseName);
-        result.Content!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        result!.PhaseName.Should().Be(phaseBanner.PhaseName);
+        result.Content.Should().NotBeNull();
+        result.Content!.Content.Should().ContainSingle(x => ((Paragraph)x).NodeType == "PhaseBanner");
+        
+        var para = result.Content!.Content.First() as Paragraph; 
+        para!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        
         result.Show.Should().Be(phaseBanner.Show);
     }
 
@@ -845,10 +840,16 @@ public class ContentfulContentServiceTests
         result!.AcceptButtonText.Should().Be(cookiesBanner.AcceptButtonText);
 
         result.AcceptedCookiesContent.Should().Be(cookiesBanner.AcceptedCookiesContent);
-        result.AcceptedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        result.AcceptedCookiesContent!.Content.Should().ContainSingle(x => x is Paragraph);
 
+        var acceptedCookiesContentPara = result.AcceptedCookiesContent!.Content.First() as Paragraph; 
+        acceptedCookiesContentPara!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        
         result.CookiesBannerContent.Should().Be(cookiesBanner.CookiesBannerContent);
-        result.CookiesBannerContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        result.CookiesBannerContent!.Content.Should().ContainSingle(x => x is Paragraph);
+        
+        var cookiesContentPara = result.AcceptedCookiesContent!.Content.First() as Paragraph; 
+        cookiesContentPara!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
 
         result.CookiesBannerLinkText.Should().Be(cookiesBanner.CookiesBannerLinkText);
         result.CookiesBannerTitle.Should().Be(cookiesBanner.CookiesBannerTitle);
@@ -856,7 +857,10 @@ public class ContentfulContentServiceTests
         result.RejectButtonText.Should().Be(cookiesBanner.RejectButtonText);
 
         result.RejectedCookiesContent.Should().Be(cookiesBanner.RejectedCookiesContent);
-        result.RejectedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
+        result.RejectedCookiesContent!.Content.Should().ContainSingle(x => x is Paragraph);
+        
+        var rejectedCookiesContent = result.AcceptedCookiesContent!.Content.First() as Paragraph; 
+        rejectedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
     }
 
     [TestMethod]

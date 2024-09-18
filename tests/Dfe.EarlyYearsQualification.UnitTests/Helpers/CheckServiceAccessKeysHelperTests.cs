@@ -1,7 +1,6 @@
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Helpers;
 

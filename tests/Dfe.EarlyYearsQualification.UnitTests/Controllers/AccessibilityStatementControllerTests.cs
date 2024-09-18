@@ -1,6 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -21,7 +21,7 @@ public class AccessibilityStatementControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<AccessibilityStatementController>>();
 
-        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller =
             new AccessibilityStatementController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
@@ -44,7 +44,7 @@ public class AccessibilityStatementControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<AccessibilityStatementController>>();
 
-        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockRenderer = new Mock<IGovUkContentfulParser>();
 
         var expectedContent = new AccessibilityStatementPage
                               {

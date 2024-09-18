@@ -1,7 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
@@ -25,7 +25,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
@@ -53,7 +53,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -86,7 +86,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -113,7 +113,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -145,7 +145,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -172,7 +172,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -204,7 +204,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -231,7 +231,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -263,7 +263,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -290,7 +290,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -322,7 +322,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -349,7 +349,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -381,7 +381,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -408,7 +408,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -443,7 +443,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -470,7 +470,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -505,7 +505,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
@@ -532,7 +532,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
 
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
                                               UserJourneyMockNoOp.Object);
