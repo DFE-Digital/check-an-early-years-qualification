@@ -57,7 +57,7 @@ else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
     <form method="post" asp-controller="CookiesPreference" asp-action="HideBanner">
         <input type="hidden" id="returnUrlHideBanner" name="returnUrl"/>
         @* SonarLint says turn this div into a section -- but this construct is mandated by Gov UK guidelines *@
-        <div id="cookies-preference-chosen" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+        <div id="cookies-preference-chosen" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Check an Early Years Qualification service">
             <div class="govuk-cookie-banner__message govuk-width-container">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
