@@ -28,7 +28,7 @@
             <div class="govuk-!-margin-bottom-6">
                 @Html.Raw(Model.MainContent)
             </div>
-            @using (Html.BeginForm("Post", "Challenge", FormMethod.Post))
+            @using (Html.BeginForm("Post", "Challenge", FormMethod.Post, new { id = "challenge-form" }))
             {
                 <input type="hidden" id="redirectAddress" name="redirectAddress" value="@Model.RedirectAddress"/>
                 
