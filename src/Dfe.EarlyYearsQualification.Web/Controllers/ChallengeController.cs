@@ -37,9 +37,9 @@ public class ChallengeController(
             logger.LogError("No content for the challenge page");
             return RedirectToAction("Index", "Error");
         }
-        
+
         var pageModel = await Map(model, contentModel);
-        
+
         return View("EntryForm", pageModel);
     }
 
@@ -52,7 +52,7 @@ public class ChallengeController(
         }
 
         var referralAddress = SanitiseReferralAddress(model.RedirectAddress);
-        
+
         var contentModel = await contentService.GetChallengePage();
 
         if (contentModel == null)
@@ -66,21 +66,23 @@ public class ChallengeController(
             return await ReturnWithError(contentModel.MissingPasswordText, model, contentModel);
         }
 
+        model.PasswordValue = model.PasswordValue.Trim();
+
         logger.LogInformation("Challenge secret access value entered");
 
-        if(!accessKeysHelper.ConfiguredKeys.Contains(model.PasswordValue))
+        if (!accessKeysHelper.ConfiguredKeys.Contains(model.PasswordValue))
         {
             return await ReturnWithError(contentModel.IncorrectPasswordText, model, contentModel);
         }
-        
+
         SetAuthSecretCookie(model.PasswordValue);
         return new RedirectResult(referralAddress);
-        
     }
 
-    private async Task<IActionResult> ReturnWithError(string errorMessage, ChallengePageModel model, ChallengePage contentModel)
+    private async Task<IActionResult> ReturnWithError(string errorMessage, ChallengePageModel model,
+                                                      ChallengePage contentModel)
     {
-        model.ErrorSummaryModel = new ErrorSummaryModel()
+        model.ErrorSummaryModel = new ErrorSummaryModel
                                   {
                                       ElementLinkId = "PasswordValue",
                                       ErrorBannerHeading = contentModel.ErrorHeading,
@@ -88,7 +90,7 @@ public class ChallengeController(
                                   };
 
         model = await Map(model, contentModel);
-            
+
         return View("EntryForm", model);
     }
 
@@ -115,7 +117,6 @@ public class ChallengeController(
 
     private async Task<ChallengePageModel> Map(ChallengePageModel model, ChallengePage content)
     {
-
         model.RedirectAddress = SanitiseReferralAddress(model.RedirectAddress);
         model.FooterContent = await contentfulParser.ToHtml(content.FooterContent);
         model.InputHeading = content.InputHeading;

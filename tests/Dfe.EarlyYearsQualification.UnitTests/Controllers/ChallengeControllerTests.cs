@@ -27,7 +27,7 @@ public class ChallengeControllerTests
         var contentService = new Mock<IContentService>();
         var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
-        
+
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(true);
 
@@ -66,11 +66,11 @@ public class ChallengeControllerTests
         var contentService = new Mock<IContentService>();
         var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
-        
+
         var mockContentfulService = new MockContentfulService();
 
         contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
-        
+
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(false);
 
@@ -105,7 +105,7 @@ public class ChallengeControllerTests
         var contentService = new Mock<IContentService>();
         var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
-        
+
         var mockContentfulService = new MockContentfulService();
 
         contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
@@ -145,11 +145,11 @@ public class ChallengeControllerTests
                          };
 
         accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
-        
+
         var mockContentfulService = new MockContentfulService();
 
         contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
-        
+
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(true);
 
@@ -171,7 +171,7 @@ public class ChallengeControllerTests
                                                  contentService.Object,
                                                  htmlRenderer.Object,
                                                  accessKeysHelper.Object);
-        
+
         controller.ControllerContext = new ControllerContext
                                        {
                                            HttpContext = mockContext.Object
@@ -189,10 +189,77 @@ public class ChallengeControllerTests
         redirect.Url.Should().Be("/cookies");
 
         cookies.Should().ContainKey(ChallengeResourceFilterAttribute.AuthSecretCookieName);
-        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item1.Should()
-                                                                      .Be(accessKey);
-        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item2.HttpOnly.Should()
-                                                                      .BeTrue();
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item1
+                                                                      .Should().Be(accessKey);
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item2.HttpOnly
+                                                                      .Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task PostChallenge_WithSecretValueWithWhitespaceStartAndEnd_RedirectsWithTrimmedKeyInCookie()
+    {
+        const string from = "/cookies";
+        const string accessKey = "Key";
+
+        var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+
+        var accessKeys = new List<string>
+                         {
+                             accessKey
+                         };
+
+        accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
+
+        var mockContentfulService = new MockContentfulService();
+
+        contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
+
+        mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
+                     .Returns(true);
+
+        var cookies = new Dictionary<string, Tuple<string, CookieOptions>>();
+
+        var cookiesMock = new Mock<IResponseCookies>();
+        cookiesMock.Setup(c =>
+                              c.Append(ChallengeResourceFilterAttribute.AuthSecretCookieName,
+                                       accessKey,
+                                       It.IsAny<CookieOptions>()))
+                   .Callback((string k, string v, CookieOptions o) =>
+                                 cookies.Add(k, new Tuple<string, CookieOptions>(v, o)));
+
+        var mockContext = new Mock<HttpContext>();
+        mockContext.SetupGet(c => c.Response.Cookies).Returns(cookiesMock.Object);
+
+        var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 htmlRenderer.Object,
+                                                 accessKeysHelper.Object);
+
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = mockContext.Object
+                                       };
+
+        var result = await controller.Post(new ChallengePageModel
+                                           {
+                                               RedirectAddress = from,
+                                               PasswordValue = $"  {accessKey}  "
+                                           });
+
+        result.Should().BeAssignableTo<RedirectResult>();
+
+        var redirect = (RedirectResult)result;
+        redirect.Url.Should().Be("/cookies");
+
+        cookies.Should().ContainKey(ChallengeResourceFilterAttribute.AuthSecretCookieName);
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item1
+                                                                      .Should().Be(accessKey);
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item2.HttpOnly
+                                                                      .Should().BeTrue();
     }
 
     [TestMethod]
@@ -205,18 +272,18 @@ public class ChallengeControllerTests
         var contentService = new Mock<IContentService>();
         var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
-        
+
         var accessKeys = new List<string>
                          {
                              accessKey
                          };
 
         accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
-        
+
         var mockContentfulService = new MockContentfulService();
 
         contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
-        
+
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(false); // NB: behaviour relies on UrlHelper correctly determining non-local URLs
 
@@ -238,7 +305,7 @@ public class ChallengeControllerTests
                                                  contentService.Object,
                                                  htmlRenderer.Object,
                                                  accessKeysHelper.Object);
-        
+
         controller.ControllerContext = new ControllerContext
                                        {
                                            HttpContext = mockContext.Object
@@ -256,10 +323,10 @@ public class ChallengeControllerTests
         redirect.Url.Should().Be("/");
 
         cookies.Should().ContainKey(ChallengeResourceFilterAttribute.AuthSecretCookieName);
-        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item1.Should()
-                                                                      .Be(accessKey);
-        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item2.HttpOnly.Should()
-                                                                      .BeTrue();
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item1
+                                                                      .Should().Be(accessKey);
+        cookies[ChallengeResourceFilterAttribute.AuthSecretCookieName].Item2.HttpOnly
+                                                                      .Should().BeTrue();
     }
 
     [TestMethod]
@@ -269,13 +336,13 @@ public class ChallengeControllerTests
         var contentService = new Mock<IContentService>();
         var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
-        
+
         var mockContentfulService = new MockContentfulService();
 
         var content = await mockContentfulService.GetChallengePage();
 
         contentService.Setup(x => x.GetChallengePage()).ReturnsAsync(content);
-        
+
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(true);
 
@@ -308,7 +375,7 @@ public class ChallengeControllerTests
         var contentService = new Mock<IContentService>();
         var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
-        
+
         var mockContentfulService = new MockContentfulService();
 
         contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
@@ -354,11 +421,12 @@ public class ChallengeControllerTests
 
         var result = await controller.Index(new ChallengePageModel { RedirectAddress = "/" });
 
-        result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null), options => options.ExcludingMissingMembers());
+        result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null),
+                                       options => options.ExcludingMissingMembers());
 
         mockLogger.VerifyError("No content for the challenge page");
     }
-    
+
     [TestMethod]
     public async Task Post_NoContent_RedirectsToErrorPage()
     {
@@ -382,7 +450,8 @@ public class ChallengeControllerTests
 
         var result = await controller.Post(new ChallengePageModel { RedirectAddress = "/" });
 
-        result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null), options => options.ExcludingMissingMembers());
+        result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null),
+                                       options => options.ExcludingMissingMembers());
 
         mockLogger.VerifyError("No content for the challenge page");
     }
@@ -406,7 +475,7 @@ public class ChallengeControllerTests
                                                               {
                                                                   "Some Key"
                                                               });
-        
+
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
@@ -418,7 +487,8 @@ public class ChallengeControllerTests
                                            HttpContext = new DefaultHttpContext()
                                        };
 
-        var result = await controller.Post(new ChallengePageModel { RedirectAddress = "/", PasswordValue = "Not A Correct Key"});
+        var result = await controller.Post(new ChallengePageModel
+                                           { RedirectAddress = "/", PasswordValue = "Not A Correct Key" });
 
         result.Should().BeAssignableTo<ViewResult>();
 
