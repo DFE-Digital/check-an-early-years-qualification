@@ -4,7 +4,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using FluentAssertions;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
+namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
 [TestClass]
 public class InsetTextRendererTests

@@ -4,16 +4,16 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
+namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
 [TestClass]
-public class MailtoRendererTests
+public class ExternalNavigationLinkRendererTests
 {
     [TestMethod]
     public void SupportsContent_IsNotEntryStructure_ReturnsFalse()
     {
         var content = new Paragraph();
-        new MailtoLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
     
     [TestMethod]
@@ -21,7 +21,7 @@ public class MailtoRendererTests
     {
         var content = new EntryStructure { Data = new EntryStructureData { Target = null } };
 
-        new MailtoLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
 
     [TestMethod]
@@ -29,7 +29,7 @@ public class MailtoRendererTests
     {
         var content = new EntryStructure { Data = new EntryStructureData { Target = new Text() } };
 
-        new MailtoLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
     
     [TestMethod]
@@ -43,13 +43,13 @@ public class MailtoRendererTests
                                  }
                       };
 
-        new MailtoLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
 
     [TestMethod]
     public void SupportsContent_DataTargetIsCustomNodeWithJObject_OtherId_NotSupported()
     {
-        var mailtoLink = new MailtoLink
+        var navigationLink = new NavigationLink
                              {
                                  Sys =
                                  {
@@ -57,13 +57,13 @@ public class MailtoRendererTests
                                                    {
                                                        SystemProperties = new SystemProperties
                                                                           {
-                                                                              Id = "not a mailto link ID"
+                                                                              Id = "externalNavigationLink123"
                                                                           }
                                                    }
                                  }
                              };
 
-        var jObject = JObject.FromObject(mailtoLink);
+        var jObject = JObject.FromObject(navigationLink);
 
         var customNode = new CustomNode
                          {
@@ -78,27 +78,27 @@ public class MailtoRendererTests
                                  }
                       };
 
-        new MailtoLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
 
     [TestMethod]
     public void SupportsContent_DataTargetIsCustomNodeWithJObject_IsSupported()
     {
-        var mailtoLink = new MailtoLink
-                         {
-                             Sys =
-                             {
-                                 ContentType = new ContentType
-                                               {
-                                                   SystemProperties = new SystemProperties
-                                                                      {
-                                                                          Id = "mailtoLink"
-                                                                      }
-                                               }
-                             }
-                         };
+        var navigationLink = new NavigationLink
+                                  {
+                                      Sys =
+                                      {
+                                          ContentType = new ContentType
+                                                        {
+                                                            SystemProperties = new SystemProperties
+                                                                               {
+                                                                                   Id = "externalNavigationLink"
+                                                                               }
+                                                        }
+                                      }
+                                  };
 
-        var jObject = JObject.FromObject(mailtoLink);
+        var jObject = JObject.FromObject(navigationLink);
 
         var customNode = new CustomNode
                          {
@@ -113,13 +113,13 @@ public class MailtoRendererTests
                                  }
                       };
 
-        new MailtoLinkRenderer().SupportsContent(content).Should().BeTrue();
+        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeTrue();
     }
-    
+
     [TestMethod]
-    public async Task RenderAsync_RendersATagWithMailto()
+    public async Task RenderAsync_IncludesTarget()
     {
-        var mailtoLink = new MailtoLink()
+        var navigationLink = new NavigationLink
                              {
                                  Sys =
                                  {
@@ -127,15 +127,16 @@ public class MailtoRendererTests
                                                    {
                                                        SystemProperties = new SystemProperties
                                                                           {
-                                                                              Id = "mailtoLink"
+                                                                              Id = "externalNavigationLink"
                                                                           }
                                                    }
                                  },
-                                 Text = "Some Text",
-                                 Email = "Some Email"
+                                 Href = "/",
+                                 DisplayText = "Display text",
+                                 OpenInNewTab = true
                              };
 
-        var jObject = JObject.FromObject(mailtoLink);
+        var jObject = JObject.FromObject(navigationLink);
 
         var customNode = new CustomNode
                          {
@@ -150,9 +151,50 @@ public class MailtoRendererTests
                                  }
                       };
         
-        var renderer = new MailtoLinkRenderer();
+        var renderer = new ExternalNavigationLinkRenderer();
         var result = await renderer.RenderAsync(content);
 
-        result.Should().Be($"<a class='govuk-link' href='mailto:Some Email'>Some Text</a>");
+        result.Should().Be($"<a href='/' target='_blank' class='govuk-link'>Display text</a>");
+    }
+    
+    [TestMethod]
+    public async Task RenderAsync_ExcludesTarget()
+    {
+        var navigationLink = new NavigationLink
+                             {
+                                 Sys =
+                                 {
+                                     ContentType = new ContentType
+                                                   {
+                                                       SystemProperties = new SystemProperties
+                                                                          {
+                                                                              Id = "externalNavigationLink"
+                                                                          }
+                                                   }
+                                 },
+                                 Href = "/",
+                                 DisplayText = "Display text",
+                                 OpenInNewTab = false
+                             };
+
+        var jObject = JObject.FromObject(navigationLink);
+
+        var customNode = new CustomNode
+                         {
+                             JObject = jObject
+                         };
+
+        var content = new EntryStructure
+                      {
+                          Data = new EntryStructureData
+                                 {
+                                     Target = customNode
+                                 }
+                      };
+        
+        var renderer = new ExternalNavigationLinkRenderer();
+        var result = await renderer.RenderAsync(content);
+
+        result.Should().Be($"<a href='/' class='govuk-link'>Display text</a>");
     }
 }

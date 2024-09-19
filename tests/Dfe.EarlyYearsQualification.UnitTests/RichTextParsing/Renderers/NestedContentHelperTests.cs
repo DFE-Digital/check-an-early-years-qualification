@@ -4,7 +4,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing.Helpers;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
+namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
 [TestClass]
 public class NestedContentHelperTests

@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 using FluentAssertions;
 using TableCellRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableCellRenderer;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
+namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
 [TestClass]
 public class TableCellRendererTests

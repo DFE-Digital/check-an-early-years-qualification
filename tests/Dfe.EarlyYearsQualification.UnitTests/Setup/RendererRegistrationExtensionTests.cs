@@ -85,7 +85,7 @@ public class RendererRegistrationExtensionTests
         
         services.Should().ContainSingle(s => s.ServiceType == typeof(IContentRenderer)
                                              && s.ImplementationInstance != null
-                                             && s.ImplementationInstance.GetType() == typeof(SuccessBannerParagraphRenderer)
+                                             && s.ImplementationInstance.GetType() == typeof(SuccessBannerRenderer)
                                              && s.Lifetime == ServiceLifetime.Singleton);
         
         services.Should().ContainSingle(s => s.ServiceType == typeof(IContentRenderer)

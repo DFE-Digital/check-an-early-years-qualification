@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using FluentAssertions;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
+namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
 [TestClass]
 public class Heading3RendererTests

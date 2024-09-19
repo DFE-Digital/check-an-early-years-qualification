@@ -23,11 +23,10 @@ public class PhaseBanner
                 
                 foreach (var content in value.Content)
                 {
-                    // TODO: Check that instance of IContent contains node type property instead of casting to paragraph
-                    if (content is not Paragraph test) continue;
-                    test.NodeType = nameof(PhaseBanner);
+                    if (content is not Paragraph para) continue;
+                    para.NodeType = nameof(PhaseBanner);
 
-                    newContent.Add(test);
+                    newContent.Add(para);
                 }
                 
                 _content = new Document

@@ -6,7 +6,7 @@ using FluentAssertions;
 using Newtonsoft.Json.Linq;
 using GovParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.ParagraphRenderer;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Renderers;
+namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
 [TestClass]
 public class HtmlRendererExtensionsTests
