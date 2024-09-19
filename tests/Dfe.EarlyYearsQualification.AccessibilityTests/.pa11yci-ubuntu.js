@@ -1,4 +1,4 @@
-var config = {
+const config = {
     defaults: {
         standard: 'WCAG2AA',
         chromeLaunchConfig: {
