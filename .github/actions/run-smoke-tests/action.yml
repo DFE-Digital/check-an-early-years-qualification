@@ -1,0 +1,33 @@
+name: Run Cypress E2E tests
+description: Run E2E tests using Cypress
+
+inputs:
+  webapp_name:
+    required: true
+    type: string
+  slot_name:
+    required: true
+    type: string
+  auth_secret:
+    required: true
+    type: string
+
+runs:
+  using: composite
+
+  steps:
+    - name: Run Smoke Tests
+      uses: cypress-io/github-action@v6
+      if: success() || failure()
+      with:
+        env: auth_secret="${{ inputs.auth_secret }}"
+        working-directory: ./tests/Dfe.EarlyYearsQualification.SmokeTests/
+        browser: chrome
+        config: baseUrl="https://${{ inputs.webapp_name }}-${{ inputs.slot_name }}.azurewebsites.net"
+
+    - name: Store screenshots on test failure
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: cypress-screenshots
+        path: ./tests/Dfe.EarlyYearsQualification.SmokeTests/cypress/screenshots
