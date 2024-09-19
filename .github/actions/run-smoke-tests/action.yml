@@ -1,5 +1,5 @@
-name: Run Cypress E2E tests
-description: Run E2E tests using Cypress
+name: Run smoke tests
+description: Run smoke tests using Cypress
 
 inputs:
   webapp_name:
