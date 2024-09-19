@@ -203,7 +203,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IHtmlRenderer>();
+        var htmlRenderer = new Mock<IGovUkContentfulParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var accessKeys = new List<string>
@@ -457,7 +457,7 @@ public class ChallengeControllerTests
     }
 
     [TestMethod]
-    public async Task Post_PasswordPassedIsntCorrect_ReturnsWithErrorMessage()
+    public async Task Post_PasswordPassedIsNotCorrect_ReturnsWithErrorMessage()
     {
         var mockLogger = new Mock<ILogger<ChallengeController>>();
 
