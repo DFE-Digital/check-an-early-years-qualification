@@ -342,12 +342,13 @@ public class QualificationDetailsController(
 
         var dateStarted = string.Empty;
         var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+
+        // ReSharper disable once InvertIf
         if (startYear is not null && startMonth is not null)
         {
             var dateOnly = new DateOnly(startYear.Value, startMonth.Value, 1);
             dateStarted = dateOnly.ToString("MMMM yyyy");
         }
-        
 
         return new QualificationDetailsModel
                {
@@ -380,7 +381,8 @@ public class QualificationDetailsController(
                                  RequirementsText = await contentParser.ToHtml(content.RequirementsText),
                                  RatiosHeading = content.RatiosHeading,
                                  RatiosText = await contentParser.ToHtml(content.RatiosText),
-                                 RatiosTextNotFullAndRelevant = await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant),
+                                 RatiosTextNotFullAndRelevant =
+                                     await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant),
                                  CheckAnotherQualificationLink =
                                      MapToNavigationLinkModel(content.CheckAnotherQualificationLink),
                                  PrintButtonText = content.PrintButtonText,

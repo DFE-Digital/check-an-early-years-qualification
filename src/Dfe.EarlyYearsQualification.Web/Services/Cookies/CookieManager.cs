@@ -26,12 +26,6 @@ public class CookieManager(IHttpContextAccessor context) : ICookieManager
     {
         var httpContext = context.HttpContext;
 
-        if (httpContext is null)
-        {
-            // no context, no outbound cookies!
-            return;
-        }
-
-        httpContext.Response.Cookies.Delete(key);
+        httpContext?.Response.Cookies.Delete(key);
     }
 }

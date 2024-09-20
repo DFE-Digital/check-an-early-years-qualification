@@ -12,9 +12,9 @@ public class GovUkContentParserTests
     [TestMethod]
     public async Task GovUkContentfulParser_ConstructedWithRenderer_NoContent_ReturnsEmptyString()
     {
-        var renderers = new List<IContentRenderer>()
+        var renderers = new List<IContentRenderer>
                         {
-                            new ParagraphRenderer(),
+                            new ParagraphRenderer()
                         };
 
         var govUkContentfulParser = new GovUkContentParser(renderers);
@@ -22,13 +22,13 @@ public class GovUkContentParserTests
         var result = await govUkContentfulParser.ToHtml(null);
         result.Should().Be(string.Empty);
     }
-    
+
     [TestMethod]
     public async Task GovUkContentfulParser_ConstructedWithRenderer_Content_ReturnsEmptyString()
     {
-        var renderers = new List<IContentRenderer>()
+        var renderers = new List<IContentRenderer>
                         {
-                            new ParagraphRenderer(),
+                            new ParagraphRenderer()
                         };
 
         var govUkContentfulParser = new GovUkContentParser(renderers);

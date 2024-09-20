@@ -4,13 +4,13 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class PhaseBanner
 {
+    private readonly Document? _content;
+
     public string PhaseName { get; init; } = string.Empty;
 
-    private readonly Document? _content;
-    
     public Document? Content
     {
-        get => _content;
+        get { return _content; }
         init
         {
             if (value == null)
@@ -20,7 +20,7 @@ public class PhaseBanner
             else
             {
                 var newContent = new List<IContent>();
-                
+
                 foreach (var content in value.Content)
                 {
                     if (content is not Paragraph para) continue;
@@ -28,7 +28,7 @@ public class PhaseBanner
 
                     newContent.Add(para);
                 }
-                
+
                 _content = new Document
                            {
                                NodeType = value.NodeType,

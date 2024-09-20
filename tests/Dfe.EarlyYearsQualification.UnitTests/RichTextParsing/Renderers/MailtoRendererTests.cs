@@ -15,7 +15,7 @@ public class MailtoRendererTests
         var content = new Paragraph();
         new MailtoLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void SupportsContent_DataTargetIsNull_DoesNotSupport()
     {
@@ -31,7 +31,7 @@ public class MailtoRendererTests
 
         new MailtoLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void SupportsContent_DataTargetIsEmptyCustomNode_NotSupported()
     {
@@ -50,18 +50,18 @@ public class MailtoRendererTests
     public void SupportsContent_DataTargetIsCustomNodeWithJObject_OtherId_NotSupported()
     {
         var mailtoLink = new MailtoLink
+                         {
+                             Sys =
                              {
-                                 Sys =
-                                 {
-                                     ContentType = new ContentType
-                                                   {
-                                                       SystemProperties = new SystemProperties
-                                                                          {
-                                                                              Id = "not a mailto link ID"
-                                                                          }
-                                                   }
-                                 }
-                             };
+                                 ContentType = new ContentType
+                                               {
+                                                   SystemProperties = new SystemProperties
+                                                                      {
+                                                                          Id = "not a mailto link ID"
+                                                                      }
+                                               }
+                             }
+                         };
 
         var jObject = JObject.FromObject(mailtoLink);
 
@@ -115,25 +115,25 @@ public class MailtoRendererTests
 
         new MailtoLinkRenderer().SupportsContent(content).Should().BeTrue();
     }
-    
+
     [TestMethod]
     public async Task RenderAsync_RendersATagWithMailto()
     {
-        var mailtoLink = new MailtoLink()
+        var mailtoLink = new MailtoLink
+                         {
+                             Sys =
                              {
-                                 Sys =
-                                 {
-                                     ContentType = new ContentType
-                                                   {
-                                                       SystemProperties = new SystemProperties
-                                                                          {
-                                                                              Id = "mailtoLink"
-                                                                          }
-                                                   }
-                                 },
-                                 Text = "Some Text",
-                                 Email = "Some Email"
-                             };
+                                 ContentType = new ContentType
+                                               {
+                                                   SystemProperties = new SystemProperties
+                                                                      {
+                                                                          Id = "mailtoLink"
+                                                                      }
+                                               }
+                             },
+                             Text = "Some Text",
+                             Email = "Some Email"
+                         };
 
         var jObject = JObject.FromObject(mailtoLink);
 
@@ -149,10 +149,10 @@ public class MailtoRendererTests
                                      Target = customNode
                                  }
                       };
-        
+
         var renderer = new MailtoLinkRenderer();
         var result = await renderer.RenderAsync(content);
 
-        result.Should().Be($"<a class='govuk-link' href='mailto:Some Email'>Some Text</a>");
+        result.Should().Be("<a class='govuk-link' href='mailto:Some Email'>Some Text</a>");
     }
 }

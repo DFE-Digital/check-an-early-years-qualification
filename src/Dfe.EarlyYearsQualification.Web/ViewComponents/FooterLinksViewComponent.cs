@@ -29,20 +29,16 @@ public class FooterLinksViewComponent(IContentService contentService, ILogger<Fo
             return await Task.FromResult(Array.Empty<NavigationLink>().AsEnumerable());
         }
     }
-    
-    private static IEnumerable<NavigationLinkModel> MapToNavigationLinkModels(IEnumerable<NavigationLink> navigationLinks)
-    {
-        var results = new List<NavigationLinkModel>();
-        foreach (var navigationLink in navigationLinks)
-        {
-            results.Add(new NavigationLinkModel()
-                        {
-                            DisplayText = navigationLink.DisplayText,
-                            OpenInNewTab = navigationLink.OpenInNewTab,
-                            Href = navigationLink.Href
-                        });
-        }
 
-        return results.AsEnumerable();
+    private static IEnumerable<NavigationLinkModel> MapToNavigationLinkModels(
+        IEnumerable<NavigationLink> navigationLinks)
+    {
+        return
+            navigationLinks.Select(navigationLink => new NavigationLinkModel
+                                                     {
+                                                         DisplayText = navigationLink.DisplayText,
+                                                         OpenInNewTab = navigationLink.OpenInNewTab,
+                                                         Href = navigationLink.Href
+                                                     });
     }
 }

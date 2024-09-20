@@ -15,7 +15,7 @@ public class ExternalNavigationLinkRendererTests
         var content = new Paragraph();
         new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void SupportsContent_DataTargetIsNull_DoesNotSupport()
     {
@@ -31,7 +31,7 @@ public class ExternalNavigationLinkRendererTests
 
         new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void SupportsContent_DataTargetIsEmptyCustomNode_NotSupported()
     {
@@ -85,18 +85,18 @@ public class ExternalNavigationLinkRendererTests
     public void SupportsContent_DataTargetIsCustomNodeWithJObject_IsSupported()
     {
         var navigationLink = new NavigationLink
-                                  {
-                                      Sys =
-                                      {
-                                          ContentType = new ContentType
-                                                        {
-                                                            SystemProperties = new SystemProperties
-                                                                               {
-                                                                                   Id = "externalNavigationLink"
-                                                                               }
-                                                        }
-                                      }
-                                  };
+                             {
+                                 Sys =
+                                 {
+                                     ContentType = new ContentType
+                                                   {
+                                                       SystemProperties = new SystemProperties
+                                                                          {
+                                                                              Id = "externalNavigationLink"
+                                                                          }
+                                                   }
+                                 }
+                             };
 
         var jObject = JObject.FromObject(navigationLink);
 
@@ -150,13 +150,13 @@ public class ExternalNavigationLinkRendererTests
                                      Target = customNode
                                  }
                       };
-        
+
         var renderer = new ExternalNavigationLinkRenderer();
         var result = await renderer.RenderAsync(content);
 
-        result.Should().Be($"<a href='/' target='_blank' class='govuk-link'>Display text</a>");
+        result.Should().Be("<a href='/' target='_blank' class='govuk-link'>Display text</a>");
     }
-    
+
     [TestMethod]
     public async Task RenderAsync_ExcludesTarget()
     {
@@ -191,10 +191,10 @@ public class ExternalNavigationLinkRendererTests
                                      Target = customNode
                                  }
                       };
-        
+
         var renderer = new ExternalNavigationLinkRenderer();
         var result = await renderer.RenderAsync(content);
 
-        result.Should().Be($"<a href='/' class='govuk-link'>Display text</a>");
+        result.Should().Be("<a href='/' class='govuk-link'>Display text</a>");
     }
 }

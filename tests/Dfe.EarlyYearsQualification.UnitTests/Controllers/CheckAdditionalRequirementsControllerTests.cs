@@ -352,7 +352,7 @@ public class CheckAdditionalRequirementsControllerTests
                    FromWhichYear = "Aug-14", QualificationNumber = "ABC/123/789",
                    ToWhichYear = "Additional requirements",
                    AdditionalRequirementQuestions = additionalRequirementQuestions,
-                   RatioRequirements = new List<RatioRequirement>()
+                   RatioRequirements = []
                };
     }
 

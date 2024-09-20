@@ -59,14 +59,20 @@ public class NestedContentHelperTests
 
         output.Should().Be("Some text");
     }
-    
+
     [TestMethod]
     public void ContentHelper_RenderBoldText()
     {
-        var text = new Text { Value = "Some text", Marks = [ new Mark
-                                                             {
-                                                                 Type = "bold"
-                                                             }]};
+        var text = new Text
+                   {
+                       Value = "Some text", Marks =
+                       [
+                           new Mark
+                           {
+                               Type = "bold"
+                           }
+                       ]
+                   };
 
         var content = new List<IContent> { text };
 
@@ -135,24 +141,24 @@ public class NestedContentHelperTests
                          };
 
         var entryStructure = new EntryStructure
-                      {
-                          Data = new EntryStructureData
-                                 {
-                                     Target = customNode
-                                 }
-                      };
-        
+                             {
+                                 Data = new EntryStructureData
+                                        {
+                                            Target = customNode
+                                        }
+                             };
+
         var content = new List<IContent> { entryStructure };
-        
+
         var output = NestedContentHelper.Render(content).Result;
-        
-        output.Should().Be($"<a href='/' target='_blank' class='govuk-link'>Display text</a>");
+
+        output.Should().Be("<a href='/' target='_blank' class='govuk-link'>Display text</a>");
     }
-    
+
     [TestMethod]
     public void ContentHelper_RenderMailtoLink()
     {
-        var navigationLink = new MailtoLink()
+        var navigationLink = new MailtoLink
                              {
                                  Sys =
                                  {
@@ -182,11 +188,11 @@ public class NestedContentHelperTests
                                             Target = customNode
                                         }
                              };
-        
+
         var content = new List<IContent> { entryStructure };
-        
+
         var output = NestedContentHelper.Render(content).Result;
-        
+
         output.Should().Be("<a class='govuk-link' href='mailto:Some Email'>Display Text</a>");
     }
 }

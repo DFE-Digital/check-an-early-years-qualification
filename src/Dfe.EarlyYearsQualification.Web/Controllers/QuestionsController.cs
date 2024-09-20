@@ -63,19 +63,17 @@ public class QuestionsController(
 
         userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option);
 
-        switch (model.Option)
-        {
-            case QualificationAwardLocation.OutsideOfTheUnitedKingdom:
-                return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
-            case QualificationAwardLocation.Scotland:
-                return RedirectToAction("QualificationsAchievedInScotland", "Advice");
-            case QualificationAwardLocation.Wales:
-                return RedirectToAction("QualificationsAchievedInWales", "Advice");
-            case QualificationAwardLocation.NorthernIreland:
-                return RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice");
-        }
-
-        return RedirectToAction(nameof(this.WhenWasTheQualificationStarted));
+        return model.Option switch
+               {
+                   QualificationAwardLocation.OutsideOfTheUnitedKingdom =>
+                       RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice"),
+                   QualificationAwardLocation.Scotland =>
+                       RedirectToAction("QualificationsAchievedInScotland", "Advice"),
+                   QualificationAwardLocation.Wales => RedirectToAction("QualificationsAchievedInWales", "Advice"),
+                   QualificationAwardLocation.NorthernIreland =>
+                       RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice"),
+                   _ => RedirectToAction(nameof(this.WhenWasTheQualificationStarted))
+               };
     }
 
     [HttpGet("when-was-the-qualification-started")]
@@ -312,6 +310,8 @@ public class QuestionsController(
         model.ErrorMessage = placeholderUpdater.Replace(validationResult?.ErrorMessage ?? question.ErrorMessage);
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
         model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
+
+        // ReSharper disable once InvertIf
         if (selectedMonth.HasValue && selectedYear.HasValue)
         {
             model.SelectedMonth = selectedMonth.Value;

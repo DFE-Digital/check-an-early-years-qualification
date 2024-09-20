@@ -2,7 +2,10 @@ namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
 public class CheckServiceAccessKeysHelper(IConfiguration configuration) : ICheckServiceAccessKeysHelper
 {
-    public bool AllowPublicAccess => configuration.GetValue<bool>("ServiceAccess:IsPublic");
+    public bool AllowPublicAccess
+    {
+        get { return configuration.GetValue<bool>("ServiceAccess:IsPublic"); }
+    }
 
     public IEnumerable<string> ConfiguredKeys
     {

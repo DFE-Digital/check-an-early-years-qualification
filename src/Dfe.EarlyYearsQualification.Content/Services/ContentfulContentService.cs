@@ -12,17 +12,8 @@ namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentService : IContentService
 {
-
     private readonly IContentfulClient _contentfulClient;
-    private readonly ILogger<ContentfulContentService> _logger;
-    public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
-    {
-        _contentfulClient = contentfulClient;
-        _contentfulClient.ContentTypeResolver = new EntityResolver();
 
-        _logger = logger;
-    }
-    
     private readonly Dictionary<object, string> _contentTypes
         = new()
           {
@@ -41,8 +32,18 @@ public class ContentfulContentService : IContentService
               { typeof(QualificationListPage), ContentTypes.QualificationListPage },
               { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage },
               { typeof(CheckAdditionalRequirementsPage), ContentTypes.CheckAdditionalRequirementsPage },
-              { typeof(ChallengePage), ContentTypes.ChallengePage}
+              { typeof(ChallengePage), ContentTypes.ChallengePage }
           };
+
+    private readonly ILogger<ContentfulContentService> _logger;
+
+    public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
+    {
+        _contentfulClient = contentfulClient;
+        _contentfulClient.ContentTypeResolver = new EntityResolver();
+
+        _logger = logger;
+    }
 
     public async Task<StartPage?> GetStartPage()
     {
@@ -211,6 +212,9 @@ public class ContentfulContentService : IContentService
     public async Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage()
     {
         var checkAdditionalRequirementsPageEntities = await GetEntriesByType<CheckAdditionalRequirementsPage>();
+
+        // ReSharper disable once InvertIf
+        // ...more legible as it is
         if (checkAdditionalRequirementsPageEntities is null || !checkAdditionalRequirementsPageEntities.Any())
         {
             _logger.LogWarning("No CheckAdditionalRequirementsPage entry returned");

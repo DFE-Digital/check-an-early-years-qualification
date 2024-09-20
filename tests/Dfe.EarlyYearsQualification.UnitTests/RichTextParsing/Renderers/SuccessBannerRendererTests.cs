@@ -27,13 +27,13 @@ public class SuccessBannerRendererTests
         var para = new Hyperlink();
         new SuccessBannerRenderer().SupportsContent(para).Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void GovUkParagraphRenderer_SupportsParaWithCustomNodeType()
     {
         var para = new Paragraph
                    {
-                       NodeType = "SuccessBannerContent",
+                       NodeType = "SuccessBannerContent"
                    };
         new SuccessBannerRenderer().SupportsContent(para).Should().BeTrue();
     }

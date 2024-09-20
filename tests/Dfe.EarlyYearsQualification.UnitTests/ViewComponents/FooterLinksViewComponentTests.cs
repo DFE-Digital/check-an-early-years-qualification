@@ -33,10 +33,17 @@ public class FooterLinksViewComponentTests
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
         model.Should().NotBeNull();
 
-        var data = model as List<NavigationLinkModel>;
-        data.Should().NotBeNull();
+        var data = model as IEnumerable<NavigationLinkModel>;
 
-        data![0].DisplayText.Should().Be(navigationLink.DisplayText);
+        var navigationLinkModels = data!.ToList();
+
+        navigationLinkModels.Should().NotBeNull();
+
+        var linkModel = navigationLinkModels[0];
+
+        linkModel.DisplayText.Should().Be(navigationLink.DisplayText);
+        linkModel.Href.Should().Be(navigationLink.Href);
+        linkModel.OpenInNewTab.Should().Be(navigationLink.OpenInNewTab);
     }
 
     [TestMethod]

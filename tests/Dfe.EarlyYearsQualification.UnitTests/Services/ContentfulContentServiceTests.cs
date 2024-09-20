@@ -25,7 +25,8 @@ public class ContentfulContentServiceTests
     {
         _logger = new Mock<ILogger<ContentfulContentService>>();
         _clientMock = new Mock<IContentfulClient>();
-        _clientMock.Setup(x => x.SerializerSettings).Returns(new JsonSerializerSettings { Converters = new List<JsonConverter>()});
+        _clientMock.Setup(x => x.SerializerSettings)
+                   .Returns(new JsonSerializerSettings { Converters = new List<JsonConverter>() });
     }
 
     [TestMethod]
@@ -33,7 +34,7 @@ public class ContentfulContentServiceTests
     {
         var startPage = new StartPage { CtaButtonText = "CtaButton" };
 
-        var pages = new ContentfulCollection<StartPage> { Items = new[] { startPage } };
+        var pages = new ContentfulCollection<StartPage> { Items = [startPage] };
 
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -138,7 +139,7 @@ public class ContentfulContentServiceTests
         var accessibilityStatementPage = new AccessibilityStatementPage { Heading = "Heading" };
 
         var pages = new ContentfulCollection<AccessibilityStatementPage>
-                    { Items = new[] { accessibilityStatementPage } };
+                    { Items = [accessibilityStatementPage] };
 
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -206,7 +207,7 @@ public class ContentfulContentServiceTests
                               SuccessBannerContent = ContentfulContentHelper.Paragraph("SuccessBannerContentHtml")
                           };
 
-        var pages = new ContentfulCollection<CookiesPage> { Items = new[] { cookiesPage } };
+        var pages = new ContentfulCollection<CookiesPage> { Items = [cookiesPage] };
 
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
@@ -362,7 +363,6 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
-        
         _clientMock.Setup(client =>
                               client.GetEntriesByType(
                                                       It.IsAny<string>(),
@@ -763,10 +763,10 @@ public class ContentfulContentServiceTests
         result!.PhaseName.Should().Be(phaseBanner.PhaseName);
         result.Content.Should().NotBeNull();
         result.Content!.Content.Should().ContainSingle(x => ((Paragraph)x).NodeType == "PhaseBanner");
-        
-        var para = result.Content!.Content.First() as Paragraph; 
+
+        var para = result.Content!.Content[0] as Paragraph;
         para!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
-        
+
         result.Show.Should().Be(phaseBanner.Show);
     }
 
@@ -842,13 +842,13 @@ public class ContentfulContentServiceTests
         result.AcceptedCookiesContent.Should().Be(cookiesBanner.AcceptedCookiesContent);
         result.AcceptedCookiesContent!.Content.Should().ContainSingle(x => x is Paragraph);
 
-        var acceptedCookiesContentPara = result.AcceptedCookiesContent!.Content.First() as Paragraph; 
+        var acceptedCookiesContentPara = result.AcceptedCookiesContent!.Content[0] as Paragraph;
         acceptedCookiesContentPara!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
-        
+
         result.CookiesBannerContent.Should().Be(cookiesBanner.CookiesBannerContent);
         result.CookiesBannerContent!.Content.Should().ContainSingle(x => x is Paragraph);
-        
-        var cookiesContentPara = result.AcceptedCookiesContent!.Content.First() as Paragraph; 
+
+        var cookiesContentPara = result.CookiesBannerContent!.Content[0] as Paragraph;
         cookiesContentPara!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
 
         result.CookiesBannerLinkText.Should().Be(cookiesBanner.CookiesBannerLinkText);
@@ -858,8 +858,8 @@ public class ContentfulContentServiceTests
 
         result.RejectedCookiesContent.Should().Be(cookiesBanner.RejectedCookiesContent);
         result.RejectedCookiesContent!.Content.Should().ContainSingle(x => x is Paragraph);
-        
-        var rejectedCookiesContent = result.AcceptedCookiesContent!.Content.First() as Paragraph; 
+
+        var rejectedCookiesContent = result.RejectedCookiesContent!.Content[0] as Paragraph;
         rejectedCookiesContent!.Content.Should().ContainSingle(x => ((Text)x).Value == "TEST");
     }
 
@@ -953,11 +953,11 @@ public class ContentfulContentServiceTests
 
         result.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetChallengePage_ReturnsPage()
     {
-        var page = new ChallengePage() { MainHeading = "Test heading" };
+        var page = new ChallengePage { MainHeading = "Test heading" };
 
         _clientMock.Setup(c =>
                               c.GetEntriesByType(It.IsAny<string>(),
@@ -971,7 +971,7 @@ public class ContentfulContentServiceTests
 
         result.Should().Be(page);
     }
-    
+
     [TestMethod]
     public async Task GetChallengePage_ContentfulHasNoPage_ReturnsNull()
     {

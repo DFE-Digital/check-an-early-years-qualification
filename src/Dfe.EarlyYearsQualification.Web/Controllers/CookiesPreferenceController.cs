@@ -100,8 +100,7 @@ public class CookiesPreferenceController(
                    SuccessBannerHeading = content.SuccessBannerHeading,
                    ErrorText = content.ErrorText,
                    BackButton = MapToNavigationLinkModel(content.BackButton),
-                   FormHeading = content.FormHeading,
-                   
+                   FormHeading = content.FormHeading
                };
     }
 }
