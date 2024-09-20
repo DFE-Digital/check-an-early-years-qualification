@@ -15,7 +15,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class AdviceController(
     ILogger<AdviceController> logger,
     IContentService contentService,
-    IGovUkContentfulParser contentfulParser,
+    IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
@@ -106,7 +106,7 @@ public class AdviceController(
         return new AdvicePageModel
                {
                    Heading = advicePage.Heading,
-                   BodyContent = await contentfulParser.ToHtml(advicePage.Body),
+                   BodyContent = await contentParser.ToHtml(advicePage.Body),
                    BackButton = MapToNavigationLinkModel(advicePage.BackButton)
                };
     }

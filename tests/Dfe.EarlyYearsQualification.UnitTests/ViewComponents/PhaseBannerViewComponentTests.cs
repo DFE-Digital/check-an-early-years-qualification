@@ -24,9 +24,9 @@ public class PhaseBannerViewComponentTests
         contentMock.Setup(x => x.GetPhaseBannerContent()).ReturnsAsync((PhaseBanner?)null);
 
         var logger = new Mock<ILogger<PhaseBannerViewComponent>>();
-        var rendererMock = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
-        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, rendererMock.Object);
+        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, mockContentParser.Object);
 
         await component.InvokeAsync();
 
@@ -50,11 +50,11 @@ public class PhaseBannerViewComponentTests
                    .ReturnsAsync(phaseBanner);
 
         var logger = new Mock<ILogger<PhaseBannerViewComponent>>();
-        var rendererMock = new Mock<IGovUkContentfulParser>();
-        rendererMock.Setup(x => x.ToHtml(It.IsAny<Document>()))
-                    .ReturnsAsync(expectedHtml);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>()))
+                         .ReturnsAsync(expectedHtml);
 
-        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, rendererMock.Object);
+        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, mockContentParser.Object);
 
         var result = await component.InvokeAsync();
 

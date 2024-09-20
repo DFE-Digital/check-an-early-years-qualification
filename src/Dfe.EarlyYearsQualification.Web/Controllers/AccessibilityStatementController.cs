@@ -11,7 +11,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class AccessibilityStatementController(
     ILogger<AccessibilityStatementController> logger,
     IContentService contentService,
-    IGovUkContentfulParser contentfulParser)
+    IGovUkContentParser contentParser)
     : ServiceController
 {
     [HttpGet]
@@ -35,7 +35,7 @@ public class AccessibilityStatementController(
         return new AccessibilityStatementPageModel
                {
                    Heading = content.Heading,
-                   BodyContent = await contentfulParser.ToHtml(content.Body),
+                   BodyContent = await contentParser.ToHtml(content.Body),
                    BackButton = MapToNavigationLinkModel(content.BackButton)
                };
     }

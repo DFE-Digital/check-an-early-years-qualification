@@ -11,7 +11,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class HomeController(
     ILogger<HomeController> logger,
     IContentService contentService,
-    IGovUkContentfulParser contentfulParser,
+    IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
@@ -37,11 +37,11 @@ public class HomeController(
         return new StartPageModel
                {
                    Header = startPageContent.Header,
-                   PreCtaButtonContent = await contentfulParser.ToHtml(startPageContent.PreCtaButtonContent),
+                   PreCtaButtonContent = await contentParser.ToHtml(startPageContent.PreCtaButtonContent),
                    CtaButtonText = startPageContent.CtaButtonText,
-                   PostCtaButtonContent = await contentfulParser.ToHtml(startPageContent.PostCtaButtonContent),
+                   PostCtaButtonContent = await contentParser.ToHtml(startPageContent.PostCtaButtonContent),
                    RightHandSideContentHeader = startPageContent.RightHandSideContentHeader,
-                   RightHandSideContent = await contentfulParser.ToHtml(startPageContent.RightHandSideContent)
+                   RightHandSideContent = await contentParser.ToHtml(startPageContent.RightHandSideContent)
                };
     }
 }

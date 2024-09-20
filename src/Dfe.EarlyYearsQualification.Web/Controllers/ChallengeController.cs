@@ -13,7 +13,7 @@ public class ChallengeController(
     ILogger<ChallengeController> logger,
     IUrlHelper urlHelper,
     IContentService contentService,
-    IGovUkContentfulParser contentfulParser,
+    IGovUkContentParser contentParser,
     ICheckServiceAccessKeysHelper accessKeysHelper)
     : Controller
 {
@@ -118,9 +118,9 @@ public class ChallengeController(
     private async Task<ChallengePageModel> Map(ChallengePageModel model, ChallengePage content)
     {
         model.RedirectAddress = SanitiseReferralAddress(model.RedirectAddress);
-        model.FooterContent = await contentfulParser.ToHtml(content.FooterContent);
+        model.FooterContent = await contentParser.ToHtml(content.FooterContent);
         model.InputHeading = content.InputHeading;
-        model.MainContent = await contentfulParser.ToHtml(content.MainContent);
+        model.MainContent = await contentParser.ToHtml(content.MainContent);
         model.MainHeading = content.MainHeading;
         model.SubmitButtonText = content.SubmitButtonText;
         model.ShowPasswordButtonText = content.ShowPasswordButtonText;

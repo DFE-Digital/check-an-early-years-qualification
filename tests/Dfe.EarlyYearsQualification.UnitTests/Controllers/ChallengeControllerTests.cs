@@ -25,7 +25,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
@@ -38,7 +38,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -64,7 +64,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var mockContentfulService = new MockContentfulService();
@@ -77,7 +77,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -103,7 +103,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var mockContentfulService = new MockContentfulService();
@@ -113,7 +113,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -136,7 +136,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var accessKeys = new List<string>
@@ -169,7 +169,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -203,7 +203,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var accessKeys = new List<string>
@@ -236,7 +236,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -270,7 +270,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var accessKeys = new List<string>
@@ -303,7 +303,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -334,7 +334,7 @@ public class ChallengeControllerTests
     {
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var mockContentfulService = new MockContentfulService();
@@ -349,7 +349,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         var result = await controller.Post(new ChallengePageModel { RedirectAddress = "/", PasswordValue = " \t " });
@@ -373,7 +373,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var mockContentfulService = new MockContentfulService();
@@ -383,7 +383,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -405,13 +405,13 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -434,13 +434,13 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -463,7 +463,7 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var htmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
 
         var mockContentfulService = new MockContentfulService();
@@ -479,7 +479,7 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 htmlRenderer.Object,
+                                                 mockContentParser.Object,
                                                  accessKeysHelper.Object);
 
         controller.ControllerContext = new ControllerContext

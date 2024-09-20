@@ -9,7 +9,7 @@ namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 public class PhaseBannerViewComponent(
     IContentService contentService,
     ILogger<PhaseBannerViewComponent> logger,
-    IGovUkContentfulParser contentfulParser)
+    IGovUkContentParser contentParser)
     : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
@@ -33,7 +33,7 @@ public class PhaseBannerViewComponent(
                {
                    PhaseName = content.PhaseName,
                    Show = content.Show,
-                   Content = await contentfulParser.ToHtml(content.Content)
+                   Content = await contentParser.ToHtml(content.Content)
                };
     }
 }

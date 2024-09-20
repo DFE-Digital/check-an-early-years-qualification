@@ -24,13 +24,13 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -53,13 +53,13 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -88,13 +88,13 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -123,7 +123,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
@@ -145,7 +145,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -167,7 +167,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
@@ -189,7 +189,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -211,7 +211,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
@@ -248,7 +248,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -276,7 +276,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
@@ -323,7 +323,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -362,7 +362,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
@@ -392,7 +392,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -410,7 +410,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
@@ -447,7 +447,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -465,7 +465,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
@@ -507,7 +507,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -525,7 +525,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         const string qualificationId = "eyq-145";
@@ -589,7 +589,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -626,7 +626,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         mockUserJourneyCookieService.Setup(x => x.UserHasAnsweredAdditionalQuestions())
@@ -696,7 +696,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -722,7 +722,7 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         mockContentFilterService
@@ -737,7 +737,7 @@ public class QualificationDetailsControllerTests
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -768,13 +768,13 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -802,13 +802,13 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -832,13 +832,13 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -862,13 +862,13 @@ public class QualificationDetailsControllerTests
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
         var mockContentService = new Mock<IContentService>();
         var mockContentFilterService = new Mock<IContentFilterService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
             new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
                                                mockContentFilterService.Object,
-                                               mockHtmlRenderer.Object, mockUserJourneyCookieService.Object)
+                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {

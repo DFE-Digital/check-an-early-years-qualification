@@ -1,10 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 using Microsoft.Extensions.DependencyInjection;
-using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.ParagraphRenderer;
-using TableCellRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableCellRenderer;
-using TableRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableRenderer;
-using TableRowRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableRowRenderer;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing;
 
@@ -17,7 +13,7 @@ public static class RendererRegistrationExtension
         
         services.AddSingleton<IContentRenderer>(new PhaseBannerRenderer { Order = 1 })
                 .AddSingleton<IContentRenderer>(new SuccessBannerRenderer { Order = 2 })
-                .AddSingleton<IContentRenderer>(new ParagraphRenderer { Order = 3 })
+                .AddSingleton<IContentRenderer>(new Renderers.ParagraphRenderer { Order = 3 })
                 .AddSingleton<IContentRenderer>(new ExternalNavigationLinkRenderer { Order = 4 })
                 .AddSingleton<IContentRenderer>(new Heading1Renderer { Order = 5 })
                 .AddSingleton<IContentRenderer>(new Heading2Renderer { Order = 6 })
@@ -28,14 +24,14 @@ public static class RendererRegistrationExtension
                 .AddSingleton<IContentRenderer>(new HyperlinkRenderer { Order = 11 })
                 .AddSingleton<IContentRenderer>(new InsetTextRenderer { Order = 12 })
                 .AddSingleton<IContentRenderer>(new MailtoLinkRenderer { Order = 13 })
-                .AddSingleton<IContentRenderer>(new TableCellRenderer { Order = 14 })
+                .AddSingleton<IContentRenderer>(new Renderers.TableCellRenderer { Order = 14 })
                 .AddSingleton<IContentRenderer>(new TableHeadingRenderer { Order = 15 })
-                .AddSingleton<IContentRenderer>(new TableRenderer { Order = 16 })
-                .AddSingleton<IContentRenderer>(new TableRowRenderer { Order = 17 })
+                .AddSingleton<IContentRenderer>(new Renderers.TableRenderer { Order = 16 })
+                .AddSingleton<IContentRenderer>(new Renderers.TableRowRenderer { Order = 17 })
                 .AddSingleton<IContentRenderer>(new UnorderedListRenderer { Order = 18 })
                 .AddSingleton<IContentRenderer>(new UnorderedListHyperlinksRenderer { Order = 19 });
         
         // Register GovUk parser after each renderer registration
-        services.AddTransient<IGovUkContentfulParser, GovUkContentfulParser>();
+        services.AddTransient<IGovUkContentParser, GovUkContentParser>();
     }
 }

@@ -13,7 +13,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class CookiesPreferenceController(
     ILogger<CookiesPreferenceController> logger,
     IContentService contentService,
-    IGovUkContentfulParser contentfulParser,
+    IGovUkContentParser contentParser,
     ICookiesPreferenceService cookieService,
     IUrlHelper urlHelper)
     : ServiceController
@@ -93,10 +93,10 @@ public class CookiesPreferenceController(
         return new CookiesPageModel
                {
                    Heading = content.Heading,
-                   BodyContent = await contentfulParser.ToHtml(content.Body),
+                   BodyContent = await contentParser.ToHtml(content.Body),
                    Options = content.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList(),
                    ButtonText = content.ButtonText,
-                   SuccessBannerContent = await contentfulParser.ToHtml(content.SuccessBannerContent),
+                   SuccessBannerContent = await contentParser.ToHtml(content.SuccessBannerContent),
                    SuccessBannerHeading = content.SuccessBannerHeading,
                    ErrorText = content.ErrorText,
                    BackButton = MapToNavigationLinkModel(content.BackButton),

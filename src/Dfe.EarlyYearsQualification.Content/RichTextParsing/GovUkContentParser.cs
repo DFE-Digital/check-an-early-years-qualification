@@ -5,11 +5,11 @@ namespace Dfe.EarlyYearsQualification.Content.RichTextParsing;
 /// <summary>
 ///     A class to turn a contentful rich text field (Document object) into a GovUk styled HTML string
 /// </summary>
-public class GovUkContentfulParser : IGovUkContentfulParser
+public class GovUkContentParser : IGovUkContentParser
 {
     private readonly HtmlRenderer _renderer = new();
 
-    public GovUkContentfulParser(IEnumerable<IContentRenderer> renderers)
+    public GovUkContentParser(IEnumerable<IContentRenderer> renderers)
     {
         foreach (var renderer in renderers)
         {

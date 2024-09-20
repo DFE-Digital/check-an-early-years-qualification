@@ -119,7 +119,7 @@ public class RendererRegistrationExtensionTests
                                              && s.Lifetime == ServiceLifetime.Singleton);
         
         services.Should().ContainSingle(s => s.ServiceType == typeof(IGovUkContentfulParser)
-                                       && s.ImplementationType == typeof(GovUkContentfulParser)
+                                       && s.ImplementationType == typeof(GovUkContentParser)
                                        && s.Lifetime == ServiceLifetime.Transient);
 
         

@@ -7,7 +7,7 @@ using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Re
 namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing;
 
 [TestClass]
-public class GovUkContentfulParserTests
+public class GovUkContentParserTests
 {
     [TestMethod]
     public async Task GovUkContentfulParser_ConstructedWithRenderer_NoContent_ReturnsEmptyString()
@@ -17,7 +17,7 @@ public class GovUkContentfulParserTests
                             new ParagraphRenderer(),
                         };
 
-        var govUkContentfulParser = new GovUkContentfulParser(renderers);
+        var govUkContentfulParser = new GovUkContentParser(renderers);
 
         var result = await govUkContentfulParser.ToHtml(null);
         result.Should().Be(string.Empty);
@@ -31,7 +31,7 @@ public class GovUkContentfulParserTests
                             new ParagraphRenderer(),
                         };
 
-        var govUkContentfulParser = new GovUkContentfulParser(renderers);
+        var govUkContentfulParser = new GovUkContentParser(renderers);
 
         var result = await govUkContentfulParser.ToHtml(ContentfulContentHelper.Paragraph("TEST"));
         result.Should().Be("<p class=\"govuk-body\">TEST</p>");

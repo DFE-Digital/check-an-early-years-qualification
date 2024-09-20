@@ -9,7 +9,7 @@ namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 public class CookiesBannerViewComponent(
     IContentService contentService,
     ILogger<CookiesBannerViewComponent> logger,
-    IGovUkContentfulParser contentfulParser)
+    IGovUkContentParser contentParser)
     : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
@@ -35,12 +35,12 @@ public class CookiesBannerViewComponent(
         return new CookiesBannerModel
                {
                    AcceptButtonText = content.AcceptButtonText,
-                   AcceptedCookiesContent = await contentfulParser.ToHtml(content.AcceptedCookiesContent),
-                   CookiesBannerContent = await contentfulParser.ToHtml(content.CookiesBannerContent),
+                   AcceptedCookiesContent = await contentParser.ToHtml(content.AcceptedCookiesContent),
+                   CookiesBannerContent = await contentParser.ToHtml(content.CookiesBannerContent),
                    CookiesBannerTitle = content.CookiesBannerTitle,
                    CookiesBannerLinkText = content.CookiesBannerLinkText,
                    HideCookieBannerButtonText = content.HideCookieBannerButtonText,
-                   RejectedCookiesContent = await contentfulParser.ToHtml(content.RejectedCookiesContent),
+                   RejectedCookiesContent = await contentParser.ToHtml(content.RejectedCookiesContent),
                    RejectButtonText = content.RejectButtonText,
                    Show = true
                };

@@ -18,7 +18,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class QuestionsController(
     ILogger<QuestionsController> logger,
     IContentService contentService,
-    IGovUkContentfulParser contentfulParser,
+    IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
     IContentFilterService contentFilterService,
     IDateQuestionModelValidator questionModelValidator,
@@ -262,7 +262,7 @@ public class QuestionsController(
         model.ControllerName = controllerName;
         model.ErrorMessage = question.ErrorMessage;
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await contentfulParser.ToHtml(question.AdditionalInformationBody);
+        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
         model.BackButton = MapToNavigationLinkModel(question.BackButton);
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
@@ -311,7 +311,7 @@ public class QuestionsController(
             placeholderUpdater.Replace(validationResult?.BannerErrorMessage ?? question.ErrorBannerLinkText);
         model.ErrorMessage = placeholderUpdater.Replace(validationResult?.ErrorMessage ?? question.ErrorMessage);
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await contentfulParser.ToHtml(question.AdditionalInformationBody);
+        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
         if (selectedMonth.HasValue && selectedYear.HasValue)
         {
             model.SelectedMonth = selectedMonth.Value;
@@ -364,7 +364,7 @@ public class QuestionsController(
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await contentfulParser.ToHtml(question.AdditionalInformationBody);
+        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
         model.NotInTheList = selectedNotOnTheList;
         model.SelectedValue = selectedAwardingOrganisation;
         return model;

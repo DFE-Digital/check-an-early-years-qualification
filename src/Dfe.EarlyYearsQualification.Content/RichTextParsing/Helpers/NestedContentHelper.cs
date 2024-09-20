@@ -1,7 +1,6 @@
 using System.Text;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
-using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.ParagraphRenderer;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Helpers;
 
@@ -16,7 +15,7 @@ public static class NestedContentHelper
             switch (item)
             {
                 case Paragraph p:
-                    var paragraphRenderer = new ParagraphRenderer();
+                    var paragraphRenderer = new Renderers.ParagraphRenderer();
                     var paragraphText = await paragraphRenderer.RenderAsync(p);
                     sb.Append(paragraphText);
                     continue;

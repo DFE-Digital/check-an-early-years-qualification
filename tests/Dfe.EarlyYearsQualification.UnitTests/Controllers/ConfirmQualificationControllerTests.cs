@@ -24,11 +24,11 @@ public class ConfirmQualificationControllerTests
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         var result = await controller.Index(id);
 
@@ -47,11 +47,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -109,11 +109,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -181,11 +181,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -256,11 +256,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -283,11 +283,11 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel());
 
@@ -312,11 +312,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -389,11 +389,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -471,11 +471,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -512,11 +512,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -554,11 +554,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -595,11 +595,11 @@ public class ConfirmQualificationControllerTests
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
-        var mockHtmlRenderer = new Mock<IGovUkContentfulParser>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockHtmlRenderer.Object);
+                                               mockUserJourneyService.Object, mockContentParser.Object);
 
         await controller.Confirm(new ConfirmQualificationPageModel
                                  {

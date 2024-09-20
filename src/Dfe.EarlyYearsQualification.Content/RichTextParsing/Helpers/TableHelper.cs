@@ -1,8 +1,6 @@
 using System.Text;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
-using TableCellRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableCellRenderer;
-using TableRowRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableRowRenderer;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Helpers;
 
@@ -17,7 +15,7 @@ public static class TableHelper
             switch (item)
             {
                 case TableRow tr:
-                    var tableRowRenderer = new TableRowRenderer();
+                    var tableRowRenderer = new Renderers.TableRowRenderer();
                     var tableRowContent = await tableRowRenderer.RenderAsync(tr);
                     sb.Append(tableRowContent);
                     continue;
@@ -29,7 +27,7 @@ public static class TableHelper
                     continue;
 
                 case TableCell tc:
-                    var tableCellRenderer = new TableCellRenderer();
+                    var tableCellRenderer = new Renderers.TableCellRenderer();
                     var tableCellText = await tableCellRenderer.RenderAsync(tc);
                     sb.Append(tableCellText);
                     continue;

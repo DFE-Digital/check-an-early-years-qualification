@@ -15,7 +15,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class CheckAdditionalRequirementsController(
     ILogger<CheckAdditionalRequirementsController> logger,
     IContentService contentService,
-    IGovUkContentfulParser contentfulParser,
+    IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
@@ -122,7 +122,7 @@ public class CheckAdditionalRequirementsController(
                             Question = additionalRequirementQuestion.Question,
                             HintText = additionalRequirementQuestion.HintText,
                             DetailsHeading = additionalRequirementQuestion.DetailsHeading,
-                            DetailsContent = await contentfulParser.ToHtml(additionalRequirementQuestion.DetailsContent),
+                            DetailsContent = await contentParser.ToHtml(additionalRequirementQuestion.DetailsContent),
                             Options = MapOptions(additionalRequirementQuestion.Answers)
                         });
         }
