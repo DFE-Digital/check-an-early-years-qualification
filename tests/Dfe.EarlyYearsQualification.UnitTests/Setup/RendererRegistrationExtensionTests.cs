@@ -118,7 +118,7 @@ public class RendererRegistrationExtensionTests
                                              && s.ImplementationInstance.GetType() == typeof(UnorderedListHyperlinksRenderer)
                                              && s.Lifetime == ServiceLifetime.Singleton);
         
-        services.Should().ContainSingle(s => s.ServiceType == typeof(IGovUkContentfulParser)
+        services.Should().ContainSingle(s => s.ServiceType == typeof(IGovUkContentParser)
                                        && s.ImplementationType == typeof(GovUkContentParser)
                                        && s.Lifetime == ServiceLifetime.Transient);
 
