@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
 public class AntiForgeryCookieBuilder : CookieBuilder

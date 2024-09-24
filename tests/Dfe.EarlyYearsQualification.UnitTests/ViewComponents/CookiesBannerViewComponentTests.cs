@@ -1,6 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
@@ -22,12 +22,12 @@ public class CookiesBannerViewComponentTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesBannerViewComponent>>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync((CookiesBanner?)default);
 
         var cookiesBannerViewComponent =
-            new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockHtmlRenderer.Object);
+            new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockContentParser.Object);
 
         var result = await cookiesBannerViewComponent.InvokeAsync();
 
@@ -48,7 +48,7 @@ public class CookiesBannerViewComponentTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesBannerViewComponent>>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var expectedContent = new CookiesBanner
                               {
@@ -64,10 +64,10 @@ public class CookiesBannerViewComponentTests
 
         mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync(expectedContent);
 
-        mockHtmlRenderer.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Mock HTML renderer result");
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Mock HTML renderer result");
 
         var cookiesBannerViewComponent =
-            new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockHtmlRenderer.Object);
+            new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockContentParser.Object);
 
         var result = await cookiesBannerViewComponent.InvokeAsync();
 
@@ -88,6 +88,6 @@ public class CookiesBannerViewComponentTests
         data.HideCookieBannerButtonText.Should().Be("Test Hide Cookies Banner Button Text");
         data.Show.Should().BeTrue();
 
-        mockHtmlRenderer.Verify(x => x.ToHtml(expectedContent.CookiesBannerContent), Times.Once);
+        mockContentParser.Verify(x => x.ToHtml(expectedContent.CookiesBannerContent), Times.Once);
     }
 }

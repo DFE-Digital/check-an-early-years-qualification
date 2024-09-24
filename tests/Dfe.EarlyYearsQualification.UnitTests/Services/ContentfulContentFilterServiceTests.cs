@@ -19,28 +19,28 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-741",
-                                                        "test",
-                                                        AwardingOrganisations.Pearson,
-                                                        3)
-                                      {
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "def/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-741",
+                                                "test",
+                                                AwardingOrganisations.Pearson,
+                                                3)
+                              {
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "def/456/951",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
@@ -73,19 +73,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -118,19 +118,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -164,37 +164,37 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-741",
-                                                        "test",
-                                                        AwardingOrganisations.Pearson,
-                                                        4)
-                                      {
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "def/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-752",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Sep-21",
-                                          QualificationNumber = "ghi/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-741",
+                                                "test",
+                                                AwardingOrganisations.Pearson,
+                                                4)
+                              {
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "def/456/951",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-752",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Sep-21",
+                                  QualificationNumber = "ghi/456/951",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
@@ -226,37 +226,37 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-741",
-                                                        "test",
-                                                        AwardingOrganisations.Pearson,
-                                                        4)
-                                      {
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "def/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-752",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Sep-21",
-                                          QualificationNumber = "ghi/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-741",
+                                                "test",
+                                                AwardingOrganisations.Pearson,
+                                                4)
+                              {
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "def/456/951",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-752",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Sep-21",
+                                  QualificationNumber = "ghi/456/951",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
@@ -288,46 +288,46 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-741",
-                                                        "test",
-                                                        AwardingOrganisations.Pearson,
-                                                        4)
-                                      {
-                                          ToWhichYear = "Sep-19",
-                                          QualificationNumber = "def/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-746",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Sep-15",
-                                          QualificationNumber = "ghi/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-752",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Sep-21",
-                                          QualificationNumber = "ghi/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-741",
+                                                "test",
+                                                AwardingOrganisations.Pearson,
+                                                4)
+                              {
+                                  ToWhichYear = "Sep-19",
+                                  QualificationNumber = "def/456/951",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-746",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Sep-15",
+                                  QualificationNumber = "ghi/456/951",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-752",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Sep-21",
+                                  QualificationNumber = "ghi/456/951",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
@@ -359,46 +359,46 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-741",
-                                                        "test",
-                                                        AwardingOrganisations.Pearson,
-                                                        4)
-                                      {
-                                          ToWhichYear = "seP-19",
-                                          QualificationNumber = "def/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-746",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "sEp-15",
-                                          QualificationNumber = "ghi/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-752",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "SEP-21",
-                                          QualificationNumber = "ghi/456/951",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-741",
+                                                "test",
+                                                AwardingOrganisations.Pearson,
+                                                4)
+                              {
+                                  ToWhichYear = "seP-19",
+                                  QualificationNumber = "def/456/951",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-746",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "sEp-15",
+                                  QualificationNumber = "ghi/456/951",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-752",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "SEP-21",
+                                  QualificationNumber = "ghi/456/951",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
         var mockContentfulClient = new Mock<IContentfulClient>();
         mockContentfulClient.Setup(x => x.GetEntries(
@@ -451,20 +451,20 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear =
-                                              "Sep15", // We expect Mmm-yy, e.g. "Sep-15"
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear =
+                                      "Sep15", // We expect Mmm-yy, e.g. "Sep-15"
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -493,20 +493,20 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear =
-                                              "Sept-15", // "Sept" in the data: we expect "Sep"
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear =
+                                      "Sept-15", // "Sept" in the data: we expect "Sep"
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -535,19 +535,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Sep-15",
-                                          ToWhichYear = "Aug-1a", // invalid year typo
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Sep-15",
+                                  ToWhichYear = "Aug-1a", // invalid year typo
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -576,19 +576,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Pearson,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Pearson,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -622,19 +622,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Pearson,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Pearson,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -668,19 +668,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -712,19 +712,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -758,19 +758,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -804,19 +804,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -850,19 +850,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -896,19 +896,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -947,29 +947,29 @@ public class ContentfulContentFilterServiceTests
 
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        technicalDiplomaInChildCare,
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-123",
-                                                        "Diploma in Early Years Child Care",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                technicalDiplomaInChildCare,
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-123",
+                                                "Diploma in Early Years Child Care",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -1010,29 +1010,29 @@ public class ContentfulContentFilterServiceTests
 
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        technicalDiplomaInChildCare,
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      },
-                                      new Qualification("EYQ-123",
-                                                        "Diploma in Early Years Child Care",
-                                                        AwardingOrganisations.Cache,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                technicalDiplomaInChildCare,
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              },
+                              new Qualification("EYQ-123",
+                                                "Diploma in Early Years Child Care",
+                                                AwardingOrganisations.Cache,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -1065,19 +1065,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Apr-15",
-                                          ToWhichYear = "Aug-19",
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Apr-15",
+                                  ToWhichYear = "Aug-19",
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();
@@ -1108,19 +1108,19 @@ public class ContentfulContentFilterServiceTests
     {
         var results = new ContentfulCollection<Qualification>
                       {
-                          Items = new[]
-                                  {
-                                      new Qualification("EYQ-123",
-                                                        "test",
-                                                        AwardingOrganisations.Ncfe,
-                                                        4)
-                                      {
-                                          FromWhichYear = "Aug-15",
-                                          ToWhichYear = null,
-                                          QualificationNumber = "abc/123/987",
-                                          AdditionalRequirements = "requirements"
-                                      }
-                                  }
+                          Items =
+                          [
+                              new Qualification("EYQ-123",
+                                                "test",
+                                                AwardingOrganisations.Ncfe,
+                                                4)
+                              {
+                                  FromWhichYear = "Aug-15",
+                                  ToWhichYear = null,
+                                  QualificationNumber = "abc/123/987",
+                                  AdditionalRequirements = "requirements"
+                              }
+                          ]
                       };
 
         var mockContentfulClient = new Mock<IContentfulClient>();

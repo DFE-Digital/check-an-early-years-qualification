@@ -1,5 +1,3 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class QualificationDetailsModel : BasicQualificationModel

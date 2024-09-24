@@ -68,29 +68,29 @@ public class MockContentfulFilterService : IContentFilterService
                    ToWhichYear = endDate,
                    QualificationNumber = "ghi/456/123",
                    AdditionalRequirements = "Additional requirements",
-                   AdditionalRequirementQuestions = new List<AdditionalRequirementQuestion>
-                                                    {
-                                                        new()
-                                                        {
-                                                            Question =
-                                                                "Answer 'yes' for this to be full and relevant",
-                                                            AnswerToBeFullAndRelevant = true,
-                                                            Answers =
-                                                            [
-                                                                new Option
-                                                                {
-                                                                    Label = "Yes",
-                                                                    Value = "yes"
-                                                                },
+                   AdditionalRequirementQuestions =
+                   [
+                       new AdditionalRequirementQuestion
+                       {
+                           Question =
+                               "Answer 'yes' for this to be full and relevant",
+                           AnswerToBeFullAndRelevant = true,
+                           Answers =
+                           [
+                               new Option
+                               {
+                                   Label = "Yes",
+                                   Value = "yes"
+                               },
 
-                                                                new Option
-                                                                {
-                                                                    Label = "No",
-                                                                    Value = "no"
-                                                                }
-                                                            ]
-                                                        }
-                                                    }
+                               new Option
+                               {
+                                   Label = "No",
+                                   Value = "no"
+                               }
+                           ]
+                       }
+                   ]
                };
     }
 }
