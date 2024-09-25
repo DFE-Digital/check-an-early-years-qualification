@@ -2,7 +2,7 @@ using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 
 namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
-public class GtmConfiguration(ICookiesPreferenceService cookiesPreferenceService, IConfiguration configuration)
+public class TrackingConfiguration(ICookiesPreferenceService cookiesPreferenceService, IConfiguration configuration)
 {
     private readonly DfeCookie _cookie = cookiesPreferenceService.GetCookie();
 
@@ -14,5 +14,10 @@ public class GtmConfiguration(ICookiesPreferenceService cookiesPreferenceService
     public string GtmTag
     {
         get { return configuration.GetValue<string>("GTM:Tag") ?? ""; }
+    }
+
+    public string ClarityTag
+    {
+        get { return configuration.GetValue<string>("Clarity:Tag") ?? ""; }
     }
 }
