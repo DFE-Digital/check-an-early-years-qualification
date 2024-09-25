@@ -54,7 +54,7 @@ public static class ContentfulContentHelper
                                {
                                    Value = text, Marks =
                                    [
-                                       new Mark()
+                                       new Mark
                                        {
                                            Type = "bold"
                                        }

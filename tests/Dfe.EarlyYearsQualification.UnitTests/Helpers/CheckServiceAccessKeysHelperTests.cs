@@ -1,7 +1,6 @@
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Helpers;
 
@@ -26,7 +25,7 @@ public class CheckServiceAccessKeysHelperTests
 
         result.Should().Be(false);
     }
-    
+
     [TestMethod]
     public void AllowPublicAccess_ConfigSetAsTrue_ReturnsTrue()
     {
@@ -48,11 +47,11 @@ public class CheckServiceAccessKeysHelperTests
 
     [TestMethod]
     public void ConfiguredKeys_NoKeys_ReturnsEmptyArray()
-    { 
+    {
         var configuration = new ConfigurationBuilder()
-                          .AddInMemoryCollection(new Dictionary<string, string?>())
-                          .Build();
-        
+                            .AddInMemoryCollection(new Dictionary<string, string?>())
+                            .Build();
+
         var helper = new CheckServiceAccessKeysHelper(configuration);
 
         var result = helper.ConfiguredKeys;
@@ -66,14 +65,14 @@ public class CheckServiceAccessKeysHelperTests
         var dic = new Dictionary<string, string?>
                   {
                       { "ServiceAccess:Keys:0", " " },
-                      { "ServiceAccess:Keys:1", "\t" },
+                      { "ServiceAccess:Keys:1", "\t" }
                   };
         var configuration = new ConfigurationBuilder()
                             .AddInMemoryCollection(dic)
                             .Build();
-        
+
         var helper = new CheckServiceAccessKeysHelper(configuration);
-        
+
         var result = helper.ConfiguredKeys;
 
         result.Count().Should().Be(0);
@@ -85,14 +84,14 @@ public class CheckServiceAccessKeysHelperTests
         var dic = new Dictionary<string, string?>
                   {
                       { "ServiceAccess:Keys:0", "Some Key" },
-                      { "ServiceAccess:Keys:1", "Another Key" },
+                      { "ServiceAccess:Keys:1", "Another Key" }
                   };
         var configuration = new ConfigurationBuilder()
                             .AddInMemoryCollection(dic)
                             .Build();
-        
+
         var helper = new CheckServiceAccessKeysHelper(configuration);
-        
+
         var result = helper.ConfiguredKeys.ToArray();
 
         result.Length.Should().Be(2);

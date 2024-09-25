@@ -207,12 +207,12 @@ public class UserJourneyCookieServiceTests
 
         model.Should().Be(AwardingOrganisations.Ncfe);
     }
-    
+
     [TestMethod]
     public void GetAwardingOrganisationIsNotOnList_CookieValueIsFalse_ReturnsValue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel();
-        
+
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
@@ -222,12 +222,13 @@ public class UserJourneyCookieServiceTests
 
         model.Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void GetAwardingOrganisationIsNotOnList_CookieValueIsTrue_ReturnsValue()
     {
-        var existingModel = new UserJourneyCookieService.UserJourneyModel { SelectedAwardingOrganisationNotOnTheList = true };
-        
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            { SelectedAwardingOrganisationNotOnTheList = true };
+
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
@@ -729,7 +730,7 @@ public class UserJourneyCookieServiceTests
 
         service.UserHasAnsweredAdditionalQuestions().Should().BeTrue();
     }
-    
+
     [TestMethod]
     public void SetAwardingOrganisationNotOnList_True_SetsCookieToTrue()
     {
@@ -745,12 +746,12 @@ public class UserJourneyCookieServiceTests
                                                           SelectedAwardingOrganisationNotOnTheList = true
                                                       });
     }
-    
+
     [TestMethod]
     public void SetAwardingOrganisationNotOnList_False_SetsCookieToFalse()
     {
-        var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel 
-                                                                                            { SelectedAwardingOrganisationNotOnTheList = true });
+        var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel
+                                                                   { SelectedAwardingOrganisationNotOnTheList = true });
 
         var service = new UserJourneyCookieService(mockCookieManager.cookieManager.Object,
                                                    NullLogger<UserJourneyCookieService>.Instance);
@@ -848,11 +849,7 @@ public class UserJourneyCookieServiceTests
                         WhatIsTheAwardingOrganisation = "Awarding Organisation"
                     };
 
-        var testObjects =
-            SetCookieManagerWithExistingCookie(model);
-
-        var manager = testObjects.cookieManager;
-        var cookies = testObjects.cookies;
+        var (manager, cookies) = SetCookieManagerWithExistingCookie(model);
 
         // Manager mock should be set up to return a dictionary containing the cookie with the cookie value passed in
         manager.Object.ReadInboundCookies().Should().BeOfType<Dictionary<string, string>>()
@@ -863,22 +860,23 @@ public class UserJourneyCookieServiceTests
 
         cookies["X"].Should().Be("Y");
     }
-    
+
     [TestMethod]
     public void ClearAdditionalQuestionsAnswersInternal_ClearValuesFromModel()
     {
         var mockCookieManager =
             SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel
-                            {
-                                AdditionalQuestionsAnswers = new() { { "key", "value" }}
-                            });
-        
+                                               {
+                                                   AdditionalQuestionsAnswers =
+                                                       new Dictionary<string, string> { { "key", "value" } }
+                                               });
+
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
         var service = new UserJourneyCookieService(mockCookieManager.cookieManager.Object, mockLogger.Object);
 
         service.ClearAdditionalQuestionsAnswers();
-        
+
         CheckSerializedModelWasSet(mockCookieManager,
                                    new UserJourneyCookieService.UserJourneyModel());
     }

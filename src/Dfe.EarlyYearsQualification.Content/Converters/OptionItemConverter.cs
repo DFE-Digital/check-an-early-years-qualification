@@ -11,7 +11,8 @@ public class OptionItemConverter : JsonConverter
         return objectType == typeof(IOptionItem);
     }
 
-    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, Type objectType, object? existingValue,
+                                    JsonSerializer serializer)
     {
         var jo = JObject.Load(reader);
         var hasLabel = jo.ContainsKey("label") || jo.ContainsKey("Label");

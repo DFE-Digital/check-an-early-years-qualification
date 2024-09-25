@@ -198,7 +198,7 @@ public class MockContentfulService : IContentService
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
-        var content = new Document()
+        var content = new Document
                       {
                           Content =
                           [
@@ -275,29 +275,29 @@ public class MockContentfulService : IContentService
                                        "E awarding organisation", 123)
                                    {
                                        AdditionalRequirements = "Additional requirements",
-                                       AdditionalRequirementQuestions = new List<AdditionalRequirementQuestion>
-                                                                        {
-                                                                            new()
-                                                                            {
-                                                                                Question =
-                                                                                    "Answer 'yes' for this to be full and relevant",
-                                                                                AnswerToBeFullAndRelevant = true,
-                                                                                Answers =
-                                                                                [
-                                                                                    new Option
-                                                                                    {
-                                                                                        Label = "Yes",
-                                                                                        Value = "yes"
-                                                                                    },
+                                       AdditionalRequirementQuestions =
+                                       [
+                                           new AdditionalRequirementQuestion
+                                           {
+                                               Question =
+                                                   "Answer 'yes' for this to be full and relevant",
+                                               AnswerToBeFullAndRelevant = true,
+                                               Answers =
+                                               [
+                                                   new Option
+                                                   {
+                                                       Label = "Yes",
+                                                       Value = "yes"
+                                                   },
 
-                                                                                    new Option
-                                                                                    {
-                                                                                        Label = "No",
-                                                                                        Value = "no"
-                                                                                    }
-                                                                                ]
-                                                                            }
-                                                                        },
+                                                   new Option
+                                                   {
+                                                       Label = "No",
+                                                       Value = "no"
+                                                   }
+                                               ]
+                                           }
+                                       ],
                                        QualificationNumber = "Q/22/2427"
                                    }
                                });
@@ -329,7 +329,8 @@ public class MockContentfulService : IContentService
                                              ContentfulContentHelper.Text("Post search criteria content"),
                                          AnyLevelHeading = "Any level",
                                          AnyAwardingOrganisationHeading = "Various awarding organisations",
-                                         NoResultsText = ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
+                                         NoResultsText =
+                                             ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
                                          ClearSearchText = "Clear search",
                                          NoQualificationsFoundText = "No"
                                      });
@@ -351,7 +352,8 @@ public class MockContentfulService : IContentService
                                          LevelLabel = "Test level label",
                                          DateAddedLabel = "Test date added label",
                                          Heading = "Test heading",
-                                         PostHeadingContent = ContentfulContentHelper.Paragraph("The post heading content"),
+                                         PostHeadingContent =
+                                             ContentfulContentHelper.Paragraph("The post heading content"),
                                          Options =
                                          [
                                              new Option
@@ -369,7 +371,9 @@ public class MockContentfulService : IContentService
                                          AwardingOrganisationLabel = "Test awarding organisation label",
                                          ErrorBannerHeading = "Test error banner heading",
                                          ErrorBannerLink = "Test error banner link",
-                                         VariousAwardingOrganisationsExplanation = ContentfulContentHelper.Paragraph("Various awarding organisation explanation text")
+                                         VariousAwardingOrganisationsExplanation =
+                                             ContentfulContentHelper
+                                                 .Paragraph("Various awarding organisation explanation text")
                                      });
     }
 
@@ -400,15 +404,15 @@ public class MockContentfulService : IContentService
     {
         return await Task.FromResult(new ChallengePage
                                      {
-                                        ErrorHeading = "Test Error Heading",
-                                        FooterContent = ContentfulContentHelper.Paragraph("Test Footer Content"),
-                                        InputHeading = "Test Input Heading",
-                                        MainContent = ContentfulContentHelper.Paragraph("Test Main Content"),
-                                        MainHeading = "Test Main Heading",
-                                        IncorrectPasswordText = "Test Incorrect Password Text",
-                                        MissingPasswordText = "Test Missing Password Text",
-                                        SubmitButtonText = "Test Submit Button Text",
-                                        ShowPasswordButtonText = "Test Show Password Button Text"
+                                         ErrorHeading = "Test Error Heading",
+                                         FooterContent = ContentfulContentHelper.Paragraph("Test Footer Content"),
+                                         InputHeading = "Test Input Heading",
+                                         MainContent = ContentfulContentHelper.Paragraph("Test Main Content"),
+                                         MainHeading = "Test Main Heading",
+                                         IncorrectPasswordText = "Test Incorrect Password Text",
+                                         MissingPasswordText = "Test Missing Password Text",
+                                         SubmitButtonText = "Test Submit Button Text",
+                                         ShowPasswordButtonText = "Test Show Password Button Text"
                                      });
     }
 
@@ -562,7 +566,8 @@ public class MockContentfulService : IContentService
                    ErrorMessage = "Test Error Message",
                    FutureDateErrorBannerLinkText = "Future date error message banner link",
                    FutureDateErrorMessage = "Future date error message",
-                   IncorrectFormatErrorBannerLinkText = "Enter a month between 1 and 12 and a year between 1900 and $[actual-year]$",
+                   IncorrectFormatErrorBannerLinkText =
+                       "Enter a month between 1 and 12 and a year between 1900 and $[actual-year]$",
                    IncorrectFormatErrorMessage = "Incorrect format error message banner link"
                };
     }
@@ -612,103 +617,105 @@ public class MockContentfulService : IContentService
         return new Qualification(qualificationId,
                                  qualificationName,
                                  awardingOrganisation,
-                          3)
-        {
-            FromWhichYear = "2020",
-            ToWhichYear = "2021",
-            QualificationNumber = "603/5829/4",
-            AdditionalRequirements =
-                "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-            AdditionalRequirementQuestions =
-                new List<AdditionalRequirementQuestion>
-                {
-                    new()
-                    {
-                        Question = "Test question",
-                        HintText =
-                            "This is the hint text: answer yes for full and relevant",
-                        DetailsHeading =
-                            "This is the details heading",
-                        DetailsContent =
-                            ContentfulContentHelper
-                                .Paragraph("This is the details content"),
-                        Answers =
-                        [
-                            new Option
-                            {
-                                Label = "Yes",
-                                Value = "yes"
-                            },
+                                 3)
+               {
+                   FromWhichYear = "2020",
+                   ToWhichYear = "2021",
+                   QualificationNumber = "603/5829/4",
+                   AdditionalRequirements =
+                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
+                   AdditionalRequirementQuestions =
+                   [
+                       new AdditionalRequirementQuestion
+                       {
+                           Question = "Test question",
+                           HintText =
+                               "This is the hint text: answer yes for full and relevant",
+                           DetailsHeading =
+                               "This is the details heading",
+                           DetailsContent =
+                               ContentfulContentHelper
+                                   .Paragraph("This is the details content"),
+                           Answers =
+                           [
+                               new Option
+                               {
+                                   Label = "Yes",
+                                   Value = "yes"
+                               },
 
-                            new Option
-                            {
-                                Label = "No",
-                                Value = "no"
-                            }
-                        ],
-                        ConfirmationStatement =
-                            "This is the confirmation statement 1",
-                        AnswerToBeFullAndRelevant = true
-                    },
-                    new()
-                    {
-                        Question = "Test question 2",
-                        HintText =
-                            "This is the hint text: answer no for full and relevant",
-                        DetailsHeading =
-                            "This is the details heading",
-                        DetailsContent =
-                            ContentfulContentHelper
-                                .Paragraph("This is the details content"),
-                        Answers =
-                        [
-                            new Option
-                            {
-                                Label = "Yes",
-                                Value = "yes"
-                            },
+                               new Option
+                               {
+                                   Label = "No",
+                                   Value = "no"
+                               }
+                           ],
+                           ConfirmationStatement =
+                               "This is the confirmation statement 1",
+                           AnswerToBeFullAndRelevant = true
+                       },
 
-                            new Option
-                            {
-                                Label = "No",
-                                Value = "no"
-                            }
-                        ],
-                        ConfirmationStatement =
-                            "This is the confirmation statement 2",
-                        AnswerToBeFullAndRelevant = false
-                    }
-                },
-            RatioRequirements = new List<RatioRequirement>
-                                {
-                                    new()
-                                    {
-                                        RatioRequirementName =
-                                            RatioRequirements
-                                                .Level2RatioRequirementName,
-                                        FullAndRelevantForLevel3After2014 = true
-                                    },
-                                    new()
-                                    {
-                                        RatioRequirementName =
-                                            RatioRequirements
-                                                .Level3RatioRequirementName,
-                                        FullAndRelevantForLevel3After2014 = true
-                                    },
-                                    new()
-                                    {
-                                        RatioRequirementName = RatioRequirements
-                                            .Level6RatioRequirementName
-                                    },
-                                    new()
-                                    {
-                                        RatioRequirementName =
-                                            RatioRequirements
-                                                .UnqualifiedRatioRequirementName,
-                                        FullAndRelevantForLevel3After2014 = true
-                                    }
-                                }
-        };
-        
+                       new AdditionalRequirementQuestion
+                       {
+                           Question = "Test question 2",
+                           HintText =
+                               "This is the hint text: answer no for full and relevant",
+                           DetailsHeading =
+                               "This is the details heading",
+                           DetailsContent =
+                               ContentfulContentHelper
+                                   .Paragraph("This is the details content"),
+                           Answers =
+                           [
+                               new Option
+                               {
+                                   Label = "Yes",
+                                   Value = "yes"
+                               },
+
+                               new Option
+                               {
+                                   Label = "No",
+                                   Value = "no"
+                               }
+                           ],
+                           ConfirmationStatement =
+                               "This is the confirmation statement 2",
+                           AnswerToBeFullAndRelevant = false
+                       }
+                   ],
+                   RatioRequirements =
+                   [
+                       new RatioRequirement
+                       {
+                           RatioRequirementName =
+                               RatioRequirements
+                                   .Level2RatioRequirementName,
+                           FullAndRelevantForLevel3After2014 = true
+                       },
+
+                       new RatioRequirement
+                       {
+                           RatioRequirementName =
+                               RatioRequirements
+                                   .Level3RatioRequirementName,
+                           FullAndRelevantForLevel3After2014 = true
+                       },
+
+                       new RatioRequirement
+                       {
+                           RatioRequirementName = RatioRequirements
+                               .Level6RatioRequirementName
+                       },
+
+                       new RatioRequirement
+                       {
+                           RatioRequirementName =
+                               RatioRequirements
+                                   .UnqualifiedRatioRequirementName,
+                           FullAndRelevantForLevel3After2014 = true
+                       }
+                   ]
+               };
     }
 }

@@ -1,6 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -21,10 +21,10 @@ public class AccessibilityStatementControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<AccessibilityStatementController>>();
 
-        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
+            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object, mockContentParser.Object);
 
         mockContentService.Setup(x => x.GetAccessibilityStatementPage())
                           .ReturnsAsync((AccessibilityStatementPage?)default);
@@ -44,7 +44,7 @@ public class AccessibilityStatementControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<AccessibilityStatementController>>();
 
-        var mockRenderer = new Mock<IHtmlRenderer>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
         var expectedContent = new AccessibilityStatementPage
                               {
@@ -55,11 +55,11 @@ public class AccessibilityStatementControllerTests
 
         const string expectedHtml = "<p>Some HTML.</p>";
 
-        mockRenderer.Setup(x => x.ToHtml(It.IsAny<Document>()))
-                    .ReturnsAsync(expectedHtml);
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>()))
+                         .ReturnsAsync(expectedHtml);
 
         var controller =
-            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object, mockRenderer.Object);
+            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object, mockContentParser.Object);
 
         var result = await controller.Index();
 
