@@ -10,7 +10,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
         model.MonthError = false;
         model.YearError = false;
         
-        if (model is { SelectedYear: 0, SelectedMonth: 0 })
+        if (model is { SelectedYear: null, SelectedMonth: null })
         {
             model.MonthError = true;
             model.YearError = true;
@@ -23,7 +23,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                    };
         }
 
-        if (model.SelectedMonth == 0)
+        if (model.SelectedMonth == null)
         {
             model.MonthError = true;
             
@@ -35,7 +35,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                    };
         }
         
-        if (model.SelectedYear == 0)
+        if (model.SelectedYear == null)
         {
             model.YearError = true;
             
@@ -44,18 +44,6 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                        IsValid = false, 
                        ErrorMessage = questionPage.MissingYearErrorMessage,
                        BannerErrorMessage = questionPage.MissingYearBannerLinkText
-                   };
-        }
-        
-        if (model.SelectedMonth is <= 0 or > 12)
-        {
-            model.MonthError = true;
-            
-            return new ValidationResult
-                   {
-                       IsValid = false, 
-                       ErrorMessage = questionPage.IncorrectMonthFormatErrorMessage,
-                       BannerErrorMessage = questionPage.IncorrectMonthFormatErrorBannerLinkText
                    };
         }
         
@@ -85,8 +73,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                    };
         }
         
-
-        var selectedDate = new DateOnly(model.SelectedYear, model.SelectedMonth, 1);
+        var selectedDate = new DateOnly(model.SelectedYear!.Value, model.SelectedMonth!.Value, 1);
 
         var isValid = selectedDate <= DateOnly.FromDateTime(now);
         

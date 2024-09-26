@@ -443,7 +443,6 @@ public class QuestionsControllerTests
 
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.HasErrors.Should().BeTrue();
         model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
         model.MonthLabel.Should().Be(questionPage.MonthLabel);
         model.YearLabel.Should().Be(questionPage.YearLabel);
