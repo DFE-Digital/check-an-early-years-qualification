@@ -9,6 +9,10 @@ public class DateQuestionModel : BaseQuestionModel
     public string MonthLabel { get; set; } = string.Empty;
 
     public string YearLabel { get; set; } = string.Empty;
+    
+    public bool MonthError { get; set; }
+    
+    public bool YearError { get; set; }
 
     [Required] public int SelectedMonth { get; set; }
 

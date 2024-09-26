@@ -368,8 +368,8 @@ public class MockContentfulServiceTests
         result.QuestionHint.Should().Be("Test Question Hint");
         result.FutureDateErrorMessage.Should().Be("Future date error message");
         result.FutureDateErrorBannerLinkText.Should().Be("Future date error message banner link");
-        result.IncorrectFormatErrorMessage.Should().Be("Incorrect format error message banner link");
-        result.IncorrectFormatErrorBannerLinkText.Should().Be("Enter a month between 1 and 12 and a year between 1900 and $[actual-year]$");
+        result.IncorrectMonthFormatErrorMessage.Should().Be("Incorrect format error message banner link");
+        result.IncorrectMonthFormatErrorBannerLinkText.Should().Be("Enter a month between 1 and 12 and a year between 1900 and $[actual-year]$");
     }
 
     [TestMethod]

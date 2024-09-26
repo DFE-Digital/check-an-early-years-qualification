@@ -118,14 +118,14 @@ public class DateQuestionModelValidatorTests
 
         var questionPage = new DateQuestionPage
                            {
-                               IncorrectFormatErrorMessage = "Incorrect format error message",
-                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
+                               IncorrectMonthFormatErrorMessage = "Incorrect format error message",
+                               IncorrectMonthFormatErrorBannerLinkText = "Incorrect format banner link text"
                            };
 
         var result = validator.IsValid(model, questionPage);
         result.IsValid.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
+        result.ErrorMessage.Should().Match(questionPage.IncorrectMonthFormatErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.IncorrectMonthFormatErrorBannerLinkText);
     }
 
     [TestMethod]
@@ -139,14 +139,14 @@ public class DateQuestionModelValidatorTests
 
         var questionPage = new DateQuestionPage
                            {
-                               IncorrectFormatErrorMessage = "Incorrect format error message",
-                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
+                               IncorrectMonthFormatErrorMessage = "Incorrect format error message",
+                               IncorrectMonthFormatErrorBannerLinkText = "Incorrect format banner link text"
                            };
 
         var result = validator.IsValid(model, questionPage);
         result.IsValid.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
+        result.ErrorMessage.Should().Match(questionPage.IncorrectMonthFormatErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.IncorrectMonthFormatErrorBannerLinkText);
     }
 
     [TestMethod]
@@ -160,14 +160,14 @@ public class DateQuestionModelValidatorTests
 
         var questionPage = new DateQuestionPage
                            {
-                               IncorrectFormatErrorMessage = "Incorrect format error message",
-                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
+                               IncorrectMonthFormatErrorMessage = "Incorrect format error message",
+                               IncorrectMonthFormatErrorBannerLinkText = "Incorrect format banner link text"
                            };
 
         var result = validator.IsValid(model, questionPage);
         result.IsValid.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
+        result.ErrorMessage.Should().Match(questionPage.IncorrectMonthFormatErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.IncorrectMonthFormatErrorBannerLinkText);
     }
     
     [TestMethod]
