@@ -90,7 +90,7 @@ builder.Services.AddScoped(x =>
 builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
 builder.Services.AddSingleton<IDateTimeAdapter, DateTimeAdapter>();
 builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelValidator>();
-builder.Services.AddTransient<GtmConfiguration>();
+builder.Services.AddTransient<TrackingConfiguration>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 

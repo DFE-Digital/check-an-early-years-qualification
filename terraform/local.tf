@@ -21,6 +21,7 @@ locals {
     "ServiceAccess__Keys__2"              = var.webapp_access_key_1
     "ServiceAccess__Keys__3"              = var.webapp_access_key_2
     "GTM__Tag"                            = var.gtm_tag
+    "Clarity__Tag"                        = var.clarity_tag
   }
 
   webapp_slot_app_settings = {
