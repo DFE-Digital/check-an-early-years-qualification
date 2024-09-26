@@ -607,7 +607,12 @@ public class MockContentfulService : IContentService
                                     DisplayText = "TEST",
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
-                                }
+                                },
+                   FeedbackBanner = new FeedbackBanner
+                                    {
+                                        Heading = "Feedback heading",
+                                        Body = ContentfulContentHelper.Paragraph("This is the body text")
+                                    }
                };
     }
 
