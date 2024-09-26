@@ -91,13 +91,13 @@ public static class SecureHeaderConfiguration
         var clarityCspElement = new ContentSecurityPolicyElement
                                 {
                                     CommandType = CspCommandType.Uri,
-                                    DirectiveOrUri = "https://www.clarity.ms/"
+                                    DirectiveOrUri = "https://www.clarity.ms/ https://c.bing.com"
                                 };
 
         var clarityConnectSourceCspElement = new ContentSecurityPolicyElement
                                              {
                                                  CommandType = CspCommandType.Uri,
-                                                 DirectiveOrUri = "https://s.clarity.ms/collect"
+                                                 DirectiveOrUri = "https://*.clarity.ms/collect"
                                              };
         
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
