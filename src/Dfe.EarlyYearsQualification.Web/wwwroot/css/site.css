@@ -152,4 +152,5 @@ body {
 
 .feedback-banner-container .feedback-banner-body > p {
     font-size: 19px !important;
+    margin-bottom: 0;
 }
