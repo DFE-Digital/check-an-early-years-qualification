@@ -61,7 +61,9 @@ public class ContentfulContentService : IContentService
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-        var detailsPageEntries = await GetEntriesByType<DetailsPage>();
+        var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(_contentTypes[typeof(DetailsPage)])
+                                                          .Include(2);
+        var detailsPageEntries = await GetEntriesByType(queryBuilder);
         if (detailsPageEntries is null || !detailsPageEntries.Any())
         {
             _logger.LogWarning("No details page entry returned");
@@ -256,6 +258,7 @@ public class ContentfulContentService : IContentService
         {
             // NOTE: GetEntry doesn't bind linked references which is why we are using GetEntriesByType
             var queryBuilder = new QueryBuilder<T>().ContentTypeIs(_contentTypes[typeof(T)])
+                                                    .Include(2)
                                                     .FieldEquals("sys.id", entryId);
             var entry = await _contentfulClient.GetEntriesByType(_contentTypes[typeof(T)], queryBuilder);
             return entry.FirstOrDefault();
