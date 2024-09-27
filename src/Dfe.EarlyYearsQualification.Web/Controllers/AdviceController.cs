@@ -107,7 +107,8 @@ public class AdviceController(
                {
                    Heading = advicePage.Heading,
                    BodyContent = await contentParser.ToHtml(advicePage.Body),
-                   BackButton = MapToNavigationLinkModel(advicePage.BackButton)
+                   BackButton = MapToNavigationLinkModel(advicePage.BackButton),
+                   FeedbackBanner = await MapToFeedbackBannerModel(advicePage.FeedbackBanner, contentParser)
                };
     }
 }

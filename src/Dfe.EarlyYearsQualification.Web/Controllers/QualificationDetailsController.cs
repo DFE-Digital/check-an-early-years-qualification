@@ -388,7 +388,8 @@ public class QualificationDetailsController(
                                  PrintButtonText = content.PrintButtonText,
                                  QualificationNameLabel = content.QualificationNameLabel,
                                  QualificationStartDateLabel = content.QualificationStartDateLabel,
-                                 QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader
+                                 QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader,
+                                 FeedbackBanner = await MapToFeedbackBannerModel(content.FeedbackBanner, contentParser)
                              }
                };
     }
