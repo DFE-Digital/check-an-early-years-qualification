@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
 using Contentful.AspNetCore;
-using Dfe.EarlyYearsQualification.Content.Extensions;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Dfe.EarlyYearsQualification.Web.Filters;
@@ -90,7 +90,7 @@ builder.Services.AddScoped(x =>
 builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
 builder.Services.AddSingleton<IDateTimeAdapter, DateTimeAdapter>();
 builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelValidator>();
-builder.Services.AddTransient<GtmConfiguration>();
+builder.Services.AddTransient<TrackingConfiguration>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 

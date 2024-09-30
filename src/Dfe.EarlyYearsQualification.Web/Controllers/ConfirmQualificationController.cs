@@ -1,5 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -16,16 +16,15 @@ public class ConfirmQualificationController(
     ILogger<ConfirmQualificationController> logger,
     IContentService contentService,
     IUserJourneyCookieService userJourneyCookieService,
-    IHtmlRenderer htmlRenderer,
-    IGovUkInsetTextRenderer govUkInsetTextRenderer)
+    IGovUkContentParser contentParser)
     : ServiceController
 {
     [HttpGet]
     [Route("{qualificationId}")]
-#pragma warning disable S6967
+    #pragma warning disable S6967
     // ...the model is a string, so no need to check ModelState.IsValid here
     public async Task<IActionResult> Index(string qualificationId)
-#pragma warning restore S6967
+    #pragma warning restore S6967
     {
         if (string.IsNullOrEmpty(qualificationId))
         {
@@ -135,9 +134,8 @@ public class ConfirmQualificationController(
                    QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle.Trim(),
                    QualificationDateAdded = qualification.FromWhichYear!,
                    BackButton = MapToNavigationLinkModel(content.BackButton),
-                   PostHeadingContent = await htmlRenderer.ToHtml(content.PostHeadingContent),
-                   VariousAwardingOrganisationsExplanation =
-                       await govUkInsetTextRenderer.ToHtml(content.VariousAwardingOrganisationsExplanation)
+                   PostHeadingContent = await contentParser.ToHtml(content.PostHeadingContent),
+                   VariousAwardingOrganisationsExplanation = await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation)
                };
     }
 }

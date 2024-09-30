@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Constants;
@@ -18,7 +18,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class QuestionsController(
     ILogger<QuestionsController> logger,
     IContentService contentService,
-    IHtmlRenderer renderer,
+    IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
     IContentFilterService contentFilterService,
     IDateQuestionModelValidator questionModelValidator,
@@ -63,19 +63,17 @@ public class QuestionsController(
 
         userJourneyCookieService.SetWhereWasQualificationAwarded(model.Option);
 
-        switch (model.Option)
-        {
-            case QualificationAwardLocation.OutsideOfTheUnitedKingdom:
-                return RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice");
-            case QualificationAwardLocation.Scotland:
-                return RedirectToAction("QualificationsAchievedInScotland", "Advice");
-            case QualificationAwardLocation.Wales:
-                return RedirectToAction("QualificationsAchievedInWales", "Advice");
-            case QualificationAwardLocation.NorthernIreland:
-                return RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice");
-        }
-
-        return RedirectToAction(nameof(this.WhenWasTheQualificationStarted));
+        return model.Option switch
+               {
+                   QualificationAwardLocation.OutsideOfTheUnitedKingdom =>
+                       RedirectToAction("QualificationOutsideTheUnitedKingdom", "Advice"),
+                   QualificationAwardLocation.Scotland =>
+                       RedirectToAction("QualificationsAchievedInScotland", "Advice"),
+                   QualificationAwardLocation.Wales => RedirectToAction("QualificationsAchievedInWales", "Advice"),
+                   QualificationAwardLocation.NorthernIreland =>
+                       RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice"),
+                   _ => RedirectToAction(nameof(this.WhenWasTheQualificationStarted))
+               };
     }
 
     [HttpGet("when-was-the-qualification-started")]
@@ -262,7 +260,7 @@ public class QuestionsController(
         model.ControllerName = controllerName;
         model.ErrorMessage = question.ErrorMessage;
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
+        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
         model.BackButton = MapToNavigationLinkModel(question.BackButton);
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
@@ -311,7 +309,9 @@ public class QuestionsController(
             placeholderUpdater.Replace(validationResult?.BannerErrorMessage ?? question.ErrorBannerLinkText);
         model.ErrorMessage = placeholderUpdater.Replace(validationResult?.ErrorMessage ?? question.ErrorMessage);
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
+        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
+
+        // ReSharper disable once InvertIf
         if (selectedMonth.HasValue && selectedYear.HasValue)
         {
             model.SelectedMonth = selectedMonth.Value;
@@ -364,7 +364,7 @@ public class QuestionsController(
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText = question.ErrorBannerLinkText;
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await renderer.ToHtml(question.AdditionalInformationBody);
+        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
         model.NotInTheList = selectedNotOnTheList;
         model.SelectedValue = selectedAwardingOrganisation;
         return model;

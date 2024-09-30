@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,17 @@ public class ServiceController : Controller
                    Href = navigationLink.Href,
                    DisplayText = navigationLink.DisplayText,
                    OpenInNewTab = navigationLink.OpenInNewTab
+               };
+    }
+
+    protected static async Task<FeedbackBannerModel?> MapToFeedbackBannerModel(
+        FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
+    {
+        if (feedbackBanner is null) return null;
+        return new FeedbackBannerModel
+               {
+                   Heading = feedbackBanner.Heading,
+                   Body = await contentParser.ToHtml(feedbackBanner.Body)
                };
     }
 }
