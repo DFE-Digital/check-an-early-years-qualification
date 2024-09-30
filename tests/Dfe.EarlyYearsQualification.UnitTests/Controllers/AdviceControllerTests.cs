@@ -561,4 +561,66 @@ public class AdviceControllerTests
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task PrivacyPolicy_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.TemporaryPrivacyPolicy))
+                          .ReturnsAsync((AdvicePage?)default).Verifiable();
+
+        var result = await controller.PrivacyPolicy();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the advice page");
+    }
+
+    [TestMethod]
+    public async Task PrivacyPolicy_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+
+        const string renderedHtmlBody = "Test html body (Privacy Policy)";
+
+        var advicePage = new AdvicePage
+                         { Heading = "Heading (Privacy Policy)", Body = ContentfulContentHelper.Text("Anything") };
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.TemporaryPrivacyPolicy))
+                          .ReturnsAsync(advicePage);
+
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(renderedHtmlBody);
+
+        var result = await controller.PrivacyPolicy();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as AdvicePageModel;
+        model.Should().NotBeNull();
+
+        model!.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be(renderedHtmlBody);
+
+        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+    }
 }
