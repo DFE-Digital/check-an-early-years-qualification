@@ -171,7 +171,7 @@ describe("A spec that tests question pages", () => {
 
                 cy.get(".govuk-error-summary").should("be.visible");
                 cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
-                cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Banner Link");
+                cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Link Text");
 
                 cy.get('#date-error').should("exist");
                 cy.get('#date-error').should("contain.text", "Month Out Of Bounds Error Message");
@@ -208,7 +208,7 @@ describe("A spec that tests question pages", () => {
 
                 cy.get(".govuk-error-summary").should("be.visible");
                 cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
-                cy.get("#error-banner-link").should("contain.text", "Year Out Of Bounds Error Banner Link");
+                cy.get("#error-banner-link").should("contain.text", "Year Out Of Bounds Error Link Text");
 
                 cy.get('#date-error').should("exist");
                 cy.get('#date-error').should("contain.text", "Year Out Of Bounds Error Message");
