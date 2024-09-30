@@ -19,6 +19,6 @@ variable "tags" {
 }
 
 variable "webapp_subnet_id" {
-  description = "The ID of the subnet"
+  description = "The ID of the WebApp Subnet"
   type        = string
 }
