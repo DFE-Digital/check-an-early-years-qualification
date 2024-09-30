@@ -83,8 +83,8 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             return new ValidationResult
                    {
                        IsValid = false, 
-                       ErrorMessage = questionPage.YearOutOfBoundsErrorMessage,
-                       BannerErrorMessage = questionPage.YearOutOfBoundsErrorLinkText
+                       ErrorMessage = questionPage.FutureDateErrorMessage,
+                       BannerErrorMessage = questionPage.FutureDateErrorBannerLinkText
                    };
         }
         
