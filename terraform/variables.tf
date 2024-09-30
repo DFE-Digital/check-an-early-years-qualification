@@ -67,6 +67,12 @@ variable "asp_sku" {
   type        = string
 }
 
+variable "dev_asp_sku" {
+  default     = "B2"
+  description = "SKU name for the Development App Service Plan"
+  type        = string
+}
+
 variable "webapp_worker_count" {
   default     = 1
   description = "Number of Workers for the App Service Plan"
