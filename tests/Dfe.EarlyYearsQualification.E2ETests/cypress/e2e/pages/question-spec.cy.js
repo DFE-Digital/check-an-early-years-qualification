@@ -154,7 +154,7 @@ describe("A spec that tests question pages", () => {
         ]
         
         invalidMonthsToTest.forEach((value) => {
-            it(`is ${value} then it shows the incorrect month format error message`, () => {
+            it(`is ${value} then it shows the month out of bounds error message`, () => {
                 cy.visit("/questions/when-was-the-qualification-started");
 
                 cy.get(".govuk-error-summary").should("not.exist");
@@ -171,10 +171,10 @@ describe("A spec that tests question pages", () => {
 
                 cy.get(".govuk-error-summary").should("be.visible");
                 cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
-                cy.get("#error-banner-link").should("contain.text", "Incorrect Month Format Error Banner Link");
+                cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Banner Link");
 
                 cy.get('#date-error').should("exist");
-                cy.get('#date-error').should("contain.text", "Incorrect Month Format Error Message");
+                cy.get('#date-error').should("contain.text", "Month Out Of Bounds Error Message");
                 cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
                 cy.get("#date-started-month").should("have.class", "govuk-input--error");
                 cy.get("#date-started-year").should("not.have.class", "govuk-input--error");
@@ -208,10 +208,10 @@ describe("A spec that tests question pages", () => {
 
                 cy.get(".govuk-error-summary").should("be.visible");
                 cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
-                cy.get("#error-banner-link").should("contain.text", "Incorrect Year Format Error Banner Link");
+                cy.get("#error-banner-link").should("contain.text", "Year Out Of Bounds Error Banner Link");
 
                 cy.get('#date-error').should("exist");
-                cy.get('#date-error').should("contain.text", "Incorrect Year Format Error Message");
+                cy.get('#date-error').should("contain.text", "Year Out Of Bounds Error Message");
                 cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
                 cy.get("#date-started-month").should("not.have.class", "govuk-input--error");
                 cy.get("#date-started-year").should("have.class", "govuk-input--error");

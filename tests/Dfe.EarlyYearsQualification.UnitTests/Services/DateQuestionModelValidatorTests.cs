@@ -95,16 +95,16 @@ public class DateQuestionModelValidatorTests
 
         var questionPage = new DateQuestionPage
                            {
-                               IncorrectMonthFormatErrorMessage = "Incorrect format error message",
-                               IncorrectMonthFormatErrorBannerLinkText = "Incorrect format banner link text"
+                               MonthOutOfBoundsErrorMessage = "Month out of bounds error message",
+                               MonthOutOfBoundsErrorLinkText = "Month out of bounds error link text"
                            };
 
         var result = validator.IsValid(model, questionPage);
         result.IsValid.Should().BeFalse();
         model.MonthError.Should().BeTrue();
         model.YearError.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.IncorrectMonthFormatErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.IncorrectMonthFormatErrorBannerLinkText);
+        result.ErrorMessage.Should().Match(questionPage.MonthOutOfBoundsErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.MonthOutOfBoundsErrorLinkText);
     }
     
     [TestMethod]
@@ -127,16 +127,16 @@ public class DateQuestionModelValidatorTests
 
         var questionPage = new DateQuestionPage
                            {
-                               IncorrectYearFormatErrorMessage = "Incorrect year format error message",
-                               IncorrectYearFormatErrorBannerLinkText = "Incorrect year format banner link text"
+                               YearOutOfBoundsErrorMessage = "Year out of bounds error message",
+                               YearOutOfBoundsErrorLinkText = "Year out of bounds error link text"
                            };
 
         var result = validator.IsValid(model, questionPage);
         result.IsValid.Should().BeFalse();
         model.MonthError.Should().BeFalse();
         model.YearError.Should().BeTrue();
-        result.ErrorMessage.Should().Match(questionPage.IncorrectYearFormatErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.IncorrectYearFormatErrorBannerLinkText);
+        result.ErrorMessage.Should().Match(questionPage.YearOutOfBoundsErrorMessage);
+        result.BannerErrorMessage.Should().Match(questionPage.YearOutOfBoundsErrorLinkText);
     }
     
     [TestMethod]

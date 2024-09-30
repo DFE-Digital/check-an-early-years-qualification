@@ -38,11 +38,11 @@ public class DateQuestionPage
 
     public string MissingYearErrorMessage { get; init; } = string.Empty;
     
-    public string IncorrectMonthFormatErrorBannerLinkText { get; init; } = string.Empty;
+    public string MonthOutOfBoundsErrorMessage { get; init; } = string.Empty;
     
-    public string IncorrectMonthFormatErrorMessage { get; init; } = string.Empty;
+    public string MonthOutOfBoundsErrorLinkText { get; init; } = string.Empty;
     
-    public string IncorrectYearFormatErrorBannerLinkText { get; init; } = string.Empty;
+    public string YearOutOfBoundsErrorMessage { get; init; } = string.Empty;
     
-    public string IncorrectYearFormatErrorMessage { get; init; } = string.Empty;
+    public string YearOutOfBoundsErrorLinkText { get; init; } = string.Empty;
 }

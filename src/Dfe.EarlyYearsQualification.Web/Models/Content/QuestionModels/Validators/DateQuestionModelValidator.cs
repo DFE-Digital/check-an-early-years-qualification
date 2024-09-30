@@ -54,8 +54,8 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             return new ValidationResult
                    {
                        IsValid = false, 
-                       ErrorMessage = questionPage.IncorrectMonthFormatErrorMessage,
-                       BannerErrorMessage = questionPage.IncorrectMonthFormatErrorBannerLinkText
+                       ErrorMessage = questionPage.MonthOutOfBoundsErrorMessage,
+                       BannerErrorMessage = questionPage.MonthOutOfBoundsErrorLinkText
                    };
         }
         
@@ -68,23 +68,29 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             return new ValidationResult
                    {
                        IsValid = false, 
-                       ErrorMessage = questionPage.IncorrectYearFormatErrorMessage,
-                       BannerErrorMessage = questionPage.IncorrectYearFormatErrorBannerLinkText
+                       ErrorMessage = questionPage.YearOutOfBoundsErrorMessage,
+                       BannerErrorMessage = questionPage.YearOutOfBoundsErrorLinkText
                    };
         }
         
         var selectedDate = new DateOnly(model.SelectedYear!.Value, model.SelectedMonth!.Value, 1);
 
-        var isValid = selectedDate <= DateOnly.FromDateTime(now);
-        
-        model.MonthError = !isValid;
-        model.YearError = !isValid;
+        if (selectedDate > DateOnly.FromDateTime(now))
+        {
+            model.MonthError = true;
+            model.YearError = true;
+            
+            return new ValidationResult
+                   {
+                       IsValid = false, 
+                       ErrorMessage = questionPage.YearOutOfBoundsErrorMessage,
+                       BannerErrorMessage = questionPage.YearOutOfBoundsErrorLinkText
+                   };
+        }
         
         return new ValidationResult
                {
-                   IsValid = isValid,
-                   ErrorMessage = questionPage.FutureDateErrorMessage,
-                   BannerErrorMessage = questionPage.FutureDateErrorBannerLinkText
+                   IsValid = true
                };
     }
 }
