@@ -70,6 +70,10 @@ public class MockContentfulService : IContentService
                    AdvicePages.Level6QualificationPost2014 =>
                        await Task.FromResult(CreateAdvicePage("Level 6 qualification post 2014",
                                                               body, WhatLevelIsTheQualificationPath)),
+                   
+                   AdvicePages.TemporaryPrivacyPolicy =>
+                       await Task.FromResult(CreateAdvicePage("Temporary privacy policy",
+                                                              body, WhatLevelIsTheQualificationPath)),
                    _ => null
                };
     }

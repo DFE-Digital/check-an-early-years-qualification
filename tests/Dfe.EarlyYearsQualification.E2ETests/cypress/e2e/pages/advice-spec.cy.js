@@ -87,4 +87,15 @@ describe("A spec that tests advice pages", () => {
         cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
         cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
     })
+
+    it("Checks the Temporary privacy policy details are on the page", () => {
+        cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D');
+        cy.visit("/advice/privacy-policy");
+
+        cy.get("#advice-page-heading").should("contain.text", "Temporary privacy policy");
+        cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
+
+        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
+        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+    })
 })
