@@ -2,10 +2,7 @@ name: Run smoke tests
 description: Run smoke tests using Cypress
 
 inputs:
-  webapp_name:
-    required: true
-    type: string
-  slot_name:
+  webapp_url:
     required: true
     type: string
   auth_secret:
@@ -23,7 +20,7 @@ runs:
         env: auth_secret="${{ inputs.auth_secret }}"
         working-directory: ./tests/Dfe.EarlyYearsQualification.SmokeTests/
         browser: chrome
-        config: baseUrl="https://${{ inputs.webapp_name }}-${{ inputs.slot_name }}.azurewebsites.net"
+        config: baseUrl="https://${{ inputs.webapp_url }}.azurewebsites.net"
 
     - name: Store screenshots on test failure
       uses: actions/upload-artifact@v4

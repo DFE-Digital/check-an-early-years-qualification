@@ -23,11 +23,6 @@ variable "asp_sku" {
   type        = string
 }
 
-variable "dev_asp_sku" {
-  description = "SKU name for the Development App Service Plan"
-  type        = string
-}
-
 variable "webapp_admin_email_address" {
   description = "Email Address of the Admin"
   type        = string

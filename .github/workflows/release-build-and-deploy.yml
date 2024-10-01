@@ -71,15 +71,13 @@ jobs:
       - name: Make request to health check endpoint 
         uses: ./.github/actions/health-check
         with:
-          webapp_name: ${{ vars.WEBAPP_NAME }}  
-          slot_name: ${{ vars.WEBAPP_SLOT_NAME }}
+          webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
           
       # Run smoke test
       - name: Run smoke tests against slot
         uses: ./.github/actions/run-smoke-tests
         with:
-          webapp_name: ${{ vars.WEBAPP_NAME }}
-          slot_name: ${{ vars.WEBAPP_SLOT_NAME }}
+          webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
      
       # Swap the slots
