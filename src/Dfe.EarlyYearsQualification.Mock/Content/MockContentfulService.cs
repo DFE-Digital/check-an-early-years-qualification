@@ -70,7 +70,7 @@ public class MockContentfulService : IContentService
                    AdvicePages.Level6QualificationPost2014 =>
                        await Task.FromResult(CreateAdvicePage("Level 6 qualification post 2014",
                                                               body, WhatLevelIsTheQualificationPath)),
-                   
+
                    AdvicePages.TemporaryPrivacyPolicy =>
                        await Task.FromResult(CreateAdvicePage("Temporary privacy policy",
                                                               body, WhatLevelIsTheQualificationPath)),
@@ -219,18 +219,6 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<Qualification?> GetQualificationById(string qualificationId)
-    {
-        return qualificationId.ToLower() switch
-               {
-                   "eyq-250" => await Task.FromResult(CreateQualification("EYQ-250", "BTEC",
-                                                                          AwardingOrganisations.Various)),
-                   _ => await Task.FromResult(CreateQualification("EYQ-240",
-                                                                  "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
-                                                                  AwardingOrganisations.Ncfe))
-               };
-    }
-
     public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
     {
         return entryId switch
@@ -261,50 +249,6 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateDropdownPage()),
                    _ => throw new NotImplementedException($"No dropdown question page mock for entry {entryId}")
                };
-    }
-
-    public Task<List<Qualification>> GetQualifications()
-    {
-        return Task.FromResult(new List<Qualification>
-                               {
-                                   new("1", "TEST",
-                                       "A awarding organisation", 123),
-                                   new("2", "TEST",
-                                       "B awarding organisation", 123),
-                                   new("3", "TEST",
-                                       "C awarding organisation", 123),
-                                   new("4", "TEST",
-                                       "D awarding organisation", 123),
-                                   new("5", "TEST with additional requirements",
-                                       "E awarding organisation", 123)
-                                   {
-                                       AdditionalRequirements = "Additional requirements",
-                                       AdditionalRequirementQuestions =
-                                       [
-                                           new AdditionalRequirementQuestion
-                                           {
-                                               Question =
-                                                   "Answer 'yes' for this to be full and relevant",
-                                               AnswerToBeFullAndRelevant = true,
-                                               Answers =
-                                               [
-                                                   new Option
-                                                   {
-                                                       Label = "Yes",
-                                                       Value = "yes"
-                                                   },
-
-                                                   new Option
-                                                   {
-                                                       Label = "No",
-                                                       Value = "no"
-                                                   }
-                                               ]
-                                           }
-                                       ],
-                                       QualificationNumber = "Q/22/2427"
-                                   }
-                               });
     }
 
     public async Task<QualificationListPage?> GetQualificationListPage()
@@ -617,114 +561,6 @@ public class MockContentfulService : IContentService
                                         Heading = "Feedback heading",
                                         Body = ContentfulContentHelper.Paragraph("This is the body text")
                                     }
-               };
-    }
-
-    private static Qualification CreateQualification(string qualificationId, string qualificationName,
-                                                     string awardingOrganisation)
-    {
-        return new Qualification(qualificationId,
-                                 qualificationName,
-                                 awardingOrganisation,
-                                 3)
-               {
-                   FromWhichYear = "2020",
-                   ToWhichYear = "2021",
-                   QualificationNumber = "603/5829/4",
-                   AdditionalRequirements =
-                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                   AdditionalRequirementQuestions =
-                   [
-                       new AdditionalRequirementQuestion
-                       {
-                           Question = "Test question",
-                           HintText =
-                               "This is the hint text: answer yes for full and relevant",
-                           DetailsHeading =
-                               "This is the details heading",
-                           DetailsContent =
-                               ContentfulContentHelper
-                                   .Paragraph("This is the details content"),
-                           Answers =
-                           [
-                               new Option
-                               {
-                                   Label = "Yes",
-                                   Value = "yes"
-                               },
-
-                               new Option
-                               {
-                                   Label = "No",
-                                   Value = "no"
-                               }
-                           ],
-                           ConfirmationStatement =
-                               "This is the confirmation statement 1",
-                           AnswerToBeFullAndRelevant = true
-                       },
-
-                       new AdditionalRequirementQuestion
-                       {
-                           Question = "Test question 2",
-                           HintText =
-                               "This is the hint text: answer no for full and relevant",
-                           DetailsHeading =
-                               "This is the details heading",
-                           DetailsContent =
-                               ContentfulContentHelper
-                                   .Paragraph("This is the details content"),
-                           Answers =
-                           [
-                               new Option
-                               {
-                                   Label = "Yes",
-                                   Value = "yes"
-                               },
-
-                               new Option
-                               {
-                                   Label = "No",
-                                   Value = "no"
-                               }
-                           ],
-                           ConfirmationStatement =
-                               "This is the confirmation statement 2",
-                           AnswerToBeFullAndRelevant = false
-                       }
-                   ],
-                   RatioRequirements =
-                   [
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .Level2RatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .Level3RatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName = RatioRequirements
-                               .Level6RatioRequirementName
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .UnqualifiedRatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
-                       }
-                   ]
                };
     }
 }

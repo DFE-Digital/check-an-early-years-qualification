@@ -9,7 +9,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddMockContentfulServices(this IServiceCollection services)
     {
         services.AddSingleton<IContentService, MockContentfulService>();
-        services.AddSingleton<IContentFilterService, MockContentfulFilterService>();
+        services.AddSingleton<IQualificationsRepository, MockQualificationsRepository>();
         return services;
     }
 }

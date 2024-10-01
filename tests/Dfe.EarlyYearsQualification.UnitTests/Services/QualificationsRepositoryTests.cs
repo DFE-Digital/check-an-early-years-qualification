@@ -11,9 +11,127 @@ using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
-[TestClass]
-public class ContentfulContentFilterServiceTests
+public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<QualificationsRepository>
 {
+    [TestMethod]
+    public async Task GetQualificationById_Null_LogsAndReturnsDefault()
+    {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<Qualification>)null!);
+
+        var service = new QualificationsRepository(ClientMock.Object,
+                                                   new Mock<IFuzzyAdapter>().Object,
+                                                   Logger.Object);
+
+        var result = await service.GetQualificationById("SomeId");
+
+        Logger.VerifyWarning("No qualifications returned for qualificationId: SomeId");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetQualificationById_NoContent_LogsAndReturnsDefault()
+    {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<Qualification> { Items = new List<Qualification>() });
+
+        var service = new QualificationsRepository(ClientMock.Object,
+                                                   new Mock<IFuzzyAdapter>().Object,
+                                                   Logger.Object);
+
+        var result = await service.GetQualificationById("SomeId");
+
+        Logger.VerifyWarning("No qualifications returned for qualificationId: SomeId");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetQualificationById_QualificationExists_Returns()
+    {
+        var qualification = new Qualification("SomeId",
+                                              "Test qualification name",
+                                              "Test awarding org",
+                                              123)
+                            {
+                                FromWhichYear = "Test from which year",
+                                ToWhichYear = "Test to which year",
+                                QualificationNumber = "Test qualification number",
+                                AdditionalRequirements = "Test additional requirements"
+                            };
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<Qualification>
+                                { Items = new List<Qualification> { qualification } });
+
+        var service = new QualificationsRepository(ClientMock.Object,
+                                                   new Mock<IFuzzyAdapter>().Object,
+                                                   Logger.Object);
+
+        var result = await service.GetQualificationById("SomeId");
+
+        result.Should().NotBeNull();
+        result.Should().Be(qualification);
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_ReturnsQualifications()
+    {
+        var qualification = new Qualification("Id",
+                                              "Name",
+                                              "AO",
+                                              6)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2020",
+                                QualificationNumber = "number", AdditionalRequirements = "Rq"
+                            };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<Qualification>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [qualification] });
+
+        var service = new QualificationsRepository(ClientMock.Object,
+                                                   new Mock<IFuzzyAdapter>().Object,
+                                                   Logger.Object);
+
+        var result = await service.GetQualifications();
+
+        result.Should().HaveCount(1).And.Contain(qualification);
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_ContentfulHasNoQualifications_ReturnsEmpty()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<Qualification>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [] });
+
+        var service = new QualificationsRepository(ClientMock.Object,
+                                                   new Mock<IFuzzyAdapter>().Object,
+                                                   Logger.Object);
+
+        var result = await service.GetQualifications();
+
+        result.Should().BeEmpty();
+    }
+
     [TestMethod]
     public async Task GetFilteredQualifications_PassInNullParameters_ReturnsAllQualifications()
     {
@@ -51,9 +169,12 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
+
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object,
+                                         mockFuzzyAdapter.Object,
+                                         mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -97,9 +218,11 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object,
+                                         mockFuzzyAdapter.Object,
+                                         mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -142,9 +265,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -205,9 +328,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -267,9 +390,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -338,9 +461,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -409,9 +532,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -436,9 +559,9 @@ public class ContentfulContentFilterServiceTests
 
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object);
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object);
 
         var filteredQualifications = await filterService.GetFilteredQualifications(4, 5, 2016, null, null);
 
@@ -476,9 +599,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -518,9 +641,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -559,9 +682,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -600,9 +723,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -646,9 +769,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -692,9 +815,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -736,9 +859,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -782,9 +905,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -828,9 +951,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -874,9 +997,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -920,9 +1043,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -984,9 +1107,9 @@ public class ContentfulContentFilterServiceTests
             .Returns(80);
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -1045,9 +1168,9 @@ public class ContentfulContentFilterServiceTests
         mockFuzzyAdapter.Setup(a => a.PartialRatio(qualificationSearch, technicalDiplomaInChildCare)).Returns(70);
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -1089,9 +1212,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };
@@ -1132,9 +1255,9 @@ public class ContentfulContentFilterServiceTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
 
         var mockQueryBuilder = new MockQueryBuilder();
-        var mockLogger = new Mock<ILogger<ContentfulContentFilterService>>();
+        var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var filterService =
-            new ContentfulContentFilterService(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
+            new QualificationsRepository(mockContentfulClient.Object, mockFuzzyAdapter.Object, mockLogger.Object)
             {
                 QueryBuilder = mockQueryBuilder
             };

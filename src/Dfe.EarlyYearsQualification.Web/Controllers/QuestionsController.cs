@@ -20,7 +20,7 @@ public class QuestionsController(
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
-    IContentFilterService contentFilterService,
+    IQualificationsRepository repository,
     IDateQuestionModelValidator questionModelValidator,
     IPlaceholderUpdater placeholderUpdater)
     : ServiceController
@@ -229,7 +229,7 @@ public class QuestionsController(
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
+        return await repository.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName,

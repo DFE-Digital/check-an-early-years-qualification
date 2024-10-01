@@ -40,8 +40,8 @@ public class MockContentfulSetupTests
         service.Lifetime.Should().Be(ServiceLifetime.Singleton);
 
         var filterService = serviceList[1];
-        filterService.ImplementationType.Should().Be(typeof(MockContentfulFilterService));
-        filterService.ServiceType.Should().Be(typeof(IContentFilterService));
+        filterService.ImplementationType.Should().Be(typeof(MockQualificationsRepository));
+        filterService.ServiceType.Should().Be(typeof(IQualificationsRepository));
         filterService.Lifetime.Should().Be(ServiceLifetime.Singleton);
     }
 }
