@@ -87,7 +87,7 @@ if (useMockContentful)
 else
 {
     builder.Services.AddTransient<IContentService, ContentfulContentService>();
-    builder.Services.AddTransient<IContentFilterService, ContentfulContentFilterService>();
+    builder.Services.AddTransient<IQualificationsRepository, QualificationsRepository>();
 }
 
 builder.Services.AddModelRenderers();

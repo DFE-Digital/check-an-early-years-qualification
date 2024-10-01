@@ -8,8 +8,6 @@ public interface IContentService
 
     Task<List<NavigationLink>> GetNavigationLinks();
 
-    Task<Qualification?> GetQualificationById(string qualificationId);
-
     Task<DetailsPage?> GetDetailsPage();
 
     Task<AdvicePage?> GetAdvicePage(string entryId);
@@ -27,8 +25,6 @@ public interface IContentService
     Task<DateQuestionPage?> GetDateQuestionPage(string entryId);
 
     Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId);
-
-    Task<List<Qualification>> GetQualifications();
 
     Task<QualificationListPage?> GetQualificationListPage();
 
