@@ -29,11 +29,27 @@ if (!useMockContentful)
     var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
-    var blobStorageConnectionString = builder.Configuration.GetSection("Storage").GetValue<string>("ConnectionString");
-    builder.Services.AddDataProtection()
-           .PersistKeysToAzureBlobStorage(blobStorageConnectionString, "data-protection", "data-protection")
+    builder.Services
+           .AddDataProtection()
            .ProtectKeysWithAzureKeyVault(new Uri($"{keyVaultEndpoint}keys/data-protection"),
                                          new DefaultAzureCredential());
+
+    if (!builder.Environment.IsDevelopment())
+    {
+        var blobStorageConnectionString =
+            builder.Configuration
+                   .GetSection("Storage")
+                   .GetValue<string>("ConnectionString");
+
+        const string containerName = "data-protection";
+        const string blobName = "data-protection";
+
+        builder.Services
+               .AddDataProtection()
+               .PersistKeysToAzureBlobStorage(blobStorageConnectionString,
+                                              containerName,
+                                              blobName);
+    }
 }
 
 // Add services to the container.
@@ -144,4 +160,5 @@ await app.RunAsync();
 [ExcludeFromCodeCoverage]
 // ReSharper disable once UnusedType.Global
 // ...declared partial so we can exclude it from code coverage calculations
-public static partial class Program;
+public static partial class
+    Program;
