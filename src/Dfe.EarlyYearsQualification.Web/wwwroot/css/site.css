@@ -136,3 +136,21 @@ body {
         margin-top: 0 !important;
     }
 }
+
+/* Custom Feedback Banner Component */
+.feedback-banner-container {
+    width: 100%;
+    padding: 20px 30px;
+    border-top: 1px solid #B1B4B6;
+    background-color: #F3F2F1;
+    margin-top: 40px;
+}
+
+.feedback-banner-container h3 {
+    font-size: 24px;
+}
+
+.feedback-banner-container .feedback-banner-body > p {
+    font-size: 19px !important;
+    margin-bottom: 0;
+}

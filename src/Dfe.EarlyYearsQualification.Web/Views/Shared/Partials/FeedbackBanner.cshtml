@@ -1,0 +1,10 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.FeedbackBannerModel
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <div class="feedback-banner-container">
+            <h3 class="govuk-heading-m" id="feedback-banner-heading">@Model.Heading</h3>
+            <div class="feedback-banner-body" id="feedback-banner-body">@Html.Raw(Model.Body)</div>
+        </div>
+    </div>
+</div>

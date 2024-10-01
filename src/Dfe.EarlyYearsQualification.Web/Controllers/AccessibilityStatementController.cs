@@ -1,5 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -11,7 +11,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class AccessibilityStatementController(
     ILogger<AccessibilityStatementController> logger,
     IContentService contentService,
-    IHtmlRenderer renderer)
+    IGovUkContentParser contentParser)
     : ServiceController
 {
     [HttpGet]
@@ -35,7 +35,7 @@ public class AccessibilityStatementController(
         return new AccessibilityStatementPageModel
                {
                    Heading = content.Heading,
-                   BodyContent = await renderer.ToHtml(content.Body),
+                   BodyContent = await contentParser.ToHtml(content.Body),
                    BackButton = MapToNavigationLinkModel(content.BackButton)
                };
     }

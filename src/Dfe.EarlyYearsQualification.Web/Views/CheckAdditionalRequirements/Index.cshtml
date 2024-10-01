@@ -24,14 +24,16 @@
                             @for (var i = 0; i < Model.AdditionalRequirementQuestions.Count; i++)
                             {
                                 var question = Model.AdditionalRequirementQuestions[i];
-                                if (question.HasError)
+                                if (!question.HasError)
                                 {
-                                    var href = $"#question-choice-error_{i}";
-                                    var errorBannerLinkId = $"error-banner-link_{i}";
-                                    <li>
-                                        <a id="@errorBannerLinkId" href="@href">@Model.ErrorMessage</a>
-                                    </li>
+                                    continue;
                                 }
+
+                                var href = $"#question-choice-error_{i}";
+                                var errorBannerLinkId = $"error-banner-link_{i}";
+                                <li>
+                                    <a id="@errorBannerLinkId" href="@href">@Model.ErrorMessage</a>
+                                </li>
                             }
 
                         </ul>
@@ -114,7 +116,7 @@
                                 var id = $"{option.Value}_{qi}_{i}";
                                 var @checked = Model.Answers.GetValueOrDefault(question.Question) == option.Value ? "checked" : "";
                                 <div class="govuk-radios__item">
-                                    @Html.RadioButtonFor(x => x.Answers![question.Question], option.Value, new { @class = "govuk-radios__input", id, @checked })
+                                    @Html.RadioButtonFor(x => x.Answers[question.Question], option.Value, new { @class = "govuk-radios__input", id, @checked })
                                     <label class="govuk-label govuk-radios__label" for="@id">
                                         @option.Label
                                     </label>

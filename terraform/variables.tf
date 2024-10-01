@@ -155,3 +155,9 @@ variable "gtm_tag" {
   description = "The Google Analytics tag"
   type        = string
 }
+
+variable "clarity_tag" {
+  default     = ""
+  description = "The Microsoft Clarity tag"
+  type        = string
+}

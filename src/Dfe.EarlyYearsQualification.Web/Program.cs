@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
 using Contentful.AspNetCore;
-using Dfe.EarlyYearsQualification.Content.Extensions;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Dfe.EarlyYearsQualification.Web.Filters;
@@ -29,11 +29,27 @@ if (!useMockContentful)
     var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
-    var blobStorageConnectionString = builder.Configuration.GetSection("Storage").GetValue<string>("ConnectionString");
-    builder.Services.AddDataProtection()
-           .PersistKeysToAzureBlobStorage(blobStorageConnectionString, "data-protection", "data-protection")
+    builder.Services
+           .AddDataProtection()
            .ProtectKeysWithAzureKeyVault(new Uri($"{keyVaultEndpoint}keys/data-protection"),
                                          new DefaultAzureCredential());
+
+    if (!builder.Environment.IsDevelopment())
+    {
+        var blobStorageConnectionString =
+            builder.Configuration
+                   .GetSection("Storage")
+                   .GetValue<string>("ConnectionString");
+
+        const string containerName = "data-protection";
+        const string blobName = "data-protection";
+
+        builder.Services
+               .AddDataProtection()
+               .PersistKeysToAzureBlobStorage(blobStorageConnectionString,
+                                              containerName,
+                                              blobName);
+    }
 }
 
 // Add services to the container.
@@ -90,7 +106,7 @@ builder.Services.AddScoped(x =>
 builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
 builder.Services.AddSingleton<IDateTimeAdapter, DateTimeAdapter>();
 builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelValidator>();
-builder.Services.AddTransient<GtmConfiguration>();
+builder.Services.AddTransient<TrackingConfiguration>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 

@@ -16,19 +16,14 @@ public static class QualificationAwardLocation
     ///     Option for Scotland
     /// </summary>
     public const string Scotland = "scotland";
-    
+
     /// <summary>
     ///     Option for Wales
     /// </summary>
     public const string Wales = "wales";
-    
+
     /// <summary>
     ///     Option for Northern Ireland
     /// </summary>
     public const string NorthernIreland = "northern-ireland";
-
-    /// <summary>
-    ///     Option for Not Sure.
-    /// </summary>
-    public const string NotSure = "not-sure";
 }

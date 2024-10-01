@@ -286,33 +286,37 @@ public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<User
 
     private void EnsureModelLoaded()
     {
-        if (_model == null)
+        if (_model != null)
         {
-            lock (_lockObject)
+            return;
+        }
+
+        lock (_lockObject)
+        {
+            if (_model != null)
             {
-                if (_model == null)
+                return;
+            }
+
+            var cookies = cookieManager.ReadInboundCookies();
+
+            UserJourneyModel? userJourneyModel = null;
+
+            if (cookies?.TryGetValue(CookieKeyNames.UserJourneyKey, out var cookie) == true)
+            {
+                try
                 {
-                    var cookies = cookieManager.ReadInboundCookies();
-
-                    UserJourneyModel? userJourneyModel = null;
-
-                    if (cookies?.TryGetValue(CookieKeyNames.UserJourneyKey, out var cookie) == true)
-                    {
-                        try
-                        {
-                            userJourneyModel = JsonSerializer.Deserialize<UserJourneyModel>(cookie);
-                        }
-                        catch
-                        {
-                            logger.LogWarning("Failed to deserialize cookie");
-                        }
-                    }
-
-                    _model = userJourneyModel ?? new UserJourneyModel();
-
-                    SetJourneyCookie();
+                    userJourneyModel = JsonSerializer.Deserialize<UserJourneyModel>(cookie);
+                }
+                catch
+                {
+                    logger.LogWarning("Failed to deserialize cookie");
                 }
             }
+
+            _model = userJourneyModel ?? new UserJourneyModel();
+
+            SetJourneyCookie();
         }
     }
 

@@ -16,3 +16,7 @@
         <div class="govuk-body" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
     </div>
 </div>
+@if (Model.FeedbackBanner is not null)
+{
+    await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
+}

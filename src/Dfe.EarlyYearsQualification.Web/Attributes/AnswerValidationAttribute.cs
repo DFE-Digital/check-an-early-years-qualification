@@ -22,11 +22,8 @@ public class AnswerValidationAttribute : ValidationAttribute
                              .Cast<KeyValuePair<string, string>?>()
                              .FirstOrDefault();
 
-        if (keyWithNoValue.HasValue)
-        {
-            return new ValidationResult($"Value is required for key: {keyWithNoValue.Value.Key}");
-        }
-
-        return ValidationResult.Success;
+        return keyWithNoValue.HasValue
+                   ? new ValidationResult($"Value is required for key: {keyWithNoValue.Value.Key}")
+                   : ValidationResult.Success;
     }
 }

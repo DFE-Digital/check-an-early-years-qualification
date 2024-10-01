@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -15,7 +15,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class AdviceController(
     ILogger<AdviceController> logger,
     IContentService contentService,
-    IHtmlRenderer renderer,
+    IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
@@ -87,6 +87,12 @@ public class AdviceController(
         return await GetView(AdvicePages.QualificationLevel7);
     }
 
+    [HttpGet("privacy-policy")]
+    public async Task<IActionResult> PrivacyPolicy()
+    {
+        return await GetView(AdvicePages.TemporaryPrivacyPolicy);
+    }
+
     private async Task<IActionResult> GetView(string advicePageId)
     {
         var advicePage = await contentService.GetAdvicePage(advicePageId);
@@ -106,8 +112,9 @@ public class AdviceController(
         return new AdvicePageModel
                {
                    Heading = advicePage.Heading,
-                   BodyContent = await renderer.ToHtml(advicePage.Body),
-                   BackButton = MapToNavigationLinkModel(advicePage.BackButton)
+                   BodyContent = await contentParser.ToHtml(advicePage.Body),
+                   BackButton = MapToNavigationLinkModel(advicePage.BackButton),
+                   FeedbackBanner = await MapToFeedbackBannerModel(advicePage.FeedbackBanner, contentParser)
                };
     }
 }

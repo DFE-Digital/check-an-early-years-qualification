@@ -87,6 +87,18 @@ public static class SecureHeaderConfiguration
                               CommandType = CspCommandType.Directive,
                               DirectiveOrUri = "sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY="
                           };
+
+        var clarityCspElement = new ContentSecurityPolicyElement
+                                {
+                                    CommandType = CspCommandType.Uri,
+                                    DirectiveOrUri = "https://www.clarity.ms/ https://c.bing.com"
+                                };
+
+        var clarityConnectSourceCspElement = new ContentSecurityPolicyElement
+                                             {
+                                                 CommandType = CspCommandType.Uri,
+                                                 DirectiveOrUri = "https://*.clarity.ms/collect"
+                                             };
         
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
@@ -101,6 +113,8 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowPrint);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(challengePageShowPassword);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(clarityCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(clarityConnectSourceCspElement);
         
         return configuration;
     }

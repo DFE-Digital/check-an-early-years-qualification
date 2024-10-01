@@ -9,4 +9,6 @@ public class AdvicePage
     public Document? Body { get; init; }
 
     public NavigationLink? BackButton { get; init; }
+
+    public FeedbackBanner? FeedbackBanner { get; init; }
 }
