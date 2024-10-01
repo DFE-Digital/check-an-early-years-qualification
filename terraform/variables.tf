@@ -61,6 +61,11 @@ variable "kv_certificate_subject" {
   type        = string
 }
 
+variable "asp_sku" {
+  description = "SKU name for the App Service Plan"
+  type        = string
+}
+
 variable "webapp_worker_count" {
   default     = 1
   description = "Number of Workers for the App Service Plan"

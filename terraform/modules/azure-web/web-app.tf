@@ -39,7 +39,7 @@ resource "azurerm_service_plan" "asp" {
   location            = var.location
   resource_group_name = var.resource_group
   os_type             = "Linux"
-  sku_name            = var.environment != "development" ? var.asp_sku : var.dev_asp_sku
+  sku_name            = var.asp_sku
   worker_count        = var.webapp_worker_count
 
   lifecycle {
