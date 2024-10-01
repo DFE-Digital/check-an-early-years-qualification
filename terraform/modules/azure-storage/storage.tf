@@ -64,6 +64,14 @@ resource "azurerm_storage_account" "sa" {
   #checkov:skip=CKV2_AZURE_33:VNet not configured
 }
 
+resource "azurerm_storage_account_network_rules" "sa_network_rules" {
+  storage_account_id         = azurerm_storage_account.sa.id
+  default_action             = "Deny"
+  bypass                     = ["AzureServices"]
+  ip_rules                   = []
+  virtual_network_subnet_ids = [var.webapp_subnet_id]
+}
+
 resource "azurerm_storage_container" "data_protection" {
   name                  = "data-protection"
   storage_account_name  = azurerm_storage_account.sa.name
