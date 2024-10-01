@@ -26,11 +26,11 @@ public class MockQualificationsRepositoryTests
         var repository = new MockQualificationsRepository();
 
         var results =
-            await repository.GetFilteredQualifications(level,
-                                                       null,
-                                                       null,
-                                                       null,
-                                                       null);
+            await repository.Get(level,
+                                 null,
+                                 null,
+                                 null,
+                                 null);
 
         results.Count.Should().Be(expectedQualificationIds.Length);
 
@@ -41,7 +41,7 @@ public class MockQualificationsRepositoryTests
     public async Task GetFilteredQualifications_PassInLevel3_ReturnsQualificationWithAdditionalRequirementQuestions()
     {
         var repository = new MockQualificationsRepository();
-        var results = await repository.GetFilteredQualifications(3, null, null, null, null);
+        var results = await repository.Get(3, null, null, null, null);
 
         var qualificationWithAdditionalRequirements =
             results.SingleOrDefault(q => q.AdditionalRequirementQuestions?.Count > 0);
@@ -68,7 +68,7 @@ public class MockQualificationsRepositoryTests
     {
         var repository = new MockQualificationsRepository();
 
-        var result = await repository.GetQualificationById("test_id");
+        var result = await repository.GetById("test_id");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
         result!.AdditionalRequirements.Should().NotBeNullOrEmpty();
@@ -141,7 +141,7 @@ public class MockQualificationsRepositoryTests
     {
         var repository = new MockQualificationsRepository();
 
-        var result = await repository.GetQualifications();
+        var result = await repository.Get();
 
         result.Count.Should().Be(5);
     }
@@ -151,7 +151,7 @@ public class MockQualificationsRepositoryTests
     {
         var repository = new MockQualificationsRepository();
 
-        var result = await repository.GetQualifications();
+        var result = await repository.Get();
 
         result.Count.Should().Be(5);
 

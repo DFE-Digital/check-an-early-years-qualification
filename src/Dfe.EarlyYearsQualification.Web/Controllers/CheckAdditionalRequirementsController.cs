@@ -51,7 +51,7 @@ public class CheckAdditionalRequirementsController(
     private async Task<IActionResult> GetResponse(string qualificationId,
                                                   CheckAdditionalRequirementsPageModel? model = null)
     {
-        var qualification = await qualificationsRepository.GetQualificationById(qualificationId);
+        var qualification = await qualificationsRepository.GetById(qualificationId);
         if (qualification is null)
         {
             var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");

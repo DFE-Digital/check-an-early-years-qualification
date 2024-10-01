@@ -835,12 +835,12 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         mockRepository
-            .Setup(x => x.GetFilteredQualifications(
-                                                    It.IsAny<int?>(),
-                                                    It.IsAny<int?>(),
-                                                    It.IsAny<int?>(),
-                                                    It.IsAny<string?>(),
-                                                    It.IsAny<string?>()))
+            .Setup(x => x.Get(
+                              It.IsAny<int?>(),
+                              It.IsAny<int?>(),
+                              It.IsAny<int?>(),
+                              It.IsAny<string?>(),
+                              It.IsAny<string?>()))
             .ReturnsAsync([]);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
@@ -903,8 +903,8 @@ public class QuestionsControllerTests
                                    };
 
         mockRepository
-            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
-                                                    It.IsAny<string?>(), It.IsAny<string?>()))
+            .Setup(x => x.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
+                              It.IsAny<string?>(), It.IsAny<string?>()))
             .ReturnsAsync(listOfQualifications);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
@@ -967,8 +967,8 @@ public class QuestionsControllerTests
                                    };
 
         mockRepository
-            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
-                                                    It.IsAny<string?>(), It.IsAny<string?>()))
+            .Setup(x => x.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
+                              It.IsAny<string?>(), It.IsAny<string?>()))
             .ReturnsAsync(listOfQualifications);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
@@ -1021,8 +1021,8 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         mockRepository
-            .Setup(x => x.GetFilteredQualifications(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
-                                                    It.IsAny<string?>(), It.IsAny<string?>()))
+            .Setup(x => x.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
+                              It.IsAny<string?>(), It.IsAny<string?>()))
             .ReturnsAsync([]);
 
         controller.ModelState.AddModelError("option", "test error");

@@ -109,7 +109,7 @@ public class QualificationDetailsControllerTests
             };
 
         const string qualificationId = "eyq-145";
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync((Qualification?)default);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -148,7 +148,7 @@ public class QualificationDetailsControllerTests
                                       AdditionalRequirements = "additional requirements"
                                   };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -198,7 +198,7 @@ public class QualificationDetailsControllerTests
                                       AdditionalRequirements = "additional requirements"
                                   };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -260,7 +260,7 @@ public class QualificationDetailsControllerTests
                                       AdditionalRequirementQuestions = listOfAdditionalReqs
                                   };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -340,7 +340,7 @@ public class QualificationDetailsControllerTests
                                       AdditionalRequirementQuestions = listOfAdditionalReqs
                                   };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -416,7 +416,7 @@ public class QualificationDetailsControllerTests
                                       RatioRequirements = ratioRequirements
                                   };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -476,7 +476,7 @@ public class QualificationDetailsControllerTests
                                       RatioRequirements = ratioRequirements
                                   };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -543,7 +543,7 @@ public class QualificationDetailsControllerTests
                                       RatioRequirements = ratioRequirements
                                   };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
+        mockRepository.Setup(x => x.GetById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
@@ -627,7 +627,7 @@ public class QualificationDetailsControllerTests
                                                               }
                           };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -738,7 +738,7 @@ public class QualificationDetailsControllerTests
                                                               }
                           };
 
-        mockRepository.Setup(x => x.GetQualificationById(qualificationId))
+        mockRepository.Setup(x => x.GetById(qualificationId))
                       .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
@@ -784,11 +784,11 @@ public class QualificationDetailsControllerTests
 
         mockRepository
             .Setup(x =>
-                       x.GetFilteredQualifications(It.IsAny<int?>(),
-                                                   It.IsAny<int?>(),
-                                                   It.IsAny<int?>(),
-                                                   It.IsAny<string?>(),
-                                                   It.IsAny<string?>()))
+                       x.Get(It.IsAny<int?>(),
+                             It.IsAny<int?>(),
+                             It.IsAny<int?>(),
+                             It.IsAny<string?>(),
+                             It.IsAny<string?>()))
             .ReturnsAsync([]);
 
         var controller =

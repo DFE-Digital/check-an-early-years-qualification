@@ -4,10 +4,10 @@ namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public interface IQualificationsRepository
 {
-    Task<Qualification?> GetQualificationById(string qualificationId);
+    Task<Qualification?> GetById(string qualificationId);
 
-    Task<List<Qualification>> GetQualifications();
+    Task<List<Qualification>> Get();
 
-    Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth, int? startDateYear,
-                                                        string? awardingOrganisation, string? qualificationName);
+    Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
+                                  string? awardingOrganisation, string? qualificationName);
 }

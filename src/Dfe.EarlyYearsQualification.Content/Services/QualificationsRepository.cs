@@ -39,7 +39,7 @@ public class QualificationsRepository(
     // Used by the unit tests to inject a mock builder that returns the query params
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
 
-    public async Task<Qualification?> GetQualificationById(string qualificationId)
+    public async Task<Qualification?> GetById(string qualificationId)
     {
         var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(ContentTypeLookup[typeof(Qualification)])
                                                             .Include(2)
@@ -59,15 +59,15 @@ public class QualificationsRepository(
         return qualification;
     }
 
-    public async Task<List<Qualification>> GetQualifications()
+    public async Task<List<Qualification>> Get()
     {
         var qualifications = await GetEntriesByType<Qualification>();
         return qualifications!.ToList();
     }
 
-    public async Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth,
-                                                                     int? startDateYear, string? awardingOrganisation,
-                                                                     string? qualificationName)
+    public async Task<List<Qualification>> Get(int? level, int? startDateMonth,
+                                               int? startDateYear, string? awardingOrganisation,
+                                               string? qualificationName)
     {
         logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}",
                               level,

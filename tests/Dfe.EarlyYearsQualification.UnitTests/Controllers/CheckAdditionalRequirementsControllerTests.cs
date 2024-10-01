@@ -53,7 +53,7 @@ public class CheckAdditionalRequirementsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockRepository.Setup(x => x.GetQualificationById("Test-123"))
+        mockRepository.Setup(x => x.GetById("Test-123"))
                       .ReturnsAsync(value: null)
                       .Verifiable();
 
@@ -85,7 +85,7 @@ public class CheckAdditionalRequirementsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockRepository.Setup(x => x.GetQualificationById("Test-123"))
+        mockRepository.Setup(x => x.GetById("Test-123"))
                       .ReturnsAsync(CreateQualification(null));
 
         var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
@@ -113,7 +113,7 @@ public class CheckAdditionalRequirementsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockRepository.Setup(x => x.GetQualificationById("Test-123"))
+        mockRepository.Setup(x => x.GetById("Test-123"))
                       .ReturnsAsync(CreateQualification(CreateAdditionalRequirementQuestions()));
 
         mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage()).ReturnsAsync(value: null);
@@ -149,7 +149,7 @@ public class CheckAdditionalRequirementsControllerTests
         var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
         var pageContent = CreatePageContent();
 
-        mockRepository.Setup(x => x.GetQualificationById("Test-123")).ReturnsAsync(qualification);
+        mockRepository.Setup(x => x.GetById("Test-123")).ReturnsAsync(qualification);
 
         mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage()).ReturnsAsync(pageContent);
 
@@ -232,7 +232,7 @@ public class CheckAdditionalRequirementsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockRepository.Setup(x => x.GetQualificationById("Test-123"))
+        mockRepository.Setup(x => x.GetById("Test-123"))
                       .ReturnsAsync(value: null).Verifiable();
 
         var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
@@ -264,7 +264,7 @@ public class CheckAdditionalRequirementsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockRepository.Setup(x => x.GetQualificationById("Test-123"))
+        mockRepository.Setup(x => x.GetById("Test-123"))
                       .ReturnsAsync(CreateQualification(null));
 
         var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
@@ -293,7 +293,7 @@ public class CheckAdditionalRequirementsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockRepository.Setup(x => x.GetQualificationById("Test-123"))
+        mockRepository.Setup(x => x.GetById("Test-123"))
                       .ReturnsAsync(CreateQualification(CreateAdditionalRequirementQuestions()));
 
         mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage())
@@ -331,7 +331,7 @@ public class CheckAdditionalRequirementsControllerTests
         var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
         var pageContent = CreatePageContent();
 
-        mockRepository.Setup(x => x.GetQualificationById("Test-123"))
+        mockRepository.Setup(x => x.GetById("Test-123"))
                       .ReturnsAsync(qualification);
 
         mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage())

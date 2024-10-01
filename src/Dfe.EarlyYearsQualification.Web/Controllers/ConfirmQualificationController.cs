@@ -40,7 +40,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var qualification = await qualificationsRepository.GetQualificationById(qualificationId);
+        var qualification = await qualificationsRepository.GetById(qualificationId);
         if (qualification is null)
         {
             var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
@@ -64,7 +64,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var qualification = await qualificationsRepository.GetQualificationById(model.QualificationId);
+        var qualification = await qualificationsRepository.GetById(model.QualificationId);
         if (qualification is null)
         {
             var loggedQualificationId = model.QualificationId.Replace(Environment.NewLine, "");

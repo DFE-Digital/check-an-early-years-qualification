@@ -7,7 +7,7 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockQualificationsRepository : IQualificationsRepository
 {
-    public async Task<Qualification?> GetQualificationById(string qualificationId)
+    public async Task<Qualification?> GetById(string qualificationId)
     {
         return qualificationId.ToLower() switch
                {
@@ -19,7 +19,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                };
     }
 
-    public Task<List<Qualification>> GetQualifications()
+    public Task<List<Qualification>> Get()
     {
         return Task.FromResult(new List<Qualification>
                                {
@@ -63,8 +63,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                });
     }
 
-    public Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth, int? startDateYear,
-                                                               string? awardingOrganisation, string? qualificationName)
+    public Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
+                                         string? awardingOrganisation, string? qualificationName)
     {
         const string startDate = "Sep-14";
         const string endDate = "Aug-19";

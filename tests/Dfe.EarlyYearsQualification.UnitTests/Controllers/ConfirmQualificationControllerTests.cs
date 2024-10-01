@@ -113,7 +113,7 @@ public class ConfirmQualificationControllerTests
                      ErrorBannerLink = "Test error banner link"
                  });
 
-        mockRepository.Setup(x => x.GetQualificationById("Some ID"))
+        mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(default(Qualification?));
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
@@ -189,7 +189,7 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockRepository.Setup(x => x.GetQualificationById("Some ID"))
+        mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
@@ -268,7 +268,7 @@ public class ConfirmQualificationControllerTests
                                 QualificationNumber = "ABC/547/900",
                                 AdditionalRequirements = "additional requirements"
                             };
-        mockRepository.Setup(x => x.GetQualificationById("Some ID"))
+        mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
@@ -332,7 +332,7 @@ public class ConfirmQualificationControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
-        mockRepository.Setup(x => x.GetQualificationById("Some ID"))
+        mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(default(Qualification?));
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
@@ -413,7 +413,7 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockRepository.Setup(x => x.GetQualificationById("Some ID"))
+        mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
@@ -499,7 +499,7 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirementQuestions = additionalRequirements
                             };
 
-        mockRepository.Setup(x => x.GetQualificationById("TEST-123"))
+        mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
@@ -545,7 +545,7 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockRepository.Setup(x => x.GetQualificationById("TEST-123"))
+        mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
@@ -591,7 +591,7 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockRepository.Setup(x => x.GetQualificationById("TEST-123"))
+        mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
@@ -636,7 +636,7 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockRepository.Setup(x => x.GetQualificationById("TEST-123"))
+        mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
