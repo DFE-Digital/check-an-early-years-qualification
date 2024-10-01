@@ -11,6 +11,7 @@ using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
+[TestClass]
 public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<QualificationsRepository>
 {
     [TestMethod]
