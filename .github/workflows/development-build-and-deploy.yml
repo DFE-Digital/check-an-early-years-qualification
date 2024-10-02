@@ -13,7 +13,7 @@ jobs:
       checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
     steps:
       - name: Fail if branch is not main, feature, fix or chore
-        if: !startsWith(github.ref, 'refs/heads/main') || !startsWith(github.ref, 'refs/heads/feature') || !startsWith(github.ref, 'refs/heads/fix') || !startsWith(github.ref, 'refs/heads/chore')
+        if: ${{ !startsWith(github.ref, 'refs/heads/main') || !startsWith(github.ref, 'refs/heads/feature') || !startsWith(github.ref, 'refs/heads/fix') || !startsWith(github.ref, 'refs/heads/chore') }}
         run: |
            echo "${{ github.ref }} is not a main, feature, fix, or chore branch."
            exit 1
