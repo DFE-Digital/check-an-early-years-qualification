@@ -12,10 +12,10 @@ jobs:
       branch: ${{ steps.var.outputs.branch }}
       checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
     steps:
-      - name: Fail if branch is not main, feature or fix
-        if: github.event_name == 'workflow_dispatch' && (github.ref != 'refs/heads/main' || github.ref != 'refs/heads/feature/**' || github.ref != 'refs/heads/fix/**' || github.ref != 'refs/heads/chore/**')
+      - name: Fail if branch is not main, feature, fix or chore
+        if: github.event_name == 'workflow_dispatch' && ( !startsWith(github.ref, 'refs/heads/main') || !startsWith(github.ref, 'refs/heads/feature/') || !startsWith(github.ref, 'refs/heads/fix/') || !startsWith(github.ref, 'refs/heads/chore/'))
         run: |
-           echo "This workflow should not be triggered on a branch other than main, feature, fix or chore"
+           echo "${{ github.ref }} is not a main, feature, fix, or chore branch."
            exit 1
       - uses: actions/checkout@v4
         with:
