@@ -10,7 +10,6 @@ namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentServiceBase
 {
-    private readonly ILogger _logger;
     protected readonly IContentfulClient ContentfulClient;
 
     protected readonly Dictionary<object, string> ContentTypeLookup
@@ -34,12 +33,14 @@ public class ContentfulContentServiceBase
               { typeof(ChallengePage), ContentTypes.ChallengePage }
           };
 
-    protected ContentfulContentServiceBase(IContentfulClient contentfulClient, ILogger logger)
+    protected readonly ILogger Logger;
+
+    protected ContentfulContentServiceBase(ILogger logger, IContentfulClient contentfulClient)
     {
         ContentfulClient = contentfulClient;
         ContentfulClient.ContentTypeResolver = new EntityResolver();
 
-        _logger = logger;
+        Logger = logger;
     }
 
     protected async Task<T?> GetEntryById<T>(string entryId)
@@ -55,9 +56,9 @@ public class ContentfulContentServiceBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,
-                             "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
-                             entryId, nameof(T));
+            Logger.LogError(ex,
+                            "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
+                            entryId, nameof(T));
             return default;
         }
     }
@@ -73,8 +74,8 @@ public class ContentfulContentServiceBase
         catch (Exception ex)
         {
             var typeName = type.Name;
-            _logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.",
-                             typeName);
+            Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.",
+                            typeName);
             return default;
         }
     }

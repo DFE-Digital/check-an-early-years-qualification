@@ -6,15 +6,16 @@ using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class QualificationsRepository(
+    ILogger<QualificationsRepository> logger,
     IContentfulClient contentfulClient,
-    IFuzzyAdapter fuzzyAdapter,
-    ILogger<QualificationsRepository> logger)
-    : ContentfulContentServiceBase(contentfulClient, logger), IQualificationsRepository
+    IFuzzyAdapter fuzzyAdapter)
+    : ContentfulContentServiceBase(logger, contentfulClient), IQualificationsRepository
 {
     private const int Day = 28;
 
@@ -50,7 +51,7 @@ public class QualificationsRepository(
         if (qualifications is null || !qualifications.Any())
         {
             var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
-            logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
+            Logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
                               encodedQualificationId);
             return default;
         }
@@ -69,7 +70,7 @@ public class QualificationsRepository(
                                                int? startDateYear, string? awardingOrganisation,
                                                string? qualificationName)
     {
-        logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}",
+        Logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}",
                               level,
                               startDateMonth,
                               startDateYear,
@@ -105,7 +106,7 @@ public class QualificationsRepository(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error getting qualifications");
+            Logger.LogError(e, "Error getting qualifications");
             return [];
         }
 
@@ -249,7 +250,7 @@ public class QualificationsRepository(
         var splitQualificationDate = qualificationDate.Split('-');
         if (splitQualificationDate.Length != 2)
         {
-            logger.LogError("Qualification date {QualificationDate} has unexpected format", qualificationDate);
+            Logger.LogError("Qualification date {QualificationDate} has unexpected format", qualificationDate);
             return (false, 0, 0);
         }
 
@@ -263,7 +264,8 @@ public class QualificationsRepository(
 
         if (!yearIsValid)
         {
-            logger.LogError("Qualification date {QualificationDate} contains unexpected year value", qualificationDate);
+            Logger.LogError("Qualification date {QualificationDate} contains unexpected year value",
+                            qualificationDate);
             return (false, 0, 0);
         }
 
@@ -272,7 +274,7 @@ public class QualificationsRepository(
             return (true, month, yearPart);
         }
 
-        logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
+        Logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
                         qualificationDate);
 
         return (false, 0, 0);

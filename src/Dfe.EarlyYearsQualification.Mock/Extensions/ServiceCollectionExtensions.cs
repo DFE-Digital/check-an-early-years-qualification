@@ -1,4 +1,4 @@
-﻿using Dfe.EarlyYearsQualification.Content.Services;
+﻿using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using Microsoft.Extensions.DependencyInjection;
 

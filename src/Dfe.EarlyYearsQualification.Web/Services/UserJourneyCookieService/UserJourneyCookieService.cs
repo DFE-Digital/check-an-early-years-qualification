@@ -5,7 +5,7 @@ using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
-public class UserJourneyCookieService(ICookieManager cookieManager, ILogger<UserJourneyCookieService> logger)
+public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, ICookieManager cookieManager)
     : IUserJourneyCookieService
 {
     private readonly CookieOptions _cookieOptions = new()

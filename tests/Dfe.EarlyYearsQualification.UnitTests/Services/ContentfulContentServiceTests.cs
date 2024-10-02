@@ -31,7 +31,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetStartPage();
 
@@ -52,7 +52,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetStartPage();
 
@@ -71,7 +71,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<StartPage>)null!);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetStartPage();
 
@@ -93,7 +93,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAccessibilityStatementPage();
 
@@ -112,7 +112,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<AccessibilityStatementPage>)null!);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAccessibilityStatementPage();
 
@@ -136,7 +136,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAccessibilityStatementPage();
 
@@ -156,7 +156,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesPage();
 
@@ -175,7 +175,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<CookiesPage>)null!);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesPage();
 
@@ -204,7 +204,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesPage();
 
@@ -222,7 +222,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<NavigationLinks> { Items = new List<NavigationLinks>() });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetNavigationLinks();
 
@@ -241,7 +241,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<NavigationLinks>)null!);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetNavigationLinks();
 
@@ -278,7 +278,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetNavigationLinks();
 
@@ -296,7 +296,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<AdvicePage>)null!);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAdvicePage("SomeId");
 
@@ -327,7 +327,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAdvicePage("SomeId");
 
@@ -358,7 +358,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetRadioQuestionPage("SomeId");
 
@@ -388,7 +388,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDateQuestionPage("SomeId");
 
@@ -418,7 +418,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDropdownQuestionPage("SomeId");
 
@@ -449,7 +449,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetConfirmQualificationPage();
 
@@ -470,7 +470,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetConfirmQualificationPage();
 
@@ -500,7 +500,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetQualificationListPage();
 
@@ -521,7 +521,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetQualificationListPage();
 
@@ -538,7 +538,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<DetailsPage>)null!);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDetailsPage();
 
@@ -557,7 +557,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<DetailsPage> { Items = new List<DetailsPage>() });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDetailsPage();
 
@@ -598,7 +598,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDetailsPage();
 
@@ -628,7 +628,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<PhaseBanner>)null!);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetPhaseBannerContent();
 
@@ -647,7 +647,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<PhaseBanner> { Items = new List<PhaseBanner>() });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetPhaseBannerContent();
 
@@ -674,7 +674,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                   .ReturnsAsync(new ContentfulCollection<PhaseBanner>
                                 { Items = new List<PhaseBanner> { phaseBanner } });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetPhaseBannerContent();
 
@@ -700,7 +700,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<CookiesBanner>)null!);
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesBannerContent();
 
@@ -719,7 +719,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<CookiesBanner> { Items = new List<CookiesBanner>() });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesBannerContent();
 
@@ -751,7 +751,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                   .ReturnsAsync(new ContentfulCollection<CookiesBanner>
                                 { Items = new List<CookiesBanner> { cookiesBanner } });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesBannerContent();
 
@@ -792,7 +792,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                 It.IsAny<CancellationToken>()))
                   .Throws<InvalidOperationException>();
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         await service.GetStartPage();
 
@@ -810,7 +810,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<CheckAdditionalRequirementsPage> { Items = [page] });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCheckAdditionalRequirementsPage();
 
@@ -826,7 +826,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<CheckAdditionalRequirementsPage> { Items = [] });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCheckAdditionalRequirementsPage();
 
@@ -844,7 +844,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<ChallengePage> { Items = [page] });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetChallengePage();
 
@@ -860,7 +860,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<ChallengePage> { Items = [] });
 
-        var service = new ContentfulContentService(ClientMock.Object, Logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetChallengePage();
 

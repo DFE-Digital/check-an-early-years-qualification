@@ -2,12 +2,15 @@
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
-public class ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
-    : ContentfulContentServiceBase(contentfulClient, logger), IContentService
+public class ContentfulContentService(
+    ILogger<ContentfulContentService> logger,
+    IContentfulClient contentfulClient)
+    : ContentfulContentServiceBase(logger, contentfulClient), IContentService
 {
     public async Task<StartPage?> GetStartPage()
     {
@@ -16,7 +19,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         // ReSharper disable once InvertIf
         if (startPageEntries is null || !startPageEntries.Any())
         {
-            logger.LogWarning("No start page entry returned");
+            Logger.LogWarning("No start page entry returned");
             return default;
         }
 
@@ -30,7 +33,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         var detailsPageEntries = await GetEntriesByType(queryBuilder);
         if (detailsPageEntries is null || !detailsPageEntries.Any())
         {
-            logger.LogWarning("No details page entry returned");
+            Logger.LogWarning("No details page entry returned");
             return default;
         }
 
@@ -45,7 +48,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         // ReSharper disable once InvertIf
         if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
         {
-            logger.LogWarning("No accessibility statement page entry returned");
+            Logger.LogWarning("No accessibility statement page entry returned");
             return default;
         }
 
@@ -57,7 +60,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         var cookiesEntities = await GetEntriesByType<CookiesPage>();
         if (cookiesEntities is null || !cookiesEntities.Any())
         {
-            logger.LogWarning("No cookies page entry returned");
+            Logger.LogWarning("No cookies page entry returned");
             return default;
         }
 
@@ -73,7 +76,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
             return navigationLinkEntries.First().Links;
         }
 
-        logger.LogWarning("No navigation links returned");
+        Logger.LogWarning("No navigation links returned");
         return [];
     }
 
@@ -84,7 +87,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         // ReSharper disable once InvertIf
         if (advicePage is null)
         {
-            logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
+            Logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
             return default;
         }
 
@@ -114,7 +117,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         // ReSharper disable once InvertIf
         if (phaseBannerEntities is null || !phaseBannerEntities.Any())
         {
-            logger.LogWarning("No phase banner entry returned");
+            Logger.LogWarning("No phase banner entry returned");
             return default;
         }
 
@@ -128,7 +131,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         // ReSharper disable once InvertIf
         if (cookiesBannerEntry is null || !cookiesBannerEntry.Any())
         {
-            logger.LogWarning("No cookies banner entry returned");
+            Logger.LogWarning("No cookies banner entry returned");
             return default;
         }
 
@@ -142,7 +145,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         // ReSharper disable once InvertIf
         if (confirmQualificationEntities is null || !confirmQualificationEntities.Any())
         {
-            logger.LogWarning("No confirm qualification page entry returned");
+            Logger.LogWarning("No confirm qualification page entry returned");
             return default;
         }
 
@@ -157,7 +160,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         // ...more legible as it is
         if (checkAdditionalRequirementsPageEntities is null || !checkAdditionalRequirementsPageEntities.Any())
         {
-            logger.LogWarning("No CheckAdditionalRequirementsPage entry returned");
+            Logger.LogWarning("No CheckAdditionalRequirementsPage entry returned");
             return default;
         }
 
@@ -169,7 +172,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         var qualificationListPageEntities = await GetEntriesByType<QualificationListPage>();
         if (qualificationListPageEntities is null || !qualificationListPageEntities.Any())
         {
-            logger.LogWarning("No qualification list page entry returned");
+            Logger.LogWarning("No qualification list page entry returned");
             return default;
         }
 
@@ -182,7 +185,7 @@ public class ContentfulContentService(IContentfulClient contentfulClient, ILogge
         var challengePageEntities = await GetEntriesByType<ChallengePage>();
         if (challengePageEntities is null || !challengePageEntities.Any())
         {
-            logger.LogWarning("No challenge page entry returned");
+            Logger.LogWarning("No challenge page entry returned");
             return default;
         }
 

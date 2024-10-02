@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -561,7 +561,7 @@ public class AdviceControllerTests
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task PrivacyPolicy_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {

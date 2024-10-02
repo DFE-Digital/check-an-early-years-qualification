@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 
-namespace Dfe.EarlyYearsQualification.Content.Services;
+namespace Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 
 public interface IQualificationsRepository
 {
