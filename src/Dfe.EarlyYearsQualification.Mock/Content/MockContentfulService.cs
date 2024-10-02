@@ -514,9 +514,14 @@ public class MockContentfulService : IContentService
                    ErrorMessage = "Test Error Message",
                    FutureDateErrorBannerLinkText = "Future date error message banner link",
                    FutureDateErrorMessage = "Future date error message",
-                   IncorrectFormatErrorBannerLinkText =
-                       "Enter a month between 1 and 12 and a year between 1900 and $[actual-year]$",
-                   IncorrectFormatErrorMessage = "Incorrect format error message banner link"
+                   MissingMonthErrorMessage = "Missing Month Error Message",
+                   MissingYearErrorMessage = "Missing Year Error Message",
+                   MissingMonthBannerLinkText = "Missing Month Banner Link Text",
+                   MissingYearBannerLinkText = "Missing Year Banner Link Text",
+                   MonthOutOfBoundsErrorLinkText = "Month Out Of Bounds Error Link Text",
+                   MonthOutOfBoundsErrorMessage = "Month Out Of Bounds Error Message",
+                   YearOutOfBoundsErrorLinkText = "Year Out Of Bounds Error Link Text",
+                   YearOutOfBoundsErrorMessage = "Year Out Of Bounds Error Message"
                };
     }
 

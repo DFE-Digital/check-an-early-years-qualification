@@ -62,7 +62,6 @@ variable "kv_certificate_subject" {
 }
 
 variable "asp_sku" {
-  default     = "S1"
   description = "SKU name for the App Service Plan"
   type        = string
 }

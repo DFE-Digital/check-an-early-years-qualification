@@ -116,7 +116,6 @@ public class QuestionsController(
                                            dateModelValidationResult,
                                            model.SelectedMonth,
                                            model.SelectedYear);
-                model.HasErrors = true;
             }
 
             return View("Date", model);

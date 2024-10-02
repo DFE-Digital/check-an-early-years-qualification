@@ -2,7 +2,7 @@ name: Terraform PR Check
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: ["release/**", "fix/**"]
     paths:
       - 'terraform/**'
       - '.github/workflows/terraform-pr-check.yml'

@@ -1,12 +1,10 @@
 name: Static code analysis
 on:
   push:
-    branches:
-      - main
+    branches: ["main", "release/**", "fix/**"]
   pull_request:
     types: [opened, synchronize, reopened]
-    branches:
-      - main
+    branches: ["main", "release/**", "fix/**"]
 jobs:
   code-analysis:
     name: Static code analysis
