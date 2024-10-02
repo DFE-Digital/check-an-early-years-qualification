@@ -87,7 +87,8 @@ public class ConfirmQualificationController(
                                                                              "CheckAdditionalRequirements",
                                                                              new
                                                                              {
-                                                                                 qualificationId = model.QualificationId
+                                                                                 qualificationId = model.QualificationId,
+                                                                                 questionId = 1
                                                                              }),
 
                        "yes" => RedirectToAction("Index",

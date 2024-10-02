@@ -8,33 +8,38 @@ public class CheckAdditionalRequirementsPageModel
     [Required]
     public string QualificationId { get; set; } = string.Empty;
 
+    [Required]
+    public int? QuestionId { get; set; }
+
     public string Heading { get; set; } = string.Empty;
 
-    public string QualificationLabel { get; set; } = string.Empty;
-
-    public string QualificationName { get; set; } = string.Empty;
-
-    public string QualificationLevelLabel { get; set; } = string.Empty;
-
-    public int QualificationLevel { get; set; }
-
-    public string AwardingOrganisationLabel { get; set; } = string.Empty;
-
-    public string AwardingOrganisation { get; set; } = string.Empty;
+    // public string QualificationLabel { get; set; } = string.Empty;
+    //
+    // public string QualificationName { get; set; } = string.Empty;
+    //
+    // public string QualificationLevelLabel { get; set; } = string.Empty;
+    //
+    // public int QualificationLevel { get; set; }
+    //
+    // public string AwardingOrganisationLabel { get; set; } = string.Empty;
+    //
+    // public string AwardingOrganisation { get; set; } = string.Empty;
 
     public string QuestionSectionHeading { get; set; } = string.Empty;
 
-    public string InformationMessage { get; set; } = string.Empty;
+    // public string InformationMessage { get; set; } = string.Empty;
 
     public string CtaButtonText { get; set; } = string.Empty;
 
     public NavigationLinkModel? BackButton { get; set; }
 
-    public List<AdditionalRequirementQuestionModel> AdditionalRequirementQuestions { get; set; } = [];
+    public AdditionalRequirementQuestionModel AdditionalRequirementQuestion { get; set; } = new();
 
-    [AnswerValidation]
-    // ReSharper disable once PropertyCanBeMadeInitOnly.Global
-    public Dictionary<string, string> Answers { get; set; } = [];
+    [Required]
+    public string Question { get; set; } = string.Empty;
+
+    [Required]
+    public string Answer { get; set; } = string.Empty;
 
     public bool HasErrors { get; set; }
 
@@ -42,12 +47,12 @@ public class CheckAdditionalRequirementsPageModel
 
     public string ErrorSummaryHeading { get; set; } = string.Empty;
 
-    public int SpecifiedAnswersCount
-    {
-        get { return Answers.Count; }
-    }
-
-    [Required]
-    [Compare("SpecifiedAnswersCount")]
-    public int QuestionCount { get; set; }
+    // public int SpecifiedAnswersCount
+    // {
+    //     get { return Answers.Count; }
+    // }
+    //
+    // [Required]
+    // [Compare("SpecifiedAnswersCount")]
+    // public int QuestionCount { get; set; }
 }

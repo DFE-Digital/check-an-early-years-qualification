@@ -19,14 +19,14 @@ public class CheckAdditionalRequirementsController(
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
-    [HttpGet("{qualificationId}")]
-    public async Task<IActionResult> Index(string qualificationId)
+    [HttpGet("{qualificationId}/{questionId}")]
+    public async Task<IActionResult> Index(string qualificationId, int questionId)
     {
         if (ModelState.IsValid)
         {
             var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
-            var model = new CheckAdditionalRequirementsPageModel { Answers = answers ?? [] };
-            return await GetResponse(qualificationId, model);
+            var model = new CheckAdditionalRequirementsPageModel();
+            return await GetResponse(qualificationId, questionId, model);
         }
         
         logger.LogError("No qualificationId passed in");
@@ -34,21 +34,45 @@ public class CheckAdditionalRequirementsController(
 
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Post([FromForm]CheckAdditionalRequirementsPageModel model)
+    [HttpPost("{qualificationId}/{questionId}")]
+    public async Task<IActionResult> Post(string qualificationId, int questionId, [FromForm]CheckAdditionalRequirementsPageModel model)
     {
         if (ModelState.IsValid)
         {
-            userJourneyCookieService.SetAdditionalQuestionsAnswers(model.Answers);
+            var previouslyAnsweredQuestions = userJourneyCookieService.GetAdditionalQuestionsAnswers() ?? new Dictionary<string, string>();
+            var additionalRequirementQuestions = new Dictionary<string, string>();
+            foreach (var previouslyAnsweredQuestion in previouslyAnsweredQuestions)
+            {
+                additionalRequirementQuestions.Add(previouslyAnsweredQuestion.Key, previouslyAnsweredQuestion.Value);
+            }
+            additionalRequirementQuestions.Add(model.Question, model.Answer);
+            userJourneyCookieService.SetAdditionalQuestionsAnswers(additionalRequirementQuestions);
+            
+            var qualification = await contentService.GetQualificationById(qualificationId);
+            if (qualification is null)
+            {
+                var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
+                logger.LogError("Could not find details for qualification with ID: {QualificationId}",
+                                loggedQualificationId);
+
+                return RedirectToAction("Index", "Error");
+            }
+
+            if (qualification.AdditionalRequirementQuestions is not null && questionId < qualification.AdditionalRequirementQuestions.Count)
+            {
+                return RedirectToAction("Index", "CheckAdditionalRequirements",
+                                        new { model.QualificationId, questionId = questionId + 1 });
+            }
+            
             return RedirectToAction("Index", "QualificationDetails",
                                     new { model.QualificationId });
         }
         
         model.HasErrors = true;
-        return await GetResponse(model.QualificationId, model);
+        return await GetResponse(qualificationId, questionId, model);
     }
 
-    private async Task<IActionResult> GetResponse(string qualificationId,
+    private async Task<IActionResult> GetResponse(string qualificationId, int questionId,
                                                   CheckAdditionalRequirementsPageModel? model = null)
     {
         var qualification = await contentService.GetQualificationById(qualificationId);
@@ -77,82 +101,43 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var mappedModel = await MapModel(content, qualification, model);
-        if (mappedModel.HasErrors)
-        {
-            SetQuestionErrorFlag(mappedModel);
-        }
-
+        var mappedModel = await MapModel(content, qualification, questionId, model);
         return View("Index", mappedModel);
     }
 
     private async Task<CheckAdditionalRequirementsPageModel> MapModel(CheckAdditionalRequirementsPage content, Qualification qualification,
+                                                                      int questionId,
                                                                       CheckAdditionalRequirementsPageModel? model = null)
     {
         var mappedModel = model ?? new CheckAdditionalRequirementsPageModel();
         mappedModel.QualificationId = qualification.QualificationId;
-        mappedModel.AwardingOrganisation = qualification.AwardingOrganisationTitle;
-        mappedModel.AwardingOrganisationLabel = content.AwardingOrganisationLabel;
+        mappedModel.QuestionId = questionId;
         mappedModel.CtaButtonText = content.CtaButtonText;
-        mappedModel.QualificationLevel = qualification.QualificationLevel;
-        mappedModel.QualificationLabel = content.QualificationLabel;
-        mappedModel.QualificationName = qualification.QualificationName;
         mappedModel.Heading = content.Heading;
-        mappedModel.InformationMessage = content.InformationMessage;
-        mappedModel.QualificationLevelLabel = content.QualificationLevelLabel;
         mappedModel.QuestionSectionHeading = content.QuestionSectionHeading;
         mappedModel.BackButton = MapToNavigationLinkModel(content.BackButton);
-        mappedModel.AdditionalRequirementQuestions =
-            await MapAdditionalRequirementQuestions(qualification.AdditionalRequirementQuestions!);
-        mappedModel.Answers = MapQuestionsToDictionary(qualification.AdditionalRequirementQuestions!, model);
+        mappedModel.AdditionalRequirementQuestion =
+            await MapAdditionalRequirementQuestion(qualification.AdditionalRequirementQuestions!, questionId);
         mappedModel.ErrorMessage = content.ErrorMessage;
         mappedModel.ErrorSummaryHeading = content.ErrorSummaryHeading;
-        mappedModel.QuestionCount = mappedModel.AdditionalRequirementQuestions.Count;
         return mappedModel;
     }
     
-    private async Task<List<AdditionalRequirementQuestionModel>> MapAdditionalRequirementQuestions(List<AdditionalRequirementQuestion> additionalRequirementQuestions)
+    private async Task<AdditionalRequirementQuestionModel> MapAdditionalRequirementQuestion(List<AdditionalRequirementQuestion> additionalRequirementQuestions, int questionId)
     {
-        var results = new List<AdditionalRequirementQuestionModel>();
-
-        foreach (var additionalRequirementQuestion in additionalRequirementQuestions)
-        {
-            results.Add(new AdditionalRequirementQuestionModel
-                        {
-                            Question = additionalRequirementQuestion.Question,
-                            HintText = additionalRequirementQuestion.HintText,
-                            DetailsHeading = additionalRequirementQuestion.DetailsHeading,
-                            DetailsContent = await contentParser.ToHtml(additionalRequirementQuestion.DetailsContent),
-                            Options = MapOptions(additionalRequirementQuestion.Answers)
-                        });
-        }
-        
-        return results;
+        var additionalRequirementQuestion = additionalRequirementQuestions[questionId - 1];
+        return new AdditionalRequirementQuestionModel
+               {
+                   Question = additionalRequirementQuestion.Question,
+                   HintText = additionalRequirementQuestion.HintText,
+                   DetailsHeading = additionalRequirementQuestion.DetailsHeading,
+                   DetailsContent = await contentParser.ToHtml(additionalRequirementQuestion.DetailsContent),
+                   Options = MapOptions(additionalRequirementQuestion.Answers)
+               };
     }
 
     private static List<OptionModel> MapOptions(List<Option> options)
     {
         return options.Select(option => new OptionModel { Label = option.Label, Value = option.Value }).ToList();
-    }
-    
-    private static Dictionary<string, string> MapQuestionsToDictionary(List<AdditionalRequirementQuestion> additionalRequirementQuestions, CheckAdditionalRequirementsPageModel? previousModel)
-    {
-        var result = additionalRequirementQuestions.ToDictionary(additionalRequirementQuestion => additionalRequirementQuestion.Question, _ => string.Empty);
-        if (previousModel is null) return result;
-        
-        foreach (var answer in previousModel.Answers.Where(answer => !string.IsNullOrEmpty(answer.Value)))
-        {
-            result[answer.Key] = answer.Value;
-        }
-
-        return result;
-    }
-    
-    private static void SetQuestionErrorFlag(CheckAdditionalRequirementsPageModel model)
-    {
-        foreach (var answer in model.Answers.Where(answer => string.IsNullOrEmpty(answer.Value)))
-        {
-            model.AdditionalRequirementQuestions.First(x => x.Question == answer.Key).HasError = true;
-        }
     }
 }

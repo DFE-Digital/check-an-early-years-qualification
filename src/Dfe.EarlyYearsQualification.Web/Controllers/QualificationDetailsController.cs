@@ -112,7 +112,7 @@ public class QualificationDetailsController(
         {
             return (false,
                     RedirectToAction("Index", "CheckAdditionalRequirements",
-                                     new { model.QualificationId }));
+                                     new { model.QualificationId, questionId = 1 }));
         }
 
         // If there are not any answers to the questions that are not full and relevant we can continue back to check the ratios.
