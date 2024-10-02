@@ -73,7 +73,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                                      It.IsAny<QueryBuilder<Qualification>>(),
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification>
-                                { Items = new List<Qualification> { qualification } });
+                                { Items = [qualification] });
 
         var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IFuzzyAdapter>().Object);
 

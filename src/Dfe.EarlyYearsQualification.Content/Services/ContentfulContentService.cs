@@ -28,8 +28,11 @@ public class ContentfulContentService(
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-        var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(ContentTypeLookup[typeof(DetailsPage)])
+        var detailsPageType = ContentTypeLookup[typeof(DetailsPage)];
+
+        var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(detailsPageType)
                                                           .Include(2);
+
         var detailsPageEntries = await GetEntriesByType(queryBuilder);
         if (detailsPageEntries is null || !detailsPageEntries.Any())
         {

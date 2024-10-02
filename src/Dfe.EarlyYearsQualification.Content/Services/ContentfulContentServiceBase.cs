@@ -12,7 +12,7 @@ public class ContentfulContentServiceBase
 {
     protected readonly IContentfulClient ContentfulClient;
 
-    protected readonly Dictionary<object, string> ContentTypeLookup
+    protected readonly Dictionary<Type, string> ContentTypeLookup
         = new()
           {
               { typeof(StartPage), ContentTypes.StartPage },
@@ -47,12 +47,16 @@ public class ContentfulContentServiceBase
     {
         try
         {
-            // NOTE: GetEntry doesn't bind linked references which is why we are using GetEntriesByType
-            var queryBuilder = new QueryBuilder<T>().ContentTypeIs(ContentTypeLookup[typeof(T)])
+            // NOTE: ContentfulClient.GetEntry doesn't bind linked references which is why we are using GetEntriesByType
+            var contentType = ContentTypeLookup[typeof(T)];
+
+            var queryBuilder = new QueryBuilder<T>().ContentTypeIs(contentType)
                                                     .Include(2)
                                                     .FieldEquals("sys.id", entryId);
-            var entry = await ContentfulClient.GetEntriesByType(ContentTypeLookup[typeof(T)], queryBuilder);
-            return entry.FirstOrDefault();
+
+            var entries = await ContentfulClient.GetEntriesByType(contentType, queryBuilder);
+
+            return entries.FirstOrDefault();
         }
         catch (Exception ex)
         {

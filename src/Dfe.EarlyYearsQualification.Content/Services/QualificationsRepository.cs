@@ -42,10 +42,12 @@ public class QualificationsRepository(
 
     public async Task<Qualification?> GetById(string qualificationId)
     {
-        var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(ContentTypeLookup[typeof(Qualification)])
-                                                            .Include(2)
-                                                            .FieldEquals("fields.qualificationId",
-                                                                         qualificationId.ToUpper());
+        var queryBuilder =
+            new QueryBuilder<Qualification>()
+                .ContentTypeIs(ContentTypeLookup[typeof(Qualification)])
+                .Include(2)
+                .FieldEquals("fields.qualificationId", qualificationId.ToUpper());
+
         var qualifications = await GetEntriesByType(queryBuilder);
 
         if (qualifications is null || !qualifications.Any())
