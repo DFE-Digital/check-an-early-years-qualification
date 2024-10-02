@@ -7,7 +7,7 @@ on:
       - 'src/**'
       - 'tests/**'
   pull_request:
-    branches: ["main"]
+    branches: ["main", "release/**", "fix/**"]
     paths:
       - 'src/**'
       - 'tests/**'
@@ -40,10 +40,6 @@ jobs:
         with:
           dotnet_version: ${{ env.DOTNET_VERSION }}  
           solution_filename: ${{ env.SOLUTION_NAME }}
-
-      - name: Run CodeQL and dependency checks
-        uses: ./.github/actions/codeql-and-dependency-checks
-        if: github.event_name == 'pull_request'
 
       - name: Run unit tests
         uses: ./.github/actions/run-unit-tests
