@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -14,6 +14,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [RedirectIfDateMissing]
 public class CheckAdditionalRequirementsController(
     ILogger<CheckAdditionalRequirementsController> logger,
+    IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService)
@@ -28,14 +29,13 @@ public class CheckAdditionalRequirementsController(
             var model = new CheckAdditionalRequirementsPageModel { Answers = answers ?? [] };
             return await GetResponse(qualificationId, model);
         }
-        
+
         logger.LogError("No qualificationId passed in");
         return RedirectToAction("Index", "Error");
-
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromForm]CheckAdditionalRequirementsPageModel model)
+    public async Task<IActionResult> Post([FromForm] CheckAdditionalRequirementsPageModel model)
     {
         if (ModelState.IsValid)
         {
@@ -43,7 +43,7 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "QualificationDetails",
                                     new { model.QualificationId });
         }
-        
+
         model.HasErrors = true;
         return await GetResponse(model.QualificationId, model);
     }
@@ -51,7 +51,7 @@ public class CheckAdditionalRequirementsController(
     private async Task<IActionResult> GetResponse(string qualificationId,
                                                   CheckAdditionalRequirementsPageModel? model = null)
     {
-        var qualification = await contentService.GetQualificationById(qualificationId);
+        var qualification = await qualificationsRepository.GetById(qualificationId);
         if (qualification is null)
         {
             var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
@@ -61,7 +61,8 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "Error");
         }
 
-        if (qualification.AdditionalRequirementQuestions is null || qualification.AdditionalRequirementQuestions.Count == 0)
+        if (qualification.AdditionalRequirementQuestions is null ||
+            qualification.AdditionalRequirementQuestions.Count == 0)
         {
             var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
             logger.LogInformation("QualificationId has no additional requirement questions: {QualificationId}",
@@ -69,7 +70,7 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "QualificationDetails",
                                     new { qualificationId });
         }
-        
+
         var content = await contentService.GetCheckAdditionalRequirementsPage();
         if (content is null)
         {
@@ -86,8 +87,10 @@ public class CheckAdditionalRequirementsController(
         return View("Index", mappedModel);
     }
 
-    private async Task<CheckAdditionalRequirementsPageModel> MapModel(CheckAdditionalRequirementsPage content, Qualification qualification,
-                                                                      CheckAdditionalRequirementsPageModel? model = null)
+    private async Task<CheckAdditionalRequirementsPageModel> MapModel(CheckAdditionalRequirementsPage content,
+                                                                      Qualification qualification,
+                                                                      CheckAdditionalRequirementsPageModel? model =
+                                                                          null)
     {
         var mappedModel = model ?? new CheckAdditionalRequirementsPageModel();
         mappedModel.QualificationId = qualification.QualificationId;
@@ -110,8 +113,9 @@ public class CheckAdditionalRequirementsController(
         mappedModel.QuestionCount = mappedModel.AdditionalRequirementQuestions.Count;
         return mappedModel;
     }
-    
-    private async Task<List<AdditionalRequirementQuestionModel>> MapAdditionalRequirementQuestions(List<AdditionalRequirementQuestion> additionalRequirementQuestions)
+
+    private async Task<List<AdditionalRequirementQuestionModel>> MapAdditionalRequirementQuestions(
+        List<AdditionalRequirementQuestion> additionalRequirementQuestions)
     {
         var results = new List<AdditionalRequirementQuestionModel>();
 
@@ -126,7 +130,7 @@ public class CheckAdditionalRequirementsController(
                             Options = MapOptions(additionalRequirementQuestion.Answers)
                         });
         }
-        
+
         return results;
     }
 
@@ -134,12 +138,17 @@ public class CheckAdditionalRequirementsController(
     {
         return options.Select(option => new OptionModel { Label = option.Label, Value = option.Value }).ToList();
     }
-    
-    private static Dictionary<string, string> MapQuestionsToDictionary(List<AdditionalRequirementQuestion> additionalRequirementQuestions, CheckAdditionalRequirementsPageModel? previousModel)
+
+    private static Dictionary<string, string> MapQuestionsToDictionary(
+        List<AdditionalRequirementQuestion> additionalRequirementQuestions,
+        CheckAdditionalRequirementsPageModel? previousModel)
     {
-        var result = additionalRequirementQuestions.ToDictionary(additionalRequirementQuestion => additionalRequirementQuestion.Question, _ => string.Empty);
+        var result =
+            additionalRequirementQuestions
+                .ToDictionary(additionalRequirementQuestion => additionalRequirementQuestion.Question,
+                              _ => string.Empty);
         if (previousModel is null) return result;
-        
+
         foreach (var answer in previousModel.Answers.Where(answer => !string.IsNullOrEmpty(answer.Value)))
         {
             result[answer.Key] = answer.Value;
@@ -147,7 +156,7 @@ public class CheckAdditionalRequirementsController(
 
         return result;
     }
-    
+
     private static void SetQuestionErrorFlag(CheckAdditionalRequirementsPageModel model)
     {
         foreach (var answer in model.Answers.Where(answer => string.IsNullOrEmpty(answer.Value)))

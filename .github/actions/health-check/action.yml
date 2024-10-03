@@ -2,10 +2,7 @@ name: Make request to health check endpoint
 description: Makes a request to the health check endpoint. Will return code 0 if successful, 1 if a failure
 
 inputs:
-  webapp_name:
-    required: true
-    type: string
-  slot_name:
+  webapp_url:
     required: true
     type: string
 
@@ -20,7 +17,7 @@ runs:
         max_attempts=5
 
         until [ ${attempt_counter} -eq ${max_attempts} ]; do
-          status_code=$(curl --output /dev/null --silent -i --fail -w '%{response_code}\n' https://${{ inputs.webapp_name }}-${{ inputs.slot_name }}.azurewebsites.net/health);
+          status_code=$(curl --output /dev/null --silent -i --fail -w '%{response_code}\n' https://${{ inputs.webapp_url }}.azurewebsites.net/health);
 
           echo "Response status code: $status_code"
             

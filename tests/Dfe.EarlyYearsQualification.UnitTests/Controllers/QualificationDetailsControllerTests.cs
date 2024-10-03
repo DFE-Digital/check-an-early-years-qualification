@@ -1,7 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -22,15 +22,17 @@ public class QualificationDetailsControllerTests
     public async Task Index_PassInNullQualificationId_ReturnsBadRequest()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -51,15 +53,17 @@ public class QualificationDetailsControllerTests
     public async Task Index_ContentServiceReturnsNullDetailsPage_RedirectsToHomeError()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -86,15 +90,17 @@ public class QualificationDetailsControllerTests
     public async Task Index_ContentServiceReturnsNoQualification_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -103,8 +109,12 @@ public class QualificationDetailsControllerTests
             };
 
         const string qualificationId = "eyq-145";
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync((Qualification?)default);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync((Qualification?)default);
+
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(new DetailsPage());
+
         var result = await controller.Index(qualificationId);
 
         result.Should().NotBeNull();
@@ -121,8 +131,8 @@ public class QualificationDetailsControllerTests
     public async Task Index_NoDateOfQualificationSelectedPriorInTheJourney_RedirectToHome()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
@@ -137,15 +147,21 @@ public class QualificationDetailsControllerTests
                                       QualificationNumber = "ABC/547/900",
                                       AdditionalRequirements = "additional requirements"
                                   };
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
+
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(new DetailsPage());
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((null, null));
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -165,8 +181,8 @@ public class QualificationDetailsControllerTests
     public async Task Index_NoDateMonthOfQualificationSelectedPriorInTheJourney_RedirectToHome()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
@@ -181,15 +197,21 @@ public class QualificationDetailsControllerTests
                                       QualificationNumber = "ABC/547/900",
                                       AdditionalRequirements = "additional requirements"
                                   };
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
+
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(new DetailsPage());
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((null, 2012));
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -209,8 +231,8 @@ public class QualificationDetailsControllerTests
     public async Task Index_QualificationHasAdditionalQuestionsButNoneAnswered_RedirectTotTheAdditionalQuestionsPage()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
@@ -238,17 +260,22 @@ public class QualificationDetailsControllerTests
                                       AdditionalRequirementQuestions = listOfAdditionalReqs
                                   };
 
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
+
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(new DetailsPage());
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, 2022));
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -274,8 +301,8 @@ public class QualificationDetailsControllerTests
             string answer1, string answer2)
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
@@ -313,17 +340,24 @@ public class QualificationDetailsControllerTests
                                       AdditionalRequirementQuestions = listOfAdditionalReqs
                                   };
 
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, 2022));
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(new DetailsPage());
+
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted())
+                                    .Returns((9, 2022));
+
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -360,8 +394,8 @@ public class QualificationDetailsControllerTests
     public async Task Index_BuildUpRatioRequirements_CantFindLevel2_LogsAndThrows()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
@@ -382,17 +416,22 @@ public class QualificationDetailsControllerTests
                                       RatioRequirements = ratioRequirements
                                   };
 
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
+
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(new DetailsPage());
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
         mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
                                     .Returns(false);
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -408,8 +447,8 @@ public class QualificationDetailsControllerTests
     public async Task Index_BuildUpRatioRequirements_CantFindLevel3_LogsAndThrows()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
@@ -437,17 +476,24 @@ public class QualificationDetailsControllerTests
                                       RatioRequirements = ratioRequirements
                                   };
 
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(new DetailsPage());
+
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted())
+                                    .Returns((9, startDateYear));
+
         mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
                                     .Returns(false);
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -463,8 +509,8 @@ public class QualificationDetailsControllerTests
     public async Task Index_BuildUpRatioRequirements_CantFindLevel6_LogsAndThrows()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
@@ -497,7 +543,7 @@ public class QualificationDetailsControllerTests
                                       RatioRequirements = ratioRequirements
                                   };
 
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
+        mockRepository.Setup(x => x.GetById(qualificationId)).ReturnsAsync(qualificationResult);
         mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
@@ -505,9 +551,11 @@ public class QualificationDetailsControllerTests
                                     .Returns(false);
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -523,8 +571,8 @@ public class QualificationDetailsControllerTests
     public async Task Index_AllRatiosFound_ReturnsView()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
@@ -579,17 +627,24 @@ public class QualificationDetailsControllerTests
                                                               }
                           };
 
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId)).ReturnsAsync(qualificationResult);
-        mockContentService.Setup(x => x.GetDetailsPage()).ReturnsAsync(detailsPage);
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
 
-        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, startDateYear));
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(detailsPage);
+
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted())
+                                    .Returns((9, startDateYear));
+
         mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014())
                                     .Returns(false);
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -624,8 +679,8 @@ public class QualificationDetailsControllerTests
     public async Task Index_BackToAdditionalQuestionsLinkIncludesQualificationId()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
@@ -683,8 +738,8 @@ public class QualificationDetailsControllerTests
                                                               }
                           };
 
-        mockContentService.Setup(x => x.GetQualificationById(qualificationId))
-                          .ReturnsAsync(qualificationResult);
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
 
         mockContentService.Setup(x => x.GetDetailsPage())
                           .ReturnsAsync(detailsPage);
@@ -694,9 +749,11 @@ public class QualificationDetailsControllerTests
                                     .Returns(false);
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -720,24 +777,26 @@ public class QualificationDetailsControllerTests
     public async Task Get_ReturnsView()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockContentFilterService
+        mockRepository
             .Setup(x =>
-                       x.GetFilteredQualifications(It.IsAny<int?>(),
-                                                   It.IsAny<int?>(),
-                                                   It.IsAny<int?>(),
-                                                   It.IsAny<string?>(),
-                                                   It.IsAny<string?>()))
+                       x.Get(It.IsAny<int?>(),
+                             It.IsAny<int?>(),
+                             It.IsAny<int?>(),
+                             It.IsAny<string?>(),
+                             It.IsAny<string?>()))
             .ReturnsAsync([]);
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -766,15 +825,17 @@ public class QualificationDetailsControllerTests
     public async Task Get_NoContent_LogsAndRedirectsToError()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -800,15 +861,17 @@ public class QualificationDetailsControllerTests
     public void Refine_SaveQualificationName_RedirectsToGet()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -830,15 +893,17 @@ public class QualificationDetailsControllerTests
     public void Refine_NullParam_RedirectsToGet()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
@@ -860,15 +925,17 @@ public class QualificationDetailsControllerTests
     public void Refine_InvalidModel_LogsWarning()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentFilterService = new Mock<IContentFilterService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new QualificationDetailsController(mockLogger.Object, mockContentService.Object,
-                                               mockContentFilterService.Object,
-                                               mockContentParser.Object, mockUserJourneyCookieService.Object)
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
             {
                 ControllerContext = new ControllerContext
                                     {
