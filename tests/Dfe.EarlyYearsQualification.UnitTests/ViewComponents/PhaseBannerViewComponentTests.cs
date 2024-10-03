@@ -1,7 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -26,7 +26,7 @@ public class PhaseBannerViewComponentTests
         var logger = new Mock<ILogger<PhaseBannerViewComponent>>();
         var mockContentParser = new Mock<IGovUkContentParser>();
 
-        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, mockContentParser.Object);
+        var component = new PhaseBannerViewComponent(logger.Object, contentMock.Object, mockContentParser.Object);
 
         await component.InvokeAsync();
 
@@ -54,7 +54,7 @@ public class PhaseBannerViewComponentTests
         mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>()))
                          .ReturnsAsync(expectedHtml);
 
-        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, mockContentParser.Object);
+        var component = new PhaseBannerViewComponent(logger.Object, contentMock.Object, mockContentParser.Object);
 
         var result = await component.InvokeAsync();
 

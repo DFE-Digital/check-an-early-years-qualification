@@ -1,19 +1,21 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Web;
 using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
-public class ContentfulContentFilterService(
+public class QualificationsRepository(
+    ILogger<QualificationsRepository> logger,
     IContentfulClient contentfulClient,
-    IFuzzyAdapter fuzzyAdapter,
-    ILogger<ContentfulContentFilterService> logger)
-    : IContentFilterService
+    IFuzzyAdapter fuzzyAdapter)
+    : ContentfulContentServiceBase(logger, contentfulClient), IQualificationsRepository
 {
     private const int Day = 28;
 
@@ -38,11 +40,39 @@ public class ContentfulContentFilterService(
     // Used by the unit tests to inject a mock builder that returns the query params
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
 
-    public async Task<List<Qualification>> GetFilteredQualifications(int? level, int? startDateMonth,
-                                                                     int? startDateYear, string? awardingOrganisation,
-                                                                     string? qualificationName)
+    public async Task<Qualification?> GetById(string qualificationId)
     {
-        logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}",
+        var queryBuilder =
+            new QueryBuilder<Qualification>()
+                .ContentTypeIs(ContentTypeLookup[typeof(Qualification)])
+                .Include(2)
+                .FieldEquals("fields.qualificationId", qualificationId.ToUpper());
+
+        var qualifications = await GetEntriesByType(queryBuilder);
+
+        if (qualifications is null || !qualifications.Any())
+        {
+            var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
+            Logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
+                              encodedQualificationId);
+            return default;
+        }
+
+        var qualification = qualifications.First();
+        return qualification;
+    }
+
+    public async Task<List<Qualification>> Get()
+    {
+        var qualifications = await GetEntriesByType<Qualification>();
+        return qualifications!.ToList();
+    }
+
+    public async Task<List<Qualification>> Get(int? level, int? startDateMonth,
+                                               int? startDateYear, string? awardingOrganisation,
+                                               string? qualificationName)
+    {
+        Logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}",
                               level,
                               startDateMonth,
                               startDateYear,
@@ -74,11 +104,11 @@ public class ContentfulContentFilterService(
         ContentfulCollection<Qualification>? qualifications;
         try
         {
-            qualifications = await contentfulClient.GetEntries(queryBuilder);
+            qualifications = await ContentfulClient.GetEntries(queryBuilder);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error getting qualifications");
+            Logger.LogError(e, "Error getting qualifications");
             return [];
         }
 
@@ -138,7 +168,8 @@ public class ContentfulContentFilterService(
         var matchedQualifications = new List<Qualification>();
         foreach (var qualification in qualifications)
         {
-            var weight = fuzzyAdapter.PartialRatio(qualificationName.ToLower(), qualification.QualificationName.ToLower());
+            var weight =
+                fuzzyAdapter.PartialRatio(qualificationName.ToLower(), qualification.QualificationName.ToLower());
             if (weight > 70)
             {
                 matchedQualifications.Add(qualification);
@@ -221,7 +252,7 @@ public class ContentfulContentFilterService(
         var splitQualificationDate = qualificationDate.Split('-');
         if (splitQualificationDate.Length != 2)
         {
-            logger.LogError("Qualification date {QualificationDate} has unexpected format", qualificationDate);
+            Logger.LogError("Qualification date {QualificationDate} has unexpected format", qualificationDate);
             return (false, 0, 0);
         }
 
@@ -235,7 +266,8 @@ public class ContentfulContentFilterService(
 
         if (!yearIsValid)
         {
-            logger.LogError("Qualification date {QualificationDate} contains unexpected year value", qualificationDate);
+            Logger.LogError("Qualification date {QualificationDate} contains unexpected year value",
+                            qualificationDate);
             return (false, 0, 0);
         }
 
@@ -244,7 +276,7 @@ public class ContentfulContentFilterService(
             return (true, month, yearPart);
         }
 
-        logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
+        Logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
                         qualificationDate);
 
         return (false, 0, 0);
