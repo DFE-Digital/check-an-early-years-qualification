@@ -59,8 +59,8 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Deploy Web Application to slot
-      - name: Deploy to Azure App Services slot
+      # Deploy Web Application
+      - name: Deploy to Azure App Services
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
@@ -73,8 +73,8 @@ jobs:
           webapp_url: ${{ vars.WEBAPP_NAME }}
 
       # Run smoke test
-      - name: Run smoke tests against slot 
+      - name: Run smoke tests
         uses: ./.github/actions/run-smoke-tests
         with:
-          webapp_name: ${{ vars.WEBAPP_NAME }}  
+          webapp_url: ${{ vars.WEBAPP_NAME }}  
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
