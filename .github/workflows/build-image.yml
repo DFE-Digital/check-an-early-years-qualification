@@ -44,6 +44,11 @@ jobs:
                 registry: ${{ env.GITHUB_CONTAINER_REGISTRY }}
                 username: ${{ github.repository_owner }}
                 password: ${{ secrets.GITHUB_TOKEN }}
+                
+            - name: Format branch name
+              run: |
+                branchName=${{ inputs.branch }}
+                echo FORMATTED_BRANCH_NAME="${branchName//\//-}" >> $GITHUB_ENV
 
             - name: Build Image & Publish To GCR
               uses: docker/build-push-action@v6
@@ -52,9 +57,9 @@ jobs:
                 file: ./src/Dfe.EarlyYearsQualification.Web/Dockerfile
                 build-args: COMMIT_SHA=${{ inputs.checked-out-sha }}
                 tags: |
-                    ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ inputs.branch }}-${{ inputs.checked-out-sha }}
+                    ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${{ inputs.checked-out-sha }}
                 push: true
 
             - name: Output Docker Image Tag
               id: image
-              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ inputs.branch }}-${{ inputs.checked-out-sha }}" >> $GITHUB_OUTPUT
+              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${{ inputs.checked-out-sha }}" >> $GITHUB_OUTPUT
