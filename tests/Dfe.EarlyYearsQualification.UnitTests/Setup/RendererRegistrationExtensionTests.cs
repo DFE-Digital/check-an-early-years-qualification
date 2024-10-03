@@ -64,6 +64,95 @@ public class RendererRegistrationExtensionTests
         VerifyService<IGovUkContentParser, GovUkContentParser>(services, ServiceLifetime.Transient, AllowNulls.Yes);
     }
 
+    [TestMethod]
+    public void VerifyService_WithService_Passes()
+    {
+        var services = new ServiceCollection();
+
+        services.AddSingleton<IStuffDoer>(new StuffDoer());
+
+        VerifyService<IStuffDoer, StuffDoer>(services, ServiceLifetime.Singleton);
+    }
+
+    [TestMethod]
+    public void VerifyService_WithNoServiceRegistered_Throws()
+    {
+        var services = new ServiceCollection();
+
+        var exceptionCaught = false;
+
+        try
+        {
+            VerifyService<IStuffDoer, StuffDoer>(services, ServiceLifetime.Singleton);
+        }
+        catch
+        {
+            exceptionCaught = true;
+        }
+
+        exceptionCaught.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void VerifyService_WithNoServiceInstance_Throws()
+    {
+        var services = new ServiceCollection();
+
+        services.AddSingleton<IStuffDoer>();
+
+        var exceptionCaught = false;
+
+        try
+        {
+            VerifyService<IStuffDoer, StuffDoer>(services, ServiceLifetime.Singleton);
+        }
+        catch
+        {
+            exceptionCaught = true;
+        }
+
+        exceptionCaught.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void VerifyService_WithNoServiceInstance_ButAllowNull_Passes()
+    {
+        var services = new ServiceCollection();
+
+        services.AddSingleton<IStuffDoer>();
+
+        VerifyService<IStuffDoer, StuffDoer>(services, ServiceLifetime.Singleton, AllowNulls.Yes);
+    }
+
+    [TestMethod]
+    public void VerifyService_WithServiceInstance_WrongLifetime_Throws()
+    {
+        var services = new ServiceCollection();
+
+        services.AddSingleton<IStuffDoer>(new StuffDoer());
+
+        var exceptionCaught = false;
+
+        try
+        {
+            VerifyService<IStuffDoer, StuffDoer>(services, ServiceLifetime.Transient);
+        }
+        catch
+        {
+            exceptionCaught = true;
+        }
+
+        exceptionCaught.Should().BeTrue();
+    }
+
+    /// <summary>
+    ///     This method is tested in the VerifyService_* methods
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="lifetime"></param>
+    /// <param name="allowNulls"></param>
+    /// <typeparam name="TService"></typeparam>
+    /// <typeparam name="TInstance"></typeparam>
     private static void VerifyService<TService, TInstance>(ServiceCollection services, ServiceLifetime lifetime,
                                                            AllowNulls allowNulls = AllowNulls.No)
     {
@@ -79,5 +168,13 @@ public class RendererRegistrationExtensionTests
     {
         No,
         Yes
+    }
+
+    private interface IStuffDoer
+    {
+    }
+
+    private class StuffDoer : IStuffDoer
+    {
     }
 }
