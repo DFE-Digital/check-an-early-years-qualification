@@ -336,6 +336,12 @@ public class MockContentfulService : IContentService
                                                           Href = "/qualifications",
                                                           OpenInNewTab = false
                                                       },
+                                         PreviousQuestionBackButton = new NavigationLink
+                                                                      {
+                                                                          DisplayText = "Previous",
+                                                                          Href = "/previous",
+                                                                          OpenInNewTab = false
+                                                                      },
                                          CtaButtonText = "Get result",
                                          AwardingOrganisationLabel = "Awarding organisation",
                                          QualificationLabel = "Qualification",
