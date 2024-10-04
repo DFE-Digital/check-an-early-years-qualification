@@ -11,6 +11,11 @@
     }
 }
 
+@if (Model.Content!.FeedbackBanner is not null)
+{
+    await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.Content.FeedbackBanner);
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <h1 class="govuk-heading-xl" id="page-header">@Model.Content!.MainHeader</h1>
@@ -221,9 +226,10 @@
         <p class="govuk-body govuk-!-static-margin-top-6">
             <a id="check-another-qualification-link" href="@Model.Content.CheckAnotherQualificationLink?.Href" class="govuk-link">@Model.Content.CheckAnotherQualificationLink?.DisplayText</a>
         </p>
+
+        @if (Model.Content.FeedbackBanner is not null)
+        {
+            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.Content.FeedbackBanner);
+        }
     </div>
 </div>
-@if (Model.Content.FeedbackBanner is not null)
-{
-    await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.Content.FeedbackBanner);
-}

@@ -10,13 +10,23 @@
     }
 }
 
+
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+
+        @if (Model.FeedbackBanner is not null)
+        {
+            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
+        }
+        
         <h1 class="govuk-heading-xl" id="advice-page-heading">@Model.Heading</h1>
         <div class="govuk-body" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
+
+        @if (Model.FeedbackBanner is not null)
+        {
+            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
+        }
+        
     </div>
 </div>
-@if (Model.FeedbackBanner is not null)
-{
-    await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
-}
