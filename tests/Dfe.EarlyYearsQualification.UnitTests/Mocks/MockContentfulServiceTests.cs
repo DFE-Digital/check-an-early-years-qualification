@@ -136,7 +136,7 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_privacyPolicy_ReturnsExpectedDetails()
     {
@@ -219,79 +219,6 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<List<NavigationLink>>();
         result.Count.Should().Be(2);
-    }
-
-    [TestMethod]
-    public async Task GetQualificationById_ReturnsExpectedDetails()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetQualificationById("test_id");
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<Qualification>();
-        result!.AdditionalRequirements.Should().NotBeNullOrEmpty();
-        result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
-        result.FromWhichYear.Should().NotBeNullOrEmpty();
-        result.QualificationId.Should().NotBeNullOrEmpty();
-        result.QualificationLevel.Should().BeGreaterThan(0);
-        result.QualificationName.Should().NotBeNullOrEmpty();
-        result.QualificationNumber.Should().NotBeNullOrEmpty();
-        result.ToWhichYear.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions.Should().NotBeNull();
-        result.AdditionalRequirementQuestions!.Count.Should().Be(2);
-        result.AdditionalRequirementQuestions[0].Question.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[0].HintText.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[0].ConfirmationStatement.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[0].DetailsHeading.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[0].DetailsHeading.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[0].Answers.Should().NotBeNull();
-        result.AdditionalRequirementQuestions[0].Answers.Count.Should().Be(2);
-        result.AdditionalRequirementQuestions[0].Answers[0].Label.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[0].Answers[0].Value.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[0].Answers[1].Label.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[0].Answers[1].Value.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].Question.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].HintText.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].ConfirmationStatement.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].DetailsHeading.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].DetailsHeading.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].Answers.Should().NotBeNull();
-        result.AdditionalRequirementQuestions[1].Answers.Count.Should().Be(2);
-        result.AdditionalRequirementQuestions[1].Answers[0].Label.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].Answers[0].Value.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].Answers[1].Label.Should().NotBeNullOrEmpty();
-        result.AdditionalRequirementQuestions[1].Answers[1].Value.Should().NotBeNullOrEmpty();
-        result.RatioRequirements.Should().NotBeNullOrEmpty();
-        result.RatioRequirements!.Count.Should().Be(4);
-        result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
-        result.RatioRequirements[0].FullAndRelevantForLevel2Before2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel2After2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel3Before2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel3After2014.Should().BeTrue();
-        result.RatioRequirements[0].FullAndRelevantForLevel4Before2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel4After2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel5Before2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel5After2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel6Before2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel6After2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel7Before2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForLevel7After2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForQtsEtcBefore2014.Should().BeFalse();
-        result.RatioRequirements[0].FullAndRelevantForQtsEtcAfter2014.Should().BeFalse();
-        result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel2After2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel3Before2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel3After2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel4Before2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel4After2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel5Before2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel5After2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel6Before2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel6After2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel7Before2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
-        result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
     }
 
     [TestMethod]
@@ -427,41 +354,6 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetQualifications_ReturnsAListOfQualifications()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetQualifications();
-
-        result.Count.Should().Be(5);
-    }
-
-    [TestMethod]
-    public async Task GetQualifications_ReturnsAQualificationWithAnAdditionalRequirementsQuestion()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetQualifications();
-
-        result.Count.Should().Be(5);
-
-        var qualificationWithAdditionalRequirements = result[4];
-        qualificationWithAdditionalRequirements.AdditionalRequirementQuestions.Should().HaveCount(1);
-
-        var additionalRequirementQuestions = qualificationWithAdditionalRequirements.AdditionalRequirementQuestions;
-
-        additionalRequirementQuestions.Should().HaveCount(1);
-        additionalRequirementQuestions![0].AnswerToBeFullAndRelevant.Should().Be(true);
-
-        var answers = additionalRequirementQuestions[0].Answers;
-
-        answers[0].Label.Should().Be("Yes");
-        answers[0].Value.Should().Be("yes");
-        answers[1].Label.Should().Be("No");
-        answers[1].Value.Should().Be("no");
-    }
-
-    [TestMethod]
     public async Task GetQualificationListPage_ReturnsCorrectMockData()
     {
         var contentfulService = new MockContentfulService();
@@ -517,7 +409,8 @@ public class MockContentfulServiceTests
         result.PostHeadingContent!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "The post heading content");
         result.VariousAwardingOrganisationsExplanation!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Various awarding organisation explanation text");
+              .Which.Content.Should()
+              .ContainSingle(x => ((Text)x).Value == "Various awarding organisation explanation text");
     }
 
     [TestMethod]

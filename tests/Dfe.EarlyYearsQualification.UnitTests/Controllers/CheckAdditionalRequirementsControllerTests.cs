@@ -1,7 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -20,11 +20,14 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Index_ModelStateInValid_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
         controller.ModelState.AddModelError("test", "error");
@@ -45,13 +48,18 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Index_UnableToFindQualification_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockContentService.Setup(x => x.GetQualificationById("Test-123")).ReturnsAsync(value: null).Verifiable();
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(value: null)
+                      .Verifiable();
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
@@ -72,13 +80,17 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Index_QualificationHasNullAdditionalRequirements_RedirectsToQualificationDetailsPage()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockContentService.Setup(x => x.GetQualificationById("Test-123")).ReturnsAsync(CreateQualification(null));
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(CreateQualification(null));
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
@@ -96,15 +108,19 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Index_PageContentIsNull_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockContentService.Setup(x => x.GetQualificationById("Test-123"))
-                          .ReturnsAsync(CreateQualification(CreateAdditionalRequirementQuestions()));
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(CreateQualification(CreateAdditionalRequirementQuestions()));
+
         mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage()).ReturnsAsync(value: null);
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
@@ -125,16 +141,21 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Index_PageContentIsReturned_MapsModelAndReturnsView()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
         var pageContent = CreatePageContent();
-        mockContentService.Setup(x => x.GetQualificationById("Test-123")).ReturnsAsync(qualification);
+
+        mockRepository.Setup(x => x.GetById("Test-123")).ReturnsAsync(qualification);
+
         mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage()).ReturnsAsync(pageContent);
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
@@ -179,11 +200,14 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Post_ModelStateIsValid_RedirectsToQualificationDetails()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
@@ -203,13 +227,17 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Post_UnableToFindQualification_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockContentService.Setup(x => x.GetQualificationById("Test-123")).ReturnsAsync(value: null).Verifiable();
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(value: null).Verifiable();
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
@@ -231,13 +259,17 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Post_QualificationHasNullAdditionalRequirements_RedirectsToQualificationDetailsPage()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockContentService.Setup(x => x.GetQualificationById("Test-123")).ReturnsAsync(CreateQualification(null));
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(CreateQualification(null));
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
@@ -256,15 +288,20 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Post_PageContentIsNull_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockContentService.Setup(x => x.GetQualificationById("Test-123"))
-                          .ReturnsAsync(CreateQualification(CreateAdditionalRequirementQuestions()));
-        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage()).ReturnsAsync(value: null);
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(CreateQualification(CreateAdditionalRequirementQuestions()));
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage())
+                          .ReturnsAsync(value: null);
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
@@ -286,16 +323,23 @@ public class CheckAdditionalRequirementsControllerTests
     public async Task Post_PageContentIsReturned_MapsModelAndReturnsView()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
         var pageContent = CreatePageContent();
-        mockContentService.Setup(x => x.GetQualificationById("Test-123")).ReturnsAsync(qualification);
-        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage()).ReturnsAsync(pageContent);
 
-        var controller = new CheckAdditionalRequirementsController(mockLogger.Object, mockContentService.Object,
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(qualification);
+
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage())
+                          .ReturnsAsync(pageContent);
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 

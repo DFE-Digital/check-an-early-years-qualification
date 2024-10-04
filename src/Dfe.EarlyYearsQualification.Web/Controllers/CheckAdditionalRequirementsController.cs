@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -14,6 +14,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [RedirectIfDateMissing]
 public class CheckAdditionalRequirementsController(
     ILogger<CheckAdditionalRequirementsController> logger,
+    IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService)
@@ -27,10 +28,9 @@ public class CheckAdditionalRequirementsController(
             var model = new CheckAdditionalRequirementsPageModel();
             return await GetResponse(qualificationId, questionId, model);
         }
-        
+
         logger.LogError("No qualificationId passed in");
         return RedirectToAction("Index", "Error");
-
     }
 
     [HttpPost("{qualificationId}/{questionId}")]
@@ -43,7 +43,7 @@ public class CheckAdditionalRequirementsController(
             additionalRequirementQuestions[model.Question] = model.Answer;
             userJourneyCookieService.SetAdditionalQuestionsAnswers(additionalRequirementQuestions);
             
-            var qualification = await contentService.GetQualificationById(qualificationId);
+            var qualification = await qualificationsRepository.GetById(qualificationId);
             if (qualification is null)
             {
                 var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
@@ -62,7 +62,7 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "QualificationDetails",
                                     new { model.QualificationId });
         }
-        
+
         model.HasErrors = true;
         return await GetResponse(qualificationId, questionId, model);
     }
@@ -70,7 +70,7 @@ public class CheckAdditionalRequirementsController(
     private async Task<IActionResult> GetResponse(string qualificationId, int questionId,
                                                   CheckAdditionalRequirementsPageModel? model = null)
     {
-        var qualification = await contentService.GetQualificationById(qualificationId);
+        var qualification = await qualificationsRepository.GetById(qualificationId);
         if (qualification is null)
         {
             var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
@@ -80,7 +80,8 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "Error");
         }
 
-        if (qualification.AdditionalRequirementQuestions is null || qualification.AdditionalRequirementQuestions.Count == 0)
+        if (qualification.AdditionalRequirementQuestions is null ||
+            qualification.AdditionalRequirementQuestions.Count == 0)
         {
             var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
             logger.LogInformation("QualificationId has no additional requirement questions: {QualificationId}",
@@ -88,7 +89,7 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "QualificationDetails",
                                     new { qualificationId });
         }
-        
+
         var content = await contentService.GetCheckAdditionalRequirementsPage();
         if (content is null)
         {
@@ -106,7 +107,8 @@ public class CheckAdditionalRequirementsController(
         return View("Index", mappedModel);
     }
 
-    private async Task<CheckAdditionalRequirementsPageModel> MapModel(CheckAdditionalRequirementsPage content, Qualification qualification,
+    private async Task<CheckAdditionalRequirementsPageModel> MapModel(CheckAdditionalRequirementsPage content,
+                                                                      Qualification qualification,
                                                                       int questionId,
                                                                       CheckAdditionalRequirementsPageModel? model = null)
     {
