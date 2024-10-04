@@ -149,6 +149,9 @@ resource "azurerm_linux_web_app" "webapp" {
 
 # Create Web Application Deployment Slot
 resource "azurerm_linux_web_app_slot" "webapp_slot" {
+
+  count = var.environment != "development" ? 1 : 0
+  
   name                      = var.webapp_slot_name
   app_service_id            = azurerm_linux_web_app.webapp.id
   https_only                = true
