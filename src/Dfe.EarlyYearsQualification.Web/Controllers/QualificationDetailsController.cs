@@ -3,7 +3,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -16,8 +16,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [RedirectIfDateMissing]
 public class QualificationDetailsController(
     ILogger<QualificationDetailsController> logger,
+    IQualificationsRepository qualificationsRepository,
     IContentService contentService,
-    IContentFilterService contentFilterService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
@@ -65,7 +65,7 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var qualification = await contentService.GetQualificationById(qualificationId);
+        var qualification = await qualificationsRepository.GetById(qualificationId);
         if (qualification is null)
         {
             var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
@@ -246,8 +246,8 @@ public class QualificationDetailsController(
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
         var searchCriteria = userJourneyCookieService.GetSearchCriteria();
 
-        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear,
-                                                                    awardingOrganisation, searchCriteria);
+        return await qualificationsRepository.Get(level, startDateMonth, startDateYear,
+                                                  awardingOrganisation, searchCriteria);
     }
 
     private async Task<QualificationListModel> MapList(QualificationListPage content,

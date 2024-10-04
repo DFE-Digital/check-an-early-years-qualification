@@ -1,50 +1,17 @@
-﻿using System.Web;
-using Contentful.Core;
-using Contentful.Core.Models;
+﻿using Contentful.Core;
 using Contentful.Core.Search;
-using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Resolvers;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
-public class ContentfulContentService : IContentService
+public class ContentfulContentService(
+    ILogger<ContentfulContentService> logger,
+    IContentfulClient contentfulClient)
+    : ContentfulContentServiceBase(logger, contentfulClient), IContentService
 {
-    private readonly IContentfulClient _contentfulClient;
-
-    private readonly Dictionary<object, string> _contentTypes
-        = new()
-          {
-              { typeof(StartPage), ContentTypes.StartPage },
-              { typeof(Qualification), ContentTypes.Qualification },
-              { typeof(DetailsPage), ContentTypes.DetailsPage },
-              { typeof(AdvicePage), ContentTypes.AdvicePage },
-              { typeof(RadioQuestionPage), ContentTypes.RadioQuestionPage },
-              { typeof(AccessibilityStatementPage), ContentTypes.AccessibilityStatementPage },
-              { typeof(NavigationLinks), ContentTypes.NavigationLinks },
-              { typeof(CookiesPage), ContentTypes.CookiesPage },
-              { typeof(PhaseBanner), ContentTypes.PhaseBanner },
-              { typeof(CookiesBanner), ContentTypes.CookiesBanner },
-              { typeof(DateQuestionPage), ContentTypes.DateQuestionPage },
-              { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
-              { typeof(QualificationListPage), ContentTypes.QualificationListPage },
-              { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage },
-              { typeof(CheckAdditionalRequirementsPage), ContentTypes.CheckAdditionalRequirementsPage },
-              { typeof(ChallengePage), ContentTypes.ChallengePage }
-          };
-
-    private readonly ILogger<ContentfulContentService> _logger;
-
-    public ContentfulContentService(IContentfulClient contentfulClient, ILogger<ContentfulContentService> logger)
-    {
-        _contentfulClient = contentfulClient;
-        _contentfulClient.ContentTypeResolver = new EntityResolver();
-
-        _logger = logger;
-    }
-
     public async Task<StartPage?> GetStartPage()
     {
         var startPageEntries = await GetEntriesByType<StartPage>();
@@ -52,7 +19,7 @@ public class ContentfulContentService : IContentService
         // ReSharper disable once InvertIf
         if (startPageEntries is null || !startPageEntries.Any())
         {
-            _logger.LogWarning("No start page entry returned");
+            Logger.LogWarning("No start page entry returned");
             return default;
         }
 
@@ -61,12 +28,15 @@ public class ContentfulContentService : IContentService
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-        var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(_contentTypes[typeof(DetailsPage)])
+        var detailsPageType = ContentTypeLookup[typeof(DetailsPage)];
+
+        var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(detailsPageType)
                                                           .Include(2);
+
         var detailsPageEntries = await GetEntriesByType(queryBuilder);
         if (detailsPageEntries is null || !detailsPageEntries.Any())
         {
-            _logger.LogWarning("No details page entry returned");
+            Logger.LogWarning("No details page entry returned");
             return default;
         }
 
@@ -81,7 +51,7 @@ public class ContentfulContentService : IContentService
         // ReSharper disable once InvertIf
         if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
         {
-            _logger.LogWarning("No accessibility statement page entry returned");
+            Logger.LogWarning("No accessibility statement page entry returned");
             return default;
         }
 
@@ -93,7 +63,7 @@ public class ContentfulContentService : IContentService
         var cookiesEntities = await GetEntriesByType<CookiesPage>();
         if (cookiesEntities is null || !cookiesEntities.Any())
         {
-            _logger.LogWarning("No cookies page entry returned");
+            Logger.LogWarning("No cookies page entry returned");
             return default;
         }
 
@@ -109,28 +79,8 @@ public class ContentfulContentService : IContentService
             return navigationLinkEntries.First().Links;
         }
 
-        _logger.LogWarning("No navigation links returned");
+        Logger.LogWarning("No navigation links returned");
         return [];
-    }
-
-    public async Task<Qualification?> GetQualificationById(string qualificationId)
-    {
-        var queryBuilder = new QueryBuilder<Qualification>().ContentTypeIs(_contentTypes[typeof(Qualification)])
-                                                            .Include(2)
-                                                            .FieldEquals("fields.qualificationId",
-                                                                         qualificationId.ToUpper());
-        var qualifications = await GetEntriesByType(queryBuilder);
-
-        if (qualifications is null || !qualifications.Any())
-        {
-            var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
-            _logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
-                               encodedQualificationId);
-            return default;
-        }
-
-        var qualification = qualifications.First();
-        return qualification;
     }
 
     public async Task<AdvicePage?> GetAdvicePage(string entryId)
@@ -140,7 +90,7 @@ public class ContentfulContentService : IContentService
         // ReSharper disable once InvertIf
         if (advicePage is null)
         {
-            _logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
+            Logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
             return default;
         }
 
@@ -149,7 +99,7 @@ public class ContentfulContentService : IContentService
 
     public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
     {
-        _contentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
+        ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
         return await GetEntryById<RadioQuestionPage>(entryId);
     }
 
@@ -170,7 +120,7 @@ public class ContentfulContentService : IContentService
         // ReSharper disable once InvertIf
         if (phaseBannerEntities is null || !phaseBannerEntities.Any())
         {
-            _logger.LogWarning("No phase banner entry returned");
+            Logger.LogWarning("No phase banner entry returned");
             return default;
         }
 
@@ -184,17 +134,11 @@ public class ContentfulContentService : IContentService
         // ReSharper disable once InvertIf
         if (cookiesBannerEntry is null || !cookiesBannerEntry.Any())
         {
-            _logger.LogWarning("No cookies banner entry returned");
+            Logger.LogWarning("No cookies banner entry returned");
             return default;
         }
 
         return cookiesBannerEntry.First();
-    }
-
-    public async Task<List<Qualification>> GetQualifications()
-    {
-        var qualifications = await GetEntriesByType<Qualification>();
-        return qualifications!.ToList();
     }
 
     public async Task<ConfirmQualificationPage?> GetConfirmQualificationPage()
@@ -204,7 +148,7 @@ public class ContentfulContentService : IContentService
         // ReSharper disable once InvertIf
         if (confirmQualificationEntities is null || !confirmQualificationEntities.Any())
         {
-            _logger.LogWarning("No confirm qualification page entry returned");
+            Logger.LogWarning("No confirm qualification page entry returned");
             return default;
         }
 
@@ -219,7 +163,7 @@ public class ContentfulContentService : IContentService
         // ...more legible as it is
         if (checkAdditionalRequirementsPageEntities is null || !checkAdditionalRequirementsPageEntities.Any())
         {
-            _logger.LogWarning("No CheckAdditionalRequirementsPage entry returned");
+            Logger.LogWarning("No CheckAdditionalRequirementsPage entry returned");
             return default;
         }
 
@@ -231,7 +175,7 @@ public class ContentfulContentService : IContentService
         var qualificationListPageEntities = await GetEntriesByType<QualificationListPage>();
         if (qualificationListPageEntities is null || !qualificationListPageEntities.Any())
         {
-            _logger.LogWarning("No qualification list page entry returned");
+            Logger.LogWarning("No qualification list page entry returned");
             return default;
         }
 
@@ -244,46 +188,11 @@ public class ContentfulContentService : IContentService
         var challengePageEntities = await GetEntriesByType<ChallengePage>();
         if (challengePageEntities is null || !challengePageEntities.Any())
         {
-            _logger.LogWarning("No challenge page entry returned");
+            Logger.LogWarning("No challenge page entry returned");
             return default;
         }
 
         var challengePage = challengePageEntities.First();
         return challengePage;
-    }
-
-    private async Task<T?> GetEntryById<T>(string entryId)
-    {
-        try
-        {
-            // NOTE: GetEntry doesn't bind linked references which is why we are using GetEntriesByType
-            var queryBuilder = new QueryBuilder<T>().ContentTypeIs(_contentTypes[typeof(T)])
-                                                    .Include(2)
-                                                    .FieldEquals("sys.id", entryId);
-            var entry = await _contentfulClient.GetEntriesByType(_contentTypes[typeof(T)], queryBuilder);
-            return entry.FirstOrDefault();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
-                             entryId, nameof(T));
-            return default;
-        }
-    }
-
-    private async Task<ContentfulCollection<T>?> GetEntriesByType<T>(QueryBuilder<T>? queryBuilder = null)
-    {
-        var type = typeof(T);
-        try
-        {
-            var results = await _contentfulClient.GetEntriesByType(_contentTypes[type], queryBuilder);
-            return results;
-        }
-        catch (Exception ex)
-        {
-            var typeName = type.Name;
-            _logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
-            return default;
-        }
     }
 }
