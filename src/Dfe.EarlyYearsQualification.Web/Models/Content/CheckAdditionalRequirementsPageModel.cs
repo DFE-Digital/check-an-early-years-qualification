@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Dfe.EarlyYearsQualification.Web.Attributes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
@@ -13,21 +12,7 @@ public class CheckAdditionalRequirementsPageModel
 
     public string Heading { get; set; } = string.Empty;
 
-    // public string QualificationLabel { get; set; } = string.Empty;
-    //
-    // public string QualificationName { get; set; } = string.Empty;
-    //
-    // public string QualificationLevelLabel { get; set; } = string.Empty;
-    //
-    // public int QualificationLevel { get; set; }
-    //
-    // public string AwardingOrganisationLabel { get; set; } = string.Empty;
-    //
-    // public string AwardingOrganisation { get; set; } = string.Empty;
-
     public string QuestionSectionHeading { get; set; } = string.Empty;
-
-    // public string InformationMessage { get; set; } = string.Empty;
 
     public string CtaButtonText { get; set; } = string.Empty;
 
@@ -46,13 +31,4 @@ public class CheckAdditionalRequirementsPageModel
     public string ErrorMessage { get; set; } = string.Empty;
 
     public string ErrorSummaryHeading { get; set; } = string.Empty;
-
-    // public int SpecifiedAnswersCount
-    // {
-    //     get { return Answers.Count; }
-    // }
-    //
-    // [Required]
-    // [Compare("SpecifiedAnswersCount")]
-    // public int QuestionCount { get; set; }
 }
