@@ -289,7 +289,8 @@ public class QualificationDetailsControllerTests
         resultType.Should().NotBeNull();
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
-        resultType.RouteValues.Should().ContainSingle("qualificationId", qualificationId);
+        resultType.RouteValues.Should().Contain("qualificationId", qualificationId);
+        resultType.RouteValues.Should().Contain("questionId", 1);
     }
 
     [TestMethod]
@@ -770,7 +771,7 @@ public class QualificationDetailsControllerTests
 
         var model = resultType!.Model as QualificationDetailsModel;
 
-        model!.BackButton!.Href.Should().Be("/api/qualifications/eyq-145");
+        model!.BackButton!.Href.Should().Be("/api/qualifications/eyq-145/1");
     }
 
     [TestMethod]
