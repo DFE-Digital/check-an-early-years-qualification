@@ -430,9 +430,9 @@ public class QualificationDetailsController(
             return content.BackButton;
         }
 
-        if (!link.Href.EndsWith($"/{qualificationId}", StringComparison.OrdinalIgnoreCase))
+        if (!link.Href.EndsWith($"/{qualificationId}/1", StringComparison.OrdinalIgnoreCase))
         {
-            link.Href = $"{link.Href}/{qualificationId}";
+            link.Href = $"{link.Href}/{qualificationId}/1";
         }
 
         return link;

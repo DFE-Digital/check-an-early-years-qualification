@@ -24,7 +24,6 @@ public class CheckAdditionalRequirementsController(
     {
         if (ModelState.IsValid)
         {
-            var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
             var model = new CheckAdditionalRequirementsPageModel();
             return await GetResponse(qualificationId, questionId, model);
         }
@@ -40,12 +39,8 @@ public class CheckAdditionalRequirementsController(
         if (ModelState.IsValid)
         {
             var previouslyAnsweredQuestions = userJourneyCookieService.GetAdditionalQuestionsAnswers() ?? new Dictionary<string, string>();
-            var additionalRequirementQuestions = new Dictionary<string, string>();
-            foreach (var previouslyAnsweredQuestion in previouslyAnsweredQuestions)
-            {
-                additionalRequirementQuestions.Add(previouslyAnsweredQuestion.Key, previouslyAnsweredQuestion.Value);
-            }
-            additionalRequirementQuestions.Add(model.Question, model.Answer);
+            var additionalRequirementQuestions = previouslyAnsweredQuestions.ToDictionary(previouslyAnsweredQuestion => previouslyAnsweredQuestion.Key, previouslyAnsweredQuestion => previouslyAnsweredQuestion.Value);
+            additionalRequirementQuestions[model.Question] = model.Answer;
             userJourneyCookieService.SetAdditionalQuestionsAnswers(additionalRequirementQuestions);
             
             var qualification = await contentService.GetQualificationById(qualificationId);
@@ -102,6 +97,12 @@ public class CheckAdditionalRequirementsController(
         }
 
         var mappedModel = await MapModel(content, qualification, questionId, model);
+        var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+        if (answers is not null && answers.Count != 0 && questionId <= answers.Count)
+        {
+            var index = questionId - 1;
+            mappedModel.Answer = answers.ElementAt(index).Value;
+        }
         return View("Index", mappedModel);
     }
 
@@ -115,14 +116,37 @@ public class CheckAdditionalRequirementsController(
         mappedModel.CtaButtonText = content.CtaButtonText;
         mappedModel.Heading = content.Heading;
         mappedModel.QuestionSectionHeading = content.QuestionSectionHeading;
-        mappedModel.BackButton = MapToNavigationLinkModel(content.BackButton);
+        mappedModel.BackButton = CalculateBackButton(qualification.QualificationId, questionId, content);
         mappedModel.AdditionalRequirementQuestion =
             await MapAdditionalRequirementQuestion(qualification.AdditionalRequirementQuestions!, questionId);
         mappedModel.ErrorMessage = content.ErrorMessage;
         mappedModel.ErrorSummaryHeading = content.ErrorSummaryHeading;
         return mappedModel;
     }
-    
+
+    private static NavigationLinkModel? CalculateBackButton(string qualificationId, int questionId, CheckAdditionalRequirementsPage content)
+    {
+        if (questionId == 1)
+        {
+            return MapToNavigationLinkModel(content.BackButton);
+        }
+        
+        var link = content.PreviousQuestionBackButton;
+
+        if (link == null)
+        {
+            return MapToNavigationLinkModel(content.BackButton);
+        }
+
+        var previousQuestionId = questionId - 1;
+        if (!link.Href.EndsWith($"/{qualificationId}/{previousQuestionId}", StringComparison.OrdinalIgnoreCase))
+        {
+            link.Href = $"{link.Href}/{qualificationId}/{previousQuestionId}";
+        }
+
+        return MapToNavigationLinkModel(link);
+    }
+
     private async Task<AdditionalRequirementQuestionModel> MapAdditionalRequirementQuestion(List<AdditionalRequirementQuestion> additionalRequirementQuestions, int questionId)
     {
         var additionalRequirementQuestion = additionalRequirementQuestions[questionId - 1];
