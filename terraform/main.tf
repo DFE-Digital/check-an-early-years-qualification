@@ -18,6 +18,11 @@ moved {
   to   = module.webapp.azurerm_key_vault_access_policy.webapp_kv_app_service_slot[0]
 }
 
+moved {
+  from = module.webapp.azurerm_monitor_diagnostic_setting.webapp_slot_logs_monitor
+  to   = module.webapp.azurerm_monitor_diagnostic_setting.webapp_slot_logs_monitor[0]
+}
+
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.resource_name_prefix}-rg"
