@@ -83,6 +83,11 @@ variable "webapp_slot_name" {
   type        = string
 }
 
+variable "webapp_storage_account_name" {
+  description = "Storage Account name"
+  type        = string
+}
+
 variable "webapp_access_is_public" {
   description = "Web app service is public, and access is unchallenged"
   default     = false

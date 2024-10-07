@@ -1,11 +1,5 @@
-resource "random_string" "resource_code" {
-  length  = 5
-  special = false
-  upper   = false
-}
-
 resource "azurerm_storage_account" "sa" {
-  name                             = "eyqualwebapp${random_string.resource_code.result}sa"
+  name                             = var.webapp_storage_account_name
   resource_group_name              = var.resource_group
   location                         = var.location
   account_tier                     = "Standard"
