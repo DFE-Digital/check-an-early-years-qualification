@@ -50,7 +50,7 @@ jobs:
 
       # Allows the current IP address access to the storage account for later terraform steps in the workflow
       - name: Azure Storage IP access
-        run:  echo "az storage account network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP"
+        run:  az storage account network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
 
       # Install the latest version of the Terraform CLI
       - name: Setup Terraform
