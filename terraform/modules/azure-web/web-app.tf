@@ -228,12 +228,17 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_logs_monitor" {
   }
 }
 
+data "azurerm_linux_web_app_slot" "ref" {
+  name                = azurerm_linux_web_app_slot.webapp_slot.name
+  resource_group_name = azurerm_linux_web_app.webapp.resource_group_name
+}
+
 resource "azurerm_monitor_diagnostic_setting" "webapp_slot_logs_monitor" {
 
   count = var.environment != "development" ? 1 : 0
   
   name                       = "${var.resource_name_prefix}-webapp-${var.webapp_slot_name}-mon"
-  target_resource_id         = azurerm_linux_web_app_slot.webapp_slot.0.id
+  target_resource_id         = data.azurerm_linux_web_app_slot.ref.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
 
   enabled_log {
@@ -415,7 +420,7 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   
   key_vault_id            = var.kv_id
   tenant_id               = data.azurerm_client_config.az_config.tenant_id
-  object_id               = azurerm_linux_web_app_slot.webapp_slot.0.identity.0.principal_id
+  object_id               = data.azurerm_linux_web_app_slot.ref.identity.0.principal_id
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
