@@ -44,6 +44,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Sets an environment variable to contain the current IP address
+      - name: IP address env
+        run: echo "CURRENT_IP=$(curl https://api.ipify.org)" >> $GITHUB_ENV
+
+      # Allows the current IP address access to the storage account for later terraform steps in the workflow
+      - name: Azure Storage IP access
+        run:  echo $CURRENT_IP
+
       # Install the latest version of the Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
