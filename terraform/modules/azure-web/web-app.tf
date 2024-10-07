@@ -1,8 +1,3 @@
-moved {
-  from = resource.azurerm_linux_web_app_slot.webapp_slot
-  to   = resource.azurerm_linux_web_app_slot.webapp_slot[0]
-}
-
 # Create Log Analytics
 resource "azurerm_log_analytics_workspace" "webapp_logs" {
   name                = "${var.resource_name_prefix}-log"
