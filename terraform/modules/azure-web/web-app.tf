@@ -149,6 +149,9 @@ resource "azurerm_linux_web_app" "webapp" {
 
 # Create Web Application Deployment Slot
 resource "azurerm_linux_web_app_slot" "webapp_slot" {
+
+  count = var.environment != "development" ? 1 : 0
+  
   name                      = var.webapp_slot_name
   app_service_id            = azurerm_linux_web_app.webapp.id
   https_only                = true
@@ -203,6 +206,7 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "webapp_logs_monitor" {
+  
   name                       = "${var.resource_name_prefix}-webapp-mon"
   target_resource_id         = azurerm_linux_web_app.webapp.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
@@ -225,8 +229,11 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_logs_monitor" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "webapp_slot_logs_monitor" {
+
+  count = var.environment != "development" ? 1 : 0
+  
   name                       = "${var.resource_name_prefix}-webapp-${var.webapp_slot_name}-mon"
-  target_resource_id         = azurerm_linux_web_app_slot.webapp_slot.id
+  target_resource_id         = azurerm_linux_web_app_slot.webapp_slot.0.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
 
   enabled_log {
@@ -403,9 +410,12 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
 
 # Grants permissions to key vault for the managed identity of the App Service slot
 resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
+
+  count = var.environment != "development" ? 1 : 0
+  
   key_vault_id            = var.kv_id
   tenant_id               = data.azurerm_client_config.az_config.tenant_id
-  object_id               = azurerm_linux_web_app_slot.webapp_slot.identity.0.principal_id
+  object_id               = azurerm_linux_web_app_slot.webapp_slot.0.identity.0.principal_id
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
