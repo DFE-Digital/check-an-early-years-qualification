@@ -48,6 +48,14 @@ jobs:
       - name: IP address env
         run: echo "CURRENT_IP=$(curl https://api.ipify.org)" >> $GITHUB_ENV
 
+      # Login to Azure using OIDC
+      - name: Login to Azure CLI
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
       # Allows the current IP address access to the storage account for later terraform steps in the workflow
       - name: Azure Storage IP access
         run:  az storage account network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
