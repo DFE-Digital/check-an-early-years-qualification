@@ -13,6 +13,21 @@ provider "azurerm" {
   }
 }
 
+moved {
+  from = module.webapp.azurerm_key_vault_access_policy.webapp_kv_app_service_slot
+  to   = module.webapp.azurerm_key_vault_access_policy.webapp_kv_app_service_slot[0]
+}
+
+moved {
+  from = module.webapp.azurerm_monitor_diagnostic_setting.webapp_slot_logs_monitor
+  to   = module.webapp.azurerm_monitor_diagnostic_setting.webapp_slot_logs_monitor[0]
+}
+
+moved {
+  from = module.webapp.azurerm_monitor_diagnostic_setting.webapp_slot_logs_monitor
+  to   = module.webapp.azurerm_monitor_diagnostic_setting.webapp_slot_logs_monitor[0]
+}
+
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.resource_name_prefix}-rg"
@@ -56,11 +71,12 @@ module "network" {
 module "storage" {
   source = "./modules/azure-storage"
 
-  location         = var.azure_region
-  resource_group   = azurerm_resource_group.rg.name
-  kv_id            = module.network.kv_id
-  webapp_subnet_id = module.network.webapp_subnet_id
-  tags             = local.common_tags
+  location                    = var.azure_region
+  resource_group              = azurerm_resource_group.rg.name
+  webapp_storage_account_name = var.webapp_storage_account_name
+  kv_id                       = module.network.kv_id
+  webapp_subnet_id            = module.network.webapp_subnet_id
+  tags                        = local.common_tags
 }
 
 # Create web application resources
