@@ -20,21 +20,21 @@ public class CheckAdditionalRequirementsController(
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
-    [HttpGet("{qualificationId}/{questionId}")]
-    public async Task<IActionResult> Index(string qualificationId, int questionId)
+    [HttpGet("{qualificationId}/{questionIndex}")]
+    public async Task<IActionResult> Index(string qualificationId, int questionIndex)
     {
         if (ModelState.IsValid)
         {
             var model = new CheckAdditionalRequirementsPageModel();
-            return await GetResponse(qualificationId, questionId, model);
+            return await GetResponse(qualificationId, questionIndex, model);
         }
 
         logger.LogError("No qualificationId passed in");
         return RedirectToAction("Index", "Error");
     }
 
-    [HttpPost("{qualificationId}/{questionId}")]
-    public async Task<IActionResult> Post(string qualificationId, int questionId, [FromForm]CheckAdditionalRequirementsPageModel model)
+    [HttpPost("{qualificationId}/{questionIndex}")]
+    public async Task<IActionResult> Post(string qualificationId, int questionIndex, [FromForm]CheckAdditionalRequirementsPageModel model)
     {
         if (ModelState.IsValid)
         {
@@ -53,10 +53,10 @@ public class CheckAdditionalRequirementsController(
                 return RedirectToAction("Index", "Error");
             }
 
-            if (qualification.AdditionalRequirementQuestions is not null && questionId < qualification.AdditionalRequirementQuestions.Count)
+            if (qualification.AdditionalRequirementQuestions is not null && questionIndex < qualification.AdditionalRequirementQuestions.Count)
             {
                 return RedirectToAction("Index", "CheckAdditionalRequirements",
-                                        new { model.QualificationId, questionId = questionId + 1 });
+                                        new { model.QualificationId, questionIndex = questionIndex + 1 });
             }
             
             return RedirectToAction("Index", "QualificationDetails",
@@ -64,10 +64,10 @@ public class CheckAdditionalRequirementsController(
         }
 
         model.HasErrors = true;
-        return await GetResponse(qualificationId, questionId, model);
+        return await GetResponse(qualificationId, questionIndex, model);
     }
 
-    private async Task<IActionResult> GetResponse(string qualificationId, int questionId,
+    private async Task<IActionResult> GetResponse(string qualificationId, int questionIndex,
                                                   CheckAdditionalRequirementsPageModel? model = null)
     {
         var qualification = await qualificationsRepository.GetById(qualificationId);
@@ -97,11 +97,11 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var mappedModel = await MapModel(content, qualification, questionId, model);
+        var mappedModel = await MapModel(content, qualification, questionIndex, model);
         var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
-        if (answers is not null && answers.Count != 0 && questionId <= answers.Count)
+        if (answers is not null && answers.Count != 0 && questionIndex <= answers.Count)
         {
-            var index = questionId - 1;
+            var index = questionIndex - 1;
             mappedModel.Answer = answers.ElementAt(index).Value;
         }
         return View("Index", mappedModel);
@@ -109,26 +109,26 @@ public class CheckAdditionalRequirementsController(
 
     private async Task<CheckAdditionalRequirementsPageModel> MapModel(CheckAdditionalRequirementsPage content,
                                                                       Qualification qualification,
-                                                                      int questionId,
+                                                                      int questionIndex,
                                                                       CheckAdditionalRequirementsPageModel? model = null)
     {
         var mappedModel = model ?? new CheckAdditionalRequirementsPageModel();
         mappedModel.QualificationId = qualification.QualificationId;
-        mappedModel.QuestionId = questionId;
+        mappedModel.QuestionIndex = questionIndex;
         mappedModel.CtaButtonText = content.CtaButtonText;
         mappedModel.Heading = content.Heading;
         mappedModel.QuestionSectionHeading = content.QuestionSectionHeading;
-        mappedModel.BackButton = CalculateBackButton(qualification.QualificationId, questionId, content);
+        mappedModel.BackButton = CalculateBackButton(qualification.QualificationId, questionIndex, content);
         mappedModel.AdditionalRequirementQuestion =
-            await MapAdditionalRequirementQuestion(qualification.AdditionalRequirementQuestions!, questionId);
+            await MapAdditionalRequirementQuestion(qualification.AdditionalRequirementQuestions!, questionIndex);
         mappedModel.ErrorMessage = content.ErrorMessage;
         mappedModel.ErrorSummaryHeading = content.ErrorSummaryHeading;
         return mappedModel;
     }
 
-    private static NavigationLinkModel? CalculateBackButton(string qualificationId, int questionId, CheckAdditionalRequirementsPage content)
+    private static NavigationLinkModel? CalculateBackButton(string qualificationId, int questionIndex, CheckAdditionalRequirementsPage content)
     {
-        if (questionId == 1)
+        if (questionIndex == 1)
         {
             return MapToNavigationLinkModel(content.BackButton);
         }
@@ -140,18 +140,18 @@ public class CheckAdditionalRequirementsController(
             return MapToNavigationLinkModel(content.BackButton);
         }
 
-        var previousQuestionId = questionId - 1;
-        if (!link.Href.EndsWith($"/{qualificationId}/{previousQuestionId}", StringComparison.OrdinalIgnoreCase))
+        var previousQuestionIndex = questionIndex - 1;
+        if (!link.Href.EndsWith($"/{qualificationId}/{previousQuestionIndex}", StringComparison.OrdinalIgnoreCase))
         {
-            link.Href = $"{link.Href}/{qualificationId}/{previousQuestionId}";
+            link.Href = $"{link.Href}/{qualificationId}/{previousQuestionIndex}";
         }
 
         return MapToNavigationLinkModel(link);
     }
 
-    private async Task<AdditionalRequirementQuestionModel> MapAdditionalRequirementQuestion(List<AdditionalRequirementQuestion> additionalRequirementQuestions, int questionId)
+    private async Task<AdditionalRequirementQuestionModel> MapAdditionalRequirementQuestion(List<AdditionalRequirementQuestion> additionalRequirementQuestions, int questionIndex)
     {
-        var additionalRequirementQuestion = additionalRequirementQuestions[questionId - 1];
+        var additionalRequirementQuestion = additionalRequirementQuestions[questionIndex - 1];
         return new AdditionalRequirementQuestionModel
                {
                    Question = additionalRequirementQuestion.Question,

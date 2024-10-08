@@ -8,7 +8,7 @@ public class CheckAdditionalRequirementsPageModel
     public string QualificationId { get; set; } = string.Empty;
 
     [Required]
-    public int? QuestionId { get; set; }
+    public int? QuestionIndex { get; set; }
 
     public string Heading { get; set; } = string.Empty;
 

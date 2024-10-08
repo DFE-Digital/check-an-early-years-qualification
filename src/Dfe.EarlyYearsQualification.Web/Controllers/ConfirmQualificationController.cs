@@ -89,7 +89,7 @@ public class ConfirmQualificationController(
                                                                              new
                                                                              {
                                                                                  qualificationId = model.QualificationId,
-                                                                                 questionId = 1
+                                                                                 questionIndex = 1
                                                                              }),
 
                        "yes" => RedirectToAction("Index",

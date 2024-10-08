@@ -23,9 +23,9 @@
                                                                    });
         }
         
-        <form id="check-additional-requirements" asp-controller="CheckAdditionalRequirements" asp-action="Post" method="post" asp-route-qualificationId="@Model.QualificationId" asp-route-questionId="@Model.QuestionId">
+        <form id="check-additional-requirements" asp-controller="CheckAdditionalRequirements" asp-action="Post" method="post" asp-route-qualificationId="@Model.QualificationId" asp-route-questionIndex="@Model.QuestionIndex">
             <input type="hidden" name="qualificationId" value="@Model.QualificationId">
-            <input type="hidden" name="questionId" value="@Model.QuestionId">
+            <input type="hidden" name="questionIndex" value="@Model.QuestionIndex">
             <input type="hidden" name="question" value="@Model.AdditionalRequirementQuestion.Question">
             <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">

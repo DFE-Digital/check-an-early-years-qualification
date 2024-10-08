@@ -446,8 +446,6 @@ public class CheckAdditionalRequirementsControllerTests
 
         controller.ModelState.AddModelError("test", "test");
 
-        var answers = new Dictionary<string, string> { { "Test question", "yes" } };
-
         var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
 
         result.Should().NotBeNull();
