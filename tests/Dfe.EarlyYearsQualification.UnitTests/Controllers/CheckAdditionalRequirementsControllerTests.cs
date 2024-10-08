@@ -32,7 +32,7 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockUserJourneyCookieService.Object);
         controller.ModelState.AddModelError("test", "error");
 
-        var result = await controller.Index("");
+        var result = await controller.Index("", 1);
 
         result.Should().NotBeNull();
 
@@ -63,7 +63,7 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
-        var result = await controller.Index("Test-123");
+        var result = await controller.Index("Test-123", 1);
 
         result.Should().NotBeNull();
 
@@ -94,7 +94,7 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
-        var result = await controller.Index("Test-123");
+        var result = await controller.Index("Test-123", 1);
 
         result.Should().NotBeNull();
 
@@ -124,7 +124,7 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
-        var result = await controller.Index("Test-123");
+        var result = await controller.Index("Test-123", 1);
 
         result.Should().NotBeNull();
 
@@ -159,7 +159,7 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
-        var result = await controller.Index("Test-123");
+        var result = await controller.Index("Test-123", 1);
 
         result.Should().NotBeNull();
 
@@ -172,30 +172,128 @@ public class CheckAdditionalRequirementsControllerTests
 
         var model = resultType.Model as CheckAdditionalRequirementsPageModel;
         model!.Heading.Should().BeSameAs(pageContent.Heading);
-        model.AwardingOrganisationLabel.Should().BeSameAs(pageContent.AwardingOrganisationLabel);
-        model.AwardingOrganisation.Should().BeSameAs(qualification.AwardingOrganisationTitle);
         model.BackButton.Should().NotBeNull();
         model.BackButton.Should().BeOfType<NavigationLinkModel>();
         model.BackButton!.Href.Should().BeSameAs(pageContent.BackButton!.Href);
         model.BackButton.DisplayText.Should().BeSameAs(pageContent.BackButton.DisplayText);
         model.BackButton.OpenInNewTab.Should().Be(pageContent.BackButton.OpenInNewTab);
-        model.Answers.Should().NotBeNull();
-        model.Answers.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
         model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);
         model.ErrorSummaryHeading.Should().BeSameAs(pageContent.ErrorSummaryHeading);
-        model.InformationMessage.Should().BeSameAs(pageContent.InformationMessage);
         model.QualificationId.Should().BeSameAs(qualification.QualificationId);
-        model.QualificationLevel.Should().Be(qualification.QualificationLevel);
-        model.QualificationLevelLabel.Should().Be(pageContent.QualificationLevelLabel);
-        model.QualificationLabel.Should().BeSameAs(pageContent.QualificationLabel);
-        model.QualificationName.Should().BeSameAs(qualification.QualificationName);
         model.CtaButtonText.Should().BeSameAs(pageContent.CtaButtonText);
         model.QuestionSectionHeading.Should().BeSameAs(pageContent.QuestionSectionHeading);
-        model.AdditionalRequirementQuestions.Should().NotBeNull();
-        model.AdditionalRequirementQuestions.Count.Should().Be(qualification.AdditionalRequirementQuestions.Count);
+        model.AdditionalRequirementQuestion.Should().NotBeNull();
+        model.HasErrors.Should().BeFalse();
+    }
+    
+    
+    [TestMethod]
+    public async Task Index_SecondQuestion_MapsPreviousQuestionBackButton()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
+        var pageContent = CreatePageContent();
+
+        mockRepository.Setup(x => x.GetById("Test-123")).ReturnsAsync(qualification);
+
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsPage()).ReturnsAsync(pageContent);
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.Index("Test-123", 2);
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+        resultType!.ViewName.Should().Be("Index");
+
+        resultType.Model.Should().NotBeNull();
+        resultType.Model.Should().BeAssignableTo<CheckAdditionalRequirementsPageModel>();
+
+        var model = resultType.Model as CheckAdditionalRequirementsPageModel;
+        model!.Heading.Should().BeSameAs(pageContent.Heading);
+        model.BackButton.Should().NotBeNull();
+        model.BackButton.Should().BeOfType<NavigationLinkModel>();
+        model.BackButton!.Href.Should().BeSameAs(pageContent.PreviousQuestionBackButton!.Href);
+        model.BackButton.DisplayText.Should().BeSameAs(pageContent.PreviousQuestionBackButton.DisplayText);
+        model.BackButton.OpenInNewTab.Should().Be(pageContent.PreviousQuestionBackButton.OpenInNewTab);
+        model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);
+        model.ErrorSummaryHeading.Should().BeSameAs(pageContent.ErrorSummaryHeading);
+        model.QualificationId.Should().BeSameAs(qualification.QualificationId);
+        model.CtaButtonText.Should().BeSameAs(pageContent.CtaButtonText);
+        model.QuestionSectionHeading.Should().BeSameAs(pageContent.QuestionSectionHeading);
+        model.AdditionalRequirementQuestion.Should().NotBeNull();
         model.HasErrors.Should().BeFalse();
     }
 
+    [TestMethod]
+    public async Task Post_ModelStateIsValidAndHasAnotherAdditionalQuestion_RedirectsToIndex()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(CreateQualification(CreateAdditionalRequirementQuestions()));
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
+        resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
+        resultType.RouteValues.Should().Contain("questionIndex", 2);
+        mockUserJourneyCookieService
+            .Verify(x => x.SetAdditionalQuestionsAnswers(It.IsAny<Dictionary<string, string>>()), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task Post_ModelStateIsValidAndUnableToFindQualification_RedirectsToIndex()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(value: null);
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+    }
+    
     [TestMethod]
     public async Task Post_ModelStateIsValid_RedirectsToQualificationDetails()
     {
@@ -205,13 +303,16 @@ public class CheckAdditionalRequirementsControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(CreateQualification(new List<AdditionalRequirementQuestion> { new () }));
+
         var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
                                                                    mockRepository.Object,
                                                                    mockContentService.Object,
                                                                    mockContentParser.Object,
                                                                    mockUserJourneyCookieService.Object);
 
-        var result = await controller.Post(new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
         result.Should().NotBeNull();
 
         var resultType = result as RedirectToActionResult;
@@ -242,7 +343,7 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockUserJourneyCookieService.Object);
 
         controller.ModelState.AddModelError("test", "test");
-        var result = await controller.Post(new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
 
         result.Should().NotBeNull();
 
@@ -274,7 +375,7 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockUserJourneyCookieService.Object);
 
         controller.ModelState.AddModelError("test", "test");
-        var result = await controller.Post(new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
 
         result.Should().NotBeNull();
 
@@ -306,7 +407,7 @@ public class CheckAdditionalRequirementsControllerTests
                                                                    mockUserJourneyCookieService.Object);
 
         controller.ModelState.AddModelError("test", "test");
-        var result = await controller.Post(new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
 
         result.Should().NotBeNull();
 
@@ -345,10 +446,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         controller.ModelState.AddModelError("test", "test");
 
-        var answers = new Dictionary<string, string> { { "Test question", "yes" } };
-
-        var result = await controller.Post(new CheckAdditionalRequirementsPageModel
-                                           { QualificationId = "Test-123", Answers = answers });
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
 
         result.Should().NotBeNull();
 
@@ -361,27 +459,17 @@ public class CheckAdditionalRequirementsControllerTests
 
         var model = resultType.Model as CheckAdditionalRequirementsPageModel;
         model!.Heading.Should().BeSameAs(pageContent.Heading);
-        model.AwardingOrganisationLabel.Should().BeSameAs(pageContent.AwardingOrganisationLabel);
-        model.AwardingOrganisation.Should().BeSameAs(qualification.AwardingOrganisationTitle);
         model.BackButton.Should().NotBeNull();
         model.BackButton.Should().BeOfType<NavigationLinkModel>();
         model.BackButton!.Href.Should().BeSameAs(pageContent.BackButton!.Href);
         model.BackButton.DisplayText.Should().BeSameAs(pageContent.BackButton.DisplayText);
         model.BackButton.OpenInNewTab.Should().Be(pageContent.BackButton.OpenInNewTab);
-        model.Answers.Should().NotBeNull();
-        model.Answers.Count.Should().Be(qualification.AdditionalRequirementQuestions!.Count);
         model.ErrorMessage.Should().BeSameAs(pageContent.ErrorMessage);
         model.ErrorSummaryHeading.Should().BeSameAs(pageContent.ErrorSummaryHeading);
-        model.InformationMessage.Should().BeSameAs(pageContent.InformationMessage);
         model.QualificationId.Should().BeSameAs(qualification.QualificationId);
-        model.QualificationLevel.Should().Be(qualification.QualificationLevel);
-        model.QualificationLevelLabel.Should().Be(pageContent.QualificationLevelLabel);
-        model.QualificationLabel.Should().BeSameAs(pageContent.QualificationLabel);
-        model.QualificationName.Should().BeSameAs(qualification.QualificationName);
         model.CtaButtonText.Should().BeSameAs(pageContent.CtaButtonText);
         model.QuestionSectionHeading.Should().BeSameAs(pageContent.QuestionSectionHeading);
-        model.AdditionalRequirementQuestions.Should().NotBeNull();
-        model.AdditionalRequirementQuestions.Count.Should().Be(qualification.AdditionalRequirementQuestions.Count);
+        model.AdditionalRequirementQuestion.Should().NotBeNull();
         model.HasErrors.Should().BeTrue();
     }
 
@@ -462,6 +550,12 @@ public class CheckAdditionalRequirementsControllerTests
                                     OpenInNewTab = false,
                                     Href = "/"
                                 },
+                   PreviousQuestionBackButton = new NavigationLink
+                                                {
+                                                    DisplayText = "Previous",
+                                                    OpenInNewTab = false,
+                                                    Href = "/previous"
+                                                },
                    AwardingOrganisationLabel = "Awarding organisation",
                    Heading = "This is the heading",
                    ErrorMessage = "This is an error",

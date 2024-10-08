@@ -14,132 +14,63 @@
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         @if (Model.HasErrors)
         {
-            <div id="error-banner" class="govuk-error-summary" data-module="govuk-error-summary">
-                <div role="alert">
-                    <h2 class="govuk-error-summary__title">
-                        @Model.ErrorSummaryHeading
-                    </h2>
-                    <div class="govuk-error-summary__body">
-                        <ul class="govuk-list govuk-error-summary__list">
-                            @for (var i = 0; i < Model.AdditionalRequirementQuestions.Count; i++)
-                            {
-                                var question = Model.AdditionalRequirementQuestions[i];
-                                if (!question.HasError)
-                                {
-                                    continue;
-                                }
-
-                                var href = $"#question-choice-error_{i}";
-                                var errorBannerLinkId = $"error-banner-link_{i}";
-                                <li>
-                                    <a id="@errorBannerLinkId" href="@href">@Model.ErrorMessage</a>
-                                </li>
-                            }
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            var elementLinkId = Model.AdditionalRequirementQuestion.Options.First();
+            await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
+                                                                   {
+                                                                       ErrorBannerHeading = Model.ErrorSummaryHeading,
+                                                                       ErrorBannerLinkText = Model.ErrorMessage,
+                                                                       ElementLinkId = elementLinkId.Value
+                                                                   });
         }
-        <h1 class="govuk-heading-xl" id="heading">@Model.Heading</h1>
-        <dl class="govuk-summary-list">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="qualification-name-label">
-                    @Model.QualificationLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="qualification-name-value">
-                    @Model.QualificationName
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="qualification-level-label">
-                    @Model.QualificationLevelLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="qualification-level-value">
-                    @Model.QualificationLevel
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="awarding-organisation-label">
-                    @Model.AwardingOrganisationLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="awarding-organisation-value">
-                    @Model.AwardingOrganisation
-                </dd>
-            </div>
-        </dl>
-        <form id="check-additional-requirements" asp-controller="CheckAdditionalRequirements" asp-action="Post" method="post">
+        
+        <form id="check-additional-requirements" asp-controller="CheckAdditionalRequirements" asp-action="Post" method="post" asp-route-qualificationId="@Model.QualificationId" asp-route-questionIndex="@Model.QuestionIndex">
             <input type="hidden" name="qualificationId" value="@Model.QualificationId">
-            <div id="additional-requirements-form-group" class="govuk-form-group">
-                <h2 id="radio-heading" class="govuk-heading-l govuk-!-static-margin-top-8">@Model.QuestionSectionHeading</h2>
-                <input type="hidden" name="QuestionCount" value="@Model.QuestionCount"/>
-                @for (var qi = 0; qi < Model.AdditionalRequirementQuestions.Count; qi++)
-                {
-                    var question = Model.AdditionalRequirementQuestions[qi];
-                    var questionId = $"question_{qi}";
-                    var fieldsetName = $"{questionId}_fieldset";
-                    <div class="govuk-form-group @(Model.AdditionalRequirementQuestions[qi].HasError ? "govuk-form-group--error" : "")">
-                        <fieldset class="govuk-fieldset" name="@fieldsetName">
-                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                                <p class="govuk-heading-s mb-0" id="@questionId">@question.Question</p>
-                            </legend>
-                            @if (!string.IsNullOrEmpty(question.HintText))
-                            {
-                                var hintId = $"{questionId}_hint";
-                                <p class="govuk-hint" id="@hintId">@question.HintText</p>
-                            }
-                            @if (Model.AdditionalRequirementQuestions[qi].HasError)
-                            {
-                                var errorId = $"question-choice-error_{qi}";
-                                <p id="@errorId" class="govuk-error-message">
-                                    <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
-                                </p>
-                            }
-                            @if (!string.IsNullOrEmpty(question.DetailsHeading) && !string.IsNullOrEmpty(question.DetailsContent))
-                            {
-                                var detailsHeadingId = $"{questionId}_details_heading";
-                                var detailsContentId = $"{questionId}_details_content";
-                                <details class="govuk-details">
-                                    <summary class="govuk-details__summary">
-                                        <span class="govuk-details__summary-text" id="@detailsHeadingId">
-                                            @question.DetailsHeading
-                                        </span>
-                                    </summary>
-                                    <div class="govuk-details__text" id="@detailsContentId">
-                                        @Html.Raw(question.DetailsContent)
+            <input type="hidden" name="questionIndex" value="@Model.QuestionIndex">
+            <input type="hidden" name="question" value="@Model.AdditionalRequirementQuestion.Question">
+            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-heading-xl mb-1" id="question">
+                            @Model.AdditionalRequirementQuestion.Question
+                        </h1>
+                    </legend>
+
+                    <div id="hint" class="govuk-hint">@Model.AdditionalRequirementQuestion.HintText</div>
+
+                    @if (!string.IsNullOrEmpty(Model.AdditionalRequirementQuestion.DetailsHeading) && !string.IsNullOrEmpty(Model.AdditionalRequirementQuestion.DetailsContent))
+                    {
+                        await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
+                                                                                        {
+                                                                                            AdditionalInformationHeader = Model.AdditionalRequirementQuestion.DetailsHeading,
+                                                                                            AdditionalInformationBody = Model.AdditionalRequirementQuestion.DetailsContent
+                                                                                        });
+                    }
+
+                    @if (Model.HasErrors)
+                    {
+                        <p id="option-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
+                        </p>
+                    }
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @foreach (var option in Model.AdditionalRequirementQuestion.Options)
+                        {
+                            <div class="govuk-radios__item">
+                                @Html.RadioButtonFor(x => x.Answer, option.Value, new { @class = "govuk-radios__input", id = option.Value })
+                                <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                    @option.Label
+                                </label>
+                                @if (!string.IsNullOrEmpty(option.Hint))
+                                {
+                                    var hintId = $"{option.Value}_hint";
+                                    <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                        @option.Hint
                                     </div>
-                                </details>
-                            }
-                            @for (var i = 0; i < question.Options.Count; i++)
-                            {
-                                var option = question.Options[i];
-                                var id = $"{option.Value}_{qi}_{i}";
-                                var @checked = Model.Answers.GetValueOrDefault(question.Question) == option.Value ? "checked" : "";
-                                <div class="govuk-radios__item">
-                                    @Html.RadioButtonFor(x => x.Answers[question.Question], option.Value, new { @class = "govuk-radios__input", id, @checked })
-                                    <label class="govuk-label govuk-radios__label" for="@id">
-                                        @option.Label
-                                    </label>
-                                    @if (!string.IsNullOrEmpty(option.Hint))
-                                    {
-                                        var hintId = $"{option.Value}_{qi}_{i}_hint";
-                                        <div id="@hintId" class="govuk-hint govuk-radios__hint">
-                                            @option.Hint
-                                        </div>
-                                    }
-                                </div>
-                            }
-                        </fieldset>
+                                }
+                            </div>
+                        }
                     </div>
-                    <hr/>
-                }
-            </div>
-            <div class="govuk-warning-text">
-                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                <strong class="govuk-warning-text__text" id="additional-requirement-warning">
-                    <span class="govuk-visually-hidden">Warning</span>
-                    @Model.InformationMessage
-                </strong>
+                </fieldset>
             </div>
             <div class="govuk-form-group">
                 <button id="additional-requirement-button" class="govuk-button" data-module="govuk-button">

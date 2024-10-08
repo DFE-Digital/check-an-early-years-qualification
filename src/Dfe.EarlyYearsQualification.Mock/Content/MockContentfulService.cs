@@ -146,7 +146,7 @@ public class MockContentfulService : IContentService
                                                                              DisplayText =
                                                                                  "TEST (back to additional questions)",
                                                                              Href =
-                                                                                 "/qualifications/check-additional-questions/EYQ-240",
+                                                                                 "/qualifications/check-additional-questions",
                                                                              OpenInNewTab = false
                                                                          },
                                          BackToLevelSixAdvice = new NavigationLink
@@ -342,6 +342,12 @@ public class MockContentfulService : IContentService
                                                           Href = "/qualifications",
                                                           OpenInNewTab = false
                                                       },
+                                         PreviousQuestionBackButton = new NavigationLink
+                                                                      {
+                                                                          DisplayText = "Previous",
+                                                                          Href = "/previous",
+                                                                          OpenInNewTab = false
+                                                                      },
                                          CtaButtonText = "Get result",
                                          AwardingOrganisationLabel = "Awarding organisation",
                                          QualificationLabel = "Qualification",
