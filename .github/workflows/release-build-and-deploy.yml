@@ -12,11 +12,6 @@ jobs:
       branch: ${{ steps.var.outputs.branch }}
       checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
     steps:
-      - name: Fail if branch is not release or fix
-        if: ${{ ! startsWith(github.ref, 'refs/heads/fix')  && ! startsWith(github.ref, 'refs/heads/release') }}
-        run: |
-          echo "This workflow should not be triggered on a branch other than release or fix"
-          exit 1
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
