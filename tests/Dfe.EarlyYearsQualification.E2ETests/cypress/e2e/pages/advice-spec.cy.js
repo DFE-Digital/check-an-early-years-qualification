@@ -9,9 +9,14 @@ describe("A spec that tests advice pages", () => {
 
         cy.get("#advice-page-heading").should("contain.text", "Qualifications achieved outside the United Kingdom");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
-        
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
     it("Checks the level 2 between 1 Sept 2014 and 31 Aug 2019 details are on the page", () => {
@@ -21,8 +26,13 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Level 2 qualifications started between 1 September 2014 and 31 August 2019");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
     it("Checks the Qualifications achieved in Scotland details are on the page", () => {
@@ -31,8 +41,13 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Qualifications achieved in Scotland");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
     it("Checks the Qualifications achieved in Wales details are on the page", () => {
@@ -41,8 +56,13 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Qualifications achieved in Wales");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
     it("Checks the Qualifications achieved in Northern Ireland details are on the page", () => {
@@ -51,8 +71,13 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Qualifications achieved in Northern Ireland");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
     it("Checks the Level 6 qualification pre 2014 details are on the page", () => {
@@ -62,8 +87,13 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Level 6 qualification pre 2014");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
     it("Checks the Level 6 qualification post 2014 details are on the page", () => {
@@ -73,8 +103,13 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Level 6 qualification post 2014");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
     it("Checks the Qualifications level 7 details are on the page", () => {
@@ -84,8 +119,13 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Qualification at Level 7");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
     it("Checks the Temporary privacy policy details are on the page", () => {
@@ -95,7 +135,12 @@ describe("A spec that tests advice pages", () => {
         cy.get("#advice-page-heading").should("contain.text", "Temporary privacy policy");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
-        cy.get("#feedback-banner-heading").should("contain.text", "Feedback heading");
-        cy.get("#feedback-banner-body").should("contain.text", "This is the body text");
+        cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "This is the body text");
+
+        cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+        cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Feedback heading");
+        cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 })

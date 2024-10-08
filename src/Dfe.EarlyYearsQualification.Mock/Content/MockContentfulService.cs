@@ -179,7 +179,13 @@ public class MockContentfulService : IContentService
                                                                          },
                                          QualificationDetailsSummaryHeader = "Qualification details",
                                          QualificationNameLabel = "Qualification",
-                                         QualificationStartDateLabel = "Qualification start date"
+                                         QualificationStartDateLabel = "Qualification start date",
+                                         FeedbackBanner = new FeedbackBanner()
+                                                          {
+                                                              Body = ContentfulContentHelper.Paragraph("Test body"),
+                                                              BannerTitle = "Test banner title",
+                                                              Heading = "Test heading"
+                                                          }
                                      });
     }
 
@@ -570,7 +576,8 @@ public class MockContentfulService : IContentService
                    FeedbackBanner = new FeedbackBanner
                                     {
                                         Heading = "Feedback heading",
-                                        Body = ContentfulContentHelper.Paragraph("This is the body text")
+                                        Body = ContentfulContentHelper.Paragraph("This is the body text"),
+                                        BannerTitle = "Test banner title"
                                     }
                };
     }
