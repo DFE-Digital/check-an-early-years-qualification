@@ -262,7 +262,7 @@ public class CheckAdditionalRequirementsControllerTests
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
-        resultType.RouteValues.Should().Contain("questionId", 2);
+        resultType.RouteValues.Should().Contain("questionIndex", 2);
         mockUserJourneyCookieService
             .Verify(x => x.SetAdditionalQuestionsAnswers(It.IsAny<Dictionary<string, string>>()), Times.Once);
     }

@@ -526,7 +526,7 @@ public class ConfirmQualificationControllerTests
         actionResult.ActionName.Should().Be("Index");
         actionResult.ControllerName.Should().Be("CheckAdditionalRequirements");
         actionResult.RouteValues.Should().Contain("qualificationId", "TEST-123");
-        actionResult.RouteValues.Should().Contain("questionId", 1);
+        actionResult.RouteValues.Should().Contain("questionIndex", 1);
     }
 
     [TestMethod]

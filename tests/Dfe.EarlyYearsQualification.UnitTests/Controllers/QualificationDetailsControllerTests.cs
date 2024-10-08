@@ -290,7 +290,7 @@ public class QualificationDetailsControllerTests
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", qualificationId);
-        resultType.RouteValues.Should().Contain("questionId", 1);
+        resultType.RouteValues.Should().Contain("questionIndex", 1);
     }
 
     [TestMethod]
