@@ -193,7 +193,8 @@ public class ContentfulContentService : IContentService
 
     public async Task<List<Qualification>> GetQualifications()
     {
-        var qualifications = await GetEntriesByType<Qualification>();
+        var queryBuilder = new QueryBuilder<Qualification>().Limit(1000);
+        var qualifications = await GetEntriesByType(queryBuilder);
         return qualifications!.ToList();
     }
 
