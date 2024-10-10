@@ -1,7 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -24,11 +24,11 @@ public class AccessibilityStatementControllerTests
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object, mockContentParser.Object);
+            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object,
+                                                 mockContentParser.Object);
 
         mockContentService.Setup(x => x.GetAccessibilityStatementPage())
                           .ReturnsAsync((AccessibilityStatementPage?)default);
-
 
         var result = await controller.Index();
 
@@ -59,7 +59,8 @@ public class AccessibilityStatementControllerTests
                          .ReturnsAsync(expectedHtml);
 
         var controller =
-            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object, mockContentParser.Object);
+            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object,
+                                                 mockContentParser.Object);
 
         var result = await controller.Index();
 

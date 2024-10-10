@@ -1,7 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -27,7 +27,7 @@ public class CookiesBannerViewComponentTests
         mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync((CookiesBanner?)default);
 
         var cookiesBannerViewComponent =
-            new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockContentParser.Object);
+            new CookiesBannerViewComponent(mockLogger.Object, mockContentService.Object, mockContentParser.Object);
 
         var result = await cookiesBannerViewComponent.InvokeAsync();
 
@@ -67,7 +67,7 @@ public class CookiesBannerViewComponentTests
         mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Mock HTML renderer result");
 
         var cookiesBannerViewComponent =
-            new CookiesBannerViewComponent(mockContentService.Object, mockLogger.Object, mockContentParser.Object);
+            new CookiesBannerViewComponent(mockLogger.Object, mockContentService.Object, mockContentParser.Object);
 
         var result = await cookiesBannerViewComponent.InvokeAsync();
 

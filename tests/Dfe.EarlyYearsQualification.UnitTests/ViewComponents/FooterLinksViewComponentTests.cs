@@ -1,5 +1,5 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
@@ -25,7 +25,7 @@ public class FooterLinksViewComponentTests
         mockContentService.Setup(x => x.GetNavigationLinks())
                           .ReturnsAsync([navigationLink]);
 
-        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
+        var footerLinksViewComponent = new FooterLinksViewComponent(mockLogger.Object, mockContentService.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
 
         result.Should().NotBeNull();
@@ -54,7 +54,7 @@ public class FooterLinksViewComponentTests
 
         mockContentService.Setup(x => x.GetNavigationLinks()).ThrowsAsync(new Exception());
 
-        var footerLinksViewComponent = new FooterLinksViewComponent(mockContentService.Object, mockLogger.Object);
+        var footerLinksViewComponent = new FooterLinksViewComponent(mockLogger.Object, mockContentService.Object);
         var result = await footerLinksViewComponent.InvokeAsync();
 
         result.Should().NotBeNull();

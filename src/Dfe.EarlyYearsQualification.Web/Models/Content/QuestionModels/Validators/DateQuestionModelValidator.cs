@@ -7,8 +7,14 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
 {
     public ValidationResult IsValid(DateQuestionModel model, DateQuestionPage questionPage)
     {
-        if (model is { SelectedYear: 0, SelectedMonth: 0 })
+        model.MonthError = false;
+        model.YearError = false;
+        
+        if (model is { SelectedYear: null, SelectedMonth: null })
         {
+            model.MonthError = true;
+            model.YearError = true;
+            
             return new ValidationResult
                    {
                        IsValid = false, 
@@ -16,28 +22,75 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                        BannerErrorMessage = questionPage.ErrorBannerLinkText
                    };
         }
-        
-        if (model.SelectedYear < 1900
-            || model.SelectedMonth < 1
-            || model.SelectedMonth > 12)
+
+        if (model.SelectedMonth == null)
         {
+            model.MonthError = true;
+            
             return new ValidationResult
                    {
                        IsValid = false, 
-                       ErrorMessage = questionPage.IncorrectFormatErrorMessage, 
-                       BannerErrorMessage = questionPage.IncorrectFormatErrorBannerLinkText
+                       ErrorMessage = questionPage.MissingMonthErrorMessage,
+                       BannerErrorMessage = questionPage.MissingMonthBannerLinkText
                    };
         }
-
-        var selectedDate = new DateOnly(model.SelectedYear, model.SelectedMonth, 1);
-
+        
+        if (model.SelectedYear == null)
+        {
+            model.YearError = true;
+            
+            return new ValidationResult
+                   {
+                       IsValid = false, 
+                       ErrorMessage = questionPage.MissingYearErrorMessage,
+                       BannerErrorMessage = questionPage.MissingYearBannerLinkText
+                   };
+        }
+        
+        if (model.SelectedMonth is <= 0 or > 12)
+        {
+            model.MonthError = true;
+            
+            return new ValidationResult
+                   {
+                       IsValid = false, 
+                       ErrorMessage = questionPage.MonthOutOfBoundsErrorMessage,
+                       BannerErrorMessage = questionPage.MonthOutOfBoundsErrorLinkText
+                   };
+        }
+        
         var now = dateTimeAdapter.Now();
 
+        if (model.SelectedYear < 1900 || model.SelectedYear > now.Year)
+        {
+            model.YearError = true;
+            
+            return new ValidationResult
+                   {
+                       IsValid = false, 
+                       ErrorMessage = questionPage.YearOutOfBoundsErrorMessage,
+                       BannerErrorMessage = questionPage.YearOutOfBoundsErrorLinkText
+                   };
+        }
+        
+        var selectedDate = new DateOnly(model.SelectedYear!.Value, model.SelectedMonth!.Value, 1);
+
+        if (selectedDate > DateOnly.FromDateTime(now))
+        {
+            model.MonthError = true;
+            model.YearError = true;
+            
+            return new ValidationResult
+                   {
+                       IsValid = false, 
+                       ErrorMessage = questionPage.FutureDateErrorMessage,
+                       BannerErrorMessage = questionPage.FutureDateErrorBannerLinkText
+                   };
+        }
+        
         return new ValidationResult
                {
-                   IsValid = selectedDate <= DateOnly.FromDateTime(now),
-                   ErrorMessage = questionPage.FutureDateErrorMessage,
-                   BannerErrorMessage = questionPage.FutureDateErrorBannerLinkText
+                   IsValid = true
                };
     }
 }

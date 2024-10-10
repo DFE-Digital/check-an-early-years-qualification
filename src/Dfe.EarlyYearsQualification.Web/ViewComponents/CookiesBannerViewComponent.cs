@@ -1,14 +1,14 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 
 public class CookiesBannerViewComponent(
-    IContentService contentService,
     ILogger<CookiesBannerViewComponent> logger,
+    IContentService contentService,
     IGovUkContentParser contentParser)
     : ViewComponent
 {

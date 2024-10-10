@@ -3,6 +3,7 @@ using Azure.Identity;
 using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
@@ -87,7 +88,7 @@ if (useMockContentful)
 else
 {
     builder.Services.AddTransient<IContentService, ContentfulContentService>();
-    builder.Services.AddTransient<IContentFilterService, ContentfulContentFilterService>();
+    builder.Services.AddTransient<IQualificationsRepository, QualificationsRepository>();
 }
 
 builder.Services.AddModelRenderers();

@@ -13,21 +13,9 @@ using Newtonsoft.Json;
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
 [TestClass]
-public class ContentfulContentServiceTests
+public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<ContentfulContentService>
 {
     private readonly Document _testRichText = ContentfulContentHelper.Paragraph("TEST");
-
-    private Mock<IContentfulClient> _clientMock = new();
-    private Mock<ILogger<ContentfulContentService>> _logger = new();
-
-    [TestInitialize]
-    public void BeforeEachTest()
-    {
-        _logger = new Mock<ILogger<ContentfulContentService>>();
-        _clientMock = new Mock<IContentfulClient>();
-        _clientMock.Setup(x => x.SerializerSettings)
-                   .Returns(new JsonSerializerSettings { Converters = new List<JsonConverter>() });
-    }
 
     [TestMethod]
     public async Task GetStartPage_PageFound_ReturnsExpectedResult()
@@ -36,14 +24,14 @@ public class ContentfulContentServiceTests
 
         var pages = new ContentfulCollection<StartPage> { Items = [startPage] };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<StartPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(pages);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<StartPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetStartPage();
 
@@ -57,18 +45,18 @@ public class ContentfulContentServiceTests
         var pages = new ContentfulCollection<StartPage> { Items = new List<StartPage>() };
         // NB: If "pages.Items" is ever null, the iterator built into ContentfulCollection will throw an exception
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<StartPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(pages);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<StartPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetStartPage();
 
-        _logger.VerifyWarning("No start page entry returned");
+        Logger.VerifyWarning("No start page entry returned");
 
         result.Should().BeNull();
     }
@@ -76,18 +64,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetStartPage_NullPages_ReturnsNull()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<StartPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<StartPage>)null!);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<StartPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<StartPage>)null!);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetStartPage();
 
-        _logger.VerifyWarning("No start page entry returned");
+        Logger.VerifyWarning("No start page entry returned");
 
         result.Should().BeNull();
     }
@@ -98,18 +86,18 @@ public class ContentfulContentServiceTests
         var pages = new ContentfulCollection<AccessibilityStatementPage>
                     { Items = new List<AccessibilityStatementPage>() };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(pages);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAccessibilityStatementPage();
 
-        _logger.VerifyWarning("No accessibility statement page entry returned");
+        Logger.VerifyWarning("No accessibility statement page entry returned");
 
         result.Should().BeNull();
     }
@@ -117,18 +105,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetAccessibilityStatementPage_NullPages_ReturnsNull()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<AccessibilityStatementPage>)null!);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<AccessibilityStatementPage>)null!);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAccessibilityStatementPage();
 
-        _logger.VerifyWarning("No accessibility statement page entry returned");
+        Logger.VerifyWarning("No accessibility statement page entry returned");
 
         result.Should().BeNull();
     }
@@ -141,14 +129,14 @@ public class ContentfulContentServiceTests
         var pages = new ContentfulCollection<AccessibilityStatementPage>
                     { Items = [accessibilityStatementPage] };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(pages);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAccessibilityStatementPage();
 
@@ -161,18 +149,18 @@ public class ContentfulContentServiceTests
     {
         var pages = new ContentfulCollection<CookiesPage> { Items = new List<CookiesPage>() };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<CookiesPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(pages);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesPage();
 
-        _logger.VerifyWarning("No cookies page entry returned");
+        Logger.VerifyWarning("No cookies page entry returned");
 
         result.Should().BeNull();
     }
@@ -180,18 +168,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetCookiesPage_NullPages_ReturnsNull()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<CookiesPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<CookiesPage>)null!);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<CookiesPage>)null!);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesPage();
 
-        _logger.VerifyWarning("No cookies page entry returned");
+        Logger.VerifyWarning("No cookies page entry returned");
 
         result.Should().BeNull();
     }
@@ -209,14 +197,14 @@ public class ContentfulContentServiceTests
 
         var pages = new ContentfulCollection<CookiesPage> { Items = [cookiesPage] };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<CookiesPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(pages);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesPage();
 
@@ -227,18 +215,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetNavigationLinks_NoContent_LogsWarningAndReturns()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<NavigationLinks>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<NavigationLinks> { Items = new List<NavigationLinks>() });
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<NavigationLinks>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<NavigationLinks> { Items = new List<NavigationLinks>() });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetNavigationLinks();
 
-        _logger.VerifyWarning("No navigation links returned");
+        Logger.VerifyWarning("No navigation links returned");
 
         result.Should().BeEmpty();
     }
@@ -246,18 +234,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetNavigationLinks_Null_LogsWarningAndReturns()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<NavigationLinks>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<NavigationLinks>)null!);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<NavigationLinks>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<NavigationLinks>)null!);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetNavigationLinks();
 
-        _logger.VerifyWarning("No navigation links returned");
+        Logger.VerifyWarning("No navigation links returned");
 
         result.Should().BeEmpty();
     }
@@ -283,14 +271,14 @@ public class ContentfulContentServiceTests
 
         var content = new ContentfulCollection<NavigationLinks> { Items = [new NavigationLinks { Links = links }] };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<NavigationLinks>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<NavigationLinks>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetNavigationLinks();
 
@@ -301,18 +289,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetAdvicePage_Null_LogsAndReturnsDefault()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<AdvicePage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<AdvicePage>)null!);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<AdvicePage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<AdvicePage>)null!);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAdvicePage("SomeId");
 
-        _logger.VerifyWarning("Advice page with SomeId could not be found");
+        Logger.VerifyWarning("Advice page with SomeId could not be found");
 
         result.Should().BeNull();
     }
@@ -332,14 +320,14 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<AdvicePage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<AdvicePage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetAdvicePage("SomeId");
 
@@ -363,14 +351,14 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<RadioQuestionPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<RadioQuestionPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetRadioQuestionPage("SomeId");
 
@@ -393,14 +381,14 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<DateQuestionPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<DateQuestionPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDateQuestionPage("SomeId");
 
@@ -423,14 +411,14 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<DropdownQuestionPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<DropdownQuestionPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDropdownQuestionPage("SomeId");
 
@@ -454,14 +442,14 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<ConfirmQualificationPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<ConfirmQualificationPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetConfirmQualificationPage();
 
@@ -475,14 +463,14 @@ public class ContentfulContentServiceTests
     {
         var content = new ContentfulCollection<ConfirmQualificationPage> { Items = [] };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<ConfirmQualificationPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<ConfirmQualificationPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetConfirmQualificationPage();
 
@@ -505,14 +493,14 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<QualificationListPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<QualificationListPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetQualificationListPage();
 
@@ -526,14 +514,14 @@ public class ContentfulContentServiceTests
     {
         var content = new ContentfulCollection<QualificationListPage> { Items = [] };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<QualificationListPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<QualificationListPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetQualificationListPage();
 
@@ -543,18 +531,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetDetailsPage_Null_LogsAndReturnsDefault()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<DetailsPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<DetailsPage>)null!);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<DetailsPage>)null!);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDetailsPage();
 
-        _logger.VerifyWarning("No details page entry returned");
+        Logger.VerifyWarning("No details page entry returned");
 
         result.Should().BeNull();
     }
@@ -562,18 +550,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetDetailsPage_NoContent_LogsAndReturnsDefault()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<DetailsPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<DetailsPage> { Items = new List<DetailsPage>() });
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<DetailsPage> { Items = new List<DetailsPage>() });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDetailsPage();
 
-        _logger.VerifyWarning("No details page entry returned");
+        Logger.VerifyWarning("No details page entry returned");
 
         result.Should().BeNull();
     }
@@ -603,14 +591,14 @@ public class ContentfulContentServiceTests
                           ]
                       };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<DetailsPage>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(content);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetDetailsPage();
 
@@ -631,88 +619,20 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public async Task GetQualificationById_Null_LogsAndReturnsDefault()
-    {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<Qualification>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<Qualification>)null!);
-
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
-
-        var result = await service.GetQualificationById("SomeId");
-
-        _logger.VerifyWarning("No qualifications returned for qualificationId: SomeId");
-
-        result.Should().BeNull();
-    }
-
-    [TestMethod]
-    public async Task GetQualificationById_NoContent_LogsAndReturnsDefault()
-    {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<Qualification>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = new List<Qualification>() });
-
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
-
-        var result = await service.GetQualificationById("SomeId");
-
-        _logger.VerifyWarning("No qualifications returned for qualificationId: SomeId");
-
-        result.Should().BeNull();
-    }
-
-    [TestMethod]
-    public async Task GetQualificationById_QualificationExists_Returns()
-    {
-        var qualification = new Qualification("SomeId",
-                                              "Test qualification name",
-                                              "Test awarding org",
-                                              123)
-                            {
-                                FromWhichYear = "Test from which year",
-                                ToWhichYear = "Test to which year",
-                                QualificationNumber = "Test qualification number",
-                                AdditionalRequirements = "Test additional requirements"
-                            };
-
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<Qualification>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<Qualification>
-                                 { Items = new List<Qualification> { qualification } });
-
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
-
-        var result = await service.GetQualificationById("SomeId");
-
-        result.Should().NotBeNull();
-        result.Should().Be(qualification);
-    }
-
-    [TestMethod]
     public async Task GetPhaseBannerContent_Null_LogsAndReturnsDefault()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<PhaseBanner>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<PhaseBanner>)null!);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<PhaseBanner>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<PhaseBanner>)null!);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetPhaseBannerContent();
 
-        _logger.VerifyWarning("No phase banner entry returned");
+        Logger.VerifyWarning("No phase banner entry returned");
 
         result.Should().BeNull();
     }
@@ -720,18 +640,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetPhaseBannerContent_NoContent_LogsAndReturnsDefault()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<PhaseBanner>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<PhaseBanner> { Items = new List<PhaseBanner>() });
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<PhaseBanner>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<PhaseBanner> { Items = new List<PhaseBanner>() });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetPhaseBannerContent();
 
-        _logger.VerifyWarning("No phase banner entry returned");
+        Logger.VerifyWarning("No phase banner entry returned");
 
         result.Should().BeNull();
     }
@@ -746,15 +666,15 @@ public class ContentfulContentServiceTests
                               Show = true
                           };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<PhaseBanner>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<PhaseBanner>
-                                 { Items = new List<PhaseBanner> { phaseBanner } });
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<PhaseBanner>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<PhaseBanner>
+                                { Items = new List<PhaseBanner> { phaseBanner } });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetPhaseBannerContent();
 
@@ -773,18 +693,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetCookiesBannerContent_Null_LogsAndReturnsDefault()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<CookiesBanner>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((ContentfulCollection<CookiesBanner>)null!);
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<CookiesBanner>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<CookiesBanner>)null!);
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesBannerContent();
 
-        _logger.VerifyWarning("No cookies banner entry returned");
+        Logger.VerifyWarning("No cookies banner entry returned");
 
         result.Should().BeNull();
     }
@@ -792,18 +712,18 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetCookiesBannerContent_NoContent_LogsAndReturnsDefault()
     {
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<CookiesBanner>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<CookiesBanner> { Items = new List<CookiesBanner>() });
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<CookiesBanner>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CookiesBanner> { Items = new List<CookiesBanner>() });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesBannerContent();
 
-        _logger.VerifyWarning("No cookies banner entry returned");
+        Logger.VerifyWarning("No cookies banner entry returned");
 
         result.Should().BeNull();
     }
@@ -823,15 +743,15 @@ public class ContentfulContentServiceTests
                                 RejectedCookiesContent = _testRichText
                             };
 
-        _clientMock.Setup(client =>
-                              client.GetEntriesByType(
-                                                      It.IsAny<string>(),
-                                                      It.IsAny<QueryBuilder<CookiesBanner>>(),
-                                                      It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<CookiesBanner>
-                                 { Items = new List<CookiesBanner> { cookiesBanner } });
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<CookiesBanner>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CookiesBanner>
+                                { Items = new List<CookiesBanner> { cookiesBanner } });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCookiesBannerContent();
 
@@ -864,60 +784,19 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public async Task GetQualifications_ReturnsQualifications()
-    {
-        var qualification = new Qualification("Id",
-                                              "Name",
-                                              "AO",
-                                              6)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2020",
-                                QualificationNumber = "number", AdditionalRequirements = "Rq"
-                            };
-
-        _clientMock.Setup(c =>
-                              c.GetEntriesByType(It.IsAny<string>(),
-                                                 It.IsAny<QueryBuilder<Qualification>>(),
-                                                 It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [qualification] });
-
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
-
-        var result = await service.GetQualifications();
-
-        result.Should().HaveCount(1).And.Contain(qualification);
-    }
-
-    [TestMethod]
-    public async Task GetQualifications_ContentfulHasNoQualifications_ReturnsEmpty()
-    {
-        _clientMock.Setup(c =>
-                              c.GetEntriesByType(It.IsAny<string>(),
-                                                 It.IsAny<QueryBuilder<Qualification>>(),
-                                                 It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [] });
-
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
-
-        var result = await service.GetQualifications();
-
-        result.Should().BeEmpty();
-    }
-
-    [TestMethod]
     public async Task GetPage_WhenContentfulGetEntriesByTypeThrows_LogsError()
     {
-        _clientMock.Setup(c =>
-                              c.GetEntriesByType(It.IsAny<string>(),
-                                                 It.IsAny<QueryBuilder<It.IsAnyType>>(),
-                                                 It.IsAny<CancellationToken>()))
-                   .Throws<InvalidOperationException>();
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<It.IsAnyType>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .Throws<InvalidOperationException>();
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         await service.GetStartPage();
 
-        _logger.VerifyError($"Exception trying to retrieve {nameof(StartPage)} from Contentful.");
+        Logger.VerifyError($"Exception trying to retrieve {nameof(StartPage)} from Contentful.");
     }
 
     [TestMethod]
@@ -925,13 +804,13 @@ public class ContentfulContentServiceTests
     {
         var page = new CheckAdditionalRequirementsPage { Heading = "Test heading" };
 
-        _clientMock.Setup(c =>
-                              c.GetEntriesByType(It.IsAny<string>(),
-                                                 It.IsAny<QueryBuilder<CheckAdditionalRequirementsPage>>(),
-                                                 It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<CheckAdditionalRequirementsPage> { Items = [page] });
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CheckAdditionalRequirementsPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CheckAdditionalRequirementsPage> { Items = [page] });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCheckAdditionalRequirementsPage();
 
@@ -941,13 +820,13 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetCheckAdditionalRequirementsPage_ContentfulHasNoPage_ReturnsNull()
     {
-        _clientMock.Setup(c =>
-                              c.GetEntriesByType(It.IsAny<string>(),
-                                                 It.IsAny<QueryBuilder<CheckAdditionalRequirementsPage>>(),
-                                                 It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<CheckAdditionalRequirementsPage> { Items = [] });
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CheckAdditionalRequirementsPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CheckAdditionalRequirementsPage> { Items = [] });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCheckAdditionalRequirementsPage();
 
@@ -959,13 +838,13 @@ public class ContentfulContentServiceTests
     {
         var page = new ChallengePage { MainHeading = "Test heading" };
 
-        _clientMock.Setup(c =>
-                              c.GetEntriesByType(It.IsAny<string>(),
-                                                 It.IsAny<QueryBuilder<ChallengePage>>(),
-                                                 It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<ChallengePage> { Items = [page] });
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<ChallengePage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<ChallengePage> { Items = [page] });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetChallengePage();
 
@@ -975,16 +854,31 @@ public class ContentfulContentServiceTests
     [TestMethod]
     public async Task GetChallengePage_ContentfulHasNoPage_ReturnsNull()
     {
-        _clientMock.Setup(c =>
-                              c.GetEntriesByType(It.IsAny<string>(),
-                                                 It.IsAny<QueryBuilder<ChallengePage>>(),
-                                                 It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(new ContentfulCollection<ChallengePage> { Items = [] });
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<ChallengePage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<ChallengePage> { Items = [] });
 
-        var service = new ContentfulContentService(_clientMock.Object, _logger.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetChallengePage();
 
         result.Should().BeNull();
+    }
+}
+
+public class ContentfulContentServiceTestsBase<T>
+{
+    protected Mock<IContentfulClient> ClientMock = new();
+    protected Mock<ILogger<T>> Logger = new();
+
+    [TestInitialize]
+    public void BeforeEachTest()
+    {
+        Logger = new Mock<ILogger<T>>();
+        ClientMock = new Mock<IContentfulClient>();
+        ClientMock.Setup(x => x.SerializerSettings)
+                  .Returns(new JsonSerializerSettings { Converters = new List<JsonConverter>() });
     }
 }

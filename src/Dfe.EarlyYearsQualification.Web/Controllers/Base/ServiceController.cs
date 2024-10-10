@@ -35,7 +35,8 @@ public class ServiceController : Controller
         return new FeedbackBannerModel
                {
                    Heading = feedbackBanner.Heading,
-                   Body = await contentParser.ToHtml(feedbackBanner.Body)
+                   Body = await contentParser.ToHtml(feedbackBanner.Body),
+                   BannerTitle = feedbackBanner.BannerTitle
                };
     }
 }

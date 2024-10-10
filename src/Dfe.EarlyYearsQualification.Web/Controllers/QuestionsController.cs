@@ -1,7 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -20,7 +20,7 @@ public class QuestionsController(
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
-    IContentFilterService contentFilterService,
+    IQualificationsRepository repository,
     IDateQuestionModelValidator questionModelValidator,
     IPlaceholderUpdater placeholderUpdater)
     : ServiceController
@@ -116,7 +116,6 @@ public class QuestionsController(
                                            dateModelValidationResult,
                                            model.SelectedMonth,
                                            model.SelectedYear);
-                model.HasErrors = true;
             }
 
             return View("Date", model);
@@ -229,7 +228,7 @@ public class QuestionsController(
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
+        return await repository.Get(level, startDateMonth, startDateYear, null, null);
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName,

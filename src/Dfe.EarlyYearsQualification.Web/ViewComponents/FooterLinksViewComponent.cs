@@ -1,11 +1,11 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 
-public class FooterLinksViewComponent(IContentService contentService, ILogger<FooterLinksViewComponent> logger)
+public class FooterLinksViewComponent(ILogger<FooterLinksViewComponent> logger, IContentService contentService)
     : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()

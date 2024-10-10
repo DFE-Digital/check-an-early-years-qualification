@@ -129,13 +129,20 @@ describe('A spec used to test the various routes through the journey', () => {
     cy.get('#yes').click();
     cy.get('button[id="confirm-qualification-button"]').click();
 
-    // check additional questions page
+    // check additional questions first page
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240');
+      expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240/1');
     })
 
-    cy.get('#yes_0_0').click();
-    cy.get('#yes_1_0').click();
+    cy.get('#yes').click();
+    cy.get('button[id="additional-requirement-button"]').click();
+
+    // check additional questions seconf page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240/2');
+    })
+
+    cy.get('#yes').click();
     cy.get('button[id="additional-requirement-button"]').click();
 
     // qualification details page

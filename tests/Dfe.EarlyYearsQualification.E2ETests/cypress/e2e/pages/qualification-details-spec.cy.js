@@ -36,6 +36,14 @@ describe("A spec used to test the qualification details page", () => {
     cy.get("#requirements-heading + p[class='govuk-body']").should("contain.text", "This is the requirements text");
 
     cy.get("#check-another-qualification-link").should("contain.text", "Check another qualification");
+
+    cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");
+    cy.get(".govuk-notification-banner__heading").eq(0).should("contain.text", "Test heading");
+    cy.get(".govuk-notification-banner__content").eq(0).should("contain.text", "Test body");
+
+    cy.get(".govuk-notification-banner__title").eq(1).should("contain.text", "Test banner title");
+    cy.get(".govuk-notification-banner__heading").eq(1).should("contain.text", "Test heading");
+    cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "Test body");
   })
 
   it("Checks the order of the ratios on the page when a user answers additional requirement questions indicating full and relevant", () => {

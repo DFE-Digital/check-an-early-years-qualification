@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -14,6 +14,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [RedirectIfDateMissing]
 public class ConfirmQualificationController(
     ILogger<ConfirmQualificationController> logger,
+    IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IUserJourneyCookieService userJourneyCookieService,
     IGovUkContentParser contentParser)
@@ -21,10 +22,10 @@ public class ConfirmQualificationController(
 {
     [HttpGet]
     [Route("{qualificationId}")]
-    #pragma warning disable S6967
+#pragma warning disable S6967
     // ...the model is a string, so no need to check ModelState.IsValid here
     public async Task<IActionResult> Index(string qualificationId)
-    #pragma warning restore S6967
+#pragma warning restore S6967
     {
         if (string.IsNullOrEmpty(qualificationId))
         {
@@ -39,7 +40,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var qualification = await contentService.GetQualificationById(qualificationId);
+        var qualification = await qualificationsRepository.GetById(qualificationId);
         if (qualification is null)
         {
             var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
@@ -63,7 +64,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var qualification = await contentService.GetQualificationById(model.QualificationId);
+        var qualification = await qualificationsRepository.GetById(model.QualificationId);
         if (qualification is null)
         {
             var loggedQualificationId = model.QualificationId.Replace(Environment.NewLine, "");
@@ -87,7 +88,8 @@ public class ConfirmQualificationController(
                                                                              "CheckAdditionalRequirements",
                                                                              new
                                                                              {
-                                                                                 qualificationId = model.QualificationId
+                                                                                 qualificationId = model.QualificationId,
+                                                                                 questionIndex = 1
                                                                              }),
 
                        "yes" => RedirectToAction("Index",
@@ -135,7 +137,8 @@ public class ConfirmQualificationController(
                    QualificationDateAdded = qualification.FromWhichYear!,
                    BackButton = MapToNavigationLinkModel(content.BackButton),
                    PostHeadingContent = await contentParser.ToHtml(content.PostHeadingContent),
-                   VariousAwardingOrganisationsExplanation = await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation)
+                   VariousAwardingOrganisationsExplanation =
+                       await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation)
                };
     }
 }

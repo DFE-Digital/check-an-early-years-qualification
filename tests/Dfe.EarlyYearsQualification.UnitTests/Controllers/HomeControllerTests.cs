@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -24,7 +24,8 @@ public class HomeControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockContentParser.Object, mockUserJourneyCookieService.Object);
+        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                            mockUserJourneyCookieService.Object);
 
         mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage?)default);
 
@@ -48,7 +49,8 @@ public class HomeControllerTests
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockContentParser.Object, mockUserJourneyCookieService.Object);
+        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                            mockUserJourneyCookieService.Object);
 
         const string postCtaContentText = "This is the post cta content";
         const string preCtaContentText = "This is the pre cta content";

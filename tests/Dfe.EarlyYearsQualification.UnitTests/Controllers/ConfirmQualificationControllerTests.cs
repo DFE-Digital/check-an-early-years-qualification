@@ -1,7 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -22,13 +22,17 @@ public class ConfirmQualificationControllerTests
     public async Task Index_NullOrEmptyIdPassed_ReturnsBadRequest(string id)
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         var result = await controller.Index(id);
 
@@ -40,6 +44,7 @@ public class ConfirmQualificationControllerTests
     public async Task Index_ContentServiceCantFindPageDetails_LogsAndReturnsErrorPage()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage())
@@ -50,8 +55,11 @@ public class ConfirmQualificationControllerTests
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -69,51 +77,55 @@ public class ConfirmQualificationControllerTests
     public async Task Index_CantFindQualification_LogsAndReturnsError()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-            {
-                QualificationLabel = "Test qualification label",
-                BackButton = new NavigationLink
-                             {
-                                 DisplayText = "Test back button",
-                                 OpenInNewTab = false,
-                                 Href = "/qualifications"
-                             },
-                ErrorText = "Test error text",
-                ButtonText = "Test button text",
-                LevelLabel = "Test level label",
-                DateAddedLabel = "Test date added label",
-                Heading = "Test heading",
-                Options =
-                [
-                    new Option
-                    {
-                        Label = "yes",
-                        Value = "yes"
-                    },
-                    new Option
-                    {
-                        Label = "no",
-                        Value = "no"
-                    }
-                ],
-                RadioHeading = "Test radio heading",
-                AwardingOrganisationLabel = "Test awarding organisation label",
-                ErrorBannerHeading = "Test error banner heading",
-                ErrorBannerLink = "Test error banner link"
-            });
+                 {
+                     QualificationLabel = "Test qualification label",
+                     BackButton = new NavigationLink
+                                  {
+                                      DisplayText = "Test back button",
+                                      OpenInNewTab = false,
+                                      Href = "/qualifications"
+                                  },
+                     ErrorText = "Test error text",
+                     ButtonText = "Test button text",
+                     LevelLabel = "Test level label",
+                     DateAddedLabel = "Test date added label",
+                     Heading = "Test heading",
+                     Options =
+                     [
+                         new Option
+                         {
+                             Label = "yes",
+                             Value = "yes"
+                         },
+                         new Option
+                         {
+                             Label = "no",
+                             Value = "no"
+                         }
+                     ],
+                     RadioHeading = "Test radio heading",
+                     AwardingOrganisationLabel = "Test awarding organisation label",
+                     ErrorBannerHeading = "Test error banner heading",
+                     ErrorBannerLink = "Test error banner link"
+                 });
 
-        mockContentService.Setup(x => x.GetQualificationById("Some ID"))
-                          .ReturnsAsync(default(Qualification?));
+        mockRepository.Setup(x => x.GetById("Some ID"))
+                      .ReturnsAsync(default(Qualification?));
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -131,40 +143,41 @@ public class ConfirmQualificationControllerTests
     public async Task Index_PageDetailsAndQualificationFound_MapsModelAndReturnsView()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-            {
-                QualificationLabel = "Test qualification label",
-                BackButton = new NavigationLink
-                             {
-                                 DisplayText = "Test back button",
-                                 OpenInNewTab = false,
-                                 Href = "/qualifications"
-                             },
-                ErrorText = "Test error text",
-                ButtonText = "Test button text",
-                LevelLabel = "Test level label",
-                DateAddedLabel = "Test date added label",
-                Heading = "Test heading",
-                Options =
-                [
-                    new Option
-                    {
-                        Label = "yes",
-                        Value = "yes"
-                    },
-                    new Option
-                    {
-                        Label = "no",
-                        Value = "no"
-                    }
-                ],
-                RadioHeading = "Test radio heading",
-                AwardingOrganisationLabel = "Test awarding organisation label",
-                ErrorBannerHeading = "Test error banner heading",
-                ErrorBannerLink = "Test error banner link"
-            });
+                 {
+                     QualificationLabel = "Test qualification label",
+                     BackButton = new NavigationLink
+                                  {
+                                      DisplayText = "Test back button",
+                                      OpenInNewTab = false,
+                                      Href = "/qualifications"
+                                  },
+                     ErrorText = "Test error text",
+                     ButtonText = "Test button text",
+                     LevelLabel = "Test level label",
+                     DateAddedLabel = "Test date added label",
+                     Heading = "Test heading",
+                     Options =
+                     [
+                         new Option
+                         {
+                             Label = "yes",
+                             Value = "yes"
+                         },
+                         new Option
+                         {
+                             Label = "no",
+                             Value = "no"
+                         }
+                     ],
+                     RadioHeading = "Test radio heading",
+                     AwardingOrganisationLabel = "Test awarding organisation label",
+                     ErrorBannerHeading = "Test error banner heading",
+                     ErrorBannerLink = "Test error banner link"
+                 });
 
         var qualification = new Qualification("Some ID",
                                               "Qualification Name",
@@ -176,16 +189,19 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockContentService.Setup(x => x.GetQualificationById("Some ID"))
-                          .ReturnsAsync(qualification);
+        mockRepository.Setup(x => x.GetById("Some ID"))
+                      .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         var result = await controller.Index("Some ID");
 
@@ -238,6 +254,7 @@ public class ConfirmQualificationControllerTests
     public async Task Post_InvalidModel_CantGetPageContent_LogsAndReturnsError()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(default(ConfirmQualificationPage?));
@@ -251,16 +268,19 @@ public class ConfirmQualificationControllerTests
                                 QualificationNumber = "ABC/547/900",
                                 AdditionalRequirements = "additional requirements"
                             };
-        mockContentService.Setup(x => x.GetQualificationById("Some ID"))
-                          .ReturnsAsync(qualification);
+        mockRepository.Setup(x => x.GetById("Some ID"))
+                      .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -280,14 +300,18 @@ public class ConfirmQualificationControllerTests
     public async Task Post_InvalidModel_NoQualificationId_LogsAndReturnsError()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel());
 
@@ -305,18 +329,22 @@ public class ConfirmQualificationControllerTests
     public async Task Post_InvalidModel_CantFindQualificationId_LogsAndReturnsError()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
-        mockContentService.Setup(x => x.GetQualificationById("Some ID"))
-                          .ReturnsAsync(default(Qualification?));
+        mockRepository.Setup(x => x.GetById("Some ID"))
+                      .ReturnsAsync(default(Qualification?));
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -339,40 +367,41 @@ public class ConfirmQualificationControllerTests
     public async Task Post_InvalidModel_BuildsModelWithHasErrorsAndReturns()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-            {
-                QualificationLabel = "Test qualification label",
-                BackButton = new NavigationLink
-                             {
-                                 DisplayText = "Test back button",
-                                 OpenInNewTab = false,
-                                 Href = "/qualifications"
-                             },
-                ErrorText = "Test error text",
-                ButtonText = "Test button text",
-                LevelLabel = "Test level label",
-                DateAddedLabel = "Test date added label",
-                Heading = "Test heading",
-                Options =
-                [
-                    new Option
-                    {
-                        Label = "yes",
-                        Value = "yes"
-                    },
-                    new Option
-                    {
-                        Label = "no",
-                        Value = "no"
-                    }
-                ],
-                RadioHeading = "Test radio heading",
-                AwardingOrganisationLabel = "Test awarding organisation label",
-                ErrorBannerHeading = "Test error banner heading",
-                ErrorBannerLink = "Test error banner link"
-            });
+                 {
+                     QualificationLabel = "Test qualification label",
+                     BackButton = new NavigationLink
+                                  {
+                                      DisplayText = "Test back button",
+                                      OpenInNewTab = false,
+                                      Href = "/qualifications"
+                                  },
+                     ErrorText = "Test error text",
+                     ButtonText = "Test button text",
+                     LevelLabel = "Test level label",
+                     DateAddedLabel = "Test date added label",
+                     Heading = "Test heading",
+                     Options =
+                     [
+                         new Option
+                         {
+                             Label = "yes",
+                             Value = "yes"
+                         },
+                         new Option
+                         {
+                             Label = "no",
+                             Value = "no"
+                         }
+                     ],
+                     RadioHeading = "Test radio heading",
+                     AwardingOrganisationLabel = "Test awarding organisation label",
+                     ErrorBannerHeading = "Test error banner heading",
+                     ErrorBannerLink = "Test error banner link"
+                 });
 
         var qualification = new Qualification("Some ID",
                                               "Qualification Name",
@@ -384,16 +413,19 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockContentService.Setup(x => x.GetQualificationById("Some ID"))
-                          .ReturnsAsync(qualification);
+        mockRepository.Setup(x => x.GetById("Some ID"))
+                      .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         controller.ModelState.AddModelError("test", "error");
 
@@ -452,6 +484,7 @@ public class ConfirmQualificationControllerTests
         Post_ValidModel_PassedYesAndQualificationHasAdditionalRequirements_RedirectsToCheckAdditionalRequirements()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
         var additionalRequirements = new List<AdditionalRequirementQuestion> { new() };
 
@@ -466,16 +499,19 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirementQuestions = additionalRequirements
                             };
 
-        mockContentService.Setup(x => x.GetQualificationById("TEST-123"))
-                          .ReturnsAsync(qualification);
+        mockRepository.Setup(x => x.GetById("TEST-123"))
+                      .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -489,13 +525,15 @@ public class ConfirmQualificationControllerTests
 
         actionResult.ActionName.Should().Be("Index");
         actionResult.ControllerName.Should().Be("CheckAdditionalRequirements");
-        actionResult.RouteValues.Should().ContainSingle("qualificationId", "TEST-123");
+        actionResult.RouteValues.Should().Contain("qualificationId", "TEST-123");
+        actionResult.RouteValues.Should().Contain("questionIndex", 1);
     }
 
     [TestMethod]
     public async Task Post_ValidModel_PassedYes_RedirectsToQualificationDetailsAction()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
         var qualification = new Qualification("Some ID",
@@ -507,16 +545,20 @@ public class ConfirmQualificationControllerTests
                                 QualificationNumber = "ABC/547/900",
                                 AdditionalRequirements = "additional requirements"
                             };
-        mockContentService.Setup(x => x.GetQualificationById("TEST-123"))
-                          .ReturnsAsync(qualification);
+
+        mockRepository.Setup(x => x.GetById("TEST-123"))
+                      .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -537,6 +579,7 @@ public class ConfirmQualificationControllerTests
     public async Task Post_ValidModel_PassedAnythingButYes_RedirectsBackToTheQualificationDetailsAction()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
         var qualification = new Qualification("Some ID",
@@ -549,16 +592,19 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockContentService.Setup(x => x.GetQualificationById("TEST-123"))
-                          .ReturnsAsync(qualification);
+        mockRepository.Setup(x => x.GetById("TEST-123"))
+                      .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
                                               {
@@ -578,6 +624,7 @@ public class ConfirmQualificationControllerTests
     public async Task Post_ValidModel_ClearsUserJourneyAdditionalAnswers()
     {
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
         var qualification = new Qualification("Some ID",
@@ -590,16 +637,19 @@ public class ConfirmQualificationControllerTests
                                 AdditionalRequirements = "additional requirements"
                             };
 
-        mockContentService.Setup(x => x.GetQualificationById("TEST-123"))
-                          .ReturnsAsync(qualification);
+        mockRepository.Setup(x => x.GetById("TEST-123"))
+                      .ReturnsAsync(qualification);
 
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
 
         var mockContentParser = new Mock<IGovUkContentParser>();
 
         var controller =
-            new ConfirmQualificationController(mockLogger.Object, mockContentService.Object,
-                                               mockUserJourneyService.Object, mockContentParser.Object);
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
 
         await controller.Confirm(new ConfirmQualificationPageModel
                                  {
