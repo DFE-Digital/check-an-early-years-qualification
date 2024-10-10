@@ -1,3 +1,4 @@
+using System.Globalization;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -59,12 +60,55 @@ public class CheckAdditionalRequirementsController(
                                         new { model.QualificationId, questionIndex = questionIndex + 1 });
             }
             
-            return RedirectToAction("Index", "QualificationDetails",
+            return RedirectToAction("ConfirmAnswers", "CheckAdditionalRequirements",
                                     new { model.QualificationId });
         }
 
         model.HasErrors = true;
         return await GetResponse(qualificationId, questionIndex, model);
+    }
+
+    [HttpGet]
+    [Route("{qualificationId}/confirm-answers")]
+    public async Task<IActionResult> ConfirmAnswers(string qualificationId)
+    {
+        var content = await contentService.GetCheckAdditionalRequirementsAnswerPage();
+        if (content is null)
+        {
+            logger.LogError("No content for the check additional requirements answer page content");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
+        
+        var qualification = await qualificationsRepository.GetById(qualificationId);
+        if (qualification is null)
+        {
+            var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
+            logger.LogError("Could not find details for qualification with ID: {QualificationId}",
+                            loggedQualificationId);
+
+            return RedirectToAction("Index", "Error");
+        }
+
+        if (qualification.AdditionalRequirementQuestions == null)
+        {
+            //TODO: go straight to result?
+        }
+        
+        if (answers == null)
+        {
+            //TODO: redirect to first question?
+        }
+
+        if (answers!.Count != qualification.AdditionalRequirementQuestions!.Count)
+        {
+            //TODO: redirect to first question?
+        }
+
+        var model = MapCheckAnswers(content, answers, qualificationId);
+
+        return View(model);
     }
 
     private async Task<IActionResult> GetResponse(string qualificationId, int questionIndex,
@@ -165,5 +209,25 @@ public class CheckAdditionalRequirementsController(
     private static List<OptionModel> MapOptions(List<Option> options)
     {
         return options.Select(option => new OptionModel { Label = option.Label, Value = option.Value }).ToList();
+    }
+
+    private CheckAdditionalRequirementsAnswerPageModel MapCheckAnswers(CheckAdditionalRequirementsAnswerPage pageModel, Dictionary<string, string> answers, string qualificationId)
+    {
+        var backButtonIndex = answers.Count;
+
+        pageModel.BackButton!.Href = pageModel.BackButton.Href + $"/{qualificationId}/{backButtonIndex}";
+
+        var answersToDisplay = answers.ToDictionary(answer => answer.Key, answer => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(answer.Value));
+
+        return new CheckAdditionalRequirementsAnswerPageModel
+               {
+                   Answers = answersToDisplay,
+                   BackButton = MapToNavigationLinkModel(pageModel.BackButton),
+                   ButtonText = pageModel.ButtonText,
+                   PageHeading = pageModel.PageHeading,
+                   AnswerDisclaimerText = pageModel.AnswerDisclaimerText,
+                   ChangeAnswerText = pageModel.ChangeAnswerText,
+                   GetResultsHref = $"/qualifications/qualification-details/{qualificationId}"
+               };
     }
 }

@@ -376,6 +376,11 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =
