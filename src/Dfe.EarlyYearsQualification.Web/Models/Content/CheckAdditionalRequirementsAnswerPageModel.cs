@@ -14,5 +14,7 @@ public class CheckAdditionalRequirementsAnswerPageModel
     
     public Dictionary<string, string>? Answers { get; init; }
 
+    public string ChangeQuestionHref { get; init; } = string.Empty;
+
     public string GetResultsHref { get; init; } = string.Empty;
 }

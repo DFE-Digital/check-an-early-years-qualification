@@ -227,7 +227,8 @@ public class CheckAdditionalRequirementsController(
                    PageHeading = pageModel.PageHeading,
                    AnswerDisclaimerText = pageModel.AnswerDisclaimerText,
                    ChangeAnswerText = pageModel.ChangeAnswerText,
-                   GetResultsHref = $"/qualifications/qualification-details/{qualificationId}"
+                   GetResultsHref = $"/qualifications/qualification-details/{qualificationId}",
+                   ChangeQuestionHref = $"/qualifications/check-additional-questions/{qualificationId}/"
                };
     }
 }

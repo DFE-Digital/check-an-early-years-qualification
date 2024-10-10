@@ -19,17 +19,17 @@
                 <col span="1" style="width: 20%;">
                 <col span="1" style="width: 20%;">
             </colgroup>
-            @foreach (var answer in Model.Answers!)
+            @foreach (var answer in Model.Answers!.Select((value, index) => new { index, value }))
             {
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell govuk-!-text-align-left">
-                        <strong>@answer.Key</strong>
+                        <strong>@answer.value.Key</strong>
                     </td>
                     <td class="govuk-table__cell govuk-!-text-align-centre">
-                        @answer.Value
+                        @answer.value.Value
                     </td>
                     <td class="govuk-table__cell govuk-!-text-align-right ">
-                        <a href="#" class="govuk-link">@Model.ChangeAnswerText</a>
+                        <a href="@(Model.ChangeQuestionHref + (answer.index + 1))" class="govuk-link">@Model.ChangeAnswerText</a>
                     </td>
                 </tr>
             }
