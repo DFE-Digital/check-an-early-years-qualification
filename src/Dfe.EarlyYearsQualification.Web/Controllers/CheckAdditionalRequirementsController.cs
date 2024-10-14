@@ -78,8 +78,6 @@ public class CheckAdditionalRequirementsController(
             logger.LogError("No content for the check additional requirements answer page content");
             return RedirectToAction("Index", "Error");
         }
-
-        var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
         
         var qualification = await qualificationsRepository.GetById(qualificationId);
         if (qualification is null)
@@ -93,22 +91,20 @@ public class CheckAdditionalRequirementsController(
 
         if (qualification.AdditionalRequirementQuestions == null)
         {
-            //TODO: go straight to result?
+            return RedirectToAction("Index", "QualificationDetails",
+                                    new { qualificationId });
         }
         
-        if (answers == null)
-        {
-            //TODO: redirect to first question?
-        }
+        var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
 
-        if (answers!.Count != qualification.AdditionalRequirementQuestions!.Count)
+        if (answers == null || answers!.Count != qualification.AdditionalRequirementQuestions!.Count)
         {
-            //TODO: redirect to first question?
+            return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId, questionIndex = 0 });
         }
 
         var model = MapCheckAnswers(content, answers, qualificationId);
 
-        return View(model);
+        return View("ConfirmAnswers", model);
     }
 
     private async Task<IActionResult> GetResponse(string qualificationId, int questionIndex,
