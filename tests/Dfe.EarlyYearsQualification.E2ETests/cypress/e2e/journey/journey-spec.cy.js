@@ -200,7 +200,7 @@ describe('A spec used to test the various routes through the journey', () => {
       expect(loc.pathname).to.eq('/advice/qualification-not-on-the-list');
     })
 
-    cy.get('#advice-page-heading').should("contain.text", "Qualification not on the list");
+    cy.get('#advice-page-heading').should("contain.text", "This is the level 3 page");
 
     // check back button goes back to the qualifications list page
     cy.get('#back-button').click();

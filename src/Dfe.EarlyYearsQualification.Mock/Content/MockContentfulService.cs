@@ -378,7 +378,42 @@ public class MockContentfulService : IContentService
 
     public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
     {
-        throw new NotImplementedException();
+        var backButton = new NavigationLink
+                         {
+                             DisplayText = "TEST",
+                             Href = "/qualifications",
+                             OpenInNewTab = false
+                         };
+
+        var feedbackBanner = new FeedbackBanner
+                             {
+                                 Heading = "Feedback banner heading",
+                                 BannerTitle = "Banner title",
+                                 Body = ContentfulContentHelper.Paragraph("Banner body text")
+                             };
+        
+        return (level switch
+                {
+                    3 => Task.FromResult(new CannotFindQualificationPage
+                                         {
+                                             Heading = "This is the level 3 page",
+                                             Body = ContentfulContentHelper.Paragraph("This is the body text"),
+                                             FromWhichYear = "Sep-14",
+                                             ToWhichYear = "Aug-19",
+                                             BackButton = backButton,
+                                             FeedbackBanner = feedbackBanner
+                                         }),
+                    4 => Task.FromResult(new CannotFindQualificationPage
+                                         {
+                                             Heading = "This is the level 4 page",
+                                             Body = ContentfulContentHelper.Paragraph("This is the body text"),
+                                             FromWhichYear = "Sep-19",
+                                             ToWhichYear = string.Empty,
+                                             BackButton = backButton,
+                                             FeedbackBanner = feedbackBanner
+                                         }),
+                    _ => Task.FromResult<CannotFindQualificationPage>(null!)
+                })!;
     }
 
     public async Task<StartPage?> GetStartPage()
