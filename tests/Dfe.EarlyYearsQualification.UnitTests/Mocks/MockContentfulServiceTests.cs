@@ -492,4 +492,57 @@ public class MockContentfulServiceTests
         result.QualificationLevelLabel.Should().NotBeNullOrEmpty();
         result.QuestionSectionHeading.Should().NotBeNullOrEmpty();
     }
+
+    [TestMethod]
+    public async Task GetCannotFindQualificationPage_PassInLevel3_ReturnsExpectedContent()
+    {
+        var contentfulService = new MockContentfulService();
+        var result = await contentfulService.GetCannotFindQualificationPage(3, 7, 2015);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CannotFindQualificationPage>();
+        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                   {
+                                                       DisplayText = "TEST",
+                                                       OpenInNewTab = false,
+                                                       Href = "/qualifications"
+                                                   });
+
+        result.Heading.Should().Be("This is the level 3 page");
+        result.Body.Should().NotBeNull();
+        result.FromWhichYear.Should().Be("Sep-14");
+        result.ToWhichYear.Should().Be("Aug-19");
+        result.FeedbackBanner.Should().NotBeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetCannotFindQualificationPage_PassInLevel4_ReturnsExpectedContent()
+    {
+        var contentfulService = new MockContentfulService();
+        var result = await contentfulService.GetCannotFindQualificationPage(4, 7, 2015);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CannotFindQualificationPage>();
+        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                   {
+                                                       DisplayText = "TEST",
+                                                       OpenInNewTab = false,
+                                                       Href = "/qualifications"
+                                                   });
+
+        result.Heading.Should().Be("This is the level 4 page");
+        result.Body.Should().NotBeNull();
+        result.FromWhichYear.Should().Be("Sep-19");
+        result.ToWhichYear.Should().BeEmpty();
+        result.FeedbackBanner.Should().NotBeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetCannotFindQualificationPage_PassInLevel5_ReturnsNull()
+    {
+        var contentfulService = new MockContentfulService();
+        var result = await contentfulService.GetCannotFindQualificationPage(5, 7, 2015);
+
+        result.Should().BeNull();
+    }
 }
