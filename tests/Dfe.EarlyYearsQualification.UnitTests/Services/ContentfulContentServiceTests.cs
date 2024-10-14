@@ -866,6 +866,119 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
+
+    [TestMethod]
+    public async Task GetCannotFindQualificationPage_ServiceReturnsNull_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CannotFindQualificationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(value: null);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCannotFindQualificationPage(2,2,2015);
+
+        result.Should().BeNull();
+        Logger.VerifyWarning("No 'cannot find qualification' page entries returned");
+    }
+    
+    [TestMethod]
+    public async Task GetCannotFindQualificationPage_ServiceReturnsEmptyArray_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CannotFindQualificationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CannotFindQualificationPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCannotFindQualificationPage(2,2,2015);
+
+        result.Should().BeNull();
+        Logger.VerifyWarning("No 'cannot find qualification' page entries returned");
+    }
+    
+    [TestMethod]
+    public async Task GetCannotFindQualificationPage_FindsMatchingPage_ReturnsPage()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CannotFindQualificationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CannotFindQualificationPage> { Items = [
+                                    new CannotFindQualificationPage
+                                    {
+                                        Heading = "Test heading sep 15 to aug 19",
+                                        FromWhichYear = "Sep-15",
+                                        ToWhichYear = "Aug-19"
+                                    },
+                                    new CannotFindQualificationPage
+                                    {
+                                        Heading = "Test heading sep 19 and above",
+                                        FromWhichYear = "Sep-19"
+                                    }] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCannotFindQualificationPage(2,2,2016);
+
+        result.Should().NotBeNull();
+        result!.Heading.Should().Be("Test heading sep 15 to aug 19");
+    }
+    
+    [TestMethod]
+    public async Task GetCannotFindQualificationPage_FindsMatchingPageForDate_ReturnsPage()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CannotFindQualificationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CannotFindQualificationPage> { Items = [
+                                    new CannotFindQualificationPage
+                                    {
+                                        Heading = "Test heading sep 15 to aug 19",
+                                        FromWhichYear = "Sep-15",
+                                        ToWhichYear = "Aug-19"
+                                    },
+                                    new CannotFindQualificationPage
+                                    {
+                                        Heading = "Test heading sep 19 and above",
+                                        FromWhichYear = "Sep-19"
+                                    }] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCannotFindQualificationPage(2,10,2019);
+
+        result.Should().NotBeNull();
+        result!.Heading.Should().Be("Test heading sep 19 and above");
+    }
+    
+    [TestMethod]
+    public async Task GetCannotFindQualificationPage_DoesntFindsMatchingPageForDate_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CannotFindQualificationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CannotFindQualificationPage> { Items = [
+                                    new CannotFindQualificationPage
+                                    {
+                                        Heading = "Test heading sep 15 to aug 19",
+                                        FromWhichYear = "Sep-15",
+                                        ToWhichYear = "Aug-19"
+                                    }] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCannotFindQualificationPage(2,10,2019);
+
+        result.Should().BeNull();
+        Logger.VerifyWarning("No filtered 'cannot find qualification' page entries returned");
+    }
 }
 
 public class ContentfulContentServiceTestsBase<T>

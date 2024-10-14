@@ -33,4 +33,6 @@ public interface IContentService
     Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage();
 
     Task<ChallengePage?> GetChallengePage();
+
+    Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear);
 }

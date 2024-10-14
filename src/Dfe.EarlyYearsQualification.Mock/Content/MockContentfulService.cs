@@ -376,6 +376,11 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =
