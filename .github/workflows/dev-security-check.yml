@@ -28,10 +28,11 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
-      # Change app setting for security scan
+      # Change app setting for security scan and restart
       - name: Change the IsPublic flag
         run: |
           az webapp config appsettings set --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --settings ServiceAccess__IsPublic=true
+          az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
 
       # Run full ZAP scan
       - name: ZAP Scan
@@ -52,7 +53,8 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
-      # Reset app setting following security scan
+      # Reset app setting following security scan and restart
       - name: Reset the IsPublic flag
         run: |
           az webapp config appsettings set --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --settings ServiceAccess__IsPublic=false
+          az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
