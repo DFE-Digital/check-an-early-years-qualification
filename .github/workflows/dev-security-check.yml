@@ -2,8 +2,8 @@ name: ZAP Check - Dev
 
 on:
   schedule:
-    # Runs daily at 4am
-    - cron: "0 4 * * *"
+    # Runs daily at 4am, Monday through Friday
+    - cron: "0 4 * * 1-5"
 
 jobs:
 
@@ -42,6 +42,15 @@ jobs:
           target: https://${{ vars.WEBAPP_NAME }}.azurewebsites.net
           allow_issue_writing: false
           artifact_name: full_scan_dev
+      
+      # Login to Azure (again) using OIDC
+      # ...the ZAP scan takes long enough that it is likely the Azure CLI login has expired by now
+      - name: Login to Azure CLI
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
       # Reset app setting following security scan
       - name: Reset the IsPublic flag
