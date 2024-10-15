@@ -5,7 +5,7 @@ resource "azurerm_storage_account" "sa" {
   account_tier                     = "Standard"
   min_tls_version                  = "TLS1_2"
   account_replication_type         = "LRS"
-  allow_nested_items_to_be_public  = false
+  allow_nested_items_to_be_public  = true
   cross_tenant_replication_enabled = false
   shared_access_key_enabled        = true
 
@@ -70,6 +70,14 @@ resource "azurerm_storage_container" "data_protection" {
   name                  = "data-protection"
   storage_account_name  = azurerm_storage_account.sa.name
   container_access_type = "private"
+
+  #checkov:skip=CKV2_AZURE_21:Logging not required
+}
+
+resource "azurerm_storage_container" "eyqual-qualifications" {
+  name                  = "eyqual-qualifications"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "public"
 
   #checkov:skip=CKV2_AZURE_21:Logging not required
 }
