@@ -317,8 +317,8 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
-        resultType.ControllerName.Should().Be("QualificationDetails");
+        resultType!.ActionName.Should().Be("ConfirmAnswers");
+        resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
         mockUserJourneyCookieService
             .Verify(x => x.SetAdditionalQuestionsAnswers(It.IsAny<Dictionary<string, string>>()), Times.Once);
@@ -471,6 +471,245 @@ public class CheckAdditionalRequirementsControllerTests
         model.QuestionSectionHeading.Should().BeSameAs(pageContent.QuestionSectionHeading);
         model.AdditionalRequirementQuestion.Should().NotBeNull();
         model.HasErrors.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task ConfirmAnswers_NoContent_Errors()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.ConfirmAnswers("some id");
+        
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockContentService.VerifyAll();
+        mockLogger.VerifyError("No content for the check additional requirements answer page content");
+    }
+
+    [TestMethod]
+    public async Task ConfirmAnswers_NoQualification_Errors()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsAnswerPage())
+                          .ReturnsAsync(new CheckAdditionalRequirementsAnswerPage());
+        
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.ConfirmAnswers("Test-123");
+        
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockContentService.VerifyAll();
+        mockLogger.VerifyError("Could not find details for qualification with ID: Test-123");
+    }
+
+    [TestMethod]
+    public async Task ConfirmAnswers_QualificationHasNoQuestions_RedirectToDetailsPage()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var qualification = CreateQualification(null);
+        
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(qualification);
+        
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsAnswerPage())
+                          .ReturnsAsync(new CheckAdditionalRequirementsAnswerPage());
+        
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.ConfirmAnswers("Test-123");
+        
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("QualificationDetails");
+        resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
+    }
+
+    [TestMethod]
+    public async Task ConfirmAnswers_QualHasQuestionsButNoAnswers_RedirectToFirstQuestion()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
+        
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(qualification);
+        
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsAnswerPage())
+                          .ReturnsAsync(new CheckAdditionalRequirementsAnswerPage());
+        
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.ConfirmAnswers("Test-123");
+        
+        result.Should().NotBeNull();
+        
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
+        resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
+        resultType.RouteValues.Should().Contain("questionIndex", 0);
+    }
+    
+    [TestMethod]
+    public async Task ConfirmAnswers_QualHasQuestionsButNotAllAreAnswered_RedirectToFirstQuestion()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
+        
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(qualification);
+        
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsAnswerPage())
+                          .ReturnsAsync(new CheckAdditionalRequirementsAnswerPage());
+
+        mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
+                                    .Returns(new Dictionary<string, string>()
+                                             {
+                                                 { "Some Question", "Some Answer" }
+                                             });
+        
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.ConfirmAnswers("Test-123");
+        
+        result.Should().NotBeNull();
+        
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
+        resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
+        resultType.RouteValues.Should().Contain("questionIndex", 0);
+    }
+    
+    [TestMethod]
+    public async Task ConfirmAnswers_QualHasQuestionsAndAllAreAnswered_RedirectToConfirmAnswersPage()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
+        
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(qualification);
+        
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsAnswerPage())
+                          .ReturnsAsync(new CheckAdditionalRequirementsAnswerPage
+                                        {
+                                            BackButton = new NavigationLink
+                                                         {
+                                                             DisplayText = "Test back button display text",
+                                                             Href = "Test back button href",
+                                                             OpenInNewTab = false,
+                                                         },
+                                            ButtonText = "Test button text",
+                                            PageHeading = "Test page heading",
+                                            AnswerDisclaimerText = "Test answer disclaimer text",
+                                            ChangeAnswerText = "Test change answer text"
+                                        });
+
+        var answers = new Dictionary<string, string>()
+                      {
+                          { "Some Question", "Some Answer" },
+                          { "Another Question", "Another Answer" }
+                      };
+        
+        mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
+                                    .Returns(answers);
+        
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.ConfirmAnswers("Test-123");
+
+        result.Should().NotBeNull();
+        
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+        resultType!.ViewName.Should().Be("ConfirmAnswers");
+
+        resultType.Model.Should().NotBeNull();
+        resultType.Model.Should().BeAssignableTo<CheckAdditionalRequirementsAnswerPageModel>();
+
+        var model = resultType.Model as CheckAdditionalRequirementsAnswerPageModel;
+
+        model!.PageHeading.Should().Be("Test page heading");
+        model.AnswerDisclaimerText.Should().Be("Test answer disclaimer text");
+        model.ChangeAnswerText.Should().Be("Test change answer text");
+        model.ButtonText.Should().Be("Test button text");
+        model.BackButton!.DisplayText.Should().Be("Test back button display text");
+        model.BackButton.OpenInNewTab.Should().BeFalse();
+        model.BackButton.Href.Should().Be("Test back button href/Test-123/2");
+        model.ButtonText.Should().Be("Test button text");
+        model.Answers.Should().BeEquivalentTo(answers);
+        model.ChangeQuestionHref.Should().Be("/qualifications/check-additional-questions/Test-123/");
+        model.GetResultsHref.Should().Be("/qualifications/qualification-details/Test-123");
     }
 
     private static Qualification CreateQualification(
