@@ -1,5 +1,7 @@
 # Check an early years qualification
 
+A public service that allows for managers in childcare positions that require child care certifications e.g. nurseries to check a job applicants certifications against the position they are applying for.
+
 ## Status badges
 
 ![Build image](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/build-image.yml/badge.svg)
@@ -10,9 +12,6 @@
 ![Terraform PR](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/terraform-pr-check.yml/badge.svg)
 ![Terraform Azure deploy](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/tf-azure-deploy.yml/badge.svg)
 ![OWASP ZAP](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/dev-security-check.yml/badge.svg)
-
-
-A public service that allows for managers in childcare positions that require child care certifications e.g. nurseries to check a job applicants certifications against the position they are applying for.
 
 ## Prototype
 The prototype can be found [here](https://github.com/DFE-Digital/ey-qualifications-prototype).
