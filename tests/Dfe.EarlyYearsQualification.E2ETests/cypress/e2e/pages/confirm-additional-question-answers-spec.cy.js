@@ -44,5 +44,13 @@ describe("A spec used to test the check additional requirements answer page", ()
         cy.url().should("include", "/qualifications/check-additional-questions/EYQ-240/2");
     })
     
-    it("Navigates back to the ")
+    it("Navigates back to the last question when the back button is clicked", () => {
+        cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2212%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Atrue%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D')
+
+        cy.visit("/qualifications/check-additional-questions/EYQ-240/confirm-answers");
+
+        cy.get('#back-button').click();
+
+        cy.url().should("include", "/qualifications/check-additional-questions/EYQ-240/2");
+    })
 })

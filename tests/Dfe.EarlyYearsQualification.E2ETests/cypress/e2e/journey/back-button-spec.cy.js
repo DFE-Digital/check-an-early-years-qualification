@@ -73,6 +73,13 @@ describe('A spec used to test the main back button route through the journey', (
         cy.get('#no').click();
         cy.get('button[id="additional-requirement-button"]').click();
 
+        // confirm answers page
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240/confirm-answers');
+        })
+
+        cy.get("#confirm-answers").click();
+
         // qualifications page
         cy.location().should((loc) => {
             expect(loc.pathname).to.eq('/qualifications/qualification-details/EYQ-240');
