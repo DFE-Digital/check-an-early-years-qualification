@@ -8,6 +8,11 @@ variable "resource_group" {
   type        = string
 }
 
+variable "webapp_storage_account_name" {
+  description = "Storage Account name"
+  type        = string
+}
+
 variable "kv_id" {
   description = "The ID of the Key Vault"
   type        = string
