@@ -34,8 +34,9 @@ describe("A spec used to test the check additional requirements answer page", ()
         cy.get("#question-1-change a").click();
 
         cy.url().should("include", "/qualifications/check-additional-questions/EYQ-240/1");
-
-        cy.visit("/qualifications/check-additional-questions/EYQ-240/confirm-answers");
+        
+        cy.get("#additional-requirement-button").click();
+        cy.get("#additional-requirement-button").click();
 
         cy.get("#question-2-change a").click();
 
