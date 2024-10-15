@@ -32,6 +32,11 @@ jobs:
       - name: Change the IsPublic flag
         run: |
           az webapp config appsettings set --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --settings ServiceAccess__IsPublic=true
+          
+      # Restart web app
+      - name: Restart web app
+        run: |
+          az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
 
       # Run full ZAP scan
       - name: ZAP Scan
@@ -56,3 +61,8 @@ jobs:
       - name: Reset the IsPublic flag
         run: |
           az webapp config appsettings set --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --settings ServiceAccess__IsPublic=false
+      
+      # Restart web app
+      - name: Restart web app
+        run: |
+          az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
