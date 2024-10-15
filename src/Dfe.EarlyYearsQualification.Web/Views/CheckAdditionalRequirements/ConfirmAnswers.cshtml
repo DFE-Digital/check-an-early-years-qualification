@@ -22,13 +22,13 @@
             @foreach (var answer in Model.Answers!.Select((value, index) => new { index, value }))
             {
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell govuk-!-text-align-left">
+                    <td id="question-@(answer.index + 1)-question" class="govuk-table__cell govuk-!-text-align-left">
                         <strong>@answer.value.Key</strong>
                     </td>
-                    <td class="govuk-table__cell govuk-!-text-align-centre">
+                    <td id="question-@(answer.index + 1)-answer" class="govuk-table__cell govuk-!-text-align-centre">
                         @answer.value.Value
                     </td>
-                    <td class="govuk-table__cell govuk-!-text-align-right ">
+                    <td id="question-@(answer.index + 1)-change" class="govuk-table__cell govuk-!-text-align-right ">
                         <a href="@(Model.ChangeQuestionHref + (answer.index + 1))" class="govuk-link">@Model.ChangeAnswerText</a>
                     </td>
                 </tr>
@@ -41,7 +41,7 @@
                 @Model.AnswerDisclaimerText
             </strong>
         </div>
-        <a href="@Model.GetResultsHref" class="govuk-button" data-module="govuk-button">
+        <a id ="confirm-answers" href="@Model.GetResultsHref" class="govuk-button" data-module="govuk-button">
             @Model.ButtonText
         </a>
     </div>

@@ -376,9 +376,21 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
+    public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(new CheckAdditionalRequirementsAnswerPage
+                                     {
+                                        BackButton = new NavigationLink
+                                                     {
+                                                         DisplayText = "Test display text",
+                                                         OpenInNewTab = false,
+                                                         Href = "Test href",
+                                                     },
+                                        ButtonText = "Test button text",
+                                        PageHeading = "Test page heading",
+                                        AnswerDisclaimerText = "Test answer disclaimer text",
+                                        ChangeAnswerText = "Test change answer text"
+                                     });
     }
 
     public async Task<StartPage?> GetStartPage()
