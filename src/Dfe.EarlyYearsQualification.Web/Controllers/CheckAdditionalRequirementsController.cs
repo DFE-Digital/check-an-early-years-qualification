@@ -207,7 +207,7 @@ public class CheckAdditionalRequirementsController(
         return options.Select(option => new OptionModel { Label = option.Label, Value = option.Value }).ToList();
     }
 
-    private CheckAdditionalRequirementsAnswerPageModel MapCheckAnswers(CheckAdditionalRequirementsAnswerPage pageModel, Dictionary<string, string> answers, string qualificationId)
+    private static CheckAdditionalRequirementsAnswerPageModel MapCheckAnswers(CheckAdditionalRequirementsAnswerPage pageModel, Dictionary<string, string> answers, string qualificationId)
     {
         var backButtonIndex = answers.Count;
 
