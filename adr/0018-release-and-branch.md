@@ -26,9 +26,10 @@ The _status quo_ was rejected as not every `dev` deployment is intended or desti
 
 GitFlow seems over-complex for such a small team of developers.
 
-We elected to deploy from `release` or `fix` branches. Once a `release` or `fix` branch is ready, it
-will be deployed to `test`/staging. Once tested there, it will be deployed to `prod`, smoke-tested there
-and the `release` branch will then immediately be merged to `main`.
+We elected to deploy from `release` or `fix` branches. A `release` branch may contain one or several
+individual features. Once a `release` or `fix` branch is ready to be released, it will be deployed to
+`test`/staging. Once tested there, it will be deployed to `prod`, smoke-tested there and the `release`
+ branch will then immediately be merged to `main`.
 
 ```mermaid
 %%{init: { 'logLevel': 'debug', 'theme': 'base', 'gitGraph': {'showBranches': true, 'showCommitLabel':true,'mainBranchOrder': 2}} }%%
