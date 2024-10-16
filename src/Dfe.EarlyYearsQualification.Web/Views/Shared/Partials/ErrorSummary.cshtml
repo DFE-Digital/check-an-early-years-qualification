@@ -8,7 +8,7 @@
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li>
-                    <a id="error-banner-link" href="#@{@Model.ElementLinkId}">@Model.ErrorBannerLinkText</a> 
+                    <a id="error-banner-link" href="#@{@Model.ElementLinkId}">@Html.Raw(Model.ErrorBannerLinkText)</a> 
                 </li>
             </ul>
         </div>

@@ -104,7 +104,7 @@ public class QuestionsController(
     {
         var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
         var dateModelValidationResult = questionModelValidator.IsValid(model, questionPage!);
-        if (!dateModelValidationResult.IsValid)
+        if (!dateModelValidationResult.MonthValid || !dateModelValidationResult.YearValid)
         {
             // ReSharper disable once InvertIf
             if (questionPage is not null)
@@ -291,10 +291,18 @@ public class QuestionsController(
     private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question,
                                                        string actionName,
                                                        string controllerName,
-                                                       ValidationResult? validationResult,
+                                                       DateValidationResult? validationResult,
                                                        int? selectedMonth,
                                                        int? selectedYear)
     {
+        var bannerErrorText = validationResult is { BannerErrorMessages.Count: > 0 }
+                                  ? string.Join("<br />", validationResult!.BannerErrorMessages)
+                                  : null;
+        
+        var errorMessageText = validationResult is { ErrorMessages.Count: > 0 }
+                                  ? string.Join("<br />", validationResult!.ErrorMessages)
+                                  : null;
+        
         model.Question = question.Question;
         model.CtaButtonText = question.CtaButtonText;
         model.ActionName = actionName;
@@ -305,11 +313,13 @@ public class QuestionsController(
         model.BackButton = MapToNavigationLinkModel(question.BackButton);
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText =
-            placeholderUpdater.Replace(validationResult?.BannerErrorMessage ?? question.ErrorBannerLinkText);
-        model.ErrorMessage = placeholderUpdater.Replace(validationResult?.ErrorMessage ?? question.ErrorMessage);
+            placeholderUpdater.Replace(bannerErrorText ?? question.ErrorBannerLinkText);
+        model.ErrorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
         model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
-
+        model.MonthError = !validationResult?.MonthValid ?? false;
+        model.YearError = !validationResult?.YearValid ?? false;
+        
         // ReSharper disable once InvertIf
         if (selectedMonth.HasValue && selectedYear.HasValue)
         {
