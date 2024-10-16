@@ -19,4 +19,5 @@ public static class ContentTypes
     public const string CheckAdditionalRequirementsPage = "checkAdditionalRequirementsPage";
     public const string ChallengePage = "challengePage";
     public const string CannotFindQualificationPage = "cannotFindQualificationPage";
+    public const string CheckAdditionalRequirementsAnswerPage = "checkAdditionalRequirementsAnswerPage";
 }

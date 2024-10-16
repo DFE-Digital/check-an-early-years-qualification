@@ -237,4 +237,17 @@ public class ContentfulContentService(
 
         return results;
     }
+    
+    public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
+    {
+        var checkAdditionalRequirementsAnswerPageEntities = await GetEntriesByType<CheckAdditionalRequirementsAnswerPage>();
+        if (checkAdditionalRequirementsAnswerPageEntities is null || !checkAdditionalRequirementsAnswerPageEntities.Any())
+        {
+            Logger.LogWarning("No check additional requirements answer entry returned");
+            return default;
+        }
+
+        var checkAdditionalRequirementsAnswerPage = checkAdditionalRequirementsAnswerPageEntities.First();
+        return checkAdditionalRequirementsAnswerPage;
+    }
 }

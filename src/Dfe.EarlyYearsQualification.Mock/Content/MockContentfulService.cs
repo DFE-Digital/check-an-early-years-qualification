@@ -416,6 +416,23 @@ public class MockContentfulService : IContentService
                 })!;
     }
 
+    public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
+    {
+        return await Task.FromResult(new CheckAdditionalRequirementsAnswerPage
+                                     {
+                                        BackButton = new NavigationLink
+                                                     {
+                                                         DisplayText = "Test display text",
+                                                         OpenInNewTab = false,
+                                                         Href = "/qualifications/check-additional-questions",
+                                                     },
+                                        ButtonText = "Test button text",
+                                        PageHeading = "Test page heading",
+                                        AnswerDisclaimerText = "Test answer disclaimer text",
+                                        ChangeAnswerText = "Test change answer text"
+                                     });
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =

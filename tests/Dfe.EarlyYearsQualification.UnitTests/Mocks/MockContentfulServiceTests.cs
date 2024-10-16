@@ -414,6 +414,25 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetCheckAdditionalRequirementsAnswerPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetCheckAdditionalRequirementsAnswerPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CheckAdditionalRequirementsAnswerPage>();
+
+        result!.BackButton!.Href.Should().Be("/qualifications/check-additional-questions");
+        result.BackButton.OpenInNewTab.Should().BeFalse();
+        result.BackButton.DisplayText.Should().Be("Test display text");
+        result.ButtonText.Should().Be("Test button text");
+        result.PageHeading.Should().Be("Test page heading");
+        result.AnswerDisclaimerText.Should().Be("Test answer disclaimer text");
+        result.ChangeAnswerText.Should().Be("Test change answer text");
+    }
+
+    [TestMethod]
     public async Task GetStartPage_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
