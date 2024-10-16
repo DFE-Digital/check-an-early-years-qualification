@@ -425,8 +425,8 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         mockQuestionModelValidator.Setup(x => x.IsValid(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestionPage>()))
-                                  .Returns(new ValidationResult
-                                           { IsValid = false, ErrorMessage = "Test error message" });
+                                  .Returns(new DateValidationResult
+                                           { MonthValid = false, YearValid = false, ErrorMessages = ["Test error message"] });
 
         mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns<string>(x => x);
 
@@ -465,7 +465,7 @@ public class QuestionsControllerTests
 
         mockQuestionModelValidator
             .Setup(x => x.IsValid(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestionPage>()))
-            .Returns(new ValidationResult { IsValid = true });
+            .Returns(new DateValidationResult { MonthValid = true, YearValid = true, });
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,

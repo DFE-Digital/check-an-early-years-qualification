@@ -8,7 +8,6 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
     public DateValidationResult IsValid(DateQuestionModel model, DateQuestionPage questionPage)
     {
         var resultToReturn = new DateValidationResult();
-        var returnEarly = false;
         
         if (model is { SelectedYear: null, SelectedMonth: null })
         {
@@ -25,7 +24,6 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.MonthValid = false;
             resultToReturn.ErrorMessages.Add(questionPage.MissingMonthErrorMessage);
             resultToReturn.BannerErrorMessages.Add(questionPage.MissingMonthBannerLinkText);
-            returnEarly = true;
         }
         
         if (model.SelectedYear == null)
@@ -33,7 +31,6 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.YearValid = false;
             resultToReturn.ErrorMessages.Add(questionPage.MissingYearErrorMessage);
             resultToReturn.BannerErrorMessages.Add(questionPage.MissingYearBannerLinkText);
-            returnEarly = true;
         }
         
         if (model.SelectedMonth is <= 0 or > 12)
@@ -41,7 +38,6 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.MonthValid = false;
             resultToReturn.ErrorMessages.Add(questionPage.MonthOutOfBoundsErrorMessage);
             resultToReturn.BannerErrorMessages.Add(questionPage.MonthOutOfBoundsErrorLinkText);
-            returnEarly = true;
         }
         
         var now = dateTimeAdapter.Now();
@@ -51,10 +47,9 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.YearValid = false;
             resultToReturn.ErrorMessages.Add(questionPage.YearOutOfBoundsErrorMessage);
             resultToReturn.BannerErrorMessages.Add(questionPage.YearOutOfBoundsErrorLinkText);
-            returnEarly = true;
         }
 
-        if (returnEarly)
+        if (resultToReturn.ErrorMessages.Count != 0)
         {
             return resultToReturn;
         }
