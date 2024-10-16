@@ -26,18 +26,18 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.BannerErrorMessages.Add(questionPage.MissingMonthBannerLinkText);
         }
         
-        if (model.SelectedYear == null)
-        {
-            resultToReturn.YearValid = false;
-            resultToReturn.ErrorMessages.Add(questionPage.MissingYearErrorMessage);
-            resultToReturn.BannerErrorMessages.Add(questionPage.MissingYearBannerLinkText);
-        }
-        
         if (model.SelectedMonth is <= 0 or > 12)
         {
             resultToReturn.MonthValid = false;
             resultToReturn.ErrorMessages.Add(questionPage.MonthOutOfBoundsErrorMessage);
             resultToReturn.BannerErrorMessages.Add(questionPage.MonthOutOfBoundsErrorLinkText);
+        }
+        
+        if (model.SelectedYear == null)
+        {
+            resultToReturn.YearValid = false;
+            resultToReturn.ErrorMessages.Add(questionPage.MissingYearErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(questionPage.MissingYearBannerLinkText);
         }
         
         var now = dateTimeAdapter.Now();

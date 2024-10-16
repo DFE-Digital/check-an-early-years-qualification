@@ -237,12 +237,10 @@ describe("A spec that tests question pages", () => {
         cy.get(".govuk-error-summary").should("be.visible");
         cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
         
-        cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Link Text");
-        cy.get("#error-banner-link").should("contain.text", "Year Out Of Bounds Error Link Text");
+        cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Link TextYear Out Of Bounds Error Link Text");
         
         cy.get('#date-error').should("exist");
-        cy.get('#date-error').should("contain.text", "Month Out Of Bounds Error Message");
-        cy.get('#date-error').should("contain.text", "Year Out Of Bounds Error Message");
+        cy.get('#date-error').should("contain.text", "Month Out Of Bounds Error MessageYear Out Of Bounds Error Message");
         cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
         cy.get("#date-started-month").should("have.class", "govuk-input--error");
         cy.get("#date-started-year").should("have.class", "govuk-input--error");
@@ -265,12 +263,10 @@ describe("A spec that tests question pages", () => {
         cy.get(".govuk-error-summary").should("be.visible");
         cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
 
-        cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Link Text");
-        cy.get("#error-banner-link").should("contain.text", "Missing Year Banner Link Text");
+        cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Link TextMissing Year Banner Link Text");
 
         cy.get('#date-error').should("exist");
-        cy.get('#date-error').should("contain.text", "Month Out Of Bounds Error Message");
-        cy.get('#date-error').should("contain.text", "Missing Year Error Message");
+        cy.get('#date-error').should("contain.text", "Month Out Of Bounds Error MessageMissing Year Error Message");
         cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
         cy.get("#date-started-month").should("have.class", "govuk-input--error");
         cy.get("#date-started-year").should("have.class", "govuk-input--error");
@@ -293,12 +289,10 @@ describe("A spec that tests question pages", () => {
         cy.get(".govuk-error-summary").should("be.visible");
         cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
 
-        cy.get("#error-banner-link").should("contain.text", "Year Out Of Bounds Error Link Text");
-        cy.get("#error-banner-link").should("contain.text", "Missing Month Banner Link Text");
+        cy.get("#error-banner-link").should("contain.text", "Missing Month Banner Link TextYear Out Of Bounds Error Link Text");
 
         cy.get('#date-error').should("exist");
-        cy.get('#date-error').should("contain.text", "Year Out Of Bounds Error Message");
-        cy.get('#date-error').should("contain.text", "Missing Month Error Message");
+        cy.get('#date-error').should("contain.text", "Missing Month Error MessageYear Out Of Bounds Error Message");
         cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
         cy.get("#date-started-month").should("have.class", "govuk-input--error");
         cy.get("#date-started-year").should("have.class", "govuk-input--error");
