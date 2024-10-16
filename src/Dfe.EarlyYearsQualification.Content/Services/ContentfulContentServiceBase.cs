@@ -54,7 +54,6 @@ public class ContentfulContentServiceBase
               { typeof(CheckAdditionalRequirementsPage), ContentTypes.CheckAdditionalRequirementsPage },
               { typeof(ChallengePage), ContentTypes.ChallengePage },
               { typeof(CannotFindQualificationPage), ContentTypes.CannotFindQualificationPage },
-              { typeof(ChallengePage), ContentTypes.ChallengePage },
               { typeof(CheckAdditionalRequirementsAnswerPage), ContentTypes.CheckAdditionalRequirementsAnswerPage }
           };
 
