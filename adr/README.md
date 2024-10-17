@@ -28,4 +28,6 @@ General information about architectural decision records is available at <https:
 | [0014 - C# Coding Standards](./0014-c-sharp-coding-standards.md)                | Accepted |
 | [0015 - Cookie Policy](./0015-cookie-policy.md)                                 | Accepted |
 | [0016 - IaC Documentation](./0016-terraform-docs.md)                            | Accepted |
-| [0017 - Access Guard in Pilot](./0017-access-guard-in-pilot.md)                 | Proposed |
+| [0017 - Access Guard in Pilot](./0017-access-guard-in-pilot.md)                 | Accepted |
+| [0018 - Release & Branch Strategy](./0018-release-and-branch.md)                | Accepted |
+| [0019 - Software License](./0019-license.md)                                    | Proposed |
