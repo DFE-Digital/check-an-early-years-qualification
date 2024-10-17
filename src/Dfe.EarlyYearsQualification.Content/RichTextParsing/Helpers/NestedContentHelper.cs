@@ -61,6 +61,12 @@ public static class NestedContentHelper
                     var hyperlinkText = await hyperlinkRenderer.RenderAsync(hl);
                     sb.Append(hyperlinkText);
                     continue;
+                
+                case List l:
+                    var unorderedListRenderer = new UnorderedListRenderer();
+                    var unorderedListText = await unorderedListRenderer.RenderAsync(l);
+                    sb.Append(unorderedListText);
+                    continue;
 
                 case Text t:
                     if (t.Marks?.Exists(mark => mark.Type == "bold") == true)

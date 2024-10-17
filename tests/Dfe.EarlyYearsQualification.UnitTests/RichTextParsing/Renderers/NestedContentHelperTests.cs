@@ -143,6 +143,23 @@ public class NestedContentHelperTests
 
         output.Should().Be("<a href='https://my.uri' class='govuk-link'>Hyperlink Content</a>");
     }
+    
+    [TestMethod]
+    public void ContentHelper_RenderList()
+    {
+        var paragraph = new Paragraph { Content = [new Text { Value = "Test list item" }] };
+
+        var list = new List
+                   {
+                       Content = [new ListItem { Content = [paragraph] }]
+                   };
+        
+        var content = new List<IContent> { list };
+
+        var output = NestedContentHelper.Render(content).Result;
+
+        output.Should().Be("<ul class=\"govuk-list govuk-list--bullet\"><li>Test list item</li></ul>");
+    }
 
     [TestMethod]
     public void ContentHelper_RenderText()
