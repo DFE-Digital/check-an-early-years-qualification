@@ -12,8 +12,6 @@ public abstract class BaseQuestionModel
 
     public string ErrorMessage { get; set; } = string.Empty;
 
-    public bool HasErrors { get; set; }
-
     public NavigationLinkModel? BackButton { get; set; }
     
     public string ErrorBannerHeading { get; set; } = string.Empty;

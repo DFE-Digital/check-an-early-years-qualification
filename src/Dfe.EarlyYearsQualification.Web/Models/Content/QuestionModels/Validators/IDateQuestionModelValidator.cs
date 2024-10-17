@@ -4,5 +4,5 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validato
 
 public interface IDateQuestionModelValidator
 {
-    ValidationResult IsValid(DateQuestionModel model, DateQuestionPage questionPage);
+    DateValidationResult IsValid(DateQuestionModel model, DateQuestionPage questionPage);
 }

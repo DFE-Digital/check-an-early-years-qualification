@@ -1,7 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Mock.Content;
@@ -70,7 +70,7 @@ public class MockContentfulService : IContentService
                    AdvicePages.Level6QualificationPost2014 =>
                        await Task.FromResult(CreateAdvicePage("Level 6 qualification post 2014",
                                                               body, WhatLevelIsTheQualificationPath)),
-                   
+
                    AdvicePages.TemporaryPrivacyPolicy =>
                        await Task.FromResult(CreateAdvicePage("Temporary privacy policy",
                                                               body, WhatLevelIsTheQualificationPath)),
@@ -146,7 +146,7 @@ public class MockContentfulService : IContentService
                                                                              DisplayText =
                                                                                  "TEST (back to additional questions)",
                                                                              Href =
-                                                                                 "/qualifications/check-additional-questions/EYQ-240",
+                                                                                 "/qualifications/check-additional-questions",
                                                                              OpenInNewTab = false
                                                                          },
                                          BackToLevelSixAdvice = new NavigationLink
@@ -179,7 +179,13 @@ public class MockContentfulService : IContentService
                                                                          },
                                          QualificationDetailsSummaryHeader = "Qualification details",
                                          QualificationNameLabel = "Qualification",
-                                         QualificationStartDateLabel = "Qualification start date"
+                                         QualificationStartDateLabel = "Qualification start date",
+                                         FeedbackBanner = new FeedbackBanner()
+                                                          {
+                                                              Body = ContentfulContentHelper.Paragraph("Test body"),
+                                                              BannerTitle = "Test banner title",
+                                                              Heading = "Test heading"
+                                                          }
                                      });
     }
 
@@ -219,18 +225,6 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<Qualification?> GetQualificationById(string qualificationId)
-    {
-        return qualificationId.ToLower() switch
-               {
-                   "eyq-250" => await Task.FromResult(CreateQualification("EYQ-250", "BTEC",
-                                                                          AwardingOrganisations.Various)),
-                   _ => await Task.FromResult(CreateQualification("EYQ-240",
-                                                                  "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
-                                                                  AwardingOrganisations.Ncfe))
-               };
-    }
-
     public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
     {
         return entryId switch
@@ -261,50 +255,6 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateDropdownPage()),
                    _ => throw new NotImplementedException($"No dropdown question page mock for entry {entryId}")
                };
-    }
-
-    public Task<List<Qualification>> GetQualifications()
-    {
-        return Task.FromResult(new List<Qualification>
-                               {
-                                   new("1", "TEST",
-                                       "A awarding organisation", 123),
-                                   new("2", "TEST",
-                                       "B awarding organisation", 123),
-                                   new("3", "TEST",
-                                       "C awarding organisation", 123),
-                                   new("4", "TEST",
-                                       "D awarding organisation", 123),
-                                   new("5", "TEST with additional requirements",
-                                       "E awarding organisation", 123)
-                                   {
-                                       AdditionalRequirements = "Additional requirements",
-                                       AdditionalRequirementQuestions =
-                                       [
-                                           new AdditionalRequirementQuestion
-                                           {
-                                               Question =
-                                                   "Answer 'yes' for this to be full and relevant",
-                                               AnswerToBeFullAndRelevant = true,
-                                               Answers =
-                                               [
-                                                   new Option
-                                                   {
-                                                       Label = "Yes",
-                                                       Value = "yes"
-                                                   },
-
-                                                   new Option
-                                                   {
-                                                       Label = "No",
-                                                       Value = "no"
-                                                   }
-                                               ]
-                                           }
-                                       ],
-                                       QualificationNumber = "Q/22/2427"
-                                   }
-                               });
     }
 
     public async Task<QualificationListPage?> GetQualificationListPage()
@@ -392,6 +342,12 @@ public class MockContentfulService : IContentService
                                                           Href = "/qualifications",
                                                           OpenInNewTab = false
                                                       },
+                                         PreviousQuestionBackButton = new NavigationLink
+                                                                      {
+                                                                          DisplayText = "Previous",
+                                                                          Href = "/previous",
+                                                                          OpenInNewTab = false
+                                                                      },
                                          CtaButtonText = "Get result",
                                          AwardingOrganisationLabel = "Awarding organisation",
                                          QualificationLabel = "Qualification",
@@ -417,6 +373,23 @@ public class MockContentfulService : IContentService
                                          MissingPasswordText = "Test Missing Password Text",
                                          SubmitButtonText = "Test Submit Button Text",
                                          ShowPasswordButtonText = "Test Show Password Button Text"
+                                     });
+    }
+
+    public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
+    {
+        return await Task.FromResult(new CheckAdditionalRequirementsAnswerPage
+                                     {
+                                        BackButton = new NavigationLink
+                                                     {
+                                                         DisplayText = "Test display text",
+                                                         OpenInNewTab = false,
+                                                         Href = "/qualifications/check-additional-questions",
+                                                     },
+                                        ButtonText = "Test button text",
+                                        PageHeading = "Test page heading",
+                                        AnswerDisclaimerText = "Test answer disclaimer text",
+                                        ChangeAnswerText = "Test change answer text"
                                      });
     }
 
@@ -570,9 +543,14 @@ public class MockContentfulService : IContentService
                    ErrorMessage = "Test Error Message",
                    FutureDateErrorBannerLinkText = "Future date error message banner link",
                    FutureDateErrorMessage = "Future date error message",
-                   IncorrectFormatErrorBannerLinkText =
-                       "Enter a month between 1 and 12 and a year between 1900 and $[actual-year]$",
-                   IncorrectFormatErrorMessage = "Incorrect format error message banner link"
+                   MissingMonthErrorMessage = "Missing Month Error Message",
+                   MissingYearErrorMessage = "Missing Year Error Message",
+                   MissingMonthBannerLinkText = "Missing Month Banner Link Text",
+                   MissingYearBannerLinkText = "Missing Year Banner Link Text",
+                   MonthOutOfBoundsErrorLinkText = "Month Out Of Bounds Error Link Text",
+                   MonthOutOfBoundsErrorMessage = "Month Out Of Bounds Error Message",
+                   YearOutOfBoundsErrorLinkText = "Year Out Of Bounds Error Link Text",
+                   YearOutOfBoundsErrorMessage = "Year Out Of Bounds Error Message"
                };
     }
 
@@ -615,116 +593,9 @@ public class MockContentfulService : IContentService
                    FeedbackBanner = new FeedbackBanner
                                     {
                                         Heading = "Feedback heading",
-                                        Body = ContentfulContentHelper.Paragraph("This is the body text")
+                                        Body = ContentfulContentHelper.Paragraph("This is the body text"),
+                                        BannerTitle = "Test banner title"
                                     }
-               };
-    }
-
-    private static Qualification CreateQualification(string qualificationId, string qualificationName,
-                                                     string awardingOrganisation)
-    {
-        return new Qualification(qualificationId,
-                                 qualificationName,
-                                 awardingOrganisation,
-                                 3)
-               {
-                   FromWhichYear = "2020",
-                   ToWhichYear = "2021",
-                   QualificationNumber = "603/5829/4",
-                   AdditionalRequirements =
-                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                   AdditionalRequirementQuestions =
-                   [
-                       new AdditionalRequirementQuestion
-                       {
-                           Question = "Test question",
-                           HintText =
-                               "This is the hint text: answer yes for full and relevant",
-                           DetailsHeading =
-                               "This is the details heading",
-                           DetailsContent =
-                               ContentfulContentHelper
-                                   .Paragraph("This is the details content"),
-                           Answers =
-                           [
-                               new Option
-                               {
-                                   Label = "Yes",
-                                   Value = "yes"
-                               },
-
-                               new Option
-                               {
-                                   Label = "No",
-                                   Value = "no"
-                               }
-                           ],
-                           ConfirmationStatement =
-                               "This is the confirmation statement 1",
-                           AnswerToBeFullAndRelevant = true
-                       },
-
-                       new AdditionalRequirementQuestion
-                       {
-                           Question = "Test question 2",
-                           HintText =
-                               "This is the hint text: answer no for full and relevant",
-                           DetailsHeading =
-                               "This is the details heading",
-                           DetailsContent =
-                               ContentfulContentHelper
-                                   .Paragraph("This is the details content"),
-                           Answers =
-                           [
-                               new Option
-                               {
-                                   Label = "Yes",
-                                   Value = "yes"
-                               },
-
-                               new Option
-                               {
-                                   Label = "No",
-                                   Value = "no"
-                               }
-                           ],
-                           ConfirmationStatement =
-                               "This is the confirmation statement 2",
-                           AnswerToBeFullAndRelevant = false
-                       }
-                   ],
-                   RatioRequirements =
-                   [
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .Level2RatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .Level3RatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName = RatioRequirements
-                               .Level6RatioRequirementName
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .UnqualifiedRatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
-                       }
-                   ]
                };
     }
 }
