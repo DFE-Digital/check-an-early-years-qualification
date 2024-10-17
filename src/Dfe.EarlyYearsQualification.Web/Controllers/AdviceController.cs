@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -124,23 +125,15 @@ public class AdviceController(
 
     private async Task<AdvicePageModel> Map(AdvicePage advicePage)
     {
-        return new AdvicePageModel
-               {
-                   Heading = advicePage.Heading,
-                   BodyContent = await contentParser.ToHtml(advicePage.Body),
-                   BackButton = MapToNavigationLinkModel(advicePage.BackButton),
-                   FeedbackBanner = await MapToFeedbackBannerModel(advicePage.FeedbackBanner, contentParser)
-               };
+        var bodyHtml = await contentParser.ToHtml(advicePage.Body);
+        var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(advicePage.FeedbackBanner, contentParser);
+        return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml);
     }
     
     private async Task<AdvicePageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
     {
-        return new AdvicePageModel
-               {
-                   Heading = cannotFindQualificationPage.Heading,
-                   BodyContent = await contentParser.ToHtml(cannotFindQualificationPage.Body),
-                   BackButton = MapToNavigationLinkModel(cannotFindQualificationPage.BackButton),
-                   FeedbackBanner = await MapToFeedbackBannerModel(cannotFindQualificationPage.FeedbackBanner, contentParser)
-               };
+        var bodyHtml = await contentParser.ToHtml(cannotFindQualificationPage.Body);
+        var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
+        return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml);
     }
 }
