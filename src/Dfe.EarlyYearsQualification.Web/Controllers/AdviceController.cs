@@ -63,6 +63,21 @@ public class AdviceController(
     [HttpGet("qualification-not-on-the-list")]
     public async Task<IActionResult> QualificationNotOnTheList()
     {
+        var level = userJourneyCookieService.GetLevelOfQualification();
+        var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+        if (level is not null && startMonth is not null & startYear is not null)
+        {
+            var specificCannotFindQualificationPage =
+                await contentService.GetCannotFindQualificationPage(level.Value, startMonth!.Value, startYear!.Value);
+            
+            if (specificCannotFindQualificationPage is not null)
+            {
+                var model = await Map(specificCannotFindQualificationPage);
+
+                return View("Advice", model);
+            }
+        }
+        
         return await GetView(AdvicePages.QualificationNotOnTheList);
     }
 
@@ -115,6 +130,17 @@ public class AdviceController(
                    BodyContent = await contentParser.ToHtml(advicePage.Body),
                    BackButton = MapToNavigationLinkModel(advicePage.BackButton),
                    FeedbackBanner = await MapToFeedbackBannerModel(advicePage.FeedbackBanner, contentParser)
+               };
+    }
+    
+    private async Task<AdvicePageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
+    {
+        return new AdvicePageModel
+               {
+                   Heading = cannotFindQualificationPage.Heading,
+                   BodyContent = await contentParser.ToHtml(cannotFindQualificationPage.Body),
+                   BackButton = MapToNavigationLinkModel(cannotFindQualificationPage.BackButton),
+                   FeedbackBanner = await MapToFeedbackBannerModel(cannotFindQualificationPage.FeedbackBanner, contentParser)
                };
     }
 }
