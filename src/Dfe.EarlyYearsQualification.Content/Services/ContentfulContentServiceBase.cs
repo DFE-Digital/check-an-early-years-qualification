@@ -33,7 +33,7 @@ public class ContentfulContentServiceBase
                          { "Nov", 11 },
                          { "Dec", 12 }
                      });
-
+    
     protected readonly Dictionary<Type, string> ContentTypeLookup
         = new()
           {
