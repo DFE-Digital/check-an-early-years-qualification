@@ -39,4 +39,11 @@ public class ServiceController : Controller
                    BannerTitle = feedbackBanner.BannerTitle
                };
     }
+
+    protected static async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
+    {
+        return feedbackBanner is not null
+                                   ? await contentParser.ToHtml(feedbackBanner.Body)
+                                   : null;
+    }
 }
