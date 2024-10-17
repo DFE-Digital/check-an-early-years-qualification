@@ -101,7 +101,7 @@ describe("A spec that tests question pages", () => {
         cy.get("#date-error").should("not.exist");
         cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
 
-        cy.get('#date-started-year').type(24);
+        cy.get('#date-started-year').type(2024);
 
         cy.get('button[id="question-submit"]').click();
         cy.location().should((loc) => {
@@ -162,7 +162,7 @@ describe("A spec that tests question pages", () => {
                 cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
 
                 cy.get('#date-started-month').type(value);
-                cy.get('#date-started-year').type(24);
+                cy.get('#date-started-year').type(2024);
                 
                 cy.get('button[id="question-submit"]').click();
                 cy.location().should((loc) => {
@@ -217,6 +217,85 @@ describe("A spec that tests question pages", () => {
                 cy.get("#date-started-year").should("have.class", "govuk-input--error");
             })
         })
+    })
+
+    it("shows the month out of bound error message and the year out of bounds error message when a user types an invalid month and year on the when-was-the-qualification-started page", () => {
+        cy.visit("/questions/when-was-the-qualification-started");
+
+        cy.get(".govuk-error-summary").should("not.exist");
+        cy.get("#date-error").should("not.exist");
+        cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
+
+        cy.get('#date-started-month').type(0);
+        cy.get('#date-started-year').type(20);
+        
+        cy.get('button[id="question-submit"]').click();
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq("/questions/when-was-the-qualification-started");
+        })
+
+        cy.get(".govuk-error-summary").should("be.visible");
+        cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+        
+        cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Link TextYear Out Of Bounds Error Link Text");
+        
+        cy.get('#date-error').should("exist");
+        cy.get('#date-error').should("contain.text", "Month Out Of Bounds Error MessageYear Out Of Bounds Error Message");
+        cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
+        cy.get("#date-started-month").should("have.class", "govuk-input--error");
+        cy.get("#date-started-year").should("have.class", "govuk-input--error");
+    })
+
+    it("shows the month out of bound error message and the year missing error message when a user types an invalid month and doesnt type a year on the when-was-the-qualification-started page", () => {
+        cy.visit("/questions/when-was-the-qualification-started");
+
+        cy.get(".govuk-error-summary").should("not.exist");
+        cy.get("#date-error").should("not.exist");
+        cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
+
+        cy.get('#date-started-month').type(0);
+
+        cy.get('button[id="question-submit"]').click();
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq("/questions/when-was-the-qualification-started");
+        })
+
+        cy.get(".govuk-error-summary").should("be.visible");
+        cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+
+        cy.get("#error-banner-link").should("contain.text", "Month Out Of Bounds Error Link TextMissing Year Banner Link Text");
+
+        cy.get('#date-error').should("exist");
+        cy.get('#date-error').should("contain.text", "Month Out Of Bounds Error MessageMissing Year Error Message");
+        cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
+        cy.get("#date-started-month").should("have.class", "govuk-input--error");
+        cy.get("#date-started-year").should("have.class", "govuk-input--error");
+    })
+
+    it("shows the month missing error message and the year out of bounds error message when a user doesnt type a year and types an invalid month on the when-was-the-qualification-started page", () => {
+        cy.visit("/questions/when-was-the-qualification-started");
+
+        cy.get(".govuk-error-summary").should("not.exist");
+        cy.get("#date-error").should("not.exist");
+        cy.get(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
+
+        cy.get('#date-started-year').type(20);
+
+        cy.get('button[id="question-submit"]').click();
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq("/questions/when-was-the-qualification-started");
+        })
+
+        cy.get(".govuk-error-summary").should("be.visible");
+        cy.get(".govuk-error-summary__title").should("contain.text", "There is a problem");
+
+        cy.get("#error-banner-link").should("contain.text", "Missing Month Banner Link TextYear Out Of Bounds Error Link Text");
+
+        cy.get('#date-error').should("exist");
+        cy.get('#date-error').should("contain.text", "Missing Month Error MessageYear Out Of Bounds Error Message");
+        cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
+        cy.get("#date-started-month").should("have.class", "govuk-input--error");
+        cy.get("#date-started-year").should("have.class", "govuk-input--error");
     })
 
     /// What level is the qualification page

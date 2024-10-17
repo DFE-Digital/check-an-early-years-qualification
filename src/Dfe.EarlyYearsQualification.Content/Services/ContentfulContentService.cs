@@ -32,7 +32,7 @@ public class ContentfulContentService(
 
         var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(detailsPageType)
                                                           .Include(2);
-
+        
         var detailsPageEntries = await GetEntriesByType(queryBuilder);
         if (detailsPageEntries is null || !detailsPageEntries.Any())
         {
@@ -196,6 +196,19 @@ public class ContentfulContentService(
         return challengePage;
     }
 
+    public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
+    {
+        var checkAdditionalRequirementsAnswerPageEntities = await GetEntriesByType<CheckAdditionalRequirementsAnswerPage>();
+        if (checkAdditionalRequirementsAnswerPageEntities is null || !checkAdditionalRequirementsAnswerPageEntities.Any())
+        {
+            Logger.LogWarning("No check additional requirements answer entry returned");
+            return default;
+        }
+
+        var checkAdditionalRequirementsAnswerPage = checkAdditionalRequirementsAnswerPageEntities.First();
+        return checkAdditionalRequirementsAnswerPage;
+    }
+    
     public async Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
     {
         var cannotFindQualificationPageType = ContentTypeLookup[typeof(CannotFindQualificationPage)];
@@ -236,18 +249,5 @@ public class ContentfulContentService(
         }
 
         return results;
-    }
-    
-    public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
-    {
-        var checkAdditionalRequirementsAnswerPageEntities = await GetEntriesByType<CheckAdditionalRequirementsAnswerPage>();
-        if (checkAdditionalRequirementsAnswerPageEntities is null || !checkAdditionalRequirementsAnswerPageEntities.Any())
-        {
-            Logger.LogWarning("No check additional requirements answer entry returned");
-            return default;
-        }
-
-        var checkAdditionalRequirementsAnswerPage = checkAdditionalRequirementsAnswerPageEntities.First();
-        return checkAdditionalRequirementsAnswerPage;
     }
 }

@@ -18,7 +18,7 @@
                                                                    {
                                                                        ErrorBannerHeading = Model.ErrorBannerHeading,
                                                                        ErrorBannerLinkText = Model.ErrorBannerLinkText,
-                                                                       ElementLinkId = "date-started-month"
+                                                                       ElementLinkId = Model.MonthError ? "date-started-month" : "date-started-year"
                                                                    });
         }
         @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "date-question-form"}))
@@ -45,7 +45,7 @@
                     @if (Model.MonthError || Model.YearError)
                     {
                         <p id="date-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
+                            <span class="govuk-visually-hidden">Error:</span> @Html.Raw(Model.ErrorMessage)
                         </p>
                     }
 
