@@ -10,6 +10,7 @@ public class MockContentfulService : IContentService
 {
     private const string WhereWasTheQualificationAwardedPath = "/questions/where-was-the-qualification-awarded";
     private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
+    private const string QualificationsPath = "/qualifications";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -56,7 +57,7 @@ public class MockContentfulService : IContentService
 
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
-                                                              body, "/qualifications")),
+                                                              body, QualificationsPath)),
 
                    AdvicePages.QualificationLevel7 =>
                        await Task.FromResult(CreateAdvicePage("Qualification at Level 7",
@@ -299,7 +300,7 @@ public class MockContentfulService : IContentService
                                                       {
                                                           DisplayText = "Test back button",
                                                           OpenInNewTab = false,
-                                                          Href = "/qualifications"
+                                                          Href = QualificationsPath
                                                       },
                                          ErrorText = "Test error text",
                                          ButtonText = "Test button text",
@@ -339,7 +340,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "Back",
-                                                          Href = "/qualifications",
+                                                          Href = QualificationsPath,
                                                           OpenInNewTab = false
                                                       },
                                          PreviousQuestionBackButton = new NavigationLink
@@ -381,7 +382,7 @@ public class MockContentfulService : IContentService
         var backButton = new NavigationLink
                          {
                              DisplayText = "TEST",
-                             Href = "/qualifications",
+                             Href = QualificationsPath,
                              OpenInNewTab = false
                          };
 
