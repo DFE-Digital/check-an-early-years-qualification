@@ -10,6 +10,7 @@ public class MockContentfulService : IContentService
 {
     private const string WhereWasTheQualificationAwardedPath = "/questions/where-was-the-qualification-awarded";
     private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
+    private const string QualificationsPath = "/qualifications";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -56,7 +57,7 @@ public class MockContentfulService : IContentService
 
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
-                                                              body, "/qualifications")),
+                                                              body, QualificationsPath)),
 
                    AdvicePages.QualificationLevel7 =>
                        await Task.FromResult(CreateAdvicePage("Qualification at Level 7",
@@ -299,7 +300,7 @@ public class MockContentfulService : IContentService
                                                       {
                                                           DisplayText = "Test back button",
                                                           OpenInNewTab = false,
-                                                          Href = "/qualifications"
+                                                          Href = QualificationsPath
                                                       },
                                          ErrorText = "Test error text",
                                          ButtonText = "Test button text",
@@ -339,7 +340,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "Back",
-                                                          Href = "/qualifications",
+                                                          Href = QualificationsPath,
                                                           OpenInNewTab = false
                                                       },
                                          PreviousQuestionBackButton = new NavigationLink
@@ -374,6 +375,46 @@ public class MockContentfulService : IContentService
                                          SubmitButtonText = "Test Submit Button Text",
                                          ShowPasswordButtonText = "Test Show Password Button Text"
                                      });
+    }
+
+    public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
+    {
+        var backButton = new NavigationLink
+                         {
+                             DisplayText = "TEST",
+                             Href = QualificationsPath,
+                             OpenInNewTab = false
+                         };
+
+        var feedbackBanner = new FeedbackBanner
+                             {
+                                 Heading = "Feedback banner heading",
+                                 BannerTitle = "Banner title",
+                                 Body = ContentfulContentHelper.Paragraph("Banner body text")
+                             };
+        
+        return (level switch
+                {
+                    3 => Task.FromResult(new CannotFindQualificationPage
+                                         {
+                                             Heading = "This is the level 3 page",
+                                             Body = ContentfulContentHelper.Paragraph("This is the body text"),
+                                             FromWhichYear = "Sep-14",
+                                             ToWhichYear = "Aug-19",
+                                             BackButton = backButton,
+                                             FeedbackBanner = feedbackBanner
+                                         }),
+                    4 => Task.FromResult(new CannotFindQualificationPage
+                                         {
+                                             Heading = "This is the level 4 page",
+                                             Body = ContentfulContentHelper.Paragraph("This is the body text"),
+                                             FromWhichYear = "Sep-19",
+                                             ToWhichYear = string.Empty,
+                                             BackButton = backButton,
+                                             FeedbackBanner = feedbackBanner
+                                         }),
+                    _ => Task.FromResult<CannotFindQualificationPage>(null!)
+                })!;
     }
 
     public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()

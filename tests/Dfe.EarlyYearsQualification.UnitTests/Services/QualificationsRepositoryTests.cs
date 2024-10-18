@@ -597,7 +597,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
 
         await repository.Get(4, 5, 2016, null, null);
 
-        mockLogger.VerifyError("Qualification date Sep15 has unexpected format");
+        mockLogger.VerifyError("dateString Sep15 has unexpected format");
     }
 
     [TestMethod]
@@ -639,7 +639,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
 
         await repository.Get(4, 5, 2016, null, null);
 
-        mockLogger.VerifyError("Qualification date Sept-15 contains unexpected month value");
+        mockLogger.VerifyError("dateString Sept-15 contains unexpected month value");
     }
 
     [TestMethod]
@@ -680,7 +680,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
 
         await repository.Get(4, 5, 2016, null, null);
 
-        mockLogger.VerifyError("Qualification date Aug-1a contains unexpected year value");
+        mockLogger.VerifyError("dateString Aug-1a contains unexpected year value");
     }
 
     [TestMethod]

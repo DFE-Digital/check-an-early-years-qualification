@@ -32,7 +32,7 @@ public class ContentfulContentService(
 
         var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(detailsPageType)
                                                           .Include(2);
-
+        
         var detailsPageEntries = await GetEntriesByType(queryBuilder);
         if (detailsPageEntries is null || !detailsPageEntries.Any())
         {
@@ -195,7 +195,7 @@ public class ContentfulContentService(
         var challengePage = challengePageEntities.First();
         return challengePage;
     }
-    
+
     public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
     {
         var checkAdditionalRequirementsAnswerPageEntities = await GetEntriesByType<CheckAdditionalRequirementsAnswerPage>();
@@ -207,5 +207,47 @@ public class ContentfulContentService(
 
         var checkAdditionalRequirementsAnswerPage = checkAdditionalRequirementsAnswerPageEntities.First();
         return checkAdditionalRequirementsAnswerPage;
+    }
+    
+    public async Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
+    {
+        var cannotFindQualificationPageType = ContentTypeLookup[typeof(CannotFindQualificationPage)];
+        var queryBuilder = new QueryBuilder<CannotFindQualificationPage>().ContentTypeIs(cannotFindQualificationPageType)
+                                                                          .Include(2)
+                                                                          .FieldEquals("fields.level", level.ToString());
+        
+        var cannotFindQualificationPages = await GetEntriesByType(queryBuilder);
+        if (cannotFindQualificationPages is null || !cannotFindQualificationPages.Any())
+        {
+            Logger.LogWarning("No 'cannot find qualification' page entries returned");
+            return default;
+        }
+
+        var filteredCannotFindQualificationPages =
+            FilterCannotFindQualificationPagesByDate(startMonth, startYear, cannotFindQualificationPages.ToList());
+
+        if (filteredCannotFindQualificationPages.Count != 0) return filteredCannotFindQualificationPages[0];
+        Logger.LogWarning("No filtered 'cannot find qualification' page entries returned");
+        return default;
+    }
+    
+    private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(int startDateMonth, int startDateYear,
+                                                           List<CannotFindQualificationPage> cannotFindQualificationPages)
+    {
+        var results = new List<CannotFindQualificationPage>();
+        var enteredStartDate = new DateOnly(startDateYear, startDateMonth, Day);
+        foreach (var page in cannotFindQualificationPages)
+        {
+            var pageStartDate = GetDate(page.FromWhichYear);
+            var pageEndDate = GetDate(page.ToWhichYear);
+
+            var result = ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, page);
+            if (result is not null)
+            {
+                results.Add(result);
+            }
+        }
+
+        return results;
     }
 }
