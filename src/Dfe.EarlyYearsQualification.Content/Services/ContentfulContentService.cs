@@ -226,7 +226,7 @@ public class ContentfulContentService(
         var filteredCannotFindQualificationPages =
             FilterCannotFindQualificationPagesByDate(startMonth, startYear, cannotFindQualificationPages.ToList());
 
-        if (filteredCannotFindQualificationPages.Count != 0) return filteredCannotFindQualificationPages.First();
+        if (filteredCannotFindQualificationPages.Count != 0) return filteredCannotFindQualificationPages[0];
         Logger.LogWarning("No filtered 'cannot find qualification' page entries returned");
         return default;
     }
