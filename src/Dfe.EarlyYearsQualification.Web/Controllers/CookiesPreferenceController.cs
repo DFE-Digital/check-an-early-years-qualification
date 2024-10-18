@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
@@ -90,17 +91,8 @@ public class CookiesPreferenceController(
 
     private async Task<CookiesPageModel> Map(CookiesPage content)
     {
-        return new CookiesPageModel
-               {
-                   Heading = content.Heading,
-                   BodyContent = await contentParser.ToHtml(content.Body),
-                   Options = content.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList(),
-                   ButtonText = content.ButtonText,
-                   SuccessBannerContent = await contentParser.ToHtml(content.SuccessBannerContent),
-                   SuccessBannerHeading = content.SuccessBannerHeading,
-                   ErrorText = content.ErrorText,
-                   BackButton = MapToNavigationLinkModel(content.BackButton),
-                   FormHeading = content.FormHeading
-               };
+        var bodyContent = await contentParser.ToHtml(content.Body);
+        var successBannerContent = await contentParser.ToHtml(content.SuccessBannerContent);
+        return CookiesPageMapper.Map(content, bodyContent, successBannerContent);
     }
 }

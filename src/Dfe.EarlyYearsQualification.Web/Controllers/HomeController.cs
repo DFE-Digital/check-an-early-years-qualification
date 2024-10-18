@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -34,14 +35,10 @@ public class HomeController(
 
     private async Task<StartPageModel> Map(StartPage startPageContent)
     {
-        return new StartPageModel
-               {
-                   Header = startPageContent.Header,
-                   PreCtaButtonContent = await contentParser.ToHtml(startPageContent.PreCtaButtonContent),
-                   CtaButtonText = startPageContent.CtaButtonText,
-                   PostCtaButtonContent = await contentParser.ToHtml(startPageContent.PostCtaButtonContent),
-                   RightHandSideContentHeader = startPageContent.RightHandSideContentHeader,
-                   RightHandSideContent = await contentParser.ToHtml(startPageContent.RightHandSideContent)
-               };
+        var preCtaButtonContent = await contentParser.ToHtml(startPageContent.PreCtaButtonContent);
+        var postCtaButtonContent = await contentParser.ToHtml(startPageContent.PostCtaButtonContent);
+        var rightHandSideContent = await contentParser.ToHtml(startPageContent.RightHandSideContent);
+
+        return StartPageMapper.Map(startPageContent, preCtaButtonContent, postCtaButtonContent, rightHandSideContent);
     }
 }

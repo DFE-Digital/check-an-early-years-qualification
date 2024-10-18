@@ -6,6 +6,7 @@ using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -252,40 +253,9 @@ public class QuestionsController(
                                                          string controllerName,
                                                          string? selectedAnswer)
     {
-        model.Question = question.Question;
-        model.OptionsItems = MapOptionItems(question.Options);
-        model.CtaButtonText = question.CtaButtonText;
-        model.ActionName = actionName;
-        model.ControllerName = controllerName;
-        model.ErrorMessage = question.ErrorMessage;
-        model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
-        model.BackButton = MapToNavigationLinkModel(question.BackButton);
-        model.ErrorBannerHeading = question.ErrorBannerHeading;
-        model.ErrorBannerLinkText = question.ErrorBannerLinkText;
-        model.Option = selectedAnswer ?? string.Empty;
-        return model;
-    }
-
-    private static List<IOptionItemModel> MapOptionItems(List<IOptionItem> questionOptions)
-    {
-        var results = new List<IOptionItemModel>();
-
-        foreach (var optionItem in questionOptions)
-        {
-            if (optionItem.GetType() == typeof(Option))
-            {
-                var option = (Option)optionItem;
-                results.Add(new OptionModel { Hint = option.Hint, Value = option.Value, Label = option.Label });
-            }
-            else if (optionItem.GetType() == typeof(Divider))
-            {
-                var divider = (Divider)optionItem;
-                results.Add(new DividerModel { Text = divider.Text });
-            }
-        }
-
-        return results;
+        var additionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
+        return RadioQuestionMapper.Map(model, question, actionName, controllerName, additionalInformationBody,
+                                                 selectedAnswer);
     }
 
     private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question,
@@ -303,31 +273,16 @@ public class QuestionsController(
                                   ? string.Join("<br />", validationResult!.ErrorMessages)
                                   : null;
         
-        model.Question = question.Question;
-        model.CtaButtonText = question.CtaButtonText;
-        model.ActionName = actionName;
-        model.ControllerName = controllerName;
-        model.QuestionHint = question.QuestionHint;
-        model.MonthLabel = question.MonthLabel;
-        model.YearLabel = question.YearLabel;
-        model.BackButton = MapToNavigationLinkModel(question.BackButton);
-        model.ErrorBannerHeading = question.ErrorBannerHeading;
-        model.ErrorBannerLinkText =
+        var errorBannerLinkText =
             placeholderUpdater.Replace(bannerErrorText ?? question.ErrorBannerLinkText);
-        model.ErrorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
-        model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
-        model.MonthError = !validationResult?.MonthValid ?? false;
-        model.YearError = !validationResult?.YearValid ?? false;
         
-        // ReSharper disable once InvertIf
-        if (selectedMonth.HasValue && selectedYear.HasValue)
-        {
-            model.SelectedMonth = selectedMonth.Value;
-            model.SelectedYear = selectedYear.Value;
-        }
+        var errorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
+        
+        var additionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
 
-        return model;
+        return DateQuestionMapper.Map(model, question, actionName, controllerName, errorBannerLinkText,
+                                               errorMessage, additionalInformationBody, validationResult, selectedMonth,
+                                               selectedYear);
     }
 
     private async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model,
@@ -345,37 +300,11 @@ public class QuestionsController(
                             .Distinct()
                             .Where(x => !Array.Exists(awardingOrganisationExclusions, x.Contains))
                             .Order();
+        
+        var additionalInformationBodyHtml = await contentParser.ToHtml(question.AdditionalInformationBody);
 
-        model.ActionName = actionName;
-        model.ControllerName = controllerName;
-        model.CtaButtonText = question.CtaButtonText;
-        model.ErrorMessage = question.ErrorMessage;
-        model.Question = question.Question;
-        model.DropdownHeading = question.DropdownHeading;
-        model.NotInListText = question.NotInListText;
-        model.BackButton = MapToNavigationLinkModel(question.BackButton);
-
-        model.Values.Add(new SelectListItem
-                         {
-                             Text = question.DefaultText,
-                             Value = ""
-                         });
-
-        foreach (var awardingOrg in uniqueAwardingOrganisations)
-        {
-            model.Values.Add(new SelectListItem
-                             {
-                                 Value = awardingOrg,
-                                 Text = awardingOrg
-                             });
-        }
-
-        model.ErrorBannerHeading = question.ErrorBannerHeading;
-        model.ErrorBannerLinkText = question.ErrorBannerLinkText;
-        model.AdditionalInformationHeader = question.AdditionalInformationHeader;
-        model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
-        model.NotInTheList = selectedNotOnTheList;
-        model.SelectedValue = selectedAwardingOrganisation;
-        return model;
+        return DropdownQuestionMapper.Map(model, question, actionName, controllerName, uniqueAwardingOrganisations,
+                                          additionalInformationBodyHtml, selectedAwardingOrganisation,
+                                          selectedNotOnTheList);
     }
 }
