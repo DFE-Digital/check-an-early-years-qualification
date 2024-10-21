@@ -4,7 +4,7 @@ resource "azurerm_log_analytics_workspace" "webapp_logs" {
   location            = var.location
   resource_group_name = var.resource_group
   sku                 = "PerGB2018"
-  retention_in_days   = 30
+  retention_in_days   = 90
   daily_quota_gb      = 1
 
   lifecycle {
@@ -23,6 +23,7 @@ resource "azurerm_application_insights" "web" {
   application_type    = "web"
   workspace_id        = azurerm_log_analytics_workspace.webapp_logs.id
   tags                = var.tags
+  retention_in_days   = 90
 
   lifecycle {
     ignore_changes = [
@@ -222,10 +223,6 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_logs_monitor" {
   timeouts {
     read = "30m"
   }
-
-  lifecycle {
-    ignore_changes = [metric]
-  }
 }
 
 resource "azurerm_monitor_diagnostic_setting" "webapp_slot_logs_monitor" {
@@ -246,10 +243,6 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_slot_logs_monitor" {
 
   timeouts {
     read = "30m"
-  }
-
-  lifecycle {
-    ignore_changes = [metric]
   }
 }
 
