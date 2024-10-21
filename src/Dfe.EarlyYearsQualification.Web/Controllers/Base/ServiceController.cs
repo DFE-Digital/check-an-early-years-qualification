@@ -28,18 +28,6 @@ public class ServiceController : Controller
                };
     }
 
-    protected static async Task<FeedbackBannerModel?> MapToFeedbackBannerModel(
-        FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
-    {
-        if (feedbackBanner is null) return null;
-        return new FeedbackBannerModel
-               {
-                   Heading = feedbackBanner.Heading,
-                   Body = await contentParser.ToHtml(feedbackBanner.Body),
-                   BannerTitle = feedbackBanner.BannerTitle
-               };
-    }
-
     protected static async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
     {
         return feedbackBanner is not null
