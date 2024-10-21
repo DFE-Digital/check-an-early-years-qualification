@@ -16,18 +16,6 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Base;
 [ServiceFilter<IChallengeResourceFilterAttribute>]
 public class ServiceController : Controller
 {
-    protected static NavigationLinkModel? MapToNavigationLinkModel(NavigationLink? navigationLink)
-    {
-        if (navigationLink is null) return null;
-        
-        return new NavigationLinkModel
-               {
-                   Href = navigationLink.Href,
-                   DisplayText = navigationLink.DisplayText,
-                   OpenInNewTab = navigationLink.OpenInNewTab
-               };
-    }
-
     protected static async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
     {
         return feedbackBanner is not null

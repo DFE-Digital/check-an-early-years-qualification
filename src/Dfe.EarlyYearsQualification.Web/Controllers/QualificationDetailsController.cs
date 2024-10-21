@@ -260,7 +260,7 @@ public class QualificationDetailsController(
 
         return new QualificationListModel
                {
-                   BackButton = MapToNavigationLinkModel(content.BackButton),
+                   BackButton = NavigationLinkMapper.Map(content.BackButton),
                    Filters = filterModel,
                    Header = content.Header,
                    SingleQualificationFoundText = content.SingleQualificationFoundText,
