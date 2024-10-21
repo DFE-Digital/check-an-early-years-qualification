@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -97,7 +98,7 @@ public class CheckAdditionalRequirementsController(
         
         var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
 
-        if (answers == null || answers!.Count != qualification.AdditionalRequirementQuestions!.Count)
+        if (answers == null || answers.Count != qualification.AdditionalRequirementQuestions!.Count)
         {
             return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId, questionIndex = 0 });
         }
@@ -152,32 +153,25 @@ public class CheckAdditionalRequirementsController(
                                                                       int questionIndex,
                                                                       CheckAdditionalRequirementsPageModel? model = null)
     {
-        var mappedModel = model ?? new CheckAdditionalRequirementsPageModel();
-        mappedModel.QualificationId = qualification.QualificationId;
-        mappedModel.QuestionIndex = questionIndex;
-        mappedModel.CtaButtonText = content.CtaButtonText;
-        mappedModel.Heading = content.Heading;
-        mappedModel.QuestionSectionHeading = content.QuestionSectionHeading;
-        mappedModel.BackButton = CalculateBackButton(qualification.QualificationId, questionIndex, content);
-        mappedModel.AdditionalRequirementQuestion =
+        var backButton = CalculateBackButton(qualification.QualificationId, questionIndex, content);
+        var additionalRequirementQuestion =
             await MapAdditionalRequirementQuestion(qualification.AdditionalRequirementQuestions!, questionIndex);
-        mappedModel.ErrorMessage = content.ErrorMessage;
-        mappedModel.ErrorSummaryHeading = content.ErrorSummaryHeading;
-        return mappedModel;
+        return CheckAdditionalRequirementsPageMapper.Map(content, qualification.QualificationId, questionIndex, backButton,
+                                                         additionalRequirementQuestion, model);
     }
 
     private static NavigationLinkModel? CalculateBackButton(string qualificationId, int questionIndex, CheckAdditionalRequirementsPage content)
     {
         if (questionIndex == 1)
         {
-            return MapToNavigationLinkModel(content.BackButton);
+            return NavigationLinkMapper.Map(content.BackButton);
         }
         
         var link = content.PreviousQuestionBackButton;
 
         if (link == null)
         {
-            return MapToNavigationLinkModel(content.BackButton);
+            return NavigationLinkMapper.Map(content.BackButton);
         }
 
         var previousQuestionIndex = questionIndex - 1;
@@ -186,7 +180,7 @@ public class CheckAdditionalRequirementsController(
             link.Href = $"{link.Href}/{qualificationId}/{previousQuestionIndex}";
         }
 
-        return MapToNavigationLinkModel(link);
+        return NavigationLinkMapper.Map(link);
     }
 
     private async Task<AdditionalRequirementQuestionModel> MapAdditionalRequirementQuestion(List<AdditionalRequirementQuestion> additionalRequirementQuestions, int questionIndex)
@@ -218,7 +212,7 @@ public class CheckAdditionalRequirementsController(
         return new CheckAdditionalRequirementsAnswerPageModel
                {
                    Answers = answersToDisplay,
-                   BackButton = MapToNavigationLinkModel(pageModel.BackButton),
+                   BackButton = NavigationLinkMapper.Map(pageModel.BackButton),
                    ButtonText = pageModel.ButtonText,
                    PageHeading = pageModel.PageHeading,
                    AnswerDisclaimerText = pageModel.AnswerDisclaimerText,
