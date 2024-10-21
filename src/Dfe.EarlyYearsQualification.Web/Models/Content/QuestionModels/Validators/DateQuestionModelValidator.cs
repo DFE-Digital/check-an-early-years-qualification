@@ -5,39 +5,65 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validato
 
 public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDateQuestionModelValidator
 {
-    public ValidationResult IsValid(DateQuestionModel model, DateQuestionPage questionPage)
+    public DateValidationResult IsValid(DateQuestionModel model, DateQuestionPage questionPage)
     {
-        if (model is { SelectedYear: 0, SelectedMonth: 0 })
+        var resultToReturn = new DateValidationResult();
+        
+        if (model is { SelectedYear: null, SelectedMonth: null })
         {
-            return new ValidationResult
-                   {
-                       IsValid = false, 
-                       ErrorMessage = questionPage.ErrorMessage, 
-                       BannerErrorMessage = questionPage.ErrorBannerLinkText
-                   };
+            resultToReturn.MonthValid = false;
+            resultToReturn.YearValid = false;
+            resultToReturn.ErrorMessages.Add(questionPage.ErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(questionPage.ErrorBannerLinkText);
+
+            return resultToReturn;
+        }
+
+        if (model.SelectedMonth == null)
+        {
+            resultToReturn.MonthValid = false;
+            resultToReturn.ErrorMessages.Add(questionPage.MissingMonthErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(questionPage.MissingMonthBannerLinkText);
         }
         
-        if (model.SelectedYear < 1900
-            || model.SelectedMonth < 1
-            || model.SelectedMonth > 12)
+        if (model.SelectedMonth is <= 0 or > 12)
         {
-            return new ValidationResult
-                   {
-                       IsValid = false, 
-                       ErrorMessage = questionPage.IncorrectFormatErrorMessage, 
-                       BannerErrorMessage = questionPage.IncorrectFormatErrorBannerLinkText
-                   };
+            resultToReturn.MonthValid = false;
+            resultToReturn.ErrorMessages.Add(questionPage.MonthOutOfBoundsErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(questionPage.MonthOutOfBoundsErrorLinkText);
         }
-
-        var selectedDate = new DateOnly(model.SelectedYear, model.SelectedMonth, 1);
-
+        
+        if (model.SelectedYear == null)
+        {
+            resultToReturn.YearValid = false;
+            resultToReturn.ErrorMessages.Add(questionPage.MissingYearErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(questionPage.MissingYearBannerLinkText);
+        }
+        
         var now = dateTimeAdapter.Now();
 
-        return new ValidationResult
-               {
-                   IsValid = selectedDate <= DateOnly.FromDateTime(now),
-                   ErrorMessage = questionPage.FutureDateErrorMessage,
-                   BannerErrorMessage = questionPage.FutureDateErrorBannerLinkText
-               };
+        if (model.SelectedYear < 1900 || model.SelectedYear > now.Year)
+        {
+            resultToReturn.YearValid = false;
+            resultToReturn.ErrorMessages.Add(questionPage.YearOutOfBoundsErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(questionPage.YearOutOfBoundsErrorLinkText);
+        }
+
+        if (resultToReturn.ErrorMessages.Count != 0)
+        {
+            return resultToReturn;
+        }
+        
+        var selectedDate = new DateOnly(model.SelectedYear!.Value, model.SelectedMonth!.Value, 1);
+
+        if (selectedDate > DateOnly.FromDateTime(now))
+        {
+            resultToReturn.MonthValid = false;
+            resultToReturn.YearValid = false;
+            resultToReturn.ErrorMessages.Add(questionPage.FutureDateErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(questionPage.FutureDateErrorBannerLinkText);
+        }
+
+        return resultToReturn;
     }
 }

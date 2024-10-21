@@ -10,6 +10,198 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class DateQuestionModelValidatorTests
 {
+    
+    [TestMethod]
+    public void DateQuestionModelValidator_GivenMonthAndYearAreNull_ValidatesFalse()
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
+        
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = null, SelectedYear = null };
+
+        var questionPage = new DateQuestionPage
+                           {
+                               ErrorMessage = "Missing month and year error message",
+                               ErrorBannerLinkText = "Missing month and year banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.MonthValid.Should().BeFalse();
+        result.YearValid.Should().BeFalse();
+        result.ErrorMessages.Should().ContainSingle(questionPage.ErrorMessage);
+        result.BannerErrorMessages.Should().ContainSingle(questionPage.ErrorBannerLinkText);
+    }
+    
+    [TestMethod]
+    public void DateQuestionModelValidator_GivenMonthIsNull_ValidatesFalse()
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = null, SelectedYear = 2024 };
+
+        var questionPage = new DateQuestionPage
+                           {
+                               MissingMonthErrorMessage = "Missing month error message",
+                               MissingMonthBannerLinkText = "Missing month banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.MonthValid.Should().BeFalse();
+        result.YearValid.Should().BeTrue();
+        result.ErrorMessages.Should().ContainSingle(questionPage.MissingMonthErrorMessage);
+        result.BannerErrorMessages.Should().ContainSingle(questionPage.MissingMonthBannerLinkText);
+    }
+    
+    [TestMethod]
+    public void DateQuestionModelValidator_GivenYearIsNull_ValidatesFalse()
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = 12, SelectedYear = null };
+
+        var questionPage = new DateQuestionPage
+                           {
+                               MissingYearErrorMessage = "Missing year error message",
+                               MissingYearBannerLinkText = "Missing year banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.MonthValid.Should().BeTrue();
+        result.YearValid.Should().BeFalse();
+        result.ErrorMessages.Should().ContainSingle(questionPage.MissingYearErrorMessage);
+        result.BannerErrorMessages.Should().ContainSingle(questionPage.MissingYearBannerLinkText);
+    }
+    
+    [TestMethod]
+    [DataRow(0)]
+    [DataRow(-1)]
+    [DataRow(13)]
+    [DataRow(999)]
+    public void DateQuestionModelValidator_GivenMonthIsBefore1OrAfter12_ValidatesFalse(int selectedMonth)
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = selectedMonth, SelectedYear = 2024 };
+
+        var questionPage = new DateQuestionPage
+                           {
+                               MonthOutOfBoundsErrorMessage = "Month out of bounds error message",
+                               MonthOutOfBoundsErrorLinkText = "Month out of bounds error link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.MonthValid.Should().BeFalse();
+        result.YearValid.Should().BeTrue();
+        result.ErrorMessages.Should().ContainSingle(questionPage.MonthOutOfBoundsErrorMessage);
+        result.BannerErrorMessages.Should().ContainSingle(questionPage.MonthOutOfBoundsErrorLinkText);
+    }
+    
+    [TestMethod]
+    [DataRow(1899)]
+    [DataRow(1)]
+    [DataRow(2025)]
+    [DataRow(9999)]
+    public void DateQuestionModelValidator_GivenYearBefore1900OrAfterCurrentYear_ValidatesFalse(int selectedYear)
+    {
+        const int thisYear = 2024;
+        const int thisMonth = 7;
+
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = selectedYear };
+
+        var questionPage = new DateQuestionPage
+                           {
+                               YearOutOfBoundsErrorMessage = "Year out of bounds error message",
+                               YearOutOfBoundsErrorLinkText = "Year out of bounds error link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.MonthValid.Should().BeTrue();
+        result.YearValid.Should().BeFalse();
+        result.ErrorMessages.Should().ContainSingle(questionPage.YearOutOfBoundsErrorMessage);
+        result.BannerErrorMessages.Should().ContainSingle(questionPage.YearOutOfBoundsErrorLinkText);
+    }
+    
+    [TestMethod]
+    [DataRow(8,2024)]
+    [DataRow(12,2024)]
+    public void DateQuestionModelValidator_GivenDateLaterThanCurrentMonthButSameYear_ValidatesFalse(int selectedMonth, int selectedYear)
+    {
+        const int thisYear = 2024;
+        const int thisMonth = 7;
+
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = selectedMonth, SelectedYear = selectedYear };
+
+        var questionPage = new DateQuestionPage
+                           {
+                               FutureDateErrorMessage = "Future date error message",
+                               FutureDateErrorBannerLinkText = "Future date error banner link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.MonthValid.Should().BeFalse();
+        result.YearValid.Should().BeFalse();
+        result.ErrorMessages.Should().ContainSingle(questionPage.FutureDateErrorMessage);
+        result.BannerErrorMessages.Should().ContainSingle(questionPage.FutureDateErrorBannerLinkText);
+    }
+    
+    [TestMethod]
+    public void DateQuestionModelValidator_BothMonthAndYearAreInvalid_ValidatesFalse()
+    {
+        const int thisYear = 2024;
+        const int thisMonth = 7;
+
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 20 };
+
+        var questionPage = new DateQuestionPage
+                           {
+                               MonthOutOfBoundsErrorMessage = "Month out of bounds error message",
+                               MonthOutOfBoundsErrorLinkText = "Month out of bounds error link text",
+                               YearOutOfBoundsErrorMessage = "Year out of bounds error message",
+                               YearOutOfBoundsErrorLinkText = "Year out of bounds error link text"
+                           };
+
+        var result = validator.IsValid(model, questionPage);
+        result.MonthValid.Should().BeFalse();
+        result.YearValid.Should().BeFalse();
+        result.ErrorMessages.Should().Contain(questionPage.MonthOutOfBoundsErrorMessage);
+        result.ErrorMessages.Should().Contain(questionPage.YearOutOfBoundsErrorMessage);
+        result.BannerErrorMessages.Should().Contain(questionPage.MonthOutOfBoundsErrorLinkText);
+        result.BannerErrorMessages.Should().Contain(questionPage.YearOutOfBoundsErrorLinkText);
+    }
+    
     [TestMethod]
     public void DateQuestionModelValidator_GivenDateInRecentPast_ValidatesTrue()
     {
@@ -22,7 +214,8 @@ public class DateQuestionModelValidatorTests
         var questionPage = new DateQuestionPage();
 
         var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeTrue();
+        result.MonthValid.Should().BeTrue();
+        result.YearValid.Should().BeTrue();
     }
 
     [TestMethod]
@@ -42,7 +235,8 @@ public class DateQuestionModelValidatorTests
         var questionPage = new DateQuestionPage();
 
         var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeTrue();
+        result.MonthValid.Should().BeTrue();
+        result.YearValid.Should().BeTrue();
     }
 
     [TestMethod]
@@ -62,132 +256,7 @@ public class DateQuestionModelValidatorTests
         var questionPage = new DateQuestionPage();
 
         var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeTrue();
-    }
-
-    [TestMethod]
-    public void DateQuestionModelValidator_GivenDateLaterThisYear_ValidatesFalse()
-    {
-        const int thisYear = 2024;
-        const int thisMonth = 7;
-
-        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
-        dateTimeAdapter.Setup(d => d.Now())
-                       .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
-
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
-
-        var model = new DateQuestionModel { SelectedMonth = thisMonth + 1, SelectedYear = thisYear };
-
-        var questionPage = new DateQuestionPage();
-
-        var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeFalse();
-    }
-
-    [TestMethod]
-    public void DateQuestionModelValidator_GivenDateInFuture_ValidatesFalse()
-    {
-        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
-        dateTimeAdapter.Setup(d => d.Now()).Returns(new DateTime(2022, 10, 10, 15, 32, 12, DateTimeKind.Local));
-
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
-
-        var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2023 };
-
-        var questionPage = new DateQuestionPage
-                           {
-                               FutureDateErrorMessage = "Future date error message",
-                               FutureDateErrorBannerLinkText = "Future date banner link text"
-                           };
-
-        var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.FutureDateErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.FutureDateErrorBannerLinkText);
-    }
-
-    [TestMethod]
-    public void DateQuestionModelValidator_GivenDateBefore1900_ValidatesFalse()
-    {
-        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
-
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
-
-        var model = new DateQuestionModel { SelectedMonth = 12, SelectedYear = 1899 };
-
-        var questionPage = new DateQuestionPage
-                           {
-                               IncorrectFormatErrorMessage = "Incorrect format error message",
-                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
-                           };
-
-        var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
-    }
-
-    [TestMethod]
-    public void DateQuestionModelValidator_GivenMonthBefore1_ValidatesFalse()
-    {
-        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
-
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
-
-        var model = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 2024 };
-
-        var questionPage = new DateQuestionPage
-                           {
-                               IncorrectFormatErrorMessage = "Incorrect format error message",
-                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
-                           };
-
-        var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
-    }
-
-    [TestMethod]
-    public void DateQuestionModelValidator_GivenMonthAfter12_ValidatesFalse()
-    {
-        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
-
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
-
-        var model = new DateQuestionModel { SelectedMonth = 13, SelectedYear = 2024 };
-
-        var questionPage = new DateQuestionPage
-                           {
-                               IncorrectFormatErrorMessage = "Incorrect format error message",
-                               IncorrectFormatErrorBannerLinkText = "Incorrect format banner link text"
-                           };
-
-        var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.IncorrectFormatErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.IncorrectFormatErrorBannerLinkText);
-    }
-    
-    [TestMethod]
-    public void DateQuestionModelValidator_GivenMonthAndYearAre0_ValidatesFalse()
-    {
-        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
-
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
-
-        var model = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 0 };
-
-        var questionPage = new DateQuestionPage
-                           {
-                               ErrorMessage = "Generic error message",
-                               ErrorBannerLinkText = "Generic banner link text"
-                           };
-
-        var result = validator.IsValid(model, questionPage);
-        result.IsValid.Should().BeFalse();
-        result.ErrorMessage.Should().Match(questionPage.ErrorMessage);
-        result.BannerErrorMessage.Should().Match(questionPage.ErrorBannerLinkText);
+        result.MonthValid.Should().BeTrue();
+        result.YearValid.Should().BeTrue();
     }
 }

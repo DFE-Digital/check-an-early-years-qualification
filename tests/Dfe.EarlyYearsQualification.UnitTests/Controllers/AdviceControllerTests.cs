@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -316,6 +316,85 @@ public class AdviceControllerTests
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task QualificationNotOnTheList_ContentServiceReturnsNullPage_GetsDefaultPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+
+        UserJourneyMockNoOp.Setup(x => x.GetLevelOfQualification()).Returns(2);
+        UserJourneyMockNoOp.Setup(x => x.GetWhenWasQualificationStarted()).Returns((2, 2015));
+
+        mockContentService.Setup(x => x.GetCannotFindQualificationPage(2, 2, 2015)).ReturnsAsync(value: null);
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+
+        var advicePage = new AdvicePage { Heading = "Default Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationNotOnTheList))
+                          .ReturnsAsync(advicePage);
+
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+
+        var result = await controller.QualificationNotOnTheList();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as AdvicePageModel;
+        model.Should().NotBeNull();
+
+        model!.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be("Test html body");
+
+        mockContentService.Verify(x => x.GetCannotFindQualificationPage(2,2,2015), Times.Once);
+        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task QualificationNotOnTheList_ContentServiceReturnsSpecificPage_GetsPageContent()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+
+        UserJourneyMockNoOp.Setup(x => x.GetLevelOfQualification()).Returns(2);
+        UserJourneyMockNoOp.Setup(x => x.GetWhenWasQualificationStarted()).Returns((2, 2015));
+
+        var cannotFindQualificationPage = new CannotFindQualificationPage
+                                          {
+                                              Heading = "Specific cannot find page",
+                                              Body = ContentfulContentHelper.Text("Test html body")
+                                          };
+        mockContentService.Setup(x => x.GetCannotFindQualificationPage(2, 2, 2015))
+                          .ReturnsAsync(cannotFindQualificationPage);
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+
+        var result = await controller.QualificationNotOnTheList();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as AdvicePageModel;
+        model.Should().NotBeNull();
+
+        model!.Heading.Should().Be(cannotFindQualificationPage.Heading);
+        model.BodyContent.Should().Be("Test html body");
+
+        mockContentService.Verify(x => x.GetAdvicePage(AdvicePages.QualificationNotOnTheList), Times.Never);
+        mockContentService.Verify(x => x.GetCannotFindQualificationPage(2,2,2015), Times.Once);
+        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+    }
 
     [TestMethod]
     public async Task QualificationNotOnTheList_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
@@ -561,7 +640,7 @@ public class AdviceControllerTests
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task PrivacyPolicy_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {

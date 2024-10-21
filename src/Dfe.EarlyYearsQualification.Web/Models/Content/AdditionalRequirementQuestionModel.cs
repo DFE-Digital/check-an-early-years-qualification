@@ -13,6 +13,4 @@ public class AdditionalRequirementQuestionModel
     public string DetailsContent { get; init; } = string.Empty;
 
     public List<OptionModel> Options { get; init; } = [];
-
-    public bool HasError { get; set; }
 }

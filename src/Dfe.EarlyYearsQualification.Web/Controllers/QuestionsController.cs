@@ -1,7 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -20,7 +20,7 @@ public class QuestionsController(
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
-    IContentFilterService contentFilterService,
+    IQualificationsRepository repository,
     IDateQuestionModelValidator questionModelValidator,
     IPlaceholderUpdater placeholderUpdater)
     : ServiceController
@@ -104,7 +104,7 @@ public class QuestionsController(
     {
         var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
         var dateModelValidationResult = questionModelValidator.IsValid(model, questionPage!);
-        if (!dateModelValidationResult.IsValid)
+        if (!dateModelValidationResult.MonthValid || !dateModelValidationResult.YearValid)
         {
             // ReSharper disable once InvertIf
             if (questionPage is not null)
@@ -116,7 +116,6 @@ public class QuestionsController(
                                            dateModelValidationResult,
                                            model.SelectedMonth,
                                            model.SelectedYear);
-                model.HasErrors = true;
             }
 
             return View("Date", model);
@@ -229,7 +228,7 @@ public class QuestionsController(
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        return await contentFilterService.GetFilteredQualifications(level, startDateMonth, startDateYear, null, null);
+        return await repository.Get(level, startDateMonth, startDateYear, null, null);
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName,
@@ -292,10 +291,18 @@ public class QuestionsController(
     private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question,
                                                        string actionName,
                                                        string controllerName,
-                                                       ValidationResult? validationResult,
+                                                       DateValidationResult? validationResult,
                                                        int? selectedMonth,
                                                        int? selectedYear)
     {
+        var bannerErrorText = validationResult is { BannerErrorMessages.Count: > 0 }
+                                  ? string.Join("<br />", validationResult!.BannerErrorMessages)
+                                  : null;
+        
+        var errorMessageText = validationResult is { ErrorMessages.Count: > 0 }
+                                  ? string.Join("<br />", validationResult!.ErrorMessages)
+                                  : null;
+        
         model.Question = question.Question;
         model.CtaButtonText = question.CtaButtonText;
         model.ActionName = actionName;
@@ -306,11 +313,13 @@ public class QuestionsController(
         model.BackButton = MapToNavigationLinkModel(question.BackButton);
         model.ErrorBannerHeading = question.ErrorBannerHeading;
         model.ErrorBannerLinkText =
-            placeholderUpdater.Replace(validationResult?.BannerErrorMessage ?? question.ErrorBannerLinkText);
-        model.ErrorMessage = placeholderUpdater.Replace(validationResult?.ErrorMessage ?? question.ErrorMessage);
+            placeholderUpdater.Replace(bannerErrorText ?? question.ErrorBannerLinkText);
+        model.ErrorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
         model.AdditionalInformationHeader = question.AdditionalInformationHeader;
         model.AdditionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
-
+        model.MonthError = !validationResult?.MonthValid ?? false;
+        model.YearError = !validationResult?.YearValid ?? false;
+        
         // ReSharper disable once InvertIf
         if (selectedMonth.HasValue && selectedYear.HasValue)
         {

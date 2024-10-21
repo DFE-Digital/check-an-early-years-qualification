@@ -57,14 +57,28 @@ describe('A spec used to test the main back button route through the journey', (
         cy.get('#yes').click();
         cy.get('button[id="confirm-qualification-button"]').click();
 
-        // check additional questions page
+        // check additional questions first page
         cy.location().should((loc) => {
-            expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240');
+            expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240/1');
         })
 
-        cy.get('#yes_0_0').click();
-        cy.get('#no_1_1').click();
+        cy.get('#yes').click();
         cy.get('button[id="additional-requirement-button"]').click();
+
+        // check additional questions second page
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240/2');
+        })
+
+        cy.get('#no').click();
+        cy.get('button[id="additional-requirement-button"]').click();
+
+        // confirm answers page
+        cy.location().should((loc) => {
+            expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240/confirm-answers');
+        })
+
+        cy.get("#confirm-answers").click();
 
         // qualifications page
         cy.location().should((loc) => {
@@ -76,7 +90,7 @@ describe('A spec used to test the main back button route through the journey', (
         
         cy.location().should((loc) => {
             // answered additional questions, so back to additional questions page
-            expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240')
+            expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-240/1')
         })
         
         cy.get('#back-button').click();

@@ -2,6 +2,16 @@
 
 A public service that allows for managers in childcare positions that require child care certifications e.g. nurseries to check a job applicants certifications against the position they are applying for.
 
+## Status badges
+
+![PR check](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/code-pr-check.yml/badge.svg)
+![Development build & deploy](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/development-build-and-deploy.yml/badge.svg?event=workflow_dispatch)
+![Release build & deploy](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/release-build-and-deploy.yml/badge.svg?event=workflow_dispatch)
+![SonarCloud](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/sonarcloud.yml/badge.svg)
+![Terraform PR](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/terraform-pr-check.yml/badge.svg)
+![Terraform Azure deploy](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/tf-azure-deploy.yml/badge.svg)
+![OWASP ZAP](https://github.com/DFE-Digital/check-an-early-years-qualification/actions/workflows/dev-security-check.yml/badge.svg)
+
 ## Prototype
 The prototype can be found [here](https://github.com/DFE-Digital/ey-qualifications-prototype).
 
