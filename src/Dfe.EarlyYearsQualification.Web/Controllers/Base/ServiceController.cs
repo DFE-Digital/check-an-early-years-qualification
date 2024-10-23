@@ -1,7 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Web.Filters;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -16,27 +15,10 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Base;
 [ServiceFilter<IChallengeResourceFilterAttribute>]
 public class ServiceController : Controller
 {
-    protected static NavigationLinkModel? MapToNavigationLinkModel(NavigationLink? navigationLink)
+    protected static async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
     {
-        if (navigationLink is null) return null;
-        
-        return new NavigationLinkModel
-               {
-                   Href = navigationLink.Href,
-                   DisplayText = navigationLink.DisplayText,
-                   OpenInNewTab = navigationLink.OpenInNewTab
-               };
-    }
-
-    protected static async Task<FeedbackBannerModel?> MapToFeedbackBannerModel(
-        FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
-    {
-        if (feedbackBanner is null) return null;
-        return new FeedbackBannerModel
-               {
-                   Heading = feedbackBanner.Heading,
-                   Body = await contentParser.ToHtml(feedbackBanner.Body),
-                   BannerTitle = feedbackBanner.BannerTitle
-               };
+        return feedbackBanner is not null
+                                   ? await contentParser.ToHtml(feedbackBanner.Body)
+                                   : null;
     }
 }

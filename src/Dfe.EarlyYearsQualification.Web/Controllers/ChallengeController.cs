@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
@@ -117,14 +118,9 @@ public class ChallengeController(
 
     private async Task<ChallengePageModel> Map(ChallengePageModel model, ChallengePage content)
     {
-        model.RedirectAddress = SanitiseReferralAddress(model.RedirectAddress);
-        model.FooterContent = await contentParser.ToHtml(content.FooterContent);
-        model.InputHeading = content.InputHeading;
-        model.MainContent = await contentParser.ToHtml(content.MainContent);
-        model.MainHeading = content.MainHeading;
-        model.SubmitButtonText = content.SubmitButtonText;
-        model.ShowPasswordButtonText = content.ShowPasswordButtonText;
-
-        return model;
+        var sanitisedReferralAddress = SanitiseReferralAddress(model.RedirectAddress);
+        var footerContentHtml = await contentParser.ToHtml(content.FooterContent);
+        var mainContentHtml = await contentParser.ToHtml(content.MainContent);
+        return ChallengePageMapper.Map(model, content, sanitisedReferralAddress, footerContentHtml, mainContentHtml);
     }
 }
