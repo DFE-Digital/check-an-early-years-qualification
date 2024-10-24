@@ -17,26 +17,6 @@ public class QualificationsRepository(
     IFuzzyAdapter fuzzyAdapter)
     : ContentfulContentServiceBase(logger, contentfulClient), IQualificationsRepository
 {
-    private const int Day = 28;
-
-    private static readonly ReadOnlyDictionary<string, int>
-        Months = new(
-                     new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase)
-                     {
-                         { "Jan", 1 },
-                         { "Feb", 2 },
-                         { "Mar", 3 },
-                         { "Apr", 4 },
-                         { "May", 5 },
-                         { "Jun", 6 },
-                         { "Jul", 7 },
-                         { "Aug", 8 },
-                         { "Sep", 9 },
-                         { "Oct", 10 },
-                         { "Nov", 11 },
-                         { "Dec", 12 }
-                     });
-
     // Used by the unit tests to inject a mock builder that returns the query params
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
 
@@ -188,97 +168,16 @@ public class QualificationsRepository(
         var enteredStartDate = new DateOnly(startDateYear.Value, startDateMonth.Value, Day);
         foreach (var qualification in qualifications)
         {
-            var qualificationStartDate = GetQualificationDate(qualification.FromWhichYear);
-            var qualificationEndDate = GetQualificationDate(qualification.ToWhichYear);
+            var qualificationStartDate = GetDate(qualification.FromWhichYear);
+            var qualificationEndDate = GetDate(qualification.ToWhichYear);
 
-            if (qualificationStartDate is not null
-                && qualificationEndDate is not null
-                && enteredStartDate >= qualificationStartDate
-                && enteredStartDate <= qualificationEndDate)
+            var result = ValidateDateEntry(qualificationStartDate, qualificationEndDate, enteredStartDate, qualification);
+            if (result is not null)
             {
-                // check start date falls between those dates & add to results
-                results.Add(qualification);
-            }
-            else if (qualificationStartDate is null
-                     && qualificationEndDate is not null
-                     // ReSharper disable once MergeSequentialChecks
-                     // ...reveals the intention more clearly this way
-                     && enteredStartDate <= qualificationEndDate)
-            {
-                // if qualification start date is null, check entered start date is <= ToWhichYear & add to results
-                results.Add(qualification);
-            }
-            else
-            {
-                // if qualification end date is null, check entered start date is >= FromWhichYear & add to results
-                if (qualificationStartDate is not null
-                    && qualificationEndDate is null
-                    && enteredStartDate >= qualificationStartDate)
-                {
-                    results.Add(qualification);
-                }
+                results.Add(result);
             }
         }
 
         return results;
-    }
-
-    private DateOnly? GetQualificationDate(string? qualificationDate)
-    {
-        if (string.IsNullOrEmpty(qualificationDate) || qualificationDate == "null")
-        {
-            return null;
-        }
-
-        return ConvertToDateTime(qualificationDate);
-    }
-
-    private DateOnly? ConvertToDateTime(string qualificationDate)
-    {
-        var (isValid, month, yearMod2000) = ValidateQualificationDate(qualificationDate);
-
-        if (!isValid)
-        {
-            return null;
-        }
-
-        var year = yearMod2000 + 2000;
-
-        return new DateOnly(year, month, Day);
-    }
-
-    private (bool isValid, int month, int yearMod2000) ValidateQualificationDate(string qualificationDate)
-    {
-        var splitQualificationDate = qualificationDate.Split('-');
-        if (splitQualificationDate.Length != 2)
-        {
-            Logger.LogError("Qualification date {QualificationDate} has unexpected format", qualificationDate);
-            return (false, 0, 0);
-        }
-
-        var abbreviatedMonth = splitQualificationDate[0];
-        var yearFilter = splitQualificationDate[1];
-
-        var yearIsValid = int.TryParse(yearFilter,
-                                       NumberStyles.Integer,
-                                       NumberFormatInfo.InvariantInfo,
-                                       out var yearPart);
-
-        if (!yearIsValid)
-        {
-            Logger.LogError("Qualification date {QualificationDate} contains unexpected year value",
-                            qualificationDate);
-            return (false, 0, 0);
-        }
-
-        if (Months.TryGetValue(abbreviatedMonth, out var month))
-        {
-            return (true, month, yearPart);
-        }
-
-        Logger.LogError("Qualification date {QualificationDate} contains unexpected month value",
-                        qualificationDate);
-
-        return (false, 0, 0);
     }
 }

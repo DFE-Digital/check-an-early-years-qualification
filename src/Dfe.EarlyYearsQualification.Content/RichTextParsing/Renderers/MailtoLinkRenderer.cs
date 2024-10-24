@@ -1,5 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Newtonsoft.Json.Linq;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 
@@ -21,7 +22,7 @@ public class MailtoLinkRenderer : IContentRenderer
 
         try
         {
-            var navigationLinkModel = model.JObject.ToObject<MailtoLink>();
+            var navigationLinkModel = (model.JObject as JObject)!.ToObject<MailtoLink>();
             return navigationLinkModel!.Sys.ContentType.SystemProperties.Id == "mailtoLink";
         }
         catch
@@ -34,7 +35,7 @@ public class MailtoLinkRenderer : IContentRenderer
     {
         var model = (content as EntryStructure)!.Data.Target as CustomNode;
 
-        var mailtoLinkModel = model!.JObject.ToObject<MailtoLink>()!;
+        var mailtoLinkModel = (model!.JObject as JObject)!.ToObject<MailtoLink>()!;
         
         return await Task.FromResult($"<a class='govuk-link' href='mailto:{mailtoLinkModel.Email}'>{mailtoLinkModel.Text}</a>");
     }

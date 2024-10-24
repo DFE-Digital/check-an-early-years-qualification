@@ -22,6 +22,7 @@ using OwaspHeaders.Core.Extensions;
 using RobotsTxt;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddApplicationInsightsTelemetry();
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
 var useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");

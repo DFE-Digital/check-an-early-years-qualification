@@ -3,8 +3,8 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
-using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -116,29 +116,11 @@ public class ConfirmQualificationController(
 
     private async Task<ConfirmQualificationPageModel> Map(ConfirmQualificationPage content, Qualification qualification)
     {
-        return new ConfirmQualificationPageModel
-               {
-                   Heading = content.Heading,
-                   Options = content.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value }).ToList(),
-                   ErrorText = content.ErrorText,
-                   LevelLabel = content.LevelLabel,
-                   QualificationLabel = content.QualificationLabel,
-                   RadioHeading = content.RadioHeading,
-                   DateAddedLabel = content.DateAddedLabel,
-                   AwardingOrganisationLabel = content.AwardingOrganisationLabel,
-                   ErrorBannerHeading = content.ErrorBannerHeading,
-                   ErrorBannerLink = content.ErrorBannerLink,
-                   ButtonText = content.ButtonText,
-                   HasErrors = false,
-                   QualificationName = qualification.QualificationName,
-                   QualificationLevel = qualification.QualificationLevel.ToString(),
-                   QualificationId = qualification.QualificationId,
-                   QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle.Trim(),
-                   QualificationDateAdded = qualification.FromWhichYear!,
-                   BackButton = MapToNavigationLinkModel(content.BackButton),
-                   PostHeadingContent = await contentParser.ToHtml(content.PostHeadingContent),
-                   VariousAwardingOrganisationsExplanation =
-                       await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation)
-               };
+        var postHeadingContent = await contentParser.ToHtml(content.PostHeadingContent);
+        var variousAwardingOrganisationsExplanation =
+            await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation);
+
+        return ConfirmQualificationPageMapper.Map(content, qualification, postHeadingContent,
+                                                  variousAwardingOrganisationsExplanation);
     }
 }

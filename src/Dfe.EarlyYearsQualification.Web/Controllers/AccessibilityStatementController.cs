@@ -1,8 +1,7 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -25,18 +24,9 @@ public class AccessibilityStatementController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await Map(content);
+        var bodyHtml = await contentParser.ToHtml(content.Body);
+        var model = AccessibilityStatementMapper.Map(content, bodyHtml);
 
         return View(model);
-    }
-
-    private async Task<AccessibilityStatementPageModel> Map(AccessibilityStatementPage content)
-    {
-        return new AccessibilityStatementPageModel
-               {
-                   Heading = content.Heading,
-                   BodyContent = await contentParser.ToHtml(content.Body),
-                   BackButton = MapToNavigationLinkModel(content.BackButton)
-               };
     }
 }

@@ -6,6 +6,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -259,7 +260,7 @@ public class QualificationDetailsController(
 
         return new QualificationListModel
                {
-                   BackButton = MapToNavigationLinkModel(content.BackButton),
+                   BackButton = NavigationLinkMapper.Map(content.BackButton),
                    Filters = filterModel,
                    Header = content.Header,
                    SingleQualificationFoundText = content.SingleQualificationFoundText,
@@ -349,49 +350,21 @@ public class QualificationDetailsController(
             var dateOnly = new DateOnly(startYear.Value, startMonth.Value, 1);
             dateStarted = dateOnly.ToString("MMMM yyyy");
         }
+        
+        var checkAnotherQualificationText = await contentParser.ToHtml(content.CheckAnotherQualificationText);
+        var furtherInfoText = await contentParser.ToHtml(content.FurtherInfoText);
+        var requirementsText = await contentParser.ToHtml(content.RequirementsText);
+        var ratiosText = await contentParser.ToHtml(content.RatiosText);
+        var ratiosTextNotFullAndRelevant =
+            await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant);
+        var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner, contentParser);
 
-        return new QualificationDetailsModel
-               {
-                   QualificationId = qualification.QualificationId,
-                   QualificationLevel = qualification.QualificationLevel,
-                   QualificationName = qualification.QualificationName,
-                   QualificationNumber = qualification.QualificationNumber,
-                   AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
-                   FromWhichYear = qualification.FromWhichYear,
-                   BackButton = MapToNavigationLinkModel(backNavLink),
-                   AdditionalRequirementAnswers =
-                       MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions),
-                   DateStarted = dateStarted,
-                   Content = new DetailsPageModel
-                             {
-                                 AwardingOrgLabel = content.AwardingOrgLabel,
-                                 BookmarkHeading = content.BookmarkHeading,
-                                 BookmarkText = content.BookmarkText,
-                                 CheckAnotherQualificationHeading = content.CheckAnotherQualificationHeading,
-                                 CheckAnotherQualificationText =
-                                     await contentParser.ToHtml(content.CheckAnotherQualificationText),
-                                 DateAddedLabel = content.DateAddedLabel,
-                                 DateOfCheckLabel = content.DateOfCheckLabel,
-                                 FurtherInfoHeading = content.FurtherInfoHeading,
-                                 FurtherInfoText = await contentParser.ToHtml(content.FurtherInfoText),
-                                 LevelLabel = content.LevelLabel,
-                                 MainHeader = content.MainHeader,
-                                 QualificationNumberLabel = content.QualificationNumberLabel,
-                                 RequirementsHeading = content.RequirementsHeading,
-                                 RequirementsText = await contentParser.ToHtml(content.RequirementsText),
-                                 RatiosHeading = content.RatiosHeading,
-                                 RatiosText = await contentParser.ToHtml(content.RatiosText),
-                                 RatiosTextNotFullAndRelevant =
-                                     await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant),
-                                 CheckAnotherQualificationLink =
-                                     MapToNavigationLinkModel(content.CheckAnotherQualificationLink),
-                                 PrintButtonText = content.PrintButtonText,
-                                 QualificationNameLabel = content.QualificationNameLabel,
-                                 QualificationStartDateLabel = content.QualificationStartDateLabel,
-                                 QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader,
-                                 FeedbackBanner = await MapToFeedbackBannerModel(content.FeedbackBanner, contentParser)
-                             }
-               };
+        return QualificationDetailsMapper.Map(qualification, content, backNavLink,
+                                              MapAdditionalRequirementAnswers(qualification
+                                                                                  .AdditionalRequirementQuestions),
+                                              dateStarted, checkAnotherQualificationText, furtherInfoText,
+                                              requirementsText, ratiosText, ratiosTextNotFullAndRelevant,
+                                              feedbackBodyHtml);
     }
 
     private NavigationLink? CalculateBackButton(
