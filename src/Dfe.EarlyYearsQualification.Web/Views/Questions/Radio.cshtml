@@ -25,7 +25,7 @@
         }
         @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "radio-question-form"}))
         {
-            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+            <div data-testid="main-form-group" class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-heading-xl mb-1" id="question">
