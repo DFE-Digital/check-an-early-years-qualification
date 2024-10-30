@@ -13,6 +13,14 @@ on:
           - development
           - staging
           - production
+      
+      action:
+        description: Test the planned changes or plan and apply the changes
+        default: 'Plan Only'
+        type: choice
+        options:
+          - 'Plan Only'
+          - 'Plan & Apply'
 
 defaults:
   run:
@@ -112,4 +120,5 @@ jobs:
 
       # Terraform Apply
       - name: Terraform Apply
+        if: ${{ inputs.action == 'Plan & Apply' }}
         run: terraform apply -auto-approve tfplan/tfplan
