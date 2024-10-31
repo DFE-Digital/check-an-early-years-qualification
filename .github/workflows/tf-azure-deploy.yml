@@ -1,4 +1,4 @@
-run-name: 'Terraform Deploy - ${{inputs.environment}}'
+run-name: 'Terraform Deploy - ${{inputs.environment}} (${{inputs.action}})'
 name: 'Terraform Deploy'
 
 on:
@@ -121,4 +121,4 @@ jobs:
       # Terraform Apply
       - name: Terraform Apply
         if: ${{ inputs.action == 'Plan & Apply' }}
-        run: terraform apply -auto-approve tfplan/tfplan
+        run: terraform apply -auto-approve tfplan
