@@ -15,9 +15,10 @@ To run the tests, simply run
 
 `k6 run tests/k6/main.js --env CHALLENGE_PASSWORD="[Secret]" --env CUSTOM_DOAMIN="[test-env-domain]"`
 
-…where `[Secret]` is a valid key for the challenge page in the environment. We will always expect a
-challenge key in test/staging, even after the *production* service is in public beta and set up
-for unrestricted access.
+…where `[Secret]` is a valid password for the challenge page in the environment, and
+`[test-env-domain]` is the custom domain for the service in the test environment.
+We will always expect a challenge password in test/staging, even after the *production*
+service is in public beta and set up for unrestricted access.
 
 The GitHub pipelines will always use the `test` (staging) environment, and will pass the password and the
 domain from the staging environment's secrets and variables configured in GitHub.
