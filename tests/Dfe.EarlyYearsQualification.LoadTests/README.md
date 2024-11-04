@@ -5,11 +5,10 @@ Here we have performance and load tests for the service.
 ## Prerequisites
 
 * Install k6 locally
-* Navigate to `k6` folder under `tests`
 
 ## How to run the tests locally
 
-Locally means against the test/staging environment, but on your local machine rather than in a pipeline.
+"Locally" means against the test/staging environment, but on your local machine rather than in a pipeline.
 
 To run the tests, simply run the following in the main repo folder:
 
