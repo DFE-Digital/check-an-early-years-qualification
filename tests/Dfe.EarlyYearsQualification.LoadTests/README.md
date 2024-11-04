@@ -12,7 +12,7 @@ Here we have performance and load tests for the service.
 
 To run the tests, simply run the following in the main repo folder:
 
-`k6 run tests/Dfe.EarlyYearsQualification.LoadTests/load-tests.js --env CHALLENGE_PASSWORD="[Secret]" --env CUSTOM_DOAMIN="[test-env-domain]"`
+`k6 run tests/Dfe.EarlyYearsQualification.LoadTests/load-tests.js --env CHALLENGE_PASSWORD="[Secret]" --env CUSTOM_DOMAIN="[test-env-domain]"`
 
 …replacing `[Secret]` with a valid password for the challenge page in the test environment, and
 `[test-env-domain]` with the custom domain for the service in the test environment.
