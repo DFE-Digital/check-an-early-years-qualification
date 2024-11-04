@@ -11,12 +11,12 @@ Here we have performance and load tests for the service.
 
 Locally means against the test/staging environment, but on your local machine rather than in a pipeline.
 
-To run the tests, simply run
+To run the tests, simply run the following in the main repo folder:
 
-`k6 run tests/k6/main.js --env CHALLENGE_PASSWORD="[Secret]" --env CUSTOM_DOAMIN="[test-env-domain]"`
+`k6 run tests/Dfe.EarlyYearsQualification.LoadTests/main.js --env CHALLENGE_PASSWORD="[Secret]" --env CUSTOM_DOAMIN="[test-env-domain]"`
 
-…where `[Secret]` is a valid password for the challenge page in the environment, and
-`[test-env-domain]` is the custom domain for the service in the test environment.
+…replacing `[Secret]` with a valid password for the challenge page in the test environment, and
+`[test-env-domain]` with the custom domain for the service in the test environment.
 We will always expect a challenge password in test/staging, even after the *production*
 service is in public beta and set up for unrestricted access.
 
