@@ -13,6 +13,12 @@ on:
           - development
           - staging
           - production
+            
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
 
 jobs:
 
