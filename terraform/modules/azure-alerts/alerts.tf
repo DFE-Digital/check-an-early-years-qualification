@@ -6,12 +6,15 @@ resource "azurerm_monitor_action_group" "dev_team" {
   resource_group_name = var.resource_group
   short_name          = "Dev Team"
   tags                = var.tags
-  
+
   # Should ignore changes made to email receivers
   lifecycle {
-      ignore_changes = [
-          email_receiver
-      ]
+    ignore_changes = [
+      email_receiver,
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 }
 
@@ -34,6 +37,14 @@ resource "azurerm_monitor_metric_alert" "cpu_alert" {
   action {
     action_group_id = azurerm_monitor_action_group.dev_team.id
   }
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
 }
 
 # Alert for Memory > 90%
@@ -54,5 +65,14 @@ resource "azurerm_monitor_metric_alert" "memory_alert" {
 
   action {
     action_group_id = azurerm_monitor_action_group.dev_team.id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      email_receiver,
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 }
