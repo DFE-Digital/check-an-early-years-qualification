@@ -69,7 +69,6 @@ resource "azurerm_monitor_metric_alert" "memory_alert" {
 
   lifecycle {
     ignore_changes = [
-      email_receiver,
       tags["Environment"],
       tags["Product"],
       tags["Service Offering"]
