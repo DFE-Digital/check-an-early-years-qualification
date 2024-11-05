@@ -119,8 +119,8 @@ module "webapp" {
 module "alerts" {
   source = "./modules/azure-alerts"
 
-  resource_group              = azurerm_resource_group.rg.name
-  app_service_plan_id         = module.webapp.app_service_plan_id
-  tags                        = local.common_tags
-  depends_on                  = [module.webapp]
+  resource_group      = azurerm_resource_group.rg.name
+  app_service_plan_id = module.webapp.app_service_plan_id
+  tags                = local.common_tags
+  depends_on          = [module.webapp]
 }
