@@ -90,7 +90,7 @@ resource "azurerm_monitor_metric_alert" "http4xx_errors" {
   criteria {
     metric_namespace = "Microsoft.Web/sites"
     metric_name      = "Http4xx"
-    aggregation      = "Count"
+    aggregation      = "Average"
     operator         = "GreaterThanOrEqual"
     threshold        = 10
   }
@@ -120,7 +120,7 @@ resource "azurerm_monitor_metric_alert" "http5xx_errors" {
   criteria {
     metric_namespace = "Microsoft.Web/sites"
     metric_name      = "Http5xx"
-    aggregation      = "Count"
+    aggregation      = "Average"
     operator         = "GreaterThanOrEqual"
     threshold        = 10
   }
