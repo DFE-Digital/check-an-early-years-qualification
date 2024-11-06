@@ -51,6 +51,11 @@ jobs:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
+        
+      # Checks that all Terraform configuration files adhere to a canonical format
+      # Will fail the build if not
+      - name: Terraform Format
+        run: terraform fmt -check
 
       # Sets an environment variable to contain the current IP address
       - name: IP address env
@@ -83,11 +88,6 @@ jobs:
           -backend-config="storage_account_name=${{ secrets.TERRAFORM_STATE_STORAGE_ACCOUNT_NAME }}"
           -backend-config="container_name=${{ secrets.TERRAFORM_STATE_STORAGE_CONTAINER_NAME }}"
           -backend-config="key=${{ secrets.TERRAFORM_STATE_KEY }}"
-
-      # Checks that all Terraform configuration files adhere to a canonical format
-      # Will fail the build if not
-      - name: Terraform Format
-        run: terraform fmt -check
 
       # Generates Terraform input variables
       - name: Generate Terraform Variables
