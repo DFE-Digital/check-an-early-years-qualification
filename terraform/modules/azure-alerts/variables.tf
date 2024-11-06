@@ -8,6 +8,11 @@ variable "app_service_plan_id" {
   type        = string
 }
 
+variable "app_service_webapp_id" {
+  description = "Id of the Web Application"
+  type        = string
+}
+
 variable "tags" {
   description = "Resource tags"
   type        = map(string)
