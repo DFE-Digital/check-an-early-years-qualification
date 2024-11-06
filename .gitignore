@@ -503,3 +503,4 @@ tests/Dfe.EarlyYearsQualification.E2ETests/cypress/screenshots/
 
 # Sonar
 .sonarqube/
+screenshots/

@@ -58,7 +58,7 @@ export const options = {
 // See https://grafana.com/docs/k6/latest/examples/get-started-with-k6/ to learn more
 // about authoring k6 scripts.
 //
-export default function () {
+export default async function () {
 
   const address = 'https://' + options.customDomain + '/';
 
