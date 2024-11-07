@@ -21,7 +21,7 @@ export default function main() {
   let response
 
   const cookieJar = http.cookieJar();
-  const address = 'https://' + customDomain + '/';
+  const address = 'https://' + customDomain;
 
   cookieJar.set(address, 'auth-secret', password);
 
@@ -29,9 +29,9 @@ export default function main() {
   let requestVerificationToken;
 
   group(
-    `page_1 - ${address}`,
+    `page_1 - ${address}/`,
     function () {
-      response = http.get('https://staging.check-an-early-years-qualification.education.gov.uk/', {
+      response = http.get(`${address}/`, {
         headers: {
           'upgrade-insecure-requests': '1',
           'user-agent':
@@ -55,7 +55,7 @@ export default function main() {
       });
 
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/lib/bootstrap/dist/css/bootstrap.min.css',
+        `${address}/lib/bootstrap/dist/css/bootstrap.min.css`,
         {
           headers: {
             referer: '',
@@ -68,7 +68,7 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI',
+        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
         {
           headers: {
             referer: '',
@@ -81,7 +81,7 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY',
+        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
         {
           headers: {
             referer: '',
@@ -94,7 +94,7 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/lib/jquery/dist/jquery.min.js',
+        `${address}/lib/jquery/dist/jquery.min.js`,
         {
           headers: {
             referer: '',
@@ -107,7 +107,7 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/lib/bootstrap/dist/js/bootstrap.bundle.min.js',
+        `${address}/lib/bootstrap/dist/js/bootstrap.bundle.min.js`,
         {
           headers: {
             referer: '',
@@ -120,7 +120,7 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY',
+        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
         {
           headers: {
             referer: '',
@@ -133,10 +133,10 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0',
+        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: 'https://staging.check-an-early-years-qualification.education.gov.uk',
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -147,12 +147,12 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/assets/fonts/light-94a07e06a1-v2.woff2',
+        `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: 'https://staging.check-an-early-years-qualification.education.gov.uk',
+            origin: address,
             referer:
-              'https://staging.check-an-early-years-qualification.education.gov.uk/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI',
+              '${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
             'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
@@ -162,11 +162,11 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/assets/images/govuk-crest.png',
+        `${address}/assets/images/govuk-crest.png`,
         {
           headers: {
             referer:
-              'https://staging.check-an-early-years-qualification.education.gov.uk/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI',
+              '${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
             'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
@@ -176,12 +176,12 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/assets/fonts/bold-b542beb274-v2.woff2',
+        `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: 'https://staging.check-an-early-years-qualification.education.gov.uk',
+            origin: address,
             referer:
-              'https://staging.check-an-early-years-qualification.education.gov.uk/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI',
+              '${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
             'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
@@ -191,10 +191,10 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/govuk/all.min.js',
+        `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: 'https://staging.check-an-early-years-qualification.education.gov.uk',
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -205,7 +205,7 @@ export default function main() {
         }
       )
       response = http.get(
-        'https://staging.check-an-early-years-qualification.education.gov.uk/assets/images/favicon.svg',
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer: '',
@@ -225,7 +225,7 @@ export default function main() {
   )
 
   group(
-    `page_2 - ${address}questions/start-new`,
+    `page_2 - ${address}/questions/start-new`,
     function () {
       response = http.get(
         `${address}/questions/start-new`,
@@ -335,7 +335,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -350,7 +350,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -381,7 +381,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -397,7 +397,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -532,7 +532,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -547,7 +547,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -563,7 +563,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -594,7 +594,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -716,7 +716,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -731,7 +731,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -747,7 +747,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -778,7 +778,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -899,7 +899,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -914,7 +914,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -930,7 +930,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -961,7 +961,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1083,7 +1083,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1098,7 +1098,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1114,7 +1114,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1145,7 +1145,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1259,7 +1259,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1273,7 +1273,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1288,7 +1288,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1317,7 +1317,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1444,7 +1444,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1459,7 +1459,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1475,7 +1475,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1506,7 +1506,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1630,7 +1630,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1645,7 +1645,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1661,7 +1661,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1692,7 +1692,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1806,7 +1806,7 @@ export default function main() {
         `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
@@ -1820,7 +1820,7 @@ export default function main() {
         `${address}/assets/fonts/light-94a07e06a1-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1835,7 +1835,7 @@ export default function main() {
         `${address}/assets/fonts/bold-b542beb274-v2.woff2`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer:
               `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
             'user-agent':
@@ -1850,7 +1850,7 @@ export default function main() {
         `${address}/govuk/all.min.js`,
         {
           headers: {
-            origin: `${address}`,
+            origin: address,
             referer: '',
             'user-agent':
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
