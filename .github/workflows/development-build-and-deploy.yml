@@ -69,7 +69,7 @@ jobs:
 
       # Run smoke test
       - name: Run smoke tests
-        uses: ./.github/actions/run-smoke-tests
+        uses: ./.github/workflows/playwright
         with:
           webapp_url: ${{ vars.WEBAPP_NAME }}  
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
