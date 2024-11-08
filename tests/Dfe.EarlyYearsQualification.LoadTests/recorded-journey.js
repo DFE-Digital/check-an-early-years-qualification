@@ -14,16 +14,18 @@ export const options = {
   ]
 }
 
-const password = __ENV.CHALLENGE_PASSWORD; // secret value, passed in from the CLI
-const customDomain = __ENV.CUSTOM_DOMAIN; // custom domain, the address of the service to test, passed in from the CLI
+const ENVIRONMENT = {
+  password: __ENV.CHALLENGE_PASSWORD, // secret value, passed in from the CLI
+  customDomain: __ENV.CUSTOM_DOMAIN // custom domain, the address of the service to test, passed in from the CLI
+};
 
 export default function main() {
   let response
 
   const cookieJar = http.cookieJar();
-  const address = 'https://' + customDomain;
+  const address = 'https://' + ENVIRONMENT.customDomain;
 
-  cookieJar.set(address, 'auth-secret', password);
+  cookieJar.set(address, 'auth-secret', ENVIRONMENT.password);
 
   let antiForgeryToken;
   let requestVerificationToken;
@@ -50,7 +52,7 @@ export default function main() {
 
       check(response, {
         "has cookie 'auth-secret'": (r) => cookies['auth-secret'].length > 0,
-        "'auth-secret' cookie has expected value": (r) => cookies['auth-secret'][0] === password,
+        "'auth-secret' cookie has expected value": (r) => cookies['auth-secret'][0] === ENVIRONMENT.password,
         'anti-forgery token has value': (r) => antiForgeryToken && antiForgeryToken.length > 0
       });
 
@@ -218,10 +220,6 @@ export default function main() {
         }
       )
     }
-    // function () {
-
-    //   response = http.get(address);
-
   )
 
   group(
