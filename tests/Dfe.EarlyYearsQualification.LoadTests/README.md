@@ -10,9 +10,9 @@ Here we have performance and load tests for the service.
 
 "Locally" means against the test/staging environment, but on your local machine rather than in a pipeline.
 
-To run the tests, simply run the following in the main repo folder:
+A `k6` command will kick off a test. For example, to run the "recorded journey" test scenario, run the following in the main repo folder:
 
-`k6 run tests/Dfe.EarlyYearsQualification.LoadTests/load-tests.js --env CHALLENGE_PASSWORD="[Secret]" --env CUSTOM_DOMAIN="[test-env-domain]"`
+`k6 run tests/Dfe.EarlyYearsQualification.LoadTests/recorded-journey.js --env CHALLENGE_PASSWORD="[Secret]" --env CUSTOM_DOMAIN="[test-env-domain]"`
 
 …replacing `[Secret]` with a valid password for the challenge page in the test environment, and
 `[test-env-domain]` with the custom domain for the service in the test environment.
