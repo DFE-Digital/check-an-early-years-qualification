@@ -67,9 +67,8 @@ jobs:
         with:
           webapp_url: ${{ vars.WEBAPP_NAME }}
           
-  run-smoke-test:
-    name: Run smoke tests
-    uses: ./.github/workflows/playwright.yml
-    with:
-      webapp_url: ${{ vars.WEBAPP_NAME }}
-      auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+      - name: Run Playwright smoke tests
+        uses: ./.github/actions/run-playwright-smoke-tests
+        with:
+          webapp_url: ${{ vars.WEBAPP_NAME }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
