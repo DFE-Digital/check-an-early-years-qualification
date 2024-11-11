@@ -69,8 +69,8 @@ jobs:
           webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
           
       # Run smoke test
-      - name: Run smoke tests against slot
-        uses: ./.github/actions/run-smoke-tests
+      - name: Run Playwright smoke tests against slot
+        uses: ./.github/actions/run-playwright-smoke-tests
         with:
           webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
@@ -116,9 +116,9 @@ jobs:
         with:
           webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
           
-      # Run smoke test
-      - name: Run smoke tests against slot
-        uses: ./.github/actions/run-smoke-tests
+      # Run smoke test          
+      - name: Run Playwright smoke tests against slot
+        uses: ./.github/actions/run-playwright-smoke-tests
         with:
           webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
