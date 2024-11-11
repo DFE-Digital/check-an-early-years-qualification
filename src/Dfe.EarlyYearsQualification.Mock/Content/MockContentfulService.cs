@@ -59,17 +59,8 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
                                                               body, QualificationsPath)),
 
-                   AdvicePages.QualificationLevel7 =>
-                       await Task.FromResult(CreateAdvicePage("Qualification at Level 7",
-                                                              body,
-                                                              WhatLevelIsTheQualificationPath)),
-
-                   AdvicePages.Level6QualificationPre2014 =>
-                       await Task.FromResult(CreateAdvicePage("Level 6 qualification pre 2014",
-                                                              body, WhatLevelIsTheQualificationPath)),
-
-                   AdvicePages.Level6QualificationPost2014 =>
-                       await Task.FromResult(CreateAdvicePage("Level 6 qualification post 2014",
+                   AdvicePages.Level7QualificationPost2014 =>
+                       await Task.FromResult(CreateAdvicePage("Level 7 qualification post 2014",
                                                               body, WhatLevelIsTheQualificationPath)),
 
                    AdvicePages.TemporaryPrivacyPolicy =>

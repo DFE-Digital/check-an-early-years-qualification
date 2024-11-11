@@ -32,20 +32,25 @@ public static class AdvicePages
     /// </summary>
     public const string QualificationNotOnTheList = "XU6vhxIHdeasGLwueCGel";
 
+    // /// <summary>
+    // ///     Entry ID for the "Qualification Level 7" advice page
+    // /// </summary>
+    // public const string QualificationLevel7 = "1bGiyvwsJZPd14dwrVtWCM";
+    //
+    // /// <summary>
+    // ///     Entry ID for the "Level 6 qualification pre-2014" advice page.
+    // /// </summary>
+    // public const string Level6QualificationPre2014 = "2TT7k2J5KUNmUQ3f8A56tw";
+    //
+    // /// <summary>
+    // ///     Entry ID for the "Level 6 qualification post-2014" advice page.
+    // /// </summary>
+    // public const string Level6QualificationPost2014 = "5aoy3C3jIEKdMo8fauvyvk";
+
     /// <summary>
-    ///     Entry ID for the "Qualification Level 7" advice page
+    ///     Entry ID for the "Level 7 qualification post-2014" advice page.
     /// </summary>
-    public const string QualificationLevel7 = "1bGiyvwsJZPd14dwrVtWCM";
-    
-    /// <summary>
-    ///     Entry ID for the "Level 6 qualification pre-2014" advice page.
-    /// </summary>
-    public const string Level6QualificationPre2014 = "2TT7k2J5KUNmUQ3f8A56tw";
-    
-    /// <summary>
-    ///     Entry ID for the "Level 6 qualification post-2014" advice page.
-    /// </summary>
-    public const string Level6QualificationPost2014 = "5aoy3C3jIEKdMo8fauvyvk";
+    public const string Level7QualificationPost2014 = "4nfocBj9Alwfa15ke8MHBj";
 
     /// <summary>
     ///     Entry ID for the TEMPORARY Privacy Policy page.
