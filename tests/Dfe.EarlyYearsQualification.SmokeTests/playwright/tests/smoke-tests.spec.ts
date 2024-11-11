@@ -18,8 +18,8 @@ test.describe("A spec used to smoke test the environment once a deployment has h
     }
     
     // home page
-    await expect(page.getByTestId("start-button")).toBeVisible();
-    await page.getByTestId("start-button").click();
+    await expect(page.locator("#start-now-button")).toBeVisible();
+    await page.locator("#start-now-button").click();
 
     // where-was-the-qualification-awarded page
     await expect(page.url()).toContain("/questions/where-was-the-qualification-awarded");
