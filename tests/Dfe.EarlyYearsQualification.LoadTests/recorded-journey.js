@@ -4,14 +4,25 @@ import { sleep, group, check } from 'k6'
 import http from 'k6/http'
 
 export const options = {
-  stages: [
-    { duration: '10m', target: 100 },
-    { duration: '5m', target: 100 },
-    { duration: '10m', target: 300 },
-    { duration: '5m', target: 300 },
-    { duration: '5m', target: 20 },
-    { duration: '3m', target: 0 }
-  ]
+  thresholds: {
+    http_req_failed: ['rate<0.01'],
+    http_req_duration: ['p(90) < 400', 'p(95) < 1000']
+  },
+  scenarios: {
+    end_to_end: {
+      executor: 'ramping-vus',
+      stages: [
+        { duration: '8m', target: 20 },
+        { duration: '2m', target: 20 },
+        { duration: '8m', target: 40 },
+        { duration: '2m', target: 40 },
+        { duration: '5m', target: 4 },
+        { duration: '5m', target: 0 }
+      ],
+      gracefulStop: '5m',
+      gracefulRampDown: '5m'
+    }
+  }
 }
 
 const ENVIRONMENT = {
@@ -53,7 +64,9 @@ export default function main() {
       check(response, {
         "has cookie 'auth-secret'": (r) => cookies['auth-secret'].length > 0,
         "'auth-secret' cookie has expected value": (r) => cookies['auth-secret'][0] === ENVIRONMENT.password,
-        'anti-forgery token has value': (r) => antiForgeryToken && antiForgeryToken.length > 0
+        'anti-forgery token has value': (r) => antiForgeryToken && antiForgeryToken.length > 0,
+        'request not challenged': (r) => !r.url.includes('challenge'),
+        'status 200': (r) => r.status == 200
       });
 
       response = http.get(
@@ -242,7 +255,9 @@ export default function main() {
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
       check(response, {
-        'request-verification token has value': (r) => requestVerificationToken && requestVerificationToken.length > 0
+        'request-verification token has value': (r) => requestVerificationToken && requestVerificationToken.length > 0,
+        'get status 200': (r) => r.status == 200,
+        'get request not challenged': (r) => !r.url.includes('challenge')
       })
 
       response = http.get(
@@ -440,6 +455,11 @@ export default function main() {
         }
       )
 
+      check(response, {
+        'post status 200': (r) => r.status == 200,
+        'post request not challenged': (r) => !r.url.includes('challenge')
+      });
+
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
       response = http.get(
@@ -624,6 +644,11 @@ export default function main() {
         }
       )
 
+      check(response, {
+        'post status 200': (r) => r.status == 200,
+        'post request not challenged': (r) => !r.url.includes('challenge')
+      });
+
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
       response = http.get(
@@ -806,6 +831,11 @@ export default function main() {
           },
         }
       )
+
+      check(response, {
+        'post status 200': (r) => r.status == 200,
+        'post request not challenged': (r) => !r.url.includes('challenge')
+      });
 
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
@@ -991,6 +1021,11 @@ export default function main() {
         }
       )
 
+      check(response, {
+        'post status 200': (r) => r.status == 200,
+        'post request not challenged': (r) => !r.url.includes('challenge')
+      });
+
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
       response = http.get(
@@ -1173,6 +1208,11 @@ export default function main() {
         }
       )
 
+      check(response, {
+        'get status 200': (r) => r.status == 200,
+        'get request not challenged': (r) => !r.url.includes('challenge')
+      })
+
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
       response = http.get(
@@ -1351,6 +1391,11 @@ export default function main() {
           },
         }
       )
+
+      check(response, {
+        'post status 200': (r) => r.status == 200,
+        'post request not challenged': (r) => !r.url.includes('challenge')
+      });
 
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
@@ -1537,6 +1582,11 @@ export default function main() {
           },
         }
       )
+
+      check(response, {
+        'post status 200': (r) => r.status == 200,
+        'post request not challenged': (r) => !r.url.includes('challenge')
+      });
 
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
