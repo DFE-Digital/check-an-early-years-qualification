@@ -12,11 +12,11 @@ export const options = {
     end_to_end: {
       executor: 'ramping-vus',
       stages: [
-        { duration: '8m', target: 20 },
-        { duration: '2m', target: 20 },
         { duration: '8m', target: 40 },
         { duration: '2m', target: 40 },
-        { duration: '5m', target: 4 },
+        { duration: '8m', target: 80 },
+        { duration: '2m', target: 80 },
+        { duration: '5m', target: 8 },
         { duration: '5m', target: 0 }
       ],
       gracefulStop: '5m',
