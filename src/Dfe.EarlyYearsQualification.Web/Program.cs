@@ -14,6 +14,7 @@ using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using GovUk.Frontend.AspNetCore;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -22,7 +23,13 @@ using OwaspHeaders.Core.Extensions;
 using RobotsTxt;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddApplicationInsightsTelemetry();
+
+var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
+                                        {
+                                            EnableAdaptiveSampling = false
+                                        };
+
+builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
 var useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
