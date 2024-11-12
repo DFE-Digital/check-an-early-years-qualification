@@ -25,7 +25,8 @@
         </div>
     </div>
 </div>
-@if (!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody) && !string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationHeader))
+@if ((!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody) && !string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationHeader)) 
+     || Model.AdditionalInformation.ShowAdditionalInformationBodyByDefault)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">

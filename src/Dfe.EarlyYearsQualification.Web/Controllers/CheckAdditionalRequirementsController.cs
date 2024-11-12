@@ -1,4 +1,5 @@
 using System.Globalization;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -55,12 +56,26 @@ public class CheckAdditionalRequirementsController(
                 return RedirectToAction("Index", "Error");
             }
 
-            if (qualification.AdditionalRequirementQuestions is not null && questionIndex < qualification.AdditionalRequirementQuestions.Count)
+            if (qualification.AdditionalRequirementQuestions is null)
+                return RedirectToAction("ConfirmAnswers", "CheckAdditionalRequirements",
+                                        new { model.QualificationId });
+            
+            // If the user answer matches the answer to be full and relevant to the Qts question, then go straight to the qualification details page
+            var modelAnswerAsBool = model.Answer == "yes";
+            if (qualification.AdditionalRequirementQuestions[questionIndex - 1].Sys.Id == AdditionalRequirementQuestions
+                    .QtsQuestion
+                && qualification.AdditionalRequirementQuestions[questionIndex - 1].AnswerToBeFullAndRelevant == modelAnswerAsBool)
+            {
+                return RedirectToAction("Index", "QualificationDetails",
+                                        new { qualificationId = model.QualificationId });
+            }
+
+            if (questionIndex < qualification.AdditionalRequirementQuestions.Count)
             {
                 return RedirectToAction("Index", "CheckAdditionalRequirements",
                                         new { model.QualificationId, questionIndex = questionIndex + 1 });
             }
-            
+
             return RedirectToAction("ConfirmAnswers", "CheckAdditionalRequirements",
                                     new { model.QualificationId });
         }
