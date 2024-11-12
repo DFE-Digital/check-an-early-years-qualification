@@ -66,10 +66,9 @@ jobs:
         uses: ./.github/actions/health-check
         with:
           webapp_url: ${{ vars.WEBAPP_NAME }}
-
-      # Run smoke test
-      - name: Run smoke tests
-        uses: ./.github/actions/run-smoke-tests
+          
+      - name: Run Playwright smoke tests
+        uses: ./.github/actions/run-playwright-smoke-tests
         with:
-          webapp_url: ${{ vars.WEBAPP_NAME }}  
+          webapp_url: ${{ vars.WEBAPP_NAME }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
