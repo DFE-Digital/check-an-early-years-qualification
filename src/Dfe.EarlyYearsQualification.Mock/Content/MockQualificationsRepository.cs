@@ -285,10 +285,10 @@ public class MockQualificationsRepository : IQualificationsRepository
                            HintText =
                                "This is the hint text: answer yes for full and relevant",
                            DetailsHeading =
-                               "This is the details heading",
+                               "Qts question heading",
                            DetailsContent =
                                ContentfulContentHelper
-                                   .Paragraph("This is the details content"),
+                                   .Paragraph("Qts question content"),
                            Answers =
                            [
                                new Option
