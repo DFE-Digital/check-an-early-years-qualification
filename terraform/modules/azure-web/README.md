@@ -77,5 +77,8 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_app_service_plan_id"></a> [app\_service\_plan\_id](#output\_app\_service\_plan\_id) | ID of the App Service Plan for the Web Application |
+| <a name="output_app_service_webapp_id"></a> [app\_service\_webapp\_id](#output\_app\_service\_webapp\_id) | ID of the Web Application |
 <!-- END_TF_DOCS -->
