@@ -119,7 +119,7 @@ public class CheckAdditionalRequirementsController(
 
         if (answers == null || !UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, answers))
         {
-            if (answers!.Count != qualification.AdditionalRequirementQuestions!.Count)
+            if (answers?.Count != qualification.AdditionalRequirementQuestions!.Count)
             {
                 return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId, questionIndex = 1 });
             }
@@ -247,7 +247,8 @@ public class CheckAdditionalRequirementsController(
     private static bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification,
                                                                               Dictionary<string, string> additionalRequirementAnswers)
     {
-        if (qualification.AdditionalRequirementQuestions is null || qualification.AdditionalRequirementQuestions.All(x => x.Sys.Id != AdditionalRequirementQuestions.QtsQuestion))
+        if (qualification.AdditionalRequirementQuestions is null 
+            || qualification.AdditionalRequirementQuestions.All(x => x.Sys.Id != AdditionalRequirementQuestions.QtsQuestion))
         {
             return false;
         }

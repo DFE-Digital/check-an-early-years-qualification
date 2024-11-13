@@ -598,7 +598,7 @@ public class CheckAdditionalRequirementsControllerTests
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
-        resultType.RouteValues.Should().Contain("questionIndex", 0);
+        resultType.RouteValues.Should().Contain("questionIndex", 1);
     }
     
     [TestMethod]
@@ -639,7 +639,7 @@ public class CheckAdditionalRequirementsControllerTests
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
-        resultType.RouteValues.Should().Contain("questionIndex", 0);
+        resultType.RouteValues.Should().Contain("questionIndex", 1);
     }
     
     [TestMethod]
