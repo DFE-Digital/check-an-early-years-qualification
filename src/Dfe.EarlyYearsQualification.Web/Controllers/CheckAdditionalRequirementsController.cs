@@ -62,12 +62,16 @@ public class CheckAdditionalRequirementsController(
             
             // If the user answer matches the answer to be full and relevant to the Qts question, then go straight to the qualification details page
             var modelAnswerAsBool = model.Answer == "yes";
-            if (qualification.AdditionalRequirementQuestions[questionIndex - 1].Sys.Id == AdditionalRequirementQuestions
-                    .QtsQuestion
-                && qualification.AdditionalRequirementQuestions[questionIndex - 1].AnswerToBeFullAndRelevant == modelAnswerAsBool)
+            var question = qualification.AdditionalRequirementQuestions[questionIndex - 1];
+            if (question.Sys.Id == AdditionalRequirementQuestions.QtsQuestion && question.AnswerToBeFullAndRelevant == modelAnswerAsBool)
             {
-                return RedirectToAction("Index", "QualificationDetails",
-                                        new { qualificationId = model.QualificationId });
+                var overrideAdditionalRequirementQuestion = new Dictionary<string, string>
+                                                            {
+                                                                [question.Question] = model.Answer
+                                                            };
+                userJourneyCookieService.SetAdditionalQuestionsAnswers(overrideAdditionalRequirementQuestion);
+                return RedirectToAction("ConfirmAnswers", "CheckAdditionalRequirements",
+                                        new { model.QualificationId });
             }
 
             if (questionIndex < qualification.AdditionalRequirementQuestions.Count)
@@ -113,9 +117,12 @@ public class CheckAdditionalRequirementsController(
         
         var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
 
-        if (answers == null || answers.Count != qualification.AdditionalRequirementQuestions!.Count)
+        if (answers == null || !UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, answers))
         {
-            return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId, questionIndex = 0 });
+            if (answers!.Count != qualification.AdditionalRequirementQuestions!.Count)
+            {
+                return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId, questionIndex = 1 });
+            }
         }
 
         var model = MapCheckAnswers(content, answers, qualificationId);
@@ -235,5 +242,22 @@ public class CheckAdditionalRequirementsController(
                    GetResultsHref = $"/qualifications/qualification-details/{qualificationId}",
                    ChangeQuestionHref = $"/qualifications/check-additional-questions/{qualificationId}/"
                };
+    }
+    
+    private static bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification,
+                                                                              Dictionary<string, string> additionalRequirementAnswers)
+    {
+        if (qualification.AdditionalRequirementQuestions is null || qualification.AdditionalRequirementQuestions.All(x => x.Sys.Id != AdditionalRequirementQuestions.QtsQuestion))
+        {
+            return false;
+        }
+        
+        var qtsQuestion =
+            qualification.AdditionalRequirementQuestions.First(x => x.Sys.Id == AdditionalRequirementQuestions
+                                                                         .QtsQuestion);
+
+        var userAnsweredQuestion = additionalRequirementAnswers.First(x => x.Key == qtsQuestion.Question);
+        var answerAsBool = userAnsweredQuestion.Value == "yes";
+        return qtsQuestion.AnswerToBeFullAndRelevant == answerAsBool;
     }
 }

@@ -110,22 +110,22 @@ public class QualificationDetailsController(
         // If qualification contains the QTS question, check the answers
         if (QualificationContainsQtsQuestion(qualification))
         {
+            var qtsQuestion =
+                qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
+                                                                             .QtsQuestion);
+            
             if (UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, model.AdditionalRequirementAnswers))
             {
                 // Remove the additional requirements that they didn't answer following the bypass.
-                model.AdditionalRequirementAnswers.RemoveAll(x => string.IsNullOrEmpty(x.Answer));
+                model.AdditionalRequirementAnswers.RemoveAll(x => x.Question != qtsQuestion.Question);
                 return (true, null);
             }
             
             // Check remaining questions
-            var question =
-                qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
-                                                                             .QtsQuestion);
-            
             var answersToCheck = new List<AdditionalRequirementAnswerModel>();
             answersToCheck.AddRange(model.AdditionalRequirementAnswers);
             // As L6 / L7 can potentially work at L3/2/unqualified, remove the Qts question and check answers
-            answersToCheck.RemoveAll(x => x.Question == question.Question);
+            answersToCheck.RemoveAll(x => x.Question == qtsQuestion.Question);
             
             // As we know that they didn't answer the Qts question, we need to show the L6 requirements by default.
             // Adding it here covers scenarios where they are OK for L2/3/Unqualified and just Unqualified.
@@ -305,13 +305,13 @@ public class QualificationDetailsController(
                                                                               List<AdditionalRequirementAnswerModel>
                                                                                   additionalRequirementAnswerModels)
     {
-        var question =
+        var qtsQuestion =
             qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
                                                                          .QtsQuestion);
 
-        var userAnsweredQuestion = additionalRequirementAnswerModels.First(x => x.Question == question.Question);
+        var userAnsweredQuestion = additionalRequirementAnswerModels.First(x => x.Question == qtsQuestion.Question);
         var answerAsBool = userAnsweredQuestion.Answer == "yes";
-        return question.AnswerToBeFullAndRelevant == answerAsBool;
+        return qtsQuestion.AnswerToBeFullAndRelevant == answerAsBool;
     }
     
     private async Task<List<Qualification>> GetFilteredQualifications()
