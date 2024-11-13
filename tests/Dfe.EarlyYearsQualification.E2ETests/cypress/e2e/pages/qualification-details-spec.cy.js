@@ -46,6 +46,53 @@ describe("A spec used to test the qualification details page", () => {
     cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "Test body");
   })
 
+  it("Checks the order of the ratios for a level 6 qualification when a user answers yes to the Qts Question", () => {
+    // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationStarted":"7/2015","LevelOfQualification":"6","WhatIsTheAwardingOrganisation":"NCFE","SearchCriteria":"","AdditionalQuestionsAnswers":{"This is the Qts question":"yes"}}' encoded
+    cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22yes%22%7D%7D');
+    cy.visit("/qualifications/qualification-details/eyq-108");
+
+    cy.get(".ratio-row").should('have.length', 4);
+    cy.get(".ratio-heading").eq(0).should("contain.text", "Level 6");
+    cy.get(".ratio-heading").eq(1).should("contain.text", "Level 3");
+    cy.get(".ratio-heading").eq(2).should("contain.text", "Level 2");
+    cy.get(".ratio-heading").eq(3).should("contain.text", "Unqualified");
+    
+
+    // Phase Banner uses govuk-tag also hence index starting at 1
+    cy.get(".govuk-tag").eq(1).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(2).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(3).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(4).should("contain.text", "Approved");
+
+    cy.get(".govuk-tag").eq(1).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(2).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(3).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(4).should("have.class", "govuk-tag--green");
+  })
+
+  it("Checks the order of the ratios for a level 6 qualification when a user answers no to the Qts Question but yes to the remaining question", () => {
+    // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationStarted":"7/2015","LevelOfQualification":"6","WhatIsTheAwardingOrganisation":"NCFE","SearchCriteria":"","AdditionalQuestionsAnswers":{"This is the Qts question":"no","Test question 2":"yes"}}' encoded
+    cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22no%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D');
+    cy.visit("/qualifications/qualification-details/eyq-108");
+
+    cy.get(".ratio-row").should('have.length', 4);
+    cy.get(".ratio-heading").eq(0).should("contain.text", "Level 3");
+    cy.get(".ratio-heading").eq(1).should("contain.text", "Level 2");
+    cy.get(".ratio-heading").eq(2).should("contain.text", "Unqualified");
+    cy.get(".ratio-heading").eq(3).should("contain.text", "Level 6");
+
+    // Phase Banner uses govuk-tag also hence index starting at 1
+    cy.get(".govuk-tag").eq(1).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(2).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(3).should("contain.text", "Approved");
+    cy.get(".govuk-tag").eq(4).should("contain.text", "Not Approved");
+
+    cy.get(".govuk-tag").eq(1).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(2).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(3).should("have.class", "govuk-tag--green");
+    cy.get(".govuk-tag").eq(4).should("have.class", "govuk-tag--red");
+  })
+
   it("Checks the order of the ratios on the page when a user answers additional requirement questions indicating full and relevant", () => {
     // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationStarted":"7/2015","LevelOfQualification":"3","WhatIsTheAwardingOrganisation":"NCFE","SearchCriteria":"","AdditionalQuestionsAnswers":{"Test question":"yes","Test question 2":"no"}}' encoded
     cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D');
