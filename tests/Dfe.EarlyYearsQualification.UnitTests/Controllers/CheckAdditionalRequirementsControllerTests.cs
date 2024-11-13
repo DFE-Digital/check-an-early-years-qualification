@@ -1,4 +1,5 @@
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -295,7 +296,7 @@ public class CheckAdditionalRequirementsControllerTests
     }
     
     [TestMethod]
-    public async Task Post_ModelStateIsValid_RedirectsToQualificationDetails()
+    public async Task Post_ModelStateIsValid_RedirectsToConfirmAnswers()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
         var mockRepository = new Mock<IQualificationsRepository>();
@@ -322,6 +323,96 @@ public class CheckAdditionalRequirementsControllerTests
         resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
         mockUserJourneyCookieService
             .Verify(x => x.SetAdditionalQuestionsAnswers(It.IsAny<Dictionary<string, string>>()), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task Post_QuestionIsQtsQuestionAndAnswerMatchesAnswerToBeFullAndRelevant_RedirectsToConfirmAnswers()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var qtsQuestion = new AdditionalRequirementQuestion
+                          {
+                              Sys = new SystemProperties
+                                    {
+                                        Id = AdditionalRequirementQuestions.QtsQuestion
+                                    },
+                              AnswerToBeFullAndRelevant = true,
+                              Question = "This is the qts question"
+                          };
+        var qualification = CreateQualification(new List<AdditionalRequirementQuestion> { qtsQuestion });
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(qualification);
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123", Answer = "yes" });
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("ConfirmAnswers");
+        resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
+        resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
+        mockUserJourneyCookieService
+            .Verify(x => x.SetAdditionalQuestionsAnswers(It.IsAny<Dictionary<string, string>>()), Times.Exactly(2));
+    }
+    
+    [TestMethod]
+    public async Task Post_QuestionIsQtsQuestionAndAnswerDoesntMatchAnswerToBeFullAndRelevant_RedirectsToCheckAdditionalRequirements()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var questions = new List<AdditionalRequirementQuestion>
+                          {
+                              new() {
+                                  Sys = new SystemProperties
+                                        {
+                                            Id = AdditionalRequirementQuestions.QtsQuestion
+                                        },
+                                  AnswerToBeFullAndRelevant = true,
+                                  Question = "This is the qts question"
+                              },
+                              new() {
+                                        Sys = new SystemProperties
+                                              {
+                                                  Id = "Another id"
+                                              },
+                                        AnswerToBeFullAndRelevant = true,
+                                        Question = "This is not a qts question"
+                                    }
+                          };
+        var qualification = CreateQualification(questions);
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(qualification);
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.Post("Test-123", 1, new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123", Answer = "no" });
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ControllerName.Should().Be("CheckAdditionalRequirements");
+        resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
+        resultType.RouteValues.Should().Contain("questionIndex", 2);
+        mockUserJourneyCookieService
+            .Verify(x => x.SetAdditionalQuestionsAnswers(It.IsAny<Dictionary<string, string>>()), Times.Exactly(1));
     }
 
     [TestMethod]

@@ -60,7 +60,7 @@ public class CheckAdditionalRequirementsController(
                 return RedirectToAction("ConfirmAnswers", "CheckAdditionalRequirements",
                                         new { model.QualificationId });
             
-            // If the user answer matches the answer to be full and relevant to the Qts question, then go straight to the qualification details page
+            // If the user answer matches the answer to be full and relevant to the Qts question, then go straight to the confirm answers page
             var modelAnswerAsBool = model.Answer == "yes";
             var question = qualification.AdditionalRequirementQuestions[questionIndex - 1];
             if (question.Sys.Id == AdditionalRequirementQuestions.QtsQuestion && question.AnswerToBeFullAndRelevant == modelAnswerAsBool)
