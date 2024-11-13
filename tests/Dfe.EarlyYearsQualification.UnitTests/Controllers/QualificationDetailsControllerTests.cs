@@ -623,10 +623,10 @@ public class QualificationDetailsControllerTests
 
         var detailsPage = new DetailsPage
                           {
-                              BackToAdditionalQuestionsLink = new NavigationLink
-                                                              {
-                                                                  Href = "/api/qualifications"
-                                                              }
+                              BackToConfirmAnswers = new NavigationLink
+                                                     {
+                                                         Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers"
+                                                     }
                           };
 
         mockRepository.Setup(x => x.GetById(qualificationId))
@@ -761,10 +761,10 @@ public class QualificationDetailsControllerTests
 
         var detailsPage = new DetailsPage
                           {
-                              BackToAdditionalQuestionsLink = new NavigationLink
-                                                              {
-                                                                  Href = "/api/qualifications"
-                                                              }
+                              BackToConfirmAnswers = new NavigationLink
+                                                     {
+                                                         Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers"
+                                                     }
                           };
 
         mockRepository.Setup(x => x.GetById(qualificationId))
@@ -907,10 +907,10 @@ public class QualificationDetailsControllerTests
 
         var detailsPage = new DetailsPage
                           {
-                              BackToAdditionalQuestionsLink = new NavigationLink
-                                                              {
-                                                                  Href = "/api/qualifications"
-                                                              }
+                              BackToConfirmAnswers = new NavigationLink
+                                                     {
+                                                         Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers"
+                                                     }
                           };
 
         mockRepository.Setup(x => x.GetById(qualificationId))
@@ -1053,10 +1053,10 @@ public class QualificationDetailsControllerTests
 
         var detailsPage = new DetailsPage
                           {
-                              BackToAdditionalQuestionsLink = new NavigationLink
-                                                              {
-                                                                  Href = "/api/qualifications"
-                                                              }
+                              BackToConfirmAnswers = new NavigationLink
+                                                     {
+                                                         Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers"
+                                                     }
                           };
 
         mockRepository.Setup(x => x.GetById(qualificationId))
@@ -1172,9 +1172,9 @@ public class QualificationDetailsControllerTests
 
         var detailsPage = new DetailsPage
                           {
-                              BackToAdditionalQuestionsLink = new NavigationLink
+                              BackToConfirmAnswers = new NavigationLink
                                                               {
-                                                                  Href = "/api/qualifications"
+                                                                  Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers"
                                                               }
                           };
 
@@ -1210,7 +1210,7 @@ public class QualificationDetailsControllerTests
 
         var model = resultType!.Model as QualificationDetailsModel;
 
-        model!.BackButton!.Href.Should().Be("/api/qualifications/eyq-145/1");
+        model!.BackButton!.Href.Should().Be("/qualifications/check-additional-questions/eyq-145/confirm-answers");
     }
 
     [TestMethod]

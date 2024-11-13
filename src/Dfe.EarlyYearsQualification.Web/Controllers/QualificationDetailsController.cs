@@ -470,17 +470,15 @@ public class QualificationDetailsController(
     private static NavigationLink? ContentBackButtonLinkForAdditionalQuestions(
         DetailsPage content, string qualificationId)
     {
-        var link = content.BackToAdditionalQuestionsLink;
+        const string placeholder = "$[qualification-id]$";
+        var link = content.BackToConfirmAnswers;
 
         if (link == null)
         {
             return content.BackButton;
         }
 
-        if (!link.Href.EndsWith($"/{qualificationId}/1", StringComparison.OrdinalIgnoreCase))
-        {
-            link.Href = $"{link.Href}/{qualificationId}/1";
-        }
+        link.Href = link.Href.Replace(placeholder, qualificationId);
 
         return link;
     }

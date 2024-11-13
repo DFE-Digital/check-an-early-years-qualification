@@ -129,12 +129,12 @@ public class MockContentfulService : IContentService
                                                           Href = "/confirm-qualification/eyq-240",
                                                           OpenInNewTab = false
                                                       },
-                                         BackToAdditionalQuestionsLink = new NavigationLink
+                                         BackToConfirmAnswers = new NavigationLink
                                                                          {
                                                                              DisplayText =
                                                                                  "TEST (back to additional questions)",
                                                                              Href =
-                                                                                 "/qualifications/check-additional-questions",
+                                                                                 "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers",
                                                                              OpenInNewTab = false
                                                                          },
                                          BackToLevelSixAdvice = new NavigationLink
@@ -333,7 +333,7 @@ public class MockContentfulService : IContentService
                                          PreviousQuestionBackButton = new NavigationLink
                                                                       {
                                                                           DisplayText = "Previous",
-                                                                          Href = "/previous",
+                                                                          Href = "/qualifications/check-additional-questions",
                                                                           OpenInNewTab = false
                                                                       },
                                          CtaButtonText = "Get result",
