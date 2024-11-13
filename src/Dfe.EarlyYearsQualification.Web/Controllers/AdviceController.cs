@@ -89,12 +89,6 @@ public class AdviceController(
         return await GetView(AdvicePages.Level7QualificationPost2014);
     }
 
-    [HttpGet("privacy-policy")]
-    public async Task<IActionResult> PrivacyPolicy()
-    {
-        return await GetView(AdvicePages.TemporaryPrivacyPolicy);
-    }
-
     private async Task<IActionResult> GetView(string advicePageId)
     {
         var advicePage = await contentService.GetAdvicePage(advicePageId);

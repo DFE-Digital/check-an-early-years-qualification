@@ -36,9 +36,4 @@ public static class AdvicePages
     ///     Entry ID for the "Level 7 qualification post-2014" advice page.
     /// </summary>
     public const string Level7QualificationPost2014 = "4nfocBj9Alwfa15ke8MHBj";
-
-    /// <summary>
-    ///     Entry ID for the TEMPORARY Privacy Policy page.
-    /// </summary>
-    public const string TemporaryPrivacyPolicy = "6VCAUoA8ERp0hkeT5JcM72";
 }
