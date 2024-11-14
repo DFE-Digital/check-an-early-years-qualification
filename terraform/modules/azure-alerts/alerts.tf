@@ -153,12 +153,12 @@ resource "azurerm_monitor_metric_alert" "instance_count_increase" {
     aggregation      = "Total"
     operator         = "GreaterThan"
     threshold        = 2
-  }
 
-  dimension {
-    name     = "ScaleDirection"
-    operator = "Equals"
-    values   = ["Increase"]
+    dimension {
+      name     = "ScaleDirection"
+      operator = "Equals"
+      values   = ["Increase"]
+    }
   }
 
   action {
@@ -189,12 +189,12 @@ resource "azurerm_monitor_metric_alert" "instance_count_decrease" {
     aggregation      = "Total"
     operator         = "LessThanOrEqual"
     threshold        = 2
-  }
 
-  dimension {
-    name     = "ScaleDirection"
-    operator = "Equals"
-    values   = ["Decrease"]
+    dimension {
+      name     = "ScaleDirection"
+      operator = "Equals"
+      values   = ["Decrease"]
+    }
   }
 
   action {
