@@ -142,17 +142,23 @@ resource "azurerm_monitor_metric_alert" "http5xx_errors" {
 resource "azurerm_monitor_metric_alert" "instance_count_increase" {
   name                = "instance-count-increase-alert"
   resource_group_name = var.resource_group
-  scopes              = [var.app_service_webapp_id]
+  scopes              = [var.app_service_plan_id]
   description         = "Action will be triggered when the instance count increases"
   tags                = var.tags
-  severity            = 2 # warning
+  severity            = 3 # informational
 
   criteria {
-    metric_namespace = "Microsoft.Web/sites"
-    metric_name      = "InstanceCount"
-    aggregation      = "Count"
+    metric_namespace = "microsoft.insights/autoscalesettings"
+    metric_name      = "ScaleActionsInitiated"
+    aggregation      = "Total"
     operator         = "GreaterThan"
     threshold        = 2
+  }
+
+  dimension {
+    name     = "ScaleDirection"
+    operator = "Equals"
+    values   = ["Increase"]
   }
 
   action {
@@ -178,12 +184,18 @@ resource "azurerm_monitor_metric_alert" "instance_count_decrease" {
   severity            = 3 # informational
 
   criteria {
-    metric_namespace = "Microsoft.Web/sites"
-    metric_name      = "InstanceCount"
-    aggregation      = "Count"
-    operator         = "LessThanOrEqual"
-    threshold        = 2
-  }
+      metric_namespace = "microsoft.insights/autoscalesettings"
+      metric_name      = "ScaleActionsInitiated"
+      aggregation      = "Total"
+      operator         = "LessThanOrEqual"
+      threshold        = 2
+    }
+  
+    dimension {
+      name     = "ScaleDirection"
+      operator = "Equals"
+      values   = ["Decrease"]
+    }
 
   action {
     action_group_id = azurerm_monitor_action_group.dev_team.id
