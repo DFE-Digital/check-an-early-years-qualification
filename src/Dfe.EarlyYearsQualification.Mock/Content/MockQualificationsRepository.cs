@@ -197,35 +197,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                "This is the confirmation statement 1",
                            AnswerToBeFullAndRelevant = true
                        },
-
-                       new AdditionalRequirementQuestion
-                       {
-                           Question = "Test question 2",
-                           HintText =
-                               "This is the hint text: answer no for full and relevant",
-                           DetailsHeading =
-                               "This is the details heading",
-                           DetailsContent =
-                               ContentfulContentHelper
-                                   .Paragraph("This is the details content"),
-                           Answers =
-                           [
-                               new Option
-                               {
-                                   Label = "Yes",
-                                   Value = "yes"
-                               },
-
-                               new Option
-                               {
-                                   Label = "No",
-                                   Value = "no"
-                               }
-                           ],
-                           ConfirmationStatement =
-                               "This is the confirmation statement 2",
-                           AnswerToBeFullAndRelevant = false
-                       }
+                       CreateSecondAdditionalRequirementQuestion()
                    ],
                    RatioRequirements =
                    [
@@ -307,35 +279,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                "This is the confirmation statement 1",
                            AnswerToBeFullAndRelevant = true
                        },
-
-                       new AdditionalRequirementQuestion
-                       {
-                           Question = "Test question 2",
-                           HintText =
-                               "This is the hint text: answer no for full and relevant",
-                           DetailsHeading =
-                               "This is the details heading",
-                           DetailsContent =
-                               ContentfulContentHelper
-                                   .Paragraph("This is the details content"),
-                           Answers =
-                           [
-                               new Option
-                               {
-                                   Label = "Yes",
-                                   Value = "yes"
-                               },
-
-                               new Option
-                               {
-                                   Label = "No",
-                                   Value = "no"
-                               }
-                           ],
-                           ConfirmationStatement =
-                               "This is the confirmation statement 2",
-                           AnswerToBeFullAndRelevant = true
-                       }
+                       CreateSecondAdditionalRequirementQuestion()
                    ],
                    RatioRequirements =
                    [
@@ -374,6 +318,38 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForLevel6After2014 = true
                        }
                    ]
+               };
+    }
+
+    private static AdditionalRequirementQuestion CreateSecondAdditionalRequirementQuestion()
+    {
+        return new AdditionalRequirementQuestion
+               {
+                   Question = "Test question 2",
+                   HintText =
+                       "This is the hint text: answer no for full and relevant",
+                   DetailsHeading =
+                       "This is the details heading",
+                   DetailsContent =
+                       ContentfulContentHelper
+                           .Paragraph("This is the details content"),
+                   Answers =
+                   [
+                       new Option
+                       {
+                           Label = "Yes",
+                           Value = "yes"
+                       },
+
+                       new Option
+                       {
+                           Label = "No",
+                           Value = "no"
+                       }
+                   ],
+                   ConfirmationStatement =
+                       "This is the confirmation statement 2",
+                   AnswerToBeFullAndRelevant = true
                };
     }
 }
