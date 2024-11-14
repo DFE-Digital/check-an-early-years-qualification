@@ -184,18 +184,18 @@ resource "azurerm_monitor_metric_alert" "instance_count_decrease" {
   severity            = 3 # informational
 
   criteria {
-      metric_namespace = "microsoft.insights/autoscalesettings"
-      metric_name      = "ScaleActionsInitiated"
-      aggregation      = "Total"
-      operator         = "LessThanOrEqual"
-      threshold        = 2
-    }
-  
-    dimension {
-      name     = "ScaleDirection"
-      operator = "Equals"
-      values   = ["Decrease"]
-    }
+    metric_namespace = "microsoft.insights/autoscalesettings"
+    metric_name      = "ScaleActionsInitiated"
+    aggregation      = "Total"
+    operator         = "LessThanOrEqual"
+    threshold        = 2
+  }
+
+  dimension {
+    name     = "ScaleDirection"
+    operator = "Equals"
+    values   = ["Decrease"]
+  }
 
   action {
     action_group_id = azurerm_monitor_action_group.dev_team.id
