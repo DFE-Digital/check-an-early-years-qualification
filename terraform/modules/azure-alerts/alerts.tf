@@ -156,7 +156,7 @@ resource "azurerm_monitor_metric_alert" "instance_count_increase" {
 
     dimension {
       name     = "ScaleDirection"
-      operator = "Equals"
+      operator = "Include"
       values   = ["Increase"]
     }
   }
@@ -192,7 +192,7 @@ resource "azurerm_monitor_metric_alert" "instance_count_decrease" {
 
     dimension {
       name     = "ScaleDirection"
-      operator = "Equals"
+      operator = "Include"
       values   = ["Decrease"]
     }
   }
