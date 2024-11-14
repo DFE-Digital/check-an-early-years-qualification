@@ -197,7 +197,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                "This is the confirmation statement 1",
                            AnswerToBeFullAndRelevant = true
                        },
-                       CreateSecondAdditionalRequirementQuestion()
+                       CreateSecondAdditionalRequirementQuestion(false)
                    ],
                    RatioRequirements =
                    [
@@ -279,7 +279,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                "This is the confirmation statement 1",
                            AnswerToBeFullAndRelevant = true
                        },
-                       CreateSecondAdditionalRequirementQuestion()
+                       CreateSecondAdditionalRequirementQuestion(true)
                    ],
                    RatioRequirements =
                    [
@@ -321,7 +321,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                };
     }
 
-    private static AdditionalRequirementQuestion CreateSecondAdditionalRequirementQuestion()
+    private static AdditionalRequirementQuestion CreateSecondAdditionalRequirementQuestion(bool answerToBeFullAndRelevant)
     {
         return new AdditionalRequirementQuestion
                {
@@ -349,7 +349,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                    ],
                    ConfirmationStatement =
                        "This is the confirmation statement 2",
-                   AnswerToBeFullAndRelevant = true
+                   AnswerToBeFullAndRelevant = answerToBeFullAndRelevant
                };
     }
 }
