@@ -31,7 +31,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_app_service_plan_id"></a> [app\_service\_plan\_id](#input\_app\_service\_plan\_id) | Id of the App Service Plan | `string` | n/a | yes |
 | <a name="input_app_service_webapp_id"></a> [app\_service\_webapp\_id](#input\_app\_service\_webapp\_id) | Id of the Web Application | `string` | n/a | yes |
-| <a name="input_location"></a> [location](#input\_location) | Name of the Azure region to deploy resources | `string` | n/a | yes |
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Name of the Azure Resource Group to deploy resources | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(string)` | n/a | yes |
 
