@@ -18,6 +18,8 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_monitor_action_group.dev_team](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_action_group) | resource |
+| [azurerm_monitor_activity_log_alert.instance_count_decrease](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_activity_log_alert) | resource |
+| [azurerm_monitor_activity_log_alert.instance_count_increase](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_activity_log_alert) | resource |
 | [azurerm_monitor_metric_alert.cpu_alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_metric_alert) | resource |
 | [azurerm_monitor_metric_alert.http4xx_errors](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_metric_alert) | resource |
 | [azurerm_monitor_metric_alert.http5xx_errors](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_metric_alert) | resource |
