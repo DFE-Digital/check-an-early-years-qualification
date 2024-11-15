@@ -18,7 +18,7 @@ resource "azurerm_monitor_action_group" "dev_team" {
   }
 }
 
-# Alert for CPU > 90%
+# Alert for CPU >= 90%
 resource "azurerm_monitor_metric_alert" "cpu_alert" {
   name                = "cpu-alert"
   resource_group_name = var.resource_group
@@ -48,7 +48,7 @@ resource "azurerm_monitor_metric_alert" "cpu_alert" {
   }
 }
 
-# Alert for Memory > 90%
+# Alert for Memory >= 90%
 resource "azurerm_monitor_metric_alert" "memory_alert" {
   name                = "memory-alert"
   resource_group_name = var.resource_group
@@ -78,7 +78,7 @@ resource "azurerm_monitor_metric_alert" "memory_alert" {
   }
 }
 
-# Alert for Http4xx errors
+# Alert for Http4xx errors Avg >= 10
 resource "azurerm_monitor_metric_alert" "http4xx_errors" {
   name                = "http4xx-alert"
   resource_group_name = var.resource_group
@@ -108,7 +108,7 @@ resource "azurerm_monitor_metric_alert" "http4xx_errors" {
   }
 }
 
-# Alert for Http5xx errors
+# Alert for Http5xx errors Avg >= 10
 resource "azurerm_monitor_metric_alert" "http5xx_errors" {
   name                = "http5xx-alert"
   resource_group_name = var.resource_group
@@ -123,66 +123,6 @@ resource "azurerm_monitor_metric_alert" "http5xx_errors" {
     aggregation      = "Average"
     operator         = "GreaterThanOrEqual"
     threshold        = 10
-  }
-
-  action {
-    action_group_id = azurerm_monitor_action_group.dev_team.id
-  }
-
-  lifecycle {
-    ignore_changes = [
-      tags["Environment"],
-      tags["Product"],
-      tags["Service Offering"]
-    ]
-  }
-}
-
-# Alert for InstanceCount increase
-resource "azurerm_monitor_metric_alert" "instance_count_increase" {
-  name                = "instance-count-increase-alert"
-  resource_group_name = var.resource_group
-  scopes              = [var.app_service_webapp_id]
-  description         = "Action will be triggered when the instance count increases"
-  tags                = var.tags
-  severity            = 2 # warning
-
-  criteria {
-    metric_namespace = "Microsoft.Web/sites"
-    metric_name      = "InstanceCount"
-    aggregation      = "Count"
-    operator         = "GreaterThan"
-    threshold        = 2
-  }
-
-  action {
-    action_group_id = azurerm_monitor_action_group.dev_team.id
-  }
-
-  lifecycle {
-    ignore_changes = [
-      tags["Environment"],
-      tags["Product"],
-      tags["Service Offering"]
-    ]
-  }
-}
-
-# Alert for InstanceCount decrease
-resource "azurerm_monitor_metric_alert" "instance_count_decrease" {
-  name                = "instance-count-decrease-alert"
-  resource_group_name = var.resource_group
-  scopes              = [var.app_service_webapp_id]
-  description         = "Action will be triggered when the instance count decreases"
-  tags                = var.tags
-  severity            = 3 # informational
-
-  criteria {
-    metric_namespace = "Microsoft.Web/sites"
-    metric_name      = "InstanceCount"
-    aggregation      = "Count"
-    operator         = "LessThanOrEqual"
-    threshold        = 2
   }
 
   action {

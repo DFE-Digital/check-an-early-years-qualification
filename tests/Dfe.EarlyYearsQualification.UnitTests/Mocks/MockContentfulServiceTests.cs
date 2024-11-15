@@ -97,52 +97,13 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-
+    
     [TestMethod]
-    public async Task GetAdvicePage_QualificationLevel7_ReturnsExpectedDetails()
+    public async Task GetAdvicePage_Level7QualificationPost2014_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationLevel7);
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().Be("Qualification at Level 7");
-        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
-    }
-
-    [TestMethod]
-    public async Task GetAdvicePage_Level6QualificationPre2014_ReturnsExpectedDetails()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetAdvicePage(AdvicePages.Level6QualificationPre2014);
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
-        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
-    }
-
-    [TestMethod]
-    public async Task GetAdvicePage_Level6QualificationPost2014_ReturnsExpectedDetails()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetAdvicePage(AdvicePages.Level6QualificationPost2014);
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
-        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
-    }
-
-    [TestMethod]
-    public async Task GetAdvicePage_privacyPolicy_ReturnsExpectedDetails()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetAdvicePage(AdvicePages.TemporaryPrivacyPolicy);
+    
+        var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationPost2014);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
         result!.Heading.Should().NotBeNullOrEmpty();
