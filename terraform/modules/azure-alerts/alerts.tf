@@ -137,3 +137,57 @@ resource "azurerm_monitor_metric_alert" "http5xx_errors" {
     ]
   }
 }
+
+# Alert for App Service Plan Instance increase
+resource "azurerm_monitor_activity_log_alert" "instance_count_increase" {
+  name                = "instance-count-increase-alert"
+  resource_group_name = var.resource_group
+  scopes              = [var.app_service_plan_id]
+  description         = "Action will be triggered when the instance count increases"
+  tags                = var.tags
+
+  criteria {
+    category       = "Autoscale"
+    operation_name = "Microsoft.Insights/AutoscaleSettings/ScaleupResult/Action"
+    status         = "Succeeded"
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.dev_team.id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
+}
+
+# Alert for App Service Plan Instance decrease
+resource "azurerm_monitor_activity_log_alert" "instance_count_decrease" {
+  name                = "instance-count-decrease-alert"
+  resource_group_name = var.resource_group
+  scopes              = [var.app_service_plan_id]
+  description         = "Action will be triggered when the instance count decreases"
+  tags                = var.tags
+
+  criteria {
+    category       = "Autoscale"
+    operation_name = "Microsoft.Insights/AutoscaleSettings/ScaledownResult/Action"
+    status         = "Succeeded"
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.dev_team.id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
+}
