@@ -1,37 +1,13 @@
 // Adapted from recordings created by Grafana k6 Browser Recorder 1.0.4
 
-import { sleep, group, check } from 'k6'
-import http from 'k6/http'
+import { sleep, group, check } from 'k6';
+import http from 'k6/http';
 
-export const options = {
-  thresholds: {
-    http_req_failed: ['rate<0.01'],
-    http_req_duration: ['p(90) < 400', 'p(95) < 1000']
-  },
-  scenarios: {
-    end_to_end: {
-      executor: 'ramping-vus',
-      stages: [
-        { duration: '8m', target: 40 },
-        { duration: '2m', target: 40 },
-        { duration: '8m', target: 80 },
-        { duration: '2m', target: 80 },
-        { duration: '5m', target: 8 },
-        { duration: '5m', target: 0 }
-      ],
-      gracefulStop: '5m',
-      gracefulRampDown: '5m'
-    }
-  }
-}
+import { getRequestVerificationTokenValue } from './support/assurance.js';
 
-const ENVIRONMENT = {
-  password: __ENV.CHALLENGE_PASSWORD, // secret value, passed in from the CLI
-  customDomain: __ENV.CUSTOM_DOMAIN // custom domain, the address of the service to test, passed in from the CLI
-};
+export default function level3Journey(ENVIRONMENT, DATA) {
 
-export default function main() {
-  let response
+  let response;
 
   const cookieJar = http.cookieJar();
   const address = 'https://' + ENVIRONMENT.customDomain;
@@ -1939,13 +1915,4 @@ export default function main() {
   )
 
   sleep(1)
-}
-
-function getRequestVerificationTokenValue(response) {
-
-  const requestVerificationTokenInput = response.html().find('input[name=__RequestVerificationToken]');
-
-  const requestVerificationToken = requestVerificationTokenInput.attr('value');
-
-  return requestVerificationToken;
 }

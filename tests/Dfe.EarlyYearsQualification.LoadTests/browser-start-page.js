@@ -1,6 +1,8 @@
 import { browser } from 'k6/browser';
 import { sleep, check } from 'k6';
 
+var configName = __ENV.CONFIG;
+
 export const options = {
   scenarios: {
     ui: {
@@ -14,11 +16,13 @@ export const options = {
   },
   thresholds: {
     checks: ['rate==1.0']
-  },
+  }
+};
 
+const ENVIRONMENT = {
   challenge: __ENV.CHALLENGE_PASSWORD, // secret value, passed in from the CLI
   customDomain: __ENV.CUSTOM_DOMAIN // custom domain, the address of the service to test, passed in from the CLI
-};
+}
 
 // The function that defines VU logic.
 //
@@ -27,7 +31,7 @@ export const options = {
 //
 export default async function () {
 
-  const address = 'https://' + options.customDomain + '/';
+  const address = 'https://' + ENVIRONMENT.customDomain + '/';
 
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -35,7 +39,7 @@ export default async function () {
   try {
 
     await context.addCookies([
-      { name: 'auth-secret', value: options.challenge, sameSite: 'Strict', url: address }
+      { name: 'auth-secret', value: ENVIRONMENT.challenge, sameSite: 'Strict', url: address }
     ]);
 
     var resp = await page.goto(address,);
