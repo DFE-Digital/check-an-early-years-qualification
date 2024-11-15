@@ -142,7 +142,6 @@ resource "azurerm_monitor_metric_alert" "http5xx_errors" {
 resource "azurerm_monitor_activity_log_alert" "instance_count_increase" {
   name                = "instance-count-increase-alert"
   resource_group_name = var.resource_group
-  location            = var.location
   scopes              = [var.app_service_plan_id]
   description         = "Action will be triggered when the instance count increases"
   tags                = var.tags
@@ -170,7 +169,6 @@ resource "azurerm_monitor_activity_log_alert" "instance_count_increase" {
 resource "azurerm_monitor_activity_log_alert" "instance_count_decrease" {
   name                = "instance-count-decrease-alert"
   resource_group_name = var.resource_group
-  location            = var.location
   scopes              = [var.app_service_plan_id]
   description         = "Action will be triggered when the instance count decreases"
   tags                = var.tags
