@@ -17,16 +17,16 @@
           "target": 40
         },
         {
+          "duration": "2m",
+          "target": 40
+        },
+        {
           "duration": "8m",
           "target": 80
         },
         {
           "duration": "2m",
           "target": 80
-        },
-        {
-          "duration": "2m",
-          "target": 40
         },
         {
           "duration": "5m",
