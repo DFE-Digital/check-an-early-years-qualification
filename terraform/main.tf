@@ -123,6 +123,5 @@ module "alerts" {
   app_service_plan_id   = module.webapp.app_service_plan_id
   app_service_webapp_id = module.webapp.app_service_webapp_id
   tags                  = local.common_tags
-  location              = var.azure_region
   depends_on            = [module.webapp]
 }
