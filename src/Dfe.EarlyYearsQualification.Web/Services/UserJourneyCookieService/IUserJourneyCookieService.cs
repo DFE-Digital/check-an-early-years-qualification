@@ -15,6 +15,7 @@ public interface IUserJourneyCookieService
     string? GetWhereWasQualificationAwarded();
     (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
     bool WasStartedBeforeSeptember2014();
+    bool WasStartedOnOrAfterSeptember2014();
     bool WasStartedBetweenSeptember2014AndAugust2019();
     int? GetLevelOfQualification();
     string? GetAwardingOrganisation();

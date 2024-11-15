@@ -29,9 +29,9 @@ public class DetailsPage
     public Document? FurtherInfoText { get; init; }
 
     public NavigationLink? BackButton { get; init; }
-
-    public NavigationLink? BackToAdditionalQuestionsLink { get; init; }
-
+    
+    public NavigationLink? BackToConfirmAnswers { get; init; }
+    
     public NavigationLink? BackToLevelSixAdviceBefore2014 { get; init; }
 
     public NavigationLink? BackToLevelSixAdvice { get; init; }

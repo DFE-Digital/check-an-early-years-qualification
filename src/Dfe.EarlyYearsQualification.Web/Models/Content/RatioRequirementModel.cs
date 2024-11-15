@@ -27,6 +27,8 @@ public class RatioRequirementModel
 
     public string RequirementsForLevel6 { get; set; } = string.Empty;
 
+    public bool ShowRequirementsForLevel6ByDefault { get; set; }
+
     public string RequirementsHeadingForUnqualified { get; set; } = string.Empty;
 
     public string RequirementsForUnqualified { get; set; } = string.Empty;

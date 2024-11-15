@@ -59,21 +59,8 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
                                                               body, QualificationsPath)),
 
-                   AdvicePages.QualificationLevel7 =>
-                       await Task.FromResult(CreateAdvicePage("Qualification at Level 7",
-                                                              body,
-                                                              WhatLevelIsTheQualificationPath)),
-
-                   AdvicePages.Level6QualificationPre2014 =>
-                       await Task.FromResult(CreateAdvicePage("Level 6 qualification pre 2014",
-                                                              body, WhatLevelIsTheQualificationPath)),
-
-                   AdvicePages.Level6QualificationPost2014 =>
-                       await Task.FromResult(CreateAdvicePage("Level 6 qualification post 2014",
-                                                              body, WhatLevelIsTheQualificationPath)),
-
-                   AdvicePages.TemporaryPrivacyPolicy =>
-                       await Task.FromResult(CreateAdvicePage("Temporary privacy policy",
+                   AdvicePages.Level7QualificationPost2014 =>
+                       await Task.FromResult(CreateAdvicePage("Level 7 qualification post 2014",
                                                               body, WhatLevelIsTheQualificationPath)),
                    _ => null
                };
@@ -142,12 +129,12 @@ public class MockContentfulService : IContentService
                                                           Href = "/confirm-qualification/eyq-240",
                                                           OpenInNewTab = false
                                                       },
-                                         BackToAdditionalQuestionsLink = new NavigationLink
+                                         BackToConfirmAnswers = new NavigationLink
                                                                          {
                                                                              DisplayText =
                                                                                  "TEST (back to additional questions)",
                                                                              Href =
-                                                                                 "/qualifications/check-additional-questions",
+                                                                                 "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers",
                                                                              OpenInNewTab = false
                                                                          },
                                          BackToLevelSixAdvice = new NavigationLink
@@ -346,7 +333,7 @@ public class MockContentfulService : IContentService
                                          PreviousQuestionBackButton = new NavigationLink
                                                                       {
                                                                           DisplayText = "Previous",
-                                                                          Href = "/previous",
+                                                                          Href = "/qualifications/check-additional-questions",
                                                                           OpenInNewTab = false
                                                                       },
                                          CtaButtonText = "Get result",

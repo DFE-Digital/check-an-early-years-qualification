@@ -23,7 +23,7 @@ describe("A spec that tests the check additional questions page", () => {
     it("Checks the check additional questions details are on the second question page", () => {
         cy.visit("/qualifications/check-additional-questions/eyq-240/2");
 
-        cy.get("#back-button").should("have.attr", "href").and("include", "/previous");
+        cy.get("#back-button").should("have.attr", "href").and("include", "/qualifications/check-additional-questions");
         
         cy.get("#question").should("contain.text", "Test question 2");
         cy.get("#hint").should("contain.text", "This is the hint text");

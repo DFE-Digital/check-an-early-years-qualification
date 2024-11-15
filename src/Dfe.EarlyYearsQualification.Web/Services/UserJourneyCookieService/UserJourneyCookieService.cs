@@ -195,6 +195,20 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
         return date < new DateOnly(2014, 9, 1);
     }
+    
+    public bool WasStartedOnOrAfterSeptember2014()
+    {
+        var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
+
+        if (startDateMonth is null || startDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was started on or after 09-2014");
+        }
+
+        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        return date >= new DateOnly(2014, 9, 1);
+    }
 
     public int? GetLevelOfQualification()
     {

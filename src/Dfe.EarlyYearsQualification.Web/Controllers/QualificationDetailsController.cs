@@ -89,7 +89,7 @@ public class QualificationDetailsController(
 
         var model = await MapDetails(qualificationStartedBeforeSeptember2014, qualification, detailsPageContent);
 
-        var validateAdditionalRequirementQuestions = ValidateAdditionalQuestions(model);
+        var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
 
         if (!validateAdditionalRequirementQuestions.isValid)
         {
@@ -102,11 +102,55 @@ public class QualificationDetailsController(
         return View(model);
     }
 
-    private (bool isValid, IActionResult? actionResult) ValidateAdditionalQuestions(QualificationDetailsModel model)
+    private async Task<(bool isValid, IActionResult? actionResult)> ValidateAdditionalQuestions(QualificationDetailsModel model, Qualification qualification)
     {
         // If the qualification has no additional requirements then skip all checks and return.
         if (model.AdditionalRequirementAnswers == null) return (true, null);
-
+        
+        // If qualification contains the QTS question, check the answers
+        if (QualificationContainsQtsQuestion(qualification))
+        {
+            var qtsQuestion =
+                qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
+                                                                             .QtsQuestion);
+            
+            if (UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, model.AdditionalRequirementAnswers))
+            {
+                // Remove the additional requirements that they didn't answer following the bypass.
+                model.AdditionalRequirementAnswers.RemoveAll(x => x.Question != qtsQuestion.Question);
+                return (true, null);
+            }
+            
+            // Check remaining questions
+            var answersToCheck = new List<AdditionalRequirementAnswerModel>();
+            answersToCheck.AddRange(model.AdditionalRequirementAnswers);
+            // As L6 / L7 can potentially work at L3/2/unqualified, remove the Qts question and check answers
+            answersToCheck.RemoveAll(x => x.Question == qtsQuestion.Question);
+            
+            // As we know that they didn't answer the Qts question, we need to show the L6 requirements by default.
+            // Adding it here covers scenarios where they are OK for L2/3/Unqualified and just Unqualified.
+            model.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
+            
+            if (!AnswersIndicateNotFullAndRelevant(answersToCheck)) return (true, null);
+            
+            // Answers indicate not full and relevant
+            model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
+            // Set any content for L6
+            var qualificationStartedBefore2014 = userJourneyCookieService.WasStartedBeforeSeptember2014();
+            var beforeOrAfter =
+                qualificationStartedBefore2014
+                    ? "Before"
+                    : "After";
+            var additionalRequirementDetailPropertyToCheck = $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
+            var requirementsForLevel6 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
+                                                                   RatioRequirements.Level6RatioRequirementName,
+                                                                   qualification);
+            model.RatioRequirements.RequirementsForLevel6 = await contentParser.ToHtml(requirementsForLevel6);
+            model.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
+            
+            return (false, View(model));
+        }
+        
         // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
         if (model.AdditionalRequirementAnswers.Count == 0 ||
             model.AdditionalRequirementAnswers.Exists(answer => string.IsNullOrEmpty(answer.Answer)))
@@ -157,6 +201,16 @@ public class QualificationDetailsController(
 
         var additionalRequirementDetailPropertyToCheck =
             $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
+        
+        if (QualificationContainsQtsQuestion(qualification))
+        {
+            // Check user against QTS criteria and swap to Qts Criteria if matches
+            if (UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, model.AdditionalRequirementAnswers!))
+            {
+                fullAndRelevantPropertyToCheck = $"FullAndRelevantForQtsEtc{beforeOrAfter}2014";
+                additionalRequirementDetailPropertyToCheck = $"RequirementForQtsEtc{beforeOrAfter}2014";
+            }
+        }
 
         const string additionalRequirementHeading = "RequirementHeading";
 
@@ -239,7 +293,27 @@ public class QualificationDetailsController(
 
         return model;
     }
+    
+    private static bool QualificationContainsQtsQuestion(Qualification qualification)
+    {
+        return qualification.AdditionalRequirementQuestions != null
+               && qualification.AdditionalRequirementQuestions.Any(x => x.Sys.Id == AdditionalRequirementQuestions
+                                                                            .QtsQuestion);
+    }
 
+    private static bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification,
+                                                                              List<AdditionalRequirementAnswerModel>
+                                                                                  additionalRequirementAnswerModels)
+    {
+        var qtsQuestion =
+            qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
+                                                                         .QtsQuestion);
+
+        var userAnsweredQuestion = additionalRequirementAnswerModels.First(x => x.Question == qtsQuestion.Question);
+        var answerAsBool = userAnsweredQuestion.Answer == "yes";
+        return qtsQuestion.AnswerToBeFullAndRelevant == answerAsBool;
+    }
+    
     private async Task<List<Qualification>> GetFilteredQualifications()
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
@@ -396,17 +470,15 @@ public class QualificationDetailsController(
     private static NavigationLink? ContentBackButtonLinkForAdditionalQuestions(
         DetailsPage content, string qualificationId)
     {
-        var link = content.BackToAdditionalQuestionsLink;
+        const string placeholder = "$[qualification-id]$";
+        var link = content.BackToConfirmAnswers;
 
         if (link == null)
         {
             return content.BackButton;
         }
 
-        if (!link.Href.EndsWith($"/{qualificationId}/1", StringComparison.OrdinalIgnoreCase))
-        {
-            link.Href = $"{link.Href}/{qualificationId}/1";
-        }
+        link.Href = link.Href.Replace(placeholder, qualificationId);
 
         return link;
     }
