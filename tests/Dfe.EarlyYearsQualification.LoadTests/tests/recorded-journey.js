@@ -3,7 +3,7 @@
 import { sleep, group, check } from 'k6';
 import http from 'k6/http';
 
-import { getRequestVerificationTokenValue } from './support/assurance.js';
+import { getRequestVerificationTokenValue } from './support/requestVerificationToken.js';
 
 export default function level3Journey(ENVIRONMENT, DATA) {
 
