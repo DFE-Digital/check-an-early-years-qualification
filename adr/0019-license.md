@@ -1,6 +1,6 @@
 # 0019 - Software License
 
-* **Status**: proposed
+* **Status**: accepted
 
 ## Context and Problem Statement
 
