@@ -1,12 +1,25 @@
+import { fail } from "k6";
+
+// test options set scenario: currently "load" and "quick" are supported; defaults to "quick"
+const allowedOptionsSets = ['load', 'quick'];
+
 // Parse __ENV
 const ENVIRONMENT = {
   password: __ENV.CHALLENGE_PASSWORD, // secret value, passed in from the CLI
   customDomain: __ENV.CUSTOM_DOMAIN, // custom domain, the address of the service to test, passed in from the CLI
-  optionsSet: __ENV.OPTIONS_SET, // options set: currently "load" and "quick" are supported
+  optionsSet: __ENV.OPTIONS_SET,
   jsonResult: __ENV.JSON_RESULT
 };
 
-import level3Journey from './tests/recorded-journey.js';
+if (!ENVIRONMENT.optionsSet) {
+  ENVIRONMENT.optionsSet = 'quick';
+}
+
+if (!allowedOptionsSets.includes(ENVIRONMENT.optionsSet)) {
+  fail('Environment OPTIONS_SET must be "load" or "quick"');
+}
+
+import level3Journey from "./tests/recorded-l3-journey.js";
 
 // Add tests to run to this array
 let TESTS = [level3Journey];
