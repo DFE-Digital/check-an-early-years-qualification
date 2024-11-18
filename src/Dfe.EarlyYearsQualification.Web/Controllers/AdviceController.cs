@@ -81,32 +81,12 @@ public class AdviceController(
         
         return await GetView(AdvicePages.QualificationNotOnTheList);
     }
-
-    [HttpGet("level-6-qualification-pre-2014")]
+    
+    [HttpGet("level-7-qualification-post-2014")]
     [RedirectIfDateMissing]
-    public async Task<IActionResult> Level6QualificationPre2014()
+    public async Task<IActionResult> Level7QualificationPost2014()
     {
-        return await GetView(AdvicePages.Level6QualificationPre2014);
-    }
-
-    [HttpGet("level-6-qualification-post-2014")]
-    [RedirectIfDateMissing]
-    public async Task<IActionResult> Level6QualificationPost2014()
-    {
-        return await GetView(AdvicePages.Level6QualificationPost2014);
-    }
-
-    [HttpGet("qualification-level-7")]
-    [RedirectIfDateMissing]
-    public async Task<IActionResult> QualificationLevel7()
-    {
-        return await GetView(AdvicePages.QualificationLevel7);
-    }
-
-    [HttpGet("privacy-policy")]
-    public async Task<IActionResult> PrivacyPolicy()
-    {
-        return await GetView(AdvicePages.TemporaryPrivacyPolicy);
+        return await GetView(AdvicePages.Level7QualificationPost2014);
     }
 
     private async Task<IActionResult> GetView(string advicePageId)

@@ -4,6 +4,8 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class AdditionalRequirementQuestion
 {
+    public SystemProperties Sys { get; init; } = new();
+    
     public string Question { get; init; } = string.Empty;
 
     public string HintText { get; init; } = string.Empty;
