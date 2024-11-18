@@ -19,7 +19,8 @@ run the following in the main repo folder:
 …replacing `[Secret]` with a valid password for the challenge page in the test environment, and
 `[test-env-domain]` with the custom domain for the service in the test environment.
 
-If you want to run a full load test, ramping up to 80 users, replace `quick` with `load`, and it will pick up that scenario.
+If you want to run a load test, ramping up to 80 users, replace `quick` with `load`, and it will pick up that scenario. If you
+don't specify an `OPTIONS_SET`, then it will default to `quick`.
 
 If you want the output in JSON format in a file rather than in text format to the console, add `--env JSON_RESULT=yes`
 and the output report will be placed in `TestResults\k6-testResult.json`.
