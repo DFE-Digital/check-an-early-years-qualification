@@ -317,7 +317,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForQtsEtcAfter2014 = true,
                            FullAndRelevantForLevel6After2014 = true
                        }
-                   ]
+                   ],
+                   IsAutomaticallyApprovedAtLevel6 = false
                };
     }
 

@@ -19,4 +19,5 @@ public class Qualification(
     public string? AdditionalRequirements { get; init; }
     public List<AdditionalRequirementQuestion>? AdditionalRequirementQuestions { get; init; }
     public List<RatioRequirement>? RatioRequirements { get; init; }
+    public bool IsAutomaticallyApprovedAtLevel6 { get; init; }
 }

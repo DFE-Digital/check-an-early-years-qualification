@@ -79,8 +79,7 @@ public class ConfirmQualificationController(
             userJourneyCookieService.SetUserSelectedQualificationFromList(YesOrNo.Yes);
             userJourneyCookieService.ClearAdditionalQuestionsAnswers();
 
-            var hasAdditionalQuestions = qualification.AdditionalRequirementQuestions is not null &&
-                                         qualification.AdditionalRequirementQuestions.Count > 0;
+            var hasAdditionalQuestions = qualification is { IsAutomaticallyApprovedAtLevel6: false, AdditionalRequirementQuestions.Count: > 0 };
 
             return model.ConfirmQualificationAnswer switch
                    {
