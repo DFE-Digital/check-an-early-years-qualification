@@ -1,4 +1,5 @@
 // Adapted from recordings created by Grafana k6 Browser Recorder 1.0.4
+// A recorded level-3 qualification journey, end-to-end, where the qualification is found
 
 import { sleep, group, check } from 'k6';
 import http from 'k6/http';
@@ -59,7 +60,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -72,7 +73,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -111,7 +112,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -124,7 +125,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -251,7 +252,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -265,7 +266,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -307,7 +308,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -321,7 +322,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -453,7 +454,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -467,7 +468,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -509,7 +510,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -523,7 +524,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -642,7 +643,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -656,7 +657,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -698,7 +699,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -712,7 +713,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -830,7 +831,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -844,7 +845,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -886,7 +887,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -900,7 +901,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -1019,7 +1020,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -1033,7 +1034,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -1075,7 +1076,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -1089,7 +1090,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -1205,7 +1206,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -1218,7 +1219,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -1257,7 +1258,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -1270,7 +1271,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -1390,7 +1391,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -1404,7 +1405,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -1446,7 +1447,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -1460,7 +1461,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -1581,7 +1582,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -1595,7 +1596,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -1637,7 +1638,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -1651,7 +1652,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
@@ -1762,7 +1763,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/govuk/all.min.css?v=GgJd433hcU0_9bAVW6i2iBx3ytWDyVLKH-9vfxG4UxI`,
+        `${address}/govuk/all.min.css`,
         {
           headers: {
             referer: '',
@@ -1775,7 +1776,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/css/site.css?v=igoQaqnM1Mg8CnrQJH6phEDWpG58m_dbMUgZxK0EsYY`,
+        `${address}/css/site.css`,
         {
           headers: {
             referer: '',
@@ -1814,7 +1815,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/js/site.js?v=PVhEInckNOQLnX1CbKZYN9JbKFv7pI2XJKwv1s_zsGY`,
+        `${address}/js/site.js`,
         {
           headers: {
             referer: '',
@@ -1827,7 +1828,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/govuk/all.min.js?v=qWAac5Qu0FixAEn44iyug6gG9I_RILPlCYO7ZpK9z_0`,
+        `${address}/govuk/all.min.js`,
         {
           headers: {
             origin: address,
