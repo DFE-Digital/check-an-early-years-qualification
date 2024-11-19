@@ -528,6 +528,56 @@ public class ConfirmQualificationControllerTests
         actionResult.RouteValues.Should().Contain("qualificationId", "TEST-123");
         actionResult.RouteValues.Should().Contain("questionIndex", 1);
     }
+    
+    [TestMethod]
+    public async Task
+        Post_ValidModel_QualificationHasAdditionalRequirementsButAutomaticallyApprovedAtL6IsTrue_RedirectsToCheckAdditionalRequirements()
+    {
+        var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentService = new Mock<IContentService>();
+        var additionalRequirements = new List<AdditionalRequirementQuestion> { new() };
+
+        var qualification = new Qualification("Some ID",
+                                              "Qualification Name",
+                                              AwardingOrganisations.Ncfe,
+                                              2)
+                            {
+                                FromWhichYear = "2014", ToWhichYear = "2019",
+                                QualificationNumber = "ABC/547/900",
+                                AdditionalRequirements = "additional requirements",
+                                AdditionalRequirementQuestions = additionalRequirements,
+                                IsAutomaticallyApprovedAtLevel6 = true
+                            };
+
+        mockRepository.Setup(x => x.GetById("TEST-123"))
+                      .ReturnsAsync(qualification);
+
+        var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
+
+        var mockContentParser = new Mock<IGovUkContentParser>();
+
+        var controller =
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockContentParser.Object);
+
+        var result = await controller.Confirm(new ConfirmQualificationPageModel
+                                              {
+                                                  QualificationId = "TEST-123",
+                                                  ConfirmQualificationAnswer = "yes"
+                                              });
+
+        result.Should().BeOfType<RedirectToActionResult>();
+
+        var actionResult = (RedirectToActionResult)result;
+
+        actionResult.ActionName.Should().Be("Index");
+        actionResult.ControllerName.Should().Be("QualificationDetails");
+        actionResult.RouteValues.Should().ContainSingle("qualificationId", "TEST-123");
+    }
 
     [TestMethod]
     public async Task Post_ValidModel_PassedYes_RedirectsToQualificationDetailsAction()
