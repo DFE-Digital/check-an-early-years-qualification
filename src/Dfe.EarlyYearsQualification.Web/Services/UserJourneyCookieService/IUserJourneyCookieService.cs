@@ -24,4 +24,5 @@ public interface IUserJourneyCookieService
     Dictionary<string, string>? GetAdditionalQuestionsAnswers();
     bool UserHasAnsweredAdditionalQuestions();
     YesOrNo GetQualificationWasSelectedFromList();
+    bool WasStartedBetweenSept2014AndAug2019();
 }

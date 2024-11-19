@@ -98,6 +98,12 @@ public class QualificationDetailsController(
 
         // If all the additional requirement checks pass, then we can go to check each level individually
         await CheckRatioRequirements(qualificationStartedBeforeSeptember2014, qualification, model);
+        
+        // Check if the qualification if not full and relevant and was started between Sept 2014 and Aug 2019
+        if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSept2014AndAug2019())
+        {
+            await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
+        }
 
         return View(model);
     }
@@ -184,6 +190,17 @@ public class QualificationDetailsController(
                             { AnswerToBeFullAndRelevant: true, Answer: "no" }
                             or
                             { AnswerToBeFullAndRelevant: false, Answer: "yes" });
+    }
+    
+    /// If the qualification is above a level 2 qualification, is not full and relevant and is started between Sept 2014 and Aug 2019
+    /// then it will have special requirements for level 2.
+    private async Task QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(QualificationDetailsModel model, Qualification qualification)
+    {
+        model.RatioRequirements.ApprovedForLevel2 = true;
+        var requirementsForLevel2 = GetRatioProperty<Document>("RequirementForLevel2BetweenSept2014AndAug2019",
+                                                               RatioRequirements.Level2RatioRequirementName,
+                                                               qualification);
+        model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(requirementsForLevel2);
     }
 
     private async Task CheckRatioRequirements(bool qualificationStartedBeforeSeptember2014,
