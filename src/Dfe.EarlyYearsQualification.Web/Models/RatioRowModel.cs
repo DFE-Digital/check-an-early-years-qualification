@@ -4,7 +4,7 @@ public class RatioRowModel
 {
     public string LevelText { get; init; } = string.Empty;
 
-    public bool IsApproved { get; init; }
+    public QualificationApprovalStatus ApprovalStatus { get; init; }
 
     public AdditionalInformationModel AdditionalInformation { get; init; } = new();
 }
