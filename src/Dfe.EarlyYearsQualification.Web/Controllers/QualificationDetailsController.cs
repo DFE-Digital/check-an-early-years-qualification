@@ -103,7 +103,7 @@ public class QualificationDetailsController(
         // Check if the qualification if not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
         if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSept2014AndAug2019() && qualification.QualificationLevel > 2)
         {
-            await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
+            //await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
         }
 
         return View(model);

@@ -1218,10 +1218,10 @@ public class QualificationDetailsControllerTests
         model.FromWhichYear.Should().Be(qualificationResult.FromWhichYear);
         model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
 
-        model.RatioRequirements.ApprovedForLevel2.Should().BeTrue();
-        model.RatioRequirements.ApprovedForLevel3.Should().BeTrue();
-        model.RatioRequirements.ApprovedForLevel6.Should().BeTrue();
-        model.RatioRequirements.ApprovedForUnqualified.Should().BeTrue();
+        model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.ApprovedForLevel6.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
     }
     
     [TestMethod]

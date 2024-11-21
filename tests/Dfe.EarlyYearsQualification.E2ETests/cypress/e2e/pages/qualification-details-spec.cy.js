@@ -163,4 +163,12 @@ describe("A spec used to test the qualification details page", () => {
       expect(printStub).to.be.calledOnce
     })
   });
+  
+  it("When the user has a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is markes as not full and relevant, they see the level 2 qualification markes as 'Further action required'", () => {
+    cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2016%22%2C%22LevelOfQualification%22%3A%225%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D');
+    cy.visit("/qualifications/qualification-details/eyq-114");
+    
+    cy.get("#ratio-Level 2 > .govuk-!-width-one-half .tag-padding-right > div > strong").should("contain.text", "Further action required");
+    cy.get("#ratio-Level 2-additional-info").should("contain.text", "Level 2 further action required text");
+  });
 });
