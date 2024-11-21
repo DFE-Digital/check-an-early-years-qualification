@@ -24,12 +24,21 @@ $("#dropdown-question-form").on("submit", function(){
     let question = $("#question").text();
     let selectedAO = $("#awarding-organisation-select :selected").val();
     let isNotOnTheListChecked = $("#awarding-organisation-not-in-list").is(":checked");
-    window.dataLayer.push({
-        'event': 'dropdownQuestionFormSubmission',
-        'question': question,
-        'selectedAwardingOrganisation': selectedAO,
-        'isNotOnTheListChecked': isNotOnTheListChecked
-    });
+    
+    let payload = isNotOnTheListChecked ? 
+        {
+            'event': 'dropdownQuestionFormSubmission',
+            'question': question,
+            'isNotOnTheListChecked': isNotOnTheListChecked
+        }
+    :
+        {
+            'event': 'dropdownQuestionFormSubmission',
+            'question': question,
+            'selectedAwardingOrganisation': selectedAO
+        };
+    
+    window.dataLayer.push(payload);
 });
 
 $("#confirm-qualification").on("submit", function(){
