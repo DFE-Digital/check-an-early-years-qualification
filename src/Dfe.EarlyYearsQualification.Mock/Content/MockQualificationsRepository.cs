@@ -16,6 +16,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                                                           AwardingOrganisations.Various, 3)),
                    "eyq-108" => await Task.FromResult(CreateQtsQualification("EYQ-108", "BTEC",
                                                                              AwardingOrganisations.Various, 6)),
+                   "eyq-115" => await Task.FromResult(CreateQualification("EYQ-115", "NCFE",
+                                                                             AwardingOrganisations.Various, 3, false)),
                    _ => await Task.FromResult(CreateQualification("EYQ-240",
                                                                   "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
                                                                   AwardingOrganisations.Ncfe, 3))
@@ -155,50 +157,53 @@ public class MockQualificationsRepository : IQualificationsRepository
     }
 
     private static Qualification CreateQualification(string qualificationId, string qualificationName,
-                                                     string awardingOrganisation, int qualificationLevel)
+                                                     string awardingOrganisation, int qualificationLevel,
+                                                     bool includeAdditionalRequirementQuestions = true)
     {
-        return new Qualification(qualificationId,
-                                 qualificationName,
-                                 awardingOrganisation,
-                                 qualificationLevel)
+        var additionalRequirementQuestions = includeAdditionalRequirementQuestions
+                                                 ? new List<AdditionalRequirementQuestion>{
+                                                     new()
+                                                     {
+                                                         Question = "Test question",
+                                                         HintText =
+                                                             "This is the hint text: answer yes for full and relevant",
+                                                         DetailsHeading =
+                                                             "This is the details heading",
+                                                         DetailsContent =
+                                                             ContentfulContentHelper
+                                                                 .Paragraph("This is the details content"),
+                                                         Answers =
+                                                         [
+                                                             new Option
+                                                             {
+                                                                 Label = "Yes",
+                                                                 Value = "yes"
+                                                             },
+
+                                                             new Option
+                                                             {
+                                                                 Label = "No",
+                                                                 Value = "no"
+                                                             }
+                                                         ],
+                                                         ConfirmationStatement =
+                                                             "This is the confirmation statement 1",
+                                                         AnswerToBeFullAndRelevant = true
+                                                     },
+                                                     CreateSecondAdditionalRequirementQuestion(false)
+                                                } : null;
+        
+    return new Qualification(qualificationId,
+                             qualificationName,
+                             awardingOrganisation,
+                             qualificationLevel)
                {
                    FromWhichYear = "2020",
                    ToWhichYear = "2021",
                    QualificationNumber = "603/5829/4",
                    AdditionalRequirements =
                        "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                   AdditionalRequirementQuestions =
-                   [
-                       new AdditionalRequirementQuestion
-                       {
-                           Question = "Test question",
-                           HintText =
-                               "This is the hint text: answer yes for full and relevant",
-                           DetailsHeading =
-                               "This is the details heading",
-                           DetailsContent =
-                               ContentfulContentHelper
-                                   .Paragraph("This is the details content"),
-                           Answers =
-                           [
-                               new Option
-                               {
-                                   Label = "Yes",
-                                   Value = "yes"
-                               },
-
-                               new Option
-                               {
-                                   Label = "No",
-                                   Value = "no"
-                               }
-                           ],
-                           ConfirmationStatement =
-                               "This is the confirmation statement 1",
-                           AnswerToBeFullAndRelevant = true
-                       },
-                       CreateSecondAdditionalRequirementQuestion(false)
-                   ],
+                   AdditionalRequirementQuestions = additionalRequirementQuestions,
                    RatioRequirements =
                    [
                        new RatioRequirement
@@ -317,7 +322,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForQtsEtcAfter2014 = true,
                            FullAndRelevantForLevel6After2014 = true
                        }
-                   ]
+                   ],
+                   IsAutomaticallyApprovedAtLevel6 = false
                };
     }
 

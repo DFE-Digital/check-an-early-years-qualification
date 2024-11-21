@@ -85,7 +85,7 @@ describe("A spec used to test the qualification details page", () => {
     cy.get(".govuk-tag").eq(1).should("contain.text", "Approved");
     cy.get(".govuk-tag").eq(2).should("contain.text", "Approved");
     cy.get(".govuk-tag").eq(3).should("contain.text", "Approved");
-    cy.get(".govuk-tag").eq(4).should("contain.text", "Not Approved");
+    cy.get(".govuk-tag").eq(4).should("contain.text", "Not approved");
 
     cy.get(".govuk-tag").eq(1).should("have.class", "govuk-tag--green");
     cy.get(".govuk-tag").eq(2).should("have.class", "govuk-tag--green");
@@ -108,7 +108,7 @@ describe("A spec used to test the qualification details page", () => {
     cy.get(".govuk-tag").eq(1).should("contain.text", "Approved");
     cy.get(".govuk-tag").eq(2).should("contain.text", "Approved");
     cy.get(".govuk-tag").eq(3).should("contain.text", "Approved");
-    cy.get(".govuk-tag").eq(4).should("contain.text", "Not Approved");
+    cy.get(".govuk-tag").eq(4).should("contain.text", "Not approved");
 
     cy.get(".govuk-tag").eq(1).should("have.class", "govuk-tag--green");
     cy.get(".govuk-tag").eq(2).should("have.class", "govuk-tag--green");
@@ -138,9 +138,9 @@ describe("A spec used to test the qualification details page", () => {
 
     // Phase Banner uses govuk-tag also hence index starting at 1
     cy.get(".govuk-tag").eq(1).should("contain.text", "Approved");
-    cy.get(".govuk-tag").eq(2).should("contain.text", "Not Approved");
-    cy.get(".govuk-tag").eq(3).should("contain.text", "Not Approved");
-    cy.get(".govuk-tag").eq(4).should("contain.text", "Not Approved");
+    cy.get(".govuk-tag").eq(2).should("contain.text", "Not approved");
+    cy.get(".govuk-tag").eq(3).should("contain.text", "Not approved");
+    cy.get(".govuk-tag").eq(4).should("contain.text", "Not approved");
 
     cy.get(".govuk-tag").eq(1).should("have.class", "govuk-tag--green");
     cy.get(".govuk-tag").eq(2).should("have.class", "govuk-tag--red");

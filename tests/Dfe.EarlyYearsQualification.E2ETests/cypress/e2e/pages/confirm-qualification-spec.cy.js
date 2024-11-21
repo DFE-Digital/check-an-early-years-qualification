@@ -23,6 +23,8 @@ describe("A spec that tests the confirm qualification page", () => {
         cy.get('label[for="yes"]').should("contain.text", "yes");
         cy.get('label[for="no"]').should("contain.text", "no");
 
+        cy.get('#warning-text-container').should("not.exist");
+
         cy.get("#confirm-qualification-button").should("contain.text", "Test button text");
 
         cy.get(".govuk-error-summary").should("not.exist");
@@ -34,6 +36,14 @@ describe("A spec that tests the confirm qualification page", () => {
 
         cy.get('#various-ao-content').should("exist");
         cy.get('#various-ao-content').should("contain.text", "Various awarding organisation explanation text");
+    });
+
+    it("Checks the warning content is on the page when the qualification has no additional requirement questions", () => {
+        cy.visit("/confirm-qualification/eyq-115");
+
+        cy.get('#warning-text-container').should("exist");
+        cy.get('#warning-text-container').should("contain.text", "Answer disclaimer text");
+        cy.get("#confirm-qualification-button").should("contain.text", "Get result");
     });
 
     it("Shows errors if user does not select an option", () => {

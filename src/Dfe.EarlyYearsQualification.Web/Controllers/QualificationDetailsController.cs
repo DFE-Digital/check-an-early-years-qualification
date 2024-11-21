@@ -221,14 +221,13 @@ public class QualificationDetailsController(
         var additionalRequirementDetailPropertyToCheck =
             $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
         
-        if (QualificationContainsQtsQuestion(qualification))
+        if (qualification.IsAutomaticallyApprovedAtLevel6 || 
+            (QualificationContainsQtsQuestion(qualification) 
+             && UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, model.AdditionalRequirementAnswers)))
         {
             // Check user against QTS criteria and swap to Qts Criteria if matches
-            if (UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, model.AdditionalRequirementAnswers!))
-            {
-                fullAndRelevantPropertyToCheck = $"FullAndRelevantForQtsEtc{beforeOrAfter}2014";
-                additionalRequirementDetailPropertyToCheck = $"RequirementForQtsEtc{beforeOrAfter}2014";
-            }
+            fullAndRelevantPropertyToCheck = $"FullAndRelevantForQtsEtc{beforeOrAfter}2014";
+            additionalRequirementDetailPropertyToCheck = $"RequirementForQtsEtc{beforeOrAfter}2014";
         }
 
         const string additionalRequirementHeading = "RequirementHeading";
@@ -336,9 +335,14 @@ public class QualificationDetailsController(
     }
 
     private static bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification,
-                                                                              List<AdditionalRequirementAnswerModel>
+                                                                              List<AdditionalRequirementAnswerModel>?
                                                                                   additionalRequirementAnswerModels)
     {
+        if (additionalRequirementAnswerModels is null)
+        {
+            return false;
+        }
+        
         var qtsQuestion =
             qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
                                                                          .QtsQuestion);

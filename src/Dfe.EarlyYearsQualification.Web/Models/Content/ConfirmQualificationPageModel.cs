@@ -32,4 +32,6 @@ public class ConfirmQualificationPageModel
     public NavigationLinkModel? BackButton { get; init; }
     public string PostHeadingContent { get; init; } = string.Empty;
     public string VariousAwardingOrganisationsExplanation { get; init; } = string.Empty;
+    public bool ShowAnswerDisclaimerText { get; init; }
+    public string AnswerDisclaimerText { get; init; } = string.Empty;
 }
