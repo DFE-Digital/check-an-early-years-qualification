@@ -12,8 +12,7 @@ public class RatioRequirementModel
 
     public bool IsNotFullAndRelevant =>
         // get { return ApprovedForUnqualified && !ApprovedForLevel2 & !ApprovedForLevel3 && !ApprovedForLevel6; }
-        ApprovedForUnqualified != QualificationApprovalStatus.Approved
-        || ApprovedForLevel2 != QualificationApprovalStatus.Approved
+        ApprovedForLevel2 != QualificationApprovalStatus.Approved
         || ApprovedForLevel3 != QualificationApprovalStatus.Approved
         || ApprovedForLevel6 != QualificationApprovalStatus.Approved;
 

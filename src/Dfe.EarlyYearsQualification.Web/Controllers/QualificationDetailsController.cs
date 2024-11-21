@@ -103,7 +103,7 @@ public class QualificationDetailsController(
         // Check if the qualification if not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
         if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSept2014AndAug2019() && qualification.QualificationLevel > 2)
         {
-            //await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
+            await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
         }
 
         return View(model);
@@ -282,8 +282,7 @@ public class QualificationDetailsController(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level6RatioRequirementName,
                                      qualification);
 
-        var approvedForUnqualified = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.UnqualifiedRatioRequirementName,
-                                                            qualification);
+        var approvedForUnqualified = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.UnqualifiedRatioRequirementName, qualification);
         
         model.RatioRequirements.ApprovedForUnqualified = approvedForUnqualified
                                                              ? QualificationApprovalStatus.Approved
@@ -296,8 +295,7 @@ public class QualificationDetailsController(
         model.RatioRequirements.RequirementsForUnqualified = await contentParser.ToHtml(requirementsForUnqualified);
 
         model.RatioRequirements.RequirementsHeadingForUnqualified =
-            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName,
-                                     qualification);
+            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName, qualification);
     }
 
     private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
