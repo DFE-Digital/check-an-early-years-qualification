@@ -153,6 +153,7 @@
             }
 
             if (Model.RatioRequirements.ApprovedForLevel2 == QualificationApprovalStatus.NotApproved
+                || Model.RatioRequirements.ApprovedForLevel2 == QualificationApprovalStatus.FurtherActionRequired
                 || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.NotApproved
                 || Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.NotApproved
                 || Model.RatioRequirements.ApprovedForUnqualified == QualificationApprovalStatus.NotApproved)
@@ -171,7 +172,7 @@
                                                                        });
                 }
 
-                if (Model.RatioRequirements.ApprovedForLevel2 == QualificationApprovalStatus.NotApproved)
+                if (Model.RatioRequirements.ApprovedForLevel2 is QualificationApprovalStatus.NotApproved or QualificationApprovalStatus.FurtherActionRequired)
                 {
                     await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                        {
@@ -180,7 +181,8 @@
                                                                            AdditionalInformation = new AdditionalInformationModel
                                                                                                    {
                                                                                                        AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel2,
-                                                                                                       AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel2
+                                                                                                       AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel2,
+                                                                                                       ShowAdditionalInformationBodyByDefault = Model.RatioRequirements.ShowRequirementsForLevel2ByDefault
                                                                                                    }
                                                                        });
                 }

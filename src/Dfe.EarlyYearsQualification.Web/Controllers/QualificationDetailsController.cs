@@ -100,8 +100,8 @@ public class QualificationDetailsController(
         // If all the additional requirement checks pass, then we can go to check each level individually
         await CheckRatioRequirements(qualificationStartedBeforeSeptember2014, qualification, model);
         
-        // Check if the qualification if not full and relevant and was started between Sept 2014 and Aug 2019
-        if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSept2014AndAug2019())
+        // Check if the qualification if not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
+        if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSept2014AndAug2019() && qualification.QualificationLevel > 2)
         {
             await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
         }
@@ -197,11 +197,12 @@ public class QualificationDetailsController(
     /// then it will have special requirements for level 2.
     private async Task QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(QualificationDetailsModel model, Qualification qualification)
     {
-        model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.Approved;
-        var requirementsForLevel2 = GetRatioProperty<Document>("RequirementForLevel2BetweenSept2014AndAug2019",
+        model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.FurtherActionRequired;
+        var requirementsForLevel2 = GetRatioProperty<Document>("RequirementForLevel2BetweenSept14AndAug19",
                                                                RatioRequirements.Level2RatioRequirementName,
                                                                qualification);
         model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(requirementsForLevel2);
+        model.RatioRequirements.ShowRequirementsForLevel2ByDefault = true;
     }
 
     private async Task CheckRatioRequirements(bool qualificationStartedBeforeSeptember2014,
@@ -322,7 +323,7 @@ public class QualificationDetailsController(
         model.ApprovedForLevel2 = QualificationApprovalStatus.NotApproved;
         model.ApprovedForLevel3 = QualificationApprovalStatus.NotApproved;
         model.ApprovedForLevel6 = QualificationApprovalStatus.NotApproved;
-        model.ApprovedForUnqualified = QualificationApprovalStatus.NotApproved;
+        model.ApprovedForUnqualified = QualificationApprovalStatus.Approved;
 
         return model;
     }
