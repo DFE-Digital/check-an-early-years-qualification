@@ -24,16 +24,17 @@ $("#dropdown-question-form").on("submit", function(){
     let question = $("#question").text();
     let selectedAO = $("#awarding-organisation-select :selected").val();
     let isNotOnTheListChecked = $("#awarding-organisation-not-in-list").is(":checked");
+    const eventName = 'dropdownQuestionFormSubmission';
     
     let payload = isNotOnTheListChecked ? 
         {
-            'event': 'dropdownQuestionFormSubmission',
+            'event': eventName,
             'question': question,
             'isNotOnTheListChecked': isNotOnTheListChecked
         }
     :
         {
-            'event': 'dropdownQuestionFormSubmission',
+            'event': eventName,
             'question': question,
             'selectedAwardingOrganisation': selectedAO
         };
