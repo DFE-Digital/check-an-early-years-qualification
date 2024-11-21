@@ -315,7 +315,9 @@ public class MockContentfulService : IContentService
                                          ErrorBannerLink = "Test error banner link",
                                          VariousAwardingOrganisationsExplanation =
                                              ContentfulContentHelper
-                                                 .Paragraph("Various awarding organisation explanation text")
+                                                 .Paragraph("Various awarding organisation explanation text"),
+                                         AnswerDisclaimerText = "Answer disclaimer text",
+                                         NoAdditionalRequirementsButtonText = "Get result"
                                      });
     }
 

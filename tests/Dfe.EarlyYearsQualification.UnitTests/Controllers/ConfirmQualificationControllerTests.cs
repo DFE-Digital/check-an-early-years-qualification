@@ -80,38 +80,7 @@ public class ConfirmQualificationControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
-        mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-                 {
-                     QualificationLabel = "Test qualification label",
-                     BackButton = new NavigationLink
-                                  {
-                                      DisplayText = "Test back button",
-                                      OpenInNewTab = false,
-                                      Href = "/qualifications"
-                                  },
-                     ErrorText = "Test error text",
-                     ButtonText = "Test button text",
-                     LevelLabel = "Test level label",
-                     DateAddedLabel = "Test date added label",
-                     Heading = "Test heading",
-                     Options =
-                     [
-                         new Option
-                         {
-                             Label = "yes",
-                             Value = "yes"
-                         },
-                         new Option
-                         {
-                             Label = "no",
-                             Value = "no"
-                         }
-                     ],
-                     RadioHeading = "Test radio heading",
-                     AwardingOrganisationLabel = "Test awarding organisation label",
-                     ErrorBannerHeading = "Test error banner heading",
-                     ErrorBannerLink = "Test error banner link"
-                 });
+        mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(GetConfirmQualificationPageContent());
 
         mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(default(Qualification?));
@@ -146,38 +115,9 @@ public class ConfirmQualificationControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
-        mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-                 {
-                     QualificationLabel = "Test qualification label",
-                     BackButton = new NavigationLink
-                                  {
-                                      DisplayText = "Test back button",
-                                      OpenInNewTab = false,
-                                      Href = "/qualifications"
-                                  },
-                     ErrorText = "Test error text",
-                     ButtonText = "Test button text",
-                     LevelLabel = "Test level label",
-                     DateAddedLabel = "Test date added label",
-                     Heading = "Test heading",
-                     Options =
-                     [
-                         new Option
-                         {
-                             Label = "yes",
-                             Value = "yes"
-                         },
-                         new Option
-                         {
-                             Label = "no",
-                             Value = "no"
-                         }
-                     ],
-                     RadioHeading = "Test radio heading",
-                     AwardingOrganisationLabel = "Test awarding organisation label",
-                     ErrorBannerHeading = "Test error banner heading",
-                     ErrorBannerLink = "Test error banner link"
-                 });
+        var confirmQualificationPageContent = GetConfirmQualificationPageContent();
+        
+        mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(confirmQualificationPageContent);
 
         var qualification = new Qualification("Some ID",
                                               "Qualification Name",
@@ -232,24 +172,24 @@ public class ConfirmQualificationControllerTests
                                                       Value = "no"
                                                   }
                                               ]);
-        model.Heading.Should().Be("Test heading");
-        model.ButtonText.Should().Be("Test button text");
-        model.ErrorText.Should().Be("Test error text");
-        model.LevelLabel.Should().Be("Test level label");
+        model.Heading.Should().Be(confirmQualificationPageContent.Heading);
+        model.ButtonText.Should().Be(confirmQualificationPageContent.NoAdditionalRequirementsButtonText);
+        model.ErrorText.Should().Be(confirmQualificationPageContent.ErrorText);
+        model.LevelLabel.Should().Be(confirmQualificationPageContent.LevelLabel);
         model.QualificationId.Should().Be("Some ID");
-        model.QualificationLabel.Should().Be("Test qualification label");
+        model.QualificationLabel.Should().Be(confirmQualificationPageContent.QualificationLabel);
         model.QualificationLevel.Should().Be("2");
         model.QualificationName.Should().Be("Qualification Name");
-        model.RadioHeading.Should().Be("Test radio heading");
-        model.AwardingOrganisationLabel.Should().Be("Test awarding organisation label");
+        model.RadioHeading.Should().Be(confirmQualificationPageContent.RadioHeading);
+        model.AwardingOrganisationLabel.Should().Be(confirmQualificationPageContent.AwardingOrganisationLabel);
         model.ConfirmQualificationAnswer.Should().Be(string.Empty);
-        model.DateAddedLabel.Should().Be("Test date added label");
-        model.ErrorBannerHeading.Should().Be("Test error banner heading");
-        model.ErrorBannerLink.Should().Be("Test error banner link");
+        model.DateAddedLabel.Should().Be(confirmQualificationPageContent.DateAddedLabel);
+        model.ErrorBannerHeading.Should().Be(confirmQualificationPageContent.ErrorBannerHeading);
+        model.ErrorBannerLink.Should().Be(confirmQualificationPageContent.ErrorBannerLink);
         model.QualificationAwardingOrganisation.Should().Be(AwardingOrganisations.Ncfe);
         model.QualificationDateAdded.Should().Be("2014");
     }
-
+    
     [TestMethod]
     public async Task Post_InvalidModel_CantGetPageContent_LogsAndReturnsError()
     {
@@ -370,38 +310,9 @@ public class ConfirmQualificationControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
-        mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(new ConfirmQualificationPage
-                 {
-                     QualificationLabel = "Test qualification label",
-                     BackButton = new NavigationLink
-                                  {
-                                      DisplayText = "Test back button",
-                                      OpenInNewTab = false,
-                                      Href = "/qualifications"
-                                  },
-                     ErrorText = "Test error text",
-                     ButtonText = "Test button text",
-                     LevelLabel = "Test level label",
-                     DateAddedLabel = "Test date added label",
-                     Heading = "Test heading",
-                     Options =
-                     [
-                         new Option
-                         {
-                             Label = "yes",
-                             Value = "yes"
-                         },
-                         new Option
-                         {
-                             Label = "no",
-                             Value = "no"
-                         }
-                     ],
-                     RadioHeading = "Test radio heading",
-                     AwardingOrganisationLabel = "Test awarding organisation label",
-                     ErrorBannerHeading = "Test error banner heading",
-                     ErrorBannerLink = "Test error banner link"
-                 });
+        var confirmQualificationPageContent = GetConfirmQualificationPageContent();
+        
+        mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(confirmQualificationPageContent);
 
         var qualification = new Qualification("Some ID",
                                               "Qualification Name",
@@ -461,20 +372,20 @@ public class ConfirmQualificationControllerTests
                                                       Value = "no"
                                                   }
                                               ]);
-        model.Heading.Should().Be("Test heading");
-        model.ButtonText.Should().Be("Test button text");
-        model.ErrorText.Should().Be("Test error text");
-        model.LevelLabel.Should().Be("Test level label");
+        model.Heading.Should().Be(confirmQualificationPageContent.Heading);
+        model.ButtonText.Should().Be(confirmQualificationPageContent.NoAdditionalRequirementsButtonText);
+        model.ErrorText.Should().Be(confirmQualificationPageContent.ErrorText);
+        model.LevelLabel.Should().Be(confirmQualificationPageContent.LevelLabel);
         model.QualificationId.Should().Be("Some ID");
-        model.QualificationLabel.Should().Be("Test qualification label");
+        model.QualificationLabel.Should().Be(confirmQualificationPageContent.QualificationLabel);
         model.QualificationLevel.Should().Be("2");
         model.QualificationName.Should().Be("Qualification Name");
-        model.RadioHeading.Should().Be("Test radio heading");
-        model.AwardingOrganisationLabel.Should().Be("Test awarding organisation label");
+        model.RadioHeading.Should().Be(confirmQualificationPageContent.RadioHeading);
+        model.AwardingOrganisationLabel.Should().Be(confirmQualificationPageContent.AwardingOrganisationLabel);
         model.ConfirmQualificationAnswer.Should().Be(string.Empty);
-        model.DateAddedLabel.Should().Be("Test date added label");
-        model.ErrorBannerHeading.Should().Be("Test error banner heading");
-        model.ErrorBannerLink.Should().Be("Test error banner link");
+        model.DateAddedLabel.Should().Be(confirmQualificationPageContent.DateAddedLabel);
+        model.ErrorBannerHeading.Should().Be(confirmQualificationPageContent.ErrorBannerHeading);
+        model.ErrorBannerLink.Should().Be(confirmQualificationPageContent.ErrorBannerLink);
         model.QualificationAwardingOrganisation.Should().Be(AwardingOrganisations.Ncfe);
         model.QualificationDateAdded.Should().Be("2014");
     }
@@ -708,5 +619,43 @@ public class ConfirmQualificationControllerTests
                                  });
 
         mockUserJourneyService.Verify(x => x.ClearAdditionalQuestionsAnswers(), Times.Once);
+    }
+    
+    private static ConfirmQualificationPage GetConfirmQualificationPageContent()
+    {
+        return new ConfirmQualificationPage
+               {
+                   QualificationLabel = "Test qualification label",
+                   BackButton = new NavigationLink
+                                {
+                                    DisplayText = "Test back button",
+                                    OpenInNewTab = false,
+                                    Href = "/qualifications"
+                                },
+                   ErrorText = "Test error text",
+                   ButtonText = "Test button text",
+                   LevelLabel = "Test level label",
+                   DateAddedLabel = "Test date added label",
+                   Heading = "Test heading",
+                   Options =
+                   [
+                       new Option
+                       {
+                           Label = "yes",
+                           Value = "yes"
+                       },
+                       new Option
+                       {
+                           Label = "no",
+                           Value = "no"
+                       }
+                   ],
+                   RadioHeading = "Test radio heading",
+                   AwardingOrganisationLabel = "Test awarding organisation label",
+                   ErrorBannerHeading = "Test error banner heading",
+                   ErrorBannerLink = "Test error banner link",
+                   AnswerDisclaimerText = "Answer disclaimer text",
+                   NoAdditionalRequirementsButtonText = "Get result"
+               };
     }
 }
