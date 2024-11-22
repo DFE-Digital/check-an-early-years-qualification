@@ -80,8 +80,8 @@ resource "azurerm_linux_web_app" "webapp" {
     health_check_eviction_time_in_min = var.webapp_health_check_eviction_time_in_min
     http2_enabled                     = true
     vnet_route_all_enabled            = true
-    ip_restriction_default_action     = null
-    scm_ip_restriction_default_action = null
+    ip_restriction_default_action     = "Deny"
+    scm_ip_restriction_default_action = "Deny"
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
