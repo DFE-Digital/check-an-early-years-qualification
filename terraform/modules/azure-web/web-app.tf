@@ -62,6 +62,8 @@ resource "azurerm_linux_web_app" "webapp" {
   service_plan_id           = azurerm_service_plan.asp.id
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
+
+
   app_settings = merge({
     "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
@@ -78,6 +80,8 @@ resource "azurerm_linux_web_app" "webapp" {
     health_check_eviction_time_in_min = var.webapp_health_check_eviction_time_in_min
     http2_enabled                     = true
     vnet_route_all_enabled            = true
+    ip_restriction_default_action     = null
+    scm_ip_restriction_default_action = null
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
