@@ -26,7 +26,7 @@ $("#dropdown-question-form").on("submit", function(){
     const isNotOnTheListChecked = $("#awarding-organisation-not-in-list").is(":checked");
     const eventName = 'dropdownQuestionFormSubmission';
     
-    let payload = isNotOnTheListChecked ? 
+    const payload = isNotOnTheListChecked ? 
         {
             'event': eventName,
             'question': question,
