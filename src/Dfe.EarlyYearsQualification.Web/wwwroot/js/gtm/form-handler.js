@@ -21,9 +21,9 @@ $("#date-question-form").on("submit", function(){
 });
 
 $("#dropdown-question-form").on("submit", function(){
-    let question = $("#question").text();
-    let selectedAO = $("#awarding-organisation-select :selected").val();
-    let isNotOnTheListChecked = $("#awarding-organisation-not-in-list").is(":checked");
+    const question = $("#question").text();
+    const selectedAO = $("#awarding-organisation-select :selected").val();
+    const isNotOnTheListChecked = $("#awarding-organisation-not-in-list").is(":checked");
     const eventName = 'dropdownQuestionFormSubmission';
     
     let payload = isNotOnTheListChecked ? 
