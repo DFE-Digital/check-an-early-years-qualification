@@ -94,19 +94,25 @@ public class QualificationDetailsController(
 
         if (!validateAdditionalRequirementQuestions.isValid)
         {
+            await CheckLevel2EdgeCase(model, qualification);
             return validateAdditionalRequirementQuestions.actionResult!;
         }
 
         // If all the additional requirement checks pass, then we can go to check each level individually
         await CheckRatioRequirements(qualificationStartedBeforeSeptember2014, qualification, model);
         
-        // Check if the qualification if not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
+        await CheckLevel2EdgeCase(model, qualification);
+
+        return View(model);
+    }
+
+    private async Task CheckLevel2EdgeCase(QualificationDetailsModel model, Qualification qualification)
+    {
+        // Check if the qualification is not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
         if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSept2014AndAug2019() && qualification.QualificationLevel > 2)
         {
             await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
         }
-
-        return View(model);
     }
 
     private async Task<(bool isValid, IActionResult? actionResult)> ValidateAdditionalQuestions(QualificationDetailsModel model, Qualification qualification)

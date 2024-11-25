@@ -704,6 +704,136 @@ public class QualificationDetailsControllerTests
     }
 
     [TestMethod]
+    public async Task
+        Index_QualIsRelevantButAdditionalAnswersMarkItAsNotRelevantAndLevel3OrAboveStartedBetweenSept2014AndAug2019_MarksLevel2AsFurtherActionRequired()
+    {
+        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        const string qualificationId = "eyq-145";
+        const int level = 6;
+        const int startMonth = 6;
+        const int startYear = 2016;
+        
+        var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>
+                                             {
+                                                 new()
+                                                 {
+                                                     Sys = new SystemProperties
+                                                           {
+                                                               Id = "Some Id"
+                                                           },
+                                                     Question = "Have they got pediatric first aid?",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 }
+                                             };
+        
+        //Answer here makes this qual not full and relevant
+        var listOfAdditionalReqsAnswered = new Dictionary<string, string>
+                                           {
+                                               { "Have they got pediatric first aid?", "no" }
+                                           };
+        
+        var ratioRequirements = new List<RatioRequirement>
+                                {
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 2 Ratio Requirements",
+                                        FullAndRelevantForLevel6After2014 = true,
+                                        RequirementForLevel2BetweenSept14AndAug19 = ContentfulContentHelper.Paragraph("Test")
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 3 Ratio Requirements",
+                                        FullAndRelevantForLevel6After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
+                                    },
+                                    new()
+                                    {
+                                        RatioRequirementName = "Level 6 Ratio Requirements",
+                                        FullAndRelevantForLevel6After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
+                                    },
+                                    // Note that every qualification will be marked as relevant for unqualified work, this still counts as not F and R.
+                                    new()
+                                    {
+                                        RatioRequirementName = "Unqualified Ratio Requirements",
+                                        FullAndRelevantForLevel6After2014 = true,
+                                        RequirementForLevel2After2014 = ContentfulContentHelper.Paragraph("Test")
+                                    }
+                                };
+
+        var qualificationResult = new Qualification(qualificationId,
+                                                    "Qualification Name",
+                                                    AwardingOrganisations.Ncfe,
+                                                    level)
+                                  {
+                                      FromWhichYear = "2014", ToWhichYear = "2019",
+                                      QualificationNumber = "ABC/547/900",
+                                      AdditionalRequirements = "additional requirements",
+                                      RatioRequirements = ratioRequirements,
+                                      AdditionalRequirementQuestions = additionalRequirementQuestions
+                                  };
+
+        mockRepository.Setup(x => x.GetById(qualificationId))
+                      .ReturnsAsync(qualificationResult);
+
+        mockContentService.Setup(x => x.GetDetailsPage())
+                          .ReturnsAsync(new DetailsPage
+                                        {
+                                            BackToConfirmAnswers = new NavigationLink
+                                                                   {
+                                                                       Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers"
+                                                                   }
+                                        });
+
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSept2014AndAug2019())
+                                    .Returns(true);
+        
+        mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
+                                    .Returns(listOfAdditionalReqsAnswered);
+
+        var controller =
+            new QualificationDetailsController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object)
+            {
+                ControllerContext = new ControllerContext
+                                    {
+                                        HttpContext = new DefaultHttpContext()
+                                    }
+            };
+
+        var result = await controller.Index(qualificationId);
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as QualificationDetailsModel;
+        model.Should().NotBeNull();
+
+        model!.QualificationId.Should().Be(qualificationResult.QualificationId);
+        model.QualificationName.Should().Be(qualificationResult.QualificationName);
+        model.AwardingOrganisationTitle.Should().Be(qualificationResult.AwardingOrganisationTitle);
+        model.QualificationLevel.Should().Be(qualificationResult.QualificationLevel);
+        model.FromWhichYear.Should().Be(qualificationResult.FromWhichYear);
+        model.QualificationNumber.Should().Be(qualificationResult.QualificationNumber);
+
+        model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.FurtherActionRequired);
+        model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.NotApproved);
+        model.RatioRequirements.ApprovedForLevel6.Should().Be(QualificationApprovalStatus.NotApproved);
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+    }
+
+    [TestMethod]
     public async Task Index_AllRatiosFound_ReturnsView()
     {
         var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
