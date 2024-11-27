@@ -20,6 +20,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                                                           AwardingOrganisations.Various, 3, false)),
                    "eyq-114" => await Task.FromResult(CreateLevel2FurtherActionRequiredQualification("EYQ-114", "Level 2 Further Action Qualification", AwardingOrganisations.Ncfe, 3)),
                    
+                   "eyq-241" => await Task.FromResult(CreateQualification("EYQ-241", "BTEC",
+                                                                          AwardingOrganisations.Various, 2)),
                    _ => await Task.FromResult(CreateQualification("EYQ-240",
                                                                   "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
                                                                   AwardingOrganisations.Ncfe, 3))
@@ -213,7 +215,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level2RatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
+                           FullAndRelevantForLevel3After2014 = true,
+                           RequirementForLevel2BetweenSept14AndAug19 = ContentfulContentHelper.Paragraph("Level 2 further action required text")
                        },
 
                        new RatioRequirement
