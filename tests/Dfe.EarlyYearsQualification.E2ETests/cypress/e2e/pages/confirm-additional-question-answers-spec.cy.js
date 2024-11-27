@@ -20,7 +20,8 @@ describe("A spec used to test the check additional requirements answer page", ()
         cy.get("#question-2-question").should("contain.text", "Test question");
         cy.get("#question-2-answer").should("contain.text", "Yes");
         cy.get("#question-2-change").should("contain.text", "Test change answer text");
-        
+
+        cy.get('#warning-text-container').should("exist");
         cy.get(".govuk-warning-text__text").should("contain.text", "Test answer disclaimer text");
         
         cy.get("#confirm-answers").should("contain.text", "Test button text");

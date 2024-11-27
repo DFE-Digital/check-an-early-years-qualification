@@ -11,6 +11,8 @@ public static class ConfirmQualificationPageMapper
                                                      string postHeadingContentHtml,
                                                      string variousAwardingOrganisationsExplanationHtml)
     {
+        var hasAnyAdditionalRequirementQuestions = qualification.AdditionalRequirementQuestions is { Count: > 0 };
+        
         return new ConfirmQualificationPageModel
                {
                    Heading = content.Heading,
@@ -23,7 +25,7 @@ public static class ConfirmQualificationPageMapper
                    AwardingOrganisationLabel = content.AwardingOrganisationLabel,
                    ErrorBannerHeading = content.ErrorBannerHeading,
                    ErrorBannerLink = content.ErrorBannerLink,
-                   ButtonText = content.ButtonText,
+                   ButtonText = hasAnyAdditionalRequirementQuestions ? content.ButtonText : content.NoAdditionalRequirementsButtonText,
                    HasErrors = false,
                    QualificationName = qualification.QualificationName,
                    QualificationLevel = qualification.QualificationLevel.ToString(),
@@ -33,7 +35,9 @@ public static class ConfirmQualificationPageMapper
                    BackButton = NavigationLinkMapper.Map(content.BackButton),
                    PostHeadingContent = postHeadingContentHtml,
                    VariousAwardingOrganisationsExplanation =
-                       variousAwardingOrganisationsExplanationHtml
+                       variousAwardingOrganisationsExplanationHtml,
+                   ShowAnswerDisclaimerText = !hasAnyAdditionalRequirementQuestions,
+                   AnswerDisclaimerText = content.AnswerDisclaimerText
                };
     }
 }

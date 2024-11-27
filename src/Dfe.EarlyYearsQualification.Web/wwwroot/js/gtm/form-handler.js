@@ -21,15 +21,25 @@ $("#date-question-form").on("submit", function(){
 });
 
 $("#dropdown-question-form").on("submit", function(){
-    let question = $("#question").text();
-    let selectedAO = $("#awarding-organisation-select :selected").val();
-    let isNotOnTheListChecked = $("#awarding-organisation-not-in-list").is(":checked");
-    window.dataLayer.push({
-        'event': 'dropdownQuestionFormSubmission',
-        'question': question,
-        'selectedAwardingOrganisation': selectedAO,
-        'isNotOnTheListChecked': isNotOnTheListChecked
-    });
+    const question = $("#question").text();
+    const selectedAO = $("#awarding-organisation-select :selected").val();
+    const isNotOnTheListChecked = $("#awarding-organisation-not-in-list").is(":checked");
+    const eventName = 'dropdownQuestionFormSubmission';
+    
+    const payload = isNotOnTheListChecked ? 
+        {
+            'event': eventName,
+            'question': question,
+            'isNotOnTheListChecked': isNotOnTheListChecked
+        }
+    :
+        {
+            'event': eventName,
+            'question': question,
+            'selectedAwardingOrganisation': selectedAO
+        };
+    
+    window.dataLayer.push(payload);
 });
 
 $("#confirm-qualification").on("submit", function(){

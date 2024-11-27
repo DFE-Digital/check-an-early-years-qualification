@@ -98,6 +98,12 @@
                     }
                 </fieldset>
             </div>
+            
+            @if(Model.ShowAnswerDisclaimerText)
+            {
+                await Html.RenderPartialAsync("Partials/WarningText", Model.AnswerDisclaimerText);
+            }
+            
             <div class="govuk-form-group">
                 <button id="confirm-qualification-button" class="govuk-button" data-module="govuk-button">
                     @Model.ButtonText

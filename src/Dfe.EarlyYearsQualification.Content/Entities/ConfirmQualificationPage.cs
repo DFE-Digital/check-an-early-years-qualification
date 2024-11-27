@@ -18,4 +18,6 @@ public class ConfirmQualificationPage
     public string ErrorText { get; init; } = string.Empty;
     public string ButtonText { get; init; } = string.Empty;
     public NavigationLink? BackButton { get; init; }
+    public string AnswerDisclaimerText { get; init; } = string.Empty;
+    public string NoAdditionalRequirementsButtonText { get; init; } = string.Empty;
 }
