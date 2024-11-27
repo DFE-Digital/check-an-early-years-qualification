@@ -7,6 +7,7 @@ using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -93,13 +94,25 @@ public class QualificationDetailsController(
 
         if (!validateAdditionalRequirementQuestions.isValid)
         {
+            await QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
             return validateAdditionalRequirementQuestions.actionResult!;
         }
 
         // If all the additional requirement checks pass, then we can go to check each level individually
         await CheckRatioRequirements(qualificationStartedBeforeSeptember2014, qualification, model);
+        
+        await QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
 
         return View(model);
+    }
+
+    private async Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model, Qualification qualification)
+    {
+        // Check if the qualification is not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
+        if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSept2014AndAug2019() && qualification.QualificationLevel > 2)
+        {
+            await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
+        }
     }
 
     private async Task<(bool isValid, IActionResult? actionResult)> ValidateAdditionalQuestions(QualificationDetailsModel model, Qualification qualification)
@@ -185,6 +198,18 @@ public class QualificationDetailsController(
                             or
                             { AnswerToBeFullAndRelevant: false, Answer: "yes" });
     }
+    
+    /// If the qualification is above a level 2 qualification, is not full and relevant and is started between Sept 2014 and Aug 2019
+    /// then it will have special requirements for level 2.
+    private async Task QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(QualificationDetailsModel model, Qualification qualification)
+    {
+        model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.FurtherActionRequired;
+        var requirementsForLevel2 = GetRatioProperty<Document>("RequirementForLevel2BetweenSept14AndAug19",
+                                                               RatioRequirements.Level2RatioRequirementName,
+                                                               qualification);
+        model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(requirementsForLevel2);
+        model.RatioRequirements.ShowRequirementsForLevel2ByDefault = true;
+    }
 
     private async Task CheckRatioRequirements(bool qualificationStartedBeforeSeptember2014,
                                               Qualification qualification,
@@ -213,9 +238,13 @@ public class QualificationDetailsController(
 
         const string additionalRequirementHeading = "RequirementHeading";
 
-        model.RatioRequirements.ApprovedForLevel2 =
-            GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level2RatioRequirementName,
-                                   qualification);
+        var approvedForLevel2 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level2RatioRequirementName,
+                                                       qualification);
+
+        model.RatioRequirements.ApprovedForLevel2 = approvedForLevel2
+                                                        ? QualificationApprovalStatus.Approved
+                                                        : QualificationApprovalStatus.NotApproved;
+            
 
         var requirementsForLevel2 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
                                                                RatioRequirements.Level2RatioRequirementName,
@@ -226,9 +255,13 @@ public class QualificationDetailsController(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level2RatioRequirementName,
                                      qualification);
 
-        model.RatioRequirements.ApprovedForLevel3 =
-            GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level3RatioRequirementName,
-                                   qualification);
+        var approvedForLevel3 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level3RatioRequirementName,
+                                                       qualification);
+        
+        model.RatioRequirements.ApprovedForLevel3 = approvedForLevel3
+                                                       ? QualificationApprovalStatus.Approved
+                                                       : QualificationApprovalStatus.NotApproved;
+            
 
         var requirementsForLevel3 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
                                                                RatioRequirements.Level3RatioRequirementName,
@@ -238,10 +271,13 @@ public class QualificationDetailsController(
         model.RatioRequirements.RequirementsHeadingForLevel3 =
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level3RatioRequirementName,
                                      qualification);
+        
+        var approvedForLevel6 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level6RatioRequirementName,
+                                                       qualification);
 
-        model.RatioRequirements.ApprovedForLevel6 =
-            GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level6RatioRequirementName,
-                                   qualification);
+        model.RatioRequirements.ApprovedForLevel6 = approvedForLevel6
+                                                        ? QualificationApprovalStatus.Approved
+                                                        : QualificationApprovalStatus.NotApproved;
 
         var requirementsForLevel6 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
                                                                RatioRequirements.Level6RatioRequirementName,
@@ -252,9 +288,12 @@ public class QualificationDetailsController(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level6RatioRequirementName,
                                      qualification);
 
-        model.RatioRequirements.ApprovedForUnqualified =
-            GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.UnqualifiedRatioRequirementName,
-                                   qualification);
+        var approvedForUnqualified = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.UnqualifiedRatioRequirementName, qualification);
+        
+        model.RatioRequirements.ApprovedForUnqualified = approvedForUnqualified
+                                                             ? QualificationApprovalStatus.Approved
+                                                             : QualificationApprovalStatus.NotApproved;
+            
 
         var requirementsForUnqualified = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
                                                                     RatioRequirements.UnqualifiedRatioRequirementName,
@@ -262,8 +301,7 @@ public class QualificationDetailsController(
         model.RatioRequirements.RequirementsForUnqualified = await contentParser.ToHtml(requirementsForUnqualified);
 
         model.RatioRequirements.RequirementsHeadingForUnqualified =
-            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName,
-                                     qualification);
+            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName, qualification);
     }
 
     private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
@@ -285,10 +323,10 @@ public class QualificationDetailsController(
 
     private static RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
     {
-        model.ApprovedForLevel2 = false;
-        model.ApprovedForLevel3 = false;
-        model.ApprovedForLevel6 = false;
-        model.ApprovedForUnqualified = true;
+        model.ApprovedForLevel2 = QualificationApprovalStatus.NotApproved;
+        model.ApprovedForLevel3 = QualificationApprovalStatus.NotApproved;
+        model.ApprovedForLevel6 = QualificationApprovalStatus.NotApproved;
+        model.ApprovedForUnqualified = QualificationApprovalStatus.Approved;
 
         return model;
     }
