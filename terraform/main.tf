@@ -120,6 +120,7 @@ module "alerts" {
   source = "./modules/azure-alerts"
 
   resource_group        = azurerm_resource_group.rg.name
+  location              = var.azure_region
   app_service_plan_id   = module.webapp.app_service_plan_id
   app_service_webapp_id = module.webapp.app_service_webapp_id
   tags                  = local.common_tags
