@@ -34,13 +34,11 @@
                 </tr>
             }
         </table>
-        <div class="govuk-warning-text">
-            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-            <strong class="govuk-warning-text__text">
-                <span class="govuk-visually-hidden">Warning</span>
-                @Model.AnswerDisclaimerText
-            </strong>
-        </div>
+        
+        @{
+            await Html.RenderPartialAsync("Partials/WarningText", Model.AnswerDisclaimerText);
+        }
+        
         <a id ="confirm-answers" href="@Model.GetResultsHref" class="govuk-button" data-module="govuk-button">
             @Model.ButtonText
         </a>

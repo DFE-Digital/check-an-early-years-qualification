@@ -216,49 +216,8 @@ describe('A spec used to test the various routes through the journey', () => {
       expect(loc.pathname).to.eq('/qualifications');
     })
   })
-
-  it("Selecting qualification level 6 started before 1 Sept 2014 should navigate to the level 6 pre 2014 advice page", () => {
-    // home page
-    cy.get('.govuk-button--start').click();
-
-    // where-was-the-qualification-awarded page
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
-    })
-
-    cy.get('#england').click();
-    cy.get('button[id="question-submit"]').click();
-
-    // when-was-the-qualification-started page
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
-    })
-
-    cy.get('#date-started-month').type("8");
-    cy.get('#date-started-year').type("2014");
-    cy.get('button[id="question-submit"]').click();
-
-    // what-level-is-the-qualification page
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
-    })
-    cy.get('#6').click();
-    cy.get('button[id="question-submit"]').click();
-
-    // level 6 pre 2014 advice page
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/advice/level-6-qualification-pre-2014');
-    })
-
-    // check back button goes back to the what level is the qualification page
-    cy.get('#back-button').click();
-
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
-    })
-  })
-
-  it("Selecting qualification level 6 started after 1 Sept 2014 should navigate to the level 6 post 2014 advice page", () => {
+  
+  it("Selecting qualification level 7 started after 1 Sept 2014 should navigate to the level 7 post 2014 advice page", () => {
     // home page
     cy.get('.govuk-button--start').click();
 
@@ -283,53 +242,12 @@ describe('A spec used to test the various routes through the journey', () => {
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
     })
-    cy.get('#6').click();
-    cy.get('button[id="question-submit"]').click();
-
-    // level 6 post 2014 advice page
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/advice/level-6-qualification-post-2014');
-    })
-
-    // check back button goes back to the what level is the qualification page
-    cy.get('#back-button').click();
-
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
-    })
-  })
-
-  it("Selecting qualification level 7 should navigate to the level 7 advice page", () => {
-    // home page
-    cy.get('.govuk-button--start').click();
-
-    // where-was-the-qualification-awarded page
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
-    })
-
-    cy.get('#england').click();
-    cy.get('button[id="question-submit"]').click();
-
-    // when-was-the-qualification-started page
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
-    })
-
-    cy.get('#date-started-month').type("6");
-    cy.get('#date-started-year').type("2022");
-    cy.get('button[id="question-submit"]').click();
-
-    // what-level-is-the-qualification page
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
-    })
     cy.get('#7').click();
     cy.get('button[id="question-submit"]').click();
 
-    // level 7 advice page
+    // level 7 post 2014 advice page
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/advice/qualification-level-7');
+      expect(loc.pathname).to.eq('/advice/level-7-qualification-post-2014');
     })
 
     // check back button goes back to the what level is the qualification page
@@ -339,7 +257,7 @@ describe('A spec used to test the various routes through the journey', () => {
       expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
     })
   })
-
+  
   it("should move the user back to the previous page when they click on the back button", () => {
     // home page
     cy.get('.govuk-button--start').click();
@@ -462,6 +380,158 @@ describe('A spec used to test the various routes through the journey', () => {
       cy.location().should((loc) => {
         expect(loc.pathname).to.eq('/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019');
       })
+    })
+  })
+
+  it("should bypass remaining additional requirement question when answering yes to the Qts question", () => {
+    // home page
+    cy.get('.govuk-button--start').click();
+
+    // where-was-the-qualification-awarded page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+    })
+
+    cy.get('#england').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // when-was-the-qualification-started page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
+    })
+
+    cy.get('#date-started-month').type("6");
+    cy.get('#date-started-year').type("2022");
+    cy.get('button[id="question-submit"]').click();
+
+    // what-level-is-the-qualification page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+    })
+    cy.get('#6').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // what-is-the-awarding-organisation page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-is-the-awarding-organisation');
+    })
+
+    cy.get('#awarding-organisation-select').select(1);  // first no-default item in the list
+    cy.get('button[id="question-submit"]').click();
+
+    // qualifications page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications');
+    })
+
+    cy.get('a[href="/confirm-qualification/EYQ-108"]').click();
+
+    // confirm qualification page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/confirm-qualification/EYQ-108');
+    })
+
+    cy.get('#yes').click();
+    cy.get('button[id="confirm-qualification-button"]').click();
+
+    // check additional questions first page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-108/1');
+    })
+
+    cy.get('#yes').click();
+    cy.get('button[id="additional-requirement-button"]').click();
+
+    // confirm answers page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-108/confirm-answers');
+    })
+
+    cy.get("#confirm-answers").click();
+
+    // qualification details page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications/qualification-details/EYQ-108');
+    })
+  })
+
+  it("should not bypass remaining additional requirement question when answering no to the Qts question", () => {
+    // home page
+    cy.get('.govuk-button--start').click();
+
+    // where-was-the-qualification-awarded page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+    })
+
+    cy.get('#england').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // when-was-the-qualification-started page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
+    })
+
+    cy.get('#date-started-month').type("6");
+    cy.get('#date-started-year').type("2022");
+    cy.get('button[id="question-submit"]').click();
+
+    // what-level-is-the-qualification page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+    })
+    cy.get('#6').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // what-is-the-awarding-organisation page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-is-the-awarding-organisation');
+    })
+
+    cy.get('#awarding-organisation-select').select(1);  // first no-default item in the list
+    cy.get('button[id="question-submit"]').click();
+
+    // qualifications page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications');
+    })
+
+    cy.get('a[href="/confirm-qualification/EYQ-108"]').click();
+
+    // confirm qualification page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/confirm-qualification/EYQ-108');
+    })
+
+    cy.get('#yes').click();
+    cy.get('button[id="confirm-qualification-button"]').click();
+
+    // check additional questions first page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-108/1');
+    })
+
+    cy.get('#no').click();
+    cy.get('button[id="additional-requirement-button"]').click();
+
+    // check second additional question
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-108/2');
+    })
+
+    cy.get('#yes').click();
+    cy.get('button[id="additional-requirement-button"]').click();
+
+    // confirm answers page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications/check-additional-questions/EYQ-108/confirm-answers');
+    })
+
+    cy.get("#confirm-answers").click();
+
+    // qualification details page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/qualifications/qualification-details/EYQ-108');
     })
   })
 })

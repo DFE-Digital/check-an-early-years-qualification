@@ -428,6 +428,182 @@ public class UserJourneyCookieServiceTests
     }
 
     [TestMethod]
+    public void WasStartedOnOrAfterSeptember2014_CookieValueIsEmpty_Throws()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = string.Empty
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var action = () => service.WasStartedOnOrAfterSeptember2014();
+
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void WasStartedOnOrAfterSeptember2014_CookieHasInvalidValue_Throws()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = "4"
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var action = () => service.WasStartedOnOrAfterSeptember2014();
+
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueIn2013_ReturnsFalse()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = "12/2013"
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.WasStartedOnOrAfterSeptember2014().Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueInAugust2014_ReturnsFalse()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = "8/2014"
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.WasStartedOnOrAfterSeptember2014().Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueInSeptember2014_ReturnsTrue()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = "9/2014"
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.WasStartedOnOrAfterSeptember2014().Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueIn2015_ReturnsTrue()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = "1/2015"
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.WasStartedOnOrAfterSeptember2014().Should().BeTrue();
+    }
+    
+    [TestMethod]
+    public void WasStartedBetweenSept2014AndAug2019_CookieValueIsEmpty_Throws()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = string.Empty
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var action = () => service.WasStartedBetweenSeptember2014AndAugust2019();
+
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void WasStartedBetweenSept2014AndAug2019_CookieHasInvalidValue_Throws()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = "4"
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var action = () => service.WasStartedBetweenSeptember2014AndAugust2019();
+
+        action.Should().Throw<InvalidOperationException>();
+    }
+    
+    [TestMethod]
+    [DataRow("8/2014")]
+    [DataRow("9/2019")]
+    [DataRow("5/2002")]
+    [DataRow("6/2024")]
+    public void WasStartedBetweenSept2014AndAug2019_CookieValueOutsideOfRange_ReturnsFalse(string dateStarted)
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = dateStarted
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeFalse();
+    }
+    
+    [TestMethod]
+    [DataRow("9/2014")]
+    [DataRow("8/2019")]
+    [DataRow("11/2016")]
+    [DataRow("4/2018")]
+    public void WasStartedBetweenSept2014AndAug2019_CookieValueInsideOfRange_ReturnsTrue(string dateStarted)
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhenWasQualificationStarted = dateStarted
+                            };
+
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
+    }
+    
+    [TestMethod]
     public void GetQualificationStartedBetween2014And2019_CookieValueIsEmpty_Throws()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
