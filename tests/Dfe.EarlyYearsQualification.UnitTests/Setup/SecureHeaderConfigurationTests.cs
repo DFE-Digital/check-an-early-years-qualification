@@ -26,7 +26,7 @@ public class SecureHeaderConfigurationTests
         config.RemoveXPoweredByHeader.Should().BeTrue();
         config.UseCrossOriginResourcePolicy.Should().BeTrue();
         config.HstsConfiguration.IncludeSubDomains.Should().BeTrue();
-        config.HstsConfiguration.MaxAge.Should().Be(63072000);
+        config.HstsConfiguration.MaxAge.Should().Be(31536000);
         config.XFrameOptionsConfiguration.OptionValue.Should().Be(XFrameOptions.Deny);
         config.XFrameOptionsConfiguration.AllowFromDomain.Should().BeNull();
         config.ContentSecurityPolicyConfiguration.BaseUri.Should().BeEmpty();
