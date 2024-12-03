@@ -154,3 +154,7 @@ body {
     font-size: 19px !important;
     margin-bottom: 0;
 }
+
+.govuk-tag {
+    max-width: initial !important;
+}

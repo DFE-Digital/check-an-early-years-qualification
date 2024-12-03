@@ -7,19 +7,25 @@
         </div>
     </div>
     <div class="govuk-!-width-one-half tag-padding-right">
-        <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
+        <div id="ratio-@Model.RatioId-tag" class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
             @{
-                if (Model.IsApproved)
+                switch (Model.ApprovalStatus)
                 {
-                    <strong class="govuk-tag govuk-tag--green tag-align-right">
-                        Approved
-                    </strong>
-                }
-                else
-                {
-                    <strong class="govuk-tag govuk-tag--red tag-align-right">
-                        Not approved
-                    </strong>
+                    case QualificationApprovalStatus.Approved:
+                        <strong class="govuk-tag govuk-tag--green tag-align-right">
+                            Approved
+                        </strong>
+                        break;
+                    case QualificationApprovalStatus.NotApproved:
+                        <strong class="govuk-tag govuk-tag--red tag-align-right">
+                            Not approved
+                        </strong>
+                        break;
+                    case QualificationApprovalStatus.FurtherActionRequired:
+                        <strong class="govuk-tag govuk-tag--grey tag-align-right">
+                            Further action required
+                        </strong>
+                        break;
                 }
             }
         </div>
@@ -28,7 +34,7 @@
 @if ((!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody) && !string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationHeader)) 
      || Model.AdditionalInformation.ShowAdditionalInformationBodyByDefault)
 {
-    <div class="govuk-grid-row">
+    <div id="ratio-@Model.RatioId-additional-info" class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             @{ await Html.RenderPartialAsync("Partials/AdditionalInformation", Model.AdditionalInformation); }
         </div>
