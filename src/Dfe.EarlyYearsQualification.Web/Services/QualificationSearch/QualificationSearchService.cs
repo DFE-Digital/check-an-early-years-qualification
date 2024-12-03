@@ -67,7 +67,7 @@ public class QualificationSearchService(
                    PostQualificationListContent = await contentParser.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
                    SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
-                   Qualifications = basicQualificationsModels.OrderBy(x => x.QualificationName).ToList(),
+                   Qualifications = basicQualificationsModels,
                    NoResultText = await contentParser.ToHtml(content.NoResultsText),
                    ClearSearchText = content.ClearSearchText,
                    NoQualificationsFoundText = content.NoQualificationsFoundText
@@ -109,23 +109,9 @@ public class QualificationSearchService(
 
     public List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification> qualifications)
     {
-        var basicQualificationsModels = new List<BasicQualificationModel>();
-
-        if (qualifications is not null && qualifications.Count > 0)
-        {
-            basicQualificationsModels.AddRange(
-                                               qualifications.Select(
-                                                                     qualification => new BasicQualificationModel
-                                                                                      {
-                                                                                          QualificationId = qualification.QualificationId,
-                                                                                          QualificationLevel = qualification.QualificationLevel,
-                                                                                          QualificationName = qualification.QualificationName,
-                                                                                          AwardingOrganisationTitle = qualification.AwardingOrganisationTitle
-                                                                                      }
-                                                                    )
-                                              );
-        }
-
-        return basicQualificationsModels;
+        if (qualifications is null) return [];
+        return qualifications.Select(qualification => new BasicQualificationModel(qualification))
+                             .OrderBy(qualification => qualification.QualificationName)
+                             .ToList();
     }
 }

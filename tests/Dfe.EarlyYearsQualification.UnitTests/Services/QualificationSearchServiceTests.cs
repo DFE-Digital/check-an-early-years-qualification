@@ -18,11 +18,11 @@ public class QualificationSearchServiceTests
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
 
     private IQualificationSearchService GetSut() => new QualificationSearchService(
-                                                       _mockRepository.Object,
-                                                       _mockContentService.Object,
-                                                       _mockContentParser.Object,
-                                                       _mockUserJourneyCookieService.Object
-                                                      );
+                                                                                   _mockRepository.Object,
+                                                                                   _mockContentService.Object,
+                                                                                   _mockContentParser.Object,
+                                                                                   _mockUserJourneyCookieService.Object
+                                                                                  );
 
     [TestInitialize]
     public void Initialize()
@@ -120,7 +120,7 @@ public class QualificationSearchServiceTests
     }
 
     [TestMethod]
-    public void GetBasicQualificationModels_Returns_Correct_Models()
+    public async Task MapList_Qualifications_Returns_Correct_List()
     {
         var qualifications = new List<Qualification>
                              {
@@ -131,13 +131,14 @@ public class QualificationSearchServiceTests
 
         var sut = GetSut();
 
-        var result = sut.GetBasicQualificationsModels(qualifications);
+        var result = await sut.MapList(new QualificationListPage(), qualifications);
 
-        result.Count.Should().Be(qualifications.Count);
+        var quals = result.Qualifications;
+        quals.Count.Should().Be(qualifications.Count);
 
-        for (int i = 0; i < result.Count; i++)
+        for (int i = 0; i < quals.Count; i++)
         {
-            var thisResult = result[i];
+            var thisResult = quals[i];
             var expectedResult = qualifications[i];
 
             thisResult.QualificationId.Should().Be(expectedResult.QualificationId);
