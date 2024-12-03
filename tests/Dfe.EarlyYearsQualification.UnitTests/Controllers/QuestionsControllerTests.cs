@@ -681,7 +681,7 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
-    
+
     [TestMethod]
     public async Task Post_WhatLevelIsTheQualification_Level7Post2014_ReturnsRedirectResponse()
     {
@@ -692,28 +692,28 @@ public class QuestionsControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
-    
+
         mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2014())
                                     .Returns(true);
-    
+
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
-    
+
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
                                                                       Option = "7"
                                                                   });
-    
+
         result.Should().NotBeNull();
-    
+
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-    
+
         resultType!.ActionName.Should().Be("Level7QualificationPost2014");
         resultType.ControllerName.Should().Be("Advice");
     }
-    
+
     [TestMethod]
     public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
@@ -1053,7 +1053,7 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationDetails");
+        resultType.ControllerName.Should().Be("QualificationSearch");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
@@ -1101,7 +1101,7 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationDetails");
+        resultType.ControllerName.Should().Be("QualificationSearch");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);

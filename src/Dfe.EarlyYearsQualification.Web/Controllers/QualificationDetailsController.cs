@@ -1,4 +1,3 @@
-using System.Globalization;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
@@ -23,34 +22,6 @@ public class QualificationDetailsController(
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
-    [HttpGet]
-    public async Task<IActionResult> Get()
-    {
-        var listPageContent = await contentService.GetQualificationListPage();
-        if (listPageContent is null)
-        {
-            logger.LogError("No content for the qualification list page");
-            return RedirectToAction("Index", "Error");
-        }
-
-        var model = await MapList(listPageContent, await GetFilteredQualifications());
-
-        return View(model);
-    }
-
-    [HttpPost]
-    public IActionResult Refine(string? refineSearch)
-    {
-        if (!ModelState.IsValid)
-        {
-            logger.LogWarning($"Invalid model state in {nameof(QualificationDetailsController)} POST");
-        }
-
-        userJourneyCookieService.SetQualificationNameSearchCriteria(refineSearch ?? string.Empty);
-
-        return RedirectToAction("Get");
-    }
-
     [HttpGet("qualification-details/{qualificationId}")]
     public async Task<IActionResult> Index(string qualificationId)
     {
@@ -106,33 +77,33 @@ public class QualificationDetailsController(
     {
         // If the qualification has no additional requirements then skip all checks and return.
         if (model.AdditionalRequirementAnswers == null) return (true, null);
-        
+
         // If qualification contains the QTS question, check the answers
         if (QualificationContainsQtsQuestion(qualification))
         {
             var qtsQuestion =
                 qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
                                                                              .QtsQuestion);
-            
+
             if (UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, model.AdditionalRequirementAnswers))
             {
                 // Remove the additional requirements that they didn't answer following the bypass.
                 model.AdditionalRequirementAnswers.RemoveAll(x => x.Question != qtsQuestion.Question);
                 return (true, null);
             }
-            
+
             // Check remaining questions
             var answersToCheck = new List<AdditionalRequirementAnswerModel>();
             answersToCheck.AddRange(model.AdditionalRequirementAnswers);
             // As L6 / L7 can potentially work at L3/2/unqualified, remove the Qts question and check answers
             answersToCheck.RemoveAll(x => x.Question == qtsQuestion.Question);
-            
+
             // As we know that they didn't answer the Qts question, we need to show the L6 requirements by default.
             // Adding it here covers scenarios where they are OK for L2/3/Unqualified and just Unqualified.
             model.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
-            
+
             if (!AnswersIndicateNotFullAndRelevant(answersToCheck)) return (true, null);
-            
+
             // Answers indicate not full and relevant
             model.RatioRequirements = MarkAsNotFullAndRelevant(model.RatioRequirements);
             // Set any content for L6
@@ -147,10 +118,10 @@ public class QualificationDetailsController(
                                                                    qualification);
             model.RatioRequirements.RequirementsForLevel6 = await contentParser.ToHtml(requirementsForLevel6);
             model.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
-            
+
             return (false, View(model));
         }
-        
+
         // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
         if (model.AdditionalRequirementAnswers.Count == 0 ||
             model.AdditionalRequirementAnswers.Exists(answer => string.IsNullOrEmpty(answer.Answer)))
@@ -201,9 +172,9 @@ public class QualificationDetailsController(
 
         var additionalRequirementDetailPropertyToCheck =
             $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
-        
-        if (qualification.IsAutomaticallyApprovedAtLevel6 || 
-            (QualificationContainsQtsQuestion(qualification) 
+
+        if (qualification.IsAutomaticallyApprovedAtLevel6 ||
+            (QualificationContainsQtsQuestion(qualification)
              && UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, model.AdditionalRequirementAnswers)))
         {
             // Check user against QTS criteria and swap to Qts Criteria if matches
@@ -292,12 +263,12 @@ public class QualificationDetailsController(
 
         return model;
     }
-    
+
     private static bool QualificationContainsQtsQuestion(Qualification qualification)
     {
         return qualification.AdditionalRequirementQuestions != null
-               && qualification.AdditionalRequirementQuestions.Any(x => x.Sys.Id == AdditionalRequirementQuestions
-                                                                            .QtsQuestion);
+               && qualification.AdditionalRequirementQuestions.Exists(x => x.Sys.Id == AdditionalRequirementQuestions
+                                                                               .QtsQuestion);
     }
 
     private static bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification,
@@ -308,7 +279,7 @@ public class QualificationDetailsController(
         {
             return false;
         }
-        
+
         var qtsQuestion =
             qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
                                                                          .QtsQuestion);
@@ -316,99 +287,6 @@ public class QualificationDetailsController(
         var userAnsweredQuestion = additionalRequirementAnswerModels.First(x => x.Question == qtsQuestion.Question);
         var answerAsBool = userAnsweredQuestion.Answer == "yes";
         return qtsQuestion.AnswerToBeFullAndRelevant == answerAsBool;
-    }
-    
-    private async Task<List<Qualification>> GetFilteredQualifications()
-    {
-        var level = userJourneyCookieService.GetLevelOfQualification();
-        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
-        var searchCriteria = userJourneyCookieService.GetSearchCriteria();
-
-        return await qualificationsRepository.Get(level, startDateMonth, startDateYear,
-                                                  awardingOrganisation, searchCriteria);
-    }
-
-    private async Task<QualificationListModel> MapList(QualificationListPage content,
-                                                       List<Qualification>? qualifications)
-    {
-        var basicQualificationsModels = GetBasicQualificationsModels(qualifications);
-
-        var filterModel = GetFilterModel(content);
-
-        return new QualificationListModel
-               {
-                   BackButton = NavigationLinkMapper.Map(content.BackButton),
-                   Filters = filterModel,
-                   Header = content.Header,
-                   SingleQualificationFoundText = content.SingleQualificationFoundText,
-                   MultipleQualificationsFoundText = content.MultipleQualificationsFoundText,
-                   PreSearchBoxContent = await contentParser.ToHtml(content.PreSearchBoxContent),
-                   SearchButtonText = content.SearchButtonText,
-                   LevelHeading = content.LevelHeading,
-                   AwardingOrganisationHeading = content.AwardingOrganisationHeading,
-                   PostSearchCriteriaContent = await contentParser.ToHtml(content.PostSearchCriteriaContent),
-                   PostQualificationListContent = await contentParser.ToHtml(content.PostQualificationListContent),
-                   SearchCriteriaHeading = content.SearchCriteriaHeading,
-                   SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
-                   Qualifications = basicQualificationsModels.OrderBy(x => x.QualificationName).ToList(),
-                   NoResultText = await contentParser.ToHtml(content.NoResultsText),
-                   ClearSearchText = content.ClearSearchText,
-                   NoQualificationsFoundText = content.NoQualificationsFoundText
-               };
-    }
-
-    private FilterModel GetFilterModel(QualificationListPage content)
-    {
-        var filterModel = new FilterModel
-                          {
-                              Country = userJourneyCookieService.GetWhereWasQualificationAwarded()!,
-                              Level = content.AnyLevelHeading,
-                              AwardingOrganisation = content.AnyAwardingOrganisationHeading
-                          };
-
-        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        if (startDateMonth is not null && startDateYear is not null)
-        {
-            var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-            filterModel.StartDate = $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
-        }
-
-        var level = userJourneyCookieService.GetLevelOfQualification();
-        if (level > 0)
-        {
-            filterModel.Level = $"Level {level}";
-        }
-
-        var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
-        if (!string.IsNullOrEmpty(awardingOrganisation))
-        {
-            filterModel.AwardingOrganisation = awardingOrganisation;
-        }
-
-        return filterModel;
-    }
-
-    private static List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification>? qualifications)
-    {
-        var basicQualificationsModels = new List<BasicQualificationModel>();
-
-        // ReSharper disable once InvertIf
-        if (qualifications is not null && qualifications.Count > 0)
-        {
-            foreach (var qualification in qualifications)
-            {
-                basicQualificationsModels.Add(new BasicQualificationModel
-                                              {
-                                                  QualificationId = qualification.QualificationId,
-                                                  QualificationLevel = qualification.QualificationLevel,
-                                                  QualificationName = qualification.QualificationName,
-                                                  AwardingOrganisationTitle = qualification.AwardingOrganisationTitle
-                                              });
-            }
-        }
-
-        return basicQualificationsModels;
     }
 
     private async Task<QualificationDetailsModel> MapDetails(
@@ -428,7 +306,7 @@ public class QualificationDetailsController(
             var dateOnly = new DateOnly(startYear.Value, startMonth.Value, 1);
             dateStarted = dateOnly.ToString("MMMM yyyy");
         }
-        
+
         var checkAnotherQualificationText = await contentParser.ToHtml(content.CheckAnotherQualificationText);
         var furtherInfoText = await contentParser.ToHtml(content.FurtherInfoText);
         var requirementsText = await contentParser.ToHtml(content.RequirementsText);

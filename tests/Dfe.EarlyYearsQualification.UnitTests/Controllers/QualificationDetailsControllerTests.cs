@@ -692,26 +692,26 @@ public class QualificationDetailsControllerTests
         const string requirementsForLevel = "Test";
 
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>
-                                            {
-                                                new()
-                                                {
-                                                    Sys = new SystemProperties
-                                                          {
-                                                              Id = AdditionalRequirementQuestions.QtsQuestion
-                                                          },
-                                                    Question = "This is the Qts Question",
-                                                    AnswerToBeFullAndRelevant = true
-                                                },
-                                                new()
-                                                {
-                                                    Sys = new SystemProperties
-                                                          {
-                                                              Id = "Some other Id"
-                                                          },
-                                                    Question = "Have they got pediatric first aid?",
-                                                    AnswerToBeFullAndRelevant = true
-                                                }
-                                            };
+                                             {
+                                                 new()
+                                                 {
+                                                     Sys = new SystemProperties
+                                                           {
+                                                               Id = AdditionalRequirementQuestions.QtsQuestion
+                                                           },
+                                                     Question = "This is the Qts Question",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 },
+                                                 new()
+                                                 {
+                                                     Sys = new SystemProperties
+                                                           {
+                                                               Id = "Some other Id"
+                                                           },
+                                                     Question = "Have they got pediatric first aid?",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 }
+                                             };
 
         var ratioRequirements = new List<RatioRequirement>
                                 {
@@ -740,7 +740,7 @@ public class QualificationDetailsControllerTests
                                         RequirementForLevel6After2014 = ContentfulContentHelper.Paragraph(requirementsForLevel)
                                     }
                                 };
-        
+
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>
                                            {
                                                { "This is the Qts Question", "no" },
@@ -822,7 +822,7 @@ public class QualificationDetailsControllerTests
         model.RatioRequirements.RequirementsForLevel6.Should().Be(requirementsForLevel);
         model.RatioRequirements.ShowRequirementsForLevel6ByDefault.Should().BeTrue();
     }
-    
+
     [TestMethod]
     public async Task Index_QualificationContainsQts_UserAnswerMatches_ApprovedAtL6()
     {
@@ -838,26 +838,26 @@ public class QualificationDetailsControllerTests
         const string requirementsForLevel = "Test";
 
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>
-                                            {
-                                                new()
-                                                {
-                                                    Sys = new SystemProperties
-                                                          {
-                                                              Id = AdditionalRequirementQuestions.QtsQuestion
-                                                          },
-                                                    Question = "This is the Qts Question",
-                                                    AnswerToBeFullAndRelevant = true
-                                                },
-                                                new()
-                                                {
-                                                    Sys = new SystemProperties
-                                                          {
-                                                              Id = "Some other Id"
-                                                          },
-                                                    Question = "Have they got pediatric first aid?",
-                                                    AnswerToBeFullAndRelevant = true
-                                                }
-                                            };
+                                             {
+                                                 new()
+                                                 {
+                                                     Sys = new SystemProperties
+                                                           {
+                                                               Id = AdditionalRequirementQuestions.QtsQuestion
+                                                           },
+                                                     Question = "This is the Qts Question",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 },
+                                                 new()
+                                                 {
+                                                     Sys = new SystemProperties
+                                                           {
+                                                               Id = "Some other Id"
+                                                           },
+                                                     Question = "Have they got pediatric first aid?",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 }
+                                             };
 
         var ratioRequirements = new List<RatioRequirement>
                                 {
@@ -886,7 +886,7 @@ public class QualificationDetailsControllerTests
                                         RequirementForQtsEtcAfter2014 = ContentfulContentHelper.Paragraph(requirementsForLevel)
                                     }
                                 };
-        
+
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>
                                            {
                                                { "This is the Qts Question", "yes" },
@@ -968,7 +968,7 @@ public class QualificationDetailsControllerTests
         model.AdditionalRequirementAnswers.Should().NotBeNull();
         model.AdditionalRequirementAnswers!.Count.Should().Be(1);
     }
-    
+
     [TestMethod]
     public async Task Index_QualificationIsAutomaticallyApprovedAtL6_ApprovedAtL6()
     {
@@ -982,7 +982,7 @@ public class QualificationDetailsControllerTests
         const int level = 6;
         const int startDateYear = 2022;
         const string requirementsForLevel = "Test";
-        
+
         var ratioRequirements = new List<RatioRequirement>
                                 {
                                     new()
@@ -1010,7 +1010,7 @@ public class QualificationDetailsControllerTests
                                         RequirementForQtsEtcAfter2014 = ContentfulContentHelper.Paragraph(requirementsForLevel)
                                     }
                                 };
-        
+
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>
                                            {
                                                { "This is the Qts Question", "yes" },
@@ -1089,7 +1089,7 @@ public class QualificationDetailsControllerTests
         model.RatioRequirements.ApprovedForLevel6.Should().BeTrue();
         model.RatioRequirements.ApprovedForUnqualified.Should().BeTrue();
     }
-    
+
     [TestMethod]
     public async Task Index_QualificationContainsQts_UserAnswerDoesntMatch_OnlyApprovedAtUnqualified()
     {
@@ -1105,26 +1105,26 @@ public class QualificationDetailsControllerTests
         const string requirementsForLevel = "Test";
 
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>
-                                            {
-                                                new()
-                                                {
-                                                    Sys = new SystemProperties
-                                                          {
-                                                              Id = AdditionalRequirementQuestions.QtsQuestion
-                                                          },
-                                                    Question = "This is the Qts Question",
-                                                    AnswerToBeFullAndRelevant = true
-                                                },
-                                                new()
-                                                {
-                                                    Sys = new SystemProperties
-                                                          {
-                                                              Id = "Some other Id"
-                                                          },
-                                                    Question = "Have they got pediatric first aid?",
-                                                    AnswerToBeFullAndRelevant = true
-                                                }
-                                            };
+                                             {
+                                                 new()
+                                                 {
+                                                     Sys = new SystemProperties
+                                                           {
+                                                               Id = AdditionalRequirementQuestions.QtsQuestion
+                                                           },
+                                                     Question = "This is the Qts Question",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 },
+                                                 new()
+                                                 {
+                                                     Sys = new SystemProperties
+                                                           {
+                                                               Id = "Some other Id"
+                                                           },
+                                                     Question = "Have they got pediatric first aid?",
+                                                     AnswerToBeFullAndRelevant = true
+                                                 }
+                                             };
 
         var ratioRequirements = new List<RatioRequirement>
                                 {
@@ -1153,7 +1153,7 @@ public class QualificationDetailsControllerTests
                                         RequirementForLevel6After2014 = ContentfulContentHelper.Paragraph(requirementsForLevel)
                                     }
                                 };
-        
+
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>
                                            {
                                                { "This is the Qts Question", "no" },
@@ -1294,9 +1294,9 @@ public class QualificationDetailsControllerTests
         var detailsPage = new DetailsPage
                           {
                               BackToConfirmAnswers = new NavigationLink
-                                                              {
-                                                                  Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers"
-                                                              }
+                                                     {
+                                                         Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers"
+                                                     }
                           };
 
         mockRepository.Setup(x => x.GetById(qualificationId))
@@ -1332,182 +1332,5 @@ public class QualificationDetailsControllerTests
         var model = resultType!.Model as QualificationDetailsModel;
 
         model!.BackButton!.Href.Should().Be("/qualifications/check-additional-questions/eyq-145/confirm-answers");
-    }
-
-    [TestMethod]
-    public async Task Get_ReturnsView()
-    {
-        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-        var mockRepository = new Mock<IQualificationsRepository>();
-        var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-
-        mockRepository
-            .Setup(x =>
-                       x.Get(It.IsAny<int?>(),
-                             It.IsAny<int?>(),
-                             It.IsAny<int?>(),
-                             It.IsAny<string?>(),
-                             It.IsAny<string?>()))
-            .ReturnsAsync([]);
-
-        var controller =
-            new QualificationDetailsController(mockLogger.Object,
-                                               mockRepository.Object,
-                                               mockContentService.Object,
-                                               mockContentParser.Object,
-                                               mockUserJourneyCookieService.Object)
-            {
-                ControllerContext = new ControllerContext
-                                    {
-                                        HttpContext = new DefaultHttpContext()
-                                    }
-            };
-
-        mockContentService.Setup(x => x.GetQualificationListPage()).ReturnsAsync(new QualificationListPage
-                 {
-                     BackButton = new NavigationLink
-                                  {
-                                      DisplayText = "TEST",
-                                      Href = "/",
-                                      OpenInNewTab = false
-                                  },
-                     Header = "TEST"
-                 });
-
-        var result = await controller.Get();
-
-        result.Should().NotBeNull();
-        result.Should().BeOfType<ViewResult>();
-    }
-
-    [TestMethod]
-    public async Task Get_NoContent_LogsAndRedirectsToError()
-    {
-        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-        var mockRepository = new Mock<IQualificationsRepository>();
-        var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-
-        var controller =
-            new QualificationDetailsController(mockLogger.Object,
-                                               mockRepository.Object,
-                                               mockContentService.Object,
-                                               mockContentParser.Object,
-                                               mockUserJourneyCookieService.Object)
-            {
-                ControllerContext = new ControllerContext
-                                    {
-                                        HttpContext = new DefaultHttpContext()
-                                    }
-            };
-
-        mockContentService.Setup(x => x.GetQualificationListPage()).ReturnsAsync(default(QualificationListPage));
-
-        var result = await controller.Get();
-
-        result.Should().BeOfType<RedirectToActionResult>();
-
-        var actionResult = (RedirectToActionResult)result;
-
-        actionResult.ActionName.Should().Be("Index");
-        actionResult.ControllerName.Should().Be("Error");
-
-        mockLogger.VerifyError("No content for the qualification list page");
-    }
-
-    [TestMethod]
-    public void Refine_SaveQualificationName_RedirectsToGet()
-    {
-        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-        var mockRepository = new Mock<IQualificationsRepository>();
-        var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-
-        var controller =
-            new QualificationDetailsController(mockLogger.Object,
-                                               mockRepository.Object,
-                                               mockContentService.Object,
-                                               mockContentParser.Object,
-                                               mockUserJourneyCookieService.Object)
-            {
-                ControllerContext = new ControllerContext
-                                    {
-                                        HttpContext = new DefaultHttpContext()
-                                    }
-            };
-
-        var result = controller.Refine("Test");
-
-        result.Should().BeOfType<RedirectToActionResult>();
-
-        var actionResult = (RedirectToActionResult)result;
-
-        actionResult.ActionName.Should().Be("Get");
-        mockUserJourneyCookieService.Verify(x => x.SetQualificationNameSearchCriteria("Test"), Times.Once);
-    }
-
-    [TestMethod]
-    public void Refine_NullParam_RedirectsToGet()
-    {
-        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-        var mockRepository = new Mock<IQualificationsRepository>();
-        var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-
-        var controller =
-            new QualificationDetailsController(mockLogger.Object,
-                                               mockRepository.Object,
-                                               mockContentService.Object,
-                                               mockContentParser.Object,
-                                               mockUserJourneyCookieService.Object)
-            {
-                ControllerContext = new ControllerContext
-                                    {
-                                        HttpContext = new DefaultHttpContext()
-                                    }
-            };
-
-        var result = controller.Refine(null);
-
-        result.Should().BeOfType<RedirectToActionResult>();
-
-        var actionResult = (RedirectToActionResult)result;
-
-        actionResult.ActionName.Should().Be("Get");
-        mockUserJourneyCookieService.Verify(x => x.SetQualificationNameSearchCriteria(string.Empty), Times.Once);
-    }
-
-    [TestMethod]
-    public void Refine_InvalidModel_LogsWarning()
-    {
-        var mockLogger = new Mock<ILogger<QualificationDetailsController>>();
-        var mockRepository = new Mock<IQualificationsRepository>();
-        var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-
-        var controller =
-            new QualificationDetailsController(mockLogger.Object,
-                                               mockRepository.Object,
-                                               mockContentService.Object,
-                                               mockContentParser.Object,
-                                               mockUserJourneyCookieService.Object)
-            {
-                ControllerContext = new ControllerContext
-                                    {
-                                        HttpContext = new DefaultHttpContext()
-                                    }
-            };
-
-        controller.ModelState.AddModelError("Key", "Error message");
-
-        controller.Refine(null);
-
-        mockLogger.VerifyWarning($"Invalid model state in {nameof(QualificationDetailsController)} POST");
     }
 }

@@ -53,14 +53,14 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post, new { id="refine-search-form", @class = "float-left", style = "width:80%" }))
+                @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id="refine-search-form", @class = "float-left", style = "width:80%" }))
                 {
                     <input class="govuk-input" style="width: 85%" id="refineSearch" name="refineSearch" aria-label="refine search box" type="text" value="@Model.SearchCriteria">
                     <button id="refineSearchButton" type="submit" class="govuk-button govuk-button--secondary govuk-!-static-margin-left-1" data-module="govuk-button">
                         @Model.SearchButtonText
                     </button>
                 }
-                @using (Html.BeginForm("Refine", "QualificationDetails", FormMethod.Post, new { id="clear-search-form", @class = "float-left", style = "width:20%" }))
+                @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id="clear-search-form", @class = "float-left", style = "width:20%" }))
                 {
                     <input name="refineSearch" type="hidden" value="">
                     <button id="clear-search" type="submit" class="govuk-link button-as-link float-left govuk-!-static-margin-left-3 govuk-!-static-margin-top-1 govuk-!-font-size-19">@Model.ClearSearchText</button>
