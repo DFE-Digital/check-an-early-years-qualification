@@ -569,7 +569,7 @@ public class QualificationDetailsControllerTests
         await Assert.ThrowsExceptionAsync<NullReferenceException>(() => controller.Index(qualificationId));
         mockLogger.VerifyError($"Could not find property: FullAndRelevantForLevel{level}After2014 within Level 6 Ratio Requirements for qualification: {qualificationId}");
     }
-    
+
     [TestMethod]
     [DataRow(9, 2014, 3)]
     [DataRow(8, 2019, 3)]
@@ -664,8 +664,7 @@ public class QualificationDetailsControllerTests
                                         });
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
-        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSept2014AndAug2019())
-                                    .Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
 
         var controller =
             new QualificationDetailsController(mockLogger.Object,
@@ -717,7 +716,7 @@ public class QualificationDetailsControllerTests
         const int level = 6;
         const int startMonth = 6;
         const int startYear = 2016;
-        
+
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>
                                              {
                                                  new()
@@ -730,13 +729,13 @@ public class QualificationDetailsControllerTests
                                                      AnswerToBeFullAndRelevant = true
                                                  }
                                              };
-        
+
         //Answer here makes this qual not full and relevant
         var listOfAdditionalReqsAnswered = new Dictionary<string, string>
                                            {
                                                { "Have they got pediatric first aid?", "no" }
                                            };
-        
+
         var ratioRequirements = new List<RatioRequirement>
                                 {
                                     new()
@@ -791,9 +790,8 @@ public class QualificationDetailsControllerTests
                                         });
 
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
-        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSept2014AndAug2019())
-                                    .Returns(true);
-        
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
+
         mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
                                     .Returns(listOfAdditionalReqsAnswered);
 

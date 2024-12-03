@@ -80,7 +80,7 @@ public class QualificationDetailsController(
     private async Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model, Qualification qualification)
     {
         // Check if the qualification is not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
-        if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSept2014AndAug2019() && qualification.QualificationLevel > 2)
+        if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() && qualification.QualificationLevel > 2)
         {
             await QualIsNotLevel2NotApprovedAndStartedBetweenSept2014AndAug2019(model, qualification);
         }
