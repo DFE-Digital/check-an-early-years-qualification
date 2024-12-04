@@ -12,6 +12,7 @@ using Dfe.EarlyYearsQualification.Web.Security;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
+using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
@@ -99,6 +100,7 @@ else
     builder.Services.AddTransient<IQualificationsRepository, QualificationsRepository>();
 }
 
+builder.Services.AddTransient<IQualificationSearchService, QualificationSearchService>();
 builder.Services.AddModelRenderers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICookieManager, CookieManager>();
