@@ -26,10 +26,12 @@ public class SecureHeaderConfigurationTests
         config.UseCrossOriginResourcePolicy.Should().BeTrue();
         config.HstsConfiguration.Should().NotBeNull();
         var hstsHeaderValue = config.HstsConfiguration.BuildHeaderValue();
+        hstsHeaderValue.Should().NotBeNull();
         hstsHeaderValue.Should().Contain("max-age=31536000");
         hstsHeaderValue.Should().Contain("includeSubDomains");
         config.XFrameOptionsConfiguration.Should().NotBeNull();
         var xFrameOptionHeaderValue = config.XFrameOptionsConfiguration.BuildHeaderValue();
+        xFrameOptionHeaderValue.Should().NotBeNull();
         xFrameOptionHeaderValue.Should().Contain("DENY");
         config.XFrameOptionsConfiguration.AllowFromDomain.Should().BeNull();
         config.ContentSecurityPolicyConfiguration.BaseUri.Should().BeEmpty();
