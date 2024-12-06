@@ -9,7 +9,7 @@ test.describe("A spec used to test the main back button route through the journe
 
         // home page
         await page.goto("/");
-        await expect(page.locator(".govuk-button--start")).toHaveCount(1);
+        await expect(page.locator(".govuk-button--start")).toBeVisible();
         await page.locator(".govuk-button--start").click();
 
         // where-was-the-qualification-awarded page - england selection moves us on
