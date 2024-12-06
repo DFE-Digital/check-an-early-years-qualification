@@ -52,10 +52,16 @@ jobs:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
-      - name: Run e2e tests
-        uses: ./.github/actions/run-e2e-tests
+#      - name: Run e2e tests
+#        uses: ./.github/actions/run-e2e-tests
+#        with:
+#          url: ${{ env.URL }}
+#          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+
+      - name: Run Playwright e2e tests
+        uses: ./.github/actions/run-playwright-e2e-tests
         with:
-          url: ${{ env.URL }}
+          webapp_url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
       - name: Run Accessibility tests
