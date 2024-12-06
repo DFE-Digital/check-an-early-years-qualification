@@ -85,7 +85,7 @@ test.describe("A spec used to test the main back button route through the journe
         expect(page.url()).toContain("/questions/where-was-the-qualification-awarded");
         await page.locator("#back-button").click();
 
-        expect(page.url()).toBe("/");
+        expect(page.url()).toBe(process.env.WEBAPP_URL + "/");
     });
 
     test.describe("back buttons should all navigate to the appropriate pages in the main journey", async () => {
@@ -98,13 +98,13 @@ test.describe("A spec used to test the main back button route through the journe
         test("the back button on the accessibility statement page navigates back to the home page", async ({ page, context }) => {
             await page.goto("/accessibility-statement");
             await page.locator("#back-button").click();
-            expect(page.url()).toBe("/");
+            expect(page.url()).toBe(process.env.WEBAPP_URL + "/");
         });
 
         test("the back button on the cookies preference page navigates back to the home page", async ({ page, context }) => {
             await page.goto("/cookies");
             await page.locator("#back-button").click();
-            expect(page.url()).toBe("/");
+            expect(page.url()).toBe(process.env.WEBAPP_URL + "/");
         });
     });
 });
