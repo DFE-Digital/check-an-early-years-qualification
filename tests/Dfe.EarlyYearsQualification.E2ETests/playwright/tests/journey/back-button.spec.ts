@@ -9,8 +9,8 @@ test.describe("A spec used to test the main back button route through the journe
 
         // home page
         await page.goto("/");
-        await expect(page.locator(".govuk-button--start")).toHaveCount(1);
-        await page.locator(".govuk-button--start").click();
+        await expect(page.locator("#start-now-button")).toHaveCount(1);
+        await page.locator("#start-now-button").click();
 
         // where-was-the-qualification-awarded page - england selection moves us on
         expect(page.url()).toContain("/questions/where-was-the-qualification-awarded");
