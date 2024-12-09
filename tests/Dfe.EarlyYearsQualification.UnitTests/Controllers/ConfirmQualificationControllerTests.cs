@@ -116,7 +116,7 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         var confirmQualificationPageContent = GetConfirmQualificationPageContent();
-        
+
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(confirmQualificationPageContent);
 
         var qualification = new Qualification("Some ID",
@@ -189,7 +189,7 @@ public class ConfirmQualificationControllerTests
         model.QualificationAwardingOrganisation.Should().Be(AwardingOrganisations.Ncfe);
         model.QualificationDateAdded.Should().Be("2014");
     }
-    
+
     [TestMethod]
     public async Task Post_InvalidModel_CantGetPageContent_LogsAndReturnsError()
     {
@@ -311,7 +311,7 @@ public class ConfirmQualificationControllerTests
         var mockContentService = new Mock<IContentService>();
 
         var confirmQualificationPageContent = GetConfirmQualificationPageContent();
-        
+
         mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(confirmQualificationPageContent);
 
         var qualification = new Qualification("Some ID",
@@ -439,7 +439,7 @@ public class ConfirmQualificationControllerTests
         actionResult.RouteValues.Should().Contain("qualificationId", "TEST-123");
         actionResult.RouteValues.Should().Contain("questionIndex", 1);
     }
-    
+
     [TestMethod]
     public async Task
         Post_ValidModel_QualificationHasAdditionalRequirementsButAutomaticallyApprovedAtL6IsTrue_RedirectsToCheckAdditionalRequirements()
@@ -578,7 +578,7 @@ public class ConfirmQualificationControllerTests
         var actionResult = (RedirectToActionResult)result;
 
         actionResult.ActionName.Should().Be("Get");
-        actionResult.ControllerName.Should().Be("QualificationDetails");
+        actionResult.ControllerName.Should().Be("QualificationSearch");
     }
 
     [TestMethod]
@@ -620,7 +620,7 @@ public class ConfirmQualificationControllerTests
 
         mockUserJourneyService.Verify(x => x.ClearAdditionalQuestionsAnswers(), Times.Once);
     }
-    
+
     private static ConfirmQualificationPage GetConfirmQualificationPageContent()
     {
         return new ConfirmQualificationPage
