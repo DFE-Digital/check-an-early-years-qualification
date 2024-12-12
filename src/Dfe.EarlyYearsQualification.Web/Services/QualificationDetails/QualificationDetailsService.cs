@@ -169,7 +169,7 @@ public class QualificationDetailsService(
         }
     }
 
-    public T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
+    private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
     {
         try
         {

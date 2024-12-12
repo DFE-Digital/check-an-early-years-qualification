@@ -107,9 +107,8 @@ public class QualificationSearchService(
         return filterModel;
     }
 
-    public List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification> qualifications)
+    private static List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification> qualifications)
     {
-        if (qualifications is null) return [];
         return qualifications.Select(qualification => new BasicQualificationModel(qualification))
                              .OrderBy(qualification => qualification.QualificationName)
                              .ToList();
