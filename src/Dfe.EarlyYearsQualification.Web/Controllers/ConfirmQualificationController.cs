@@ -95,7 +95,7 @@ public class ConfirmQualificationController(
                                                  "QualificationDetails",
                                                  new { qualificationId = model.QualificationId }),
 
-                       _ => RedirectToAction("Get", "QualificationDetails")
+                       _ => RedirectToAction("Get", "QualificationSearch")
                    };
         }
 
