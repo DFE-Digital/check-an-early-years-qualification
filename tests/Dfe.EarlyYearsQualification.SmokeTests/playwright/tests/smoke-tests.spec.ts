@@ -2,21 +2,21 @@ import { test, expect } from '@playwright/test';
 
 test.describe("A spec used to smoke test the environment once a deployment has happened", () => {
   test("should return search results", async ({ page, context }) => {
-
+      
     // attempt to set cookie and navigate to start page
-    await context.addCookies([
-      { name: 'auth-secret', value: process.env.AUTH_SECRET, path: '/', domain: process.env.WEBAPP_URL }
-    ]);
-    
+   await context.addCookies([
+     { name: 'auth-secret', value: process.env.AUTH_SECRET, path: '/', domain: process.env.DOMAIN }
+   ]);
+
     await page.goto("/");
-    
+
     //if we end up navigated to the challenge page, then fill in the password and continue
     if (page.url().includes("challenge")) {
       await page.locator("#PasswordValue").fill(process.env.AUTH_SECRET);
       await page.locator("#question-submit").click();
       await page.waitForURL("/");
     }
-    
+
     // home page
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();

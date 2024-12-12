@@ -67,12 +67,18 @@ This will pull in the exclusions such as the .cshtml files and will replicate co
 End to end tests are ran using [Playwright](https://playwright.dev/).
 
 To run the tests, run the following commands:
+- Add some environment variables
+```
+WEBAPP_URL={URL OF THE HOME PAGE}
+AUTH_SECRET={PASSWORD FOR ENVIRONMENT}
+DOMAIN={DOMAIN FOR COOKIE TO BE ADDED TO (when local: localhost)}
+```
 - Run the local web app.
 - Navigate to the correct folder, be it:
   - ``cd tests/Dfe.EarlyYearsQualification.E2ETests/playwright`` for the E2E tests.
   - ``cd tests/Dfe.EarlyYearsQualification.SmokeTests/playwright`` for the smoke tests.
 - Tell Node Version Manager that you want the latest version with: ``nvm use node --lts``
-- Run the tests with: ``npx playwright test``
+- Run the tests with: ``npx playwright test`` (add --ui to run the tests in playwrights UI)
 
 ### Problems with Safari?
 If you notice you are having issues with running Safari tests locally and them failing then there is a fix.
