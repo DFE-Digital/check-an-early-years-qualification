@@ -1,7 +1,5 @@
 import { browser } from 'k6/browser';
-import { sleep, check } from 'k6';
-
-var configName = __ENV.CONFIG;
+import { sleep } from 'k6';
 
 export const options = {
   scenarios: {
@@ -42,7 +40,7 @@ export default async function () {
       { name: 'auth-secret', value: ENVIRONMENT.challenge, sameSite: 'Strict', url: address }
     ]);
 
-    var resp = await page.goto(address,);
+    await page.goto(address,);
 
     await page.screenshot({ path: 'screenshots/screenshot.png' });
 

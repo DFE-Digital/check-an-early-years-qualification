@@ -14,11 +14,10 @@ public static class SecureHeaderConfiguration
                             .UseHsts()
                             .UseXFrameOptions()
                             .UseContentTypeOptions()
-                            .UseContentDefaultSecurityPolicy()
+                            .UseDefaultContentSecurityPolicy()
                             .UsePermittedCrossDomainPolicies()
                             .UseReferrerPolicy()
                             .UseCacheControl()
-                            .RemovePoweredByHeader()
                             .UseXssProtection()
                             .UseCrossOriginResourcePolicy()
                             .Build();
