@@ -27,7 +27,7 @@ runs:
     - name: Run Playwright tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
-      run: WEBAPP_URL=${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} npx playwright test
+      run: WEBAPP_URL=${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} DOMAIN="localhost" npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
