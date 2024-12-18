@@ -11,7 +11,6 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
@@ -161,8 +160,10 @@ public class QuestionsController(
                {
                    "2" when userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() =>
                        RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice"),
-                   "7" when userJourneyCookieService.WasStartedOnOrAfterSeptember2014() =>
-                       RedirectToAction(nameof(AdviceController.Level7QualificationPost2014), "Advice"),
+                   "7" when userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() =>
+                       RedirectToAction(nameof(AdviceController.Level7QualificationStartedBetweenSept2014AndAug2019), "Advice"),
+                   "7" when userJourneyCookieService.WasStartedOnOrAfterSeptember2019() =>
+                       RedirectToAction(nameof(AdviceController.Level7QualificationPostSept2019), "Advice"),
                    _ => RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation))
                };
     }
@@ -251,7 +252,7 @@ public class QuestionsController(
     {
         var additionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
         return RadioQuestionMapper.Map(model, question, actionName, controllerName, additionalInformationBody,
-                                                 selectedAnswer);
+                                       selectedAnswer);
     }
 
     private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question,
@@ -264,21 +265,21 @@ public class QuestionsController(
         var bannerErrorText = validationResult is { BannerErrorMessages.Count: > 0 }
                                   ? string.Join("<br />", validationResult!.BannerErrorMessages)
                                   : null;
-        
+
         var errorMessageText = validationResult is { ErrorMessages.Count: > 0 }
-                                  ? string.Join("<br />", validationResult!.ErrorMessages)
-                                  : null;
-        
+                                   ? string.Join("<br />", validationResult!.ErrorMessages)
+                                   : null;
+
         var errorBannerLinkText =
             placeholderUpdater.Replace(bannerErrorText ?? question.ErrorBannerLinkText);
-        
+
         var errorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
-        
+
         var additionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
 
         return DateQuestionMapper.Map(model, question, actionName, controllerName, errorBannerLinkText,
-                                               errorMessage, additionalInformationBody, validationResult, selectedMonth,
-                                               selectedYear);
+                                      errorMessage, additionalInformationBody, validationResult, selectedMonth,
+                                      selectedYear);
     }
 
     private async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model,
@@ -296,7 +297,7 @@ public class QuestionsController(
                             .Distinct()
                             .Where(x => !Array.Exists(awardingOrganisationExclusions, x.Contains))
                             .Order();
-        
+
         var additionalInformationBodyHtml = await contentParser.ToHtml(question.AdditionalInformationBody);
 
         return DropdownQuestionMapper.Map(model, question, actionName, controllerName, uniqueAwardingOrganisations,

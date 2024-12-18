@@ -456,7 +456,7 @@ public class AdviceControllerTests
     }
 
     [TestMethod]
-    public async Task Level7QualificationPost2014_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    public async Task Level7QualificationStartedBetweenSept2014AndAug2019_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
@@ -465,10 +465,10 @@ public class AdviceControllerTests
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                               UserJourneyMockNoOp.Object);
     
-        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationPost2014))
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync((AdvicePage?)default).Verifiable();
     
-        var result = await controller.Level7QualificationPost2014();
+        var result = await controller.Level7QualificationStartedBetweenSept2014AndAug2019();
     
         result.Should().NotBeNull();
     
@@ -483,7 +483,7 @@ public class AdviceControllerTests
     }
     
     [TestMethod]
-    public async Task Level7QualificationPost2014_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    public async Task Level7QualificationStartedBetweenSept2014AndAug2019_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
@@ -492,16 +492,79 @@ public class AdviceControllerTests
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                               UserJourneyMockNoOp.Object);
     
-        const string renderedHtmlBody = "Test html body (level 7 post 2014)";
+        const string renderedHtmlBody = "Test html body (level 7 post 2014-2019)";
     
         var advicePage = new AdvicePage
-                         { Heading = "Heading (level 7 post 2014)", Body = ContentfulContentHelper.Text("Anything") };
-        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationPost2014))
+                         { Heading = "Heading (level 7 post 2014-2019)", Body = ContentfulContentHelper.Text("Anything") };
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync(advicePage);
     
         mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(renderedHtmlBody);
     
-        var result = await controller.Level7QualificationPost2014();
+        var result = await controller.Level7QualificationStartedBetweenSept2014AndAug2019();
+    
+        result.Should().NotBeNull();
+    
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+    
+        var model = resultType!.Model as AdvicePageModel;
+        model.Should().NotBeNull();
+    
+        model!.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be(renderedHtmlBody);
+    
+        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+    }
+    
+    
+    [TestMethod]
+    public async Task Level7QualificationStartedPost2019_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+    
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+    
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationPostSept2019))
+                          .ReturnsAsync((AdvicePage?)default).Verifiable();
+    
+        var result = await controller.Level7QualificationPostSept2019();
+    
+        result.Should().NotBeNull();
+    
+        var resultType = result as RedirectToActionResult;
+    
+        resultType.Should().NotBeNull();
+    
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+    
+        mockLogger.VerifyError("No content for the advice page");
+    }
+    
+    [TestMethod]
+    public async Task Level7QualificationStartedPost2019_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+    
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+    
+        const string renderedHtmlBody = "Test html body (level 7 post 2019)";
+    
+        var advicePage = new AdvicePage
+                         { Heading = "Heading (level 7 post 2019)", Body = ContentfulContentHelper.Text("Anything") };
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationPostSept2019))
+                          .ReturnsAsync(advicePage);
+    
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(renderedHtmlBody);
+    
+        var result = await controller.Level7QualificationPostSept2019();
     
         result.Should().NotBeNull();
     

@@ -33,7 +33,11 @@ public static class AdvicePages
     public const string QualificationNotOnTheList = "XU6vhxIHdeasGLwueCGel";
 
     /// <summary>
-    ///     Entry ID for the "Level 7 qualification post-2014" advice page.
+    ///     Entry ID for the "Level 7 qualifications started between 1 September 2014 and 31 August 2019" advice page.
     /// </summary>
-    public const string Level7QualificationPost2014 = "4nfocBj9Alwfa15ke8MHBj";
+    public const string Level7QualificationStartedBetweenSept2014AndAug2019 = "4nfocBj9Alwfa15ke8MHBj";
+    /// <summary>
+    ///     Entry ID for the "Level 7 qualification post-sept-2019" advice page.
+    /// </summary>
+    public const string Level7QualificationPostSept2019 = "1lITwifQ5M2M1cSPDutEPi";
 }

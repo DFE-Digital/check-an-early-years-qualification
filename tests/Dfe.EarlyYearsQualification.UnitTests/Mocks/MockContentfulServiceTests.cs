@@ -99,11 +99,24 @@ public class MockContentfulServiceTests
     }
     
     [TestMethod]
-    public async Task GetAdvicePage_Level7QualificationPost2014_ReturnsExpectedDetails()
+    public async Task GetAdvicePage_Level7QualificationStartedBetweenSept2014AndAug2019_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
     
-        var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationPost2014);
+        var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_Level7QualificationPostSept2019_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+    
+        var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationPostSept2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
         result!.Heading.Should().NotBeNullOrEmpty();

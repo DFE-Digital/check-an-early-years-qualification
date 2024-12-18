@@ -217,7 +217,7 @@ describe('A spec used to test the various routes through the journey', () => {
     })
   })
   
-  it("Selecting qualification level 7 started after 1 Sept 2014 should navigate to the level 7 post 2014 advice page", () => {
+  it("Selecting qualification level 7 started between 1 Sept 2014 and 31 August 2019 should navigate to the level 7 2014-2019 advice page", () => {
     // home page
     cy.get('.govuk-button--start').click();
 
@@ -247,7 +247,7 @@ describe('A spec used to test the various routes through the journey', () => {
 
     // level 7 post 2014 advice page
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/advice/level-7-qualification-post-2014');
+      expect(loc.pathname).to.eq('/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019');
     })
 
     // check back button goes back to the what level is the qualification page
@@ -257,6 +257,49 @@ describe('A spec used to test the various routes through the journey', () => {
       expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
     })
   })
+
+
+  it("Selecting qualification level 7 started after 1 Sep 2019 should navigate to the level 7 post 2019 advice page", () => {
+    // home page
+    cy.get('.govuk-button--start').click();
+
+    // where-was-the-qualification-awarded page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/where-was-the-qualification-awarded');
+    })
+
+    cy.get('#england').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // when-was-the-qualification-started page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
+    })
+
+    cy.get('#date-started-month').type("8");
+    cy.get('#date-started-year').type("2020");
+    cy.get('button[id="question-submit"]').click();
+
+    // what-level-is-the-qualification page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+    })
+    cy.get('#7').click();
+    cy.get('button[id="question-submit"]').click();
+
+    // level 7 post 2014 advice page
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/advice/level-7-qualification-post-sept-2019');
+    })
+
+    // check back button goes back to the what level is the qualification page
+    cy.get('#back-button').click();
+
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/questions/what-level-is-the-qualification');
+    })
+  })
+  
   
   it("should move the user back to the previous page when they click on the back button", () => {
     // home page
