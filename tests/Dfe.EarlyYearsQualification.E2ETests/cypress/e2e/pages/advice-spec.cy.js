@@ -96,11 +96,11 @@ describe("A spec that tests advice pages", () => {
         cy.get(".govuk-notification-banner__content").eq(1).should("contain.text", "This is the body text");
     })
 
-    it("Checks the Level 7 qualification post 2019 details are on the page", () => {
+    it("Checks the Level 7 qualification after aug 2019 details are on the page", () => {
         cy.setCookie('user_journey', '%7B%22WhenWasQualificationStarted%22%3A%227%2F2020%22%7D');
-        cy.visit("/advice/level-7-qualification-post-sept-2019");
+        cy.visit("/advice/level-7-qualification-after-aug-2019");
 
-        cy.get("#advice-page-heading").should("contain.text", "Level 7 qualification post sept 2019");
+        cy.get("#advice-page-heading").should("contain.text", "Level 7 qualification after aug 2019");
         cy.get("#advice-page-body").should("contain.text", "Test Advice Page Body");
 
         cy.get(".govuk-notification-banner__title").eq(0).should("contain.text", "Test banner title");

@@ -89,11 +89,11 @@ public class AdviceController(
         return await GetView(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019);
     }
     
-    [HttpGet("level-7-qualification-post-sept-2019")]
+    [HttpGet("level-7-qualification-after-aug-2019")]
     [RedirectIfDateMissing]
-    public async Task<IActionResult> Level7QualificationPostSept2019()
+    public async Task<IActionResult> Level7QualificationAfterAug2019()
     {
-        return await GetView(AdvicePages.Level7QualificationPostSept2019);
+        return await GetView(AdvicePages.Level7QualificationAfterAug2019);
     }
 
     private async Task<IActionResult> GetView(string advicePageId)

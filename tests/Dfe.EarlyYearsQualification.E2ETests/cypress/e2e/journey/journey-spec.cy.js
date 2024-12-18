@@ -259,7 +259,7 @@ describe('A spec used to test the various routes through the journey', () => {
   })
 
 
-  it("Selecting qualification level 7 started after 1 Sep 2019 should navigate to the level 7 post 2019 advice page", () => {
+  it("Selecting qualification level 7 started after 1 Sept 2019 should navigate to the level 7 post 2019 advice page", () => {
     // home page
     cy.get('.govuk-button--start').click();
 
@@ -289,7 +289,7 @@ describe('A spec used to test the various routes through the journey', () => {
 
     // level 7 post 2014 advice page
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq('/advice/level-7-qualification-post-sept-2019');
+      expect(loc.pathname).to.eq('/advice/level-7-qualification-after-aug-2019');
     })
 
     // check back button goes back to the what level is the qualification page

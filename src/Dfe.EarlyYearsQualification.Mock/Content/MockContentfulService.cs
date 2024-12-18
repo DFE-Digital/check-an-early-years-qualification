@@ -62,8 +62,8 @@ public class MockContentfulService : IContentService
                    AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
                                                               body, WhatLevelIsTheQualificationPath)),
-                   AdvicePages.Level7QualificationPostSept2019 =>
-                       await Task.FromResult(CreateAdvicePage("Level 7 qualification post sept 2019",
+                   AdvicePages.Level7QualificationAfterAug2019 =>
+                       await Task.FromResult(CreateAdvicePage("Level 7 qualification after aug 2019",
                                                               body, WhatLevelIsTheQualificationPath)),
                    _ => null
                };

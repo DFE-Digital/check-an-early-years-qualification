@@ -37,7 +37,7 @@ public static class AdvicePages
     /// </summary>
     public const string Level7QualificationStartedBetweenSept2014AndAug2019 = "4nfocBj9Alwfa15ke8MHBj";
     /// <summary>
-    ///     Entry ID for the "Level 7 qualification post-sept-2019" advice page.
+    ///     Entry ID for the "Level 7 qualification after aug 2019" advice page.
     /// </summary>
-    public const string Level7QualificationPostSept2019 = "1lITwifQ5M2M1cSPDutEPi";
+    public const string Level7QualificationAfterAug2019 = "1lITwifQ5M2M1cSPDutEPi";
 }

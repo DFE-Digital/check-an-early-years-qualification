@@ -112,11 +112,11 @@ public class MockContentfulServiceTests
     }
     
     [TestMethod]
-    public async Task GetAdvicePage_Level7QualificationPostSept2019_ReturnsExpectedDetails()
+    public async Task GetAdvicePage_Level7QualificationAfterAug2019_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
     
-        var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationPostSept2019);
+        var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationAfterAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
         result!.Heading.Should().NotBeNullOrEmpty();
