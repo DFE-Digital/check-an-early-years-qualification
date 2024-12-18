@@ -428,7 +428,7 @@ public class UserJourneyCookieServiceTests
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieValueIsEmpty_Throws()
+    public void WasStartedOnOrAfterSeptember2019_CookieValueIsEmpty_Throws()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -440,13 +440,13 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        var action = () => service.WasStartedOnOrAfterSeptember2014();
+        var action = () => service.WasStartedOnOrAfterSeptember2019();
 
         action.Should().Throw<InvalidOperationException>();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasInvalidValue_Throws()
+    public void WasStartedOnOrAfterSeptember2019_CookieHasInvalidValue_Throws()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -458,13 +458,13 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        var action = () => service.WasStartedOnOrAfterSeptember2014();
+        var action = () => service.WasStartedOnOrAfterSeptember2019();
 
         action.Should().Throw<InvalidOperationException>();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueIn2013_ReturnsFalse()
+    public void WasStartedOnOrAfterSeptember2019_CookieHasValidValueIn2013_ReturnsFalse()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -476,11 +476,11 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        service.WasStartedOnOrAfterSeptember2014().Should().BeFalse();
+        service.WasStartedOnOrAfterSeptember2019().Should().BeFalse();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueInAugust2014_ReturnsFalse()
+    public void WasStartedOnOrAfterSeptember2019_CookieHasValidValueInAugust2014_ReturnsFalse()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -492,11 +492,11 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        service.WasStartedOnOrAfterSeptember2014().Should().BeFalse();
+        service.WasStartedOnOrAfterSeptember2019().Should().BeFalse();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueInSeptember2014_ReturnsTrue()
+    public void WasStartedBetweenSeptember2014AndAugust2019_CookieHasValidValueInSeptember2014_ReturnsTrue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -508,11 +508,11 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        service.WasStartedOnOrAfterSeptember2014().Should().BeTrue();
+        service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueIn2015_ReturnsTrue()
+    public void WasStartedBetweenSeptember2014AndAugust2019_CookieHasValidValueIn2015_ReturnsTrue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -524,7 +524,7 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        service.WasStartedOnOrAfterSeptember2014().Should().BeTrue();
+        service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
     
     [TestMethod]
