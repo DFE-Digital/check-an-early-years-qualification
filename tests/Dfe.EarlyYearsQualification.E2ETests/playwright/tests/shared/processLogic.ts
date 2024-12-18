@@ -1,7 +1,7 @@
-﻿import {expect} from "@playwright/test";
+﻿import {BrowserContext, Page, expect} from "@playwright/test";
 
 
-export async function startJourney(page: any, context: any) {
+export async function startJourney(page: Page, context: BrowserContext) {
     await context.addCookies([
         {
             name: 'auth-secret',
@@ -10,9 +10,12 @@ export async function startJourney(page: any, context: any) {
             domain: process.env.DOMAIN
         }
     ]);
+    await context.tracing.start({screenshots: true, snapshots: true});
+    await context.tracing.startChunk();
     await page.goto("/");
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
+    await context.tracing.stopChunk({path: 'startJourney.zip'});
 }
 
 export function checkUrl(page: any, expectedUrl: string) {
