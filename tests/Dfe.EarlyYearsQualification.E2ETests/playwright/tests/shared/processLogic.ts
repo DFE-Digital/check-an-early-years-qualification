@@ -10,12 +10,9 @@ export async function startJourney(page: Page, context: BrowserContext) {
             domain: process.env.DOMAIN
         }
     ]);
-    await context.tracing.start({screenshots: true, snapshots: true});
-    await context.tracing.startChunk();
     await page.goto("/");
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
-    await context.tracing.stopChunk({path: 'startJourney.zip'});
 }
 
 export function checkUrl(page: any, expectedUrl: string) {
