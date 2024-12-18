@@ -742,7 +742,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
     
-        resultType!.ActionName.Should().Be("Level7QualificationPostSept2019");
+        resultType!.ActionName.Should().Be("Level7QualificationAfterAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
     
