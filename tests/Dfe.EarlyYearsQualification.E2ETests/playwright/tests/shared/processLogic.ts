@@ -10,7 +10,7 @@ export async function startJourney(page: Page, context: BrowserContext) {
             domain: process.env.DOMAIN
         }
     ]);
-    await page.goto("/");
+    await page.goto("/", { waitUntil: 'domcontentloaded'});
     process.stdout.write(await page.title());
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
