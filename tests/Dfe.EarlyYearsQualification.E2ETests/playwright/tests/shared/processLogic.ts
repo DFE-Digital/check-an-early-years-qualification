@@ -11,7 +11,7 @@ export async function startJourney(page: Page, context: BrowserContext) {
         }
     ]);
     await page.goto("/");
-    process.stdout.write(page.url());
+    process.stdout.write(await page.title());
     await expect(page.locator("#start-now-button")).toBeVisible({timeout: 10000 });
     await page.locator("#start-now-button").click();
 }
