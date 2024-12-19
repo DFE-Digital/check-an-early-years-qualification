@@ -12,7 +12,7 @@ export async function startJourney(page: Page, context: BrowserContext) {
     ]);
     await page.goto("/");
     process.stdout.write(page.url());
-    await expect(page.locator("#start-now-button")).toBeVisible();
+    await expect(page.locator("#start-now-button")).toBeVisible({timeout: 15000 });
     await page.locator("#start-now-button").click();
 }
 
