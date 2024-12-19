@@ -11,7 +11,7 @@ export async function startJourney(page: Page, context: BrowserContext) {
         }
     ]);
     await page.goto("/", { waitUntil: 'domcontentloaded'});
-    process.stdout.write(await page.title());
+    expect(await page.title()).toBe("Start - Check an Early Years qualification");
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
 }
