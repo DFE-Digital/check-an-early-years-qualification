@@ -1,7 +1,7 @@
 ﻿import {BrowserContext, Page, expect} from "@playwright/test";
 
 
-export async function startJourney(page: Page, context: BrowserContext) {
+export async function authorise(context: BrowserContext) {
     await context.addCookies([
         {
             name: 'auth-secret',
@@ -10,7 +10,11 @@ export async function startJourney(page: Page, context: BrowserContext) {
             domain: process.env.DOMAIN
         }
     ]);
-    await page.goto("/", { waitUntil: 'domcontentloaded'});
+}
+
+export async function startJourney(page: Page, context: BrowserContext) {
+    await authorise(context);
+    await page.goto("/", {waitUntil: 'domcontentloaded'});
     console.log(await page.title());
     console.log(await page.innerHTML('body'));
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
@@ -23,8 +27,12 @@ export function checkUrl(page: any, expectedUrl: string) {
     expect(page.url()).toContain(expectedUrl);
 }
 
-export function checkText(page: any, locator: string, expectedText: string) {
-    expect(page.locator(locator)).toHaveText(expectedText);
+export function checkText(page: any, locator: string, expectedText: string, contain: boolean = false) {
+    if (contain) {
+        expect(page.locator(locator)).toContainText(expectedText);
+    } else {
+        expect(page.locator(locator)).toHaveText(expectedText);
+    }
 }
 
 export function checkValue(page: any, locator: string, expectedValue: any) {
