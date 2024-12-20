@@ -11,8 +11,6 @@ export async function startJourney(page: Page, context: BrowserContext) {
         }
     ]);
     await page.goto("/", { waitUntil: 'domcontentloaded'});
-    console.log(await page.title());
-    console.log(await page.innerHTML('body'));
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
     //expect(await page.title()).toBe("Start - Check an Early Years qualification");
     await expect(page.locator("#start-now-button")).toBeVisible();

@@ -35,7 +35,6 @@ export default defineConfig({
 
         ignoreHTTPSErrors: true,
     },
-    testMatch: '**/back-button.spec.ts',
     /* Configure projects for major browsers */
     projects: [
         {
