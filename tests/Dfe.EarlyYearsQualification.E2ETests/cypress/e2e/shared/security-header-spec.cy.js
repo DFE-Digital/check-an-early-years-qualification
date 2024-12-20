@@ -33,7 +33,7 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
@@ -74,7 +74,7 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
@@ -108,7 +108,7 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
@@ -151,7 +151,7 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
@@ -188,7 +188,7 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",

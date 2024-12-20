@@ -6,7 +6,7 @@
 @section Scripts
 {
     <script type="text/javascript">
-        $("#togglePassword").click(function() {
+        $("#togglePassword").on("click", function() {
             let e = document.getElementById("PasswordValue")
             if (e.type === "password") {
                 e.type = "text"

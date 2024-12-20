@@ -59,8 +59,11 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
                                                               body, QualificationsPath)),
 
-                   AdvicePages.Level7QualificationPost2014 =>
-                       await Task.FromResult(CreateAdvicePage("Level 7 qualification post 2014",
+                   AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
+                       await Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
+                                                              body, WhatLevelIsTheQualificationPath)),
+                   AdvicePages.Level7QualificationAfterAug2019 =>
+                       await Task.FromResult(CreateAdvicePage("Level 7 qualification after aug 2019",
                                                               body, WhatLevelIsTheQualificationPath)),
                    _ => null
                };
@@ -130,13 +133,13 @@ public class MockContentfulService : IContentService
                                                           OpenInNewTab = false
                                                       },
                                          BackToConfirmAnswers = new NavigationLink
-                                                                         {
-                                                                             DisplayText =
-                                                                                 "TEST (back to additional questions)",
-                                                                             Href =
-                                                                                 "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers",
-                                                                             OpenInNewTab = false
-                                                                         },
+                                                                {
+                                                                    DisplayText =
+                                                                        "TEST (back to additional questions)",
+                                                                    Href =
+                                                                        "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers",
+                                                                    OpenInNewTab = false
+                                                                },
                                          BackToLevelSixAdvice = new NavigationLink
                                                                 {
                                                                     DisplayText =
@@ -381,7 +384,7 @@ public class MockContentfulService : IContentService
                                  BannerTitle = "Banner title",
                                  Body = ContentfulContentHelper.Paragraph("Banner body text")
                              };
-        
+
         return (level switch
                 {
                     3 => Task.FromResult(new CannotFindQualificationPage
@@ -410,16 +413,16 @@ public class MockContentfulService : IContentService
     {
         return await Task.FromResult(new CheckAdditionalRequirementsAnswerPage
                                      {
-                                        BackButton = new NavigationLink
-                                                     {
-                                                         DisplayText = "Test display text",
-                                                         OpenInNewTab = false,
-                                                         Href = "/qualifications/check-additional-questions",
-                                                     },
-                                        ButtonText = "Test button text",
-                                        PageHeading = "Test page heading",
-                                        AnswerDisclaimerText = "Test answer disclaimer text",
-                                        ChangeAnswerText = "Test change answer text"
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "Test display text",
+                                                          OpenInNewTab = false,
+                                                          Href = "/qualifications/check-additional-questions",
+                                                      },
+                                         ButtonText = "Test button text",
+                                         PageHeading = "Test page heading",
+                                         AnswerDisclaimerText = "Test answer disclaimer text",
+                                         ChangeAnswerText = "Test change answer text"
                                      });
     }
 
