@@ -1,0 +1,46 @@
+name: Run Playwright end to end tests
+description: Run end to end tests using Playwright
+
+inputs:
+  webapp_url:
+    required: true
+    type: string
+  auth_secret:
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18.x
+#    - name: Install dependencies
+#      shell: bash
+#      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+#      run: npm ci
+    - name: Install dependencies
+      shell: bash
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+      run: npm install -g yarn && yarn install --frozen-lockfile
+#    - name: Install Playwright Browsers
+#      shell: bash
+#      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+#      run: npx playwright install --with-deps
+    - name: Install Playwright Browsers
+      shell: bash
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+      run: yarn playwright install --with-deps
+    - name: Run Playwright tests
+      shell: bash
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+      env:
+        CI: true
+      run: WEBAPP_URL="http://localhost:3000" AUTH_SECRET=${{ inputs.auth_secret }} DOMAIN="localhost" npx playwright test
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
