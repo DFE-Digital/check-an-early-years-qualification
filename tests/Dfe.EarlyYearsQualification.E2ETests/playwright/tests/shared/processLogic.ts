@@ -43,6 +43,14 @@ export async function clickBackButton(page: any) {
     await page.locator("#back-button").click();
 }
 
+export async function checkCookieValue(context: BrowserContext, value: string) {
+    const cookieName = "cookies_preferences_set";
+    var cookies = await context.cookies();
+    var cookie = cookies.find((c) => c.name === cookieName);
+
+    expect(cookie.value).toBe(value);    
+}
+
 export async function whereWasTheQualificationAwarded(page: any, location: string) {
     checkUrl(page, "/questions/where-was-the-qualification-awarded");
     await page.locator(location).click();
