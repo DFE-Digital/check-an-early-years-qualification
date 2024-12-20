@@ -1,13 +1,10 @@
 ﻿import {test, expect} from '@playwright/test';
 import {pages} from "../shared/urls-to-check";
-import {authorise, checkText, checkCookieValue} from '../shared/processLogic';
+import {authorise, checkText, checkCookieValue} from './processLogic';
 
 test.describe('A spec that tests that the cookies banner shows on all pages', () => {
 
-    test.beforeEach(async ({
-                               page,
-                               context
-                           }) => {
+    test.beforeEach(async ({context}) => {
         await authorise(context);
     });
 

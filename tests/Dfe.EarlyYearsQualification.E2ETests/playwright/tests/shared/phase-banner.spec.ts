@@ -1,6 +1,6 @@
 ﻿import {test, expect} from '@playwright/test';
 import {pages} from "../shared/urls-to-check";
-import {authorise, checkText} from '../shared/processLogic';
+import {authorise, checkText} from './processLogic';
 
 test.describe('A spec that tests the phase banner is showing on all pages', () => {
 

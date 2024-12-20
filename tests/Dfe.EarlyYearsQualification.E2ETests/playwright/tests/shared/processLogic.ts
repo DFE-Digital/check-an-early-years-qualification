@@ -1,15 +1,10 @@
-﻿import {BrowserContext, Page, expect} from "@playwright/test";
+﻿import {BrowserContext, Page, expect, APIResponse} from "@playwright/test";
 
+export const cookiePreferencesCookieName = "cookies_preferences_set";
+export const journeyCookieName = 'user_journey';
 
 export async function authorise(context: BrowserContext) {
-    await context.addCookies([
-        {
-            name: 'auth-secret',
-            value: process.env.AUTH_SECRET,
-            path: '/',
-            domain: process.env.DOMAIN
-        }
-    ]);
+    await setCookie(context, process.env.AUTH_SECRET, 'auth-secret');
 }
 
 export async function startJourney(page: Page, context: BrowserContext) {
@@ -44,11 +39,29 @@ export async function clickBackButton(page: any) {
 }
 
 export async function checkCookieValue(context: BrowserContext, value: string) {
-    const cookieName = "cookies_preferences_set";
     var cookies = await context.cookies();
-    var cookie = cookies.find((c) => c.name === cookieName);
+    var cookie = cookies.find((c) => c.name === cookiePreferencesCookieName);
 
-    expect(cookie.value).toBe(value);    
+    expect(cookie.value).toBe(value);
+}
+
+export async function setCookie(context: BrowserContext, value: string, cookieName: string) {
+    await context.addCookies([
+        {
+            name: cookieName,
+            value: value,
+            path: '/',
+            domain: process.env.DOMAIN
+        }
+    ]);
+}
+
+export function checkHeaderValue(response: APIResponse, headerName: string, headerValue: string) {
+    expect(response.headers()[headerName]).toBe(headerValue);
+}
+
+export function checkHeaderExists(response: APIResponse, headerName: string, shouldExist: boolean) {
+    expect(response.headers()[headerName]).toBeUndefined();
 }
 
 export async function whereWasTheQualificationAwarded(page: any, location: string) {
