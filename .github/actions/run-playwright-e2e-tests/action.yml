@@ -37,7 +37,7 @@ runs:
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
       env:
         CI: true
-      run: WEBAPP_URL="${{ inputs.webapp_url }}" AUTH_SECRET=${{ inputs.auth_secret }} DOMAIN="127.0.0.1" npx playwright test
+      run: AUTH_SECRET=${{ inputs.auth_secret }} DOMAIN="localhost" npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

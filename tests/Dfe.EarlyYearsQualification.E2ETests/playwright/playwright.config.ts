@@ -79,7 +79,7 @@ export default defineConfig({
 
     /* Run your local dev server before starting the tests */
     webServer: {
-      command: 'cd ../../../src/Dfe.EarlyYearsQualification.Web && dotnet run --project ./Dfe.EarlyYearsQualification.Web.csproj --UseMockContentful=true',
+      command:`cd ../../../src/Dfe.EarlyYearsQualification.Web && dotnet run --project ./Dfe.EarlyYearsQualification.Web.csproj --UseMockContentful=true --ServiceAccess:Keys:0="${process.env.AUTH_SECRET}"`,
       url: baseUrl,
       reuseExistingServer: !process.env.CI,
     },
