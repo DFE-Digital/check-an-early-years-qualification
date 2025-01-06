@@ -32,7 +32,7 @@ public class SecureHeaderConfigurationTests
         config.XFrameOptionsConfiguration.Should().NotBeNull();
         var xFrameOptionHeaderValue = config.XFrameOptionsConfiguration.BuildHeaderValue();
         xFrameOptionHeaderValue.Should().NotBeNull();
-        xFrameOptionHeaderValue.Should().Contain("DENY");
+        xFrameOptionHeaderValue.Should().Contain("deny");
         config.XFrameOptionsConfiguration.AllowFromDomain.Should().BeNull();
         config.ContentSecurityPolicyConfiguration.BaseUri.Should().BeEmpty();
         config.ContentSecurityPolicyConfiguration.DefaultSrc.Should().BeEmpty();

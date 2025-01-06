@@ -39,7 +39,7 @@ describe("A spec that checks for security headers in the response", () => {
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
@@ -80,7 +80,7 @@ describe("A spec that checks for security headers in the response", () => {
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
@@ -114,7 +114,7 @@ describe("A spec that checks for security headers in the response", () => {
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
@@ -157,7 +157,7 @@ describe("A spec that checks for security headers in the response", () => {
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
@@ -194,7 +194,7 @@ describe("A spec that checks for security headers in the response", () => {
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
