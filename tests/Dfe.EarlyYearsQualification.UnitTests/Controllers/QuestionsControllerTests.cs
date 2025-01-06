@@ -681,9 +681,9 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
-
+    
     [TestMethod]
-    public async Task Post_WhatLevelIsTheQualification_Level7Post2014_ReturnsRedirectResponse()
+    public async Task Post_WhatLevelIsTheQualification_Level7StartedBetween2014And2019_ReturnsRedirectResponse()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -692,28 +692,60 @@ public class QuestionsControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
-
-        mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2014())
+    
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019())
                                     .Returns(true);
-
+    
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
-
+    
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
                                                                       Option = "7"
                                                                   });
-
+    
         result.Should().NotBeNull();
-
+    
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-
-        resultType!.ActionName.Should().Be("Level7QualificationPost2014");
+    
+        resultType!.ActionName.Should().Be("Level7QualificationStartedBetweenSept2014AndAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
-
+    
+    [TestMethod]
+    public async Task Post_WhatLevelIsTheQualification_Level7Post2019_ReturnsRedirectResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+    
+        mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2019())
+                                    .Returns(true);
+    
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+    
+        var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
+                                                                  {
+                                                                      Option = "7"
+                                                                  });
+    
+        result.Should().NotBeNull();
+    
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+    
+        resultType!.ActionName.Should().Be("Level7QualificationAfterAug2019");
+        resultType.ControllerName.Should().Be("Advice");
+    }
+    
     [TestMethod]
     public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {

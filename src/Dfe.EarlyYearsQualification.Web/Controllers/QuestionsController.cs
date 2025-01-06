@@ -160,8 +160,10 @@ public class QuestionsController(
                {
                    "2" when userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() =>
                        RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice"),
-                   "7" when userJourneyCookieService.WasStartedOnOrAfterSeptember2014() =>
-                       RedirectToAction(nameof(AdviceController.Level7QualificationPost2014), "Advice"),
+                   "7" when userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() =>
+                       RedirectToAction(nameof(AdviceController.Level7QualificationStartedBetweenSept2014AndAug2019), "Advice"),
+                   "7" when userJourneyCookieService.WasStartedOnOrAfterSeptember2019() =>
+                       RedirectToAction(nameof(AdviceController.Level7QualificationAfterAug2019), "Advice"),
                    _ => RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation))
                };
     }
