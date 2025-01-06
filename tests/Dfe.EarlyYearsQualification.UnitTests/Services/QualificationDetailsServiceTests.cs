@@ -762,4 +762,91 @@ public class QualificationDetailsServiceTests
         content.RatiosText.Should().Be(ratios);
         content.FeedbackBanner!.Body.Should().Be(feedback);
     }
+
+    [TestMethod]
+    public async Task CheckRatioRequirements_Calls_Cookies_WasStartedBeforeSeptember2014()
+    {
+        const bool wasStartedBeforeSeptember2014 = true;
+        const string qualificationId = "qualificationId";
+        const string qualificationName = "qualificationName";
+        const string awardingOrganisationTitle = "awardingOrganisationTitle";
+        const int qualificationLevel = 2;
+        var qualification = new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
+                            {
+                                RatioRequirements =
+                                [
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName
+                                    },
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName
+                                    },
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName
+                                    },
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName
+                                    }
+                                ]
+                            };
+        var qualificationDetails = new QualificationDetailsModel();
+
+        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014()).Returns(wasStartedBeforeSeptember2014);
+
+        var sut = GetSut();
+
+        await sut.CheckRatioRequirements(qualification, qualificationDetails);
+
+        _mockUserJourneyCookieService.Verify(o => o.WasStartedBeforeSeptember2014(), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task CheckRatioRequirements_AutomaticallyApproved()
+    {
+        const bool wasStartedBeforeSeptember2014 = true;
+        const string qualificationId = "qualificationId";
+        const string qualificationName = "qualificationName";
+        const string awardingOrganisationTitle = "awardingOrganisationTitle";
+        const int qualificationLevel = 2;
+        var qualification = new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
+                            {
+                                IsAutomaticallyApprovedAtLevel6 = true,
+                                RatioRequirements =
+                                [
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
+                                        RequirementForQtsEtcBefore2014 = new Document()
+                                    },
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName,
+                                        RequirementForQtsEtcBefore2014 = new Document()
+                                    },
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
+                                        RequirementForQtsEtcBefore2014 = new Document()
+                                    },
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                                        RequirementForQtsEtcBefore2014 = new Document()
+                                    }
+                                ]
+                            };
+        var qualificationDetails = new QualificationDetailsModel();
+
+        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014()).Returns(wasStartedBeforeSeptember2014);
+
+        var sut = GetSut();
+
+        await sut.CheckRatioRequirements(qualification, qualificationDetails);
+
+        _mockUserJourneyCookieService.Verify(o => o.WasStartedBeforeSeptember2014(), Times.Once);
+    }
 }
