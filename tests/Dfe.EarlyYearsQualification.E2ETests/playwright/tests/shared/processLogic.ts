@@ -10,8 +10,15 @@ export async function authorise(context: BrowserContext) {
 export async function startJourney(page: Page, context: BrowserContext) {
     await authorise(context);
     await page.goto("/", {waitUntil: 'domcontentloaded'});
-    console.log(await page.title());
-    console.log(await page.innerHTML('body'));
+    await context.addCookies([
+        {
+            name: 'auth-secret',
+            value: process.env.AUTH_SECRET,
+            path: '/',
+            domain: process.env.DOMAIN
+        }
+    ]);
+    await page.goto("/", { waitUntil: 'domcontentloaded'});
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
     //expect(await page.title()).toBe("Start - Check an Early Years qualification");
     await expect(page.locator("#start-now-button")).toBeVisible();
@@ -62,6 +69,19 @@ export function checkHeaderValue(response: APIResponse, headerName: string, head
 
 export function checkHeaderExists(response: APIResponse, headerName: string, shouldExist: boolean) {
     expect(response.headers()[headerName]).toBeUndefined();
+import {BrowserContext, Page, expect, APIResponse} from "@playwright/test";
+export const cookiePreferencesCookieName = "cookies_preferences_set";
+export const journeyCookieName = 'user_journey';
+
+export async function authorise(context: BrowserContext) {
+    await setCookie(context, process.env.AUTH_SECRET, 'auth-secret');
+}
+export function checkText(page: any, locator: string, expectedText: string, contain: boolean = false) {
+    if (contain) {
+        expect(page.locator(locator)).toContainText(expectedText);
+    } else {
+        expect(page.locator(locator)).toHaveText(expectedText);
+    }
 }
 
 export async function whereWasTheQualificationAwarded(page: any, location: string) {

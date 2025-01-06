@@ -13,8 +13,6 @@ import {defineConfig, devices} from '@playwright/test';
  */
 require('dotenv').config();
 
-const baseUrl = 'http://localhost:5025'
-
 export default defineConfig({
     testDir: './tests',
     /* Run tests in files in parallel */
@@ -30,14 +28,13 @@ export default defineConfig({
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         /* Base URL to use in actions like `await page.goto('/')`. */
-        baseURL: baseUrl,
+        baseURL: process.env.WEBAPP_URL,
 
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: 'on-first-retry',
 
         ignoreHTTPSErrors: true,
     },
-    testMatch: '**/back-button.spec.ts',
     /* Configure projects for major browsers */
     projects: [
         {
@@ -79,8 +76,8 @@ export default defineConfig({
 
     /* Run your local dev server before starting the tests */
     webServer: {
-      command: 'cd ../../../src/Dfe.EarlyYearsQualification.Web && dotnet run --project ./Dfe.EarlyYearsQualification.Web.csproj --UseMockContentful=true',
-      url: baseUrl,
+      command:`cd ../../../src/Dfe.EarlyYearsQualification.Web && dotnet run --urls "${process.env.WEBAPP_URL}" --project ./Dfe.EarlyYearsQualification.Web.csproj --UseMockContentful=true --ServiceAccess:Keys:0="${process.env.AUTH_SECRET}"`,
+      url: process.env.WEBAPP_URL,
       reuseExistingServer: !process.env.CI,
     },
 });
