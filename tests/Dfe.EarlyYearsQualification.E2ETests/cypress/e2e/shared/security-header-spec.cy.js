@@ -33,13 +33,13 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
@@ -74,13 +74,13 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
@@ -108,13 +108,13 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
@@ -151,13 +151,13 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
@@ -188,13 +188,13 @@ describe("A spec that checks for security headers in the response", () => {
         );
         expect(response.headers).to.have.property(
           "strict-transport-security",
-          "max-age=63072000;includeSubDomains"
+          "max-age=31536000;includeSubDomains"
         );
         expect(response.headers).to.have.property(
           "x-content-type-options",
           "nosniff"
         );
-        expect(response.headers).to.have.property("x-frame-options", "DENY");
+        expect(response.headers).to.have.property("x-frame-options", "deny");
         expect(response.headers).to.have.property("x-xss-protection", "0");
         expect(response.headers).not.to.have.property("server");
       });
