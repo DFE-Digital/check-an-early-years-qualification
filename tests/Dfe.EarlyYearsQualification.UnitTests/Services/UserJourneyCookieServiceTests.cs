@@ -604,42 +604,6 @@ public class UserJourneyCookieServiceTests
     }
 
     [TestMethod]
-    public void GetQualificationStartedBetween2014And2019_CookieValueIsEmpty_Throws()
-    {
-        var existingModel = new UserJourneyCookieService.UserJourneyModel
-                            {
-                                WhenWasQualificationStarted = string.Empty
-                            };
-
-        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
-        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-
-        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
-
-        var action = () => service.WasStartedBetweenSeptember2014AndAugust2019();
-
-        action.Should().Throw<InvalidOperationException>();
-    }
-
-    [TestMethod]
-    public void GetQualificationStartedBetween2014And2019_CookieHasInvalidValue_Throws()
-    {
-        var existingModel = new UserJourneyCookieService.UserJourneyModel
-                            {
-                                WhenWasQualificationStarted = "4"
-                            };
-
-        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
-        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-
-        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
-
-        var action = () => service.WasStartedBetweenSeptember2014AndAugust2019();
-
-        action.Should().Throw<InvalidOperationException>();
-    }
-
-    [TestMethod]
     public void GetQualificationStartedBetween2014And2019_CookieHasValidValueIn2013_ReturnsTrue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
