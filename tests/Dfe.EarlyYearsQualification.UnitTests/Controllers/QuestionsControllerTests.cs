@@ -1085,7 +1085,7 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationDetails");
+        resultType.ControllerName.Should().Be("QualificationSearch");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
@@ -1133,7 +1133,7 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
 
         resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationDetails");
+        resultType.ControllerName.Should().Be("QualificationSearch");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);

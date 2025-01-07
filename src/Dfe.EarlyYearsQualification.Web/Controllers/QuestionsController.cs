@@ -219,7 +219,7 @@ public class QuestionsController(
         userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue!);
         userJourneyCookieService.SetAwardingOrganisationNotOnList(model.NotInTheList);
 
-        return RedirectToAction("Get", "QualificationDetails");
+        return RedirectToAction("Get", "QualificationSearch");
     }
 
     private async Task<List<Qualification>> GetFilteredQualifications()
