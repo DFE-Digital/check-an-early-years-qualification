@@ -61,6 +61,16 @@ variable "kv_certificate_subject" {
   type        = string
 }
 
+variable "kv_test_certificate_label" {
+  description = "Label for the test Certificate"
+  type        = string
+}
+
+variable "kv_test_certificate_subject" {
+  description = "Subject of the test Certificate"
+  type        = string
+}
+
 variable "asp_sku" {
   description = "SKU name for the App Service Plan"
   type        = string

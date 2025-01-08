@@ -68,6 +68,16 @@ variable "kv_certificate_subject" {
   type        = string
 }
 
+variable "kv_test_certificate_label" {
+  description = "Label for the test Certificate"
+  type        = string
+}
+
+variable "kv_test_certificate_subject" {
+  description = "Subject of the test Certificate"
+  type        = string
+}
+
 variable "contentful_delivery_api_key" {
   description = "Contentful delivery API key"
   type        = string

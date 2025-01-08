@@ -62,6 +62,8 @@ module "network" {
   kv_certificate_authority_admin_phone_no   = var.kv_certificate_authority_admin_phone_no
   kv_certificate_label                      = var.kv_certificate_label
   kv_certificate_subject                    = var.kv_certificate_subject
+  kv_test_certificate_label                 = var.kv_test_certificate_label
+  kv_test_certificate_subject               = var.kv_test_certificate_subject
   contentful_delivery_api_key               = var.contentful_delivery_api_key
   contentful_preview_api_key                = var.contentful_preview_api_key
   contentful_space_id                       = var.contentful_space_id
