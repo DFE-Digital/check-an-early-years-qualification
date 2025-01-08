@@ -22,8 +22,6 @@ public class QualificationDetailsMapperTests
         const string checkAnotherQualificationText = "Check another qualification text";
         const string furtherInfoText = "Further info text";
         const string requirementsText = "Requirements text";
-        const string ratiosText = "Ratios text";
-        const string ratiosTextNotFullAndRelevant = "Ratios text not full and relevant";
         var detailsPage = new DetailsPage
                           {
                               AwardingOrgLabel = "Awarding org label",
@@ -46,8 +44,6 @@ public class QualificationDetailsMapperTests
                               RequirementsHeading = "Requirements heading",
                               RequirementsText = ContentfulContentHelper.Paragraph(requirementsText),
                               RatiosHeading = "Ratios heading",
-                              RatiosText = ContentfulContentHelper.Paragraph(ratiosText),
-                              RatiosTextNotFullAndRelevant = ContentfulContentHelper.Paragraph(ratiosTextNotFullAndRelevant),
                               PrintButtonText = "Print button text",
                               QualificationNameLabel = "Qualification name label",
                               QualificationStartDateLabel = "Qualifications start date label",
@@ -81,8 +77,7 @@ public class QualificationDetailsMapperTests
 
         var result = QualificationDetailsMapper.Map(qualification, detailsPage, backNavLink,
                                                     additionalRequirementAnswers, dateStarted,
-                                                    checkAnotherQualificationText, furtherInfoText, requirementsText,
-                                                    ratiosText, ratiosTextNotFullAndRelevant, feedbackBannerBody);
+                                                    checkAnotherQualificationText, furtherInfoText, requirementsText, feedbackBannerBody);
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);
@@ -117,7 +112,6 @@ public class QualificationDetailsMapperTests
         result.Content.RequirementsHeading.Should().BeSameAs(detailsPage.RequirementsHeading);
         result.Content.RequirementsText.Should().BeSameAs(requirementsText);
         result.Content.RatiosHeading.Should().BeSameAs(detailsPage.RatiosHeading);
-        result.Content.RatiosTextNotFullAndRelevant.Should().BeSameAs(ratiosTextNotFullAndRelevant);
         result.Content.CheckAnotherQualificationLink.Should().BeEquivalentTo(detailsPage.CheckAnotherQualificationLink, options => options.Excluding(x => x.Sys));
         result.Content.PrintButtonText.Should().BeSameAs(detailsPage.PrintButtonText);
         result.Content.QualificationNameLabel.Should().BeSameAs(detailsPage.QualificationNameLabel);

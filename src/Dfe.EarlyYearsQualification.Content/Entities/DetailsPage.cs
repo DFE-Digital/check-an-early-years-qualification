@@ -55,6 +55,8 @@ public class DetailsPage
     public string QualificationStartDateLabel { get; init; } = string.Empty;
 
     public Document? RatiosTextNotFullAndRelevant { get; init; }
+    
+    public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
 
     public FeedbackBanner? FeedbackBanner { get; init; }
 }

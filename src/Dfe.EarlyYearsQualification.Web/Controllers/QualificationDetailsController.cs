@@ -43,11 +43,13 @@ public class QualificationDetailsController(
         if (!validateAdditionalRequirementQuestions.isValid)
         {
             await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
+            await qualificationDetailsService.SetRatioText(model, detailsPageContent);
             return validateAdditionalRequirementQuestions.actionResult!;
         }
 
         await qualificationDetailsService.CheckRatioRequirements(qualification, model);
         await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
+        await qualificationDetailsService.SetRatioText(model, detailsPageContent);
 
         return View(model);
     }

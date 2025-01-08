@@ -14,8 +14,6 @@ public static class QualificationDetailsMapper
         string checkAnotherQualificationTextHtml,
         string furtherInfoTextHtml,
         string requirementsTextHtml,
-        string ratiosTextHtml,
-        string ratiosTextNotFullAndRelevantHtml,
         string? feedbackBodyHtml)
     {
         return new QualificationDetailsModel
@@ -46,8 +44,6 @@ public static class QualificationDetailsMapper
                                  RequirementsHeading = content.RequirementsHeading,
                                  RequirementsText = requirementsTextHtml,
                                  RatiosHeading = content.RatiosHeading,
-                                 RatiosText = ratiosTextHtml,
-                                 RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantHtml,
                                  CheckAnotherQualificationLink = NavigationLinkMapper.Map(content.CheckAnotherQualificationLink),
                                  PrintButtonText = content.PrintButtonText,
                                  QualificationNameLabel = content.QualificationNameLabel,

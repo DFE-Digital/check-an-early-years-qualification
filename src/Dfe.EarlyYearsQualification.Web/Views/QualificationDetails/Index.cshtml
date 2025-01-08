@@ -79,16 +79,8 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-static-margin-top-6">
         <h2 class="govuk-heading-l" id="ratio-heading">@Model.Content.RatiosHeading</h2>
-        @{
-            if (Model.RatioRequirements.IsNotFullAndRelevant)
-            {
-                @Html.Raw(Model.Content.RatiosTextNotFullAndRelevant)
-            }
-            else
-            {
-                @Html.Raw(Model.Content.RatiosText)
-            }
-        }
+        @Html.Raw(Model.Content.RatiosText)
+        
         @{
             if (Model.RatioRequirements.ApprovedForLevel2 == QualificationApprovalStatus.Approved
                 || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.Approved

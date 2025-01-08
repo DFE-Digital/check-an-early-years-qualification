@@ -309,14 +309,27 @@ public class QualificationDetailsService(
         var checkAnotherQualificationText = await contentParser.ToHtml(content.CheckAnotherQualificationText);
         var furtherInfoText = await contentParser.ToHtml(content.FurtherInfoText);
         var requirementsText = await contentParser.ToHtml(content.RequirementsText);
-        var ratiosText = await contentParser.ToHtml(content.RatiosText);
-        var ratiosTextNotFullAndRelevant = await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner);
 
         return QualificationDetailsMapper.Map(qualification, content, backNavLink,
                                               MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions),
                                               dateStarted, checkAnotherQualificationText, furtherInfoText,
-                                              requirementsText, ratiosText, ratiosTextNotFullAndRelevant,
-                                              feedbackBodyHtml);
+                                              requirementsText, feedbackBodyHtml);
+    }
+
+    public async Task SetRatioText(QualificationDetailsModel model, DetailsPage content)
+    {
+        switch (model.RatioRequirements.IsNotFullAndRelevant)
+        {
+            case true when model.QualificationLevel >= 3 && userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019():
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
+                break;
+            case true:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant);
+                break;
+            default:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosText);
+                break;
+        }
     }
 }

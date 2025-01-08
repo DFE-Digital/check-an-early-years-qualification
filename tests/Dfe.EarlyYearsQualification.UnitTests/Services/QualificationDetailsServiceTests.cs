@@ -1,5 +1,4 @@
-﻿using System.Drawing.Printing;
-using Contentful.Core.Models;
+﻿using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
@@ -14,19 +13,19 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class QualificationDetailsServiceTests
 {
-    private Mock<ILogger<QualificationDetailsService>> _mockLogger;
+    private Mock<ILogger<QualificationDetailsService>> _mockLogger = new();
     private Mock<IQualificationsRepository> _mockRepository = new();
     private Mock<IContentService> _mockContentService = new();
     private Mock<IGovUkContentParser> _mockContentParser = new();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
 
-    private IQualificationDetailsService GetSut() => new QualificationDetailsService(
-                                                                                     _mockLogger.Object,
-                                                                                     _mockRepository.Object,
-                                                                                     _mockContentService.Object,
-                                                                                     _mockContentParser.Object,
-                                                                                     _mockUserJourneyCookieService.Object
-                                                                                    );
+    private QualificationDetailsService GetSut() => new(
+                                                        _mockLogger.Object,
+                                                        _mockRepository.Object,
+                                                        _mockContentService.Object,
+                                                        _mockContentParser.Object,
+                                                        _mockUserJourneyCookieService.Object
+                                                        );
 
     [TestInitialize]
     public void Initialize()
@@ -710,12 +709,10 @@ public class QualificationDetailsServiceTests
         const string checkAnotherQualification = "checkAnotherQualification";
         const string furtherInfo = "furtherInfo";
         const string requirements = "requirements";
-        const string ratios = "ratios";
         const string feedback = "feedback";
         var checkAnotherQualificationText = new Document { NodeType = checkAnotherQualification };
         var furtherInfoText = new Document { NodeType = furtherInfo };
         var requirementsText = new Document { NodeType = requirements };
-        var ratiosText = new Document { NodeType = ratios };
         var feedbackText = new Document { NodeType = feedback };
         var feedbackBanner = new FeedbackBanner { Body = feedbackText };
         var backButton = new NavigationLink { Href = "backbutton" };
@@ -725,7 +722,6 @@ public class QualificationDetailsServiceTests
                               CheckAnotherQualificationText = checkAnotherQualificationText,
                               FurtherInfoText = furtherInfoText,
                               RequirementsText = requirementsText,
-                              RatiosText = ratiosText,
                               FeedbackBanner = feedbackBanner,
                               BackButton = backButton
                           };
@@ -733,7 +729,6 @@ public class QualificationDetailsServiceTests
         _mockContentParser.Setup(o => o.ToHtml(checkAnotherQualificationText)).ReturnsAsync(checkAnotherQualification);
         _mockContentParser.Setup(o => o.ToHtml(furtherInfoText)).ReturnsAsync(furtherInfo);
         _mockContentParser.Setup(o => o.ToHtml(requirementsText)).ReturnsAsync(requirements);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosText)).ReturnsAsync(ratios);
         _mockContentParser.Setup(o => o.ToHtml(feedbackText)).ReturnsAsync(feedback);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
 
@@ -743,7 +738,6 @@ public class QualificationDetailsServiceTests
         _mockContentParser.Verify(o => o.ToHtml(checkAnotherQualificationText), Times.Once);
         _mockContentParser.Verify(o => o.ToHtml(furtherInfoText), Times.Once);
         _mockContentParser.Verify(o => o.ToHtml(requirementsText), Times.Once);
-        _mockContentParser.Verify(o => o.ToHtml(ratiosText), Times.Once);
         _mockContentParser.Verify(o => o.ToHtml(feedbackText), Times.Once);
 
         result.QualificationId.Should().Be(qualificationId);
@@ -759,7 +753,6 @@ public class QualificationDetailsServiceTests
         content.CheckAnotherQualificationText.Should().Be(checkAnotherQualification);
         content.FurtherInfoText.Should().Be(furtherInfo);
         content.RequirementsText.Should().Be(requirements);
-        content.RatiosText.Should().Be(ratios);
         content.FeedbackBanner!.Body.Should().Be(feedback);
     }
 
@@ -848,5 +841,130 @@ public class QualificationDetailsServiceTests
         await sut.CheckRatioRequirements(qualification, qualificationDetails);
 
         _mockUserJourneyCookieService.Verify(o => o.WasStartedBeforeSeptember2014(), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task SetRatiosText_IsFullAndRelevant_ShowsApprovedText()
+    {
+        const string ratiosText = "Approved ratio text";
+        const string ratiosTextNotFullAndRelevant = "Not approved";
+        const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
+        var ratiosTextDoc = new Document { NodeType = ratiosText };
+        var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
+        var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
+            new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc)).ReturnsAsync(ratiosTextNotFullAndRelevant);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc)).ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+        var detailsPageContent = new DetailsPage
+                                 {
+                                     RatiosText = ratiosTextDoc,
+                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
+                                 };
+        
+        var model = new QualificationDetailsModel
+                    {
+                        RatioRequirements = new RatioRequirementModel
+                                            {
+                                                ApprovedForLevel2 = QualificationApprovalStatus.Approved,
+                                                ApprovedForLevel3 = QualificationApprovalStatus.Approved,
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
+                                            },
+                        Content = new DetailsPageModel()
+                    };
+        
+        var sut = GetSut();
+
+        await sut.SetRatioText(model, detailsPageContent);
+
+        model.Content.Should().NotBeNull();
+        model.Content.RatiosText.Should().Be(ratiosText);
+    }
+    
+    [TestMethod]
+    public async Task SetRatiosText_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsNotApprovedText()
+    {
+        const string ratiosText = "Approved ratio text";
+        const string ratiosTextNotFullAndRelevant = "Not approved";
+        const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
+        var ratiosTextDoc = new Document { NodeType = ratiosText };
+        var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
+        var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
+            new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc)).ReturnsAsync(ratiosTextNotFullAndRelevant);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc)).ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+        var detailsPageContent = new DetailsPage
+                                 {
+                                     RatiosText = ratiosTextDoc,
+                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
+                                 };
+        
+        var model = new QualificationDetailsModel
+                    {
+                        QualificationLevel = 3,
+                        RatioRequirements = new RatioRequirementModel
+                                            {
+                                                ApprovedForLevel6 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
+                                            },
+                        Content = new DetailsPageModel()
+                    };
+
+        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
+        
+        var sut = GetSut();
+
+        await sut.SetRatioText(model, detailsPageContent);
+
+        model.Content.Should().NotBeNull();
+        model.Content.RatiosText.Should().Be(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+    }
+    
+    [TestMethod]
+    public async Task SetRatiosText_IsNotFullAndRelevantAndOutsideOfAug19_ShowsNotApprovedText()
+    {
+        const string ratiosText = "Approved ratio text";
+        const string ratiosTextNotFullAndRelevant = "Not approved";
+        const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
+        var ratiosTextDoc = new Document { NodeType = ratiosText };
+        var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
+        var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
+            new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc)).ReturnsAsync(ratiosTextNotFullAndRelevant);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc)).ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+        var detailsPageContent = new DetailsPage
+                                 {
+                                     RatiosText = ratiosTextDoc,
+                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
+                                 };
+        
+        var model = new QualificationDetailsModel
+                    {
+                        QualificationLevel = 3,
+                        RatioRequirements = new RatioRequirementModel
+                                            {
+                                                ApprovedForLevel6 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
+                                            },
+                        Content = new DetailsPageModel()
+                    };
+
+        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
+        
+        var sut = GetSut();
+
+        await sut.SetRatioText(model, detailsPageContent);
+
+        model.Content.Should().NotBeNull();
+        model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
     }
 }
