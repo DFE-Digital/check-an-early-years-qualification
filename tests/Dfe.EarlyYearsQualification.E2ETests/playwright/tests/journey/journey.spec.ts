@@ -6,7 +6,6 @@
 import {
     startJourney,
     checkUrl,
-    checkValue,
     checkText,
     clickBackButton,
     refineQualificationSearch,
@@ -18,7 +17,8 @@ import {
     confirmQualificiation,
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
-    checkDetailsPage
+    checkDetailsPage, 
+    checkEmptyValue
 } from '../shared/processLogic';
 
 test.describe('A spec used to test the various routes through the journey', () => {
@@ -28,22 +28,22 @@ test.describe('A spec used to test the various routes through the journey', () =
 
     test("should redirect the user when they select qualification was awarded outside the UK", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#outside-uk");
-        checkUrl(page, "/advice/qualification-outside-the-united-kingdom");
+        await checkUrl(page, "/advice/qualification-outside-the-united-kingdom");
     });
 
     test("should redirect the user when they select qualification was awarded in Scotland", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#scotland");
-        checkUrl(page, "/advice/qualifications-achieved-in-scotland");
+        await checkUrl(page, "/advice/qualifications-achieved-in-scotland");
     });
 
     test("should redirect the user when they select qualification was awarded in Wales", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#wales");
-        checkUrl(page, "/advice/qualifications-achieved-in-wales");
+        await checkUrl(page, "/advice/qualifications-achieved-in-wales");
     });
 
     test("should redirect the user when they select qualification was awarded in Northern Ireland", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#northern-ireland");
-        checkUrl(page, "/advice/qualifications-achieved-in-northern-ireland");
+        await checkUrl(page, "/advice/qualifications-achieved-in-northern-ireland");
     });
 
     test("should redirect the user when they select qualification was awarded in England", async ({page}) => {
@@ -56,7 +56,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await processAdditionalRequirement(page, "EYQ-240", 1, "#yes");
         await processAdditionalRequirement(page, "EYQ-240", 2, "#yes");
         await confirmAdditonalRequirementsAnswers(page, "EYQ-240");
-        checkDetailsPage(page, "EYQ-240");
+        await checkDetailsPage(page, "EYQ-240");
     });
 
     test("Selecting the 'Qualification is not on the list' link on the qualification list page should navigate to the correct advice page", async ({page}) => {
@@ -66,27 +66,27 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whatIsTheAwardingOrganisation(page, 1);
 
         // qualifications page - click a qualification in the list to move us on
-        checkUrl(page, "/qualifications");
+        await checkUrl(page, "/qualifications");
 
         // click not on the list link
         await page.locator('a[href="/advice/qualification-not-on-the-list"]').click();
 
         // qualification not on the list page
-        checkUrl(page, "/advice/qualification-not-on-the-list");
-        checkText(page, "#advice-page-heading", "This is the level 3 page");
+        await checkUrl(page, "/advice/qualification-not-on-the-list");
+        await checkText(page, "#advice-page-heading", "This is the level 3 page");
 
         // check back button goes back to the qualifications list page
         await clickBackButton(page);
-        checkUrl(page, "/qualifications");
+        await checkUrl(page, "/qualifications");
     });
 
     test("Selecting qualification level 7 started after 1 Sept 2014 should navigate to the level 7 post 2014 advice page", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "8", "2015");
         await whatLevelIsTheQualification(page, 7);
-        checkUrl(page, "/advice/level-7-qualification-post-2014");
+        await checkUrl(page, "/advice/level-7-qualification-post-2014");
         await clickBackButton(page);
-        checkUrl(page, "/questions/what-level-is-the-qualification");
+        await checkUrl(page, "/questions/what-level-is-the-qualification");
     });
 
     test("Should remove the search criteria when a user goes to the awarding organisation page and back again", async ({page}) => {
@@ -94,13 +94,15 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whenWasQualificationStarted(page, "6", "2022");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
-        checkUrl(page, "/qualifications");
-        refineQualificationSearch(page, 'test');
-        checkUrl(page, "/qualifications");
+        await checkUrl(page, "/qualifications");
+        await refineQualificationSearch(page, 'test');
+        await checkUrl(page, "/qualifications");
         await clickBackButton(page);
         await whatIsTheAwardingOrganisation(page, 1);
-        checkUrl(page, "/qualifications");
-        checkValue(page, "#refineSearch", '');
+        await checkUrl(page, "/qualifications");
+        await checkEmptyValue(page, "#refineSearch");
+        //await expect(page.locator("#refineSearch")).toBeEmpty();
+        //await checkText(page, "#refineSearch", undefined);
     });
 
     [
@@ -114,7 +116,7 @@ test.describe('A spec used to test the various routes through the journey', () =
             await whereWasTheQualificationAwarded(page, "#england");
             await whenWasQualificationStarted(page, month, year);
             await whatLevelIsTheQualification(page, 2);
-            checkUrl(page, "/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019");
+            await checkUrl(page, "/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019");
         });
     });
 
@@ -127,7 +129,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await confirmQualificiation(page, "#yes");
         await processAdditionalRequirement(page, "EYQ-108", 1, "#yes");
         await confirmAdditonalRequirementsAnswers(page, "EYQ-108");
-        checkDetailsPage(page, "EYQ-108");
+        await checkDetailsPage(page, "EYQ-108");
     });
 
     test("should not bypass remaining additional requirement question when answering no to the Qts question", async ({page}) => {
@@ -140,6 +142,6 @@ test.describe('A spec used to test the various routes through the journey', () =
         await processAdditionalRequirement(page, "EYQ-108", 1, "#no");
         await processAdditionalRequirement(page, "EYQ-108", 2, "#yes");
         await confirmAdditonalRequirementsAnswers(page, "EYQ-108");
-        checkDetailsPage(page, "EYQ-108");
+        await checkDetailsPage(page, "EYQ-108");
     });
 });

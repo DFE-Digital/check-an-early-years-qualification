@@ -33,39 +33,39 @@ test.describe("A spec used to test the main back button route through the journe
         await processAdditionalRequirement(page, "EYQ-240", 1, "#yes");
         await processAdditionalRequirement(page, "EYQ-240", 2, "#no");
         await confirmAdditonalRequirementsAnswers(page, "EYQ-240");
-        checkDetailsPage(page, "EYQ-240");
+        await checkDetailsPage(page, "EYQ-240");
 
         await clickBackButton(page);
-        checkUrl(page, "/qualifications/check-additional-questions/EYQ-240/confirm-answers");
+        await checkUrl(page, "/qualifications/check-additional-questions/EYQ-240/confirm-answers");
         await clickBackButton(page);
-        checkUrl(page, "/qualifications/check-additional-questions/EYQ-240/2");
+        await checkUrl(page, "/qualifications/check-additional-questions/EYQ-240/2");
         await clickBackButton(page);
-        checkUrl(page, "/qualifications/check-additional-questions/EYQ-240/1");
+        await checkUrl(page, "/qualifications/check-additional-questions/EYQ-240/1");
         await clickBackButton(page);
-        checkUrl(page, "/qualifications");
+        await checkUrl(page, "/qualifications");
         await clickBackButton(page);
-        checkUrl(page, "/questions/what-is-the-awarding-organisation");
+        await checkUrl(page, "/questions/what-is-the-awarding-organisation");
         await clickBackButton(page);
-        checkUrl(page, "/questions/what-level-is-the-qualification");
+        await checkUrl(page, "/questions/what-level-is-the-qualification");
         await clickBackButton(page);
-        checkUrl(page, "/questions/when-was-the-qualification-started");
+        await checkUrl(page, "/questions/when-was-the-qualification-started");
         await clickBackButton(page);
-        checkUrl(page, "/questions/where-was-the-qualification-awarded");
+        await checkUrl(page, "/questions/where-was-the-qualification-awarded");
         await clickBackButton(page);
-        checkUrl(page, process.env.WEBAPP_URL + "/");
+        await checkUrl(page, process.env.WEBAPP_URL + "/");
     });
 
     test.describe("back buttons should all navigate to the appropriate pages in the main journey", async () => {
         test("the back button on the accessibility statement page navigates back to the home page", async ({page}) => {
             await page.goto("/accessibility-statement");
             await clickBackButton(page);
-            checkUrl(page, process.env.WEBAPP_URL + "/");
+            await checkUrl(page, process.env.WEBAPP_URL + "/");
         });
 
         test("the back button on the cookies preference page navigates back to the home page", async ({page}) => {
             await page.goto("/cookies");
             await clickBackButton(page);
-            checkUrl(page, process.env.WEBAPP_URL + "/");
+            await checkUrl(page, process.env.WEBAPP_URL + "/");
         });
     });
 });

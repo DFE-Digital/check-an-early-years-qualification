@@ -7,8 +7,8 @@ import {
 test.describe('A spec used to check a new user is challenged to enter the secret', () => {
     test("should redirect the user to the challenge page", async ({page}) => {
         await page.goto("/");
-        checkUrl(page, "/challenge?redirectAddress=%2F");
-        checkValue(page, "#redirectAddress", "/");
-        checkValue(page, "#PasswordValue", '');
+        await checkUrl(page, "/challenge?redirectAddress=%2F");
+        await checkValue(page, "#redirectAddress", "/");
+        await checkValue(page, "#PasswordValue", '');
     });
 });

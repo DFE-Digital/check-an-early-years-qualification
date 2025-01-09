@@ -16,23 +16,32 @@ export async function startJourney(page: Page, context: BrowserContext) {
     await page.locator("#start-now-button").click();
 }
 
-export function checkUrl(page: any, expectedUrl: string) {
+export async function checkUrl(page: Page, expectedUrl: string) {
+    await page.waitForLoadState("domcontentloaded");
     expect(page.url()).toContain(expectedUrl);
 }
 
-export function checkText(page: any, locator: string, expectedText: string, contain: boolean = false) {
+export async function checkText(page: Page, locator: string, expectedText: string, contain: boolean = false) {
+    await page.waitForLoadState("domcontentloaded");
+    await page.waitForSelector(locator);
     if (contain) {
-        expect(page.locator(locator)).toContainText(expectedText);
+        await expect(page.locator(locator)).toContainText(expectedText);
     } else {
-        expect(page.locator(locator)).toHaveText(expectedText);
+        await expect(page.locator(locator)).toHaveText(expectedText);
     }
 }
 
-export function checkValue(page: any, locator: string, expectedValue: any) {
-    expect(page.locator(locator)).toHaveValue(expectedValue);
+export async function checkValue(page: Page, locator: string, expectedValue: any) {
+    await page.waitForLoadState("domcontentloaded");
+    await expect(page.locator(locator)).toHaveValue(expectedValue);
 }
 
-export async function clickBackButton(page: any) {
+export async function checkEmptyValue(page: Page, locator: string) {
+    await page.waitForLoadState("domcontentloaded");
+    await expect(page.locator(locator).first()).toBeEmpty();
+}
+
+export async function clickBackButton(page: Page) {
     await page.locator("#back-button").click();
 }
 
@@ -62,48 +71,48 @@ export function checkHeaderExists(response: APIResponse, headerName: string, sho
     expect(response.headers()[headerName]).toBeUndefined();
 }
 
-export async function whereWasTheQualificationAwarded(page: any, location: string) {
+export async function whereWasTheQualificationAwarded(page: Page, location: string) {
     checkUrl(page, "/questions/where-was-the-qualification-awarded");
     await page.locator(location).click();
     await page.locator("#question-submit").click();
 }
 
-export async function whenWasQualificationStarted(page: any, month: string, year: string) {
+export async function whenWasQualificationStarted(page: Page, month: string, year: string) {
     checkUrl(page, '/questions/when-was-the-qualification-started');
     await page.locator("#date-started-month").fill(month);
     await page.locator("#date-started-year").fill(year);
     await page.locator("#question-submit").click();
 }
 
-export async function whatLevelIsTheQualification(page: any, level: number) {
+export async function whatLevelIsTheQualification(page: Page, level: number) {
     // what-level-is-the-qualification page - valid level moves us on
     checkUrl(page, "/questions/what-level-is-the-qualification");
     await page.locator('input[id="' + level + '"]').click();
     await page.locator("#question-submit").click();
 }
 
-export async function whatIsTheAwardingOrganisation(page: any, dropdownIndex: number) {
+export async function whatIsTheAwardingOrganisation(page: Page, dropdownIndex: number) {
     // what-is-the-awarding-organisation page - valid awarding organisation moves us on
     checkUrl(page, "/questions/what-is-the-awarding-organisation");
     await page.locator("#awarding-organisation-select").selectOption({index: dropdownIndex});
     await page.locator("#question-submit").click();
 }
 
-export async function selectQualification(page: any, qualificationId: string) {
+export async function selectQualification(page: Page, qualificationId: string) {
     // qualifications page - click a qualification in the list to move us on
     checkUrl(page, "/qualifications");
     await page.locator("a[href=\"/confirm-qualification/" + qualificationId + "\"]").click();
     checkUrl(page, "/confirm-qualification/" + qualificationId);
 }
 
-export async function confirmQualificiation(page: any, answer: string) {
+export async function confirmQualificiation(page: Page, answer: string) {
     // confirm qualification page
     await page.locator(answer).click();
     await page.locator('#confirm-qualification-button').click();
 
 }
 
-export async function processAdditionalRequirement(page: any, qualificationId: string, additionalRequirementIndex: number, answer: string) {
+export async function processAdditionalRequirement(page: Page, qualificationId: string, additionalRequirementIndex: number, answer: string) {
     // check additional questions first page
     checkUrl(page, "/qualifications/check-additional-questions/" + qualificationId + "/" + additionalRequirementIndex);
     await page.locator(answer).click();
@@ -111,16 +120,16 @@ export async function processAdditionalRequirement(page: any, qualificationId: s
 
 }
 
-export async function confirmAdditonalRequirementsAnswers(page: any, qualificationId: string) {
+export async function confirmAdditonalRequirementsAnswers(page: Page, qualificationId: string) {
     checkUrl(page, "/qualifications/check-additional-questions/" + qualificationId + "/confirm-answers");
     await page.locator("#confirm-answers").click();
 }
 
-export function checkDetailsPage(page: any, qualificationId: string) {
-    checkUrl(page, "/qualifications/qualification-details/" + qualificationId);
+export async function checkDetailsPage(page: Page, qualificationId: string) {
+    await checkUrl(page, "/qualifications/qualification-details/" + qualificationId);
 }
 
-export async function refineQualificationSearch(page: any, searchTerm: string) {
+export async function refineQualificationSearch(page: Page, searchTerm: string) {
     await page.locator("#refineSearch").fill(searchTerm);
     checkValue(page, "#refineSearch", searchTerm);
     await page.locator("#refineSearchButton").click();

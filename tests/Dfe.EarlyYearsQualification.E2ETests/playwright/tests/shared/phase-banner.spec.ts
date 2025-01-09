@@ -16,8 +16,8 @@ test.describe('A spec that tests the phase banner is showing on all pages', () =
             await page.goto(url);
 
             await expect(page.locator(".govuk-phase-banner")).toBeVisible();
-            checkText(page, ".govuk-phase-banner__content__tag", "Test phase banner name");
-            checkText(page, ".govuk-phase-banner__text", "Some TextLink Text");
+            await checkText(page, ".govuk-phase-banner__content__tag", "Test phase banner name");
+            await checkText(page, ".govuk-phase-banner__text", "Some TextLink Text");
         })
     });
 });
