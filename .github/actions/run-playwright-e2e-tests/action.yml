@@ -4,10 +4,10 @@ description: Run end to end tests using Playwright
 inputs:
   webapp_url:
     required: true
-    type: string
+    description: "The web app url to test against"
   auth_secret:
     required: true
-    type: string
+    description: "The auth secret to use for the e2e tests"
 
 runs:
   using: composite
