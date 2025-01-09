@@ -17,12 +17,15 @@ public class QualificationSearchServiceTests
     private Mock<IGovUkContentParser> _mockContentParser = new();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
 
-    private IQualificationSearchService GetSut() => new QualificationSearchService(
-                                                                                   _mockRepository.Object,
-                                                                                   _mockContentService.Object,
-                                                                                   _mockContentParser.Object,
-                                                                                   _mockUserJourneyCookieService.Object
-                                                                                  );
+    private IQualificationSearchService GetSut()
+    {
+        return new QualificationSearchService(
+                                              _mockRepository.Object,
+                                              _mockContentService.Object,
+                                              _mockContentParser.Object,
+                                              _mockUserJourneyCookieService.Object
+                                             );
+    }
 
     [TestInitialize]
     public void Initialize()

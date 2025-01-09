@@ -21,4 +21,5 @@ public interface IQualificationDetailsService
     NavigationLink? CalculateBackButton(DetailsPage content, string qualificationId);
     List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(List<AdditionalRequirementQuestion>? additionalRequirementQuestions);
     Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content);
+    Task SetRatioText(QualificationDetailsModel model, DetailsPage content);
 }

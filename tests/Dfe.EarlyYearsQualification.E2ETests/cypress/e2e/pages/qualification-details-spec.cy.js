@@ -116,9 +116,18 @@ describe("A spec used to test the qualification details page", () => {
     cy.get(".govuk-tag").eq(4).should("have.class", "govuk-tag--red");
   })
 
-  it("Checks the staff ratio text shows correctly when not full and relevant", () => {
+  it("Checks the staff ratio text shows correctly when not full and relevant for a L3+ qualification started between Sep14 & Aug19", () => {
     // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationStarted":"7/2015","LevelOfQualification":"3","WhatIsTheAwardingOrganisation":"NCFE","SearchCriteria":"","AdditionalQuestionsAnswers":{"Test question":"yes","Test question 2":"yes"}}' encoded
     cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D');
+    cy.visit("/qualifications/qualification-details/eyq-240");
+
+    cy.get("#ratio-heading").should("contain.text", "Test ratio heading");
+    cy.get("#ratio-heading + p[class='govuk-body']").should("contain.text", "This is not F&R for L3 between Sep14 & Aug19");
+  })
+
+  it("Checks the staff ratio text shows correctly when not full and relevant for a L3+ qualification started after Sep19", () => {
+    // Value is '{"WhereWasQualificationAwarded":"england","WhenWasQualificationStarted":"10/2019","LevelOfQualification":"3","WhatIsTheAwardingOrganisation":"NCFE","SearchCriteria":"","AdditionalQuestionsAnswers":{"Test question":"yes","Test question 2":"yes"}}' encoded
+    cy.setCookie('user_journey', '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D');
     cy.visit("/qualifications/qualification-details/eyq-240");
 
     cy.get("#ratio-heading").should("contain.text", "Test ratio heading");

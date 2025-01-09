@@ -111,6 +111,7 @@ public class MockContentfulService : IContentService
         var furtherInfoText = ContentfulContentHelper.Paragraph("Test Further Info Text");
         var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
+        var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 = ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
         var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
         return await Task.FromResult(new DetailsPage
                                      {
@@ -159,6 +160,7 @@ public class MockContentfulService : IContentService
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
                                          RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
+                                         RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19,
                                          RequirementsHeading = "Test requirements heading",
                                          RequirementsText = requirementsText,
                                          CheckAnotherQualificationLink = new NavigationLink
