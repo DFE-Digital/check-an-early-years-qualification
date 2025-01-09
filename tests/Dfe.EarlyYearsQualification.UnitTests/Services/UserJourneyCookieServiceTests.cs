@@ -428,7 +428,7 @@ public class UserJourneyCookieServiceTests
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieValueIsEmpty_Throws()
+    public void WasStartedOnOrAfterSeptember2019_CookieValueIsEmpty_Throws()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -440,13 +440,13 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        var action = () => service.WasStartedOnOrAfterSeptember2014();
+        var action = () => service.WasStartedOnOrAfterSeptember2019();
 
         action.Should().Throw<InvalidOperationException>();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasInvalidValue_Throws()
+    public void WasStartedOnOrAfterSeptember2019_CookieHasInvalidValue_Throws()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -458,13 +458,13 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        var action = () => service.WasStartedOnOrAfterSeptember2014();
+        var action = () => service.WasStartedOnOrAfterSeptember2019();
 
         action.Should().Throw<InvalidOperationException>();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueIn2013_ReturnsFalse()
+    public void WasStartedOnOrAfterSeptember2019_CookieHasValidValueIn2013_ReturnsFalse()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -476,11 +476,11 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        service.WasStartedOnOrAfterSeptember2014().Should().BeFalse();
+        service.WasStartedOnOrAfterSeptember2019().Should().BeFalse();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueInAugust2014_ReturnsFalse()
+    public void WasStartedOnOrAfterSeptember2019_CookieHasValidValueInAugust2014_ReturnsFalse()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -492,11 +492,11 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        service.WasStartedOnOrAfterSeptember2014().Should().BeFalse();
+        service.WasStartedOnOrAfterSeptember2019().Should().BeFalse();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueInSeptember2014_ReturnsTrue()
+    public void WasStartedBetweenSeptember2014AndAugust2019_CookieHasValidValueInSeptember2014_ReturnsTrue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -508,11 +508,11 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        service.WasStartedOnOrAfterSeptember2014().Should().BeTrue();
+        service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
 
     [TestMethod]
-    public void WasStartedOnOrAfterSeptember2014_CookieHasValidValueIn2015_ReturnsTrue()
+    public void WasStartedBetweenSeptember2014AndAugust2019_CookieHasValidValueIn2015_ReturnsTrue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -524,9 +524,9 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        service.WasStartedOnOrAfterSeptember2014().Should().BeTrue();
+        service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
-    
+
     [TestMethod]
     public void WasStartedBetweenSept2014AndAug2019_CookieValueIsEmpty_Throws()
     {
@@ -562,7 +562,7 @@ public class UserJourneyCookieServiceTests
 
         action.Should().Throw<InvalidOperationException>();
     }
-    
+
     [TestMethod]
     [DataRow("8/2014")]
     [DataRow("9/2019")]
@@ -582,7 +582,7 @@ public class UserJourneyCookieServiceTests
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeFalse();
     }
-    
+
     [TestMethod]
     [DataRow("9/2014")]
     [DataRow("8/2019")]
@@ -601,42 +601,6 @@ public class UserJourneyCookieServiceTests
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
-    }
-    
-    [TestMethod]
-    public void GetQualificationStartedBetween2014And2019_CookieValueIsEmpty_Throws()
-    {
-        var existingModel = new UserJourneyCookieService.UserJourneyModel
-                            {
-                                WhenWasQualificationStarted = string.Empty
-                            };
-
-        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
-        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-
-        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
-
-        var action = () => service.WasStartedBetweenSeptember2014AndAugust2019();
-
-        action.Should().Throw<InvalidOperationException>();
-    }
-
-    [TestMethod]
-    public void GetQualificationStartedBetween2014And2019_CookieHasInvalidValue_Throws()
-    {
-        var existingModel = new UserJourneyCookieService.UserJourneyModel
-                            {
-                                WhenWasQualificationStarted = "4"
-                            };
-
-        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
-        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-
-        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
-
-        var action = () => service.WasStartedBetweenSeptember2014AndAugust2019();
-
-        action.Should().Throw<InvalidOperationException>();
     }
 
     [TestMethod]
@@ -669,38 +633,6 @@ public class UserJourneyCookieServiceTests
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
         service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeFalse();
-    }
-
-    [TestMethod]
-    public void GetQualificationStartedBetween2014And2019_CookieHasValidValueInSeptember2014_ReturnsTrue()
-    {
-        var existingModel = new UserJourneyCookieService.UserJourneyModel
-                            {
-                                WhenWasQualificationStarted = "9/2014"
-                            };
-
-        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
-        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-
-        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
-
-        service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
-    }
-
-    [TestMethod]
-    public void GetQualificationStartedBetween2014And2019_CookieHasValidValueIn2015_ReturnsTrue()
-    {
-        var existingModel = new UserJourneyCookieService.UserJourneyModel
-                            {
-                                WhenWasQualificationStarted = "1/2015"
-                            };
-
-        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
-        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-
-        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
-
-        service.WasStartedBetweenSeptember2014AndAugust2019().Should().BeTrue();
     }
 
     [TestMethod]
@@ -887,7 +819,8 @@ public class UserJourneyCookieServiceTests
 
         var mockCookieManager = SetCookieManagerWithExistingCookie(model);
 
-        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance, mockCookieManager.cookieManager.Object);
+        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance,
+                                                   mockCookieManager.cookieManager.Object);
 
         service.UserHasAnsweredAdditionalQuestions().Should().BeFalse();
     }
@@ -900,7 +833,8 @@ public class UserJourneyCookieServiceTests
 
         var mockCookieManager = SetCookieManagerWithExistingCookie(model);
 
-        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance, mockCookieManager.cookieManager.Object);
+        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance,
+                                                   mockCookieManager.cookieManager.Object);
 
         service.UserHasAnsweredAdditionalQuestions().Should().BeTrue();
     }
@@ -910,7 +844,8 @@ public class UserJourneyCookieServiceTests
     {
         var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
 
-        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance, mockCookieManager.cookieManager.Object);
+        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance,
+                                                   mockCookieManager.cookieManager.Object);
 
         service.SetAwardingOrganisationNotOnList(true);
 
@@ -926,7 +861,8 @@ public class UserJourneyCookieServiceTests
         var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel
                                                                    { SelectedAwardingOrganisationNotOnTheList = true });
 
-        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance, mockCookieManager.cookieManager.Object);
+        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance,
+                                                   mockCookieManager.cookieManager.Object);
 
         service.SetAwardingOrganisationNotOnList(false);
 
@@ -941,7 +877,8 @@ public class UserJourneyCookieServiceTests
     {
         var mockCookieManager = SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
 
-        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance, mockCookieManager.cookieManager.Object);
+        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance,
+                                                   mockCookieManager.cookieManager.Object);
 
         service.SetUserSelectedQualificationFromList(YesOrNo.Yes);
 
@@ -959,7 +896,8 @@ public class UserJourneyCookieServiceTests
                                                                        QualificationWasSelectedFromList = YesOrNo.Yes
                                                                    });
 
-        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance, mockCookieManager.cookieManager.Object);
+        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance,
+                                                   mockCookieManager.cookieManager.Object);
 
         service.SetUserSelectedQualificationFromList(YesOrNo.No);
 
@@ -977,30 +915,55 @@ public class UserJourneyCookieServiceTests
                                                                        QualificationWasSelectedFromList = YesOrNo.Yes
                                                                    });
 
-        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance, mockCookieManager.cookieManager.Object);
+        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance,
+                                                   mockCookieManager.cookieManager.Object);
 
         var result = service.GetQualificationWasSelectedFromList();
         result.Should().Be(YesOrNo.Yes);
     }
 
     [TestMethod]
-    public static void SetMultipleValues_AllSetInOutboundCookie()
+    public void SetMultipleValues_AllSetInOutboundCookie()
     {
         var mockCookieManager =
             SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
 
-        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance, mockCookieManager.cookieManager.Object);
+        var service = new UserJourneyCookieService(NullLogger<UserJourneyCookieService>.Instance,
+                                                   mockCookieManager.cookieManager.Object);
 
-        service.SetAwardingOrganisation("Awarding Organisation");
-        service.SetUserSelectedQualificationFromList(YesOrNo.Yes);
-        service.SetAdditionalQuestionsAnswers(new Dictionary<string, string> { { "1", "Answer 1" } });
-        service.SetQualificationNameSearchCriteria("Search Criteria");
-        service.SetLevelOfQualification("6");
-        service.SetWhenWasQualificationStarted("12/2012");
-        service.SetWhereWasQualificationAwarded("York");
+        const string awardingOrganisation = "Awarding Organisation";
+        service.SetAwardingOrganisation(awardingOrganisation);
 
-        CheckSerializedModelWasSet(mockCookieManager,
-                                   new UserJourneyCookieService.UserJourneyModel());
+        const YesOrNo userSelectedQualificationFromList = YesOrNo.Yes;
+        service.SetUserSelectedQualificationFromList(userSelectedQualificationFromList);
+
+        var additionalQuestionsAnswers = new Dictionary<string, string> { { "1", "Answer 1" } };
+        service.SetAdditionalQuestionsAnswers(additionalQuestionsAnswers);
+
+        const string searchCriteria = "Search Criteria";
+        service.SetQualificationNameSearchCriteria(searchCriteria);
+
+        const string level = "6";
+        service.SetLevelOfQualification(level);
+
+        const string dateStarted = "12/2012";
+        service.SetWhenWasQualificationStarted(dateStarted);
+
+        const string location = "York";
+        service.SetWhereWasQualificationAwarded(location);
+
+        var expectedModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WhatIsTheAwardingOrganisation = awardingOrganisation,
+                                QualificationWasSelectedFromList = userSelectedQualificationFromList,
+                                AdditionalQuestionsAnswers = additionalQuestionsAnswers,
+                                SearchCriteria = searchCriteria,
+                                LevelOfQualification = level,
+                                WhenWasQualificationStarted = dateStarted,
+                                WhereWasQualificationAwarded = location
+                            };
+
+        CheckSerializedModelWasSet(mockCookieManager, expectedModel);
     }
 
     [TestMethod]
