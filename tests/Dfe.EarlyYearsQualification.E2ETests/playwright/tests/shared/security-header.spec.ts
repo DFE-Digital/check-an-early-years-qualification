@@ -31,7 +31,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
             checkHeaderValue(response, "x-content-type-options", "nosniff");
-            checkHeaderValue(response, "x-frame-options", "DENY");
+            checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
             checkHeaderExists(response, "server", false);
         });
@@ -52,7 +52,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
             checkHeaderValue(response, "x-content-type-options", "nosniff");
-            checkHeaderValue(response, "x-frame-options", "DENY");
+            checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
             checkHeaderExists(response, "server", false);
         });
@@ -65,7 +65,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
             checkHeaderValue(response, "x-content-type-options", "nosniff");
-            checkHeaderValue(response, "x-frame-options", "DENY");
+            checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
             checkHeaderExists(response, "server", false);
         });
@@ -85,7 +85,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
             checkHeaderValue(response, "x-content-type-options", "nosniff");
-            checkHeaderValue(response, "x-frame-options", "DENY");
+            checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
             checkHeaderExists(response, "server", false);
         });
@@ -103,7 +103,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
             checkHeaderValue(response, "x-content-type-options", "nosniff");
-            checkHeaderValue(response, "x-frame-options", "DENY");
+            checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
             checkHeaderExists(response, "server", false);
         });
