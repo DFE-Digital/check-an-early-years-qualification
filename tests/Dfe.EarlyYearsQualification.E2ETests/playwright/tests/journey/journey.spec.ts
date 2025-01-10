@@ -84,7 +84,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "8", "2015");
         await whatLevelIsTheQualification(page, 7);
-        await checkUrl(page, "/advice/level-7-qualification-post-2014");
+        await checkUrl(page, "/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019");
         await clickBackButton(page);
         await checkUrl(page, "/questions/what-level-is-the-qualification");
     });
