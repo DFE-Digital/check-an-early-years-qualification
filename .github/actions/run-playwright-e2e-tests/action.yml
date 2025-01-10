@@ -20,18 +20,10 @@ runs:
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
       run: npm ci
-#    - name: Install dependencies
-#      shell: bash
-#      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
-#      run: npm install -g yarn && yarn install --frozen-lockfile
     - name: Install Playwright Browsers
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
       run: npx playwright install --with-deps
-#    - name: Install Playwright Browsers
-#      shell: bash
-#      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
-#      run: yarn playwright install --with-deps
     - name: Run Playwright tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright

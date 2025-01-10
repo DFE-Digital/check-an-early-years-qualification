@@ -12,7 +12,6 @@ on:
     paths:
       - 'src/**'
       - 'tests/**'
-      - 'tests/Dfe.EarlyYearsQualification.E2ETests/**'
       - '.github/workflows/code-pr-check.yml'
       - '.github/actions/**'
       - 'terraform/**'
