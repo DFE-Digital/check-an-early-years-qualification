@@ -16,22 +16,22 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: 18.x
-#    - name: Install dependencies
-#      shell: bash
-#      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
-#      run: npm ci
     - name: Install dependencies
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
-      run: npm install -g yarn && yarn install --frozen-lockfile
-#    - name: Install Playwright Browsers
+      run: npm ci
+#    - name: Install dependencies
 #      shell: bash
 #      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
-#      run: npx playwright install --with-deps
+#      run: npm install -g yarn && yarn install --frozen-lockfile
     - name: Install Playwright Browsers
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
-      run: yarn playwright install --with-deps
+      run: npx playwright install --with-deps
+#    - name: Install Playwright Browsers
+#      shell: bash
+#      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+#      run: yarn playwright install --with-deps
     - name: Run Playwright tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
