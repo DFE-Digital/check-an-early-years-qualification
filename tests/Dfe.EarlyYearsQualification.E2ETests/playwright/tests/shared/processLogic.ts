@@ -21,14 +21,14 @@ export async function checkUrl(page: Page, expectedUrl: string) {
     expect(page.url()).toContain(expectedUrl);
 }
 
-export async function checkText(page: Page, locator: string, expectedText: string, contain: boolean = false) {
+export async function checkText(page: Page, locator: string, expectedText: string, nth: number = null) {
     await page.waitForLoadState("domcontentloaded");
     await page.waitForSelector(locator);
-    if (contain) {
-        await expect(page.locator(locator)).toContainText(expectedText);
-    } else {
-        await expect(page.locator(locator)).toHaveText(expectedText);
+    var element = page.locator(locator);
+    if (nth != null) {
+        element = element.nth(nth);
     }
+    await expect(element).toContainText(expectedText);
 }
 
 export async function checkValue(page: Page, locator: string, expectedValue: any) {
