@@ -17,6 +17,7 @@ public class RedirectIfDateMissingAttribute() : TypeFilterAttribute(typeof(Redir
 
             if (startMonth == null || startYear == null)
             {
+                userJourneyCookieService.SetWhereWasQualificationAwarded("england");
                 context.Result = new RedirectResult("/questions/when-was-the-qualification-started");
             }
         }
