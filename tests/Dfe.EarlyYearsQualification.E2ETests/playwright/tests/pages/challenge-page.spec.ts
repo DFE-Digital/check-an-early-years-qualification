@@ -1,4 +1,4 @@
-﻿import {expect, Page, test} from '@playwright/test';
+﻿import {expect, test} from '@playwright/test';
 import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/processLogic';
 
 test.describe('A spec that tests the challenge page', () => {

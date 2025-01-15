@@ -1,4 +1,4 @@
-﻿import {expect, Page, test} from '@playwright/test';
+﻿import {Page, test} from '@playwright/test';
 import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/processLogic';
 
 async function checkFeedbackBanners(page: Page) {

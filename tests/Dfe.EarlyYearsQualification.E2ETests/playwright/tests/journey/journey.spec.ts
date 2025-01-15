@@ -1,6 +1,5 @@
 ﻿import {
-    test,
-    expect
+    test
 } from '@playwright/test';
 
 import {

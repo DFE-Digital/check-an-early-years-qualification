@@ -11,7 +11,6 @@ export async function startJourney(page: Page, context: BrowserContext) {
     await authorise(context);
     await page.goto("/", {waitUntil: 'domcontentloaded'});
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
-    //expect(await page.title()).toBe("Start - Check an Early Years qualification");
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
 }
@@ -23,7 +22,6 @@ export async function checkUrl(page: Page, expectedUrl: string) {
 
 export async function checkText(page: Page, locator: string, expectedText: string, nth: number = null) {
     await page.waitForLoadState("domcontentloaded");
-    await page.waitForSelector(locator);
     var element = page.locator(locator);
     if (nth != null) {
         element = element.nth(nth);
