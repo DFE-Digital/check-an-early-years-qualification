@@ -84,7 +84,7 @@ public static class SecureHeaderConfiguration
         var challengePageShowPassword = new ContentSecurityPolicyElement
                           {
                               CommandType = CspCommandType.Directive,
-                              DirectiveOrUri = "sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY="
+                              DirectiveOrUri = "sha256-fWDhQI9vCzfKzPnyv9Rt3lgLpz8aTH7VYjbVc8OgTXY="
                           };
 
         var clarityCspElement = new ContentSecurityPolicyElement
