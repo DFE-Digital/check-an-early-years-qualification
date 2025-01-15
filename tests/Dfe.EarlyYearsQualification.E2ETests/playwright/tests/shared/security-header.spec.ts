@@ -9,7 +9,7 @@ import {
     checkHeaderExists
 } from "./processLogic";
 
-
+var expectedContentSecurityPolicyHeader = "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-VAoCuOmBv4C4V/WthoGzlhYyYpWir44ETG7WKh+3kG8=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-lD2YLKoqlgPJ6bMRB0gZKeUdZqwszfrRSmAnzX0TSls=' 'sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I=' 'sha256-fWDhQI9vCzfKzPnyv9Rt3lgLpz8aTH7VYjbVc8OgTXY=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://www.clarity.ms/ https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect;block-all-mixed-content;upgrade-insecure-requests;"
 test.describe('A spec that checks for security headers in the response', () => {
 
     test.beforeEach(async ({context}) => {
@@ -26,7 +26,7 @@ test.describe('A spec that checks for security headers in the response', () => {
 
             var response = await request.get(url);
             checkHeaderValue(response, "cache-control", "no-store,no-cache");
-            checkHeaderValue(response, "content-security-policy", "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-VAoCuOmBv4C4V/WthoGzlhYyYpWir44ETG7WKh+3kG8=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-lD2YLKoqlgPJ6bMRB0gZKeUdZqwszfrRSmAnzX0TSls=' 'sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I=' 'sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://www.clarity.ms/ https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect;block-all-mixed-content;upgrade-insecure-requests;");
+            checkHeaderValue(response, "content-security-policy", expectedContentSecurityPolicyHeader);
             checkHeaderValue(response, "cross-origin-resource-policy", "same-origin");
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
@@ -47,7 +47,7 @@ test.describe('A spec that checks for security headers in the response', () => {
 
             var response = await request.get(url);
             checkHeaderValue(response, "cache-control", "no-store,no-cache");
-            checkHeaderValue(response, "content-security-policy", "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-VAoCuOmBv4C4V/WthoGzlhYyYpWir44ETG7WKh+3kG8=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-lD2YLKoqlgPJ6bMRB0gZKeUdZqwszfrRSmAnzX0TSls=' 'sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I=' 'sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://www.clarity.ms/ https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect;block-all-mixed-content;upgrade-insecure-requests;");
+            checkHeaderValue(response, "content-security-policy", expectedContentSecurityPolicyHeader);
             checkHeaderValue(response, "cross-origin-resource-policy", "same-origin");
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
@@ -60,7 +60,7 @@ test.describe('A spec that checks for security headers in the response', () => {
         test(`pages without forms that will not redirect if no date - cookie banner showing - ${url} contains the expected response headers`, async ({request}) => {
             var response = await request.get(url);
             checkHeaderValue(response, "cache-control", "no-store,no-cache");
-            checkHeaderValue(response, "content-security-policy", "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-VAoCuOmBv4C4V/WthoGzlhYyYpWir44ETG7WKh+3kG8=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-lD2YLKoqlgPJ6bMRB0gZKeUdZqwszfrRSmAnzX0TSls=' 'sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I=' 'sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://www.clarity.ms/ https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect;block-all-mixed-content;upgrade-insecure-requests;");
+            checkHeaderValue(response, "content-security-policy", expectedContentSecurityPolicyHeader);
             checkHeaderValue(response, "cross-origin-resource-policy", "same-origin");
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
@@ -80,7 +80,7 @@ test.describe('A spec that checks for security headers in the response', () => {
 
             var response = await request.get(url);
             checkHeaderValue(response, "cache-control", "no-store,no-cache");
-            checkHeaderValue(response, "content-security-policy", "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-VAoCuOmBv4C4V/WthoGzlhYyYpWir44ETG7WKh+3kG8=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-lD2YLKoqlgPJ6bMRB0gZKeUdZqwszfrRSmAnzX0TSls=' 'sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I=' 'sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://www.clarity.ms/ https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect;block-all-mixed-content;upgrade-insecure-requests;");
+            checkHeaderValue(response, "content-security-policy", expectedContentSecurityPolicyHeader);
             checkHeaderValue(response, "cross-origin-resource-policy", "same-origin");
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
@@ -98,7 +98,7 @@ test.describe('A spec that checks for security headers in the response', () => {
 
             var response = await request.get(url);
             checkHeaderValue(response, "cache-control", "no-store,no-cache");
-            checkHeaderValue(response, "content-security-policy", "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-VAoCuOmBv4C4V/WthoGzlhYyYpWir44ETG7WKh+3kG8=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-lD2YLKoqlgPJ6bMRB0gZKeUdZqwszfrRSmAnzX0TSls=' 'sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I=' 'sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://www.clarity.ms/ https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect;block-all-mixed-content;upgrade-insecure-requests;");
+            checkHeaderValue(response, "content-security-policy", expectedContentSecurityPolicyHeader);
             checkHeaderValue(response, "cross-origin-resource-policy", "same-origin");
             checkHeaderValue(response, "referrer-policy", "no-referrer");
             checkHeaderValue(response, "strict-transport-security", "max-age=31536000;includeSubDomains");
