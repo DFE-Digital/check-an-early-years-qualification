@@ -1,5 +1,13 @@
-﻿import {test, expect} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
+﻿import {test} from '@playwright/test';
+import {
+    startJourney,
+    checkText,
+    setCookie,
+    journeyCookieName,
+    doesNotExist,
+    exists,
+    isVisible
+} from '../shared/playwrightWrapper';
 
 test.describe('A spec that tests the confirm qualification page', () => {
     test.beforeEach(async ({page, context}) => {
@@ -15,29 +23,29 @@ test.describe('A spec that tests the confirm qualification page', () => {
         await checkText(page, "#qualification-name-row dt", "Test qualification label");
         await checkText(page, "#qualification-level-row dt", "Test level label");
         await checkText(page, "#qualification-org-row dt", "Test awarding organisation label");
-        await expect(page.locator("#various-ao-content")).toHaveCount(0);
+        await doesNotExist(page, "#various-ao-content");
         await checkText(page, "#radio-heading", "Test radio heading");
-        await expect(page.locator('input[value="yes"]')).toHaveCount(1);
-        await expect(page.locator('input[value="no"]')).toHaveCount(1);
+        await exists(page, 'input[value="yes"]');
+        await exists(page, 'input[value="no"]');
         await checkText(page, 'label[for="yes"]', "yes");
         await checkText(page, 'label[for="no"]', "no");
-        await expect(page.locator('#warning-text-container')).toHaveCount(0);
+        await doesNotExist(page, '#warning-text-container');
         await checkText(page, "#confirm-qualification-button", "Test button text");
-        await expect(page.locator(".govuk-error-summary")).toHaveCount(0);
-        await expect(page.locator("#confirm-qualification-choice-error")).toHaveCount(0);
+        await doesNotExist(page, ".govuk-error-summary");
+        await doesNotExist(page, "#confirm-qualification-choice-error");
     });
 
     test("Checks the various content is on the page", async ({page}) => {
         await page.goto("/confirm-qualification/eyq-250");
 
-        await expect(page.locator('#various-ao-content')).toHaveCount(1);
+        await exists(page, '#various-ao-content');
         await checkText(page, '#various-ao-content', "Various awarding organisation explanation text");
     });
 
     test("Checks the warning content is on the page when the qualification has no additional requirement questions", async ({page}) => {
         await page.goto("/confirm-qualification/eyq-115");
 
-        await expect(page.locator('#warning-text-container')).toHaveCount(1);
+        await exists(page, '#warning-text-container');
         await checkText(page, '#warning-text-container', "Answer disclaimer text");
         await checkText(page, "#confirm-qualification-button", "Get result");
     });
@@ -46,10 +54,10 @@ test.describe('A spec that tests the confirm qualification page', () => {
         await page.goto("/confirm-qualification/eyq-240");
 
         await page.click("#confirm-qualification-button");
-        await expect(page.locator(".govuk-error-summary")).toBeVisible();
+        await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "Test error banner heading");
         await checkText(page, "#error-banner-link", "Test error banner link");
         await checkText(page, "#confirm-qualification-choice-error", "Test error text");
-        await expect(page.locator(".govuk-form-group--error")).toBeVisible();
+        await isVisible(page, ".govuk-form-group--error");
     });
 });

@@ -70,11 +70,15 @@ export function checkHeaderExists(response: APIResponse, headerName: string) {
 }
 
 export async function exists(page: Page, locator: string) {
-    await expect(page.locator(locator)).toHaveCount(1);
+    await hasCount(page, locator, 1);
 }
 
 export async function doesNotExist(page: Page, locator: string) {
-    await expect(page.locator(locator)).toHaveCount(0);
+    await hasCount(page, locator, 0);
+}
+
+export async function hasCount(page: Page, locator: string, count: number) {
+    await expect(page.locator(locator)).toHaveCount(count);
 }
 
 export async function isVisible(page: Page, locator: string) {
@@ -85,8 +89,8 @@ export async function isNotVisible(page: Page, locator: string) {
     await expect(page.locator(locator)).not.toBeVisible();
 }
 
-export async function hasAttribute(page: Page, locator: string, attribute: string) {
-    await expect(page.locator(locator)).toHaveAttribute(attribute);
+export async function hasAttribute(page: Page, locator: string, attribute: string, value?: string) {
+    await expect(page.locator(locator)).toHaveAttribute(attribute, value);
 }
 
 export async function doesNotHaveAttribute(page: Page, locator: string, attribute: string) {
@@ -95,6 +99,22 @@ export async function doesNotHaveAttribute(page: Page, locator: string, attribut
 
 export async function attributeContains(page: Page, locator: string, attribute: string, value: string) {
     expect(await page.locator(locator).getAttribute(attribute)).toContain(value);
+}
+
+export async function hasClass(page: Page, locator: string, expectedClass: string | RegExp, nth: number = null) {
+    var element = page.locator(locator);
+    if (nth != null) {
+        element = element.nth(nth);
+    }
+    await expect(element).toHaveClass(expectedClass);
+}
+
+export async function doesNotHaveClass(page: Page, locator: string, expectedClass: string | RegExp, nth: number = null) {
+    var element = page.locator(locator);
+    if (nth != null) {
+        element = element.nth(nth);
+    }
+    await expect(element).not.toHaveClass(expectedClass);
 }
 
 export async function whereWasTheQualificationAwarded(page: Page, location: string) {

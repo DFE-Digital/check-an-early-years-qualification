@@ -110,8 +110,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whatIsTheAwardingOrganisation(page, 1);
         await checkUrl(page, "/qualifications");
         await checkEmptyValue(page, "#refineSearch");
-        //await expect(page.locator("#refineSearch")).toBeEmpty();
-        //await checkText(page, "#refineSearch", undefined);
+        await checkText(page, "#refineSearch", '');
     });
 
     [

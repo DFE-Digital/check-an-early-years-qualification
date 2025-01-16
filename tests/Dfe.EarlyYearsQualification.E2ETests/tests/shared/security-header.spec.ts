@@ -33,7 +33,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "x-content-type-options", "nosniff");
             checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
-            checkHeaderExists(response, "server", false);
+            checkHeaderExists(response, "server");
         });
     });
 
@@ -54,7 +54,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "x-content-type-options", "nosniff");
             checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
-            checkHeaderExists(response, "server", false);
+            checkHeaderExists(response, "server");
         });
 
         test(`pages without forms that will not redirect if no date - cookie banner showing - ${url} contains the expected response headers`, async ({request}) => {
@@ -67,7 +67,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "x-content-type-options", "nosniff");
             checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
-            checkHeaderExists(response, "server", false);
+            checkHeaderExists(response, "server");
         });
     });
 
@@ -87,7 +87,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "x-content-type-options", "nosniff");
             checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
-            checkHeaderExists(response, "server", false);
+            checkHeaderExists(response, "server");
         });
 
         test(`pages without forms that will redirect if no date - cookie banner showing - ${url} contains the expected response headers`, async ({
@@ -105,7 +105,7 @@ test.describe('A spec that checks for security headers in the response', () => {
             checkHeaderValue(response, "x-content-type-options", "nosniff");
             checkHeaderValue(response, "x-frame-options", "deny");
             checkHeaderValue(response, "x-xss-protection", "0");
-            checkHeaderExists(response, "server", false);
+            checkHeaderExists(response, "server");
         });
     });
 });

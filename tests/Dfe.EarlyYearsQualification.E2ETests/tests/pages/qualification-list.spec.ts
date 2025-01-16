@@ -1,5 +1,5 @@
-﻿import {test, expect} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
+﻿import {test} from '@playwright/test';
+import {startJourney, checkText, setCookie, journeyCookieName, doesNotExist} from '../shared/playwrightWrapper';
 
 test.describe('A spec used to test the qualification list page', () => {
     test.beforeEach(async ({page, context}) => {
@@ -21,7 +21,7 @@ test.describe('A spec used to test the qualification list page', () => {
         await checkText(page, "#post-list-content", "Link to not on list advice page");
         await checkText(page, "#post-filter-content", "Post search criteria content");
         await checkText(page, "#clear-search", "Clear search");
-        await expect(page.locator("#no-result-content")).toHaveCount(0);
+        await doesNotExist(page, "#no-result-content");
     });
 
     test("Shows the default headings when any level and no awarding organisation selected", async ({

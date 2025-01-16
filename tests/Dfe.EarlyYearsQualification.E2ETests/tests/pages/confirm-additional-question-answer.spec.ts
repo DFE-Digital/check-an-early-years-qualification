@@ -1,5 +1,13 @@
-﻿import {expect, test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName, checkUrl, clickBackButton} from '../shared/playwrightWrapper';
+﻿import {test} from '@playwright/test';
+import {
+    startJourney,
+    checkText,
+    setCookie,
+    journeyCookieName,
+    checkUrl,
+    clickBackButton,
+    exists
+} from '../shared/playwrightWrapper';
 
 test.describe('A spec used to test the check additional requirements answer page', () => {
     test.beforeEach(async ({page, context}) => {
@@ -17,7 +25,7 @@ test.describe('A spec used to test the check additional requirements answer page
         await checkText(page, "#question-2-question", "Test question");
         await checkText(page, "#question-2-answer", "Yes");
         await checkText(page, "#question-2-change", "Test change answer text");
-        await expect(page.locator('#warning-text-container')).toHaveCount(1);
+        await exists(page, '#warning-text-container');
         await checkText(page, ".govuk-warning-text__text", "Test answer disclaimer text");
         await checkText(page, "#confirm-answers", "Test button text");
     });

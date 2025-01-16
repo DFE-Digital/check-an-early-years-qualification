@@ -1,5 +1,5 @@
-﻿import {test, expect} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
+﻿import {test} from '@playwright/test';
+import {startJourney, checkText, setCookie, journeyCookieName, hasClass, hasCount} from '../shared/playwrightWrapper';
 
 test.describe("A spec used to test the qualification details page", () => {
     test.beforeEach(async ({page, context}) => {
@@ -46,7 +46,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-108");
 
-        await expect(page.locator(".ratio-row")).toHaveCount(4);
+        await hasCount(page,".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 6", 0);
         await checkText(page, ".ratio-heading", "Level 3", 1);
         await checkText(page, ".ratio-heading", "Level 2", 2);
@@ -55,10 +55,10 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, ".govuk-tag", "Approved", 2);
         await checkText(page, ".govuk-tag", "Approved", 3);
         await checkText(page, ".govuk-tag", "Approved", 4);
-        await expect(page.locator(".govuk-tag").nth(1)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(2)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(3)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(4)).toHaveClass(/govuk-tag--green/);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 4);
     });
 
     test("Checks the order of the ratios for a level 6 qualification when a user answers no to the Qts Question but yes to the remaining question", async ({
@@ -68,7 +68,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22no%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-108");
 
-        await expect(page.locator(".ratio-row")).toHaveCount(4);
+        await hasCount(page,".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 3", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Unqualified", 2);
@@ -77,10 +77,10 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, ".govuk-tag", "Approved", 2);
         await checkText(page, ".govuk-tag", "Approved", 3);
         await checkText(page, ".govuk-tag", "Not approved", 4);
-        await expect(page.locator(".govuk-tag").nth(1)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(2)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(3)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(4)).toHaveClass(/govuk-tag--red/);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
     });
 
     test("Checks the order of the ratios on the page when a user answers additional requirement questions indicating full and relevant", async ({
@@ -90,7 +90,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
-        await expect(page.locator(".ratio-row")).toHaveCount(4);
+        await hasCount(page,".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 3", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Unqualified", 2);
@@ -99,10 +99,10 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, ".govuk-tag", "Approved", 2);
         await checkText(page, ".govuk-tag", "Approved", 3);
         await checkText(page, ".govuk-tag", "Not approved", 4);
-        await expect(page.locator(".govuk-tag").nth(1)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(2)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(3)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(4)).toHaveClass(/govuk-tag--red/);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
     });
 
     test("Checks the order of the ratios on the page when a user answers an additional requirement question indicating not full and relevant", async ({
@@ -112,7 +112,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-241");
 
-        await expect(page.locator(".ratio-row")).toHaveCount(4);
+        await hasCount(page,".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Unqualified", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Level 3", 2);
@@ -121,10 +121,10 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, ".govuk-tag", "Not approved", 2);
         await checkText(page, ".govuk-tag", "Not approved", 3);
         await checkText(page, ".govuk-tag", "Not approved", 4);
-        await expect(page.locator(".govuk-tag").nth(1)).toHaveClass(/govuk-tag--green/);
-        await expect(page.locator(".govuk-tag").nth(2)).toHaveClass(/govuk-tag--red/);
-        await expect(page.locator(".govuk-tag").nth(3)).toHaveClass(/govuk-tag--red/);
-        await expect(page.locator(".govuk-tag").nth(4)).toHaveClass(/govuk-tag--red/);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
     });
 
     test("Checks the staff ratio text shows correctly when not full and relevant for a L3+ qualification started between Sep14 & Aug19", async ({
