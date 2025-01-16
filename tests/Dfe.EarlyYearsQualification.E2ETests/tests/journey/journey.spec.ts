@@ -88,6 +88,19 @@ test.describe('A spec used to test the various routes through the journey', () =
         await checkUrl(page, "/questions/what-level-is-the-qualification");
     });
 
+
+    test("Selecting qualification level 7 started after 1 Sept 2019 should navigate to the level 7 post 2019 advice page", async ({page}) => {
+
+        await checkUrl(page, "/questions/where-was-the-qualification-awarded");
+        await whereWasTheQualificationAwarded(page, "#england");
+        await whenWasQualificationStarted(page, "8", "2020");
+        await whatLevelIsTheQualification(page, 7);
+        await checkUrl(page, '/advice/level-7-qualification-after-aug-2019');
+        await clickBackButton(page);
+        await checkUrl(page, "/questions/what-level-is-the-qualification");
+    })
+
+
     test("Should remove the search criteria when a user goes to the awarding organisation page and back again", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "6", "2022");

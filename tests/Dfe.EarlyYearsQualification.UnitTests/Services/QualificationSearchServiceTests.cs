@@ -17,7 +17,7 @@ public class QualificationSearchServiceTests
     private Mock<IGovUkContentParser> _mockContentParser = new();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
 
-    private IQualificationSearchService GetSut()
+    private QualificationSearchService GetSut()
     {
         return new QualificationSearchService(
                                               _mockRepository.Object,
