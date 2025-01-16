@@ -1,5 +1,5 @@
-﻿import {expect, test} from '@playwright/test';
-import {startJourney, checkText} from '../shared/playwrightWrapper';
+﻿import {test} from '@playwright/test';
+import {startJourney, checkText, doesNotExist, exists, isVisible, isNotVisible} from '../shared/playwrightWrapper';
 
 test.describe("A spec that tests the cookies page", () => {
     test.beforeEach(async ({page, context}) => {
@@ -8,16 +8,15 @@ test.describe("A spec that tests the cookies page", () => {
     });
 
     test("Checks the content is present", async ({page}) => {
-
-        await expect(page.locator('#cookies-set-banner')).toHaveCount(0);
+        await doesNotExist(page, "#cookies-set-banner");
         await checkText(page, "#cookies-heading", "Test Cookies Heading");
         await checkText(page, "#cookies-body", "Test Cookies Page Body");
         await checkText(page, "#cookies-form-heading", "Test Form Heading");
-        await expect(page.locator("#test-option-value-1")).toHaveCount(1);
-        await expect(page.locator("#test-option-value-2")).toHaveCount(1);
+        await exists(page, "#test-option-value-1");
+        await exists(page, "#test-option-value-2");
         await checkText(page, "label[for='test-option-value-1']", "Test Option Label 1");
         await checkText(page, "label[for='test-option-value-2']", "Test Option Label 2");
-        await expect(page.locator("#cookies-choice-error")).not.toBeVisible();
+        await isNotVisible(page, "#cookies-choice-error");
         await checkText(page, "#cookies-choice-error", "Test Error Text");
         await checkText(page, 'button[id="cookies-button"]', "Test Cookies Button");
     });
@@ -26,8 +25,8 @@ test.describe("A spec that tests the cookies page", () => {
         test("Checks that the radio button validation is working", async ({page}) => {
 
             await page.click('#cookies-button');
-            await expect(page.locator("#cookies-set-banner")).toHaveCount(0);
-            await expect(page.locator("#cookies-choice-error")).toBeVisible();
+            await doesNotExist(page, "#cookies-set-banner");
+            await isVisible(page, "#cookies-choice-error");
         });
 
         ["test-option-value-1", "test-option-value-2"].forEach((option) => {
@@ -35,10 +34,10 @@ test.describe("A spec that tests the cookies page", () => {
 
                 await page.click(`#${option}`);
                 await page.click('#cookies-button');
-                await expect(page.locator("#cookies-set-banner")).toBeVisible();
+                await isVisible(page, "#cookies-set-banner");
                 await checkText(page, "#cookies-set-banner-heading", "Test Success Banner Heading");
                 await checkText(page, "#cookies-set-banner-content", "Test Success Banner Content");
-                await expect(page.locator("#cookies-choice-error")).not.toBeVisible();
+                await isNotVisible(page, "#cookies-choice-error");
             });
         });
     });

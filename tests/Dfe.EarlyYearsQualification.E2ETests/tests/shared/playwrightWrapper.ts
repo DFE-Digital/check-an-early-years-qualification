@@ -65,8 +65,36 @@ export function checkHeaderValue(response: APIResponse, headerName: string, head
     expect(response.headers()[headerName]).toBe(headerValue);
 }
 
-export function checkHeaderExists(response: APIResponse, headerName: string, shouldExist: boolean) {
+export function checkHeaderExists(response: APIResponse, headerName: string) {
     expect(response.headers()[headerName]).toBeUndefined();
+}
+
+export async function exists(page: Page, locator: string) {
+    await expect(page.locator(locator)).toHaveCount(1);
+}
+
+export async function doesNotExist(page: Page, locator: string) {
+    await expect(page.locator(locator)).toHaveCount(0);
+}
+
+export async function isVisible(page: Page, locator: string) {
+    await expect(page.locator(locator)).toBeVisible();
+}
+
+export async function isNotVisible(page: Page, locator: string) {
+    await expect(page.locator(locator)).not.toBeVisible();
+}
+
+export async function hasAttribute(page: Page, locator: string, attribute: string) {
+    await expect(page.locator(locator)).toHaveAttribute(attribute);
+}
+
+export async function doesNotHaveAttribute(page: Page, locator: string, attribute: string) {
+    await expect(page.locator(locator)).not.toHaveAttribute(attribute);
+}
+
+export async function attributeContains(page: Page, locator: string, attribute: string, value: string) {
+    expect(await page.locator(locator).getAttribute(attribute)).toContain(value);
 }
 
 export async function whereWasTheQualificationAwarded(page: Page, location: string) {

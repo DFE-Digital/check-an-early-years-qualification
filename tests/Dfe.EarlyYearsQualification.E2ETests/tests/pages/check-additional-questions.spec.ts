@@ -1,5 +1,13 @@
-﻿import {expect, test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
+﻿import {test} from '@playwright/test';
+import {
+    startJourney,
+    checkText,
+    setCookie,
+    journeyCookieName,
+    isVisible,
+    hasAttribute,
+    attributeContains
+} from '../shared/playwrightWrapper';
 
 test.describe('A spec that tests the check additional questions page', () => {
     test.beforeEach(async ({page, context}) => {
@@ -10,8 +18,8 @@ test.describe('A spec that tests the check additional questions page', () => {
     test("Checks the check additional questions details are on the first question page", async ({page}) => {
         await page.goto(`/qualifications/check-additional-questions/eyq-240/1`);
 
-        await expect(page.locator("#back-button")).toHaveAttribute('href');
-        expect(await page.locator("#back-button").getAttribute('href')).toContain('/qualifications');
+        await hasAttribute(page, "#back-button", 'href');
+        await attributeContains(page, "#back-button", 'href', '/qualifications');
 
         await checkText(page, '#question', 'Test question');
         await checkText(page, '#hint', 'This is the hint text');
@@ -25,9 +33,9 @@ test.describe('A spec that tests the check additional questions page', () => {
     test("Checks the check additional questions details are on the second question page", async ({page}) => {
         await page.goto(`/qualifications/check-additional-questions/eyq-240/2`);
 
-        await expect(page.locator("#back-button")).toHaveAttribute('href');
-        expect(await page.locator("#back-button").getAttribute('href')).toContain('/qualifications/check-additional-questions');
-
+        await hasAttribute(page, "#back-button", 'href');
+        await attributeContains(page, "#back-button", 'href', '/qualifications/check-additional-questions');
+     
         await checkText(page, '#question', 'Test question 2');
         await checkText(page, '#hint', 'This is the hint text');
         await checkText(page, ".govuk-details__summary-text", "This is the details heading");
@@ -42,11 +50,11 @@ test.describe('A spec that tests the check additional questions page', () => {
 
         await page.click("#additional-requirement-button");
 
-        await expect(page.locator(".govuk-error-summary")).toBeVisible();
+        await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There was a problem");
         await checkText(page, "#error-banner-link", "This is a test error message");
-        await expect(page.locator("#option-error")).toBeVisible();
+        await isVisible(page, "#option-error");
         await checkText(page, "#option-error", "This is a test error message");
-        await expect(page.locator(".govuk-form-group--error")).toBeVisible();
+        await isVisible(page, ".govuk-form-group--error");
     });
 });
