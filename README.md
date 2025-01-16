@@ -75,7 +75,7 @@ DOMAIN={DOMAIN FOR COOKIE TO BE ADDED TO (when local: localhost)}
 ```
 - Run the local web app.
 - Navigate to the correct folder, be it:
-  - ``cd tests/Dfe.EarlyYearsQualification.E2ETests/playwright`` for the E2E tests.
+  - ``cd tests/Dfe.EarlyYearsQualification.E2ETests`` for the E2E tests.
   - ``cd tests/Dfe.EarlyYearsQualification.SmokeTests/playwright`` for the smoke tests.
 - Tell Node Version Manager that you want the latest version with: ``nvm use node --lts``
 - Run the tests with: ``npx playwright test`` (add --ui to run the tests in playwrights UI)

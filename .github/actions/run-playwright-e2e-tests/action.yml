@@ -10,15 +10,15 @@ runs:
         node-version: 18.x
     - name: Install dependencies
       shell: bash
-      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       run: npm ci
     - name: Install Playwright Browsers
       shell: bash
-      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       shell: bash
-      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       env:
         CI: true
       run: npx playwright test 
