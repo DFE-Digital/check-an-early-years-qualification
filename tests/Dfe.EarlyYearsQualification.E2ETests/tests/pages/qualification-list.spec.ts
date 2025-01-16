@@ -1,16 +1,12 @@
 ﻿import {test, expect} from '@playwright/test';
 import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
 
-
 test.describe('A spec used to test the qualification list page', () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
     });
 
-    test("Checks the details are showing on the page", async ({
-                                                                  page,
-                                                                  context
-                                                              }) => {
+    test("Checks the details are showing on the page", async ({page, context}) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
         await page.goto("/qualifications");
 
@@ -40,9 +36,9 @@ test.describe('A spec used to test the qualification list page', () => {
     });
 
     test("Shows the correct no results content when there are no results in the search", async ({
-                                                                                                       page,
-                                                                                                       context
-                                                                                                   }) => {
+                                                                                                    page,
+                                                                                                    context
+                                                                                                }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
         await page.goto("/qualifications");
 

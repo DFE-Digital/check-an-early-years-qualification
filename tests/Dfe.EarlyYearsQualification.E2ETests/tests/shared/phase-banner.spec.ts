@@ -4,10 +4,7 @@ import {authorise, checkText} from './playwrightWrapper';
 
 test.describe('A spec that tests the phase banner is showing on all pages', () => {
 
-    test.beforeEach(async ({
-                               page,
-                               context
-                           }) => {
+    test.beforeEach(async ({context}) => {
         await authorise(context);
     });
 

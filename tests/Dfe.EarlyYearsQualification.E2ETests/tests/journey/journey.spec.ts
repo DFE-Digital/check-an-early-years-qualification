@@ -1,7 +1,4 @@
-﻿import {
-    test
-} from '@playwright/test';
-
+﻿import {test} from '@playwright/test';
 import {
     startJourney,
     checkUrl,
@@ -16,7 +13,7 @@ import {
     confirmQualificiation,
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
-    checkDetailsPage, 
+    checkDetailsPage,
     checkEmptyValue
 } from '../shared/playwrightWrapper';
 

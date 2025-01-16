@@ -1,7 +1,4 @@
-import {
-    test
-} from '@playwright/test';
-
+import {test} from '@playwright/test';
 import {
     startJourney,
     checkUrl,

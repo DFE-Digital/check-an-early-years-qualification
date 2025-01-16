@@ -1,5 +1,5 @@
 ﻿import {expect, test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
+import {startJourney, checkText} from '../shared/playwrightWrapper';
 
 test.describe('A spec that tests the challenge page', () => {
     test.beforeEach(async ({page, context}) => {

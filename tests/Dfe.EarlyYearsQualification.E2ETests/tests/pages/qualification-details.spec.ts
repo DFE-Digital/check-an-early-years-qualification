@@ -1,7 +1,6 @@
 ﻿import {test, expect} from '@playwright/test';
 import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
 
-
 test.describe("A spec used to test the qualification details page", () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
@@ -178,7 +177,7 @@ test.describe("A spec used to test the qualification details page", () => {
                                                                         }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
-        
+
         await page.evaluate('(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()');
         await page.click('#print-button');
         await page.waitForFunction('window.waitForPrintDialog');

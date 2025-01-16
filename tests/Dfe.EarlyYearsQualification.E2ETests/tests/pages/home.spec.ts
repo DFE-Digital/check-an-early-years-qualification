@@ -1,6 +1,5 @@
-﻿import {test, expect} from '@playwright/test';
-import {startJourney, checkText, checkUrl} from '../shared/playwrightWrapper';
-
+﻿import {test} from '@playwright/test';
+import {startJourney, checkText} from '../shared/playwrightWrapper';
 
 test.describe('A spec used to test the home page', () => {
     test.beforeEach(async ({page, context}) => {
