@@ -6,21 +6,7 @@
     var cookie = CookieService.GetCookie();
 }
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const relativePath = window.location.pathname + window.location.search;
-
-    const returnUrl = document.getElementById("returnUrl");
-    if (returnUrl) {
-      returnUrl.value = relativePath;
-    }
-    
-    const returnUrlHideBanner = document.getElementById("returnUrlHideBanner");
-    if (returnUrlHideBanner) {
-      returnUrlHideBanner.value = relativePath;
-    }
-  });
-</script>
+<script src="~/js/pages/components/cookie-banner-component.js" asp-append-version="true"></script>
 
 @if (cookie is { HasApproved: false, IsRejected: false })
 {
@@ -40,10 +26,10 @@
                     </div>
                 </div>
                 <div class="govuk-button-group">
-                    <button id="accept-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="Cookies" asp-action="Accept">
+                    <button id="accept-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="CookiesPreference" asp-action="Accept">
                         @Model.AcceptButtonText
                     </button>
-                    <button id="reject-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="Cookies" asp-action="Reject">
+                    <button id="reject-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="CookiesPreference" asp-action="Reject">
                         @Model.RejectButtonText
                     </button>
                     <a class="govuk-link" href="/cookies">@Model.CookiesBannerLinkText</a>

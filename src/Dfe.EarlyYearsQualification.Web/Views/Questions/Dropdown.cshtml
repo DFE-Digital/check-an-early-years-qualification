@@ -4,18 +4,11 @@
     ViewData["Title"] = Model.Question;
 }
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let checkbox = document.getElementById('@Model.CheckboxId');
-        let dropdown = document.getElementById('@Model.DropdownId');
 
-        dropdown.disabled = checkbox.checked;
-
-        checkbox.addEventListener('click', function() {
-            dropdown.disabled = !!checkbox.checked;
-        });
-    });
-</script>
+@section Scripts
+{
+    <script src="~/js/pages/question-dropdown-page.js" asp-append-version="true"></script>
+}
 
 @section BeforeMainContent {
     @{
