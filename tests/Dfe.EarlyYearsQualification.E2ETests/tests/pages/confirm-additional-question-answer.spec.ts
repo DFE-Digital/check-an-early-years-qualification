@@ -1,5 +1,5 @@
 ﻿import {expect, test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName, checkUrl, clickBackButton} from '../shared/processLogic';
+import {startJourney, checkText, setCookie, journeyCookieName, checkUrl, clickBackButton} from '../shared/playwrightWrapper';
 
 test.describe('A spec used to test the check additional requirements answer page', () => {
     test.beforeEach(async ({page, context}) => {

@@ -1,6 +1,6 @@
 ﻿import {test, expect} from '@playwright/test';
 import {pages} from "../shared/urls-to-check";
-import {authorise, checkText, checkCookieValue} from './processLogic';
+import {authorise, checkText, checkCookieValue} from './playwrightWrapper';
 
 test.describe('A spec that tests that the cookies banner shows on all pages', () => {
 

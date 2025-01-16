@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText} from '../shared/processLogic';
+import {startJourney, checkText} from '../shared/playwrightWrapper';
 
 test.describe('A spec that tests the accessibility statement page', () => {
     test.beforeEach(async ({page, context}) => {

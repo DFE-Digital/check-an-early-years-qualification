@@ -1,5 +1,5 @@
 ﻿import {test, expect} from '@playwright/test';
-import {startJourney, checkText, checkUrl} from '../shared/processLogic';
+import {startJourney, checkText, checkUrl} from '../shared/playwrightWrapper';
 
 
 test.describe('A spec used to test the home page', () => {

@@ -502,7 +502,7 @@ build/
 tests/Dfe.EarlyYearsQualification.E2ETests/cypress/screenshots/
 
 # Playwright
-tests/Dfe.EarlyYearsQualification.E2ETests/playwright/playwright-report/
+tests/Dfe.EarlyYearsQualification.E2ETests/playwright-report/
 
 
 # Sonar

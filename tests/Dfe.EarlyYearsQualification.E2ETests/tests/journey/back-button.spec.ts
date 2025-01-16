@@ -15,7 +15,7 @@ import {
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
     checkDetailsPage
-} from '../shared/processLogic';
+} from '../shared/playwrightWrapper';
 
 test.describe("A spec used to test the main back button route through the journey", () => {
     //Mock details found in Dfe.EarlyYearsQualification.Mock.Content.MockContentfulService.

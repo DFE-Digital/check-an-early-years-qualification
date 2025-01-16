@@ -7,7 +7,7 @@ import {
     setCookie,
     checkHeaderValue,
     checkHeaderExists
-} from "./processLogic";
+} from "./playwrightWrapper";
 
 var expectedContentSecurityPolicyHeader = "script-src 'self' 'sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y=' 'sha256-J9XqQhqN9DBC2a8DSiKQLF4w9PuSgEx4Vz/Fivcj0t4=' 'sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms=' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-lD2YLKoqlgPJ6bMRB0gZKeUdZqwszfrRSmAnzX0TSls=' 'sha256-1f+6vEGZewP7dkvrYIBD4bqMLOhumfg10mwfKd2jU7I=' 'sha256-fWDhQI9vCzfKzPnyv9Rt3lgLpz8aTH7VYjbVc8OgTXY=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://www.clarity.ms/ https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect;block-all-mixed-content;upgrade-insecure-requests;"
 test.describe('A spec that checks for security headers in the response', () => {

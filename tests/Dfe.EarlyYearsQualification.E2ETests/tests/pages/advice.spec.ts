@@ -1,5 +1,5 @@
 ﻿import {Page, test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/processLogic';
+import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
 
 async function checkFeedbackBanners(page: Page) {
     await checkText(page, ".govuk-notification-banner__title", "Test banner title", 0);

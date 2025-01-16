@@ -1,5 +1,5 @@
 ﻿import {test, expect} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/processLogic';
+import {startJourney, checkText, setCookie, journeyCookieName} from '../shared/playwrightWrapper';
 
 
 test.describe("A spec used to test the qualification details page", () => {
