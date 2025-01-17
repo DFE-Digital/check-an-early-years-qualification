@@ -14,7 +14,8 @@ import {
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
     checkDetailsPage,
-    checkEmptyValue
+    checkEmptyValue,
+    checkValue
 } from '../shared/playwrightWrapper';
 
 test.describe('A spec used to test the various routes through the journey', () => {
@@ -110,7 +111,6 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whatIsTheAwardingOrganisation(page, 1);
         await checkUrl(page, "/qualifications");
         await checkEmptyValue(page, "#refineSearch");
-        await checkText(page, "#refineSearch", '');
     });
 
     [
