@@ -32,7 +32,7 @@ public static class SecureHeaderConfiguration
         var cookiesPageShaCspElement = new ContentSecurityPolicyElement
                                        {
                                            CommandType = CspCommandType.Directive,
-                                           DirectiveOrUri = "sha256-VAoCuOmBv4C4V/WthoGzlhYyYpWir44ETG7WKh+3kG8="
+                                           DirectiveOrUri = "sha256-J9XqQhqN9DBC2a8DSiKQLF4w9PuSgEx4Vz/Fivcj0t4="
                                        };
 
         var windowLocationShaCspElement = new ContentSecurityPolicyElement
@@ -84,7 +84,7 @@ public static class SecureHeaderConfiguration
         var challengePageShowPassword = new ContentSecurityPolicyElement
                           {
                               CommandType = CspCommandType.Directive,
-                              DirectiveOrUri = "sha256-LBWtLNxa0f5+6KBUNLCp8JXVP7YuPtJtEt1Ku3cCKdY="
+                              DirectiveOrUri = "sha256-fWDhQI9vCzfKzPnyv9Rt3lgLpz8aTH7VYjbVc8OgTXY="
                           };
 
         var clarityCspElement = new ContentSecurityPolicyElement
