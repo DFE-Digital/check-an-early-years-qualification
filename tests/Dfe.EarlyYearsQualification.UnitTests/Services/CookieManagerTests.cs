@@ -1,7 +1,5 @@
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -57,14 +55,17 @@ public class CookieManagerTests
     public void CookieManager_Delete_CallsDeleteCookieOnContext()
     {
         var mockContext = new Mock<IHttpContextAccessor>();
+        mockContext.Setup(c => c.HttpContext!.Request.Host).Returns(new HostString("localhost", 5025));
         mockContext.Setup(c => c.HttpContext!.Response.Cookies.Delete(It.IsAny<string>()))
+                   .Verifiable();
+        mockContext.Setup(c => c.HttpContext!.Response.Cookies.Delete(It.IsAny<string>(), It.IsAny<CookieOptions>()))
                    .Verifiable();
 
         var service = new CookieManager(mockContext.Object);
 
         service.DeleteOutboundCookie("key");
 
-        mockContext.Verify(c => c.HttpContext!.Response.Cookies.Delete("key"), Times.Once);
+        mockContext.VerifyAll();
     }
 
     private class CookieCollection : Dictionary<string, string>, IRequestCookieCollection

@@ -25,7 +25,8 @@ public class CookieManager(IHttpContextAccessor context) : ICookieManager
     public void DeleteOutboundCookie(string key)
     {
         var httpContext = context.HttpContext;
-
         httpContext?.Response.Cookies.Delete(key);
+        // This deletes cookies that may have been set with the subdomain (note the . )
+        httpContext?.Response.Cookies.Delete(key, new CookieOptions { Domain = $".{httpContext.Request.Host.Host}"});
     }
 }

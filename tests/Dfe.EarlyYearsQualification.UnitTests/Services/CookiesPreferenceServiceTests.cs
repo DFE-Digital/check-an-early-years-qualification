@@ -2,15 +2,15 @@ using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
 [TestClass]
 public class CookieServiceTests
 {
+    private const string FakeGoogleAnalyticsSessionCookie = "_ga_TEST";
+    
     [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
@@ -45,7 +45,11 @@ public class CookieServiceTests
 
         cookieService.RejectCookies();
 
-        mockContext.Verify(x => x.DeleteOutboundCookie("cookies_preferences_set"), Times.Once);
+        mockContext.Verify(x => x.DeleteOutboundCookie(CookieKeyNames.ClaritySessionKey), Times.Once);
+        mockContext.Verify(x => x.DeleteOutboundCookie(CookieKeyNames.ClarityUserIdKey), Times.Once);
+        mockContext.Verify(x => x.DeleteOutboundCookie(CookieKeyNames.GoogleAnalyticsKey), Times.Once);
+        mockContext.Verify(x => x.DeleteOutboundCookie(FakeGoogleAnalyticsSessionCookie), Times.Once);
+        mockContext.Verify(x => x.DeleteOutboundCookie(CookieKeyNames.CookiesPreferenceKey), Times.Once);
 
         var serializedCookieToCheck = JsonSerializer.Serialize(new DfeCookie
                                                                {
@@ -159,7 +163,7 @@ public class CookieServiceTests
 
         var mockManager = new Mock<ICookieManager>();
 
-        var cookies = new Dictionary<string, string> { { CookieKeyNames.CookiesPreferenceKey, serializedModel } };
+        var cookies = new Dictionary<string, string> { { CookieKeyNames.CookiesPreferenceKey, serializedModel }, { FakeGoogleAnalyticsSessionCookie, "test" } };
 
         mockManager.Setup(m => m.ReadInboundCookies())
                    .Returns(cookies);

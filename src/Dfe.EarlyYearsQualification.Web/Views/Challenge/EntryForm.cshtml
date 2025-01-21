@@ -3,19 +3,12 @@
 @{
     ViewData["Title"] = Model.MainHeading;
 }
+
 @section Scripts
 {
-    <script type="text/javascript">
-        $("#togglePassword").on("click", function() {
-            let e = document.getElementById("PasswordValue")
-            if (e.type === "password") {
-                e.type = "text"
-            } else {
-                e.type = "password"
-            }
-        });
-    </script>
+    <script src="~/js/pages/challenge-page.js" asp-append-version="true"></script>
 }
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         @if (Model.ErrorSummaryModel != null)

@@ -5,6 +5,11 @@
     ViewData["Title"] = "Qualification Details";
 }
 
+@section Scripts
+{
+    <script src="~/js/pages/qualification-details-page.js" asp-append-version="true"></script>
+}
+
 @section BeforeMainContent {
     @{
         await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
@@ -215,7 +220,7 @@
         @Html.Raw(Model.Content!.RequirementsText)
 
         <div class="govuk-!-static-margin-top-6">
-            <button id="print-button" onclick="printButtonClicked();" class="govuk-link govuk-body-s print-button" aria-label="Print page button">@Model.Content!.PrintButtonText</button>
+            <button id="print-button" class="govuk-link govuk-body-s print-button" aria-label="Print page button">@Model.Content!.PrintButtonText</button>
         </div>
 
         <p class="govuk-body govuk-!-static-margin-top-6 govuk-!-margin-bottom-9">
