@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using OwaspHeaders.Core.Extensions;
-using RobotsTxt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -135,8 +134,6 @@ else
     builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
 }
 
-builder.Services.AddStaticRobotsTxt(robotsTxtOptions => robotsTxtOptions.DenyAll());
-
 var app = builder.Build();
 
 app.UseSecureHeadersMiddleware(
@@ -159,7 +156,6 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRobotsTxt();
 app.UseRouting();
 
 app.UseAuthorization();
