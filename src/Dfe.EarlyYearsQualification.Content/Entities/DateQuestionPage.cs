@@ -8,6 +8,7 @@ public class DateQuestionPage
 
     public string CtaButtonText { get; init; } = string.Empty;
     
+    public string QuestionHintHeader { get; init; } = string.Empty;
     public string QuestionHint { get; init; } = string.Empty;
 
     public string MonthLabel { get; init; } = string.Empty;
@@ -19,6 +20,7 @@ public class DateQuestionPage
     public string AdditionalInformationHeader { get; init; } = string.Empty;
 
     public Document? AdditionalInformationBody { get; init; }
+    public Document? PostHeaderContent { get; init; }
     
     public string ErrorBannerHeading { get; init; } = string.Empty;
 

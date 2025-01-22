@@ -71,6 +71,8 @@ test.describe("A spec that tests question pages", () => {
 
         await checkText(page, ".govuk-details__summary-text", "This is the additional information header");
         await checkText(page, ".govuk-details__text", "This is the additional information body");
+        await checkText(page, "#postHeaderContent", "This is post header content");
+        await checkText(page, "#hintHeader", "Test Question Hint Header");
         await page.click(".govuk-details__summary-text");
         await hasAttribute(page, ".govuk-details", "open");
     });

@@ -563,6 +563,7 @@ public class MockContentfulService : IContentService
                    CtaButtonText = "Continue",
                    MonthLabel = "Test Month Label",
                    YearLabel = "Test Year Label",
+                   QuestionHintHeader = "Test Question Hint Header",
                    QuestionHint = "Test Question Hint",
                    BackButton = new NavigationLink
                                 {
@@ -572,6 +573,8 @@ public class MockContentfulService : IContentService
                                 },
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),
+                   PostHeaderContent = 
+                       ContentfulContentHelper.Paragraph("This is post header content"),
                    AdditionalInformationHeader = "This is the additional information header",
                    ErrorBannerHeading = "There is a problem",
                    ErrorBannerLinkText = "Test error banner link text",
