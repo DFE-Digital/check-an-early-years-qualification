@@ -20,6 +20,7 @@ public static class SecureHeaderConfiguration
                             .UseCacheControl()
                             .UseXssProtection()
                             .UseCrossOriginResourcePolicy()
+                            .SetUrlsToIgnore(["/assets/images/og-image.png"])
                             .Build();
 
         var govukFrontendSupportedElement = new ContentSecurityPolicyElement
