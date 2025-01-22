@@ -8,12 +8,38 @@
 @{
     var gtmTag = TrackingConfiguration.GtmTag;
     var clarityTag = TrackingConfiguration.ClarityTag;
+    
+    const string title = "Check an early years qualification";
+    const string description = """
+        Public BETA, 
+        Check an early years qualifications helps early years settings check recruitment candidates qualifications are full and relevant
+        """;
+    const string domain = "check-an-early-years-qualification.education.gov.uk";
+    const string url = $"https://{domain}";
+    const string imageUrl = "https://earlyyearsqualifications-dev.azurewebsites.net/assets/images/og-image.png";
 }
 
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:url" content="@url">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@title">
+    <meta property="og:site_name" content="@title">
+    <meta property="og:description" content="@description">
+    <meta property="og:image" content="@imageUrl">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="@domain">
+    <meta property="twitter:url" content="@url">
+    <meta name="twitter:title" content="@title">
+    <meta name="twitter:description" content="@description">
+    <meta name="twitter:image" content="@imageUrl">
+    
     <title>@ViewData["Title"] - Check an Early Years qualification</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.svg"/>
