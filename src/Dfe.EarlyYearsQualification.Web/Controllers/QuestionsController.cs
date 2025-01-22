@@ -277,8 +277,10 @@ public class QuestionsController(
 
         var additionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
 
+        var postHeaderContent = await contentParser.ToHtml(question.PostHeaderContent);
+
         return DateQuestionMapper.Map(model, question, actionName, controllerName, errorBannerLinkText,
-                                      errorMessage, additionalInformationBody, validationResult, selectedMonth,
+                                      errorMessage, additionalInformationBody, postHeaderContent, validationResult, selectedMonth,
                                       selectedYear);
     }
 

@@ -4,6 +4,7 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 public class DateQuestionModel : BaseQuestionModel
 {
+    public string QuestionHintHeader { get; set; } = string.Empty;
     public string QuestionHint { get; set; } = string.Empty;
 
     public string MonthLabel { get; set; } = string.Empty;
