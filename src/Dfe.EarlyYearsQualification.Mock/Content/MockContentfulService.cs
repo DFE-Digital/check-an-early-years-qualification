@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using File = Contentful.Core.Models.File;
 
 namespace Dfe.EarlyYearsQualification.Mock.Content;
 
@@ -425,6 +426,24 @@ public class MockContentfulService : IContentService
                                          PageHeading = "Test page heading",
                                          AnswerDisclaimerText = "Test answer disclaimer text",
                                          ChangeAnswerText = "Test change answer text"
+                                     });
+    }
+
+    public async Task<OpenGraphData?> GetOpenGraphData()
+    {
+        return await Task.FromResult(new OpenGraphData
+                                     {
+                                         Title = "OG Title",
+                                         Description = "OG Description",
+                                         Domain = "OG Domain",
+                                         Image = new Asset
+                                                 {
+                                                     File = new File
+                                                            {
+                                                                Url = "test/url/og-image.png"
+                                                            }
+                                                     
+                                                 }
                                      });
     }
 

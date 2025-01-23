@@ -119,6 +119,7 @@ builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
 builder.Services.AddSingleton<IDateTimeAdapter, DateTimeAdapter>();
 builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelValidator>();
 builder.Services.AddTransient<TrackingConfiguration>();
+builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 

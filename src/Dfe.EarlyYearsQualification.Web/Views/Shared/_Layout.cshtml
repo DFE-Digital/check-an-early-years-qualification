@@ -1,6 +1,7 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Helpers
 @using GovUk.Frontend.AspNetCore
 @inject TrackingConfiguration TrackingConfiguration
+@inject OpenGraphDataHelper OpenGraphDataHelper
 
 <!DOCTYPE html>
 <html class="govuk-template" lang="en">
@@ -8,15 +9,21 @@
 @{
     var gtmTag = TrackingConfiguration.GtmTag;
     var clarityTag = TrackingConfiguration.ClarityTag;
-    
-    const string title = "Check an early years qualification";
-    const string description = @"
-        Public BETA, 
-        Check an early years qualification helps early years settings check recruitment candidates' qualifications are full and relevant.
-        ";
-    const string domain = "check-an-early-years-qualification.education.gov.uk";
-    const string url = $"https://{domain}";
-    const string imageUrl = "https://earlyyearsqualifications-dev.azurewebsites.net/assets/images/og-image.png";
+
+    var title = string.Empty;
+    var description = string.Empty;
+    var domain = string.Empty;
+    var url = string.Empty;
+    var imageUrl = string.Empty;
+    var openGraphData = await OpenGraphDataHelper.GetOpenGraphData();
+    if (openGraphData != null)
+    {
+        title = openGraphData.Title;
+        description = openGraphData.Description;
+        domain = openGraphData.Domain;
+        url = $"https://{domain}";
+        imageUrl = openGraphData.Image?.File.Url;
+    }
 }
 
 <head>

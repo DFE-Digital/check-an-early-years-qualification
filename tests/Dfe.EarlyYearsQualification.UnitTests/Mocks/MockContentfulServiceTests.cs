@@ -2,7 +2,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Mock.Content;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 
@@ -537,5 +536,20 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetCannotFindQualificationPage(5, 7, 2015);
 
         result.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetOpenGraphData_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetOpenGraphData();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<OpenGraphData>();
+        result!.Title.Should().NotBeNullOrEmpty();
+        result.Description.Should().NotBeNullOrEmpty();
+        result.Domain.Should().NotBeNullOrEmpty();
+        result.Image.Should().NotBeNull();
     }
 }
