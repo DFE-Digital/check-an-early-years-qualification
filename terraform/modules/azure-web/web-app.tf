@@ -386,6 +386,19 @@ resource "azurerm_app_service_custom_hostname_binding" "webapp_custom_domain" {
   }
 }
 
+resource "azurerm_app_service_custom_hostname_binding" "webapp_service_gov_uk_custom_domain" {
+  # Custom hostname only deployed to the Test and Production subscription
+  count = var.environment != "development" ? 1 : 0
+
+  resource_group_name = var.resource_group
+  hostname            = var.webapp_service_gov_uk_custom_domain_name
+  app_service_name    = azurerm_linux_web_app.webapp.name
+
+  lifecycle {
+    ignore_changes = [ssl_state, thumbprint]
+  }
+}
+
 data "azurerm_client_config" "az_config" {}
 
 # References the web app to be used in KV access policy as it already existed when changes needed to be made
@@ -441,5 +454,24 @@ resource "azurerm_app_service_certificate_binding" "webapp_custom_domain_cert_bi
 
   hostname_binding_id = azurerm_app_service_custom_hostname_binding.webapp_custom_domain[0].id
   certificate_id      = azurerm_app_service_certificate.webapp_custom_domain_cert[0].id
+  ssl_state           = "SniEnabled"
+}
+
+resource "azurerm_app_service_certificate" "webapp_service_gov_uk_custom_domain_cert" {
+  # Custom hostname only deployed to the Test and Production subscription
+  count = var.environment != "development" ? 1 : 0
+
+  name                = var.webapp_service_gov_uk_custom_domain_cert_secret_label
+  resource_group_name = var.resource_group
+  location            = var.location
+  key_vault_secret_id = var.kv_cert_secret_id
+}
+
+resource "azurerm_app_service_certificate_binding" "webapp_service_gov_uk_custom_domain_cert_bind" {
+  # Custom hostname only deployed to the Test and Production subscription
+  count = var.environment != "development" ? 1 : 0
+
+  hostname_binding_id = azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain[0].id
+  certificate_id      = azurerm_app_service_certificate.webapp_service_gov_uk_custom_domain_cert[0].id
   ssl_state           = "SniEnabled"
 }
