@@ -276,9 +276,12 @@ public class MockContentfulServiceTests
         result.AdditionalInformationHeader.Should().Be("This is the additional information header");
         result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
+        result.PostHeaderContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is post header content");
         result.MonthLabel.Should().Be("Test Month Label");
         result.YearLabel.Should().Be("Test Year Label");
         result.QuestionHint.Should().Be("Test Question Hint");
+        result.QuestionHintHeader.Should().Be("Test Question Hint Header");
         result.FutureDateErrorMessage.Should().Be("Future date error message");
         result.FutureDateErrorBannerLinkText.Should().Be("Future date error message banner link");
     }
