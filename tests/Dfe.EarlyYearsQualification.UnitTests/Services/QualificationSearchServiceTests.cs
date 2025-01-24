@@ -4,8 +4,6 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
-using FluentAssertions;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 

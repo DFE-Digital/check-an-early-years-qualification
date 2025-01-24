@@ -1,6 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Mappers;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 

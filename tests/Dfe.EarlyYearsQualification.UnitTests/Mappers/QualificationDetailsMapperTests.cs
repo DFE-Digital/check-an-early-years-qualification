@@ -2,7 +2,6 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 

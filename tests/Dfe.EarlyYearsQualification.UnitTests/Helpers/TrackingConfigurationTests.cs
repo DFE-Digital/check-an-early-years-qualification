@@ -1,8 +1,6 @@
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Microsoft.Extensions.Configuration;
-using FluentAssertions;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Helpers;
 

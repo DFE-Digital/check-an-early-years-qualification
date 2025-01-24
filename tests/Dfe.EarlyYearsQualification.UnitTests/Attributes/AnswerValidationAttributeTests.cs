@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Dfe.EarlyYearsQualification.Web.Attributes;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Attributes;
 

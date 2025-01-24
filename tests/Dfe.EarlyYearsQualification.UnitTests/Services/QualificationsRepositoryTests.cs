@@ -5,10 +5,6 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.UnitTests.Extensions;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
