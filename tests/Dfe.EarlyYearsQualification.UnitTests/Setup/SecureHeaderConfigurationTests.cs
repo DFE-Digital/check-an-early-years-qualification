@@ -1,6 +1,4 @@
 using Dfe.EarlyYearsQualification.Web.Security;
-using FluentAssertions;
-using OwaspHeaders.Core.Enums;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Setup;
 

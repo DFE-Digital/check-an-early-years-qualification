@@ -1,6 +1,3 @@
-using Microsoft.Extensions.Logging;
-using Moq;
-
 namespace Dfe.EarlyYearsQualification.UnitTests.Extensions;
 
 public static class MockLoggerExtensions

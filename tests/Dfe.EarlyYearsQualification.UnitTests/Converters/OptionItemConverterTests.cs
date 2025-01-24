@@ -1,6 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using FluentAssertions;
 using Newtonsoft.Json;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Converters;

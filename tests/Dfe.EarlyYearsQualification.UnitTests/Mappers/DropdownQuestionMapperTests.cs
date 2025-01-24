@@ -1,7 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 
