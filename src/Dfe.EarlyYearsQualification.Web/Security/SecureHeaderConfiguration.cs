@@ -20,6 +20,7 @@ public static class SecureHeaderConfiguration
                             .UseCacheControl()
                             .UseXssProtection()
                             .UseCrossOriginResourcePolicy()
+                            .SetUrlsToIgnore(["/favicon.ico"])
                             .Build();
 
         var govukFrontendSupportedElement = new ContentSecurityPolicyElement

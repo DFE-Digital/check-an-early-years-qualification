@@ -37,4 +37,6 @@ public interface IContentService
     Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear);
 
     Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage();
+
+    Task<OpenGraphData?> GetOpenGraphData();
 }

@@ -208,7 +208,20 @@ public class ContentfulContentService(
         var checkAdditionalRequirementsAnswerPage = checkAdditionalRequirementsAnswerPageEntities.First();
         return checkAdditionalRequirementsAnswerPage;
     }
-    
+
+    public async Task<OpenGraphData?> GetOpenGraphData()
+    {
+        var openGraphEntities = await GetEntriesByType<OpenGraphData>();
+        if (openGraphEntities is null || !openGraphEntities.Any())
+        {
+            Logger.LogWarning("No open graph data entry returned");
+            return default;
+        }
+
+        var openGraphData = openGraphEntities.First();
+        return openGraphData;
+    }
+
     public async Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
     {
         var cannotFindQualificationPageType = ContentTypeLookup[typeof(CannotFindQualificationPage)];

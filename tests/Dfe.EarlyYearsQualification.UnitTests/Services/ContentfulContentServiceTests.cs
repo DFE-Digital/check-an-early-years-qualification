@@ -1013,6 +1013,40 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         result.Should().BeNull();
         Logger.VerifyWarning("No filtered 'cannot find qualification' page entries returned");
     }
+    
+    [TestMethod]
+    public async Task GetOpenGraphData_ReturnsData()
+    {
+        var data = new OpenGraphData { Title = "test title" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<OpenGraphData>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<OpenGraphData> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetOpenGraphData();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetOpenGraphData_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<OpenGraphData>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<OpenGraphData> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetOpenGraphData();
+
+        result.Should().BeNull();
+    }
 }
 
 public class ContentfulContentServiceTestsBase<T>

@@ -540,4 +540,21 @@ public class MockContentfulServiceTests
 
         result.Should().BeNull();
     }
+    
+    [TestMethod]
+    public async Task GetOpenGraphData_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetOpenGraphData();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<OpenGraphData>();
+        result!.Title.Should().Be("OG Title");
+        result.Description.Should().Be("OG Description");
+        result.Domain.Should().Be("OG Domain");
+        result.Image.Should().NotBeNull();
+        result.Image!.File.Should().NotBeNull();
+        result.Image.File.Url.Should().Be("test/url/og-image.png");
+    }
 }
