@@ -8,6 +8,7 @@ public class SecurityTextControllerTests
 {
     private readonly Mock<IConfiguration> _configurationMock = new();
     private readonly Mock<IConfigurationSection> _configurationSectionMock = new();
+
     private SecurityTextController GetSut()
     {
         return new SecurityTextController(_configurationMock.Object);
@@ -52,6 +53,6 @@ public class SecurityTextControllerTests
         result.Should().BeOfType<RedirectResult>();
         var resultType = result as RedirectResult;
         resultType.Should().NotBeNull();
-        resultType.Url.Should().Be(dummyUrl);
+        resultType!.Url.Should().Be(dummyUrl);
     }
 }
