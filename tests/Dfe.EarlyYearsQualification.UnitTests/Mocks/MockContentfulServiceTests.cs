@@ -550,9 +550,11 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<OpenGraphData>();
-        result!.Title.Should().NotBeNullOrEmpty();
-        result.Description.Should().NotBeNullOrEmpty();
-        result.Domain.Should().NotBeNullOrEmpty();
+        result!.Title.Should().Be("OG Title");
+        result.Description.Should().Be("OG Description");
+        result.Domain.Should().Be("OG Domain");
         result.Image.Should().NotBeNull();
+        result.Image!.File.Should().NotBeNull();
+        result.Image.File.Url.Should().Be("test/url/og-image.png");
     }
 }
