@@ -8,7 +8,10 @@ public class SecurityTextControllerTests
 {
     private readonly Mock<IConfiguration> _configurationMock = new();
     private readonly Mock<IConfigurationSection> _configurationSectionMock = new();
-    private SecurityTextController GetSut() => new(_configurationMock.Object);
+    private SecurityTextController GetSut()
+    {
+        return new SecurityTextController(_configurationMock.Object);
+    }
 
     private void SetUrl(string url)
     {
