@@ -14,6 +14,9 @@ on:
 #          - staging
 #          - production
 
+env:
+    SECRET_NAME: 'Storage--ConnectionString'
+
 jobs:
 
   cycle-access-keys:
@@ -40,16 +43,16 @@ jobs:
       # Get the secondary connection, update KV and restart web app
       - name: Get the secondary connection string and update KeyVault secret
         run: |
-          $connectionString = az storage account show-connection-string --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key secondary
-          az keyvault secret set --name Storage--ConnectionString --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value $connectionString
+          connectionString=$(az storage account show-connection-string --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key secondary)
+          az keyvault secret set --name ${{ env.SECRET_NAME }} --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value $connectionString
           az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
           
       # Update the primary access key, update KV and restart
       - name: Update the primary access key and update KeyVault secret
         run: |
           az storage account keys renew --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key primary
-          $connectionString = az storage account show-connection-string --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key primary
-          az keyvault secret set --name Storage--ConnectionString --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value $connectionString
+          connectionString=$(az storage account show-connection-string --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key primary)
+          az keyvault secret set --name ${{ env.SECRET_NAME }} --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value $connectionString
           az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
 
       # Update the secondary access key
