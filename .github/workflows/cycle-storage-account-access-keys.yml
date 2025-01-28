@@ -11,8 +11,8 @@ on:
         type: choice
         options:
           - development
-#          - staging
-#          - production
+          - staging
+          - production
 
 env:
     SECRET_NAME: 'Storage--ConnectionString'
