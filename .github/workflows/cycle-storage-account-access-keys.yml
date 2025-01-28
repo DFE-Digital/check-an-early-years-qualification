@@ -45,18 +45,20 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
       # Get the key2 connection, update KV and restart web app
-      - name: Get the secondary connection string and update KeyVault secret
+      - name: Get the key2 connection string and update KeyVault secret
+        shell: bash
         run: |
           connectionString=$(az storage account show-connection-string --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key key2)
-          az keyvault secret set --name ${{ env.SECRET_NAME }} --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value $connectionString
+          az keyvault secret set --name ${{ env.SECRET_NAME }} --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value "$connectionString"
           az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
           
       # Update the key1 access key, update KV and restart
       - name: Update the key1 access key and update KeyVault secret
+        shell: bash
         run: |
           az storage account keys renew --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key key1
           connectionString=$(az storage account show-connection-string --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key key1)
-          az keyvault secret set --name ${{ env.SECRET_NAME }} --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value $connectionString
+          az keyvault secret set --name ${{ env.SECRET_NAME }} --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value "$connectionString"
           az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
 
       # Update the key2 access key
