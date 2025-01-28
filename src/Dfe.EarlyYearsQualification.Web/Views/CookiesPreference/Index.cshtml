@@ -1,5 +1,4 @@
 @using Dfe.EarlyYearsQualification.Web.Models.Content
-@using GovUk.Frontend.AspNetCore.TagHelpers
 @model Dfe.EarlyYearsQualification.Web.Models.Content.CookiesPageModel
 
 @{
@@ -7,20 +6,7 @@
 }
 
 @section Scripts {
-    <script type="text/javascript">
-      $('#cookies-form').submit(function(e) {
-
-        const checked = $("input[name='" + '@CookiesPageModel.CookiesAnswer' + "']:checked").val();
-
-        if (checked === undefined)
-        {
-          e.preventDefault();
-          $("#cookies-form-group").addClass("govuk-form-group--error");
-          $("#cookies-choice-error").removeAttr('hidden');
-          
-        }
-      });
-    </script>
+    <script src="~/js/pages/cookies-preference-page.js" asp-append-version="true"></script>
 }
 
 @section BeforeMainContent {

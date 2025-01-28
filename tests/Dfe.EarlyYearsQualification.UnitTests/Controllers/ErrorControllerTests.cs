@@ -1,7 +1,5 @@
 using Dfe.EarlyYearsQualification.Web.Controllers;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 

@@ -1,7 +1,5 @@
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
-using FluentAssertions;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Helpers;
 

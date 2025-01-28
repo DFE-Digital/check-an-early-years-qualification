@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Web;
 using Contentful.Core;
 using Contentful.Core.Models;

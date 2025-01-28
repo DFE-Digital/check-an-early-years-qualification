@@ -1,7 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Mock.Content;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 

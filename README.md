@@ -61,3 +61,22 @@ dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
 ```
 
 This will pull in the exclusions such as the .cshtml files and will replicate coverage in the GitHub Actions.
+
+## End to end/Smoke testing
+
+End to end tests are ran using [Playwright](https://playwright.dev/).
+
+To run the tests, run the following commands:
+- Navigate to the correct folder, be it:
+  - ``cd tests/Dfe.EarlyYearsQualification.E2ETests`` for the E2E tests.
+  - ``cd tests/Dfe.EarlyYearsQualification.SmokeTests/playwright`` for the smoke tests.
+- Tell Node Version Manager that you want the latest version with: ``nvm use node --lts``
+- Run the tests with: ``npx playwright install`` (install all playwright browsers)
+- Run the tests with: ``npx playwright test`` (add --ui to run the tests in playwrights UI)
+
+### Problems with Safari?
+If you notice you are having issues with running Safari tests locally and them failing then there is a fix.
+
+This is happening due to because Safari strictly enforcing the `upgrade-insecure-requests` header. This is converting the HTTP requests to HTTPS.
+
+To fix this, comment out this line in the web app's [Program.cs](https://github.com/DFE-Digital/check-an-early-years-qualification/blob/main/src/Dfe.EarlyYearsQualification.Web/Program.cs#L138-L140). This will remove the header from all requests and should let Safari use HTTP.

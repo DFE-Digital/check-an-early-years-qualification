@@ -2,8 +2,6 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
-using FluentAssertions;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 

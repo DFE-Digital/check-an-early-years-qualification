@@ -40,6 +40,17 @@
                                                                                         });
                     }
 
+                    @if (!string.IsNullOrEmpty(Model.PostHeaderContent))
+                    {
+                        <div id="postHeaderContent">
+                            @Html.Raw(Model.PostHeaderContent)
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.QuestionHintHeader))
+                    {
+                        <h2 class="govuk-heading-s" id="hintHeader">@Model.QuestionHintHeader</h2>
+                    }
                     <div id="date-format-hint" class="govuk-hint">@Model.QuestionHint</div>
 
                     @if (Model.MonthError || Model.YearError)

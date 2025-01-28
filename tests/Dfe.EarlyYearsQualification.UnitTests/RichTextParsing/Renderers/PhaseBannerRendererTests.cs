@@ -1,7 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 

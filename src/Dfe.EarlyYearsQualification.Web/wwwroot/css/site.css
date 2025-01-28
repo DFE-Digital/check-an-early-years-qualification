@@ -122,18 +122,50 @@ body {
     margin: 40px 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
+    #clear-search {
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 998px) {
+
     #refineSearchButton {
         margin-left: 0 !important;
         margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     #refineSearch {
         width: 100% !important;
     }
+}
 
+@media (min-width: 641px) and (max-width: 998px) {
     #clear-search {
-        margin-top: 0 !important;
+        margin-top: 18px !important;
+        float: none;
+    }
+
+    #clear-search-form {
+        display: inline;
+    }
+
+    #refine-search-form {
+        display: inline;
+    }
+}
+
+@media (min-width: 999px) {
+    #refine-search-form {
+        width: 85%;
+        float: left;
+    }
+
+    #clear-search-form {
+        width: 15%;
+        float: left;
     }
 }
 

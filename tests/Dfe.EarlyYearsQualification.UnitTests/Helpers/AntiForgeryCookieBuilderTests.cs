@@ -1,5 +1,4 @@
 using Dfe.EarlyYearsQualification.Web.Helpers;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Helpers;
