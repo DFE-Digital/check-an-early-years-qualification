@@ -1,18 +1,20 @@
-run-name: 'Cycle Storage Account Access Keys - ${{inputs.environment}}'
+# run-name: 'Cycle Storage Account Access Keys - ${{inputs.environment}}'
+run-name: 'Cycle Storage Account Access Keys - development'
 name: Cycle Storage Account Access Keys
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Azure environment'
-        required: true
-        default: 'development'
-        type: choice
-        options:
-          - development
-#          - staging
-#          - production
+#  workflow_dispatch:
+#    inputs:
+#      environment:
+#        description: 'Azure environment'
+#        required: true
+#        default: 'development'
+#        type: choice
+#        options:
+#          - development
+##          - staging
+##          - production
+  pull_request:
 
 env:
     SECRET_NAME: 'Storage--ConnectionString'
@@ -20,9 +22,11 @@ env:
 jobs:
 
   cycle-access-keys:
-    name: Update access keys for ${{inputs.environment}}
+    name: Update access keys for development
+    #name: Update access keys for ${{inputs.environment}}
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
+    environment: development
+    #environment: ${{ inputs.environment }}
     # Permissions for OIDC authentication
     permissions:
       id-token: write
