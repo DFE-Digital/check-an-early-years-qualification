@@ -174,12 +174,19 @@ public class MockContentfulService : IContentService
                                          QualificationDetailsSummaryHeader = "Qualification details",
                                          QualificationNameLabel = "Qualification",
                                          QualificationStartDateLabel = "Qualification start date",
-                                         FeedbackBanner = new FeedbackBanner()
+                                         FeedbackBanner = new FeedbackBanner
                                                           {
                                                               Body = ContentfulContentHelper.Paragraph("Test body"),
                                                               BannerTitle = "Test banner title",
                                                               Heading = "Test heading"
-                                                          }
+                                                          },
+                                         QualificationResultHeading = "Qualification result heading",
+                                         QualificationResultFrMessageHeading = "Full and relevant",
+                                         QualificationResultFrMessageBody = "Full and relevant body",
+                                         QualificationResultNotFrMessageHeading = "Not full and relevant",
+                                         QualificationResultNotFrMessageBody = "Not full and relevant body",
+                                         QualificationResultNotFrL3MessageHeading = "Not full and relevant L3",
+                                         QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body"
                                      });
     }
 
