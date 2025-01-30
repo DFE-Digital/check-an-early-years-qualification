@@ -45,4 +45,10 @@ public class DetailsPageModel
     public string QualificationStartDateLabel { get; init; } = string.Empty;
     
     public FeedbackBannerModel? FeedbackBanner { get; init; }
+
+    public string QualificationResultHeading { get; set; } = string.Empty;
+
+    public string QualificationResultMessageHeading { get; set; } = string.Empty;
+    
+    public string QualificationResultMessageBody { get; set; } = string.Empty;
 }

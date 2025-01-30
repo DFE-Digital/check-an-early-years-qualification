@@ -59,4 +59,18 @@ public class DetailsPage
     public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
 
     public FeedbackBanner? FeedbackBanner { get; init; }
+
+    public string QualificationResultHeading { get; init; } = string.Empty;
+
+    public string QualificationResultFrMessageHeading { get; init; } = string.Empty;
+
+    public string QualificationResultFrMessageBody { get; init; } = string.Empty;
+
+    public string QualificationResultNotFrMessageHeading { get; init; } = string.Empty;
+
+    public string QualificationResultNotFrMessageBody { get; init; } = string.Empty;
+
+    public string QualificationResultNotFrL3MessageHeading { get; init; } = string.Empty;
+
+    public string QualificationResultNotFrL3MessageBody { get; init; } = string.Empty;
 }

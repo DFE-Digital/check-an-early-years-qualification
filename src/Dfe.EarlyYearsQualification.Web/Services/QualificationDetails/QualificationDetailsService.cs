@@ -332,4 +332,28 @@ public class QualificationDetailsService(
                 break;
         }
     }
+
+    public void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPage content)
+    {
+        model.Content!.QualificationResultHeading = content.QualificationResultHeading;
+        model.Content.QualificationResultMessageHeading = content.QualificationResultFrMessageHeading;
+        model.Content.QualificationResultMessageBody = content.QualificationResultFrMessageBody;
+    }
+
+    public void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPage content)
+    {
+        model.Content!.QualificationResultHeading = content.QualificationResultHeading;
+        
+        if (model.RatioRequirements.IsNotFullAndRelevant && model.QualificationLevel > 2 &&
+            userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019())
+        {
+            model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrL3MessageHeading;
+            model.Content.QualificationResultMessageBody = content.QualificationResultNotFrL3MessageBody;
+        }
+        else
+        {
+            model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrMessageHeading;
+            model.Content.QualificationResultMessageBody = content.QualificationResultNotFrMessageBody;
+        }
+    }
 }

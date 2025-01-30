@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using Dfe.EarlyYearsQualification.Web.Models.Content
 @model Dfe.EarlyYearsQualification.Web.Models.Content.QualificationDetailsModel
 
 @{
@@ -83,9 +84,18 @@
         </dl>
     </div>
     <div class="govuk-grid-column-full govuk-!-static-margin-top-6">
+        @{ await Html.RenderPartialAsync("Partials/QualificationResult", new QualificationResultModel
+                                                              {
+                                                                  Heading = Model.Content.QualificationResultHeading,
+                                                                  MessageHeading = Model.Content.QualificationResultMessageHeading,
+                                                                  MessageBody = Model.Content.QualificationResultMessageBody,
+                                                                  IsFullAndRelevant = !Model.RatioRequirements.IsNotFullAndRelevant
+                                                              }); 
+        }
+        
         <h2 class="govuk-heading-l" id="ratio-heading">@Model.Content.RatiosHeading</h2>
         @Html.Raw(Model.Content.RatiosText)
-        
+
         @{
             if (Model.RatioRequirements.ApprovedForLevel2 == QualificationApprovalStatus.Approved
                 || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.Approved
@@ -183,7 +193,7 @@
                                                                                                    }
                                                                        });
                 }
-                
+
                 if (Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.NotApproved)
                 {
                     await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
@@ -197,7 +207,7 @@
                                                                                                    }
                                                                        });
                 }
-                
+
                 if (Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.NotApproved)
                 {
                     await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
