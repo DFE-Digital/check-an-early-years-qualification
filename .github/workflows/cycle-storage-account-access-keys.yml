@@ -13,14 +13,9 @@ on:
           - development
           - staging
           - production
-
-env:
-    SECRET_NAME: 'Storage--ConnectionString'
-
 jobs:
-
   cycle-access-keys:
-    name: Update access keys for ${{inputs.environment}}
+    name: Update access keys for ${{ inputs.environment }}
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
     # Permissions for OIDC authentication
@@ -39,25 +34,10 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      
-      # Get the key2 connection, update KV and restart web app
-      - name: Get the key2 connection string and update KeyVault secret
-        shell: bash
-        run: |
-          connectionString=$(az storage account show-connection-string --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key key2 --output tsv)
-          az keyvault secret set --name ${{ env.SECRET_NAME }} --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value "$connectionString"
-          az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
           
-      # Update the key1 access key, update KV and restart
-      - name: Update the key1 access key and update KeyVault secret
-        shell: bash
-        run: |
-          az storage account keys renew --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key key1
-          connectionString=$(az storage account show-connection-string --name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key key1 --output tsv)
-          az keyvault secret set --name ${{ env.SECRET_NAME }} --vault-name ${{ vars.RESOURCE_NAME_PREFIX }}-kv --value "$connectionString"
-          az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
-
-      # Update the key2 access key
-      - name: Update the key2 access key
-        run: |
-          az storage account keys renew --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --key key2
+      - name: Rotate keys for ${{ inputs.environment }}
+        uses: './.github/actions/storage-account-key-rotation'
+        with:
+          webapp_storage_account_name: ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }}
+          resource_name_prefix: ${{ vars.RESOURCE_NAME_PREFIX }}
+          webapp_name: ${{ vars.WEBAPP_NAME }}
