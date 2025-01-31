@@ -2,8 +2,6 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using FluentAssertions;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 

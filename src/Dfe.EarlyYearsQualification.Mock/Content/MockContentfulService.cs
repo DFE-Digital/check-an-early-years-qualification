@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using File = Contentful.Core.Models.File;
 
 namespace Dfe.EarlyYearsQualification.Mock.Content;
 
@@ -428,6 +429,24 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public async Task<OpenGraphData?> GetOpenGraphData()
+    {
+        return await Task.FromResult(new OpenGraphData
+                                     {
+                                         Title = "OG Title",
+                                         Description = "OG Description",
+                                         Domain = "OG Domain",
+                                         Image = new Asset
+                                                 {
+                                                     File = new File
+                                                            {
+                                                                Url = "test/url/og-image.png"
+                                                            }
+                                                     
+                                                 }
+                                     });
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =
@@ -563,6 +582,7 @@ public class MockContentfulService : IContentService
                    CtaButtonText = "Continue",
                    MonthLabel = "Test Month Label",
                    YearLabel = "Test Year Label",
+                   QuestionHintHeader = "Test Question Hint Header",
                    QuestionHint = "Test Question Hint",
                    BackButton = new NavigationLink
                                 {
@@ -572,6 +592,8 @@ public class MockContentfulService : IContentService
                                 },
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),
+                   PostHeaderContent = 
+                       ContentfulContentHelper.Paragraph("This is post header content"),
                    AdditionalInformationHeader = "This is the additional information header",
                    ErrorBannerHeading = "There is a problem",
                    ErrorBannerLinkText = "Test error banner link text",

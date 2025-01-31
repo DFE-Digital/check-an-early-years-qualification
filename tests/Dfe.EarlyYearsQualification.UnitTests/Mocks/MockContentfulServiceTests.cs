@@ -2,7 +2,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Mock.Content;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 
@@ -277,9 +276,12 @@ public class MockContentfulServiceTests
         result.AdditionalInformationHeader.Should().Be("This is the additional information header");
         result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
+        result.PostHeaderContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is post header content");
         result.MonthLabel.Should().Be("Test Month Label");
         result.YearLabel.Should().Be("Test Year Label");
         result.QuestionHint.Should().Be("Test Question Hint");
+        result.QuestionHintHeader.Should().Be("Test Question Hint Header");
         result.FutureDateErrorMessage.Should().Be("Future date error message");
         result.FutureDateErrorBannerLinkText.Should().Be("Future date error message banner link");
     }
@@ -537,5 +539,22 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetCannotFindQualificationPage(5, 7, 2015);
 
         result.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetOpenGraphData_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetOpenGraphData();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<OpenGraphData>();
+        result!.Title.Should().Be("OG Title");
+        result.Description.Should().Be("OG Description");
+        result.Domain.Should().Be("OG Domain");
+        result.Image.Should().NotBeNull();
+        result.Image!.File.Should().NotBeNull();
+        result.Image.File.Url.Should().Be("test/url/og-image.png");
     }
 }

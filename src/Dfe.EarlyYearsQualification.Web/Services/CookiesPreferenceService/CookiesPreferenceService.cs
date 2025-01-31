@@ -9,14 +9,20 @@ public class CookiesPreferenceService(ICookieManager cookieManager) : ICookiesPr
     public void SetVisibility(bool visibility)
     {
         var currentCookie = GetCookie();
-        DeleteCookie();
+        DeleteCookie(CookieKeyNames.CookiesPreferenceKey);
         CreateCookie(CookieKeyNames.CookiesPreferenceKey, currentCookie.HasApproved, visibility,
                      currentCookie.IsRejected);
     }
 
     public void RejectCookies()
     {
-        DeleteCookie();
+        DeleteCookie(CookieKeyNames.CookiesPreferenceKey);
+        // Delete any remaining GA or Clarity cookies too
+        DeleteCookie(CookieKeyNames.ClarityUserIdKey);
+        DeleteCookie(CookieKeyNames.ClaritySessionKey);
+        DeleteCookie(CookieKeyNames.GoogleAnalyticsKey);
+        DeleteGoogleAnalyticSessionStateCookie();
+
         CreateCookie(CookieKeyNames.CookiesPreferenceKey, false, true, true);
     }
 
@@ -50,9 +56,9 @@ public class CookiesPreferenceService(ICookieManager cookieManager) : ICookiesPr
         }
     }
 
-    private void DeleteCookie()
+    private void DeleteCookie(string key)
     {
-        cookieManager.DeleteOutboundCookie(CookieKeyNames.CookiesPreferenceKey);
+        cookieManager.DeleteOutboundCookie(key);
     }
 
     private void CreateCookie(string key, bool value, bool visibility = true, bool rejected = false)
@@ -68,5 +74,16 @@ public class CookiesPreferenceService(ICookieManager cookieManager) : ICookiesPr
         var serializedCookie = JsonSerializer.Serialize(cookie);
 
         cookieManager.SetOutboundCookie(key, serializedCookie, cookieOptions);
+    }
+    
+    private void DeleteGoogleAnalyticSessionStateCookie()
+    {
+        var allCookies = cookieManager.ReadInboundCookies();
+        var gaSessionStateCookie =
+            allCookies?.Keys.FirstOrDefault(x => x.StartsWith(CookieKeyNames.GoogleAnalyticsSessionStateKey));
+        if (gaSessionStateCookie != null)
+        {
+            DeleteCookie(gaSessionStateCookie);
+        }
     }
 }

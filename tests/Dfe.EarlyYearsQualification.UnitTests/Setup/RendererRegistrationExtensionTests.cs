@@ -1,7 +1,6 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.ParagraphRenderer;
 using TableCellRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableCellRenderer;

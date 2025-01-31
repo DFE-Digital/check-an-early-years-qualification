@@ -1,16 +1,15 @@
 {
   "name": "dfe.earlyyearsqualification.e2etests",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "cypress:open": "cypress open",
-    "test": "cypress run",
-    "test:specific": "cypress run --spec 'cypress/e2e/pages/qualification-details-spec.cy.js'"
-  },
+  "scripts": {},
+  "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "cypress": "^13.13.3"
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.10.1",
+    "dotenv": "^16.4.7"
   }
 }

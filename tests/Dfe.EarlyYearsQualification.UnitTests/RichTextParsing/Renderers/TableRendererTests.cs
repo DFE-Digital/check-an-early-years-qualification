@@ -1,5 +1,4 @@
 using Contentful.Core.Models;
-using FluentAssertions;
 using TableRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.TableRenderer;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;

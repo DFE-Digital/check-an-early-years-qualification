@@ -4,8 +4,6 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
-using FluentAssertions;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -17,7 +15,7 @@ public class QualificationSearchServiceTests
     private Mock<IGovUkContentParser> _mockContentParser = new();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
 
-    private IQualificationSearchService GetSut()
+    private QualificationSearchService GetSut()
     {
         return new QualificationSearchService(
                                               _mockRepository.Object,

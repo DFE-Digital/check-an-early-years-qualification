@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using OwaspHeaders.Core.Extensions;
-using RobotsTxt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -120,6 +119,7 @@ builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
 builder.Services.AddSingleton<IDateTimeAdapter, DateTimeAdapter>();
 builder.Services.AddSingleton<IDateQuestionModelValidator, DateQuestionModelValidator>();
 builder.Services.AddTransient<TrackingConfiguration>();
+builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 
@@ -134,8 +134,6 @@ else
 {
     builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
 }
-
-builder.Services.AddStaticRobotsTxt(robotsTxtOptions => robotsTxtOptions.DenyAll());
 
 var app = builder.Build();
 
@@ -159,7 +157,6 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRobotsTxt();
 app.UseRouting();
 
 app.UseAuthorization();
