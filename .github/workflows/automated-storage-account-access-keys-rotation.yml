@@ -1,6 +1,7 @@
 name: Automated Storage Account Access Keys Rotation
 
 on:
+  workflow_dispatch:
   schedule:
     # Runs at 2am, on the first of the month of feb, apr, jun, aug, oct, dec
     - cron: "0 2 1 2,4,6,8,10,12 *"
