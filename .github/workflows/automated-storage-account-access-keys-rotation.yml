@@ -8,6 +8,7 @@ on:
 
 jobs:
   rotate-access-keys:
+    needs: auto-approve
     runs-on: ubuntu-22.04
     strategy:
       matrix:
@@ -34,3 +35,17 @@ jobs:
           webapp_storage_account_name: ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }}
           resource_name_prefix: ${{ vars.RESOURCE_NAME_PREFIX }}
           webapp_name: ${{ vars.WEBAPP_NAME }}
+          
+  auto-approve:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Auto-approve
+        shell: bash
+        run: |
+          curl -L \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/DFE-Digital/check-an-early-years-qualification/actions/runs/${{github.run_id}}/pending_deployments \
+          -d '{"environment_ids":[2468357533,3407698866],"state":"approved","comment":"auto approved through workflow"}'
