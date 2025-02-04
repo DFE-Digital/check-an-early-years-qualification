@@ -33,6 +33,44 @@ resource "azurerm_application_insights" "web" {
   }
 }
 
+
+/*
+ Grants permission to the Service Principal used for deployment to deploy to the Key Vault.
+ It needs this to create the custom domain bindings to their certificates.
+ It is not clear (apparently not even to Microsoft) why it needs this permission.
+*/
+data "azurerm_subscription" "current" {
+}
+
+resource "random_uuid" "reader_with_kv_deploy_role_definition_id" {}
+
+resource "azurerm_role_definition" "reader_with_kv_deploy" {
+  role_definition_id = random_uuid.reader_with_kv_deploy_role_definition_id.result
+  name               = "Key Vault Reader with Key Vault Deploy"
+  scope              = data.azurerm_subscription.current.id
+  description        = "Can deploy/import secret from key vault to web app"
+
+  permissions {
+    actions     = ["*/read", "Microsoft.KeyVault/vaults/deploy/action"]
+    not_actions = []
+  }
+
+  assignable_scopes = [
+    data.azurerm_subscription.current.id
+  ]
+}
+
+data "azuread_service_principal" "MicrosoftWebApp" {
+  client_id = "abfa0a7c-a6b6-4736-8310-5855508787cd"
+}
+
+resource "azurerm_role_assignment" "sp_as_kv_reader" {
+  scope              = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group}"
+  role_definition_id = azurerm_role_definition.reader_with_kv_deploy.id
+  principal_id       = azuread_service_principal.MicrosoftWebApp.sp.id
+}
+# End grant permission
+
 # Create App Service Plan
 resource "azurerm_service_plan" "asp" {
   name                = "${var.resource_name_prefix}-asp"
