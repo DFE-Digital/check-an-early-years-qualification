@@ -8,7 +8,6 @@ on:
 
 jobs:
   rotate-access-keys:
-    needs: auto-approve
     runs-on: ubuntu-22.04
     strategy:
       matrix:
@@ -39,6 +38,11 @@ jobs:
   auto-approve:
     runs-on: ubuntu-22.04
     steps:
+      
+      # Allows the rotate-access-keys job to start and create the approval requests
+      - name: Sleep for 30 seconds
+        shell: bash
+        run: sleep 30s
       - name: Auto-approve
         shell: bash
         run: |
