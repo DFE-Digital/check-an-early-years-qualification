@@ -69,7 +69,7 @@ resource "azurerm_role_assignment" "sp_as_kv_reader" {
 
   scope              = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group}"
   role_definition_id = azurerm_role_definition.reader_with_kv_deploy.id
-  principal_id       = azuread_service_principal.MicrosoftWebApp.sp.id
+  principal_id       = data.azuread_service_principal.MicrosoftWebApp.sp.id
 }
 # End grant permission
 
