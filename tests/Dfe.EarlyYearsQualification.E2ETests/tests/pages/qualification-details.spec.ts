@@ -182,4 +182,40 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.click('#print-button');
         await page.waitForFunction('window.waitForPrintDialog');
     });
+
+    test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started between Sep14 & Aug19", async ({
+                                                                                                                                                    page,
+                                                                                                                                                    context
+                                                                                                                                                }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
+        await page.goto("/qualifications/qualification-details/eyq-240");
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 body");
+    });
+
+    test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started after Sep19", async ({
+                                                                                                                                          page,
+                                                                                                                                          context
+                                                                                                                                      }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
+        await page.goto("/qualifications/qualification-details/eyq-240");
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant body");
+    });
+
+    test("Checks the qualification result inset shows correctly when full and relevant", async ({
+                                                                                           page,
+                                                                                           context
+                                                                                        }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
+        await page.goto("/qualifications/qualification-details/eyq-240");
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Full and relevant");
+        await checkText(page, "#qualification-result-message-body", "Full and relevant body");
+    });
 });

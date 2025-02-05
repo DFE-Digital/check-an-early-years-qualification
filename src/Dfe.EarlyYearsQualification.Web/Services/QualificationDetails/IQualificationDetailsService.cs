@@ -22,4 +22,8 @@ public interface IQualificationDetailsService
     List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(List<AdditionalRequirementQuestion>? additionalRequirementQuestions);
     Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content);
     Task SetRatioText(QualificationDetailsModel model, DetailsPage content);
+
+    void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPage content);
+    
+    void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPage content);
 }

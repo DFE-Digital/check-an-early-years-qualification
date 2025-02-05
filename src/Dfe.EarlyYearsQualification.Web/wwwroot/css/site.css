@@ -190,3 +190,16 @@ body {
 .govuk-tag {
     max-width: initial !important;
 }
+
+/* Custom Qualification Result component */
+.govuk-inset-text.qualification-result-success {
+    border-left-color: #00703c;
+}
+
+.govuk-inset-text.qualification-result-failure {
+    border-left-color: #d4351c;
+}
+
+.qualification-result-container {
+    margin-bottom: 60px;
+}

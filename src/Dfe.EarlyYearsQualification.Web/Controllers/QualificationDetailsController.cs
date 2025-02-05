@@ -40,14 +40,26 @@ public class QualificationDetailsController(
 
         var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
 
+        model.Content!.QualificationResultHeading = detailsPageContent.QualificationResultHeading;
+        
         if (!validateAdditionalRequirementQuestions.isValid)
         {
             await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
+            qualificationDetailsService.SetQualificationResultFailureDetails(model, detailsPageContent);
             await qualificationDetailsService.SetRatioText(model, detailsPageContent);
             return validateAdditionalRequirementQuestions.actionResult!;
         }
-
+        
         await qualificationDetailsService.CheckRatioRequirements(qualification, model);
+        if (model.RatioRequirements.IsNotFullAndRelevant)
+        {
+            qualificationDetailsService.SetQualificationResultFailureDetails(model, detailsPageContent);
+        }
+        else
+        {
+            qualificationDetailsService.SetQualificationResultSuccessDetails(model, detailsPageContent);
+        }
+        
         await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
         await qualificationDetailsService.SetRatioText(model, detailsPageContent);
 

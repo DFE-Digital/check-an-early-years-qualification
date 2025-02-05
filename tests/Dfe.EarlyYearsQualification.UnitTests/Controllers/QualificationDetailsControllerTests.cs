@@ -19,7 +19,7 @@ public class QualificationDetailsControllerTests
 
     private static DetailsPage DummyDetailsPage => new();
 
-    private static QualificationDetailsModel DummyDetails => new();
+    private static QualificationDetailsModel DummyDetails => new() { Content = new DetailsPageModel() };
 
     private readonly Mock<ILogger<QualificationDetailsController>> _mockLogger = new();
     private readonly Mock<IQualificationDetailsService> _mockQualificationDetailsService = new();
@@ -220,7 +220,7 @@ public class QualificationDetailsControllerTests
     public async Task Index_ValidateAdditionalQuestions_InValid_Calls_QualificationDetailsService_QualificationLevel3OrAboveMightBeRelevantAtLevel2()
     {
         const string qualificationId = "qualificationId";
-        var details = new QualificationDetailsModel { AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()] };
+        var details = new QualificationDetailsModel { AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()], Content = new DetailsPageModel() };
         _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
         _mockQualificationDetailsService.Setup(o => o.GetDetailsPage()).ReturnsAsync(DummyDetailsPage);
         _mockQualificationDetailsService.Setup(o => o.GetQualification(qualificationId)).ReturnsAsync(DummyQualification);
@@ -237,7 +237,7 @@ public class QualificationDetailsControllerTests
     public async Task Index_ValidateAdditionalQuestions_InValid_Returns_View()
     {
         const string qualificationId = "qualificationId";
-        var details = new QualificationDetailsModel { AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()] };
+        var details = new QualificationDetailsModel { AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()], Content = new DetailsPageModel() };
         _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
         _mockQualificationDetailsService.Setup(o => o.GetDetailsPage()).ReturnsAsync(DummyDetailsPage);
         _mockQualificationDetailsService.Setup(o => o.GetQualification(qualificationId)).ReturnsAsync(DummyQualification);
@@ -259,7 +259,7 @@ public class QualificationDetailsControllerTests
     {
         const string qualificationId = "qualificationId";
 
-        var qualificationDetailsModel = new QualificationDetailsModel { QualificationId = qualificationId, AdditionalRequirementAnswers = [] };
+        var qualificationDetailsModel = new QualificationDetailsModel { QualificationId = qualificationId, AdditionalRequirementAnswers = [], Content = new DetailsPageModel() };
 
         _mockQualificationDetailsService.Setup(x => x.GetQualification(qualificationId)).ReturnsAsync(DummyQualification);
         _mockQualificationDetailsService.Setup(x => x.GetDetailsPage()).ReturnsAsync(DummyDetailsPage);
@@ -285,7 +285,7 @@ public class QualificationDetailsControllerTests
     {
         const string qualificationId = "qualificationId";
 
-        var details = new QualificationDetailsModel { AdditionalRequirementAnswers = [] };
+        var details = new QualificationDetailsModel { AdditionalRequirementAnswers = [], Content = new DetailsPageModel() };
 
         _mockQualificationDetailsService.Setup(x => x.GetQualification(qualificationId)).ReturnsAsync(DummyQualification);
         _mockQualificationDetailsService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
@@ -351,7 +351,8 @@ public class QualificationDetailsControllerTests
                               {
                                   Question = "Question 1"
                               }
-                          ]
+                          ],
+                          Content = new DetailsPageModel()
                       };
 
         var notQtsAnswer = details.AdditionalRequirementAnswers.First(o => o.Question == "Question 1");

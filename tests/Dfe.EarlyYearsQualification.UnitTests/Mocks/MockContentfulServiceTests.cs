@@ -181,6 +181,13 @@ public class MockContentfulServiceTests
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text");
         result.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
+        result.QualificationResultHeading.Should().Be("Qualification result heading");
+        result.QualificationResultFrMessageHeading.Should().Be("Full and relevant");
+        result.QualificationResultFrMessageBody.Should().Be("Full and relevant body");
+        result.QualificationResultNotFrMessageHeading.Should().Be("Not full and relevant");
+        result.QualificationResultNotFrMessageBody.Should().Be("Not full and relevant body");
+        result.QualificationResultNotFrL3MessageHeading.Should().Be("Not full and relevant L3");
+        result.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
     }
 
     [TestMethod]
