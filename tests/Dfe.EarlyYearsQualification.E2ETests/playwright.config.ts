@@ -13,6 +13,8 @@ import {defineConfig, devices} from '@playwright/test';
  */
 require('dotenv').config();
 
+var chromeUse = process.env.CI ? {...devices['Desktop Chrome'], channel: 'chromium'} : {...devices['Desktop Chrome']};
+
 export default defineConfig({
     testDir: './tests',
     /* Run tests in files in parallel */
@@ -39,7 +41,7 @@ export default defineConfig({
     projects: [
         {
             name: 'chromium',
-            use: {...devices['Desktop Chrome'], channel: 'chromium'},
+            use: chromeUse,
         },
         {
             name: 'firefox',
