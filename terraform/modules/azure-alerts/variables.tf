@@ -3,6 +3,11 @@ variable "resource_group" {
   type        = string
 }
 
+variable "location" {
+  description = "Name of the Azure region to deploy resources"
+  type        = string
+}
+
 variable "app_service_plan_id" {
   description = "Id of the App Service Plan"
   type        = string

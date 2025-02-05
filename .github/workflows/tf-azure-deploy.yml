@@ -37,7 +37,6 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_USE_OIDC: true
-  ARM_SKIP_PROVIDER_REGISTRATION: true
 
 jobs:
   terraform:
@@ -77,7 +76,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.5.6
+          terraform_version: 1.9.8
           terraform_wrapper: false
 
       # Initialise a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.

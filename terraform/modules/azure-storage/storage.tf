@@ -3,33 +3,12 @@ resource "azurerm_storage_account" "sa" {
   resource_group_name              = var.resource_group
   location                         = var.location
   account_tier                     = "Standard"
+  account_kind                     = "StorageV2"
   min_tls_version                  = "TLS1_2"
   account_replication_type         = "LRS"
   allow_nested_items_to_be_public  = false
   cross_tenant_replication_enabled = false
   shared_access_key_enabled        = true
-
-  queue_properties {
-    logging {
-      delete                = true
-      read                  = true
-      write                 = true
-      version               = "1.0"
-      retention_policy_days = 10
-    }
-    hour_metrics {
-      enabled               = true
-      include_apis          = true
-      version               = "1.0"
-      retention_policy_days = 10
-    }
-    minute_metrics {
-      enabled               = true
-      include_apis          = true
-      version               = "1.0"
-      retention_policy_days = 10
-    }
-  }
 
   blob_properties {
     delete_retention_policy {
@@ -58,6 +37,30 @@ resource "azurerm_storage_account" "sa" {
   #checkov:skip=CKV2_AZURE_33:VNet not configured
 }
 
+resource "azurerm_storage_account_queue_properties" "saq" {
+  storage_account_id = azurerm_storage_account.sa.id
+
+  logging {
+    version               = "1.0"
+    delete                = true
+    read                  = true
+    write                 = true
+    retention_policy_days = 10
+  }
+
+  hour_metrics {
+    version               = "1.0"
+    include_apis          = true
+    retention_policy_days = 10
+  }
+
+  minute_metrics {
+    version               = "1.0"
+    include_apis          = true
+    retention_policy_days = 10
+  }
+}
+
 resource "azurerm_storage_account_network_rules" "sa_network_rules" {
   storage_account_id         = azurerm_storage_account.sa.id
   default_action             = "Deny"
@@ -68,7 +71,7 @@ resource "azurerm_storage_account_network_rules" "sa_network_rules" {
 
 resource "azurerm_storage_container" "data_protection" {
   name                  = "data-protection"
-  storage_account_name  = azurerm_storage_account.sa.name
+  storage_account_id    = azurerm_storage_account.sa.id
   container_access_type = "private"
 
   #checkov:skip=CKV2_AZURE_21:Logging not required
