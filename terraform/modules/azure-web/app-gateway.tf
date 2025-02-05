@@ -159,7 +159,7 @@ resource "azurerm_application_gateway" "agw" {
 
   backend_address_pool {
     name  = local.backend_address_pool_name
-    fqdns = [azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain.hostname]
+    fqdns = [azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain[0].hostname]
   }
 
   backend_http_settings {
