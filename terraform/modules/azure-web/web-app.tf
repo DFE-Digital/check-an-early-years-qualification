@@ -464,7 +464,7 @@ resource "azurerm_app_service_certificate" "webapp_service_gov_uk_custom_domain_
   name                = var.webapp_service_gov_uk_custom_domain_cert_secret_label
   resource_group_name = var.resource_group
   location            = var.location
-  key_vault_secret_id = var.kv_cert_secret_id
+  key_vault_secret_id = var.kv_service_gov_uk_cert_secret_id
 }
 
 resource "azurerm_app_service_certificate_binding" "webapp_service_gov_uk_custom_domain_cert_bind" {
