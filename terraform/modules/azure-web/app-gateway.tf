@@ -88,7 +88,7 @@ locals {
   http_setting_name              = "${var.resource_name_prefix}-agw-best"
   health_probe_name              = "${var.resource_name_prefix}-agw-hp"
   listener_name                  = "${var.resource_name_prefix}-agw-lstn"
-  ssl_certificate_name           = "${var.resource_name_prefix}-agw-ctx"
+  ssl_certificate_name           = "${var.resource_name_prefix}-agw-cert"
 }
 
 resource "azurerm_application_gateway" "agw" {
