@@ -99,7 +99,7 @@ resource "azurerm_key_vault_access_policy" "kv_azure_ap" {
 
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.az_config.tenant_id
-  object_id    = azuread_service_principal.MicrosoftWebApp.object_id
+  object_id    = data.azuread_service_principal.MicrosoftWebApp.object_id
 
   secret_permissions = [
     "Get"
