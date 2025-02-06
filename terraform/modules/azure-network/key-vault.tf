@@ -89,6 +89,29 @@ resource "azurerm_key_vault_access_policy" "kv_mi_ap" {
   ]
 }
 
+data "azuread_service_principal" "MicrosoftWebApp" {
+  client_id = "abfa0a7c-a6b6-4736-8310-5855508787cd"
+}
+
+resource "azurerm_key_vault_access_policy" "kv_azure_ap" {
+  # Key Vault only deployed to the Test and Production subscription
+  count = var.environment != "development" ? 1 : 0
+
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.az_config.tenant_id
+  object_id    = azuread_service_principal.MicrosoftWebApp.object_id
+
+  secret_permissions = [
+    "Get"
+  ]
+
+  certificate_permissions = [
+    "Get",
+    "Create",
+    "List"
+  ]
+}
+
 resource "azurerm_key_vault_certificate_issuer" "kv_ca" {
   # Certificate issuer only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
