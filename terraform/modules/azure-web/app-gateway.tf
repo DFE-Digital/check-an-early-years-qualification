@@ -124,7 +124,7 @@ resource "azurerm_application_gateway" "agw" {
 
   ssl_certificate {
     name                = local.ssl_certificate_name
-    key_vault_secret_id = var.kv_cert_secret_id
+    key_vault_secret_id = var.kv_service_gov_uk_cert_secret_id
   }
 
   ssl_policy {
@@ -133,7 +133,7 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   probe {
-    host                = var.webapp_custom_domain_name
+    host                = var.webapp_service_gov_uk_custom_domain_name
     name                = local.health_probe_name
     interval            = 30
     path                = "/health"
