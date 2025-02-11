@@ -23,8 +23,14 @@
             await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
                                                                    {
                                                                        ErrorBannerHeading = Model.ErrorBannerHeading,
-                                                                       ErrorBannerLinkText = Model.ErrorBannerLinkText,
-                                                                       ElementLinkId = Model.DropdownId
+                                                                       ErrorSummaryLinks =
+                                                                       [
+                                                                           new ErrorSummaryLink
+                                                                           {
+                                                                               ErrorBannerLinkText = Model.ErrorBannerLinkText,
+                                                                               ElementLinkId = Model.DropdownId
+                                                                           }
+                                                                       ]
                                                                    });
         }
         @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "dropdown-question-form"}))

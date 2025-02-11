@@ -20,7 +20,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = null, SelectedYear = null };
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DateQuestion
                            {
                                ErrorMessage = "Missing month and year error message",
                                ErrorBannerLinkText = "Missing month and year banner link text"
@@ -44,7 +44,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = null, SelectedYear = 2024 };
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DateQuestion
                            {
                                MissingMonthErrorMessage = "Missing month error message",
                                MissingMonthBannerLinkText = "Missing month banner link text"
@@ -68,7 +68,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = 12, SelectedYear = null };
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DateQuestion
                            {
                                MissingYearErrorMessage = "Missing year error message",
                                MissingYearBannerLinkText = "Missing year banner link text"
@@ -96,7 +96,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = selectedMonth, SelectedYear = 2024 };
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DateQuestion
                            {
                                MonthOutOfBoundsErrorMessage = "Month out of bounds error message",
                                MonthOutOfBoundsErrorLinkText = "Month out of bounds error link text"
@@ -127,7 +127,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = selectedYear };
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DateQuestion
                            {
                                YearOutOfBoundsErrorMessage = "Year out of bounds error message",
                                YearOutOfBoundsErrorLinkText = "Year out of bounds error link text"
@@ -156,7 +156,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = selectedMonth, SelectedYear = selectedYear };
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DateQuestion
                            {
                                FutureDateErrorMessage = "Future date error message",
                                FutureDateErrorBannerLinkText = "Future date error banner link text"
@@ -183,7 +183,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 20 };
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DateQuestion
                            {
                                MonthOutOfBoundsErrorMessage = "Month out of bounds error message",
                                MonthOutOfBoundsErrorLinkText = "Month out of bounds error link text",
@@ -209,7 +209,7 @@ public class DateQuestionModelValidatorTests
         var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2023 };
-        var questionPage = new DateQuestionPage();
+        var questionPage = new DateQuestion();
 
         var result = validator.IsValid(model, questionPage);
         result.MonthValid.Should().BeTrue();
@@ -230,7 +230,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = thisYear };
 
-        var questionPage = new DateQuestionPage();
+        var questionPage = new DateQuestion();
 
         var result = validator.IsValid(model, questionPage);
         result.MonthValid.Should().BeTrue();
@@ -251,7 +251,7 @@ public class DateQuestionModelValidatorTests
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = thisYear };
 
-        var questionPage = new DateQuestionPage();
+        var questionPage = new DateQuestion();
 
         var result = validator.IsValid(model, questionPage);
         result.MonthValid.Should().BeTrue();

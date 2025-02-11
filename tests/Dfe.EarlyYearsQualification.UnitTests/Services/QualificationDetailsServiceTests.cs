@@ -25,7 +25,7 @@ public class QualificationDetailsServiceTests
                                                         _mockContentService.Object,
                                                         _mockContentParser.Object,
                                                         _mockUserJourneyCookieService.Object
-                                                        );
+                                                       );
 
     [TestInitialize]
     public void Initialize()
@@ -696,11 +696,15 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    [DataRow(null, null, "")]
-    [DataRow(null, 2024, "")]
-    [DataRow(1, null, "")]
-    [DataRow(1, 2024, "January 2024")]
-    public async Task MapDetails_(int? month, int? year, string dateStarted)
+    [DataRow(null, null, "", null, null, "")]
+    [DataRow(null, 2024, "", null, null, "")]
+    [DataRow(1, null, "", null, null, "")]
+    [DataRow(1, 2024, "January 2024", null, null, "")]
+    [DataRow(null, null, "", null, null, "")]
+    [DataRow(null, null, "", null, 2024, "")]
+    [DataRow(null, null, "", 1, null, "")]
+    [DataRow(null, null, "", 1, 2024, "January 2024")]
+    public async Task MapDetails_(int? startMonth, int? startYear, string dateStarted, int? awardMonth, int? awardYear, string dateAwarded)
     {
         const string qualificationId = "qualificationId";
         const string qualificationName = "qualificationName";
@@ -730,7 +734,8 @@ public class QualificationDetailsServiceTests
         _mockContentParser.Setup(o => o.ToHtml(furtherInfoText)).ReturnsAsync(furtherInfo);
         _mockContentParser.Setup(o => o.ToHtml(requirementsText)).ReturnsAsync(requirements);
         _mockContentParser.Setup(o => o.ToHtml(feedbackText)).ReturnsAsync(feedback);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardMonth, awardYear));
 
         var sut = GetSut();
         var result = await sut.MapDetails(qualification, detailsPage);
@@ -748,6 +753,7 @@ public class QualificationDetailsServiceTests
         result.BackButton!.Href.Should().Be(backButton.Href);
         result.AdditionalRequirementAnswers.Should().BeNullOrEmpty();
         result.DateStarted.Should().Be(dateStarted);
+        result.DateAwarded.Should().Be(dateAwarded);
 
         var content = result.Content!;
         content.CheckAnotherQualificationText.Should().Be(checkAnotherQualification);
@@ -862,7 +868,7 @@ public class QualificationDetailsServiceTests
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         RatioRequirements = new RatioRequirementModel
@@ -873,7 +879,7 @@ public class QualificationDetailsServiceTests
                                             },
                         Content = new DetailsPageModel()
                     };
-        
+
         var sut = GetSut();
 
         await sut.SetRatioText(model, detailsPageContent);
@@ -881,7 +887,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosText);
     }
-    
+
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsNotApprovedText()
     {
@@ -901,7 +907,7 @@ public class QualificationDetailsServiceTests
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -916,7 +922,7 @@ public class QualificationDetailsServiceTests
                     };
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
-        
+
         var sut = GetSut();
 
         await sut.SetRatioText(model, detailsPageContent);
@@ -924,7 +930,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextL3PlusNotFrBetweenSep14Aug19);
     }
-    
+
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndOutsideOfAug19_ShowsNotApprovedText()
     {
@@ -944,7 +950,7 @@ public class QualificationDetailsServiceTests
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -959,7 +965,7 @@ public class QualificationDetailsServiceTests
                     };
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
-        
+
         var sut = GetSut();
 
         await sut.SetRatioText(model, detailsPageContent);
@@ -967,7 +973,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
     }
-    
+
     [TestMethod]
     public void SetQualificationResultSuccessDetails_ShowsSuccessText()
     {
@@ -977,7 +983,7 @@ public class QualificationDetailsServiceTests
                                      QualificationResultFrMessageHeading = "Message heading",
                                      QualificationResultFrMessageBody = "Message body"
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         Content = new DetailsPageModel()
@@ -992,7 +998,7 @@ public class QualificationDetailsServiceTests
         model.Content.QualificationResultMessageHeading.Should().Be(detailsPageContent.QualificationResultFrMessageHeading);
         model.Content.QualificationResultMessageBody.Should().Be(detailsPageContent.QualificationResultFrMessageBody);
     }
-    
+
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndOutsideOfAug19_ShowsCorrectText()
     {
@@ -1002,7 +1008,7 @@ public class QualificationDetailsServiceTests
                                      QualificationResultNotFrMessageHeading = "Message heading",
                                      QualificationResultNotFrMessageBody = "Message body"
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -1018,7 +1024,6 @@ public class QualificationDetailsServiceTests
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
 
-
         var sut = GetSut();
 
         sut.SetQualificationResultFailureDetails(model, detailsPageContent);
@@ -1028,7 +1033,7 @@ public class QualificationDetailsServiceTests
         model.Content.QualificationResultMessageHeading.Should().Be(detailsPageContent.QualificationResultNotFrMessageHeading);
         model.Content.QualificationResultMessageBody.Should().Be(detailsPageContent.QualificationResultNotFrMessageBody);
     }
-    
+
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsCorrectText()
     {
@@ -1038,7 +1043,7 @@ public class QualificationDetailsServiceTests
                                      QualificationResultNotFrL3MessageHeading = "Message heading",
                                      QualificationResultNotFrL3MessageBody = "Message body"
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -1053,7 +1058,6 @@ public class QualificationDetailsServiceTests
                     };
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
-
 
         var sut = GetSut();
 

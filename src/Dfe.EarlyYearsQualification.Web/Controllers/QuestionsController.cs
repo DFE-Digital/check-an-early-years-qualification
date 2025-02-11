@@ -79,50 +79,43 @@ public class QuestionsController(
     [HttpGet("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted()
     {
-        var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+        var questionPage = await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
         if (questionPage is null)
         {
             logger.LogError("No content for the question page");
             return RedirectToAction("Index", "Error");
         }
 
-        var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        var model = await MapDateModel(new DateQuestionModel(), questionPage,
-                                       nameof(this.WhenWasTheQualificationStarted),
-                                       Questions,
-                                       null,
-                                       startMonth,
-                                       startYear);
-        return View("Date", model);
+        var model = MapDatesModel(new DatesQuestionModel(), questionPage,
+                                  nameof(this.WhenWasTheQualificationStarted),
+                                  Questions,
+                                  null
+                                 );
+
+        return View("Dates", model);
     }
 
     [HttpPost("when-was-the-qualification-started")]
 #pragma warning disable S6967
-    // ...although it doesn't directly use ModelState.IsValid, the validity of the inbound model is checked 
-    public async Task<IActionResult> WhenWasTheQualificationStarted(DateQuestionModel model)
+    public async Task<IActionResult> WhenWasTheQualificationStarted(DatesQuestionModel model)
 #pragma warning restore S6967
     {
-        var questionPage = await contentService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+        var questionPage = await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
         var dateModelValidationResult = questionModelValidator.IsValid(model, questionPage!);
-        if (!dateModelValidationResult.MonthValid || !dateModelValidationResult.YearValid)
+        if (!dateModelValidationResult.Valid)
         {
+            model.HasErrors = true;
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
-                model = await MapDateModel(model,
-                                           questionPage,
-                                           nameof(this.WhenWasTheQualificationStarted),
-                                           Questions,
-                                           dateModelValidationResult,
-                                           model.SelectedMonth,
-                                           model.SelectedYear);
+                model = MapDatesModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions, dateModelValidationResult);
             }
 
-            return View("Date", model);
+            return View("Dates", model);
         }
 
-        userJourneyCookieService.SetWhenWasQualificationStarted(model.SelectedMonth.ToString() + '/' +
-                                                                model.SelectedYear);
+        userJourneyCookieService.SetWhenWasQualificationStarted(model.StartedQuestion.SelectedMonth.ToString() + '/' + model.StartedQuestion.SelectedYear);
+        userJourneyCookieService.SetWhenWasQualificationAwarded(model.AwardedQuestion.SelectedMonth.ToString() + '/' + model.AwardedQuestion.SelectedYear);
 
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
@@ -255,12 +248,10 @@ public class QuestionsController(
                                        selectedAnswer);
     }
 
-    private async Task<DateQuestionModel> MapDateModel(DateQuestionModel model, DateQuestionPage question,
-                                                       string actionName,
-                                                       string controllerName,
-                                                       DateValidationResult? validationResult,
-                                                       int? selectedMonth,
-                                                       int? selectedYear)
+    private DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question,
+                                           DateValidationResult? validationResult,
+                                           int? selectedMonth,
+                                           int? selectedYear)
     {
         var bannerErrorText = validationResult is { BannerErrorMessages.Count: > 0 }
                                   ? string.Join("<br />", validationResult!.BannerErrorMessages)
@@ -270,18 +261,22 @@ public class QuestionsController(
                                    ? string.Join("<br />", validationResult!.ErrorMessages)
                                    : null;
 
-        var errorBannerLinkText =
-            placeholderUpdater.Replace(bannerErrorText ?? question.ErrorBannerLinkText);
+        var errorBannerLinkText = placeholderUpdater.Replace(bannerErrorText ?? question.ErrorBannerLinkText);
 
         var errorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
 
-        var additionalInformationBody = await contentParser.ToHtml(question.AdditionalInformationBody);
+        return DateQuestionMapper.Map(model, question, errorBannerLinkText, errorMessage, validationResult, selectedMonth, selectedYear);
+    }
 
-        var postHeaderContent = await contentParser.ToHtml(question.PostHeaderContent);
+    private DatesQuestionModel MapDatesModel(DatesQuestionModel model, DatesQuestionPage question, string actionName, string controllerName, DatesValidationResult? validationResult)
+    {
+        var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+        var startedModel = MapDateModel(new DateQuestionModel(), question.StartedQuestion, validationResult?.StartedValidationResult, startMonth, startYear);
 
-        return DateQuestionMapper.Map(model, question, actionName, controllerName, errorBannerLinkText,
-                                      errorMessage, additionalInformationBody, postHeaderContent, validationResult, selectedMonth,
-                                      selectedYear);
+        var (awardedMonth, awardedYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        var awardedModel = MapDateModel(new DateQuestionModel(), question.AwardedQuestion, validationResult?.AwardedValidationResult, awardedMonth, awardedYear);
+
+        return DatesQuestionMapper.Map(model, question, actionName, controllerName, startedModel, awardedModel);
     }
 
     private async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model,

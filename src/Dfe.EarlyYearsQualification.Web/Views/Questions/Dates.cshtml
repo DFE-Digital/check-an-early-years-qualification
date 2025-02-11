@@ -1,0 +1,127 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.DatesQuestionModel
+
+
+@{
+    ViewData["Title"] = Model.Question;
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+@{
+    var awardingQuestion = Model.AwardedQuestion;
+    var startingQuestion = Model.StartedQuestion;
+}
+
+<div>
+    @if (Model.HasErrors)
+    {
+        await Html.RenderPartialAsync("Partials/ErrorSummary", Model.Errors);
+    }
+
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+        <h1 class="govuk-fieldset__heading mb-1" id="question">
+            @Model.Question
+        </h1>
+    </legend>
+    @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "date-question-form" }))
+    {
+        <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+            @if (startingQuestion is not null)
+            {
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <div
+                            class="govuk-form-group @(startingQuestion.MonthError || startingQuestion.YearError ? "govuk-form-group--error" : "")">
+
+                            @if (!string.IsNullOrEmpty(startingQuestion.QuestionHeader))
+                            {
+                                <h2 class="govuk-heading-s" id="hintHeader">@startingQuestion.QuestionHeader</h2>
+                            }
+                            <div id="date-format-hint" class="govuk-hint">@startingQuestion.QuestionHint</div>
+
+                            @if (startingQuestion.MonthError || startingQuestion.YearError)
+                            {
+                                <p id="date-error" class="govuk-error-message">
+                                    <span
+                                        class="govuk-visually-hidden">Error:</span> @Html.Raw(startingQuestion.ErrorMessage)
+                                </p>
+                            }
+
+                            <div class="govuk-date-input" id="@startingQuestion.QuestionId">
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label"
+                                               for="@startingQuestion.MonthId">@startingQuestion.MonthLabel</label>
+                                        @Html.TextBoxFor(x => x.StartedQuestion.SelectedMonth, "{0:#.#}", new { id = startingQuestion.MonthId, @class = startingQuestion.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = startingQuestion.MonthId, type = "text", inputmode = "numeric", Value = startingQuestion.SelectedMonth })
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label"
+                                               for="@startingQuestion.YearId">@startingQuestion.YearLabel</label>
+                                        @Html.TextBoxFor(x => x.StartedQuestion.SelectedYear, "{0:#.#}", new { id = startingQuestion.YearId, @class = startingQuestion.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = startingQuestion.YearId, type = "text", inputmode = "numeric", Value = startingQuestion.SelectedYear })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (awardingQuestion is not null)
+            {
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+
+
+                        <div
+                            class="govuk-form-group @(awardingQuestion.MonthError || awardingQuestion.YearError ? "govuk-form-group--error" : "")">
+
+                            @if (!string.IsNullOrEmpty(awardingQuestion.QuestionHeader))
+                            {
+                                <h2 class="govuk-heading-s" id="hintHeader">@awardingQuestion.QuestionHeader</h2>
+                            }
+                            <div id="date-format-hint" class="govuk-hint">@awardingQuestion.QuestionHint</div>
+
+                            @if (awardingQuestion.MonthError || awardingQuestion.YearError)
+                            {
+                                <p id="date-error" class="govuk-error-message">
+                                    <span
+                                        class="govuk-visually-hidden">Error:</span> @Html.Raw(awardingQuestion.ErrorMessage)
+                                </p>
+                            }
+
+                            <div class="govuk-date-input" id="@awardingQuestion.QuestionId">
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label"
+                                               for="@awardingQuestion.MonthId">@awardingQuestion.MonthLabel</label>
+                                        @Html.TextBoxFor(x => x.AwardedQuestion.SelectedMonth, "{0:#.#}", new { id = awardingQuestion.MonthId, @class = awardingQuestion.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = awardingQuestion.MonthId, type = "text", inputmode = "numeric", Value = awardingQuestion.SelectedMonth })
+                                    </div>
+                                </div>
+                                <div class="govuk-date-input__item">
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label govuk-date-input__label"
+                                               for="@awardingQuestion.YearId">@awardingQuestion.YearLabel</label>
+                                        @Html.TextBoxFor(x => x.AwardedQuestion.SelectedYear, "{0:#.#}", new { id = awardingQuestion.YearId, @class = awardingQuestion.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = awardingQuestion.YearId, type = "text", inputmode = "numeric", Value = awardingQuestion.SelectedYear })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="govuk-form-group">
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        </fieldset>
+    }
+</div>
+

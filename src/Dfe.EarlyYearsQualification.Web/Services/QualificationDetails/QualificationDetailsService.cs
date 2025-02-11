@@ -299,11 +299,19 @@ public class QualificationDetailsService(
         var dateStarted = string.Empty;
         var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
 
-        // ReSharper disable once InvertIf
         if (startYear is not null && startMonth is not null)
         {
             var dateOnly = new DateOnly(startYear.Value, startMonth.Value, 1);
             dateStarted = dateOnly.ToString("MMMM yyyy");
+        }
+
+        var dateAwarded = string.Empty;
+        var (awardedMonth, awardedYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+
+        if (awardedYear is not null && awardedMonth is not null)
+        {
+            var dateOnly = new DateOnly(awardedYear.Value, awardedMonth.Value, 1);
+            dateAwarded = dateOnly.ToString("MMMM yyyy");
         }
 
         var checkAnotherQualificationText = await contentParser.ToHtml(content.CheckAnotherQualificationText);
@@ -313,7 +321,7 @@ public class QualificationDetailsService(
 
         return QualificationDetailsMapper.Map(qualification, content, backNavLink,
                                               MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions),
-                                              dateStarted, checkAnotherQualificationText, furtherInfoText,
+                                              dateStarted, dateAwarded, checkAnotherQualificationText, furtherInfoText,
                                               requirementsText, feedbackBodyHtml);
     }
 

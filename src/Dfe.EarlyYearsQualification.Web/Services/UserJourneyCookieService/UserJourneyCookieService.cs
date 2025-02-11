@@ -41,6 +41,18 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             SetJourneyCookie();
         }
     }
+    
+    public void SetWhenWasQualificationAwarded(string date)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.WhenWasQualificationAwarded = date;
+
+            SetJourneyCookie();
+        }
+    }
 
     public void SetLevelOfQualification(string level)
     {
@@ -165,6 +177,29 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             }
 
             return (startDateMonth, startDateYear);
+        }
+    }
+    
+    public (int? startMonth, int? startYear) GetWhenWasQualificationAwarded()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            int? awardedDateMonth = null;
+            int? awardedDateYear = null;
+            var qualificationAwardedDateSplit = _model!.WhenWasQualificationAwarded.Split('/');
+
+            // ReSharper disable once InvertIf
+            if (qualificationAwardedDateSplit.Length == 2
+                && int.TryParse(qualificationAwardedDateSplit[0], out var parsedAwardedMonth)
+                && int.TryParse(qualificationAwardedDateSplit[1], out var parsedAwardedYear))
+            {
+                awardedDateMonth = parsedAwardedMonth;
+                awardedDateYear = parsedAwardedYear;
+            }
+
+            return (awardedDateMonth, awardedDateYear);
         }
     }
 
@@ -386,6 +421,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
     {
         public string WhereWasQualificationAwarded { get; set; } = string.Empty;
         public string WhenWasQualificationStarted { get; set; } = string.Empty;
+        public string WhenWasQualificationAwarded { get; set; } = string.Empty;
         public string LevelOfQualification { get; set; } = string.Empty;
         public string WhatIsTheAwardingOrganisation { get; set; } = string.Empty;
         public bool SelectedAwardingOrganisationNotOnTheList { get; set; }

@@ -363,16 +363,15 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetDateQuestionPage_ReturnsContent()
+    public async Task GetDatesQuestionPage_ReturnsContent()
     {
-        var content = new ContentfulCollection<DateQuestionPage>
+        var content = new ContentfulCollection<DatesQuestionPage>
                       {
                           Items =
                           [
-                              new DateQuestionPage
+                              new DatesQuestionPage
                               {
-                                  Question = "Question",
-                                  QuestionHint = "Question hint"
+                                  Question = "Question"
                               }
                           ]
                       };
@@ -380,16 +379,15 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         ClientMock.Setup(client =>
                              client.GetEntriesByType(
                                                      It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<DateQuestionPage>>(),
+                                                     It.IsAny<QueryBuilder<DatesQuestionPage>>(),
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
-        var result = await service.GetDateQuestionPage("SomeId");
+        var result = await service.GetDatesQuestionPage("SomeId");
 
         result!.Question.Should().Be("Question");
-        result.QuestionHint.Should().Be("Question hint");
     }
 
     [TestMethod]

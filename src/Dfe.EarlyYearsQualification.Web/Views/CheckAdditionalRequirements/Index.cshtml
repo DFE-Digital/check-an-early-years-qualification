@@ -18,11 +18,17 @@
             await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
                                                                    {
                                                                        ErrorBannerHeading = Model.ErrorSummaryHeading,
-                                                                       ErrorBannerLinkText = Model.ErrorMessage,
-                                                                       ElementLinkId = elementLinkId.Value
+                                                                       ErrorSummaryLinks =
+                                                                       [
+                                                                           new ErrorSummaryLink
+                                                                           {
+                                                                           ErrorBannerLinkText = Model.ErrorMessage,
+                                                                           ElementLinkId = elementLinkId.Value
+                                                                           }
+                                                                       ]
                                                                    });
         }
-        
+
         <form id="check-additional-requirements" asp-controller="CheckAdditionalRequirements" asp-action="Post" method="post" asp-route-qualificationId="@Model.QualificationId" asp-route-questionIndex="@Model.QuestionIndex">
             <input type="hidden" name="qualificationId" value="@Model.QualificationId">
             <input type="hidden" name="questionIndex" value="@Model.QuestionIndex">

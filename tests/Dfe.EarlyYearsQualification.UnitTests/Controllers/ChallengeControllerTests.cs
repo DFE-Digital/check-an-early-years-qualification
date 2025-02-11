@@ -358,7 +358,7 @@ public class ChallengeControllerTests
         var modelToReturn = viewResult.Model as ChallengePageModel;
 
         modelToReturn!.ErrorSummaryModel.Should().NotBeNull();
-        modelToReturn.ErrorSummaryModel!.ErrorBannerLinkText.Should().Be(content!.MissingPasswordText);
+        modelToReturn.ErrorSummaryModel!.ErrorSummaryLinks.First().ErrorBannerLinkText.Should().Be(content!.MissingPasswordText);
     }
 
     [TestMethod]
@@ -494,6 +494,6 @@ public class ChallengeControllerTests
         var modelToReturn = viewResult.Model as ChallengePageModel;
 
         modelToReturn!.ErrorSummaryModel.Should().NotBeNull();
-        modelToReturn.ErrorSummaryModel!.ErrorBannerLinkText.Should().Be(content!.IncorrectPasswordText);
+        modelToReturn.ErrorSummaryModel!.ErrorSummaryLinks.First().ErrorBannerLinkText.Should().Be(content!.IncorrectPasswordText);
     }
 }
