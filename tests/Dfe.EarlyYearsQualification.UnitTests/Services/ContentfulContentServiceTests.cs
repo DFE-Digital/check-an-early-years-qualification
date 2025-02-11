@@ -1043,6 +1043,40 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
+    
+    [TestMethod]
+    public async Task GetCheckYourAnswersPage_ReturnsData()
+    {
+        var data = new CheckYourAnswersPage { PageHeading = "test heading" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CheckYourAnswersPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CheckYourAnswersPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCheckYourAnswersPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetCheckYourAnswersPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CheckYourAnswersPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CheckYourAnswersPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCheckYourAnswersPage();
+
+        result.Should().BeNull();
+    }
 }
 
 public class ContentfulContentServiceTestsBase<T>

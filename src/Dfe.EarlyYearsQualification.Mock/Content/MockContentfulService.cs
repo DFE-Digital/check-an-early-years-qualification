@@ -454,6 +454,26 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public async Task<CheckYourAnswersPage?> GetCheckYourAnswersPage()
+    {
+        return await Task.FromResult(new CheckYourAnswersPage
+                                     {
+                                        PageHeading = "Check your answers",
+                                        BackButton = new NavigationLink
+                                                     {
+                                                         DisplayText = "TEST",
+                                                         Href = WhereWasTheQualificationAwardedPath,
+                                                         OpenInNewTab = false
+                                                     },
+                                        CtaButtonText = "Continue",
+                                        ChangeAnswerText = "Change",
+                                        QualificationAwardedText = "Awarded in",
+                                        QualificationStartedText = "Started in",
+                                        AnyAwardingOrganisationText = "Various awarding organisations",
+                                        AnyLevelText = "Any level"
+                                     });
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =

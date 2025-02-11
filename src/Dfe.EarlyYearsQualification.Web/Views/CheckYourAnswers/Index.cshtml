@@ -1,0 +1,42 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.CheckYourAnswersPageModel
+
+@{
+    ViewData["Title"] = "Check additional requirements answers";
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        <h1 class="govuk-heading-xl">@Model.PageHeading</h1>
+        <table class="govuk-table">
+            <colgroup>
+                <col span="1" style="width: 60%;">
+                <col span="1" style="width: 20%;">
+                <col span="1" style="width: 20%;">
+            </colgroup>
+            @foreach (var answer in Model.QuestionAnswerModels.Select((value, index) => new { index, value }))
+            {
+                <tr class="govuk-table__row">
+                    <td id="question-@(answer.index + 1)-question" class="govuk-table__cell govuk-!-text-align-left">
+                        <strong>@answer.value.Question</strong>
+                    </td>
+                    <td id="question-@(answer.index + 1)-answer" class="govuk-table__cell govuk-!-text-align-centre">
+                        @answer.value.Answer
+                    </td>
+                    <td id="question-@(answer.index + 1)-change" class="govuk-table__cell govuk-!-text-align-right ">
+                        <a href="@answer.value.ChangeAnswerHref" class="govuk-link">@Model.ChangeAnswerText</a>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <a id ="cta-button" href="@Url.Action("Get", "QualificationSearch")" class="govuk-button govuk-!-margin-top-2" data-module="govuk-button">
+            @Model.CtaButtonText
+        </a>
+    </div>
+</div>

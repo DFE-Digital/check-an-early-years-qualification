@@ -1040,7 +1040,7 @@ public class QuestionsControllerTests
 
     [TestMethod]
     public async Task
-        Post_WhatIsTheAwardingOrganisation_AwardingOrgPassedIn_SetsJourneyCookieAndRedirectsToTheQualificationListPage()
+        Post_WhatIsTheAwardingOrganisation_AwardingOrgPassedIn_SetsJourneyCookieAndRedirectsToTheCheckYourAnswersPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -1079,8 +1079,8 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationSearch");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckYourAnswers");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
@@ -1088,7 +1088,7 @@ public class QuestionsControllerTests
 
     [TestMethod]
     public async Task
-        Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_SetsJourneyCookieAndRedirectsToTheQualificationListPage()
+        Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_SetsJourneyCookieAndRedirectsToTheCheckYourAnswersPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -1127,8 +1127,8 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationSearch");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckYourAnswers");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);

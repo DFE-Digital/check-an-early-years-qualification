@@ -39,4 +39,6 @@ public interface IContentService
     Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage();
 
     Task<OpenGraphData?> GetOpenGraphData();
+
+    Task<CheckYourAnswersPage?> GetCheckYourAnswersPage();
 }
