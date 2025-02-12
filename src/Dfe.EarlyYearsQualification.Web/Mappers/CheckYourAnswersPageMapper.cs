@@ -36,27 +36,27 @@ public static class CheckYourAnswersPageMapper
                                                     pageContent.QualificationAwardedText);
 
         model.QuestionAnswerModels.Add(MapQuestionAnswerModel(whereWasQualificationAwardedQuestion,
-                                                              whereWasQualificationAwardedAnswer!,
+                                                              [whereWasQualificationAwardedAnswer!],
                                                               QuestionUrls.WhereWasQualificationAwarded));
         model.QuestionAnswerModels.Add(MapQuestionAnswerModel(
                                                               whenWasTheQualificationStartedAndAwardedQuestion,
-                                                              $"{startedDateString} {awardedDateString}",
+                                                              [startedDateString, awardedDateString],
                                                               QuestionUrls.WhenWasTheQualificationStartedAndAwarded));
         model.QuestionAnswerModels.Add(MapQuestionAnswerModel(whatLevelIsTheQualificationQuestion,
                                                               whatLevelIsTheQualificationAnswer > 0
-                                                                  ? $"Level {whatLevelIsTheQualificationAnswer}"
-                                                                  : pageContent.AnyLevelText,
+                                                                  ? [$"Level {whatLevelIsTheQualificationAnswer}"]
+                                                                  : [pageContent.AnyLevelText],
                                                               QuestionUrls.WhatLevelIsTheQualification));
         model.QuestionAnswerModels.Add(MapQuestionAnswerModel(whatIsTheAwardingOrganisationQuestion,
                                                               !string.IsNullOrEmpty(whatIsTheAwardingOrganisationAnswer)
-                                                                  ? whatIsTheAwardingOrganisationAnswer
-                                                                  : pageContent.AnyAwardingOrganisationText,
+                                                                  ? [whatIsTheAwardingOrganisationAnswer]
+                                                                  : [pageContent.AnyAwardingOrganisationText],
                                                               QuestionUrls.WhatIsTheAwardingOrganisation));
 
         return model;
     }
     
-    private static QuestionAnswerModel MapQuestionAnswerModel(string question, string answer, string changeAnswerHref)
+    private static QuestionAnswerModel MapQuestionAnswerModel(string question, string[] answer, string changeAnswerHref)
     {
         return new QuestionAnswerModel
                {

@@ -23,7 +23,8 @@ public class CheckYourAnswersPageMapperTests
         const int whatLevelIsTheQualificationAnswer = 3;
         const string whatIsTheAwardingOrganisationAnswer = "NCFE";
 
-        const string expectedStartedAndAwardedAnswer = "Started in January 2015 Awarded in February 2017";
+        const string expectedStartedAnswer = "Started in January 2015";
+        const string expectedAwardedAnswer = "Awarded in February 2017";
         const string expectedLevelAnswer = "Level 3";
 
         var model = CheckYourAnswersPageMapper.Map(pageContent, WhereWasQualificationAwardedQuestion,
@@ -45,19 +46,19 @@ public class CheckYourAnswersPageMapperTests
         model.QuestionAnswerModels.Count.Should().Be(4);
         model.QuestionAnswerModels[0].Should().NotBeNull();
         model.QuestionAnswerModels[0].Question.Should().BeSameAs(WhereWasQualificationAwardedQuestion);
-        model.QuestionAnswerModels[0].Answer.Should().BeSameAs(whereWasQualificationAwardedAnswer);
+        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo([whereWasQualificationAwardedAnswer]);
         model.QuestionAnswerModels[0].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhereWasQualificationAwarded);
         model.QuestionAnswerModels[1].Should().NotBeNull();
         model.QuestionAnswerModels[1].Question.Should().BeSameAs(WhenWasTheQualificationStartedAndAwardedQuestion);
-        model.QuestionAnswerModels[1].Answer.Should().Match(expectedStartedAndAwardedAnswer);
+        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo([expectedStartedAnswer, expectedAwardedAnswer]);
         model.QuestionAnswerModels[1].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
         model.QuestionAnswerModels[2].Should().NotBeNull();
         model.QuestionAnswerModels[2].Question.Should().BeSameAs(WhatLevelIsTheQualificationQuestion);
-        model.QuestionAnswerModels[2].Answer.Should().Match(expectedLevelAnswer);
+        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo([expectedLevelAnswer]);
         model.QuestionAnswerModels[2].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatLevelIsTheQualification);
         model.QuestionAnswerModels[3].Should().NotBeNull();
         model.QuestionAnswerModels[3].Question.Should().BeSameAs(WhatIsTheAwardingOrganisationQuestion);
-        model.QuestionAnswerModels[3].Answer.Should().BeSameAs(whatIsTheAwardingOrganisationAnswer);
+        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo([whatIsTheAwardingOrganisationAnswer]);
         model.QuestionAnswerModels[3].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatIsTheAwardingOrganisation);
     }
     
@@ -72,7 +73,8 @@ public class CheckYourAnswersPageMapperTests
         const int whatLevelIsTheQualificationAnswer = 0;
         const string whatIsTheAwardingOrganisationAnswer = "NCFE";
 
-        const string expectedStartedAndAwardedAnswer = "Started in January 2015 Awarded in February 2017";
+        const string expectedStartedAnswer = "Started in January 2015";
+        const string expectedAwardedAnswer = "Awarded in February 2017";
 
         var model = CheckYourAnswersPageMapper.Map(pageContent, WhereWasQualificationAwardedQuestion,
                                                    WhenWasTheQualificationStartedAndAwardedQuestion,
@@ -93,19 +95,19 @@ public class CheckYourAnswersPageMapperTests
         model.QuestionAnswerModels.Count.Should().Be(4);
         model.QuestionAnswerModels[0].Should().NotBeNull();
         model.QuestionAnswerModels[0].Question.Should().BeSameAs(WhereWasQualificationAwardedQuestion);
-        model.QuestionAnswerModels[0].Answer.Should().BeSameAs(whereWasQualificationAwardedAnswer);
+        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo([whereWasQualificationAwardedAnswer]);
         model.QuestionAnswerModels[0].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhereWasQualificationAwarded);
         model.QuestionAnswerModels[1].Should().NotBeNull();
         model.QuestionAnswerModels[1].Question.Should().BeSameAs(WhenWasTheQualificationStartedAndAwardedQuestion);
-        model.QuestionAnswerModels[1].Answer.Should().Match(expectedStartedAndAwardedAnswer);
+        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo([expectedStartedAnswer, expectedAwardedAnswer]);
         model.QuestionAnswerModels[1].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
         model.QuestionAnswerModels[2].Should().NotBeNull();
         model.QuestionAnswerModels[2].Question.Should().BeSameAs(WhatLevelIsTheQualificationQuestion);
-        model.QuestionAnswerModels[2].Answer.Should().Match(pageContent.AnyLevelText);
+        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo([pageContent.AnyLevelText]);
         model.QuestionAnswerModels[2].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatLevelIsTheQualification);
         model.QuestionAnswerModels[3].Should().NotBeNull();
         model.QuestionAnswerModels[3].Question.Should().BeSameAs(WhatIsTheAwardingOrganisationQuestion);
-        model.QuestionAnswerModels[3].Answer.Should().BeSameAs(whatIsTheAwardingOrganisationAnswer);
+        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo([whatIsTheAwardingOrganisationAnswer]);
         model.QuestionAnswerModels[3].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatIsTheAwardingOrganisation);
     }
     
@@ -120,7 +122,8 @@ public class CheckYourAnswersPageMapperTests
         const int whatLevelIsTheQualificationAnswer = 3;
         const string whatIsTheAwardingOrganisationAnswer = "";
 
-        const string expectedStartedAndAwardedAnswer = "Started in January 2015 Awarded in February 2017";
+        const string expectedStartedAnswer = "Started in January 2015";
+        const string expectedAwardedAnswer = "Awarded in February 2017";
         const string expectedLevelAnswer = "Level 3";
 
         var model = CheckYourAnswersPageMapper.Map(pageContent, WhereWasQualificationAwardedQuestion,
@@ -142,19 +145,19 @@ public class CheckYourAnswersPageMapperTests
         model.QuestionAnswerModels.Count.Should().Be(4);
         model.QuestionAnswerModels[0].Should().NotBeNull();
         model.QuestionAnswerModels[0].Question.Should().BeSameAs(WhereWasQualificationAwardedQuestion);
-        model.QuestionAnswerModels[0].Answer.Should().BeSameAs(whereWasQualificationAwardedAnswer);
+        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo([whereWasQualificationAwardedAnswer]);
         model.QuestionAnswerModels[0].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhereWasQualificationAwarded);
         model.QuestionAnswerModels[1].Should().NotBeNull();
         model.QuestionAnswerModels[1].Question.Should().BeSameAs(WhenWasTheQualificationStartedAndAwardedQuestion);
-        model.QuestionAnswerModels[1].Answer.Should().Match(expectedStartedAndAwardedAnswer);
+        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo([expectedStartedAnswer, expectedAwardedAnswer]);
         model.QuestionAnswerModels[1].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
         model.QuestionAnswerModels[2].Should().NotBeNull();
         model.QuestionAnswerModels[2].Question.Should().BeSameAs(WhatLevelIsTheQualificationQuestion);
-        model.QuestionAnswerModels[2].Answer.Should().Match(expectedLevelAnswer);
+        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo([expectedLevelAnswer]);
         model.QuestionAnswerModels[2].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatLevelIsTheQualification);
         model.QuestionAnswerModels[3].Should().NotBeNull();
         model.QuestionAnswerModels[3].Question.Should().BeSameAs(WhatIsTheAwardingOrganisationQuestion);
-        model.QuestionAnswerModels[3].Answer.Should().BeSameAs(pageContent.AnyAwardingOrganisationText);
+        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo([pageContent.AnyAwardingOrganisationText]);
         model.QuestionAnswerModels[3].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatIsTheAwardingOrganisation);
     }
 

@@ -26,7 +26,10 @@
                         <strong>@answer.value.Question</strong>
                     </td>
                     <td id="question-@(answer.index + 1)-answer" class="govuk-table__cell govuk-!-text-align-centre">
-                        @answer.value.Answer
+                        @for (int i = 0; i < answer.value.Answer.Length; i++)
+                        {
+                            <p style="margin-bottom: @(i + 1 < answer.value.Answer.Length ? "10px": "0")">@answer.value.Answer[i]</p>
+                        }
                     </td>
                     <td id="question-@(answer.index + 1)-change" class="govuk-table__cell govuk-!-text-align-right ">
                         <a href="@answer.value.ChangeAnswerHref" class="govuk-link">@Model.ChangeAnswerText</a>
