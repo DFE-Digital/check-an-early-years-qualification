@@ -868,7 +868,7 @@ public class QualificationDetailsServiceTests
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
-
+        
         var model = new QualificationDetailsModel
                     {
                         RatioRequirements = new RatioRequirementModel
@@ -879,7 +879,7 @@ public class QualificationDetailsServiceTests
                                             },
                         Content = new DetailsPageModel()
                     };
-
+        
         var sut = GetSut();
 
         await sut.SetRatioText(model, detailsPageContent);
@@ -887,7 +887,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosText);
     }
-
+    
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsNotApprovedText()
     {
@@ -907,7 +907,7 @@ public class QualificationDetailsServiceTests
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
-
+        
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -922,7 +922,7 @@ public class QualificationDetailsServiceTests
                     };
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
-
+        
         var sut = GetSut();
 
         await sut.SetRatioText(model, detailsPageContent);
@@ -930,7 +930,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextL3PlusNotFrBetweenSep14Aug19);
     }
-
+    
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndOutsideOfAug19_ShowsNotApprovedText()
     {
@@ -973,7 +973,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
     }
-
+    
     [TestMethod]
     public void SetQualificationResultSuccessDetails_ShowsSuccessText()
     {
@@ -983,7 +983,7 @@ public class QualificationDetailsServiceTests
                                      QualificationResultFrMessageHeading = "Message heading",
                                      QualificationResultFrMessageBody = "Message body"
                                  };
-
+        
         var model = new QualificationDetailsModel
                     {
                         Content = new DetailsPageModel()
@@ -998,7 +998,7 @@ public class QualificationDetailsServiceTests
         model.Content.QualificationResultMessageHeading.Should().Be(detailsPageContent.QualificationResultFrMessageHeading);
         model.Content.QualificationResultMessageBody.Should().Be(detailsPageContent.QualificationResultFrMessageBody);
     }
-
+    
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndOutsideOfAug19_ShowsCorrectText()
     {
@@ -1008,7 +1008,7 @@ public class QualificationDetailsServiceTests
                                      QualificationResultNotFrMessageHeading = "Message heading",
                                      QualificationResultNotFrMessageBody = "Message body"
                                  };
-
+        
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -1023,7 +1023,7 @@ public class QualificationDetailsServiceTests
                     };
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
-
+        
         var sut = GetSut();
 
         sut.SetQualificationResultFailureDetails(model, detailsPageContent);

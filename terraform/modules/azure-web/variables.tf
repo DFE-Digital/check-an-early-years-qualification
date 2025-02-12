@@ -107,12 +107,22 @@ variable "webapp_health_check_eviction_time_in_min" {
 }
 
 variable "webapp_custom_domain_name" {
-  description = "Custom domain hostname"
+  description = "education.gov.uk custom domain hostname"
   type        = string
 }
 
 variable "webapp_custom_domain_cert_secret_label" {
-  description = "Label for the Certificate"
+  description = "Label for the education.gov.uk certificate"
+  type        = string
+}
+
+variable "webapp_service_gov_uk_custom_domain_name" {
+  description = "service.gov.uk custom domain hostname"
+  type        = string
+}
+
+variable "webapp_service_gov_uk_custom_domain_cert_secret_label" {
+  description = "Label for the service.gov.uk certificate"
   type        = string
 }
 
@@ -138,7 +148,12 @@ variable "kv_id" {
 }
 
 variable "kv_cert_secret_id" {
-  description = "SSL certificate Secret ID"
+  description = "education.gov.uk SSL certificate Secret ID"
+  type        = string
+}
+
+variable "kv_service_gov_uk_cert_secret_id" {
+  description = "service.gov.uk SSL certificate Secret ID"
   type        = string
 }
 

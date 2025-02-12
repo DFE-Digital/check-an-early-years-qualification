@@ -452,6 +452,7 @@ public class MockContentfulService : IContentService
                                                             {
                                                                 Url = "test/url/og-image.png"
                                                             }
+                                                     
                                                  }
                                      });
     }
