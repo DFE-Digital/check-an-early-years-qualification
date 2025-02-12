@@ -8,17 +8,17 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class DateQuestionModelValidatorTests
 {
-    
     [TestMethod]
     public void DateQuestionModelValidator_GivenMonthAndYearAreNull_ValidatesFalse()
     {
+        const string questionId = "questionId";
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
-        
+
         var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
-        var model = new DateQuestionModel { SelectedMonth = null, SelectedYear = null };
+        var model = new DateQuestionModel { SelectedMonth = null, SelectedYear = null, QuestionId = questionId };
 
         var questionPage = new DateQuestion
                            {
@@ -27,12 +27,14 @@ public class DateQuestionModelValidatorTests
                            };
 
         var result = validator.IsValid(model, questionPage);
+
+        model.QuestionId.Should().Be(questionId);
         result.MonthValid.Should().BeFalse();
         result.YearValid.Should().BeFalse();
         result.ErrorMessages.Should().ContainSingle(questionPage.ErrorMessage);
         result.BannerErrorMessages.Should().ContainSingle(questionPage.ErrorBannerLinkText);
     }
-    
+
     [TestMethod]
     public void DateQuestionModelValidator_GivenMonthIsNull_ValidatesFalse()
     {
@@ -56,7 +58,7 @@ public class DateQuestionModelValidatorTests
         result.ErrorMessages.Should().ContainSingle(questionPage.MissingMonthErrorMessage);
         result.BannerErrorMessages.Should().ContainSingle(questionPage.MissingMonthBannerLinkText);
     }
-    
+
     [TestMethod]
     public void DateQuestionModelValidator_GivenYearIsNull_ValidatesFalse()
     {
@@ -80,7 +82,7 @@ public class DateQuestionModelValidatorTests
         result.ErrorMessages.Should().ContainSingle(questionPage.MissingYearErrorMessage);
         result.BannerErrorMessages.Should().ContainSingle(questionPage.MissingYearBannerLinkText);
     }
-    
+
     [TestMethod]
     [DataRow(0)]
     [DataRow(-1)]
@@ -108,7 +110,7 @@ public class DateQuestionModelValidatorTests
         result.ErrorMessages.Should().ContainSingle(questionPage.MonthOutOfBoundsErrorMessage);
         result.BannerErrorMessages.Should().ContainSingle(questionPage.MonthOutOfBoundsErrorLinkText);
     }
-    
+
     [TestMethod]
     [DataRow(1899)]
     [DataRow(1)]
@@ -139,10 +141,10 @@ public class DateQuestionModelValidatorTests
         result.ErrorMessages.Should().ContainSingle(questionPage.YearOutOfBoundsErrorMessage);
         result.BannerErrorMessages.Should().ContainSingle(questionPage.YearOutOfBoundsErrorLinkText);
     }
-    
+
     [TestMethod]
-    [DataRow(8,2024)]
-    [DataRow(12,2024)]
+    [DataRow(8, 2024)]
+    [DataRow(12, 2024)]
     public void DateQuestionModelValidator_GivenDateLaterThanCurrentMonthButSameYear_ValidatesFalse(int selectedMonth, int selectedYear)
     {
         const int thisYear = 2024;
@@ -168,7 +170,7 @@ public class DateQuestionModelValidatorTests
         result.ErrorMessages.Should().ContainSingle(questionPage.FutureDateErrorMessage);
         result.BannerErrorMessages.Should().ContainSingle(questionPage.FutureDateErrorBannerLinkText);
     }
-    
+
     [TestMethod]
     public void DateQuestionModelValidator_BothMonthAndYearAreInvalid_ValidatesFalse()
     {
@@ -199,7 +201,7 @@ public class DateQuestionModelValidatorTests
         result.BannerErrorMessages.Should().Contain(questionPage.MonthOutOfBoundsErrorLinkText);
         result.BannerErrorMessages.Should().Contain(questionPage.YearOutOfBoundsErrorLinkText);
     }
-    
+
     [TestMethod]
     public void DateQuestionModelValidator_GivenDateInRecentPast_ValidatesTrue()
     {

@@ -13,20 +13,10 @@ public class DateQuestionMapperTests
     {
         var question = new DateQuestion
                        {
-                           Question = "Question",
-                           CtaButtonText = "Button Text",
                            QuestionHint = "Hint",
-                           QuestionHintHeader = "Question hint header",
+                           QuestionHeader = "Question hint header",
                            MonthLabel = "Month label",
                            YearLabel = "Year label",
-                           BackButton = new NavigationLink
-                                        {
-                                            DisplayText = "Back",
-                                            OpenInNewTab = true,
-                                            Href = "/"
-                                        },
-                           ErrorBannerHeading = "Error banner heading",
-                           AdditionalInformationHeader = "Additional information header"
                        };
         const string errorBannerLinkText = "error banner link text";
         const string errorMessage = "error message";
@@ -41,7 +31,7 @@ public class DateQuestionMapperTests
         result.YearLabel.Should().BeSameAs(question.YearLabel);
         result.ErrorMessage.Should().BeSameAs(errorMessage);
         result.QuestionHint.Should().BeSameAs(question.QuestionHint);
-        result.QuestionHeader.Should().BeSameAs(question.QuestionHintHeader);
+        result.QuestionHeader.Should().BeSameAs(question.QuestionHeader);
         result.MonthError.Should().BeTrue();
         result.YearError.Should().BeTrue();
         result.SelectedMonth.Should().NotBeNull();

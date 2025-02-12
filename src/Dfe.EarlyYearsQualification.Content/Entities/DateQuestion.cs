@@ -2,23 +2,13 @@
 
 public class DateQuestion
 {
-    public string Question { get; init; } = string.Empty;
-
-    public string CtaButtonText { get; init; } = string.Empty;
-
-    public string QuestionHintHeader { get; init; } = string.Empty;
+    public string QuestionHeader { get; init; } = string.Empty;
     public string QuestionHint { get; init; } = string.Empty;
 
     public string MonthLabel { get; init; } = string.Empty;
 
     public string YearLabel { get; init; } = string.Empty;
-
-    public NavigationLink? BackButton { get; init; }
-
-    public string AdditionalInformationHeader { get; init; } = string.Empty;
-
-    public string ErrorBannerHeading { get; init; } = string.Empty;
-
+    
     public string ErrorBannerLinkText { get; init; } = string.Empty;
 
     public string ErrorMessage { get; init; } = string.Empty;

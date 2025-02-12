@@ -369,6 +369,7 @@ public class QuestionsControllerTests
         model.ErrorBannerHeading.Should().Be(string.Empty);
         model.StartedQuestion.Should().NotBeNull();
         model.AwardedQuestion.Should().NotBeNull();
+        model.HasErrors.Should().BeFalse();
     }
 
     [TestMethod]

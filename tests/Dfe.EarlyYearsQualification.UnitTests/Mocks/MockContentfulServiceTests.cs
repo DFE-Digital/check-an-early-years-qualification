@@ -274,13 +274,10 @@ public class MockContentfulServiceTests
     {
         var expectedStartedQuestion = new DateQuestion
                                       {
-                                          Question = "started- Test Date Question",
                                           MonthLabel = "started- Test Month Label",
                                           YearLabel = "started- Test Year Label",
-                                          QuestionHintHeader = "started- Test Question Hint Header",
+                                          QuestionHeader = "started- Test Question Hint Header",
                                           QuestionHint = "started- Test Question Hint",
-                                          AdditionalInformationHeader = "started- This is the additional information header",
-                                          ErrorBannerHeading = "started- There is a problem",
                                           ErrorBannerLinkText = "started- Test error banner link text",
                                           ErrorMessage = "started- Test Error Message",
                                           FutureDateErrorBannerLinkText = "started- Future date error message banner link",
@@ -296,13 +293,10 @@ public class MockContentfulServiceTests
                                       };
         var expectedAwardedQuestion = new DateQuestion
                                       {
-                                          Question = "awarded- Test Date Question",
                                           MonthLabel = "awarded- Test Month Label",
                                           YearLabel = "awarded- Test Year Label",
-                                          QuestionHintHeader = "awarded- Test Question Hint Header",
+                                          QuestionHeader = "awarded- Test Question Hint Header",
                                           QuestionHint = "awarded- Test Question Hint",
-                                          AdditionalInformationHeader = "awarded- This is the additional information header",
-                                          ErrorBannerHeading = "awarded- There is a problem",
                                           ErrorBannerLinkText = "awarded- Test error banner link text",
                                           ErrorMessage = "awarded- Test Error Message",
                                           FutureDateErrorBannerLinkText = "awarded- Future date error message banner link",

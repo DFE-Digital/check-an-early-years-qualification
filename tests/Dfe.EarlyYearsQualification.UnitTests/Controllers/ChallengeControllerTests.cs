@@ -359,6 +359,7 @@ public class ChallengeControllerTests
 
         modelToReturn!.ErrorSummaryModel.Should().NotBeNull();
         modelToReturn.ErrorSummaryModel!.ErrorSummaryLinks.First().ErrorBannerLinkText.Should().Be(content!.MissingPasswordText);
+        modelToReturn.ErrorSummaryModel!.ErrorSummaryLinks.First().ElementLinkId.Should().Be("PasswordValue");
     }
 
     [TestMethod]

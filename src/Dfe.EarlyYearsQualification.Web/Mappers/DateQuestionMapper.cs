@@ -14,7 +14,7 @@ public static class DateQuestionMapper
                                         int? selectedMonth,
                                         int? selectedYear)
     {
-        model.QuestionHeader = question.QuestionHintHeader;
+        model.QuestionHeader = question.QuestionHeader;
         model.QuestionHint = question.QuestionHint;
         model.MonthLabel = question.MonthLabel;
         model.YearLabel = question.YearLabel;

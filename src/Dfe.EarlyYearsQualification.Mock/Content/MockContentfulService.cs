@@ -606,13 +606,10 @@ public class MockContentfulService : IContentService
     {
         return new DateQuestion
                {
-                   Question = prefix + "Test Date Question",
                    MonthLabel = prefix + "Test Month Label",
                    YearLabel = prefix + "Test Year Label",
-                   QuestionHintHeader = prefix + "Test Question Hint Header",
+                   QuestionHeader = prefix + "Test Question Hint Header",
                    QuestionHint = prefix + "Test Question Hint",
-                   AdditionalInformationHeader = prefix + "This is the additional information header",
-                   ErrorBannerHeading = prefix + "There is a problem",
                    ErrorBannerLinkText = prefix + "Test error banner link text",
                    ErrorMessage = prefix + "Test Error Message",
                    FutureDateErrorBannerLinkText = prefix + "Future date error message banner link",
