@@ -22,15 +22,15 @@
         await Html.RenderPartialAsync("Partials/ErrorSummary", Model.Errors);
     }
 
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <h1 class="govuk-fieldset__heading mb-1" id="question">
-            @Model.Question
-        </h1>
-    </legend>
+
     @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "date-question-form" }))
     {
         <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
-            @if (startingQuestion is not null)
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading mb-1" id="question">
+                    @Model.Question
+                </h1>
+            </legend>       @if (startingQuestion is not null)
             {
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
