@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, doesNotExist, exists, isVisible, isNotVisible} from '../shared/playwrightWrapper';
+import {startJourney, checkText, checkError, doesNotExist, exists, isVisible, isNotVisible} from '../shared/playwrightWrapper';
 
 test.describe("A spec that tests the cookies page", () => {
     test.beforeEach(async ({page, context}) => {
@@ -17,7 +17,7 @@ test.describe("A spec that tests the cookies page", () => {
         await checkText(page, "label[for='test-option-value-1']", "Test Option Label 1");
         await checkText(page, "label[for='test-option-value-2']", "Test Option Label 2");
         await isNotVisible(page, "#cookies-choice-error");
-        await checkText(page, "#cookies-choice-error", "Test Error Text");
+        await checkError(page, "#cookies-choice-error", "Test Error Text");
         await checkText(page, 'button[id="cookies-button"]', "Test Cookies Button");
     });
 

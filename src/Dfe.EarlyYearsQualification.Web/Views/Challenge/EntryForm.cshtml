@@ -29,8 +29,7 @@
                     @if (Model.ErrorSummaryModel != null)
                     {
                         <p id="error-message" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorSummaryModel.ErrorSummaryLinks.First().ErrorBannerLinkText
-                        </p>
+                            <span class="govuk-visually-hidden">Error:</span>@Model.ErrorSummaryModel.ErrorSummaryLinks.First().ErrorBannerLinkText</p>
                     }
                     <label class="govuk-label" for="PasswordValue">@Model.InputHeading</label>
                     <input class="govuk-input" id="PasswordValue" name="PasswordValue" aria-label="Password challenge input" type="password" style="width: 85%"/>

@@ -22,17 +22,12 @@ public static class DatesQuestionMapper
         model.StartedQuestion.QuestionId = "date-started";
         model.StartedQuestion.MonthId = "date-started-month";
         model.StartedQuestion.YearId = "date-started-year";
-        model.StartedQuestion.ErrorSummaryLink = new ErrorSummaryLink
-                                                 {
-                                                     ElementLinkId = model.StartedQuestion.MonthError ? model.StartedQuestion.MonthId : model.StartedQuestion.YearId
-                                                 };
+        model.StartedQuestion.ErrorSummaryLink!.ElementLinkId = model.StartedQuestion.MonthError ? model.StartedQuestion.MonthId : model.StartedQuestion.YearId;
         model.AwardedQuestion.QuestionId = "date-awarded";
         model.AwardedQuestion.MonthId = "date-awarded-month";
         model.AwardedQuestion.YearId = "date-awarded-year";
-        model.AwardedQuestion.ErrorSummaryLink = new ErrorSummaryLink
-                                                 {
-                                                     ElementLinkId = model.AwardedQuestion.MonthError ? model.AwardedQuestion.MonthId : model.AwardedQuestion.YearId
-                                                 };
+        model.AwardedQuestion.ErrorSummaryLink!.ElementLinkId = model.AwardedQuestion.MonthError ? model.AwardedQuestion.MonthId : model.AwardedQuestion.YearId;
+        
         var errorLinks = new List<ErrorSummaryLink>();
 
         if (model.StartedQuestion.MonthError || model.StartedQuestion.YearError)
