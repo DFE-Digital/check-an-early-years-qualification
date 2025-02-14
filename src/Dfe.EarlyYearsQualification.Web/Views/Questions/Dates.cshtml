@@ -17,7 +17,7 @@
 }
 
 <div>
-    @if (Model.HasErrors)
+    @if (Model is { HasErrors: true, Errors: not null })
     {
         await Html.RenderPartialAsync("Partials/ErrorSummary", Model.Errors);
     }
@@ -30,7 +30,8 @@
                 <h1 class="govuk-fieldset__heading mb-1" id="question">
                     @Model.Question
                 </h1>
-            </legend>       @if (startingQuestion is not null)
+            </legend>
+            @if (startingQuestion is not null)
             {
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
@@ -55,14 +56,14 @@
                                     <div class="govuk-form-group">
                                         <label id="started-month-label" class="govuk-label govuk-date-input__label"
                                                for="@startingQuestion.MonthId">@startingQuestion.MonthLabel</label>
-                                        @Html.TextBoxFor(x => x.StartedQuestion.SelectedMonth, "{0:#.#}", new { id = startingQuestion.MonthId, @class = startingQuestion.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = startingQuestion.MonthId, type = "text", inputmode = "numeric", Value = startingQuestion.SelectedMonth })
+                                        @Html.TextBoxFor(x => x.StartedQuestion!.SelectedMonth, "{0:#.#}", new { id = startingQuestion.MonthId, @class = startingQuestion.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = startingQuestion.MonthId, type = "text", inputmode = "numeric", Value = startingQuestion.SelectedMonth })
                                     </div>
                                 </div>
                                 <div class="govuk-date-input__item">
                                     <div class="govuk-form-group">
                                         <label id="started-year-label" class="govuk-label govuk-date-input__label"
                                                for="@startingQuestion.YearId">@startingQuestion.YearLabel</label>
-                                        @Html.TextBoxFor(x => x.StartedQuestion.SelectedYear, "{0:#.#}", new { id = startingQuestion.YearId, @class = startingQuestion.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = startingQuestion.YearId, type = "text", inputmode = "numeric", Value = startingQuestion.SelectedYear })
+                                        @Html.TextBoxFor(x => x.StartedQuestion!.SelectedYear, "{0:#.#}", new { id = startingQuestion.YearId, @class = startingQuestion.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = startingQuestion.YearId, type = "text", inputmode = "numeric", Value = startingQuestion.SelectedYear })
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +91,8 @@
                             {
                                 <p id="awarded-error" class="govuk-error-message">
                                     <span
-                                        class="govuk-visually-hidden">Error:</span>@Html.Raw(awardingQuestion.ErrorMessage)</p>
+                                        class="govuk-visually-hidden">Error:</span>@Html.Raw(awardingQuestion.ErrorMessage)
+                                </p>
                             }
 
                             <div class="govuk-date-input" id="@awardingQuestion.QuestionId">

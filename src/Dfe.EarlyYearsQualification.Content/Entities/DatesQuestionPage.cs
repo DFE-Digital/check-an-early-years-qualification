@@ -6,6 +6,6 @@ public class DatesQuestionPage
     public string CtaButtonText { get; init; } = string.Empty;
     public string ErrorBannerHeading { get; init; } = string.Empty;
     public NavigationLink? BackButton { get; init; }
-    public DateQuestion StartedQuestion { get; init; }
-    public DateQuestion AwardedQuestion { get; init; }
+    public DateQuestion? StartedQuestion { get; init; }
+    public DateQuestion? AwardedQuestion { get; init; }
 }

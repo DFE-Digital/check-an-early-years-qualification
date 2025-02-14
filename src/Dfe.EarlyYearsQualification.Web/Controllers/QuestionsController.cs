@@ -114,8 +114,8 @@ public class QuestionsController(
             return View("Dates", model);
         }
 
-        userJourneyCookieService.SetWhenWasQualificationStarted(model.StartedQuestion.SelectedMonth.ToString() + '/' + model.StartedQuestion.SelectedYear);
-        userJourneyCookieService.SetWhenWasQualificationAwarded(model.AwardedQuestion.SelectedMonth.ToString() + '/' + model.AwardedQuestion.SelectedYear);
+        userJourneyCookieService.SetWhenWasQualificationStarted(model.StartedQuestion!.SelectedMonth.ToString() + '/' + model.StartedQuestion.SelectedYear);
+        userJourneyCookieService.SetWhenWasQualificationAwarded(model.AwardedQuestion!.SelectedMonth.ToString() + '/' + model.AwardedQuestion.SelectedYear);
 
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
@@ -248,11 +248,12 @@ public class QuestionsController(
                                        selectedAnswer);
     }
 
-    private DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question,
-                                           DateValidationResult? validationResult,
-                                           int? selectedMonth,
-                                           int? selectedYear)
+    private DateQuestionModel? MapDateModel(DateQuestionModel model, DateQuestion? question,
+                                            DateValidationResult? validationResult,
+                                            int? selectedMonth,
+                                            int? selectedYear)
     {
+        if (question is null) return null;
         var bannerErrorText = validationResult is { BannerErrorMessages.Count: > 0 }
                                   ? string.Join("<br />", validationResult!.BannerErrorMessages)
                                   : null;
