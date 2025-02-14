@@ -558,7 +558,7 @@ public class MockContentfulService : IContentService
                           }
                       };
         return CreateRadioQuestionPage("What level is the qualification?", options,
-                                       "/questions/when-was-the-qualification-started");
+                                       "/questions/when-was-the-qualification-started-and-awarded");
     }
 
     private static RadioQuestionPage CreateRadioQuestionPage(string question, List<IOptionItem> options,

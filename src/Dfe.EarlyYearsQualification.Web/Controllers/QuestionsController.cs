@@ -76,7 +76,7 @@ public class QuestionsController(
                };
     }
 
-    [HttpGet("when-was-the-qualification-started")]
+    [HttpGet("when-was-the-qualification-started-and-awarded")]
     public async Task<IActionResult> WhenWasTheQualificationStarted()
     {
         var questionPage = await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
@@ -95,7 +95,7 @@ public class QuestionsController(
         return View("Dates", model);
     }
 
-    [HttpPost("when-was-the-qualification-started")]
+    [HttpPost("when-was-the-qualification-started-and-awarded")]
 #pragma warning disable S6967
     public async Task<IActionResult> WhenWasTheQualificationStarted(DatesQuestionModel model)
 #pragma warning restore S6967

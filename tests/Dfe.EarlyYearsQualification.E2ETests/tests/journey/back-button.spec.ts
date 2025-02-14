@@ -44,7 +44,7 @@ test.describe("A spec used to test the main back button route through the journe
         await clickBackButton(page);
         await checkUrl(page, "/questions/what-level-is-the-qualification");
         await clickBackButton(page);
-        await checkUrl(page, "/questions/when-was-the-qualification-started");
+        await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await clickBackButton(page);
         await checkUrl(page, "/questions/where-was-the-qualification-awarded");
         await clickBackButton(page);
