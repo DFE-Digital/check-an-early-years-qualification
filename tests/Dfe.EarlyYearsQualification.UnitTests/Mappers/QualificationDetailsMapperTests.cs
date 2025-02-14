@@ -16,7 +16,7 @@ public class QualificationDetailsMapperTests
                                 QualificationNumber = "Qualification number",
                                 FromWhichYear = "Sep-16"
                             };
-        
+
         const string feedbackBannerBody = "This is the feedback banner body";
         const string checkAnotherQualificationText = "Check another qualification text";
         const string furtherInfoText = "Further info text";
@@ -46,6 +46,7 @@ public class QualificationDetailsMapperTests
                               PrintButtonText = "Print button text",
                               QualificationNameLabel = "Qualification name label",
                               QualificationStartDateLabel = "Qualifications start date label",
+                              QualificationAwardedDateLabel = "Qualifications awarded date label",
                               QualificationDetailsSummaryHeader = "Qualification details summary label",
                               FeedbackBanner = new FeedbackBanner
                                                {
@@ -56,11 +57,11 @@ public class QualificationDetailsMapperTests
                           };
 
         var backNavLink = new NavigationLink
-                                           {
-                                               DisplayText = "Back button",
-                                               OpenInNewTab = true,
-                                               Href = "/"
-                                           };
+                          {
+                              DisplayText = "Back button",
+                              OpenInNewTab = true,
+                              Href = "/"
+                          };
 
         var additionalRequirementAnswers = new List<AdditionalRequirementAnswerModel>
                                            {
@@ -73,9 +74,10 @@ public class QualificationDetailsMapperTests
                                            };
 
         const string dateStarted = "Date started";
+        const string dateAwarded = "Date awarded";
 
         var result = QualificationDetailsMapper.Map(qualification, detailsPage, backNavLink,
-                                                    additionalRequirementAnswers, dateStarted,
+                                                    additionalRequirementAnswers, dateStarted, dateAwarded,
                                                     checkAnotherQualificationText, furtherInfoText, requirementsText, feedbackBannerBody);
 
         result.Should().NotBeNull();
@@ -96,6 +98,7 @@ public class QualificationDetailsMapperTests
               .BeSameAs(result.AdditionalRequirementAnswers[0].ConfirmationStatement);
         result.AdditionalRequirementAnswers[0].AnswerToBeFullAndRelevant.Should().BeTrue();
         result.DateStarted.Should().BeSameAs(dateStarted);
+        result.DateAwarded.Should().BeSameAs(dateAwarded);
         result.Content.Should().NotBeNull();
         result.Content!.AwardingOrgLabel.Should().BeSameAs(detailsPage.AwardingOrgLabel);
         result.Content.BookmarkHeading.Should().BeSameAs(detailsPage.BookmarkHeading);
@@ -115,6 +118,7 @@ public class QualificationDetailsMapperTests
         result.Content.PrintButtonText.Should().BeSameAs(detailsPage.PrintButtonText);
         result.Content.QualificationNameLabel.Should().BeSameAs(detailsPage.QualificationNameLabel);
         result.Content.QualificationStartDateLabel.Should().BeSameAs(detailsPage.QualificationStartDateLabel);
+        result.Content.QualificationAwardedDateLabel.Should().BeSameAs(detailsPage.QualificationAwardedDateLabel);
         result.Content.QualificationDetailsSummaryHeader.Should().BeSameAs(detailsPage.QualificationDetailsSummaryHeader);
         result.Content.FeedbackBanner.Should().BeEquivalentTo(detailsPage.FeedbackBanner, options => options.Excluding(x => x.Body));
     }

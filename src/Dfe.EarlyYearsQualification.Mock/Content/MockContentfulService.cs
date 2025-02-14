@@ -174,6 +174,7 @@ public class MockContentfulService : IContentService
                                          QualificationDetailsSummaryHeader = "Qualification details",
                                          QualificationNameLabel = "Qualification",
                                          QualificationStartDateLabel = "Qualification start date",
+                                         QualificationAwardedDateLabel = "Qualification awarded date",
                                          FeedbackBanner = new FeedbackBanner
                                                           {
                                                               Body = ContentfulContentHelper.Paragraph("Test body"),
@@ -238,12 +239,12 @@ public class MockContentfulService : IContentService
                };
     }
 
-    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
+    public async Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId)
     {
         return entryId switch
                {
-                   QuestionPages.WhenWasTheQualificationStarted =>
-                       await Task.FromResult(CreateDateQuestionPage()),
+                   QuestionPages.WhenWasTheQualificationStartedAndAwarded =>
+                       await Task.FromResult(CreateDatesQuestionPage()),
                    _ => throw new NotImplementedException($"No date question page mock for entry {entryId}")
                };
     }
@@ -287,7 +288,9 @@ public class MockContentfulService : IContentService
                                          NoResultsText =
                                              ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
                                          ClearSearchText = "Clear search",
-                                         NoQualificationsFoundText = "No"
+                                         NoQualificationsFoundText = "No",
+                                         StartDatePrefixText = "Started in",
+                                         AwardedDatePrefixText = "Awarded in"
                                      });
     }
 
@@ -555,7 +558,7 @@ public class MockContentfulService : IContentService
                           }
                       };
         return CreateRadioQuestionPage("What level is the qualification?", options,
-                                       "/questions/when-was-the-qualification-started");
+                                       "/questions/when-was-the-qualification-started-and-awarded");
     }
 
     private static RadioQuestionPage CreateRadioQuestionPage(string question, List<IOptionItem> options,
@@ -581,40 +584,44 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static DateQuestionPage CreateDateQuestionPage()
+    private static DatesQuestionPage CreateDatesQuestionPage()
     {
-        return new DateQuestionPage
+        return new DatesQuestionPage
                {
-                   Question = "Test Date Question",
-                   CtaButtonText = "Continue",
-                   MonthLabel = "Test Month Label",
-                   YearLabel = "Test Year Label",
-                   QuestionHintHeader = "Test Question Hint Header",
-                   QuestionHint = "Test Question Hint",
+                   Question = "Test Dates Questions",
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",
                                     Href = WhereWasTheQualificationAwardedPath,
                                     OpenInNewTab = false
                                 },
-                   AdditionalInformationBody =
-                       ContentfulContentHelper.Paragraph("This is the additional information body"),
-                   PostHeaderContent = 
-                       ContentfulContentHelper.Paragraph("This is post header content"),
-                   AdditionalInformationHeader = "This is the additional information header",
+                   CtaButtonText = "Continue",
                    ErrorBannerHeading = "There is a problem",
-                   ErrorBannerLinkText = "Test error banner link text",
-                   ErrorMessage = "Test Error Message",
-                   FutureDateErrorBannerLinkText = "Future date error message banner link",
-                   FutureDateErrorMessage = "Future date error message",
-                   MissingMonthErrorMessage = "Missing Month Error Message",
-                   MissingYearErrorMessage = "Missing Year Error Message",
-                   MissingMonthBannerLinkText = "Missing Month Banner Link Text",
-                   MissingYearBannerLinkText = "Missing Year Banner Link Text",
-                   MonthOutOfBoundsErrorLinkText = "Month Out Of Bounds Error Link Text",
-                   MonthOutOfBoundsErrorMessage = "Month Out Of Bounds Error Message",
-                   YearOutOfBoundsErrorLinkText = "Year Out Of Bounds Error Link Text",
-                   YearOutOfBoundsErrorMessage = "Year Out Of Bounds Error Message"
+                   StartedQuestion = CreateDatesQuestionPage("started- "),
+                   AwardedQuestion = CreateDatesQuestionPage("awarded- ")
+               };
+    }
+
+    private static DateQuestion CreateDatesQuestionPage(string prefix)
+    {
+        return new DateQuestion
+               {
+                   MonthLabel = prefix + "Test Month Label",
+                   YearLabel = prefix + "Test Year Label",
+                   QuestionHeader = prefix + "Test Question Hint Header",
+                   QuestionHint = prefix + "Test Question Hint",
+                   ErrorBannerLinkText = prefix + "Test error banner link text",
+                   ErrorMessage = prefix + "Test Error Message",
+                   FutureDateErrorBannerLinkText = prefix + "Future date error message banner link",
+                   FutureDateErrorMessage = prefix + "Future date error message",
+                   MissingMonthErrorMessage = prefix + "Missing Month Error Message",
+                   MissingYearErrorMessage = prefix + "Missing Year Error Message",
+                   MissingMonthBannerLinkText = prefix + "Missing Month Banner Link Text",
+                   MissingYearBannerLinkText = prefix + "Missing Year Banner Link Text",
+                   MonthOutOfBoundsErrorLinkText = prefix + "Month Out Of Bounds Error Link Text",
+                   MonthOutOfBoundsErrorMessage = prefix + "Month Out Of Bounds Error Message",
+                   YearOutOfBoundsErrorLinkText = prefix + "Year Out Of Bounds Error Link Text",
+                   YearOutOfBoundsErrorMessage = prefix + "Year Out Of Bounds Error Message"
                };
     }
 

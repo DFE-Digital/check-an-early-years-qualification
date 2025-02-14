@@ -21,5 +21,4 @@ public abstract class BaseQuestionModel
     public string AdditionalInformationHeader { get; set; } = string.Empty;
 
     public string AdditionalInformationBody { get; set; } = string.Empty;
-    public string PostHeaderContent { get; set; } = string.Empty;
 }

@@ -96,12 +96,12 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_Level7QualificationStartedBetweenSept2014AndAug2019_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
-    
+
         var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
@@ -109,12 +109,12 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_Level7QualificationAfterAug2019_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
-    
+
         var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationAfterAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
@@ -177,6 +177,7 @@ public class MockContentfulServiceTests
         result.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
         result.QualificationNameLabel.Should().NotBeNullOrEmpty();
         result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
+        result.QualificationAwardedDateLabel.Should().NotBeNullOrEmpty();
         result.RatiosText!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text");
         result.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
@@ -269,36 +270,71 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetDateQuestionPage_PassWhenWasQualificationStartedId_ReturnsExpectedDetails()
+    public async Task GetDatesQuestionPage_PassWhenWasQualificationStartedId_ReturnsExpectedDetails()
     {
+        var expectedStartedQuestion = new DateQuestion
+                                      {
+                                          MonthLabel = "started- Test Month Label",
+                                          YearLabel = "started- Test Year Label",
+                                          QuestionHeader = "started- Test Question Hint Header",
+                                          QuestionHint = "started- Test Question Hint",
+                                          ErrorBannerLinkText = "started- Test error banner link text",
+                                          ErrorMessage = "started- Test Error Message",
+                                          FutureDateErrorBannerLinkText = "started- Future date error message banner link",
+                                          FutureDateErrorMessage = "started- Future date error message",
+                                          MissingMonthErrorMessage = "started- Missing Month Error Message",
+                                          MissingYearErrorMessage = "started- Missing Year Error Message",
+                                          MissingMonthBannerLinkText = "started- Missing Month Banner Link Text",
+                                          MissingYearBannerLinkText = "started- Missing Year Banner Link Text",
+                                          MonthOutOfBoundsErrorLinkText = "started- Month Out Of Bounds Error Link Text",
+                                          MonthOutOfBoundsErrorMessage = "started- Month Out Of Bounds Error Message",
+                                          YearOutOfBoundsErrorLinkText = "started- Year Out Of Bounds Error Link Text",
+                                          YearOutOfBoundsErrorMessage = "started- Year Out Of Bounds Error Message"
+                                      };
+        var expectedAwardedQuestion = new DateQuestion
+                                      {
+                                          MonthLabel = "awarded- Test Month Label",
+                                          YearLabel = "awarded- Test Year Label",
+                                          QuestionHeader = "awarded- Test Question Hint Header",
+                                          QuestionHint = "awarded- Test Question Hint",
+                                          ErrorBannerLinkText = "awarded- Test error banner link text",
+                                          ErrorMessage = "awarded- Test Error Message",
+                                          FutureDateErrorBannerLinkText = "awarded- Future date error message banner link",
+                                          FutureDateErrorMessage = "awarded- Future date error message",
+                                          MissingMonthErrorMessage = "awarded- Missing Month Error Message",
+                                          MissingYearErrorMessage = "awarded- Missing Year Error Message",
+                                          MissingMonthBannerLinkText = "awarded- Missing Month Banner Link Text",
+                                          MissingYearBannerLinkText = "awarded- Missing Year Banner Link Text",
+                                          MonthOutOfBoundsErrorLinkText = "awarded- Month Out Of Bounds Error Link Text",
+                                          MonthOutOfBoundsErrorMessage = "awarded- Month Out Of Bounds Error Message",
+                                          YearOutOfBoundsErrorLinkText = "awarded- Year Out Of Bounds Error Link Text",
+                                          YearOutOfBoundsErrorMessage = "awarded- Year Out Of Bounds Error Message"
+                                      };
+
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+        var result = await contentfulService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
 
         result.Should().NotBeNull();
+        result!.Question.Should().Be("Test Dates Questions");
         result!.CtaButtonText.Should().Be("Continue");
-        result.ErrorMessage.Should().Be("Test Error Message");
-        result.ErrorBannerHeading.Should().Be("There is a problem");
-        result.ErrorBannerLinkText.Should().Be("Test error banner link text");
-        result.AdditionalInformationHeader.Should().Be("This is the additional information header");
-        result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
-        result.PostHeaderContent!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is post header content");
-        result.MonthLabel.Should().Be("Test Month Label");
-        result.YearLabel.Should().Be("Test Year Label");
-        result.QuestionHint.Should().Be("Test Question Hint");
-        result.QuestionHintHeader.Should().Be("Test Question Hint Header");
-        result.FutureDateErrorMessage.Should().Be("Future date error message");
-        result.FutureDateErrorBannerLinkText.Should().Be("Future date error message banner link");
+        result!.ErrorBannerHeading.Should().Be("There is a problem");
+        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                   {
+                                                       DisplayText = "TEST",
+                                                       Href = "/questions/where-was-the-qualification-awarded",
+                                                       OpenInNewTab = false
+                                                   });
+        result.StartedQuestion.Should().BeEquivalentTo(expectedStartedQuestion);
+        result.AwardedQuestion.Should().BeEquivalentTo(expectedAwardedQuestion);
     }
 
     [TestMethod]
-    public async Task GetDateQuestionPage_PassInvalidEntryId_ReturnsException()
+    public async Task GetDatesQuestionPage_PassInvalidEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
 
-        Func<Task> act = () => contentfulService.GetDateQuestionPage("Fake_entry_id");
+        Func<Task> act = () => contentfulService.GetDatesQuestionPage("Fake_entry_id");
 
         await act.Should().ThrowAsync<NotImplementedException>()
                  .WithMessage("No date question page mock for entry Fake_entry_id");
@@ -516,7 +552,7 @@ public class MockContentfulServiceTests
         result.ToWhichYear.Should().Be("Aug-19");
         result.FeedbackBanner.Should().NotBeNull();
     }
-    
+
     [TestMethod]
     public async Task GetCannotFindQualificationPage_PassInLevel4_ReturnsExpectedContent()
     {
@@ -538,7 +574,7 @@ public class MockContentfulServiceTests
         result.ToWhichYear.Should().BeEmpty();
         result.FeedbackBanner.Should().NotBeNull();
     }
-    
+
     [TestMethod]
     public async Task GetCannotFindQualificationPage_PassInLevel5_ReturnsNull()
     {
@@ -547,7 +583,7 @@ public class MockContentfulServiceTests
 
         result.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetOpenGraphData_ReturnsExpectedDetails()
     {
