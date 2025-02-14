@@ -26,8 +26,8 @@ test.describe("A spec used to smoke test the environment once a deployment has h
     await page.locator("#england").click();
     await page.locator("#question-submit").click();
 
-    // when-was-the-qualification-started page
-    expect(page.url()).toContain("/questions/when-was-the-qualification-started");
+    // when-was-the-qualification-started-and-awarded page
+    expect(page.url()).toContain("/questions/when-was-the-qualification-started-and-awarded");
     await page.locator("#date-started-month").fill("7");
     await page.locator("#date-started-year").fill("2015");
     await page.locator("#question-submit").click();

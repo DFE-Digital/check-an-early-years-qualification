@@ -103,9 +103,9 @@ public class ContentfulContentService(
         return await GetEntryById<RadioQuestionPage>(entryId);
     }
 
-    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
+    public async Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId)
     {
-        return await GetEntryById<DateQuestionPage>(entryId);
+        return await GetEntryById<DatesQuestionPage>(entryId);
     }
 
     public async Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId)

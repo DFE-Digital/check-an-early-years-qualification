@@ -47,7 +47,7 @@ public class ContentfulContentServiceBase
               { typeof(CookiesPage), ContentTypes.CookiesPage },
               { typeof(PhaseBanner), ContentTypes.PhaseBanner },
               { typeof(CookiesBanner), ContentTypes.CookiesBanner },
-              { typeof(DateQuestionPage), ContentTypes.DateQuestionPage },
+              { typeof(DatesQuestionPage), ContentTypes.DatesQuestionPage },
               { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
               { typeof(QualificationListPage), ContentTypes.QualificationListPage },
               { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage },

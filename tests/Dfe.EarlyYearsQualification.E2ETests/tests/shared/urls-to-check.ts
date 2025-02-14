@@ -3,7 +3,7 @@ export const pages = [
     "/accessibility-statement",
     "/cookies",
     "/questions/where-was-the-qualification-awarded",
-    "/questions/when-was-the-qualification-started",
+    "/questions/when-was-the-qualification-started-and-awarded",
     "/questions/what-level-is-the-qualification",
     "/questions/what-is-the-awarding-organisation",
     "/qualifications",
@@ -22,7 +22,7 @@ export const pages = [
 
 export const pagesWithForms = [
     "/questions/where-was-the-qualification-awarded",
-    "/questions/when-was-the-qualification-started",
+    "/questions/when-was-the-qualification-started-and-awarded",
     "/questions/what-level-is-the-qualification",
     "/questions/what-is-the-awarding-organisation",
     "/cookies",

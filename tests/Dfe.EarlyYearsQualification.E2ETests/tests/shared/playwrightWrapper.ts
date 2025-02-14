@@ -26,7 +26,18 @@ export async function checkText(page: Page, locator: string, expectedText: strin
     if (nth != null) {
         element = element.nth(nth);
     }
-    await expect(element).toContainText(expectedText);
+    await expect(element).toHaveText(expectedText);
+}
+
+export async function checkError(page: Page, locator: string, expectedText: string) {
+    await checkText(page, locator + " > span", "Error:");
+    await checkText(page, locator, `Error:${expectedText}`);
+}
+
+export async function checkDisclaimer(page: Page, expectedText: string) {
+    await checkText(page, ".govuk-warning-text__icon", "!");
+    await checkText(page, ".govuk-warning-text__text" + " > span", "Warning:");
+    await checkText(page, ".govuk-warning-text__text", `Warning:${expectedText}`);
 }
 
 export async function checkValue(page: Page, locator: string, expectedValue: any) {
@@ -123,10 +134,12 @@ export async function whereWasTheQualificationAwarded(page: Page, location: stri
     await page.locator("#question-submit").click();
 }
 
-export async function whenWasQualificationStarted(page: Page, month: string, year: string) {
-    checkUrl(page, '/questions/when-was-the-qualification-started');
-    await page.locator("#date-started-month").fill(month);
-    await page.locator("#date-started-year").fill(year);
+export async function whenWasQualificationStarted(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
+    checkUrl(page, '/questions/when-was-the-qualification-started-and-awarded');
+    await page.locator("#date-started-month").fill(startedMonth);
+    await page.locator("#date-started-year").fill(startedYear);
+    await page.locator("#date-awarded-month").fill(awardedMonth);
+    await page.locator("#date-awarded-year").fill(awardedYear);
     await page.locator("#question-submit").click();
 }
 

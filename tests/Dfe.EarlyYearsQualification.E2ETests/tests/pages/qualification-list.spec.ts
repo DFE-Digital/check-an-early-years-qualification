@@ -7,12 +7,13 @@ test.describe('A spec used to test the qualification list page', () => {
     });
 
     test("Checks the details are showing on the page", async ({page, context}) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
         await page.goto("/qualifications");
 
         await checkText(page, "#your-search-header", "Your search");
         await checkText(page, "#filter-country", "England");
-        await checkText(page, "#filter-start-date", "June 2022");
+        await checkText(page, "#filter-start-date", "Started in June 2022");
+        await checkText(page, "#filter-awarded-date", "Awarded in January 2025");
         await checkText(page, "#filter-level", "Level 3");
         await checkText(page, "#filter-org", "NCFE");
         await checkText(page, "#heading", "Test Header");

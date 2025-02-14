@@ -17,10 +17,10 @@ public static class QuestionPages
     //// Date Pages
 
     /// <summary>
-    ///     Entry ID for the "When was the qualification started" question page.
+    ///     Entry ID for the When was the qualification started and awarded page
     /// </summary>
-    public const string WhenWasTheQualificationStarted = "2o331MBr0R6nsZNBem4yvk";
-
+    public const string WhenWasTheQualificationStartedAndAwarded = "chiZA3BjtPW4t4ou3YEeF";
+    
     //// Dropdown Pages
 
     /// <summary>

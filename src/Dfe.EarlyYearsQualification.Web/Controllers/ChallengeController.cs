@@ -85,9 +85,15 @@ public class ChallengeController(
     {
         model.ErrorSummaryModel = new ErrorSummaryModel
                                   {
-                                      ElementLinkId = "PasswordValue",
                                       ErrorBannerHeading = contentModel.ErrorHeading,
-                                      ErrorBannerLinkText = errorMessage
+                                      ErrorSummaryLinks =
+                                      [
+                                          new ErrorSummaryLink
+                                          {
+                                              ErrorBannerLinkText = errorMessage,
+                                              ElementLinkId = "PasswordValue"
+                                          }
+                                      ]
                                   };
 
         model = await Map(model, contentModel);

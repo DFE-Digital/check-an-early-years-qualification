@@ -10,9 +10,7 @@ test.describe('A spec used to test the not found page', () => {
         await page.goto("/error/404");
 
         await checkText(page, "#page-not-found-heading", "Page not found");
-        await checkText(page, "#page-not-found-statement-body", "If you typed out the web address, check it is correct.");
-        await checkText(page, "#page-not-found-statement-body", "If you pasted the web address, check you copied the entire address.");
-        await checkText(page, "#page-not-found-statement-body", "If the web address is correct or you selected a link or button, contact the check an early years qualification team by emailing techsupport.EARLY-YEARS-QUALS@education.gov.uk to report a fault with the service.");
+        await checkText(page, "#page-not-found-statement-body", "If you typed out the web address, check it is correct. If you pasted the web address, check you copied the entire address. If the web address is correct or you selected a link or button, contact the check an early years qualification team by emailing techsupport.EARLY-YEARS-QUALS@education.gov.uk to report a fault with the service.");
 
         await attributeContains(page, "#page-not-found-link", "href", "mailto:techsupport.EARLY-YEARS-QUALS@education.gov.uk");
     });

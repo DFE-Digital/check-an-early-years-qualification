@@ -22,7 +22,7 @@ public interface IContentService
 
     Task<CookiesBanner?> GetCookiesBannerContent();
 
-    Task<DateQuestionPage?> GetDateQuestionPage(string entryId);
+    Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId);
 
     Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId);
 

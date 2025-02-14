@@ -9,14 +9,17 @@ $("#radio-question-form").on("submit", function(){
     });
 });
 
-$("#date-question-form").on("submit", function(){
+$("#date-question-form").on("submit", function () {
     let question = $("#question").text();
-    let month = $("#date-started-month").val();
-    let year = $('#date-started-year').val();
+    let startedMonth = $("#date-started-month").val();
+    let startedYear = $('#date-started-year').val();
+    let awardedMonth = $("#date-awarded-month").val();
+    let awardedYear = $('#date-awarded-year').val();
     window.dataLayer.push({
         'event': 'dateQuestionFormSubmission',
         'question': question,
-        'dateStarted': `${month}-${year}`
+        'dateStarted': `${startedMonth}-${startedYear}`,
+        'dateAwarded': `${awardedMonth}-${awardedYear}`,
     });
 });
 

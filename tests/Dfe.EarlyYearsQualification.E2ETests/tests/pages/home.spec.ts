@@ -20,6 +20,6 @@ test.describe('A spec used to test the home page', () => {
     test("Checks Crown copyright link text", async ({page}) => {
         await page.goto("/");
 
-        await checkText(page, ".govuk-footer__copyright-logo", "Crown copyright", 0);
+        await checkText(page, ".govuk-footer__copyright-logo", "© Crown copyright", 0);
     });
 });
