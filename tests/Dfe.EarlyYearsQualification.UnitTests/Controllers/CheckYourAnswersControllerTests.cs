@@ -20,7 +20,7 @@ public class CheckYourAnswersControllerTests
         var controller =
             new CheckYourAnswersController(mockLogger.Object, mockContentService.Object, mockUserJourneyCookieService.Object);
 
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted)).ReturnsAsync(new DateQuestionPage { Question = "Date started question"});
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
         mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage());
@@ -67,7 +67,7 @@ public class CheckYourAnswersControllerTests
             new CheckYourAnswersController(mockLogger.Object, mockContentService.Object, mockUserJourneyCookieService.Object);
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted)).ReturnsAsync(new DateQuestionPage { Question = "Date started question"});
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
         mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage());
         
@@ -91,7 +91,7 @@ public class CheckYourAnswersControllerTests
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted)).ReturnsAsync(new DateQuestionPage { Question = "Date started question"});
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
         mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage());
         
         var result = await controller.Index();
@@ -114,7 +114,7 @@ public class CheckYourAnswersControllerTests
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted)).ReturnsAsync(new DateQuestionPage { Question = "Date started question"});
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
         
         var result = await controller.Index();
@@ -139,7 +139,7 @@ public class CheckYourAnswersControllerTests
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted)).ReturnsAsync(new DateQuestionPage { Question = "Date started question"});
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
         mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage { PageHeading = pageHeading });
         
