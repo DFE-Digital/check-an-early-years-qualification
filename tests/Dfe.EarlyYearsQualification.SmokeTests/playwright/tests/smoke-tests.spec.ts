@@ -42,6 +42,10 @@ test.describe("A spec used to smoke test the environment once a deployment has h
     await page.locator("#awarding-organisation-not-in-list").click();
     await page.locator("#question-submit").click();
 
+      // check-your-answers page
+      expect(page.url()).toContain("/questions/check-your-answers");
+      await page.locator("#cta-button").click();
+
     // qualifications page
     expect(page.url()).toContain("/qualifications");
     // If this shows then no qualifications are getting returned indicating possible issue
