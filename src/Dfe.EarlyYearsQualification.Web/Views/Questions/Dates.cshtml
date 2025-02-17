@@ -100,14 +100,14 @@
                                     <div class="govuk-form-group">
                                         <label id="awarded-month-label" class="govuk-label govuk-date-input__label"
                                                for="@awardingQuestion.MonthId">@awardingQuestion.MonthLabel</label>
-                                        @Html.TextBoxFor(x => x.AwardedQuestion.SelectedMonth, "{0:#.#}", new { id = awardingQuestion.MonthId, @class = awardingQuestion.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = awardingQuestion.MonthId, type = "text", inputmode = "numeric", Value = awardingQuestion.SelectedMonth })
+                                        @Html.TextBoxFor(x => x.AwardedQuestion!.SelectedMonth, "{0:#.#}", new { id = awardingQuestion.MonthId, @class = awardingQuestion.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2", maxlength = "2", name = awardingQuestion.MonthId, type = "text", inputmode = "numeric", Value = awardingQuestion.SelectedMonth })
                                     </div>
                                 </div>
                                 <div class="govuk-date-input__item">
                                     <div class="govuk-form-group">
                                         <label id="awarded-year-label" class="govuk-label govuk-date-input__label"
                                                for="@awardingQuestion.YearId">@awardingQuestion.YearLabel</label>
-                                        @Html.TextBoxFor(x => x.AwardedQuestion.SelectedYear, "{0:#.#}", new { id = awardingQuestion.YearId, @class = awardingQuestion.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = awardingQuestion.YearId, type = "text", inputmode = "numeric", Value = awardingQuestion.SelectedYear })
+                                        @Html.TextBoxFor(x => x.AwardedQuestion!.SelectedYear, "{0:#.#}", new { id = awardingQuestion.YearId, @class = awardingQuestion.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4", maxlength = "4", name = awardingQuestion.YearId, type = "text", inputmode = "numeric", Value = awardingQuestion.SelectedYear })
                                     </div>
                                 </div>
                             </div>
