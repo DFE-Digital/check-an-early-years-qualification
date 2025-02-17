@@ -30,6 +30,8 @@ test.describe("A spec used to smoke test the environment once a deployment has h
     expect(page.url()).toContain("/questions/when-was-the-qualification-started-and-awarded");
     await page.locator("#date-started-month").fill("7");
     await page.locator("#date-started-year").fill("2015");
+    await page.locator("#date-awarded-month").fill("9");
+    await page.locator("#date-awarded-year").fill("2019");
     await page.locator("#question-submit").click();
 
     // what-level-is-the-qualification page
