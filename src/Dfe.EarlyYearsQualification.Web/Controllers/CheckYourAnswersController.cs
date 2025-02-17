@@ -54,8 +54,7 @@ public class CheckYourAnswersController(
     {
         var whereWasQualificationAwardedAnswer = userJourneyCookieService.GetWhereWasQualificationAwarded();
         var whenWasTheQualificationStartedAnswer = userJourneyCookieService.GetWhenWasQualificationStarted();
-        // TODO: Update reference when new method available
-        var whenWasTheQualificationAwardedAnswer = userJourneyCookieService.GetWhenWasQualificationStarted();
+        var whenWasTheQualificationAwardedAnswer = userJourneyCookieService.GetWhenWasQualificationAwarded();
         var whatLevelIsTheQualificationAnswer = userJourneyCookieService.GetLevelOfQualification();
         var whatIsTheAwardingOrganisationAnswer = userJourneyCookieService.GetAwardingOrganisation();
         

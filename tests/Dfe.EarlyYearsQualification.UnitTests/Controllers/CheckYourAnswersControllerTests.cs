@@ -155,5 +155,11 @@ public class CheckYourAnswersControllerTests
 
         var model = data as CheckYourAnswersPageModel;
         model!.PageHeading.Should().Match(pageHeading);
+        
+        mockUserJourneyCookieService.Verify(x => x.GetWhereWasQualificationAwarded(), Times.Once);
+        mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationStarted(), Times.Once);
+        mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationAwarded(), Times.Once);
+        mockUserJourneyCookieService.Verify(x => x.GetLevelOfQualification(), Times.Once);
+        mockUserJourneyCookieService.Verify(x => x.GetAwardingOrganisation(), Times.Once);
     }
 }

@@ -25,7 +25,7 @@
                     <td id="question-@(answer.index + 1)-question" class="govuk-table__cell govuk-!-text-align-left">
                         <strong>@answer.value.Question</strong>
                     </td>
-                    <td id="question-@(answer.index + 1)-answer" class="govuk-table__cell govuk-!-text-align-centre">
+                    <td id="question-@(answer.index + 1)-answer" class="govuk-table__cell govuk-!-text-align-left">
                         @for (int i = 0; i < answer.value.Answer.Length; i++)
                         {
                             <p style="margin-bottom: @(i + 1 < answer.value.Answer.Length ? "10px": "0")">@answer.value.Answer[i]</p>

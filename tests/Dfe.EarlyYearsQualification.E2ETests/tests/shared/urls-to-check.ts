@@ -6,6 +6,7 @@ export const pages = [
     "/questions/when-was-the-qualification-started-and-awarded",
     "/questions/what-level-is-the-qualification",
     "/questions/what-is-the-awarding-organisation",
+    "/questions/check-your-answers",
     "/qualifications",
     "/confirm-qualification/EYQ-240",
     "/qualifications/qualification-details/EYQ-240",
@@ -39,6 +40,7 @@ export const pagesWithoutFormsOrRedirects = [
     "/advice/qualifications-achieved-in-wales",
     "/advice/qualifications-achieved-in-northern-ireland",
     "/advice/qualification-not-on-the-list",
+    "/questions/check-your-answers",
 ]
 
 export const pagesWithoutFormsWithRedirects = [
@@ -51,6 +53,7 @@ export const pagesWithoutFormsWithRedirects = [
 export const pagesThatRedirectIfDateMissing = [
     "/questions/what-level-is-the-qualification",
     "/questions/what-is-the-awarding-organisation",
+    "/questions/check-your-answers",
     "/qualifications",
     "/confirm-qualification/EYQ-240",
     "/qualifications/qualification-details/EYQ-240",
