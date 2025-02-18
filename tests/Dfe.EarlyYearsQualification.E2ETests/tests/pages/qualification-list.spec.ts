@@ -11,16 +11,15 @@ test.describe('A spec used to test the qualification list page', () => {
         await page.goto("/qualifications");
 
         await checkText(page, "#your-search-header", "Your search");
-        await checkText(page, "#filter-country", "England");
-        await checkText(page, "#filter-start-date", "Started in June 2022");
-        await checkText(page, "#filter-awarded-date", "Awarded in January 2025");
-        await checkText(page, "#filter-level", "Level 3");
-        await checkText(page, "#filter-org", "NCFE");
+        await checkText(page, "#filter-country", "awarded in England");
+        await checkText(page, "#filter-start-date", "started in June 2022");
+        await checkText(page, "#filter-awarded-date", "awarded in January 2025");
+        await checkText(page, "#filter-level", "level 3");
+        await checkText(page, "#filter-org", "awarded by NCFE");
         await checkText(page, "#heading", "Test Header");
-        await checkText(page, "#found-heading", "3 qualifications found");
+        await checkText(page, "#found-heading", "We found 3 matching qualifications");
         await checkText(page, "#pre-search-content", "Pre search box content");
         await checkText(page, "#post-list-content", "Link to not on list advice page");
-        await checkText(page, "#post-filter-content", "Post search criteria content");
         await checkText(page, "#clear-search", "Clear search");
         await doesNotExist(page, "#no-result-content");
     });
@@ -32,8 +31,8 @@ test.describe('A spec used to test the qualification list page', () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
         await page.goto("/qualifications");
 
-        await checkText(page, "#filter-level", "Any level");
-        await checkText(page, "#filter-org", "Various awarding organisations");
+        await checkText(page, "#filter-level", "any level");
+        await checkText(page, "#filter-org", "awarded by various awarding organisations");
     });
 
     test("Shows the correct no results content when there are no results in the search", async ({
@@ -43,7 +42,7 @@ test.describe('A spec used to test the qualification list page', () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
         await page.goto("/qualifications");
 
-        await checkText(page, "#found-heading", "No qualifications found");
+        await checkText(page, "#found-heading", "We found 0 matching qualifications");
         await checkText(page, "#no-result-content", "Test no qualifications text");
     });
 });

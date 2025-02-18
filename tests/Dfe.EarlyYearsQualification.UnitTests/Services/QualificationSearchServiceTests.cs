@@ -165,23 +165,30 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_BasicModel_IsCorrect()
     {
-        const string country = "where awarded";
-        const string anyLevelHeading = "any heading";
-        const string anyAwardingOrganisation = "any awarding organisation";
+        const string awardedIn = "awarded in";
+        const string awardedBy = "awarded by";
+        const string country = "England";
+        const string anyLevelHeading = "any level";
+        const string anyAwardingOrganisation = "various awarding organisations";
 
         _mockUserJourneyCookieService.Setup(o => o.GetWhereWasQualificationAwarded()).Returns(country);
 
         var qualificationListPage = new QualificationListPage
                                     {
+                                        AwardedLocationPrefixText = awardedIn,
+                                        AwardedByPrefixText = awardedBy,
                                         AnyLevelHeading = anyLevelHeading,
                                         AnyAwardingOrganisationHeading = anyAwardingOrganisation,
                                     };
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
 
-        result.Country.Should().Be(country);
+        const string expectedCountryResult = $"{awardedIn} {country}";
+        const string expectedAwardingOrganisationResult = $"{awardedBy} {anyAwardingOrganisation}";
+
+        result.Country.Should().Be(expectedCountryResult);
         result.Level.Should().Be(anyLevelHeading);
-        result.AwardingOrganisation.Should().Be(anyAwardingOrganisation);
+        result.AwardingOrganisation.Should().Be(expectedAwardingOrganisationResult);
     }
 
     [TestMethod]
@@ -244,7 +251,7 @@ public class QualificationSearchServiceTests
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
 
-        var expectedLevel = $"Level {level}";
+        var expectedLevel = $"level {level}";
 
         result.Level.Should().Be(expectedLevel);
     }
@@ -263,23 +270,30 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_GotAwardingOrganisation_Sets_AwardingOrganisation()
     {
+        const string awardedBy = "awarded by";
         const string awardingOrganisation = "awarding organisation";
-        var qualificationListPage = new QualificationListPage();
+        var qualificationListPage = new QualificationListPage { AwardedByPrefixText = awardedBy };
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns(awardingOrganisation);
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
 
-        result.AwardingOrganisation.Should().Be(awardingOrganisation);
+        const string expectedResult = $"{awardedBy} {awardingOrganisation}";
+
+        result.AwardingOrganisation.Should().Be(expectedResult);
     }
 
     [TestMethod]
     public void GetFilterModel_NotGotAwardingOrganisation_Ignores_AwardingOrganisation()
     {
-        var qualificationListPage = new QualificationListPage();
+        const string awardedBy = "awarded by";
+        const string awardingOrganisation = "various awarding organisations";
+        var qualificationListPage = new QualificationListPage { AwardedByPrefixText = "awarded by", AnyAwardingOrganisationHeading = awardingOrganisation };
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
+        
+        const string expectedResult = $"{awardedBy} {awardingOrganisation}";
 
-        result.AwardingOrganisation.Should().Be(string.Empty);
+        result.AwardingOrganisation.Should().Be(expectedResult);
     }
 }

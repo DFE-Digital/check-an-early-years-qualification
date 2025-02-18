@@ -317,9 +317,9 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result!.Question.Should().Be("Test Dates Questions");
-        result!.CtaButtonText.Should().Be("Continue");
-        result!.ErrorBannerHeading.Should().Be("There is a problem");
-        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
+        result.CtaButtonText.Should().Be("Continue");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
                                                    {
                                                        DisplayText = "TEST",
                                                        Href = "/questions/where-was-the-qualification-awarded",

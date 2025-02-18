@@ -8,6 +8,8 @@ public class QualificationListPage
 
     public NavigationLink? BackButton { get; init; }
 
+    public string QualificationFoundPrefix { get; init; } = string.Empty;
+    
     public string SingleQualificationFoundText { get; init; } = string.Empty;
 
     public string MultipleQualificationsFoundText { get; init; } = string.Empty;
@@ -16,15 +18,9 @@ public class QualificationListPage
 
     public string SearchButtonText { get; init; } = string.Empty;
 
-    public string LevelHeading { get; init; } = string.Empty;
-
-    public string AwardingOrganisationHeading { get; init; } = string.Empty;
-
     public Document? PostQualificationListContent { get; init; }
 
     public string SearchCriteriaHeading { get; init; } = string.Empty;
-
-    public Document? PostSearchCriteriaContent { get; init; }
 
     public string AnyLevelHeading { get; init; } = string.Empty;
 
@@ -33,9 +29,12 @@ public class QualificationListPage
     public Document? NoResultsText { get; init; }
 
     public string ClearSearchText { get; init; } = string.Empty;
+    
+    public string AwardedLocationPrefixText { get; init; } = string.Empty;
 
-    public string NoQualificationsFoundText { get; init; } = string.Empty;
-
-    public string StartDatePrefixText { get; set; } = string.Empty;
-    public string AwardedDatePrefixText { get; set; } = string.Empty;
+    public string StartDatePrefixText { get; init; } = string.Empty;
+    
+    public string AwardedDatePrefixText { get; init; } = string.Empty;
+    
+    public string AwardedByPrefixText { get; init; } = string.Empty;
 }

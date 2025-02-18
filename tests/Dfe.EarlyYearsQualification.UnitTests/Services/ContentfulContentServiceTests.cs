@@ -481,7 +481,6 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                               new QualificationListPage
                               {
                                   Header = "Header",
-                                  AwardingOrganisationHeading = "AO Heading",
                                   MultipleQualificationsFoundText = "Multiple qualifications found"
                               }
                           ]
@@ -499,7 +498,6 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var result = await service.GetQualificationListPage();
 
         result!.Header.Should().Be("Header");
-        result.AwardingOrganisationHeading.Should().Be("AO Heading");
         result.MultipleQualificationsFoundText.Should().Be("Multiple qualifications found");
     }
 
