@@ -2,6 +2,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 using Microsoft.AspNetCore.Http;
@@ -356,7 +357,7 @@ public class QualificationDetailsControllerTests
                       };
 
         var notQtsAnswer = details.AdditionalRequirementAnswers.First(o => o.Question == "Question 1");
-        
+
         _mockQualificationDetailsService.Setup(x => x.GetQualification(qualificationId)).ReturnsAsync(qualification);
         _mockQualificationDetailsService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
         _mockQualificationDetailsService.Setup(x => x.HasStartDate()).Returns(true);
@@ -374,12 +375,48 @@ public class QualificationDetailsControllerTests
         {
             details.AdditionalRequirementAnswers.Should().NotContain(notQtsAnswer);
             result.Should().NotBeNull();
-            _mockQualificationDetailsService.Verify(o=>o.RemainingAnswersIndicateFullAndRelevant(details,qtsQuestion), Times.Never);
+            _mockQualificationDetailsService.Verify(o => o.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion), Times.Never);
         }
         else
         {
-            _mockQualificationDetailsService.Verify(o=>o.RemainingAnswersIndicateFullAndRelevant(details,qtsQuestion), Times.Once);
+            _mockQualificationDetailsService.Verify(o => o.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion), Times.Once);
             details.AdditionalRequirementAnswers.Should().Contain(notQtsAnswer);
+        }
+    }
+
+    [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public async Task Index_CallsSuccessOrFail_Correctly(bool ratioIsNotFullAndRelevant)
+    {
+        const string qualificationId = "qualificationId";
+
+        var details = new QualificationDetailsModel
+                      {
+                          Content = new DetailsPageModel(),
+                          RatioRequirements = new RatioRequirementModel
+                                              {
+                                                  ApprovedForLevel2 = ratioIsNotFullAndRelevant ? QualificationApprovalStatus.NotApproved : QualificationApprovalStatus.Approved,
+                                                  ApprovedForLevel3 = ratioIsNotFullAndRelevant ? QualificationApprovalStatus.NotApproved : QualificationApprovalStatus.Approved,
+                                                  ApprovedForLevel6 = ratioIsNotFullAndRelevant ? QualificationApprovalStatus.NotApproved : QualificationApprovalStatus.Approved
+                                              }
+                      };
+
+        _mockQualificationDetailsService.Setup(x => x.GetQualification(qualificationId)).ReturnsAsync(new Qualification(qualificationId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()));
+        _mockQualificationDetailsService.Setup(x => x.GetDetailsPage()).ReturnsAsync(new DetailsPage());
+        _mockQualificationDetailsService.Setup(x => x.HasStartDate()).Returns(true);
+        _mockQualificationDetailsService.Setup(x => x.MapDetails(It.IsAny<Qualification>(), It.IsAny<DetailsPage>())).ReturnsAsync(details);
+        var sut = GetSut();
+
+        await sut.Index(qualificationId);
+
+        if (ratioIsNotFullAndRelevant)
+        {
+            _mockQualificationDetailsService.Verify(o => o.SetQualificationResultFailureDetails(It.IsAny<QualificationDetailsModel>(), It.IsAny<DetailsPage>()), Times.Once);
+        }
+        else
+        {
+            _mockQualificationDetailsService.Verify(o => o.SetQualificationResultSuccessDetails(It.IsAny<QualificationDetailsModel>(), It.IsAny<DetailsPage>()), Times.Once);
         }
     }
 }

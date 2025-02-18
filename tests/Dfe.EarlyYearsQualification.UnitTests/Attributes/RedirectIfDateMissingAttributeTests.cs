@@ -27,7 +27,7 @@ public class RedirectIfDateMissingAttributeTests
 
         userJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded("england"), Times.Once);
         actionExecutingContext.Result.Should()
-                              .BeEquivalentTo(new RedirectResult("/questions/when-was-the-qualification-started"));
+                              .BeEquivalentTo(new RedirectResult("/questions/when-was-the-qualification-started-and-awarded"));
     }
 
     [TestMethod]

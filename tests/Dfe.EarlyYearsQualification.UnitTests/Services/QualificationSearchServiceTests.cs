@@ -189,15 +189,37 @@ public class QualificationSearchServiceTests
     {
         const int startDateMonth = 3;
         const int startDateYear = 2016;
-        var qualificationListPage = new QualificationListPage();
+        var qualificationListPage = new QualificationListPage
+                                    {
+                                        StartDatePrefixText = "started"
+                                    };
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startDateMonth, startDateYear));
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
 
         var expectedDt = new DateOnly(startDateYear, startDateMonth, 1);
-        var expectedStartDate = $"{expectedDt.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear}";
+        var expectedStartDate = $"{qualificationListPage.StartDatePrefixText} {expectedDt.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear}";
 
         result.StartDate.Should().Be(expectedStartDate);
+    }
+    
+    [TestMethod]
+    public void GetFilterModel_GotAwardedDates_Sets_AwardedDate()
+    {
+        const int awardedDateMonth = 3;
+        const int awardedDateYear = 2016;
+        var qualificationListPage = new QualificationListPage
+                                    {
+                                        AwardedDatePrefixText = "awarded"
+                                    };
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardedDateMonth, awardedDateYear));
+        var sut = GetSut();
+        var result = sut.GetFilterModel(qualificationListPage);
+
+        var expectedDt = new DateOnly(awardedDateYear, awardedDateMonth, 1);
+        var expectedAwardedDate = $"{qualificationListPage.AwardedDatePrefixText} {expectedDt.ToString("MMMM", CultureInfo.InvariantCulture)} {awardedDateYear}";
+
+        result.AwardedDate.Should().Be(expectedAwardedDate);
     }
 
     [TestMethod]
@@ -205,10 +227,12 @@ public class QualificationSearchServiceTests
     {
         var qualificationListPage = new QualificationListPage();
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((null, null));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
 
         result.StartDate.Should().Be(string.Empty);
+        result.AwardedDate.Should().Be(string.Empty);
     }
 
     [TestMethod]

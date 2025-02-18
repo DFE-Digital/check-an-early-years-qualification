@@ -574,4 +574,20 @@ public class AdviceControllerTests
     
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
+
+    [TestMethod]
+    public void OnActionExecuting_ClearsCookies()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+    
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+        
+        controller.OnActionExecuting(null!);
+        
+        UserJourneyMockNoOp.Verify(o=>o.SetUserSelectedQualificationFromList(YesOrNo.No), Times.Once);
+        UserJourneyMockNoOp.Verify(o=>o.ClearAdditionalQuestionsAnswers(), Times.Once);
+    }
 }

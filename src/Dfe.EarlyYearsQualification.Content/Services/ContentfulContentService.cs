@@ -103,9 +103,9 @@ public class ContentfulContentService(
         return await GetEntryById<RadioQuestionPage>(entryId);
     }
 
-    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
+    public async Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId)
     {
-        return await GetEntryById<DateQuestionPage>(entryId);
+        return await GetEntryById<DatesQuestionPage>(entryId);
     }
 
     public async Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId)
@@ -242,6 +242,18 @@ public class ContentfulContentService(
         if (filteredCannotFindQualificationPages.Count != 0) return filteredCannotFindQualificationPages[0];
         Logger.LogWarning("No filtered 'cannot find qualification' page entries returned");
         return default;
+    }
+    
+    public async Task<CheckYourAnswersPage?> GetCheckYourAnswersPage()
+    {
+        var checkYourAnswersPages = await GetEntriesByType<CheckYourAnswersPage>();
+        if (checkYourAnswersPages is null || !checkYourAnswersPages.Any())
+        {
+            Logger.LogWarning("No open graph data entry returned");
+            return default;
+        }
+
+        return checkYourAnswersPages.First();
     }
     
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(int startDateMonth, int startDateYear,

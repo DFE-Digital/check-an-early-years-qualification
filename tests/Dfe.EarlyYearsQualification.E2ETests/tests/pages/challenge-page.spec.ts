@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, doesNotExist, exists, hasAttribute} from '../shared/playwrightWrapper';
+import {startJourney, checkText, checkError, doesNotExist, exists, hasAttribute} from '../shared/playwrightWrapper';
 
 test.describe('A spec that tests the challenge page', () => {
     test.beforeEach(async ({page, context}) => {
@@ -15,7 +15,7 @@ test.describe('A spec that tests the challenge page', () => {
 
         await exists(page, "#error-banner");
         await checkText(page, '#error-banner-link', "Test Missing Password Text");
-        await checkText(page, '#error-message', "Test Missing Password Text");
+        await checkError(page, '#error-message', "Test Missing Password Text");
     });
 
     test("should show the incorrect password error when the user enters an incorrect password", async ({page}) => {
@@ -27,7 +27,7 @@ test.describe('A spec that tests the challenge page', () => {
 
         await exists(page, "#error-banner");
         await checkText(page, '#error-banner-link', "Test Incorrect Password Text");
-        await checkText(page, '#error-message', "Test Incorrect Password Text");
+        await checkError(page, '#error-message', "Test Incorrect Password Text");
     });
 
     test("clicking the show password button changes the password input to text, clicking it again turns it back", async ({page}) => {

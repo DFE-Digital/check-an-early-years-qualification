@@ -4,6 +4,7 @@ public interface IUserJourneyCookieService
 {
     void SetWhereWasQualificationAwarded(string location);
     void SetWhenWasQualificationStarted(string date);
+    void SetWhenWasQualificationAwarded(string date);
     void SetLevelOfQualification(string level);
     void SetAwardingOrganisation(string awardingOrganisation);
     void SetAwardingOrganisationNotOnList(bool isOnList);
@@ -14,6 +15,7 @@ public interface IUserJourneyCookieService
     void ResetUserJourneyCookie();
     string? GetWhereWasQualificationAwarded();
     (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
+    (int? startMonth, int? startYear) GetWhenWasQualificationAwarded();
     bool WasStartedBeforeSeptember2014();
     bool WasStartedBetweenSeptember2014AndAugust2019();
     bool WasStartedOnOrAfterSeptember2019();

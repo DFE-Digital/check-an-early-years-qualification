@@ -2,6 +2,8 @@
 import {
     startJourney,
     checkText,
+    checkError,
+    checkDisclaimer,
     setCookie,
     journeyCookieName,
     doesNotExist,
@@ -46,7 +48,7 @@ test.describe('A spec that tests the confirm qualification page', () => {
         await page.goto("/confirm-qualification/eyq-115");
 
         await exists(page, '#warning-text-container');
-        await checkText(page, '#warning-text-container', "Answer disclaimer text");
+        await checkDisclaimer(page, "Answer disclaimer text");
         await checkText(page, "#confirm-qualification-button", "Get result");
     });
 
@@ -57,7 +59,7 @@ test.describe('A spec that tests the confirm qualification page', () => {
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "Test error banner heading");
         await checkText(page, "#error-banner-link", "Test error banner link");
-        await checkText(page, "#confirm-qualification-choice-error", "Test error text");
+        await checkError(page, "#confirm-qualification-choice-error", "Test error text");
         await isVisible(page, ".govuk-form-group--error");
     });
 });

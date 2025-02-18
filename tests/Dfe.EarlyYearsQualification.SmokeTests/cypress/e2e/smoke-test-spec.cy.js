@@ -17,9 +17,9 @@ describe('A spec used to smoke test the environment once a deployment has happen
         cy.get('#england').click();
         cy.get('button[id="question-submit"]').click();
 
-        // when-was-the-qualification-started page
+        // when-was-the-qualification-started-and-awarded page
         cy.location().should((loc) => {
-            expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started');
+            expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started-and-awarded');
         })
 
         cy.get('#date-started-month').type("7");

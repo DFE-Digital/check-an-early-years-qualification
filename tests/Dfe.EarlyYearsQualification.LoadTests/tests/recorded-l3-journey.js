@@ -601,7 +601,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.post(
-        `${address}/questions/when-was-the-qualification-started`,
+        `${address}/questions/when-was-the-qualification-started-and-awarded`,
         {
           SelectedMonth: '9',
           SelectedYear: '2014',

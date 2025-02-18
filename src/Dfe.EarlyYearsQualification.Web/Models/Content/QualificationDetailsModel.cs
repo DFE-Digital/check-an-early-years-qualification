@@ -15,4 +15,5 @@ public class QualificationDetailsModel : BasicQualificationModel
     public RatioRequirementModel RatioRequirements { get; set; } = new ();
 
     public string DateStarted { get; init; } = string.Empty;
+    public string DateAwarded { get; init; } = string.Empty;
 }

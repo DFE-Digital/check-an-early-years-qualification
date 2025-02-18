@@ -78,6 +78,7 @@ public class QualificationSearchService(
     {
         var countryAwarded = userJourneyCookieService.GetWhereWasQualificationAwarded()!;
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+        var (awardedDateMonth, awardedDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         var level = userJourneyCookieService.GetLevelOfQualification();
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
 
@@ -91,9 +92,14 @@ public class QualificationSearchService(
         if (startDateMonth is not null && startDateYear is not null)
         {
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-            filterModel.StartDate = $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
+            filterModel.StartDate = $"{content.StartDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
         }
 
+        if (awardedDateMonth is not null && awardedDateYear is not null)
+        {
+            var date = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
+            filterModel.AwardedDate = $"{content.AwardedDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {awardedDateYear.Value}";
+        }
         if (level > 0)
         {
             filterModel.Level = $"Level {level}";

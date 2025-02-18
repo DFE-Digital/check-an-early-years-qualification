@@ -35,4 +35,7 @@ public class QualificationListPage
     public string ClearSearchText { get; init; } = string.Empty;
 
     public string NoQualificationsFoundText { get; init; } = string.Empty;
+
+    public string StartDatePrefixText { get; set; } = string.Empty;
+    public string AwardedDatePrefixText { get; set; } = string.Empty;
 }

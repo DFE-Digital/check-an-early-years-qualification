@@ -47,7 +47,7 @@ public class ContentfulContentServiceBase
               { typeof(CookiesPage), ContentTypes.CookiesPage },
               { typeof(PhaseBanner), ContentTypes.PhaseBanner },
               { typeof(CookiesBanner), ContentTypes.CookiesBanner },
-              { typeof(DateQuestionPage), ContentTypes.DateQuestionPage },
+              { typeof(DatesQuestionPage), ContentTypes.DatesQuestionPage },
               { typeof(DropdownQuestionPage), ContentTypes.DropdownQuestionPage },
               { typeof(QualificationListPage), ContentTypes.QualificationListPage },
               { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage },
@@ -55,7 +55,8 @@ public class ContentfulContentServiceBase
               { typeof(ChallengePage), ContentTypes.ChallengePage },
               { typeof(CannotFindQualificationPage), ContentTypes.CannotFindQualificationPage },
               { typeof(CheckAdditionalRequirementsAnswerPage), ContentTypes.CheckAdditionalRequirementsAnswerPage },
-              { typeof(OpenGraphData), ContentTypes.OpenGraphData }
+              { typeof(OpenGraphData), ContentTypes.OpenGraphData },
+              { typeof(CheckYourAnswersPage), ContentTypes.CheckYourAnswersPage }
           };
 
     protected readonly ILogger Logger;

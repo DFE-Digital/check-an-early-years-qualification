@@ -53,6 +53,7 @@ public class DetailsPage
     public string QualificationNameLabel { get; init; } = string.Empty;
 
     public string QualificationStartDateLabel { get; init; } = string.Empty;
+    public string QualificationAwardedDateLabel { get; init; } = string.Empty;
 
     public Document? RatiosTextNotFullAndRelevant { get; init; }
     

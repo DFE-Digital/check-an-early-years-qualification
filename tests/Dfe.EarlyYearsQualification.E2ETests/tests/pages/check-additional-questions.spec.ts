@@ -2,6 +2,7 @@
 import {
     startJourney,
     checkText,
+    checkError,
     setCookie,
     journeyCookieName,
     isVisible,
@@ -22,7 +23,7 @@ test.describe('A spec that tests the check additional questions page', () => {
         await attributeContains(page, "#back-button", 'href', '/qualifications');
 
         await checkText(page, '#question', 'Test question');
-        await checkText(page, '#hint', 'This is the hint text');
+        await checkText(page, '#hint', 'This is the hint text: answer yes for full and relevant');
         await checkText(page, ".govuk-details__summary-text", "This is the details heading");
         await checkText(page, ".govuk-details__text", "This is the details content");
         await checkText(page, "Label[for='yes']", "Yes");
@@ -37,7 +38,7 @@ test.describe('A spec that tests the check additional questions page', () => {
         await attributeContains(page, "#back-button", 'href', '/qualifications/check-additional-questions');
      
         await checkText(page, '#question', 'Test question 2');
-        await checkText(page, '#hint', 'This is the hint text');
+        await checkText(page, '#hint', 'This is the hint text: answer no for full and relevant');
         await checkText(page, ".govuk-details__summary-text", "This is the details heading");
         await checkText(page, ".govuk-details__text", "This is the details content");
         await checkText(page, "Label[for='yes']", "Yes");
@@ -54,7 +55,7 @@ test.describe('A spec that tests the check additional questions page', () => {
         await checkText(page, ".govuk-error-summary__title", "There was a problem");
         await checkText(page, "#error-banner-link", "This is a test error message");
         await isVisible(page, "#option-error");
-        await checkText(page, "#option-error", "This is a test error message");
+        await checkError(page, "#option-error", "This is a test error message");
         await isVisible(page, ".govuk-form-group--error");
     });
 });

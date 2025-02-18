@@ -22,7 +22,7 @@ public interface IContentService
 
     Task<CookiesBanner?> GetCookiesBannerContent();
 
-    Task<DateQuestionPage?> GetDateQuestionPage(string entryId);
+    Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId);
 
     Task<DropdownQuestionPage?> GetDropdownQuestionPage(string entryId);
 
@@ -39,4 +39,6 @@ public interface IContentService
     Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage();
 
     Task<OpenGraphData?> GetOpenGraphData();
+
+    Task<CheckYourAnswersPage?> GetCheckYourAnswersPage();
 }
