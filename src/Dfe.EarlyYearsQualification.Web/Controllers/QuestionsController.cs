@@ -212,7 +212,7 @@ public class QuestionsController(
         userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue!);
         userJourneyCookieService.SetAwardingOrganisationNotOnList(model.NotInTheList);
 
-        return RedirectToAction("Get", "QualificationSearch");
+        return RedirectToAction("Index", "CheckYourAnswers");
     }
 
     private async Task<List<Qualification>> GetFilteredQualifications()
@@ -255,11 +255,11 @@ public class QuestionsController(
     {
         if (question is null) return null;
         var bannerErrorText = validationResult is { BannerErrorMessages.Count: > 0 }
-                                  ? string.Join("<br />", validationResult!.BannerErrorMessages)
+                                  ? string.Join("<br />", validationResult.BannerErrorMessages)
                                   : null;
 
         var errorMessageText = validationResult is { ErrorMessages.Count: > 0 }
-                                   ? string.Join("<br />", validationResult!.ErrorMessages)
+                                   ? string.Join("<br />", validationResult.ErrorMessages)
                                    : null;
 
         var errorBannerLinkText = placeholderUpdater.Replace(bannerErrorText ?? question.ErrorBannerLinkText);

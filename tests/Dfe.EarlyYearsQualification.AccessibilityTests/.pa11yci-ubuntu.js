@@ -16,6 +16,7 @@ const config = {
         "http://localhost:5000/questions/when-was-the-qualification-started-and-awarded",
         "http://localhost:5000/questions/what-level-is-the-qualification",
         "http://localhost:5000/questions/what-is-the-awarding-organisation",
+        "http://localhost:5000/questions/check-your-answers",
         "http://localhost:5000/qualifications",
         "http://localhost:5000/confirm-qualification/eyq-240",
         "http://localhost:5000/qualifications/qualification-details/eyq-240",

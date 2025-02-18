@@ -71,8 +71,8 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
     {
         return new DatesValidationResult
                {
-                   StartedValidationResult = IsValid(model.StartedQuestion, questionPage.StartedQuestion),
-                   AwardedValidationResult = IsValid(model.AwardedQuestion, questionPage.AwardedQuestion)
+                   StartedValidationResult = IsValid(model.StartedQuestion!, questionPage.StartedQuestion!),
+                   AwardedValidationResult = IsValid(model.AwardedQuestion!, questionPage.AwardedQuestion!)
                };
     }
 }

@@ -7,6 +7,7 @@ import {
     whenWasQualificationStarted,
     whatLevelIsTheQualification,
     whatIsTheAwardingOrganisation,
+    checkYourAnswersPage,
     selectQualification,
     confirmQualificiation,
     processAdditionalRequirement,
@@ -24,6 +25,7 @@ test.describe("A spec used to test the main back button route through the journe
         await whenWasQualificationStarted(page, "6", "2022", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
+        await checkYourAnswersPage(page);
         await selectQualification(page, "EYQ-240");
         await confirmQualificiation(page, "#yes");
         await processAdditionalRequirement(page, "EYQ-240", 1, "#yes");

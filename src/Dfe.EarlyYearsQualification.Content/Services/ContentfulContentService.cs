@@ -244,6 +244,18 @@ public class ContentfulContentService(
         return default;
     }
     
+    public async Task<CheckYourAnswersPage?> GetCheckYourAnswersPage()
+    {
+        var checkYourAnswersPages = await GetEntriesByType<CheckYourAnswersPage>();
+        if (checkYourAnswersPages is null || !checkYourAnswersPages.Any())
+        {
+            Logger.LogWarning("No open graph data entry returned");
+            return default;
+        }
+
+        return checkYourAnswersPages.First();
+    }
+    
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(int startDateMonth, int startDateYear,
                                                            List<CannotFindQualificationPage> cannotFindQualificationPages)
     {

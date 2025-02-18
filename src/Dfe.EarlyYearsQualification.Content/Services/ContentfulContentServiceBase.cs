@@ -55,7 +55,8 @@ public class ContentfulContentServiceBase
               { typeof(ChallengePage), ContentTypes.ChallengePage },
               { typeof(CannotFindQualificationPage), ContentTypes.CannotFindQualificationPage },
               { typeof(CheckAdditionalRequirementsAnswerPage), ContentTypes.CheckAdditionalRequirementsAnswerPage },
-              { typeof(OpenGraphData), ContentTypes.OpenGraphData }
+              { typeof(OpenGraphData), ContentTypes.OpenGraphData },
+              { typeof(CheckYourAnswersPage), ContentTypes.CheckYourAnswersPage }
           };
 
     protected readonly ILogger Logger;
