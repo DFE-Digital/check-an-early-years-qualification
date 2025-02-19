@@ -246,7 +246,7 @@ public class QualificationSearchServiceTests
     public void GetFilterModel_GotLevel_Sets_Level()
     {
         const int level = 3;
-        var qualificationListPage = new QualificationListPage();
+        var qualificationListPage = new QualificationListPage { LevelPrefixText = "level" };
         _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(level);
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);

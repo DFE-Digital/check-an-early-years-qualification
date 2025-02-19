@@ -99,7 +99,7 @@ public class QualificationSearchService(
         }
         if (level > 0)
         {
-            filterModel.Level = $"level {level}";
+            filterModel.Level = $"{content.LevelPrefixText} {level}";
         }
 
         if (!string.IsNullOrEmpty(awardingOrganisation))

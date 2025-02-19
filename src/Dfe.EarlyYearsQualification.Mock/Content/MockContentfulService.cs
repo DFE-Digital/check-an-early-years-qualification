@@ -288,6 +288,7 @@ public class MockContentfulService : IContentService
                                          AwardedLocationPrefixText = "awarded in",
                                          StartDatePrefixText = "started in",
                                          AwardedDatePrefixText = "awarded in",
+                                         LevelPrefixText = "level",
                                          AwardedByPrefixText = "awarded by"
                                      });
     }
