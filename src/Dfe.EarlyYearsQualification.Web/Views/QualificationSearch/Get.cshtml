@@ -89,7 +89,9 @@
         }
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <div id="post-list-content">@Html.Raw(Model.PostQualificationListContent)</div>
+                <div id="post-list-content" class="govuk-!-static-margin-top-4">
+                    @Html.Raw(Model.PostQualificationListContent)
+                </div>
             </div>
         </div>
     </div>
