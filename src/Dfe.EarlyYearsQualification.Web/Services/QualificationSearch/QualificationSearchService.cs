@@ -57,20 +57,17 @@ public class QualificationSearchService(
                    BackButton = NavigationLinkMapper.Map(content.BackButton),
                    Filters = filterModel,
                    Header = content.Header,
+                   QualificationFoundPrefixText = content.QualificationFoundPrefix,
                    SingleQualificationFoundText = content.SingleQualificationFoundText,
                    MultipleQualificationsFoundText = content.MultipleQualificationsFoundText,
                    PreSearchBoxContent = await contentParser.ToHtml(content.PreSearchBoxContent),
                    SearchButtonText = content.SearchButtonText,
-                   LevelHeading = content.LevelHeading,
-                   AwardingOrganisationHeading = content.AwardingOrganisationHeading,
-                   PostSearchCriteriaContent = await contentParser.ToHtml(content.PostSearchCriteriaContent),
                    PostQualificationListContent = await contentParser.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
                    SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
                    Qualifications = basicQualificationsModels,
                    NoResultText = await contentParser.ToHtml(content.NoResultsText),
                    ClearSearchText = content.ClearSearchText,
-                   NoQualificationsFoundText = content.NoQualificationsFoundText
                };
     }
 
@@ -84,9 +81,9 @@ public class QualificationSearchService(
 
         var filterModel = new FilterModel
                           {
-                              Country = countryAwarded,
+                              Country = $"{content.AwardedLocationPrefixText} {countryAwarded}",
                               Level = content.AnyLevelHeading,
-                              AwardingOrganisation = content.AnyAwardingOrganisationHeading
+                              AwardingOrganisation = $"{content.AwardedByPrefixText} {content.AnyAwardingOrganisationHeading}"
                           };
 
         if (startDateMonth is not null && startDateYear is not null)
@@ -102,12 +99,12 @@ public class QualificationSearchService(
         }
         if (level > 0)
         {
-            filterModel.Level = $"Level {level}";
+            filterModel.Level = $"{content.LevelPrefixText} {level}";
         }
 
         if (!string.IsNullOrEmpty(awardingOrganisation))
         {
-            filterModel.AwardingOrganisation = awardingOrganisation;
+            filterModel.AwardingOrganisation = $"{content.AwardedByPrefixText} {awardingOrganisation}";
         }
 
         return filterModel;
