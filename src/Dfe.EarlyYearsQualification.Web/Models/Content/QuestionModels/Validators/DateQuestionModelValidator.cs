@@ -69,10 +69,46 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
 
     public DatesValidationResult IsValid(DatesQuestionModel model, DatesQuestionPage questionPage)
     {
+        var startedQuestion = model.StartedQuestion;
+        var awardedQuestion = model.AwardedQuestion;
+        if (startedQuestion is null || awardedQuestion is null) throw new NullReferenceException("Started question or awarded question is null");
+        var startedValidationResult = IsValid(startedQuestion, questionPage.StartedQuestion!);
+        var awardedValidationResult = IsValid(awardedQuestion, questionPage.AwardedQuestion!);
+        bool datesValid = startedValidationResult.MonthValid &&
+                          awardedValidationResult.MonthValid &&
+                          startedValidationResult.YearValid &&
+                          awardedValidationResult.YearValid;
+        if (datesValid)
+        {
+            datesValid = IsAwardedDateAfterStartDate(startedQuestion, awardedQuestion);
+            if (!datesValid)
+            {
+                awardedValidationResult.MonthValid = false;
+                awardedValidationResult.YearValid = false;
+                awardedValidationResult.ErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
+                awardedValidationResult.BannerErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
+            }
+        }
+
         return new DatesValidationResult
                {
-                   StartedValidationResult = IsValid(model.StartedQuestion, questionPage.StartedQuestion),
-                   AwardedValidationResult = IsValid(model.AwardedQuestion, questionPage.AwardedQuestion)
+                   DatesValid = datesValid,
+                   StartedValidationResult = startedValidationResult,
+                   AwardedValidationResult = awardedValidationResult
                };
+    }
+
+    public bool IsAwardedDateAfterStartDate(DateQuestionModel startedQuestion, DateQuestionModel awardedQuestion)
+    {
+        var startDateMonth = startedQuestion.SelectedMonth;
+        var startDateYear = startedQuestion.SelectedYear;
+        var awardedDateMonth = awardedQuestion.SelectedMonth;
+        var awardedDateYear = awardedQuestion.SelectedYear;
+
+        if (startDateMonth is null || startDateYear is null || awardedDateMonth is null || awardedDateYear is null) return false;
+        var startedDate = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
+        var awardedDate = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
+
+        return awardedDate > startedDate;
     }
 }

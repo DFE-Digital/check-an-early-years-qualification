@@ -597,6 +597,7 @@ public class MockContentfulService : IContentService
                                 },
                    CtaButtonText = "Continue",
                    ErrorBannerHeading = "There is a problem",
+                   AwardedDateIsAfterStartedDateErrorText = "Error- AwardedDateIsAfterStartedDateErrorText",
                    StartedQuestion = CreateDatesQuestionPage("started- "),
                    AwardedQuestion = CreateDatesQuestionPage("awarded- ")
                };

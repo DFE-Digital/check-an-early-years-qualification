@@ -16,7 +16,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = null, SelectedYear = null, QuestionId = questionId };
 
@@ -42,7 +42,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = null, SelectedYear = 2024 };
 
@@ -66,7 +66,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = 12, SelectedYear = null };
 
@@ -94,7 +94,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(2024, 7, 1, 0, 0, 1, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = selectedMonth, SelectedYear = 2024 };
 
@@ -125,7 +125,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = selectedYear };
 
@@ -154,7 +154,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = selectedMonth, SelectedYear = selectedYear };
 
@@ -181,7 +181,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 20 };
 
@@ -208,7 +208,7 @@ public class DateQuestionModelValidatorTests
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
         dateTimeAdapter.Setup(d => d.Now()).Returns(new DateTime(2024, 7, 16, 13, 1, 12, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2023 };
         var questionPage = new DateQuestion();
@@ -228,7 +228,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(thisYear, thisMonth, 16, 13, 1, 12, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = thisYear };
 
@@ -249,7 +249,7 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(thisYear, thisMonth, 1, 0, 0, 1, DateTimeKind.Local));
 
-        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+        IDateQuestionModelValidator validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var model = new DateQuestionModel { SelectedMonth = thisMonth, SelectedYear = thisYear };
 
@@ -258,5 +258,29 @@ public class DateQuestionModelValidatorTests
         var result = validator.IsValid(model, questionPage);
         result.MonthValid.Should().BeTrue();
         result.YearValid.Should().BeTrue();
+    }
+    
+    [TestMethod]
+    [DataRow(9, 2014, 1, 2025, true)]
+    [DataRow(1, 2019, 12, 2020, true)]
+    [DataRow(1, 2025, 12, 2024, false)]
+    [DataRow(1,2025,12,2020,false)]
+    [DataRow(1,25,12,20,false)]
+    public void IsAwardedDateAfterStartedDate_GoodDates_ReturnsExpected(int startedMonth, int startedYear, int awardedMonth, int awardedYear, bool expectedResult)
+    {
+        var startedDate = new DateQuestionModel
+                          {
+                              SelectedMonth = startedMonth,
+                              SelectedYear = startedYear
+                          };
+
+        var awardedDate = new DateQuestionModel
+                          {
+                              SelectedMonth = awardedMonth,
+                              SelectedYear = awardedYear
+                          };
+        IDateQuestionModelValidator sut = new DateQuestionModelValidator(new Mock<IDateTimeAdapter>().Object);
+
+        sut.IsAwardedDateAfterStartDate(startedDate, awardedDate).Should().Be(expectedResult);
     }
 }
