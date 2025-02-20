@@ -481,7 +481,6 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                               new QualificationListPage
                               {
                                   Header = "Header",
-                                  AwardingOrganisationHeading = "AO Heading",
                                   MultipleQualificationsFoundText = "Multiple qualifications found"
                               }
                           ]
@@ -499,7 +498,6 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var result = await service.GetQualificationListPage();
 
         result!.Header.Should().Be("Header");
-        result.AwardingOrganisationHeading.Should().Be("AO Heading");
         result.MultipleQualificationsFoundText.Should().Be("Multiple qualifications found");
     }
 
@@ -1038,6 +1036,40 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetOpenGraphData();
+
+        result.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetCheckYourAnswersPage_ReturnsData()
+    {
+        var data = new CheckYourAnswersPage { PageHeading = "test heading" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CheckYourAnswersPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CheckYourAnswersPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCheckYourAnswersPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetCheckYourAnswersPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<CheckYourAnswersPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<CheckYourAnswersPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetCheckYourAnswersPage();
 
         result.Should().BeNull();
     }

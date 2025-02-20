@@ -9,6 +9,7 @@ import {
     whenWasQualificationStarted,
     whatLevelIsTheQualification,
     whatIsTheAwardingOrganisation,
+    checkYourAnswersPage,
     selectQualification,
     confirmQualificiation,
     processAdditionalRequirement,
@@ -47,6 +48,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whenWasQualificationStarted(page, "6", "2022", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
+        await checkYourAnswersPage(page);
         await selectQualification(page, "EYQ-240");
         await confirmQualificiation(page, "#yes");
         await processAdditionalRequirement(page, "EYQ-240", 1, "#yes");
@@ -60,6 +62,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whenWasQualificationStarted(page, "6", "2022", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
+        await checkYourAnswersPage(page);
 
         // qualifications page - click a qualification in the list to move us on
         await checkUrl(page, "/qualifications");
@@ -103,11 +106,13 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whenWasQualificationStarted(page, "6", "2022", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
+        await checkYourAnswersPage(page);
         await checkUrl(page, "/qualifications");
         await refineQualificationSearch(page, 'test');
         await checkUrl(page, "/qualifications");
         await clickBackButton(page);
         await whatIsTheAwardingOrganisation(page, 1);
+        await checkYourAnswersPage(page);
         await checkUrl(page, "/qualifications");
         await checkEmptyValue(page, "#refineSearch");
     });
@@ -132,6 +137,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whenWasQualificationStarted(page, "6", "2022", "1", "2025");
         await whatLevelIsTheQualification(page, 6);
         await whatIsTheAwardingOrganisation(page, 1);
+        await checkYourAnswersPage(page);
         await selectQualification(page, "EYQ-108");
         await confirmQualificiation(page, "#yes");
         await processAdditionalRequirement(page, "EYQ-108", 1, "#yes");
@@ -144,6 +150,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whenWasQualificationStarted(page, "6", "2022", "1", "2025");
         await whatLevelIsTheQualification(page, 6);
         await whatIsTheAwardingOrganisation(page, 1);
+        await checkYourAnswersPage(page);
         await selectQualification(page, "EYQ-108");
         await confirmQualificiation(page, "#yes");
         await processAdditionalRequirement(page, "EYQ-108", 1, "#no");

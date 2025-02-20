@@ -601,4 +601,28 @@ public class MockContentfulServiceTests
         result.Image!.File.Should().NotBeNull();
         result.Image.File.Url.Should().Be("test/url/og-image.png");
     }
+    
+    [TestMethod]
+    public async Task GetCheckYourAnswersPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetCheckYourAnswersPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CheckYourAnswersPage>();
+        result!.PageHeading.Should().Be("Check your answers");
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                   {
+                                                       DisplayText = "TEST",
+                                                       OpenInNewTab = false,
+                                                       Href = "/questions/where-was-the-qualification-awarded"
+                                                   });
+        result.CtaButtonText.Should().Be("Continue");
+        result.ChangeAnswerText.Should().Be("Change");
+        result.QualificationAwardedText.Should().Be("Awarded in");
+        result.QualificationStartedText.Should().Be("Started in");
+        result.AnyAwardingOrganisationText.Should().Be("Various awarding organisations");
+        result.AnyLevelText.Should().Be("Any level");
+    }
 }

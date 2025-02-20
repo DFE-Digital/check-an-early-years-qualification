@@ -21,4 +21,5 @@ public static class ContentTypes
     public const string CannotFindQualificationPage = "cannotFindQualificationPage";
     public const string CheckAdditionalRequirementsAnswerPage = "checkAdditionalRequirementsAnswerPage";
     public const string OpenGraphData = "openGraphData";
+    public const string CheckYourAnswersPage = "checkYourAnswersPage";
 }

@@ -270,27 +270,26 @@ public class MockContentfulService : IContentService
                                                           Href = "/questions/what-is-the-awarding-organisation",
                                                           OpenInNewTab = false
                                                       },
-                                         LevelHeading = "Level",
-                                         AwardingOrganisationHeading = "Awarding organisation",
+                                         QualificationFoundPrefix = "We found",
                                          SearchButtonText = "Refine",
                                          SearchCriteriaHeading = "Your search",
-                                         MultipleQualificationsFoundText = "qualifications found",
-                                         SingleQualificationFoundText = "qualification found",
+                                         MultipleQualificationsFoundText = "matching qualifications",
+                                         SingleQualificationFoundText = "matching qualification",
                                          PreSearchBoxContent =
                                              ContentfulContentHelper.Text("Pre search box content"),
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
                                                                           "/advice/qualification-not-on-the-list"),
-                                         PostSearchCriteriaContent =
-                                             ContentfulContentHelper.Text("Post search criteria content"),
-                                         AnyLevelHeading = "Any level",
-                                         AnyAwardingOrganisationHeading = "Various awarding organisations",
+                                         AnyLevelHeading = "any level",
+                                         AnyAwardingOrganisationHeading = "various awarding organisations",
                                          NoResultsText =
                                              ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
                                          ClearSearchText = "Clear search",
-                                         NoQualificationsFoundText = "No",
-                                         StartDatePrefixText = "Started in",
-                                         AwardedDatePrefixText = "Awarded in"
+                                         AwardedLocationPrefixText = "awarded in",
+                                         StartDatePrefixText = "started in",
+                                         AwardedDatePrefixText = "awarded in",
+                                         LevelPrefixText = "level",
+                                         AwardedByPrefixText = "awarded by"
                                      });
     }
 
@@ -454,6 +453,26 @@ public class MockContentfulService : IContentService
                                                             }
                                                      
                                                  }
+                                     });
+    }
+
+    public async Task<CheckYourAnswersPage?> GetCheckYourAnswersPage()
+    {
+        return await Task.FromResult(new CheckYourAnswersPage
+                                     {
+                                        PageHeading = "Check your answers",
+                                        BackButton = new NavigationLink
+                                                     {
+                                                         DisplayText = "TEST",
+                                                         Href = WhereWasTheQualificationAwardedPath,
+                                                         OpenInNewTab = false
+                                                     },
+                                        CtaButtonText = "Continue",
+                                        ChangeAnswerText = "Change",
+                                        QualificationAwardedText = "Awarded in",
+                                        QualificationStartedText = "Started in",
+                                        AnyAwardingOrganisationText = "Various awarding organisations",
+                                        AnyLevelText = "Any level"
                                      });
     }
 

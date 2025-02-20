@@ -157,6 +157,11 @@ export async function whatIsTheAwardingOrganisation(page: Page, dropdownIndex: n
     await page.locator("#question-submit").click();
 }
 
+export async function checkYourAnswersPage(page: Page) {
+    checkUrl(page, "/questions/check-your-answers");
+    await page.locator("#cta-button").click();
+}
+
 export async function selectQualification(page: Page, qualificationId: string) {
     // qualifications page - click a qualification in the list to move us on
     checkUrl(page, "/qualifications");

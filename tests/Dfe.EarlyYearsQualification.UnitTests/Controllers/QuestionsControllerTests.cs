@@ -465,12 +465,12 @@ public class QuestionsControllerTests
 
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.Errors.ErrorBannerHeading.Should().Be(questionPage.ErrorBannerHeading);
-        model.StartedQuestion.MonthLabel.Should().Be(questionPage.StartedQuestion.MonthLabel);
+        model.Errors!.ErrorBannerHeading.Should().Be(questionPage.ErrorBannerHeading);
+        model.StartedQuestion!.MonthLabel.Should().Be(questionPage.StartedQuestion.MonthLabel);
         model.StartedQuestion.YearLabel.Should().Be(questionPage.StartedQuestion.YearLabel);
         model.StartedQuestion.QuestionHint.Should().Be(questionPage.StartedQuestion.QuestionHint);
 
-        model.AwardedQuestion.MonthLabel.Should().Be(questionPage.AwardedQuestion.MonthLabel);
+        model.AwardedQuestion!.MonthLabel.Should().Be(questionPage.AwardedQuestion.MonthLabel);
         model.AwardedQuestion.YearLabel.Should().Be(questionPage.AwardedQuestion.YearLabel);
         model.AwardedQuestion.QuestionHint.Should().Be(questionPage.AwardedQuestion.QuestionHint);
 
@@ -1087,7 +1087,7 @@ public class QuestionsControllerTests
 
     [TestMethod]
     public async Task
-        Post_WhatIsTheAwardingOrganisation_AwardingOrgPassedIn_SetsJourneyCookieAndRedirectsToTheQualificationListPage()
+        Post_WhatIsTheAwardingOrganisation_AwardingOrgPassedIn_SetsJourneyCookieAndRedirectsToTheCheckYourAnswersPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -1126,8 +1126,8 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationSearch");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckYourAnswers");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
@@ -1135,7 +1135,7 @@ public class QuestionsControllerTests
 
     [TestMethod]
     public async Task
-        Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_SetsJourneyCookieAndRedirectsToTheQualificationListPage()
+        Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_SetsJourneyCookieAndRedirectsToTheCheckYourAnswersPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -1174,8 +1174,8 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationSearch");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckYourAnswers");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);
