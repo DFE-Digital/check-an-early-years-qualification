@@ -78,21 +78,17 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                           awardedValidationResult.MonthValid &&
                           startedValidationResult.YearValid &&
                           awardedValidationResult.YearValid;
-        if (datesValid)
+
+        if (datesValid && !IsAwardedDateAfterStartDate(startedQuestion, awardedQuestion))
         {
-            datesValid = IsAwardedDateAfterStartDate(startedQuestion, awardedQuestion);
-            if (!datesValid)
-            {
-                awardedValidationResult.MonthValid = false;
-                awardedValidationResult.YearValid = false;
-                awardedValidationResult.ErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
-                awardedValidationResult.BannerErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
-            }
+            awardedValidationResult.MonthValid = false;
+            awardedValidationResult.YearValid = false;
+            awardedValidationResult.ErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
+            awardedValidationResult.BannerErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
         }
 
         return new DatesValidationResult
                {
-                   DatesValid = datesValid,
                    StartedValidationResult = startedValidationResult,
                    AwardedValidationResult = awardedValidationResult
                };
