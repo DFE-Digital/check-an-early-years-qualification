@@ -74,12 +74,8 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
         if (startedQuestion is null || awardedQuestion is null) throw new NullReferenceException("Started question or awarded question is null");
         var startedValidationResult = IsValid(startedQuestion, questionPage.StartedQuestion!);
         var awardedValidationResult = IsValid(awardedQuestion, questionPage.AwardedQuestion!);
-        bool datesValid = startedValidationResult.MonthValid &&
-                          awardedValidationResult.MonthValid &&
-                          startedValidationResult.YearValid &&
-                          awardedValidationResult.YearValid;
 
-        if (datesValid && !IsAwardedDateAfterStartDate(startedQuestion, awardedQuestion))
+        if (awardedValidationResult.YearValid && DisplayAwardedDateBeforeStartDateError(startedQuestion, awardedQuestion))
         {
             awardedValidationResult.MonthValid = false;
             awardedValidationResult.YearValid = false;
@@ -94,17 +90,20 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                };
     }
 
-    public bool IsAwardedDateAfterStartDate(DateQuestionModel startedQuestion, DateQuestionModel awardedQuestion)
+    public bool DisplayAwardedDateBeforeStartDateError(DateQuestionModel startedQuestion, DateQuestionModel awardedQuestion)
     {
         var startDateMonth = startedQuestion.SelectedMonth;
         var startDateYear = startedQuestion.SelectedYear;
         var awardedDateMonth = awardedQuestion.SelectedMonth;
         var awardedDateYear = awardedQuestion.SelectedYear;
 
-        if (startDateMonth is null || startDateYear is null || awardedDateMonth is null || awardedDateYear is null) return false;
+        if (startDateYear is null || awardedDateYear is null) return false;
+        if (awardedDateYear.Value < startDateYear.Value) return true;
+        if (startDateMonth is null || awardedDateMonth is null) return false;
+
         var startedDate = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
         var awardedDate = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
 
-        return awardedDate > startedDate;
+        return startedDate >= awardedDate;
     }
 }
