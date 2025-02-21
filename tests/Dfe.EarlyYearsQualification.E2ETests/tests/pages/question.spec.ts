@@ -240,6 +240,85 @@ test.describe("A spec that tests question pages", () => {
         await exists(page, '#awarded-error');
         await checkError(page, '#awarded-error', "Error- AwardedDateIsAfterStartedDateErrorText");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 3);
+        await doesNotHaveClass(page, "#date-started-month", /govuk-input--error/);
+        await doesNotHaveClass(page, "#date-started-year", /govuk-input--error/);
+        await hasClass(page, "#date-awarded-month", /govuk-input--error/);
+        await hasClass(page, "#date-awarded-year", /govuk-input--error/);
+    });
+
+    test("shows the awarded year is before start year error message when a user enters a same awarded date on the when-was-the-qualification-started-and-awarded page", async ({page}) => {
+        await page.goto("/questions/when-was-the-qualification-started-and-awarded");
+
+        await doesNotExist(page, ".govuk-error-summary");
+        await doesNotExist(page, "#started-error");
+        await doesNotExist(page, "#awarded-error");
+        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+
+        await whenWasQualificationStarted(page, "1", "2025", "1", "2025");
+
+        await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
+        await isVisible(page, ".govuk-error-summary");
+        await checkText(page, ".govuk-error-summary__title", "There is a problem");
+        await checkText(page, "#error-banner-link", "Error- AwardedDateIsAfterStartedDateErrorText");
+        await doesNotExist(page, "#started-error");
+        await exists(page, '#awarded-error');
+        await checkError(page, '#awarded-error', "Error- AwardedDateIsAfterStartedDateErrorText");
+        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/,3);
+        await doesNotHaveClass(page, "#date-started-month", /govuk-input--error/);
+        await doesNotHaveClass(page, "#date-started-year", /govuk-input--error/);
+        await hasClass(page, "#date-awarded-month", /govuk-input--error/);
+        await hasClass(page, "#date-awarded-year", /govuk-input--error/);
+    });
+
+    test("shows the awarded year is before start year error message and missing month error when a user enters a later awarded year but missing started month on the when-was-the-qualification-started-and-awarded page", async ({page}) => {
+        await page.goto("/questions/when-was-the-qualification-started-and-awarded");
+
+        await doesNotExist(page, ".govuk-error-summary");
+        await doesNotExist(page, "#started-error");
+        await doesNotExist(page, "#awarded-error");
+        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+
+        await whenWasQualificationStarted(page, "", "2025", "12", "2020");
+
+        await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
+        await isVisible(page, ".govuk-error-summary");
+        await checkText(page, ".govuk-error-summary__title", "There is a problem");
+        await checkText(page, "#error-banner-link", "started- Missing Month Banner Link Text",0);
+        await checkText(page, "#error-banner-link", "Error- AwardedDateIsAfterStartedDateErrorText",1);
+        await exists(page, "#started-error");
+        await exists(page, '#awarded-error');
+        await checkError(page, '#started-error', "started- Missing Month Error Message");
+        await checkError(page, '#awarded-error', "Error- AwardedDateIsAfterStartedDateErrorText");
+        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 3);
+        await hasClass(page, "#date-started-month", /govuk-input--error/);
+        await doesNotHaveClass(page, "#date-started-year", /govuk-input--error/);
+        await hasClass(page, "#date-awarded-month", /govuk-input--error/);
+        await hasClass(page, "#date-awarded-year", /govuk-input--error/);
+    });
+
+
+    test("shows the awarded year is before start year error message and missing month error when a user enters a later awarded year but missing awarded month on the when-was-the-qualification-started-and-awarded page", async ({page}) => {
+        await page.goto("/questions/when-was-the-qualification-started-and-awarded");
+
+        await doesNotExist(page, ".govuk-error-summary");
+        await doesNotExist(page, "#started-error");
+        await doesNotExist(page, "#awarded-error");
+        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+
+        await whenWasQualificationStarted(page, "1", "2025", "", "2020");
+
+        await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
+        await isVisible(page, ".govuk-error-summary");
+        await checkText(page, ".govuk-error-summary__title", "There is a problem");
+        await checkText(page, "#error-banner-link", "awarded- Missing Month Banner Link TextError- AwardedDateIsAfterStartedDateErrorText");
+        await doesNotExist(page, "#started-error");
+        await exists(page, '#awarded-error');
+        await checkError(page, '#awarded-error', "awarded- Missing Month Error MessageError- AwardedDateIsAfterStartedDateErrorText");
+        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 3);
         await doesNotHaveClass(page, "#date-started-month", /govuk-input--error/);
         await doesNotHaveClass(page, "#date-started-year", /govuk-input--error/);
         await hasClass(page, "#date-awarded-month", /govuk-input--error/);

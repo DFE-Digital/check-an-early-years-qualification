@@ -261,12 +261,19 @@ public class DateQuestionModelValidatorTests
     }
 
     [TestMethod]
-    [DataRow(9, 2014, 1, 2025, true)]
-    [DataRow(1, 2019, 12, 2020, true)]
-    [DataRow(1, 2025, 12, 2024, false)]
-    [DataRow(1, 2025, 12, 2020, false)]
-    [DataRow(1, 25, 12, 20, false)]
-    public void IsAwardedDateAfterStartedDate_GoodDates_ReturnsExpected(int startedMonth, int startedYear, int awardedMonth, int awardedYear, bool expectedResult)
+    [DataRow(9, 2014, 1, 2025, false)]
+    [DataRow(1, 2019, 12, 2020, false)]
+    [DataRow(1, 2025, 12, 2024, true)]
+    [DataRow(1, 2025, 12, 2020, true)]
+    [DataRow(null, 2014, 1, 2025, false)]
+    [DataRow(1, 2019, null, 2020, false)]
+    [DataRow(1, 25, 12, 20, true)]
+    [DataRow(null, 2025, 12, 2024, true)]
+    [DataRow(1, null, 12, 2024, false)]
+    [DataRow(1, 2025, null, 2020, true)]
+    [DataRow(1, 2025, 12, null, false)]
+    [DataRow(1, 2025, 1, 2025, true)]
+    public void DisplayAwardedDateBeforeStartDateError_GoodDates_ReturnsExpected(int? startedMonth, int? startedYear, int? awardedMonth, int? awardedYear, bool expectedResult)
     {
         var startedDate = new DateQuestionModel
                           {
@@ -281,6 +288,6 @@ public class DateQuestionModelValidatorTests
                           };
         var validator = new DateQuestionModelValidator(new Mock<IDateTimeAdapter>().Object);
 
-        validator.IsAwardedDateAfterStartDate(startedDate, awardedDate).Should().Be(expectedResult);
+        validator.DisplayAwardedDateBeforeStartDateError(startedDate, awardedDate).Should().Be(expectedResult);
     }
 }
