@@ -6,14 +6,14 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Resolvers;
+using Dfe.EarlyYearsQualification.Content.Services.Extensions;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentServiceBase
 {
-    protected readonly IContentfulClient ContentfulClient;
-    
     protected const int Day = 28;
 
     private static readonly ReadOnlyDictionary<string, int>
@@ -33,7 +33,11 @@ public class ContentfulContentServiceBase
                          { "Nov", 11 },
                          { "Dec", 12 }
                      });
-    
+
+    private readonly IDistributedCache _distributedCache;
+
+    protected readonly IContentfulClient ContentfulClient;
+
     protected readonly Dictionary<Type, string> ContentTypeLookup
         = new()
           {
@@ -60,56 +64,78 @@ public class ContentfulContentServiceBase
 
     protected readonly ILogger Logger;
 
-    protected ContentfulContentServiceBase(ILogger logger, IContentfulClient contentfulClient)
+    protected ContentfulContentServiceBase(ILogger logger, IContentfulClient contentfulClient,
+                                           IDistributedCache distributedCache)
     {
         ContentfulClient = contentfulClient;
         ContentfulClient.ContentTypeResolver = new EntityResolver();
+
+        _distributedCache = distributedCache;
 
         Logger = logger;
     }
 
     protected async Task<T?> GetEntryById<T>(string entryId)
     {
-        try
+        var type = typeof(T);
+        var cacheKey = $"entry:type({type}):id({entryId})";
+
+        async Task<T?> GetEntry()
         {
-            // NOTE: ContentfulClient.GetEntry doesn't bind linked references which is why we are using GetEntriesByType
-            var contentType = ContentTypeLookup[typeof(T)];
+            try
+            {
+                // NOTE: ContentfulClient.GetEntry doesn't bind linked references which is why we are using GetEntriesByType
+                var contentType = ContentTypeLookup[typeof(T)];
 
-            var queryBuilder = new QueryBuilder<T>().ContentTypeIs(contentType)
-                                                    .Include(2)
-                                                    .FieldEquals("sys.id", entryId);
+                var queryBuilder = new QueryBuilder<T>().ContentTypeIs(contentType)
+                                                        .Include(2)
+                                                        .FieldEquals("sys.id", entryId);
 
-            var entries = await ContentfulClient.GetEntriesByType(contentType, queryBuilder);
+                var entries = await ContentfulClient.GetEntriesByType(contentType, queryBuilder);
 
-            return entries.FirstOrDefault();
+                return entries.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex,
+                                "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
+                                entryId, nameof(T));
+                return default;
+            }
         }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex,
-                            "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
-                            entryId, nameof(T));
-            return default;
-        }
+
+        var val = await _distributedCache.GetOrSetAsync(cacheKey, GetEntry);
+
+        return val;
     }
 
     protected async Task<ContentfulCollection<T>?> GetEntriesByType<T>(QueryBuilder<T>? queryBuilder = null)
     {
         var type = typeof(T);
-        try
+        var cacheKey = $"content:type({type})";
+
+        async Task<ContentfulCollection<T>?> GetEntries()
         {
-            var results = await ContentfulClient.GetEntriesByType(ContentTypeLookup[type], queryBuilder);
-            return results;
+            try
+            {
+                var results = await ContentfulClient.GetEntriesByType(ContentTypeLookup[type], queryBuilder);
+                return results;
+            }
+            catch (Exception ex)
+            {
+                var typeName = type.Name;
+                Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
+                return null;
+            }
         }
-        catch (Exception ex)
-        {
-            var typeName = type.Name;
-            Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.",
-                            typeName);
-            return default;
-        }
+
+        var val = await _distributedCache.GetOrSetAsync(cacheKey, GetEntries);
+
+        return val;
     }
-    
-    protected static T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate, T entry)
+
+    protected static T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate,
+                                             T entry)
     {
         if (startDate is not null
             && endDate is not null
@@ -129,7 +155,7 @@ public class ContentfulContentServiceBase
             // if qualification start date is null, check entered start date is <= ToWhichYear & add to results
             return entry;
         }
-        
+
         // if qualification end date is null, check entered start date is >= FromWhichYear & add to results
         if (startDate is not null
             && endDate is null
@@ -140,7 +166,7 @@ public class ContentfulContentServiceBase
 
         return default;
     }
-    
+
     protected DateOnly? GetDate(string? dateString)
     {
         if (string.IsNullOrEmpty(dateString) || dateString == "null")

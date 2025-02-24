@@ -5,6 +5,7 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
@@ -12,8 +13,9 @@ namespace Dfe.EarlyYearsQualification.Content.Services;
 public class QualificationsRepository(
     ILogger<QualificationsRepository> logger,
     IContentfulClient contentfulClient,
+    IDistributedCache distributedCache,
     IFuzzyAdapter fuzzyAdapter)
-    : ContentfulContentServiceBase(logger, contentfulClient), IQualificationsRepository
+    : ContentfulContentServiceBase(logger, contentfulClient, distributedCache), IQualificationsRepository
 {
     // Used by the unit tests to inject a mock builder that returns the query params
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
@@ -169,7 +171,8 @@ public class QualificationsRepository(
             var qualificationStartDate = GetDate(qualification.FromWhichYear);
             var qualificationEndDate = GetDate(qualification.ToWhichYear);
 
-            var result = ValidateDateEntry(qualificationStartDate, qualificationEndDate, enteredStartDate, qualification);
+            var result = ValidateDateEntry(qualificationStartDate, qualificationEndDate, enteredStartDate,
+                                           qualification);
             if (result is not null)
             {
                 results.Add(result);

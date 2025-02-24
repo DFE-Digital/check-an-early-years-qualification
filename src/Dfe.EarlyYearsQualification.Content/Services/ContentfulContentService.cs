@@ -3,14 +3,16 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentService(
     ILogger<ContentfulContentService> logger,
-    IContentfulClient contentfulClient)
-    : ContentfulContentServiceBase(logger, contentfulClient), IContentService
+    IContentfulClient contentfulClient,
+    IDistributedCache distributedCache)
+    : ContentfulContentServiceBase(logger, contentfulClient, distributedCache), IContentService
 {
     public async Task<StartPage?> GetStartPage()
     {
@@ -20,7 +22,7 @@ public class ContentfulContentService(
         if (startPageEntries is null || !startPageEntries.Any())
         {
             Logger.LogWarning("No start page entry returned");
-            return default;
+            return null;
         }
 
         return startPageEntries.First();
@@ -32,12 +34,12 @@ public class ContentfulContentService(
 
         var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(detailsPageType)
                                                           .Include(2);
-        
+
         var detailsPageEntries = await GetEntriesByType(queryBuilder);
         if (detailsPageEntries is null || !detailsPageEntries.Any())
         {
             Logger.LogWarning("No details page entry returned");
-            return default;
+            return null;
         }
 
         var detailsPageContent = detailsPageEntries.First();
@@ -52,7 +54,7 @@ public class ContentfulContentService(
         if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
         {
             Logger.LogWarning("No accessibility statement page entry returned");
-            return default;
+            return null;
         }
 
         return accessibilityStatementEntities.First();
@@ -64,7 +66,7 @@ public class ContentfulContentService(
         if (cookiesEntities is null || !cookiesEntities.Any())
         {
             Logger.LogWarning("No cookies page entry returned");
-            return default;
+            return null;
         }
 
         var cookiesContent = cookiesEntities.First();
@@ -91,7 +93,7 @@ public class ContentfulContentService(
         if (advicePage is null)
         {
             Logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
-            return default;
+            return null;
         }
 
         return advicePage;
@@ -121,7 +123,7 @@ public class ContentfulContentService(
         if (phaseBannerEntities is null || !phaseBannerEntities.Any())
         {
             Logger.LogWarning("No phase banner entry returned");
-            return default;
+            return null;
         }
 
         return phaseBannerEntities.First();
@@ -135,7 +137,7 @@ public class ContentfulContentService(
         if (cookiesBannerEntry is null || !cookiesBannerEntry.Any())
         {
             Logger.LogWarning("No cookies banner entry returned");
-            return default;
+            return null;
         }
 
         return cookiesBannerEntry.First();
@@ -149,7 +151,7 @@ public class ContentfulContentService(
         if (confirmQualificationEntities is null || !confirmQualificationEntities.Any())
         {
             Logger.LogWarning("No confirm qualification page entry returned");
-            return default;
+            return null;
         }
 
         return confirmQualificationEntities.First();
@@ -164,7 +166,7 @@ public class ContentfulContentService(
         if (checkAdditionalRequirementsPageEntities is null || !checkAdditionalRequirementsPageEntities.Any())
         {
             Logger.LogWarning("No CheckAdditionalRequirementsPage entry returned");
-            return default;
+            return null;
         }
 
         return checkAdditionalRequirementsPageEntities.First();
@@ -176,7 +178,7 @@ public class ContentfulContentService(
         if (qualificationListPageEntities is null || !qualificationListPageEntities.Any())
         {
             Logger.LogWarning("No qualification list page entry returned");
-            return default;
+            return null;
         }
 
         var qualificationListPage = qualificationListPageEntities.First();
@@ -189,7 +191,7 @@ public class ContentfulContentService(
         if (challengePageEntities is null || !challengePageEntities.Any())
         {
             Logger.LogWarning("No challenge page entry returned");
-            return default;
+            return null;
         }
 
         var challengePage = challengePageEntities.First();
@@ -198,11 +200,13 @@ public class ContentfulContentService(
 
     public async Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage()
     {
-        var checkAdditionalRequirementsAnswerPageEntities = await GetEntriesByType<CheckAdditionalRequirementsAnswerPage>();
-        if (checkAdditionalRequirementsAnswerPageEntities is null || !checkAdditionalRequirementsAnswerPageEntities.Any())
+        var checkAdditionalRequirementsAnswerPageEntities =
+            await GetEntriesByType<CheckAdditionalRequirementsAnswerPage>();
+        if (checkAdditionalRequirementsAnswerPageEntities is null ||
+            !checkAdditionalRequirementsAnswerPageEntities.Any())
         {
             Logger.LogWarning("No check additional requirements answer entry returned");
-            return default;
+            return null;
         }
 
         var checkAdditionalRequirementsAnswerPage = checkAdditionalRequirementsAnswerPageEntities.First();
@@ -215,25 +219,27 @@ public class ContentfulContentService(
         if (openGraphEntities is null || !openGraphEntities.Any())
         {
             Logger.LogWarning("No open graph data entry returned");
-            return default;
+            return null;
         }
 
         var openGraphData = openGraphEntities.First();
         return openGraphData;
     }
 
-    public async Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
+    public async Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(
+        int level, int startMonth, int startYear)
     {
         var cannotFindQualificationPageType = ContentTypeLookup[typeof(CannotFindQualificationPage)];
-        var queryBuilder = new QueryBuilder<CannotFindQualificationPage>().ContentTypeIs(cannotFindQualificationPageType)
-                                                                          .Include(2)
-                                                                          .FieldEquals("fields.level", level.ToString());
-        
+        var queryBuilder = new QueryBuilder<CannotFindQualificationPage>()
+                           .ContentTypeIs(cannotFindQualificationPageType)
+                           .Include(2)
+                           .FieldEquals("fields.level", level.ToString());
+
         var cannotFindQualificationPages = await GetEntriesByType(queryBuilder);
         if (cannotFindQualificationPages is null || !cannotFindQualificationPages.Any())
         {
             Logger.LogWarning("No 'cannot find qualification' page entries returned");
-            return default;
+            return null;
         }
 
         var filteredCannotFindQualificationPages =
@@ -241,11 +247,12 @@ public class ContentfulContentService(
 
         if (filteredCannotFindQualificationPages.Count != 0) return filteredCannotFindQualificationPages[0];
         Logger.LogWarning("No filtered 'cannot find qualification' page entries returned");
-        return default;
+        return null;
     }
-    
-    private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(int startDateMonth, int startDateYear,
-                                                           List<CannotFindQualificationPage> cannotFindQualificationPages)
+
+    private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(
+        int startDateMonth, int startDateYear,
+        List<CannotFindQualificationPage> cannotFindQualificationPages)
     {
         var results = new List<CannotFindQualificationPage>();
         var enteredStartDate = new DateOnly(startDateYear, startDateMonth, Day);
