@@ -25,7 +25,7 @@ public class QualificationListModel
     public string? SearchCriteria { get; init; } = string.Empty;
 
     public List<BasicQualificationModel> Qualifications { get; init; } = [];
-    
+
     public string NoResultText { get; init; } = string.Empty;
 
     public string ClearSearchText { get; init; } = string.Empty;

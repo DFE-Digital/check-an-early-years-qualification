@@ -46,7 +46,8 @@ public class QualificationSearchService(
                                                  );
     }
 
-    public async Task<QualificationListModel> MapList(QualificationListPage content, List<Qualification>? qualifications)
+    public async Task<QualificationListModel> MapList(QualificationListPage content,
+                                                      List<Qualification>? qualifications)
     {
         var basicQualificationsModels = qualifications == null ? [] : GetBasicQualificationsModels(qualifications);
 
@@ -67,7 +68,7 @@ public class QualificationSearchService(
                    SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
                    Qualifications = basicQualificationsModels,
                    NoResultText = await contentParser.ToHtml(content.NoResultsText),
-                   ClearSearchText = content.ClearSearchText,
+                   ClearSearchText = content.ClearSearchText
                };
     }
 
@@ -83,20 +84,24 @@ public class QualificationSearchService(
                           {
                               Country = $"{content.AwardedLocationPrefixText} {countryAwarded}",
                               Level = content.AnyLevelHeading,
-                              AwardingOrganisation = $"{content.AwardedByPrefixText} {content.AnyAwardingOrganisationHeading}"
+                              AwardingOrganisation =
+                                  $"{content.AwardedByPrefixText} {content.AnyAwardingOrganisationHeading}"
                           };
 
         if (startDateMonth is not null && startDateYear is not null)
         {
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-            filterModel.StartDate = $"{content.StartDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
+            filterModel.StartDate =
+                $"{content.StartDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
         }
 
         if (awardedDateMonth is not null && awardedDateYear is not null)
         {
             var date = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
-            filterModel.AwardedDate = $"{content.AwardedDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {awardedDateYear.Value}";
+            filterModel.AwardedDate =
+                $"{content.AwardedDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {awardedDateYear.Value}";
         }
+
         if (level > 0)
         {
             filterModel.Level = $"{content.LevelPrefixText} {level}";

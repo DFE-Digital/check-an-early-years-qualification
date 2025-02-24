@@ -13,7 +13,7 @@ public class OptionItemConverterTests
         var result = new OptionItemConverter().CanConvert(typeof(PhaseBanner));
         result.Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void CanConvert_PassInOptionItemType_ReturnsTrue()
     {
@@ -39,7 +39,7 @@ public class OptionItemConverterTests
         var data = result as Option;
         data!.Label.Should().Match(option.Label);
     }
-    
+
     [TestMethod]
     public void ReadJson_PassInObjectNotContainingLabel_ReturnsDivider()
     {
@@ -62,8 +62,9 @@ public class OptionItemConverterTests
     [TestMethod]
     public void WriteJson_ShouldThrowException()
     {
-        var act = () => new OptionItemConverter().WriteJson(new JsonTextWriter(new StringWriter()), null, JsonSerializer.CreateDefault());
+        var action = () => new OptionItemConverter().WriteJson(new JsonTextWriter(new StringWriter()), null,
+                                                               JsonSerializer.CreateDefault());
 
-        act.Should().Throw<NotImplementedException>();
+        action.Should().Throw<NotImplementedException>();
     }
 }

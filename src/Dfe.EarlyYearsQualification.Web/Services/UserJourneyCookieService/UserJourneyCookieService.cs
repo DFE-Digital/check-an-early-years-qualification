@@ -41,7 +41,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             SetJourneyCookie();
         }
     }
-    
+
     public void SetWhenWasQualificationAwarded(string date)
     {
         lock (_lockObject)
@@ -165,7 +165,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
 
             int? startDateMonth = null;
             int? startDateYear = null;
-            var qualificationAwardedDateSplit = _model!.WhenWasQualificationStarted.Split('/');
+            string[] qualificationAwardedDateSplit = _model!.WhenWasQualificationStarted.Split('/');
 
             // ReSharper disable once InvertIf
             if (qualificationAwardedDateSplit.Length == 2
@@ -179,7 +179,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             return (startDateMonth, startDateYear);
         }
     }
-    
+
     public (int? startMonth, int? startYear) GetWhenWasQualificationAwarded()
     {
         lock (_lockObject)
@@ -188,7 +188,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
 
             int? awardedDateMonth = null;
             int? awardedDateYear = null;
-            var qualificationAwardedDateSplit = _model!.WhenWasQualificationAwarded.Split('/');
+            string[] qualificationAwardedDateSplit = _model!.WhenWasQualificationAwarded.Split('/');
 
             // ReSharper disable once InvertIf
             if (qualificationAwardedDateSplit.Length == 2
@@ -230,7 +230,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
         return date < new DateOnly(2014, 9, 1);
     }
-    
+
     public bool WasStartedOnOrAfterSeptember2019()
     {
         var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
@@ -244,7 +244,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
         return date >= new DateOnly(2019, 9, 1);
     }
-    
+
     public int? GetLevelOfQualification()
     {
         lock (_lockObject)

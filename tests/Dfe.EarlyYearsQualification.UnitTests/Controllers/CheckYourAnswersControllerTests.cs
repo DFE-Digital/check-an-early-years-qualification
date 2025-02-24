@@ -18,21 +18,25 @@ public class CheckYourAnswersControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object, mockUserJourneyCookieService.Object);
+            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object,
+                                           mockUserJourneyCookieService.Object);
 
-        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
-        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+                          .ReturnsAsync(new DatesQuestionPage { Question = "Date started question" });
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Level question" });
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question" });
         mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage());
-        
+
         var result = await controller.Index();
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null));
-        
+
         mockLogger.VerifyError("No content for the check your answers page");
     }
-    
+
     [TestMethod]
     public async Task Index_NullWhenWasTheQualificationStartedAndAwardedQuestion_RedirectsToErrorPage()
     {
@@ -41,21 +45,25 @@ public class CheckYourAnswersControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object, mockUserJourneyCookieService.Object);
+            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object,
+                                           mockUserJourneyCookieService.Object);
 
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
-        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Awarded question" });
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Level question" });
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question" });
         mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage());
-        
+
         var result = await controller.Index();
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null));
-        
+
         mockLogger.VerifyError("No content for the check your answers page");
     }
-    
+
     [TestMethod]
     public async Task Index_NullWhatLevelIsTheQualificationQuestion_RedirectsToErrorPage()
     {
@@ -64,21 +72,25 @@ public class CheckYourAnswersControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object, mockUserJourneyCookieService.Object);
+            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object,
+                                           mockUserJourneyCookieService.Object);
 
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
-        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
-        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Awarded question" });
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+                          .ReturnsAsync(new DatesQuestionPage { Question = "Date started question" });
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question" });
         mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage());
-        
+
         var result = await controller.Index();
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null));
-        
+
         mockLogger.VerifyError("No content for the check your answers page");
     }
-    
+
     [TestMethod]
     public async Task Index_NullWhatIsTheAwardingOrganisationQuestion_RedirectsToErrorPage()
     {
@@ -87,21 +99,25 @@ public class CheckYourAnswersControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object, mockUserJourneyCookieService.Object);
+            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object,
+                                           mockUserJourneyCookieService.Object);
 
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
-        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Awarded question" });
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Level question" });
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+                          .ReturnsAsync(new DatesQuestionPage { Question = "Date started question" });
         mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage());
-        
+
         var result = await controller.Index();
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null));
-        
+
         mockLogger.VerifyError("No content for the check your answers page");
     }
-    
+
     [TestMethod]
     public async Task Index_NullPageContent_RedirectsToErrorPage()
     {
@@ -110,21 +126,26 @@ public class CheckYourAnswersControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object, mockUserJourneyCookieService.Object);
+            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object,
+                                           mockUserJourneyCookieService.Object);
 
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
-        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
-        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
-        
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Awarded question" });
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Level question" });
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+                          .ReturnsAsync(new DatesQuestionPage { Question = "Date started question" });
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question" });
+
         var result = await controller.Index();
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(new RedirectToActionResult("Index", "Error", null));
-        
+
         mockLogger.VerifyError("No content for the check your answers page");
     }
-    
+
     [TestMethod]
     public async Task Index_MapsDetails_ReturnsView()
     {
@@ -133,16 +154,22 @@ public class CheckYourAnswersControllerTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
         var controller =
-            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object, mockUserJourneyCookieService.Object);
+            new CheckYourAnswersController(mockLogger.Object, mockContentService.Object,
+                                           mockUserJourneyCookieService.Object);
 
         const string pageHeading = "check your answers";
 
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded)).ReturnsAsync(new RadioQuestionPage { Question = "Awarded question"});
-        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification)).ReturnsAsync(new RadioQuestionPage { Question = "Level question"});
-        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded)).ReturnsAsync(new DatesQuestionPage { Question = "Date started question"});
-        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation)).ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question"});
-        mockContentService.Setup(x => x.GetCheckYourAnswersPage()).ReturnsAsync(new CheckYourAnswersPage { PageHeading = pageHeading });
-        
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Awarded question" });
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+                          .ReturnsAsync(new RadioQuestionPage { Question = "Level question" });
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+                          .ReturnsAsync(new DatesQuestionPage { Question = "Date started question" });
+        mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
+                          .ReturnsAsync(new DropdownQuestionPage { Question = "Dropdown question" });
+        mockContentService.Setup(x => x.GetCheckYourAnswersPage())
+                          .ReturnsAsync(new CheckYourAnswersPage { PageHeading = pageHeading });
+
         var result = await controller.Index();
 
         result.Should().NotBeNull();
@@ -155,7 +182,7 @@ public class CheckYourAnswersControllerTests
 
         var model = data as CheckYourAnswersPageModel;
         model!.PageHeading.Should().Match(pageHeading);
-        
+
         mockUserJourneyCookieService.Verify(x => x.GetWhereWasQualificationAwarded(), Times.Once);
         mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationStarted(), Times.Once);
         mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationAwarded(), Times.Once);

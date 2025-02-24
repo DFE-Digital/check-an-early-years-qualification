@@ -28,7 +28,7 @@ public static class SecureHeaderConfiguration
                                                 CommandType = CspCommandType.Directive,
                                                 DirectiveOrUri = "sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw="
                                             };
-        
+
         var govukAllMinifiedElement = new ContentSecurityPolicyElement
                                       {
                                           CommandType = CspCommandType.Directive,
@@ -37,17 +37,22 @@ public static class SecureHeaderConfiguration
 
         var unsafeHashesElement = new ContentSecurityPolicyElement
                                   { CommandType = CspCommandType.Directive, DirectiveOrUri = "unsafe-hashes" };
-        
+
         var contentfulCspElement = new ContentSecurityPolicyElement
                                    { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://app.contentful.com" };
-        
-        
+
         var gtmCspElement = new ContentSecurityPolicyElement
-                                   { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://www.googletagmanager.com/gtm.js" };
-        
+                            {
+                                CommandType = CspCommandType.Uri,
+                                DirectiveOrUri = "https://www.googletagmanager.com/gtm.js"
+                            };
+
         var gtmInjectedScriptCspElement = new ContentSecurityPolicyElement
-                            { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://www.googletagmanager.com/gtag/js" };
-        
+                                          {
+                                              CommandType = CspCommandType.Uri,
+                                              DirectiveOrUri = "https://www.googletagmanager.com/gtag/js"
+                                          };
+
         var ga4CspElement = new ContentSecurityPolicyElement
                             { CommandType = CspCommandType.Uri, DirectiveOrUri = "*.google-analytics.com" };
 
@@ -62,7 +67,7 @@ public static class SecureHeaderConfiguration
                                                  CommandType = CspCommandType.Uri,
                                                  DirectiveOrUri = "https://*.clarity.ms/collect"
                                              };
-        
+
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(unsafeHashesElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukFrontendSupportedElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukAllMinifiedElement);
@@ -72,7 +77,7 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(clarityCspElement);
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(clarityConnectSourceCspElement);
-        
+
         return configuration;
     }
 }

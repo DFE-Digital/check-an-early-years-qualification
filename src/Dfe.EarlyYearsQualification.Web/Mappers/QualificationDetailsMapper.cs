@@ -46,11 +46,12 @@ public static class QualificationDetailsMapper
                                  RequirementsHeading = content.RequirementsHeading,
                                  RequirementsText = requirementsTextHtml,
                                  RatiosHeading = content.RatiosHeading,
-                                 CheckAnotherQualificationLink = NavigationLinkMapper.Map(content.CheckAnotherQualificationLink),
+                                 CheckAnotherQualificationLink =
+                                     NavigationLinkMapper.Map(content.CheckAnotherQualificationLink),
                                  PrintButtonText = content.PrintButtonText,
                                  QualificationNameLabel = content.QualificationNameLabel,
                                  QualificationStartDateLabel = content.QualificationStartDateLabel,
-                                 QualificationAwardedDateLabel =content.QualificationAwardedDateLabel,
+                                 QualificationAwardedDateLabel = content.QualificationAwardedDateLabel,
                                  QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader,
                                  FeedbackBanner = FeedbackBannerMapper.Map(content.FeedbackBanner, feedbackBodyHtml)
                              }

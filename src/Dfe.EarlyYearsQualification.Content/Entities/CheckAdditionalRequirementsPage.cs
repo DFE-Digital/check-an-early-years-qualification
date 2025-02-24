@@ -5,7 +5,7 @@ public class CheckAdditionalRequirementsPage
     public string Heading { get; init; } = string.Empty;
 
     public NavigationLink? BackButton { get; init; }
-    
+
     public NavigationLink? PreviousQuestionBackButton { get; init; }
 
     public string QualificationLabel { get; init; } = string.Empty;

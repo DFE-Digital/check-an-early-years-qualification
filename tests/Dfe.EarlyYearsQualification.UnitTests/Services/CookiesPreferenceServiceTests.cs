@@ -10,7 +10,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 public class CookieServiceTests
 {
     private const string FakeGoogleAnalyticsSessionCookie = "_ga_TEST";
-    
+
     [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
@@ -163,7 +163,11 @@ public class CookieServiceTests
 
         var mockManager = new Mock<ICookieManager>();
 
-        var cookies = new Dictionary<string, string> { { CookieKeyNames.CookiesPreferenceKey, serializedModel }, { FakeGoogleAnalyticsSessionCookie, "test" } };
+        var cookies = new Dictionary<string, string>
+                      {
+                          { CookieKeyNames.CookiesPreferenceKey, serializedModel },
+                          { FakeGoogleAnalyticsSessionCookie, "test" }
+                      };
 
         mockManager.Setup(m => m.ReadInboundCookies())
                    .Returns(cookies);

@@ -8,15 +8,18 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class CheckYourAnswersPageMapperTests
 {
     private const string WhereWasQualificationAwardedQuestion = "Where was the qualification awarded?";
-    private const string WhenWasTheQualificationStartedAndAwardedQuestion = "When was the qualification started and awarded?";
+
+    private const string WhenWasTheQualificationStartedAndAwardedQuestion =
+        "When was the qualification started and awarded?";
+
     private const string WhatLevelIsTheQualificationQuestion = "What level is the qualification?";
     private const string WhatIsTheAwardingOrganisationQuestion = "What is the awarding organisation?";
-    
+
     [TestMethod]
     public void Map_MapsValuesAsExpected()
     {
         var pageContent = GetPageContent();
-        
+
         const string whereWasQualificationAwardedAnswer = "England";
         var whenWasTheQualificationStartedAnswer = (1, 2015);
         var whenWasTheQualificationAwardedAnswer = (2, 2017);
@@ -29,7 +32,8 @@ public class CheckYourAnswersPageMapperTests
 
         var model = CheckYourAnswersPageMapper.Map(pageContent, WhereWasQualificationAwardedQuestion,
                                                    WhenWasTheQualificationStartedAndAwardedQuestion,
-                                                   WhatLevelIsTheQualificationQuestion, WhatIsTheAwardingOrganisationQuestion,
+                                                   WhatLevelIsTheQualificationQuestion,
+                                                   WhatIsTheAwardingOrganisationQuestion,
                                                    whereWasQualificationAwardedAnswer,
                                                    whenWasTheQualificationStartedAnswer,
                                                    whenWasTheQualificationAwardedAnswer,
@@ -46,27 +50,28 @@ public class CheckYourAnswersPageMapperTests
         model.QuestionAnswerModels.Count.Should().Be(4);
         model.QuestionAnswerModels[0].Should().NotBeNull();
         model.QuestionAnswerModels[0].Question.Should().BeSameAs(WhereWasQualificationAwardedQuestion);
-        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo([whereWasQualificationAwardedAnswer]);
+        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo(whereWasQualificationAwardedAnswer);
         model.QuestionAnswerModels[0].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhereWasQualificationAwarded);
         model.QuestionAnswerModels[1].Should().NotBeNull();
         model.QuestionAnswerModels[1].Question.Should().BeSameAs(WhenWasTheQualificationStartedAndAwardedQuestion);
-        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo([expectedStartedAnswer, expectedAwardedAnswer]);
-        model.QuestionAnswerModels[1].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
+        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo(expectedStartedAnswer, expectedAwardedAnswer);
+        model.QuestionAnswerModels[1].ChangeAnswerHref.Should()
+             .BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
         model.QuestionAnswerModels[2].Should().NotBeNull();
         model.QuestionAnswerModels[2].Question.Should().BeSameAs(WhatLevelIsTheQualificationQuestion);
-        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo([expectedLevelAnswer]);
+        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo(expectedLevelAnswer);
         model.QuestionAnswerModels[2].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatLevelIsTheQualification);
         model.QuestionAnswerModels[3].Should().NotBeNull();
         model.QuestionAnswerModels[3].Question.Should().BeSameAs(WhatIsTheAwardingOrganisationQuestion);
-        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo([whatIsTheAwardingOrganisationAnswer]);
+        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo(whatIsTheAwardingOrganisationAnswer);
         model.QuestionAnswerModels[3].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatIsTheAwardingOrganisation);
     }
-    
+
     [TestMethod]
     public void Map_LevelIs0_MapsLevelAnswerAsExpected()
     {
         var pageContent = GetPageContent();
-        
+
         const string whereWasQualificationAwardedAnswer = "England";
         var whenWasTheQualificationStartedAnswer = (1, 2015);
         var whenWasTheQualificationAwardedAnswer = (2, 2017);
@@ -78,7 +83,8 @@ public class CheckYourAnswersPageMapperTests
 
         var model = CheckYourAnswersPageMapper.Map(pageContent, WhereWasQualificationAwardedQuestion,
                                                    WhenWasTheQualificationStartedAndAwardedQuestion,
-                                                   WhatLevelIsTheQualificationQuestion, WhatIsTheAwardingOrganisationQuestion,
+                                                   WhatLevelIsTheQualificationQuestion,
+                                                   WhatIsTheAwardingOrganisationQuestion,
                                                    whereWasQualificationAwardedAnswer,
                                                    whenWasTheQualificationStartedAnswer,
                                                    whenWasTheQualificationAwardedAnswer,
@@ -95,27 +101,28 @@ public class CheckYourAnswersPageMapperTests
         model.QuestionAnswerModels.Count.Should().Be(4);
         model.QuestionAnswerModels[0].Should().NotBeNull();
         model.QuestionAnswerModels[0].Question.Should().BeSameAs(WhereWasQualificationAwardedQuestion);
-        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo([whereWasQualificationAwardedAnswer]);
+        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo(whereWasQualificationAwardedAnswer);
         model.QuestionAnswerModels[0].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhereWasQualificationAwarded);
         model.QuestionAnswerModels[1].Should().NotBeNull();
         model.QuestionAnswerModels[1].Question.Should().BeSameAs(WhenWasTheQualificationStartedAndAwardedQuestion);
-        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo([expectedStartedAnswer, expectedAwardedAnswer]);
-        model.QuestionAnswerModels[1].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
+        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo(expectedStartedAnswer, expectedAwardedAnswer);
+        model.QuestionAnswerModels[1].ChangeAnswerHref.Should()
+             .BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
         model.QuestionAnswerModels[2].Should().NotBeNull();
         model.QuestionAnswerModels[2].Question.Should().BeSameAs(WhatLevelIsTheQualificationQuestion);
-        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo([pageContent.AnyLevelText]);
+        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo(pageContent.AnyLevelText);
         model.QuestionAnswerModels[2].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatLevelIsTheQualification);
         model.QuestionAnswerModels[3].Should().NotBeNull();
         model.QuestionAnswerModels[3].Question.Should().BeSameAs(WhatIsTheAwardingOrganisationQuestion);
-        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo([whatIsTheAwardingOrganisationAnswer]);
+        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo(whatIsTheAwardingOrganisationAnswer);
         model.QuestionAnswerModels[3].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatIsTheAwardingOrganisation);
     }
-    
+
     [TestMethod]
     public void Map_AwardingOrganisationIsNull_MapsAnswerAsExpected()
     {
         var pageContent = GetPageContent();
-        
+
         const string whereWasQualificationAwardedAnswer = "England";
         var whenWasTheQualificationStartedAnswer = (1, 2015);
         var whenWasTheQualificationAwardedAnswer = (2, 2017);
@@ -128,7 +135,8 @@ public class CheckYourAnswersPageMapperTests
 
         var model = CheckYourAnswersPageMapper.Map(pageContent, WhereWasQualificationAwardedQuestion,
                                                    WhenWasTheQualificationStartedAndAwardedQuestion,
-                                                   WhatLevelIsTheQualificationQuestion, WhatIsTheAwardingOrganisationQuestion,
+                                                   WhatLevelIsTheQualificationQuestion,
+                                                   WhatIsTheAwardingOrganisationQuestion,
                                                    whereWasQualificationAwardedAnswer,
                                                    whenWasTheQualificationStartedAnswer,
                                                    whenWasTheQualificationAwardedAnswer,
@@ -145,19 +153,20 @@ public class CheckYourAnswersPageMapperTests
         model.QuestionAnswerModels.Count.Should().Be(4);
         model.QuestionAnswerModels[0].Should().NotBeNull();
         model.QuestionAnswerModels[0].Question.Should().BeSameAs(WhereWasQualificationAwardedQuestion);
-        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo([whereWasQualificationAwardedAnswer]);
+        model.QuestionAnswerModels[0].Answer.Should().BeEquivalentTo(whereWasQualificationAwardedAnswer);
         model.QuestionAnswerModels[0].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhereWasQualificationAwarded);
         model.QuestionAnswerModels[1].Should().NotBeNull();
         model.QuestionAnswerModels[1].Question.Should().BeSameAs(WhenWasTheQualificationStartedAndAwardedQuestion);
-        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo([expectedStartedAnswer, expectedAwardedAnswer]);
-        model.QuestionAnswerModels[1].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
+        model.QuestionAnswerModels[1].Answer.Should().BeEquivalentTo(expectedStartedAnswer, expectedAwardedAnswer);
+        model.QuestionAnswerModels[1].ChangeAnswerHref.Should()
+             .BeSameAs(QuestionUrls.WhenWasTheQualificationStartedAndAwarded);
         model.QuestionAnswerModels[2].Should().NotBeNull();
         model.QuestionAnswerModels[2].Question.Should().BeSameAs(WhatLevelIsTheQualificationQuestion);
-        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo([expectedLevelAnswer]);
+        model.QuestionAnswerModels[2].Answer.Should().BeEquivalentTo(expectedLevelAnswer);
         model.QuestionAnswerModels[2].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatLevelIsTheQualification);
         model.QuestionAnswerModels[3].Should().NotBeNull();
         model.QuestionAnswerModels[3].Question.Should().BeSameAs(WhatIsTheAwardingOrganisationQuestion);
-        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo([pageContent.AnyAwardingOrganisationText]);
+        model.QuestionAnswerModels[3].Answer.Should().BeEquivalentTo(pageContent.AnyAwardingOrganisationText);
         model.QuestionAnswerModels[3].ChangeAnswerHref.Should().BeSameAs(QuestionUrls.WhatIsTheAwardingOrganisation);
     }
 

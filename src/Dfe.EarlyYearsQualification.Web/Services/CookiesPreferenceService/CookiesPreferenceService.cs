@@ -75,7 +75,7 @@ public class CookiesPreferenceService(ICookieManager cookieManager) : ICookiesPr
 
         cookieManager.SetOutboundCookie(key, serializedCookie, cookieOptions);
     }
-    
+
     private void DeleteGoogleAnalyticSessionStateCookie()
     {
         var allCookies = cookieManager.ReadInboundCookies();

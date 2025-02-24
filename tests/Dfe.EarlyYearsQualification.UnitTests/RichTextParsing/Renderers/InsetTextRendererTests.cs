@@ -18,7 +18,7 @@ public class InsetTextRendererTests
 
     [TestMethod]
     public void InsetTextRenderer_DataTargetIsNull_DoesNotSupport()
-    { 
+    {
         var content = new EntryStructure { Data = new EntryStructureData { Target = null } };
 
         new InsetTextRenderer().SupportsContent(content).Should().BeFalse();
@@ -85,8 +85,6 @@ public class InsetTextRendererTests
                                   {
                                       Content = ContentfulContentHelper.Text("Test GovUk Inset Text Content")
                                   };
-
-        
 
         var content = new EntryStructure
                       {

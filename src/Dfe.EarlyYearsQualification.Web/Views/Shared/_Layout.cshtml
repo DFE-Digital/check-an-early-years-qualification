@@ -29,7 +29,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="noindex, nofollow"/>
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:url" content="@url">
@@ -48,7 +48,7 @@
     <meta name="twitter:title" content="@title">
     <meta name="twitter:description" content="@description">
     <meta name="twitter:image" content="@imageUrl">
-    
+
     <title>@ViewData["Title"] - Check an Early Years qualification</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.svg"/>
@@ -59,12 +59,14 @@
         {
             if (!string.IsNullOrEmpty(gtmTag))
             {
-                <script src="~/js/gtm/head-script.js" asp-append-version="true" id="ga-script" data-ga-tag=@gtmTag></script>
+                <script src="~/js/gtm/head-script.js" asp-append-version="true" id="ga-script"
+                        data-ga-tag=@gtmTag></script>
             }
 
             if (!string.IsNullOrEmpty(clarityTag))
             {
-                <script src="~/js/clarity/head-script.js" asp-append-version="true" id="clarity-script" data-clarity-tag=@clarityTag></script>
+                <script src="~/js/clarity/head-script.js" asp-append-version="true" id="clarity-script"
+                        data-clarity-tag=@clarityTag></script>
             }
         }
     }

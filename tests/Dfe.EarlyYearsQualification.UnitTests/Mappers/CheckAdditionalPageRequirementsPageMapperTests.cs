@@ -23,19 +23,19 @@ public class CheckAdditionalPageRequirementsPageMapperTests
         const string qualificationId = "Test-123";
         const int questionIndex = 2;
         var backButton = new NavigationLinkModel
-                                      {
-                                          DisplayText = "Back",
-                                          OpenInNewTab = true,
-                                          Href = "/"
-                                      };
-        
+                         {
+                             DisplayText = "Back",
+                             OpenInNewTab = true,
+                             Href = "/"
+                         };
+
         var additionalRequirementQuestionModel = new AdditionalRequirementQuestionModel
                                                  {
                                                      Question = "Question", DetailsContent = "Details content",
                                                      DetailsHeading = "Details heading", HintText = "Hint text",
                                                      Options =
                                                      [
-                                                         new OptionModel()
+                                                         new OptionModel
                                                          {
                                                              Value = "Value", Hint = "Hint",
                                                              Label = "Label"
@@ -44,7 +44,7 @@ public class CheckAdditionalPageRequirementsPageMapperTests
                                                  };
 
         var result = CheckAdditionalRequirementsPageMapper.Map(content, qualificationId, questionIndex, backButton,
-                                                               additionalRequirementQuestionModel, null);
+                                                               additionalRequirementQuestionModel);
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualificationId);

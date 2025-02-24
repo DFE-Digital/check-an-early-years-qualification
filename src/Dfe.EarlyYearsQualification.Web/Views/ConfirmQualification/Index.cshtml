@@ -23,7 +23,8 @@
                     <div class="govuk-error-summary__body">
                         <ul class="govuk-list govuk-error-summary__list">
                             <li>
-                                <a id="error-banner-link" href="#confirm-qualification-choice-error">@Model.ErrorBannerLink</a>
+                                <a id="error-banner-link"
+                                   href="#confirm-qualification-choice-error">@Model.ErrorBannerLink</a>
                             </li>
                         </ul>
                     </div>
@@ -68,7 +69,8 @@
         }
         <form id="confirm-qualification" asp-controller="ConfirmQualification" asp-action="Confirm" method="post">
             <input type="hidden" name="qualificationId" value="@Model.QualificationId">
-            <div id="confirm-qualification-form-group" class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+            <div id="confirm-qualification-form-group"
+                 class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset" aria-describedby="confirm-qualification-choice-error">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h2 id="radio-heading" class="govuk-heading-m mb-0">@Model.RadioHeading</h2>
@@ -97,12 +99,12 @@
                     }
                 </fieldset>
             </div>
-            
-            @if(Model.ShowAnswerDisclaimerText)
+
+            @if (Model.ShowAnswerDisclaimerText)
             {
                 await Html.RenderPartialAsync("Partials/WarningText", Model.AnswerDisclaimerText);
             }
-            
+
             <div class="govuk-form-group">
                 <button id="confirm-qualification-button" class="govuk-button" data-module="govuk-button">
                     @Model.ButtonText

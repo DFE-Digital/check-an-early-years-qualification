@@ -26,9 +26,9 @@
                         <strong>@answer.value.Question</strong>
                     </td>
                     <td id="question-@(answer.index + 1)-answer" class="govuk-table__cell govuk-!-text-align-left">
-                        @for (int i = 0; i < answer.value.Answer.Length; i++)
+                        @for (var i = 0; i < answer.value.Answer.Length; i++)
                         {
-                            <p style="margin-bottom: @(i + 1 < answer.value.Answer.Length ? "10px": "0")">@answer.value.Answer[i]</p>
+                            <p style="margin-bottom: @(i + 1 < answer.value.Answer.Length ? "10px" : "0")">@answer.value.Answer[i]</p>
                         }
                     </td>
                     <td id="question-@(answer.index + 1)-change" class="govuk-table__cell govuk-!-text-align-right ">
@@ -38,7 +38,8 @@
             }
         </table>
 
-        <a id ="cta-button" href="@Url.Action("Get", "QualificationSearch")" class="govuk-button" data-module="govuk-button">
+        <a id="cta-button" href="@Url.Action("Get", "QualificationSearch")" class="govuk-button"
+           data-module="govuk-button">
             @Model.CtaButtonText
         </a>
     </div>

@@ -145,7 +145,8 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     [DataRow(8, 2024)]
     [DataRow(12, 2024)]
-    public void DateQuestionModelValidator_GivenDateLaterThanCurrentMonthButSameYear_ValidatesFalse(int selectedMonth, int selectedYear)
+    public void DateQuestionModelValidator_GivenDateLaterThanCurrentMonthButSameYear_ValidatesFalse(
+        int selectedMonth, int selectedYear)
     {
         const int thisYear = 2024;
         const int thisMonth = 7;
@@ -273,7 +274,8 @@ public class DateQuestionModelValidatorTests
     [DataRow(1, 2025, null, 2020, true)]
     [DataRow(1, 2025, 12, null, false)]
     [DataRow(1, 2025, 1, 2025, true)]
-    public void DisplayAwardedDateBeforeStartDateError_GoodDates_ReturnsExpected(int? startedMonth, int? startedYear, int? awardedMonth, int? awardedYear, bool expectedResult)
+    public void DisplayAwardedDateBeforeStartDateError_GoodDates_ReturnsExpected(
+        int? startedMonth, int? startedYear, int? awardedMonth, int? awardedYear, bool expectedResult)
     {
         var startedDate = new DateQuestionModel
                           {

@@ -19,7 +19,7 @@ public class CookiesBannerViewComponentTests
         var mockLogger = new Mock<ILogger<CookiesBannerViewComponent>>();
         var mockContentParser = new Mock<IGovUkContentParser>();
 
-        mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync((CookiesBanner?)default);
+        mockContentService.Setup(x => x.GetCookiesBannerContent()).ReturnsAsync((CookiesBanner?)null);
 
         var cookiesBannerViewComponent =
             new CookiesBannerViewComponent(mockLogger.Object, mockContentService.Object, mockContentParser.Object);

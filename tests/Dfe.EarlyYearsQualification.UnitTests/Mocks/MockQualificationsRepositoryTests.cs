@@ -134,7 +134,7 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetQualificationById_EYQ108_ReturnsExpectedDetails()
     {
@@ -207,7 +207,7 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetQualificationById_EYQ115_ReturnsExpectedDetails()
     {
@@ -258,7 +258,7 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetQualificationById_EYQ250_ReturnsExpectedDetails()
     {
@@ -332,7 +332,7 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetQualificationById_EYQ114_ReturnsExpectedDetails()
     {

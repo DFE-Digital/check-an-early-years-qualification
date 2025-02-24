@@ -16,7 +16,7 @@ public class PhaseBannerRenderer : IContentRenderer
     public bool SupportsContent(IContent content)
     {
         var paragraph = content as Paragraph;
-        
+
         return paragraph?.NodeType == nameof(PhaseBanner);
     }
 }

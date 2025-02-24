@@ -71,11 +71,13 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
     {
         var startedQuestion = model.StartedQuestion;
         var awardedQuestion = model.AwardedQuestion;
-        if (startedQuestion is null || awardedQuestion is null) throw new NullReferenceException("Started question or awarded question is null");
+        if (startedQuestion is null || awardedQuestion is null)
+            throw new NullReferenceException("Started question or awarded question is null");
         var startedValidationResult = IsValid(startedQuestion, questionPage.StartedQuestion!);
         var awardedValidationResult = IsValid(awardedQuestion, questionPage.AwardedQuestion!);
 
-        if (awardedValidationResult.YearValid && DisplayAwardedDateBeforeStartDateError(startedQuestion, awardedQuestion))
+        if (awardedValidationResult.YearValid &&
+            DisplayAwardedDateBeforeStartDateError(startedQuestion, awardedQuestion))
         {
             awardedValidationResult.MonthValid = false;
             awardedValidationResult.YearValid = false;
@@ -90,7 +92,8 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                };
     }
 
-    public bool DisplayAwardedDateBeforeStartDateError(DateQuestionModel startedQuestion, DateQuestionModel awardedQuestion)
+    public bool DisplayAwardedDateBeforeStartDateError(DateQuestionModel startedQuestion,
+                                                       DateQuestionModel awardedQuestion)
     {
         var startDateMonth = startedQuestion.SelectedMonth;
         var startDateYear = startedQuestion.SelectedYear;

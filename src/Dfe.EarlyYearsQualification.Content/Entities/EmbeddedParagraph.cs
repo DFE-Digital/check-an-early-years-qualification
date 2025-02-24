@@ -8,5 +8,5 @@ public class EmbeddedParagraph : IContent
 
     public string Name { get; set; } = string.Empty;
 
-    public Document? Content { get; set; }
+    public Document? Content { get; init; }
 }

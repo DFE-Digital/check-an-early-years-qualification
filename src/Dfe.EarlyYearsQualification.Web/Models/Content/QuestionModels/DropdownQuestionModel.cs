@@ -11,7 +11,7 @@ public class DropdownQuestionModel : BaseQuestionModel
     public string DropdownHeading { get; set; } = string.Empty;
 
     public string NotInListText { get; set; } = string.Empty;
-    
+
     public bool HasErrors { get; set; }
 
     public string DropdownId { get; init; } = "awarding-organisation-select";

@@ -27,7 +27,8 @@ public class QualificationDetailsMapperTests
                               BookmarkHeading = "Bookmark heading",
                               BookmarkText = "Bookmark text",
                               CheckAnotherQualificationHeading = "check another qualification heading",
-                              CheckAnotherQualificationText = ContentfulContentHelper.Paragraph(checkAnotherQualificationText),
+                              CheckAnotherQualificationText =
+                                  ContentfulContentHelper.Paragraph(checkAnotherQualificationText),
                               CheckAnotherQualificationLink = new NavigationLink
                                                               {
                                                                   DisplayText = "Check another qualification",
@@ -78,7 +79,8 @@ public class QualificationDetailsMapperTests
 
         var result = QualificationDetailsMapper.Map(qualification, detailsPage, backNavLink,
                                                     additionalRequirementAnswers, dateStarted, dateAwarded,
-                                                    checkAnotherQualificationText, furtherInfoText, requirementsText, feedbackBannerBody);
+                                                    checkAnotherQualificationText, furtherInfoText, requirementsText,
+                                                    feedbackBannerBody);
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);
@@ -114,12 +116,15 @@ public class QualificationDetailsMapperTests
         result.Content.RequirementsHeading.Should().BeSameAs(detailsPage.RequirementsHeading);
         result.Content.RequirementsText.Should().BeSameAs(requirementsText);
         result.Content.RatiosHeading.Should().BeSameAs(detailsPage.RatiosHeading);
-        result.Content.CheckAnotherQualificationLink.Should().BeEquivalentTo(detailsPage.CheckAnotherQualificationLink, options => options.Excluding(x => x.Sys));
+        result.Content.CheckAnotherQualificationLink.Should()
+              .BeEquivalentTo(detailsPage.CheckAnotherQualificationLink, options => options.Excluding(x => x.Sys));
         result.Content.PrintButtonText.Should().BeSameAs(detailsPage.PrintButtonText);
         result.Content.QualificationNameLabel.Should().BeSameAs(detailsPage.QualificationNameLabel);
         result.Content.QualificationStartDateLabel.Should().BeSameAs(detailsPage.QualificationStartDateLabel);
         result.Content.QualificationAwardedDateLabel.Should().BeSameAs(detailsPage.QualificationAwardedDateLabel);
-        result.Content.QualificationDetailsSummaryHeader.Should().BeSameAs(detailsPage.QualificationDetailsSummaryHeader);
-        result.Content.FeedbackBanner.Should().BeEquivalentTo(detailsPage.FeedbackBanner, options => options.Excluding(x => x.Body));
+        result.Content.QualificationDetailsSummaryHeader.Should()
+              .BeSameAs(detailsPage.QualificationDetailsSummaryHeader);
+        result.Content.FeedbackBanner.Should()
+              .BeEquivalentTo(detailsPage.FeedbackBanner, options => options.Excluding(x => x.Body));
     }
 }

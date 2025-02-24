@@ -7,6 +7,7 @@ namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 public class EmbeddedParagraphRenderer : IContentRenderer
 {
     public int Order { get; set; }
+
     public bool SupportsContent(IContent content)
     {
         if (content is not EntryStructure entryStructure)

@@ -18,8 +18,10 @@ public class MockQualificationsRepository : IQualificationsRepository
                                                                              AwardingOrganisations.Various, 6)),
                    "eyq-115" => await Task.FromResult(CreateQualification("EYQ-115", "NCFE",
                                                                           AwardingOrganisations.Various, 3, false)),
-                   "eyq-114" => await Task.FromResult(CreateLevel2FurtherActionRequiredQualification("EYQ-114", "Level 2 Further Action Qualification", AwardingOrganisations.Ncfe, 3)),
-                   
+                   "eyq-114" => await Task.FromResult(CreateLevel2FurtherActionRequiredQualification("EYQ-114",
+                                                           "Level 2 Further Action Qualification",
+                                                           AwardingOrganisations.Ncfe, 3)),
+
                    "eyq-241" => await Task.FromResult(CreateQualification("EYQ-241", "BTEC",
                                                                           AwardingOrganisations.Various, 2)),
                    _ => await Task.FromResult(CreateQualification("EYQ-240",
@@ -165,42 +167,44 @@ public class MockQualificationsRepository : IQualificationsRepository
                                                      bool includeAdditionalRequirementQuestions = true)
     {
         var additionalRequirementQuestions = includeAdditionalRequirementQuestions
-                                                 ? new List<AdditionalRequirementQuestion>{
-                                                     new()
-                                                     {
-                                                         Question = "Test question",
-                                                         HintText =
-                                                             "This is the hint text: answer yes for full and relevant",
-                                                         DetailsHeading =
-                                                             "This is the details heading",
-                                                         DetailsContent =
-                                                             ContentfulContentHelper
-                                                                 .Paragraph("This is the details content"),
-                                                         Answers =
-                                                         [
-                                                             new Option
-                                                             {
-                                                                 Label = "Yes",
-                                                                 Value = "yes"
-                                                             },
+                                                 ? new List<AdditionalRequirementQuestion>
+                                                   {
+                                                       new()
+                                                       {
+                                                           Question = "Test question",
+                                                           HintText =
+                                                               "This is the hint text: answer yes for full and relevant",
+                                                           DetailsHeading =
+                                                               "This is the details heading",
+                                                           DetailsContent =
+                                                               ContentfulContentHelper
+                                                                   .Paragraph("This is the details content"),
+                                                           Answers =
+                                                           [
+                                                               new Option
+                                                               {
+                                                                   Label = "Yes",
+                                                                   Value = "yes"
+                                                               },
 
-                                                             new Option
-                                                             {
-                                                                 Label = "No",
-                                                                 Value = "no"
-                                                             }
-                                                         ],
-                                                         ConfirmationStatement =
-                                                             "This is the confirmation statement 1",
-                                                         AnswerToBeFullAndRelevant = true
-                                                     },
-                                                     CreateSecondAdditionalRequirementQuestion(false)
-                                                } : null;
-        
-    return new Qualification(qualificationId,
-                             qualificationName,
-                             awardingOrganisation,
-                             qualificationLevel)
+                                                               new Option
+                                                               {
+                                                                   Label = "No",
+                                                                   Value = "no"
+                                                               }
+                                                           ],
+                                                           ConfirmationStatement =
+                                                               "This is the confirmation statement 1",
+                                                           AnswerToBeFullAndRelevant = true
+                                                       },
+                                                       CreateSecondAdditionalRequirementQuestion(false)
+                                                   }
+                                                 : null;
+
+        return new Qualification(qualificationId,
+                                 qualificationName,
+                                 awardingOrganisation,
+                                 qualificationLevel)
                {
                    FromWhichYear = "2020",
                    ToWhichYear = "2021",
@@ -216,7 +220,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                RatioRequirements
                                    .Level2RatioRequirementName,
                            FullAndRelevantForLevel3After2014 = true,
-                           RequirementForLevel2BetweenSept14AndAug19 = ContentfulContentHelper.Paragraph("Level 2 further action required text")
+                           RequirementForLevel2BetweenSept14AndAug19 =
+                               ContentfulContentHelper.Paragraph("Level 2 further action required text")
                        },
 
                        new RatioRequirement
@@ -332,7 +337,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                };
     }
 
-    private static AdditionalRequirementQuestion CreateSecondAdditionalRequirementQuestion(bool answerToBeFullAndRelevant)
+    private static AdditionalRequirementQuestion CreateSecondAdditionalRequirementQuestion(
+        bool answerToBeFullAndRelevant)
     {
         return new AdditionalRequirementQuestion
                {
@@ -389,7 +395,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForLevel5After2014 = false,
                            FullAndRelevantForLevel6After2014 = false,
                            FullAndRelevantForLevel7After2014 = false,
-                           RequirementForLevel2BetweenSept14AndAug19 = ContentfulContentHelper.Paragraph("Level 2 further action required text")
+                           RequirementForLevel2BetweenSept14AndAug19 =
+                               ContentfulContentHelper.Paragraph("Level 2 further action required text")
                        },
 
                        new RatioRequirement

@@ -47,7 +47,7 @@ public class ConfirmQualificationPageMapperTests
         result.ShowAnswerDisclaimerText.Should().BeTrue();
         result.AnswerDisclaimerText.Should().BeSameAs(content.AnswerDisclaimerText);
     }
-    
+
     [TestMethod]
     public void Map_PassInParameters_HasAdditionalRequirementQuestions_ReturnsModel()
     {
@@ -56,10 +56,7 @@ public class ConfirmQualificationPageMapperTests
         var qualification = new Qualification("Test-ABC", "QualificationName", "NCFE", 3)
                             {
                                 FromWhichYear = "Sep-16",
-                                AdditionalRequirementQuestions = new List<AdditionalRequirementQuestion>
-                                                                 {
-                                                                     new ()
-                                                                 }
+                                AdditionalRequirementQuestions = [new AdditionalRequirementQuestion()]
                             };
 
         const string postHeadingContentHtml = "Post heading content";

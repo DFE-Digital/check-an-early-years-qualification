@@ -11,14 +11,17 @@ public class QualificationSearchControllerTests
     private Mock<ILogger<QualificationSearchController>> _mockLogger = new();
     private Mock<IQualificationSearchService> _mockQualificationSearchService = new();
 
-    private QualificationSearchController GetSut() => new(_mockLogger.Object,
-                                                          _mockQualificationSearchService.Object)
-                                                      {
-                                                          ControllerContext = new ControllerContext
-                                                                              {
-                                                                                  HttpContext = new DefaultHttpContext()
-                                                                              }
-                                                      };
+    private QualificationSearchController GetSut()
+    {
+        return new QualificationSearchController(_mockLogger.Object,
+                                                 _mockQualificationSearchService.Object)
+               {
+                   ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       }
+               };
+    }
 
     [TestInitialize]
     public void Initialize()

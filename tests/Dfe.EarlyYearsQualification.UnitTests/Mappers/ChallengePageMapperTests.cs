@@ -22,7 +22,8 @@ public class ChallengePageMapperTests
         const string footerContentHtml = "This is the footer content";
         const string mainContentHtml = "This is the main content";
 
-        var result = ChallengePageMapper.Map(model, content, sanitisedReferralAddress, footerContentHtml, mainContentHtml);
+        var result =
+            ChallengePageMapper.Map(model, content, sanitisedReferralAddress, footerContentHtml, mainContentHtml);
 
         result.Should().NotBeNull();
         result.RedirectAddress.Should().BeSameAs(sanitisedReferralAddress);

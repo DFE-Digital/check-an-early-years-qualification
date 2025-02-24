@@ -5,10 +5,10 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 public class NavigationLink
 {
     /// <summary>
-    /// Contentful system properties
+    ///     Contentful system properties
     /// </summary>
-    public SystemProperties Sys { get; init; } = new();
-    
+    public SystemProperties Sys { get; } = new();
+
     /// <summary>
     ///     Display text (i.e. <a>{DisplayText}</a>)
     /// </summary>

@@ -26,7 +26,7 @@ public static class CheckYourAnswersPageMapper
                         BackButton = NavigationLinkMapper.Map(pageContent.BackButton),
                         ChangeAnswerText = pageContent.ChangeAnswerText
                     };
-        
+
         var startedDateString = ConvertToDateString(whenWasTheQualificationStartedAnswer.startMonth,
                                                     whenWasTheQualificationStartedAnswer.startYear,
                                                     pageContent.QualificationStartedText);
@@ -55,7 +55,7 @@ public static class CheckYourAnswersPageMapper
 
         return model;
     }
-    
+
     private static QuestionAnswerModel MapQuestionAnswerModel(string question, string[] answer, string changeAnswerHref)
     {
         return new QuestionAnswerModel

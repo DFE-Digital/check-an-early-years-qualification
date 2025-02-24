@@ -6,9 +6,9 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers;
 public static class StartPageMapper
 {
     public static StartPageModel Map(StartPage startPageContent,
-                              string preCtaButtonContentHtml,
-                              string postCtaButtonContentHtml,
-                              string rightHandSideContentHtml)
+                                     string preCtaButtonContentHtml,
+                                     string postCtaButtonContentHtml,
+                                     string rightHandSideContentHtml)
     {
         return new StartPageModel
                {

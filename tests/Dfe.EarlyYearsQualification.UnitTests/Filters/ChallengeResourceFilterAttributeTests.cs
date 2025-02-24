@@ -18,13 +18,13 @@ public class ChallengeResourceFilterAttributeTests
         const string accessKey = "CX";
 
         var accessKeys = new List<string>
-                  {
-                      accessKey
-                  };
-        
+                         {
+                             accessKey
+                         };
+
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
-        
+
         var filter = new ChallengeResourceFilterAttribute(NullLogger<ChallengeResourceFilterAttribute>.Instance,
                                                           accessKeysHelper.Object);
         var httpContext = new DefaultHttpContext
@@ -70,7 +70,7 @@ public class ChallengeResourceFilterAttributeTests
                          {
                              accessKey
                          };
-        
+
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
 
@@ -111,7 +111,7 @@ public class ChallengeResourceFilterAttributeTests
                          {
                              accessKey
                          };
-        
+
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
 
@@ -151,7 +151,7 @@ public class ChallengeResourceFilterAttributeTests
 
     [TestMethod]
     public void ExecuteFilter_CorrectSecretValue2_PassesThrough()
-    { 
+    {
         const string accessKey = "CX";
 
         var accessKeys = new List<string>
@@ -159,7 +159,7 @@ public class ChallengeResourceFilterAttributeTests
                              "SomeKey", // <== NB, not using the first key in the array 
                              accessKey
                          };
-        
+
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
 
@@ -206,7 +206,7 @@ public class ChallengeResourceFilterAttributeTests
                          {
                              accessKey
                          };
-        
+
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
 
@@ -223,10 +223,10 @@ public class ChallengeResourceFilterAttributeTests
                               }
                           };
 
-        var cookie = new[]
-                     {
-                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{accessKey}"
-                     };
+        string[] cookie =
+        [
+            $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{accessKey}"
+        ];
 
         httpContext.Request.Headers.Cookie = cookie;
 
@@ -263,7 +263,7 @@ public class ChallengeResourceFilterAttributeTests
                          {
                              accessKey
                          };
-        
+
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         accessKeysHelper.Setup(x => x.ConfiguredKeys).Returns(accessKeys);
 
@@ -311,7 +311,6 @@ public class ChallengeResourceFilterAttributeTests
         var logger = new Mock<ILogger<ChallengeResourceFilterAttribute>>();
 
         var filter = new ChallengeResourceFilterAttribute(logger.Object, accessKeysHelper.Object);
-
 
         var httpContext = new DefaultHttpContext
                           {
@@ -381,7 +380,6 @@ public class ChallengeResourceFilterAttributeTests
     [TestMethod]
     public void ExecuteFilter_AllowPublicAccess_PassesThrough()
     {
-        
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
         accessKeysHelper.Setup(x => x.AllowPublicAccess).Returns(true);
 

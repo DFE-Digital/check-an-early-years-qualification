@@ -35,7 +35,7 @@ public class PhaseBannerRendererTests
                    {
                        NodeType = nameof(PhaseBanner)
                    };
-        
+
         new PhaseBannerRenderer().SupportsContent(para).Should().BeTrue();
     }
 
@@ -55,10 +55,10 @@ public class PhaseBannerRendererTests
                        ],
                        NodeType = nameof(PhaseBanner)
                    };
-        
+
         var renderer = new PhaseBannerRenderer();
         var result = renderer.RenderAsync(para).Result;
-        
+
         result.Should().Be("Some text.<a href='https://some.website.com' class='govuk-link'>Link text.</a>");
     }
 

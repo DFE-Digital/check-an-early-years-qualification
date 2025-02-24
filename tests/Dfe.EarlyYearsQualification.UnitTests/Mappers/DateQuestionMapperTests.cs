@@ -16,7 +16,7 @@ public class DateQuestionMapperTests
                            QuestionHint = "Hint",
                            QuestionHeader = "Question hint header",
                            MonthLabel = "Month label",
-                           YearLabel = "Year label",
+                           YearLabel = "Year label"
                        };
         const string errorBannerLinkText = "error banner link text";
         const string errorMessage = "error message";
@@ -24,7 +24,8 @@ public class DateQuestionMapperTests
         const int selectedMonth = 2;
         const int selectedYear = 2016;
 
-        var result = DateQuestionMapper.Map(new DateQuestionModel(), question, errorBannerLinkText, errorMessage, dateValidationResult, selectedMonth, selectedYear);
+        var result = DateQuestionMapper.Map(new DateQuestionModel(), question, errorBannerLinkText, errorMessage,
+                                            dateValidationResult, selectedMonth, selectedYear);
 
         result.Should().NotBeNull();
         result.MonthLabel.Should().BeSameAs(question.MonthLabel);

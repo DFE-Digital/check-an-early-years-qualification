@@ -15,7 +15,7 @@ public class ServiceControllerTests
         var result = await DummyController.GetFeedbackBannerBody(null, mockGovUkContentParser.Object);
         result.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetFeedbackBannerBodyToHtml_PassInFeedbackBanner_ReturnsContent()
     {
@@ -30,9 +30,9 @@ public class ServiceControllerTests
                                  BannerTitle = "Banner title",
                                  Body = feedbackBannerContentDocument
                              };
-        
+
         var result = await DummyController.GetFeedbackBannerBody(feedbackBanner, mockGovUkContentParser.Object);
-        
+
         result.Should().NotBeNull();
         result.Should().BeSameAs(feedbackBannerContent);
     }
@@ -40,7 +40,8 @@ public class ServiceControllerTests
 
 public class DummyController : ServiceController
 {
-    public static async Task<string?> GetFeedbackBannerBody(FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
+    public static async Task<string?> GetFeedbackBannerBody(FeedbackBanner? feedbackBanner,
+                                                            IGovUkContentParser contentParser)
     {
         return await GetFeedbackBannerBodyToHtml(feedbackBanner, contentParser);
     }
