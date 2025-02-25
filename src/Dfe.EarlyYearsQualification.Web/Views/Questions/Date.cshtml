@@ -29,15 +29,6 @@
                         <label id="@Model.Prefix-month-label" class="govuk-label govuk-date-input__label"
                                for="@Model.MonthId">@Model.MonthLabel</label>
                         @Html.TextBox(Model.MonthId, Model.SelectedMonth, new { id = Model.MonthId, @class=monthClass, maxlength=2, name=Model.MonthId, type="text", inputmode="numeric" })
-                        @* <input *@
-                        @*     id="@Model.MonthId" *@
-                        @*     class="@monthClass" *@
-                        @*     maxlength="2" *@
-                        @*     name="@Model.MonthId" *@
-                        @*     type="text" *@
-                        @*     inputmode="numeric" *@
-                        @*     value="@Model.SelectedMonth" *@
-                        @*     asp-format="{0:#.#}"/> *@
                     </div>
                 </div>
                 <div class="govuk-date-input__item">
@@ -45,15 +36,6 @@
                         <label id="@Model.Prefix-year-label" class="govuk-label govuk-date-input__label"
                                for="@Model.YearId">@Model.YearLabel</label>
                         @Html.TextBox(Model.YearId, Model.SelectedYear, new { id = Model.YearId, @class=yearClass, maxlength=4, name=Model.YearId, type="text", inputmode="numeric" })
-                        @* <input *@
-                        @*     id="@Model.YearId" *@
-                        @*     class="@yearClass" *@
-                        @*     maxlength="4" *@
-                        @*     name="@Model.YearId" *@
-                        @*     type="text" *@
-                        @*     inputmode="numeric" *@
-                        @*     value="@Model.SelectedYear" *@
-                        @*     asp-format="{0:#.#}"/> *@
                     </div>
                 </div>
             </div>
