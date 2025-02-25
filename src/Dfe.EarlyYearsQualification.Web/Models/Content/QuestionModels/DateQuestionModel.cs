@@ -27,5 +27,7 @@ public class DateQuestionModel
 
     public string ErrorMessage { get; set; } = string.Empty;
 
+    public string Prefix { get; set; } = string.Empty;
+
     public ErrorSummaryLink? ErrorSummaryLink { get; set; }
 }

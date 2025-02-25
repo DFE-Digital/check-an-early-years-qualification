@@ -12,6 +12,8 @@
 }
 
 @{
+    const bool useNewViews = true;
+
     var awardingQuestion = Model.AwardedQuestion;
     var startingQuestion = Model.StartedQuestion;
 }
@@ -31,7 +33,22 @@
                     @Model.Question
                 </h1>
             </legend>
-            @if (startingQuestion is not null)
+
+            @if (useNewViews)
+            {
+                @if (startingQuestion is not null)
+                {
+                    <partial name="Date" model="startingQuestion"/>
+                }
+
+                @if (awardingQuestion is not null)
+                {
+                    <partial name="Date" model="awardingQuestion"/>
+                }
+            }
+            else
+            {
+                @if (startingQuestion is not null)
             {
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
@@ -114,8 +131,8 @@
                         </div>
                     </div>
                 </div>
+                }
             }
-
             <div class="govuk-form-group">
                 <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
                     @Model.CtaButtonText
