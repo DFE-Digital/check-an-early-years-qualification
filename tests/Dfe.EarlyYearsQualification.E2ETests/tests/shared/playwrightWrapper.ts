@@ -136,10 +136,10 @@ export async function whereWasTheQualificationAwarded(page: Page, location: stri
 
 export async function whenWasQualificationStarted(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
     checkUrl(page, '/questions/when-was-the-qualification-started-and-awarded');
-    await page.locator("#date-started-month").fill(startedMonth);
-    await page.locator("#date-started-year").fill(startedYear);
-    await page.locator("#date-awarded-month").fill(awardedMonth);
-    await page.locator("#date-awarded-year").fill(awardedYear);
+    await page.locator("#StartedQuestion\\.SelectedMonth").fill(startedMonth);
+    await page.locator("#StartedQuestion\\.SelectedYear").fill(startedYear);
+    await page.locator("#AwardedQuestion\\.SelectedMonth").fill(awardedMonth);
+    await page.locator("#AwardedQuestion\\.SelectedYear").fill(awardedYear);
     await page.locator("#question-submit").click();
 }
 
