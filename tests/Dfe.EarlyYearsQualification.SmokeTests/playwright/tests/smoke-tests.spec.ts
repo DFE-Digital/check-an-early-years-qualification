@@ -28,10 +28,10 @@ test.describe("A spec used to smoke test the environment once a deployment has h
 
     // when-was-the-qualification-started-and-awarded page
     expect(page.url()).toContain("/questions/when-was-the-qualification-started-and-awarded");
-    await page.locator("#StartedQuestion.SelectedMonth").fill("7");
-    await page.locator("#StartedQuestion.SelectedYear").fill("2015");
-    await page.locator("#AwardedQuestion.SelectedMonth").fill("9");
-    await page.locator("#AwardedQuestion.SelectedYear").fill("2019");
+    await page.locator("#StartedQuestion\\.SelectedMonth").fill("7");
+    await page.locator("#StartedQuestion\\.SelectedYear").fill("2015");
+    await page.locator("#AwardedQuestion\\.SelectedMonth").fill("9");
+    await page.locator("#AwardedQuestion\\.SelectedYear").fill("2019");
     await page.locator("#question-submit").click();
 
     // what-level-is-the-qualification page
