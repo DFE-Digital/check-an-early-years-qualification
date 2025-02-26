@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
@@ -37,9 +38,12 @@ public static class DistributedCacheExtensions
         using var streamReader = new StreamReader(memoryStream);
         using var jsonTextReader = new JsonTextReader(streamReader);
 
+#if DEBUG
         string s = streamReader.ReadToEnd();
+        Debug.Write($"Value from cache: {s}");
 
         memoryStream.Seek(0, SeekOrigin.Begin);
+#endif
 
         value = Serializer.Deserialize<T>(jsonTextReader);
         return true;
