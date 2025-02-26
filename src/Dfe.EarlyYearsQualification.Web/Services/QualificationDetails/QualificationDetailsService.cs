@@ -41,7 +41,8 @@ public class QualificationDetailsService(
                    : null;
     }
 
-    public List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
+    public List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
+        List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
     {
         if (additionalRequirementQuestions is null) return null;
 
@@ -71,7 +72,8 @@ public class QualificationDetailsService(
         return results;
     }
 
-    public (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(QualificationDetailsModel details, AdditionalRequirementQuestion qtsQuestion)
+    public (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(
+        QualificationDetailsModel details, AdditionalRequirementQuestion qtsQuestion)
     {
         // Check remaining questions
         var answersToCheck = new List<AdditionalRequirementAnswerModel>();
@@ -83,14 +85,16 @@ public class QualificationDetailsService(
         // Adding it here covers scenarios where they are OK for L2/3/Unqualified and just Unqualified.
         details.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
 
-        if (!AnswersIndicateNotFullAndRelevant(answersToCheck)) return (true, details);
-        return (false, details);
+        return AnswersIndicateNotFullAndRelevant(answersToCheck)
+                   ? (false, details)
+                   : (true, details);
     }
 
     public bool QualificationContainsQtsQuestion(Qualification qualification)
     {
         return qualification.AdditionalRequirementQuestions != null
-               && qualification.AdditionalRequirementQuestions.Exists(x => x.Sys.Id == AdditionalRequirementQuestions.QtsQuestion);
+               && qualification.AdditionalRequirementQuestions.Exists(x => x.Sys.Id == AdditionalRequirementQuestions
+                                                                               .QtsQuestion);
     }
 
     public RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
@@ -109,14 +113,18 @@ public class QualificationDetailsService(
                details.AdditionalRequirementAnswers.Exists(answer => string.IsNullOrEmpty(answer.Answer));
     }
 
-    public async Task<QualificationDetailsModel> CheckLevel6Requirements(Qualification qualification, QualificationDetailsModel details)
+    public async Task<QualificationDetailsModel> CheckLevel6Requirements(
+        Qualification qualification, QualificationDetailsModel details)
     {
         // Answers indicate not full and relevant
         details.RatioRequirements = MarkAsNotFullAndRelevant(details.RatioRequirements);
         // Set any content for L6
         var beforeOrAfter = userJourneyCookieService.WasStartedBeforeSeptember2014() ? "Before" : "After";
-        var additionalRequirementDetailPropertyToCheck = $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
-        var requirementsForLevel6 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck, RatioRequirements.Level6RatioRequirementName, qualification);
+        var additionalRequirementDetailPropertyToCheck =
+            $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
+        var requirementsForLevel6 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
+                                                               RatioRequirements.Level6RatioRequirementName,
+                                                               qualification);
         details.RatioRequirements.RequirementsForLevel6 = await contentParser.ToHtml(requirementsForLevel6);
         details.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
         return details;
@@ -139,7 +147,9 @@ public class QualificationDetailsService(
                    );
     }
 
-    public bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification, List<AdditionalRequirementAnswerModel>? additionalRequirementAnswerModels)
+    public bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification,
+                                                                      List<AdditionalRequirementAnswerModel>?
+                                                                          additionalRequirementAnswerModels)
     {
         if (additionalRequirementAnswerModels is null)
         {
@@ -155,32 +165,22 @@ public class QualificationDetailsService(
         return qtsQuestion.AnswerToBeFullAndRelevant == answerAsBool;
     }
 
-    public async Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model, Qualification qualification)
+    public async Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
+                                                                        Qualification qualification)
     {
         // Check if the qualification is not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
-        if (model.RatioRequirements.IsNotFullAndRelevant && userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() && qualification.QualificationLevel > 2)
+        if (model.RatioRequirements.IsNotFullAndRelevant &&
+            userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() &&
+            qualification.QualificationLevel > 2)
         {
             // If the qualification is above a level 2 qualification, is not full and relevant and is started between Sept 2014 and Aug 2019
             // then it will have special requirements for level 2.
             model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.FurtherActionRequired;
-            var requirementsForLevel2 = GetRatioProperty<Document>("RequirementForLevel2BetweenSept14AndAug19", RatioRequirements.Level2RatioRequirementName, qualification);
+            var requirementsForLevel2 = GetRatioProperty<Document>("RequirementForLevel2BetweenSept14AndAug19",
+                                                                   RatioRequirements.Level2RatioRequirementName,
+                                                                   qualification);
             model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(requirementsForLevel2);
             model.RatioRequirements.ShowRequirementsForLevel2ByDefault = true;
-        }
-    }
-
-    private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
-    {
-        try
-        {
-            var requirement = qualification.RatioRequirements!.Find(x => x.RatioRequirementName == ratioName);
-
-            return (T)requirement!.GetType().GetProperty(propertyToCheck)!.GetValue(requirement, null)!;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Could not find property: {PropertyToCheck} within {RatioName} for qualification: {QualificationId}", propertyToCheck, ratioName, qualification.QualificationId);
-            throw;
         }
     }
 
@@ -215,12 +215,15 @@ public class QualificationDetailsService(
         // Build up property name to check for each level
         var beforeOrAfter = userJourneyCookieService.WasStartedBeforeSeptember2014() ? "Before" : "After";
 
-        var fullAndRelevantPropertyToCheck = $"FullAndRelevantForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
+        var fullAndRelevantPropertyToCheck =
+            $"FullAndRelevantForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
 
-        var additionalRequirementDetailPropertyToCheck = $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
+        var additionalRequirementDetailPropertyToCheck =
+            $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
 
         if (qualification.IsAutomaticallyApprovedAtLevel6 || (QualificationContainsQtsQuestion(qualification) &&
-                                                              UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, model.AdditionalRequirementAnswers)))
+                                                              UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification,
+                                                                   model.AdditionalRequirementAnswers)))
         {
             // Check user against QTS criteria and swap to Qts Criteria if matches
             fullAndRelevantPropertyToCheck = $"FullAndRelevantForQtsEtc{beforeOrAfter}2014";
@@ -229,7 +232,8 @@ public class QualificationDetailsService(
 
         const string additionalRequirementHeading = "RequirementHeading";
 
-        var approvedForLevel2 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level2RatioRequirementName,
+        var approvedForLevel2 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck,
+                                                       RatioRequirements.Level2RatioRequirementName,
                                                        qualification);
 
         model.RatioRequirements.ApprovedForLevel2 = approvedForLevel2
@@ -245,7 +249,8 @@ public class QualificationDetailsService(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level2RatioRequirementName,
                                      qualification);
 
-        var approvedForLevel3 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level3RatioRequirementName,
+        var approvedForLevel3 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck,
+                                                       RatioRequirements.Level3RatioRequirementName,
                                                        qualification);
 
         model.RatioRequirements.ApprovedForLevel3 = approvedForLevel3
@@ -261,7 +266,8 @@ public class QualificationDetailsService(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level3RatioRequirementName,
                                      qualification);
 
-        var approvedForLevel6 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.Level6RatioRequirementName,
+        var approvedForLevel6 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck,
+                                                       RatioRequirements.Level6RatioRequirementName,
                                                        qualification);
 
         model.RatioRequirements.ApprovedForLevel6 = approvedForLevel6
@@ -277,7 +283,9 @@ public class QualificationDetailsService(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level6RatioRequirementName,
                                      qualification);
 
-        var approvedForUnqualified = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck, RatioRequirements.UnqualifiedRatioRequirementName, qualification);
+        var approvedForUnqualified = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck,
+                                                            RatioRequirements.UnqualifiedRatioRequirementName,
+                                                            qualification);
 
         model.RatioRequirements.ApprovedForUnqualified = approvedForUnqualified
                                                              ? QualificationApprovalStatus.Approved
@@ -289,7 +297,8 @@ public class QualificationDetailsService(
         model.RatioRequirements.RequirementsForUnqualified = await contentParser.ToHtml(requirementsForUnqualified);
 
         model.RatioRequirements.RequirementsHeadingForUnqualified =
-            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName, qualification);
+            GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName,
+                                     qualification);
     }
 
     public async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content)
@@ -299,11 +308,19 @@ public class QualificationDetailsService(
         var dateStarted = string.Empty;
         var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
 
-        // ReSharper disable once InvertIf
         if (startYear is not null && startMonth is not null)
         {
             var dateOnly = new DateOnly(startYear.Value, startMonth.Value, 1);
             dateStarted = dateOnly.ToString("MMMM yyyy");
+        }
+
+        var dateAwarded = string.Empty;
+        var (awardedMonth, awardedYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
+
+        if (awardedYear is not null && awardedMonth is not null)
+        {
+            var dateOnly = new DateOnly(awardedYear.Value, awardedMonth.Value, 1);
+            dateAwarded = dateOnly.ToString("MMMM yyyy");
         }
 
         var checkAnotherQualificationText = await contentParser.ToHtml(content.CheckAnotherQualificationText);
@@ -312,8 +329,9 @@ public class QualificationDetailsService(
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner);
 
         return QualificationDetailsMapper.Map(qualification, content, backNavLink,
-                                              MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions),
-                                              dateStarted, checkAnotherQualificationText, furtherInfoText,
+                                              MapAdditionalRequirementAnswers(qualification
+                                                                                  .AdditionalRequirementQuestions),
+                                              dateStarted, dateAwarded, checkAnotherQualificationText, furtherInfoText,
                                               requirementsText, feedbackBodyHtml);
     }
 
@@ -321,7 +339,8 @@ public class QualificationDetailsService(
     {
         switch (model.RatioRequirements.IsNotFullAndRelevant)
         {
-            case true when model.QualificationLevel >= 3 && userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019():
+            case true when model.QualificationLevel >= 3 &&
+                           userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019():
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
                 break;
             case true:
@@ -343,7 +362,7 @@ public class QualificationDetailsService(
     public void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPage content)
     {
         model.Content!.QualificationResultHeading = content.QualificationResultHeading;
-        
+
         if (model.RatioRequirements.IsNotFullAndRelevant && model.QualificationLevel > 2 &&
             userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019())
         {
@@ -354,6 +373,23 @@ public class QualificationDetailsService(
         {
             model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrMessageHeading;
             model.Content.QualificationResultMessageBody = content.QualificationResultNotFrMessageBody;
+        }
+    }
+
+    private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
+    {
+        try
+        {
+            var requirement = qualification.RatioRequirements!.Find(x => x.RatioRequirementName == ratioName);
+
+            return (T)requirement!.GetType().GetProperty(propertyToCheck)!.GetValue(requirement, null)!;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex,
+                            "Could not find property: {PropertyToCheck} within {RatioName} for qualification: {QualificationId}",
+                            propertyToCheck, ratioName, qualification.QualificationId);
+            throw;
         }
     }
 }

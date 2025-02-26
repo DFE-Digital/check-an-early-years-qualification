@@ -27,7 +27,7 @@ public class CookiesPreferenceControllerTests
                                                          mockHtmlRenderer.Object, mockCookieService.Object,
                                                          mockUrlChecker.Object);
 
-        mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage?)default);
+        mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage?)null);
 
         var result = await controller.Index();
 

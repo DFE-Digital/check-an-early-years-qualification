@@ -35,7 +35,7 @@ public class QualificationsRepository(
             var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
             Logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
                               encodedQualificationId);
-            return default;
+            return null;
         }
 
         var qualification = qualifications.First();

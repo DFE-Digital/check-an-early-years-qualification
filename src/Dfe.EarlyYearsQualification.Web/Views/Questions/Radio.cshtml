@@ -19,11 +19,17 @@
             await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
                                                                    {
                                                                        ErrorBannerHeading = Model.ErrorBannerHeading,
-                                                                       ErrorBannerLinkText = Model.ErrorBannerLinkText,
-                                                                       ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
+                                                                       ErrorSummaryLinks =
+                                                                       [
+                                                                           new ErrorSummaryLink
+                                                                           {
+                                                                               ErrorBannerLinkText = Model.ErrorBannerLinkText,
+                                                                               ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
+                                                                           }
+                                                                       ]
                                                                    });
         }
-        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "radio-question-form"}))
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "radio-question-form" }))
         {
             <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
@@ -42,12 +48,11 @@
                                                                                             AdditionalInformationBody = Model.AdditionalInformationBody
                                                                                         });
                     }
-                    
+
                     @if (Model.HasErrors)
                     {
-                        <p id="option-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
-                        </p>
+                        <p id="option-error" class="govuk-error-message"><span
+                                class="govuk-visually-hidden">Error:</span>@Model.ErrorMessage</p>
                     }
                     <div class="govuk-radios" data-module="govuk-radios">
                         @foreach (var option in Model.OptionsItems)
@@ -57,7 +62,7 @@
                                 var optionModel = option as OptionModel;
                                 var @checked = optionModel!.Value == Model.Option ? "checked" : "";
                                 <div class="govuk-radios__item">
-                                    
+
                                     @Html.RadioButtonFor(x => x.Option, optionModel.Value, new { @class = "govuk-radios__input", id = optionModel.Value, @checked })
                                     <label class="govuk-label govuk-radios__label" for="@optionModel.Value">
                                         @optionModel.Label
@@ -80,7 +85,6 @@
                     </div>
                 </fieldset>
             </div>
-
 
             <div class="govuk-form-group">
                 <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">

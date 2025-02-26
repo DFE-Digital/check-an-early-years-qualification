@@ -46,7 +46,8 @@ public class QualificationSearchService(
                                                  );
     }
 
-    public async Task<QualificationListModel> MapList(QualificationListPage content, List<Qualification>? qualifications)
+    public async Task<QualificationListModel> MapList(QualificationListPage content,
+                                                      List<Qualification>? qualifications)
     {
         var basicQualificationsModels = qualifications == null ? [] : GetBasicQualificationsModels(qualifications);
 
@@ -57,20 +58,17 @@ public class QualificationSearchService(
                    BackButton = NavigationLinkMapper.Map(content.BackButton),
                    Filters = filterModel,
                    Header = content.Header,
+                   QualificationFoundPrefixText = content.QualificationFoundPrefix,
                    SingleQualificationFoundText = content.SingleQualificationFoundText,
                    MultipleQualificationsFoundText = content.MultipleQualificationsFoundText,
                    PreSearchBoxContent = await contentParser.ToHtml(content.PreSearchBoxContent),
                    SearchButtonText = content.SearchButtonText,
-                   LevelHeading = content.LevelHeading,
-                   AwardingOrganisationHeading = content.AwardingOrganisationHeading,
-                   PostSearchCriteriaContent = await contentParser.ToHtml(content.PostSearchCriteriaContent),
                    PostQualificationListContent = await contentParser.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
                    SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
                    Qualifications = basicQualificationsModels,
                    NoResultText = await contentParser.ToHtml(content.NoResultsText),
-                   ClearSearchText = content.ClearSearchText,
-                   NoQualificationsFoundText = content.NoQualificationsFoundText
+                   ClearSearchText = content.ClearSearchText
                };
     }
 
@@ -78,30 +76,40 @@ public class QualificationSearchService(
     {
         var countryAwarded = userJourneyCookieService.GetWhereWasQualificationAwarded()!;
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+        var (awardedDateMonth, awardedDateYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         var level = userJourneyCookieService.GetLevelOfQualification();
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
 
         var filterModel = new FilterModel
                           {
-                              Country = countryAwarded,
+                              Country = $"{content.AwardedLocationPrefixText} {countryAwarded}",
                               Level = content.AnyLevelHeading,
-                              AwardingOrganisation = content.AnyAwardingOrganisationHeading
+                              AwardingOrganisation =
+                                  $"{content.AwardedByPrefixText} {content.AnyAwardingOrganisationHeading}"
                           };
 
         if (startDateMonth is not null && startDateYear is not null)
         {
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-            filterModel.StartDate = $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
+            filterModel.StartDate =
+                $"{content.StartDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
+        }
+
+        if (awardedDateMonth is not null && awardedDateYear is not null)
+        {
+            var date = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
+            filterModel.AwardedDate =
+                $"{content.AwardedDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {awardedDateYear.Value}";
         }
 
         if (level > 0)
         {
-            filterModel.Level = $"Level {level}";
+            filterModel.Level = $"{content.LevelPrefixText} {level}";
         }
 
         if (!string.IsNullOrEmpty(awardingOrganisation))
         {
-            filterModel.AwardingOrganisation = awardingOrganisation;
+            filterModel.AwardingOrganisation = $"{content.AwardedByPrefixText} {awardingOrganisation}";
         }
 
         return filterModel;

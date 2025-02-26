@@ -36,38 +36,43 @@ public class AdvicePageMapperTests
         result.Heading.Should().BeSameAs(advicePage.Heading);
         result.BodyContent.Should().BeSameAs(body);
         result.BackButton.Should().BeEquivalentTo(advicePage.BackButton, options => options.Excluding(x => x.Sys));
-        result.FeedbackBanner.Should().BeEquivalentTo(advicePage.FeedbackBanner, options => options.Excluding(x => x.Body));
+        result.FeedbackBanner.Should()
+              .BeEquivalentTo(advicePage.FeedbackBanner, options => options.Excluding(x => x.Body));
     }
-    
+
     [TestMethod]
     public void Map_PassInCannotFindQualificationPage_ReturnsModel()
     {
         const string body = "This is the body";
         const string feedbackBannerBody = "This is the feedback banner body";
         var cannotFindQualificationPage = new CannotFindQualificationPage
-                         {
-                             Heading = "This is the heading",
-                             Body = ContentfulContentHelper.Paragraph(body),
-                             BackButton = new NavigationLink
                                           {
-                                              DisplayText = "Back",
-                                              OpenInNewTab = true,
-                                              Href = "/"
-                                          },
-                             FeedbackBanner = new FeedbackBanner
-                                              {
-                                                  Heading = "Feedback banner heading",
-                                                  Body = ContentfulContentHelper.Paragraph(feedbackBannerBody),
-                                                  BannerTitle = "This is the title"
-                                              }
-                         };
+                                              Heading = "This is the heading",
+                                              Body = ContentfulContentHelper.Paragraph(body),
+                                              BackButton = new NavigationLink
+                                                           {
+                                                               DisplayText = "Back",
+                                                               OpenInNewTab = true,
+                                                               Href = "/"
+                                                           },
+                                              FeedbackBanner = new FeedbackBanner
+                                                               {
+                                                                   Heading = "Feedback banner heading",
+                                                                   Body =
+                                                                       ContentfulContentHelper
+                                                                           .Paragraph(feedbackBannerBody),
+                                                                   BannerTitle = "This is the title"
+                                                               }
+                                          };
 
         var result = AdvicePageMapper.Map(cannotFindQualificationPage, body, feedbackBannerBody);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(cannotFindQualificationPage.Heading);
         result.BodyContent.Should().BeSameAs(body);
-        result.BackButton.Should().BeEquivalentTo(cannotFindQualificationPage.BackButton, options => options.Excluding(x => x.Sys));
-        result.FeedbackBanner.Should().BeEquivalentTo(cannotFindQualificationPage.FeedbackBanner, options => options.Excluding(x => x.Body));
+        result.BackButton.Should()
+              .BeEquivalentTo(cannotFindQualificationPage.BackButton, options => options.Excluding(x => x.Sys));
+        result.FeedbackBanner.Should().BeEquivalentTo(cannotFindQualificationPage.FeedbackBanner,
+                                                      options => options.Excluding(x => x.Body));
     }
 }

@@ -14,7 +14,7 @@ public class FeedbackBannerMapperTests
 
         result.Should().BeNull();
     }
-    
+
     [TestMethod]
     public void Map_PassInNullFeedbackBannerBody_ReturnsNull()
     {
@@ -22,7 +22,7 @@ public class FeedbackBannerMapperTests
 
         result.Should().BeNull();
     }
-    
+
     [TestMethod]
     public void Map_PassInFeedbackBannerAndBody_ReturnsModel()
     {
@@ -33,7 +33,7 @@ public class FeedbackBannerMapperTests
                                  Body = ContentfulContentHelper.Paragraph(body),
                                  BannerTitle = "This is the title"
                              };
-        
+
         var result = FeedbackBannerMapper.Map(feedbackBanner, body);
 
         result.Should().NotBeNull();

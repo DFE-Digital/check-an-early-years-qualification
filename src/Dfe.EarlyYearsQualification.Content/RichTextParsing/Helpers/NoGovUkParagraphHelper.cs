@@ -13,7 +13,7 @@ public static class NoGovUkParagraphHelper
         var sb = new StringBuilder();
 
         var externalLinkRenderer = new ExternalNavigationLinkRenderer();
-        
+
         foreach (var item in paragraph!.Content)
         {
             switch (item)
@@ -33,10 +33,8 @@ public static class NoGovUkParagraphHelper
             {
                 sb.Append(await externalLinkRenderer.RenderAsync(item));
             }
-            
         }
 
         return sb.ToString();
-
     }
 }

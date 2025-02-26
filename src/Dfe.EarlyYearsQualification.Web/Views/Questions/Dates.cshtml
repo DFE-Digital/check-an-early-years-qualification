@@ -1,0 +1,53 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.DatesQuestionModel
+
+
+@{
+    ViewData["Title"] = Model.Question;
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+@{
+    var awardingQuestion = Model.AwardedQuestion;
+    var startingQuestion = Model.StartedQuestion;
+}
+
+<div>
+    @if (Model is { HasErrors: true, Errors: not null })
+    {
+        await Html.RenderPartialAsync("Partials/ErrorSummary", Model.Errors);
+    }
+
+
+    @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "date-question-form" }))
+    {
+        <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading mb-1" id="question">
+                    @Model.Question
+                </h1>
+            </legend>
+
+            @if (startingQuestion is not null)
+            {
+                await Html.RenderPartialAsync("Partials/Date", startingQuestion);
+            }
+
+            @if (awardingQuestion is not null)
+            {
+                await Html.RenderPartialAsync("Partials/Date", awardingQuestion);
+            }
+
+            <div class="govuk-form-group">
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        </fieldset>
+    }
+</div>
+

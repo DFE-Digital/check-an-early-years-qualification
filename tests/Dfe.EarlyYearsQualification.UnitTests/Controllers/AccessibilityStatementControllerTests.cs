@@ -23,7 +23,7 @@ public class AccessibilityStatementControllerTests
                                                  mockContentParser.Object);
 
         mockContentService.Setup(x => x.GetAccessibilityStatementPage())
-                          .ReturnsAsync((AccessibilityStatementPage?)default);
+                          .ReturnsAsync((AccessibilityStatementPage?)null);
 
         var result = await controller.Index();
 

@@ -42,6 +42,18 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public void SetWhenWasQualificationAwarded(string date)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.WhenWasQualificationAwarded = date;
+
+            SetJourneyCookie();
+        }
+    }
+
     public void SetLevelOfQualification(string level)
     {
         lock (_lockObject)
@@ -153,7 +165,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
 
             int? startDateMonth = null;
             int? startDateYear = null;
-            var qualificationAwardedDateSplit = _model!.WhenWasQualificationStarted.Split('/');
+            string[] qualificationAwardedDateSplit = _model!.WhenWasQualificationStarted.Split('/');
 
             // ReSharper disable once InvertIf
             if (qualificationAwardedDateSplit.Length == 2
@@ -165,6 +177,29 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             }
 
             return (startDateMonth, startDateYear);
+        }
+    }
+
+    public (int? startMonth, int? startYear) GetWhenWasQualificationAwarded()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            int? awardedDateMonth = null;
+            int? awardedDateYear = null;
+            string[] qualificationAwardedDateSplit = _model!.WhenWasQualificationAwarded.Split('/');
+
+            // ReSharper disable once InvertIf
+            if (qualificationAwardedDateSplit.Length == 2
+                && int.TryParse(qualificationAwardedDateSplit[0], out var parsedAwardedMonth)
+                && int.TryParse(qualificationAwardedDateSplit[1], out var parsedAwardedYear))
+            {
+                awardedDateMonth = parsedAwardedMonth;
+                awardedDateYear = parsedAwardedYear;
+            }
+
+            return (awardedDateMonth, awardedDateYear);
         }
     }
 
@@ -195,7 +230,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
         return date < new DateOnly(2014, 9, 1);
     }
-    
+
     public bool WasStartedOnOrAfterSeptember2019()
     {
         var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
@@ -208,20 +243,6 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
 
         var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
         return date >= new DateOnly(2019, 9, 1);
-    }
-
-    public bool WasStartedBetweenSept2014AndAug2019()
-    {
-        var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
-
-        if (startDateMonth is null || startDateYear is null)
-        {
-            throw new
-                InvalidOperationException("Unable to determine whether qualification was started on or after 09-2014");
-        }
-
-        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-        return date >= new DateOnly(2014, 9, 1) && date <= new DateOnly(2019, 8, 31);
     }
 
     public int? GetLevelOfQualification()
@@ -386,6 +407,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
     {
         public string WhereWasQualificationAwarded { get; set; } = string.Empty;
         public string WhenWasQualificationStarted { get; set; } = string.Empty;
+        public string WhenWasQualificationAwarded { get; set; } = string.Empty;
         public string LevelOfQualification { get; set; } = string.Empty;
         public string WhatIsTheAwardingOrganisation { get; set; } = string.Empty;
         public bool SelectedAwardingOrganisationNotOnTheList { get; set; }

@@ -75,7 +75,8 @@ public class ConfirmQualificationControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
 
-        mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(GetConfirmQualificationPageContent());
+        mockContentService.Setup(x => x.GetConfirmQualificationPage())
+                          .ReturnsAsync(GetConfirmQualificationPageContent());
 
         mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(default(Qualification?));

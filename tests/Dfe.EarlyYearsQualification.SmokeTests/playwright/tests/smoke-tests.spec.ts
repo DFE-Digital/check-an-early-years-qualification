@@ -26,10 +26,12 @@ test.describe("A spec used to smoke test the environment once a deployment has h
     await page.locator("#england").click();
     await page.locator("#question-submit").click();
 
-    // when-was-the-qualification-started page
-    expect(page.url()).toContain("/questions/when-was-the-qualification-started");
-    await page.locator("#date-started-month").fill("7");
-    await page.locator("#date-started-year").fill("2015");
+    // when-was-the-qualification-started-and-awarded page
+    expect(page.url()).toContain("/questions/when-was-the-qualification-started-and-awarded");
+    await page.locator("#StartedQuestion\\.SelectedMonth").fill("7");
+    await page.locator("#StartedQuestion\\.SelectedYear").fill("2015");
+    await page.locator("#AwardedQuestion\\.SelectedMonth").fill("9");
+    await page.locator("#AwardedQuestion\\.SelectedYear").fill("2019");
     await page.locator("#question-submit").click();
 
     // what-level-is-the-qualification page
@@ -41,6 +43,10 @@ test.describe("A spec used to smoke test the environment once a deployment has h
     expect(page.url()).toContain("/questions/what-is-the-awarding-organisation");
     await page.locator("#awarding-organisation-not-in-list").click();
     await page.locator("#question-submit").click();
+
+      // check-your-answers page
+      expect(page.url()).toContain("/questions/check-your-answers");
+      await page.locator("#cta-button").click();
 
     // qualifications page
     expect(page.url()).toContain("/qualifications");

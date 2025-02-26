@@ -13,19 +13,22 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class QualificationDetailsServiceTests
 {
+    private Mock<IGovUkContentParser> _mockContentParser = new();
+    private Mock<IContentService> _mockContentService = new();
     private Mock<ILogger<QualificationDetailsService>> _mockLogger = new();
     private Mock<IQualificationsRepository> _mockRepository = new();
-    private Mock<IContentService> _mockContentService = new();
-    private Mock<IGovUkContentParser> _mockContentParser = new();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
 
-    private QualificationDetailsService GetSut() => new(
-                                                        _mockLogger.Object,
-                                                        _mockRepository.Object,
-                                                        _mockContentService.Object,
-                                                        _mockContentParser.Object,
-                                                        _mockUserJourneyCookieService.Object
-                                                        );
+    private QualificationDetailsService GetSut()
+    {
+        return new QualificationDetailsService(
+                                               _mockLogger.Object,
+                                               _mockRepository.Object,
+                                               _mockContentService.Object,
+                                               _mockContentParser.Object,
+                                               _mockUserJourneyCookieService.Object
+                                              );
+    }
 
     [TestInitialize]
     public void Initialize()
@@ -154,7 +157,7 @@ public class QualificationDetailsServiceTests
                                 [
                                     new AdditionalRequirementQuestion
                                     {
-                                        Sys = new SystemProperties() { Id = questionId }
+                                        Sys = new SystemProperties { Id = questionId }
                                     }
                                 ]
                             };
@@ -250,12 +253,14 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public void CalculateBackButton_HasAnsweredAdditionalQuestions_BackToConfirmAnswersNotNull_ReturnsExpectedBackButton()
+    public void
+        CalculateBackButton_HasAnsweredAdditionalQuestions_BackToConfirmAnswersNotNull_ReturnsExpectedBackButton()
     {
         const string qualificationId = "qualificationId";
         const string expectedHref = "qualificationId LINK";
 
-        var detailsPage = new DetailsPage { BackToConfirmAnswers = new NavigationLink { Href = "$[qualification-id]$ LINK" } };
+        var detailsPage = new DetailsPage
+                          { BackToConfirmAnswers = new NavigationLink { Href = "$[qualification-id]$ LINK" } };
 
         _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(true);
         var sut = GetSut();
@@ -293,7 +298,8 @@ public class QualificationDetailsServiceTests
     [DataRow(YesOrNo.Yes, 4, false)]
     [DataRow(YesOrNo.Yes, 5, false)]
     [DataRow(YesOrNo.Yes, 6, false)]
-    public void CalculateBackButton_NoAdditionalQuestions_Calls_Cookies_WasStartedBeforeSeptember2014_WhenItShould(YesOrNo selectedFromList, int level, bool shouldCall)
+    public void CalculateBackButton_NoAdditionalQuestions_Calls_Cookies_WasStartedBeforeSeptember2014_WhenItShould(
+        YesOrNo selectedFromList, int level, bool shouldCall)
     {
         const string qualificationId = "qualificationId";
 
@@ -311,12 +317,17 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public void CalculateBackButton_NoAdditionalQuestions_Lvl6NotInList_BeforeSept2014_Returns_BackToLevelSixAdviceBefore2014()
+    public void
+        CalculateBackButton_NoAdditionalQuestions_Lvl6NotInList_BeforeSept2014_Returns_BackToLevelSixAdviceBefore2014()
     {
         const string qualificationId = "qualificationId";
         const string backToLevelSixAdviceBefore2014 = "backToLevelSixAdviceBefore2014";
 
-        var detailsPage = new DetailsPage { BackToLevelSixAdviceBefore2014 = new NavigationLink { Href = backToLevelSixAdviceBefore2014 } };
+        var detailsPage = new DetailsPage
+                          {
+                              BackToLevelSixAdviceBefore2014 =
+                                  new NavigationLink { Href = backToLevelSixAdviceBefore2014 }
+                          };
 
         _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(false);
         _mockUserJourneyCookieService.Setup(o => o.GetQualificationWasSelectedFromList()).Returns(YesOrNo.No);
@@ -395,11 +406,13 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant_NoAnswers_Returns_False()
     {
-        var qualification = new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>());
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>());
         List<AdditionalRequirementAnswerModel> additionalRequirementAnswerModels = null!;
         var sut = GetSut();
 
-        var result = sut.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
+        var result =
+            sut.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
 
         result.Should().BeFalse();
     }
@@ -409,24 +422,28 @@ public class QualificationDetailsServiceTests
     [DataRow("no", true, false)]
     [DataRow("yes", false, false)]
     [DataRow("no", false, true)]
-    public void UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant_Returns_AnswerAsBool(string answer, bool qtsFullAndRelevant, bool expectedResult)
+    public void UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant_Returns_AnswerAsBool(
+        string answer, bool qtsFullAndRelevant, bool expectedResult)
     {
         var qts = new AdditionalRequirementQuestion
                   {
                       Sys = new SystemProperties
                             {
-                                Id = AdditionalRequirementQuestions.QtsQuestion,
+                                Id = AdditionalRequirementQuestions.QtsQuestion
                             },
                       AnswerToBeFullAndRelevant = qtsFullAndRelevant
                   };
-        var qualification = new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())
-                            {
-                                AdditionalRequirementQuestions = [qts]
-                            };
-        var additionalRequirementAnswerModels = new List<AdditionalRequirementAnswerModel> { new() { Question = qts.Question, Answer = answer } };
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())
+            {
+                AdditionalRequirementQuestions = [qts]
+            };
+        var additionalRequirementAnswerModels = new List<AdditionalRequirementAnswerModel>
+                                                { new() { Question = qts.Question, Answer = answer } };
         var sut = GetSut();
 
-        var result = sut.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
+        var result =
+            sut.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
 
         result.Should().Be(expectedResult);
     }
@@ -435,7 +452,8 @@ public class QualificationDetailsServiceTests
     public async Task QualificationLevel3OrAboveMightBeRelevantAtLevel2_DoesNotHitEdgeCase()
     {
         var details = new QualificationDetailsModel();
-        var qualification = new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>());
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>());
 
         var sut = GetSut();
 
@@ -456,7 +474,7 @@ public class QualificationDetailsServiceTests
                                               {
                                                   ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
                                                   ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
-                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
                                               }
                       };
         var qualification = new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 3)
@@ -493,7 +511,7 @@ public class QualificationDetailsServiceTests
                                               {
                                                   ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
                                                   ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
-                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
                                               }
                       };
         var qualification = new Qualification(qualificationId, It.IsAny<string>(), It.IsAny<string>(), 3);
@@ -539,7 +557,8 @@ public class QualificationDetailsServiceTests
     {
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>();
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers()).Returns((Dictionary<string, string>)null!);
+        _mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers())
+                                     .Returns((Dictionary<string, string>)null!);
         var sut = GetSut();
 
         var result = sut.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
@@ -556,19 +575,19 @@ public class QualificationDetailsServiceTests
                                                  {
                                                      Question = "Question 1",
                                                      AnswerToBeFullAndRelevant = true,
-                                                     ConfirmationStatement = "confirmation statement 1",
+                                                     ConfirmationStatement = "confirmation statement 1"
                                                  },
                                                  new()
                                                  {
                                                      Question = "Question 2",
                                                      AnswerToBeFullAndRelevant = false,
-                                                     ConfirmationStatement = "confirmation statement 2",
+                                                     ConfirmationStatement = "confirmation statement 2"
                                                  },
                                                  new()
                                                  {
                                                      Question = "Question 3",
                                                      AnswerToBeFullAndRelevant = true,
-                                                     ConfirmationStatement = "confirmation statement 3",
+                                                     ConfirmationStatement = "confirmation statement 3"
                                                  }
                                              };
 
@@ -576,7 +595,7 @@ public class QualificationDetailsServiceTests
                           {
                               { "Question 1", "Answer 1" },
                               { "Question 2", "Answer 2" },
-                              { "Question 3", "Answer 3" },
+                              { "Question 3", "Answer 3" }
                           };
 
         var expected = new List<AdditionalRequirementAnswerModel>
@@ -675,7 +694,7 @@ public class QualificationDetailsServiceTests
                                 [
                                     new RatioRequirement
                                     {
-                                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
+                                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName
                                     }
                                 ]
                             };
@@ -696,11 +715,16 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    [DataRow(null, null, "")]
-    [DataRow(null, 2024, "")]
-    [DataRow(1, null, "")]
-    [DataRow(1, 2024, "January 2024")]
-    public async Task MapDetails_(int? month, int? year, string dateStarted)
+    [DataRow(null, null, "", null, null, "")]
+    [DataRow(null, 2024, "", null, null, "")]
+    [DataRow(1, null, "", null, null, "")]
+    [DataRow(1, 2024, "January 2024", null, null, "")]
+    [DataRow(null, null, "", null, null, "")]
+    [DataRow(null, null, "", null, 2024, "")]
+    [DataRow(null, null, "", 1, null, "")]
+    [DataRow(null, null, "", 1, 2024, "January 2024")]
+    public async Task MapDetails_(int? startMonth, int? startYear, string dateStarted, int? awardMonth, int? awardYear,
+                                  string dateAwarded)
     {
         const string qualificationId = "qualificationId";
         const string qualificationName = "qualificationName";
@@ -716,7 +740,9 @@ public class QualificationDetailsServiceTests
         var feedbackText = new Document { NodeType = feedback };
         var feedbackBanner = new FeedbackBanner { Body = feedbackText };
         var backButton = new NavigationLink { Href = "backbutton" };
-        var qualification = new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel) { FromWhichYear = "FromWhichYear" };
+        var qualification =
+            new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
+            { FromWhichYear = "FromWhichYear" };
         var detailsPage = new DetailsPage
                           {
                               CheckAnotherQualificationText = checkAnotherQualificationText,
@@ -730,7 +756,8 @@ public class QualificationDetailsServiceTests
         _mockContentParser.Setup(o => o.ToHtml(furtherInfoText)).ReturnsAsync(furtherInfo);
         _mockContentParser.Setup(o => o.ToHtml(requirementsText)).ReturnsAsync(requirements);
         _mockContentParser.Setup(o => o.ToHtml(feedbackText)).ReturnsAsync(feedback);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardMonth, awardYear));
 
         var sut = GetSut();
         var result = await sut.MapDetails(qualification, detailsPage);
@@ -748,6 +775,7 @@ public class QualificationDetailsServiceTests
         result.BackButton!.Href.Should().Be(backButton.Href);
         result.AdditionalRequirementAnswers.Should().BeNullOrEmpty();
         result.DateStarted.Should().Be(dateStarted);
+        result.DateAwarded.Should().Be(dateAwarded);
 
         var content = result.Content!;
         content.CheckAnotherQualificationText.Should().Be(checkAnotherQualification);
@@ -764,31 +792,33 @@ public class QualificationDetailsServiceTests
         const string qualificationName = "qualificationName";
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
         const int qualificationLevel = 2;
-        var qualification = new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
-                            {
-                                RatioRequirements =
-                                [
-                                    new RatioRequirement
-                                    {
-                                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName
-                                    },
-                                    new RatioRequirement
-                                    {
-                                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName
-                                    },
-                                    new RatioRequirement
-                                    {
-                                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName
-                                    },
-                                    new RatioRequirement
-                                    {
-                                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName
-                                    }
-                                ]
-                            };
+        var qualification =
+            new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
+            {
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName
+                    }
+                ]
+            };
         var qualificationDetails = new QualificationDetailsModel();
 
-        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014()).Returns(wasStartedBeforeSeptember2014);
+        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014())
+                                     .Returns(wasStartedBeforeSeptember2014);
 
         var sut = GetSut();
 
@@ -805,36 +835,38 @@ public class QualificationDetailsServiceTests
         const string qualificationName = "qualificationName";
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
         const int qualificationLevel = 2;
-        var qualification = new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
-                            {
-                                IsAutomaticallyApprovedAtLevel6 = true,
-                                RatioRequirements =
-                                [
-                                    new RatioRequirement
-                                    {
-                                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
-                                        RequirementForQtsEtcBefore2014 = new Document()
-                                    },
-                                    new RatioRequirement
-                                    {
-                                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName,
-                                        RequirementForQtsEtcBefore2014 = new Document()
-                                    },
-                                    new RatioRequirement
-                                    {
-                                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
-                                        RequirementForQtsEtcBefore2014 = new Document()
-                                    },
-                                    new RatioRequirement
-                                    {
-                                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
-                                        RequirementForQtsEtcBefore2014 = new Document()
-                                    }
-                                ]
-                            };
+        var qualification =
+            new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
+            {
+                IsAutomaticallyApprovedAtLevel6 = true,
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
+                        RequirementForQtsEtcBefore2014 = new Document()
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName,
+                        RequirementForQtsEtcBefore2014 = new Document()
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
+                        RequirementForQtsEtcBefore2014 = new Document()
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        RequirementForQtsEtcBefore2014 = new Document()
+                    }
+                ]
+            };
         var qualificationDetails = new QualificationDetailsModel();
 
-        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014()).Returns(wasStartedBeforeSeptember2014);
+        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014())
+                                     .Returns(wasStartedBeforeSeptember2014);
 
         var sut = GetSut();
 
@@ -854,15 +886,17 @@ public class QualificationDetailsServiceTests
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc)).ReturnsAsync(ratiosTextNotFullAndRelevant);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc)).ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+                          .ReturnsAsync(ratiosTextNotFullAndRelevant);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
+                          .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
         var detailsPageContent = new DetailsPage
                                  {
                                      RatiosText = ratiosTextDoc,
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         RatioRequirements = new RatioRequirementModel
@@ -873,7 +907,7 @@ public class QualificationDetailsServiceTests
                                             },
                         Content = new DetailsPageModel()
                     };
-        
+
         var sut = GetSut();
 
         await sut.SetRatioText(model, detailsPageContent);
@@ -881,7 +915,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosText);
     }
-    
+
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsNotApprovedText()
     {
@@ -893,15 +927,17 @@ public class QualificationDetailsServiceTests
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc)).ReturnsAsync(ratiosTextNotFullAndRelevant);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc)).ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+                          .ReturnsAsync(ratiosTextNotFullAndRelevant);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
+                          .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
         var detailsPageContent = new DetailsPage
                                  {
                                      RatiosText = ratiosTextDoc,
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -916,7 +952,7 @@ public class QualificationDetailsServiceTests
                     };
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
-        
+
         var sut = GetSut();
 
         await sut.SetRatioText(model, detailsPageContent);
@@ -924,7 +960,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextL3PlusNotFrBetweenSep14Aug19);
     }
-    
+
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndOutsideOfAug19_ShowsNotApprovedText()
     {
@@ -936,15 +972,17 @@ public class QualificationDetailsServiceTests
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc)).ReturnsAsync(ratiosTextNotFullAndRelevant);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc)).ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+                          .ReturnsAsync(ratiosTextNotFullAndRelevant);
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
+                          .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
         var detailsPageContent = new DetailsPage
                                  {
                                      RatiosText = ratiosTextDoc,
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -959,7 +997,7 @@ public class QualificationDetailsServiceTests
                     };
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
-        
+
         var sut = GetSut();
 
         await sut.SetRatioText(model, detailsPageContent);
@@ -967,7 +1005,7 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
     }
-    
+
     [TestMethod]
     public void SetQualificationResultSuccessDetails_ShowsSuccessText()
     {
@@ -977,7 +1015,7 @@ public class QualificationDetailsServiceTests
                                      QualificationResultFrMessageHeading = "Message heading",
                                      QualificationResultFrMessageBody = "Message body"
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         Content = new DetailsPageModel()
@@ -989,10 +1027,11 @@ public class QualificationDetailsServiceTests
 
         model.Content.Should().NotBeNull();
         model.Content.QualificationResultHeading.Should().Be(detailsPageContent.QualificationResultHeading);
-        model.Content.QualificationResultMessageHeading.Should().Be(detailsPageContent.QualificationResultFrMessageHeading);
+        model.Content.QualificationResultMessageHeading.Should()
+             .Be(detailsPageContent.QualificationResultFrMessageHeading);
         model.Content.QualificationResultMessageBody.Should().Be(detailsPageContent.QualificationResultFrMessageBody);
     }
-    
+
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndOutsideOfAug19_ShowsCorrectText()
     {
@@ -1002,7 +1041,7 @@ public class QualificationDetailsServiceTests
                                      QualificationResultNotFrMessageHeading = "Message heading",
                                      QualificationResultNotFrMessageBody = "Message body"
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -1018,17 +1057,18 @@ public class QualificationDetailsServiceTests
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
 
-
         var sut = GetSut();
 
         sut.SetQualificationResultFailureDetails(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
         model.Content.QualificationResultHeading.Should().Be(detailsPageContent.QualificationResultHeading);
-        model.Content.QualificationResultMessageHeading.Should().Be(detailsPageContent.QualificationResultNotFrMessageHeading);
-        model.Content.QualificationResultMessageBody.Should().Be(detailsPageContent.QualificationResultNotFrMessageBody);
+        model.Content.QualificationResultMessageHeading.Should()
+             .Be(detailsPageContent.QualificationResultNotFrMessageHeading);
+        model.Content.QualificationResultMessageBody.Should()
+             .Be(detailsPageContent.QualificationResultNotFrMessageBody);
     }
-    
+
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsCorrectText()
     {
@@ -1038,7 +1078,7 @@ public class QualificationDetailsServiceTests
                                      QualificationResultNotFrL3MessageHeading = "Message heading",
                                      QualificationResultNotFrL3MessageBody = "Message body"
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 3,
@@ -1054,14 +1094,15 @@ public class QualificationDetailsServiceTests
 
         _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
 
-
         var sut = GetSut();
 
         sut.SetQualificationResultFailureDetails(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
         model.Content.QualificationResultHeading.Should().Be(detailsPageContent.QualificationResultHeading);
-        model.Content.QualificationResultMessageHeading.Should().Be(detailsPageContent.QualificationResultNotFrL3MessageHeading);
-        model.Content.QualificationResultMessageBody.Should().Be(detailsPageContent.QualificationResultNotFrL3MessageBody);
+        model.Content.QualificationResultMessageHeading.Should()
+             .Be(detailsPageContent.QualificationResultNotFrL3MessageHeading);
+        model.Content.QualificationResultMessageBody.Should()
+             .Be(detailsPageContent.QualificationResultNotFrL3MessageBody);
     }
 }

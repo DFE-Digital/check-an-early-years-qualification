@@ -12,7 +12,7 @@ public static class ContentTypes
     public const string CookiesPage = "cookiesPage";
     public const string PhaseBanner = "phaseBanner";
     public const string CookiesBanner = "cookiesBanner";
-    public const string DateQuestionPage = "dateQuestionPage";
+    public const string DatesQuestionPage = "datesQuestionPage";
     public const string DropdownQuestionPage = "dropdownQuestionPage";
     public const string QualificationListPage = "qualificationListPage";
     public const string ConfirmQualificationPage = "confirmQualificationPage";
@@ -21,4 +21,5 @@ public static class ContentTypes
     public const string CannotFindQualificationPage = "cannotFindQualificationPage";
     public const string CheckAdditionalRequirementsAnswerPage = "checkAdditionalRequirementsAnswerPage";
     public const string OpenGraphData = "openGraphData";
+    public const string CheckYourAnswersPage = "checkYourAnswersPage";
 }

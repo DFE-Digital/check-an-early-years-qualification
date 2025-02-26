@@ -3,7 +3,7 @@ using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public class AccessibilityStatementMapper
+public static class AccessibilityStatementMapper
 {
     public static AccessibilityStatementPageModel Map(AccessibilityStatementPage content, string bodyHtml)
     {

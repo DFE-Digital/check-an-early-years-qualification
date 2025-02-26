@@ -13,7 +13,8 @@
     <form method="post">
         <input type="hidden" id="returnUrl" name="returnUrl"/>
         @* SonarLint says turn this div into a section -- but this construct is mandated by Gov UK guidelines *@
-        <div id="choose-cookies-preference" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="@Model.CookiesBannerTitle">
+        <div id="choose-cookies-preference" class="govuk-cookie-banner" data-nosnippet role="region"
+             aria-label="@Model.CookiesBannerTitle">
             <div class="govuk-cookie-banner__message govuk-width-container">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
@@ -26,10 +27,12 @@
                     </div>
                 </div>
                 <div class="govuk-button-group">
-                    <button id="accept-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="CookiesPreference" asp-action="Accept">
+                    <button id="accept-cookies-button" type="submit" name="cookies" class="govuk-button"
+                            data-module="govuk-button" asp-controller="CookiesPreference" asp-action="Accept">
                         @Model.AcceptButtonText
                     </button>
-                    <button id="reject-cookies-button" type="submit" name="cookies" class="govuk-button" data-module="govuk-button" asp-controller="CookiesPreference" asp-action="Reject">
+                    <button id="reject-cookies-button" type="submit" name="cookies" class="govuk-button"
+                            data-module="govuk-button" asp-controller="CookiesPreference" asp-action="Reject">
                         @Model.RejectButtonText
                     </button>
                     <a class="govuk-link" href="/cookies">@Model.CookiesBannerLinkText</a>
@@ -43,7 +46,8 @@ else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
     <form method="post" asp-controller="CookiesPreference" asp-action="HideBanner">
         <input type="hidden" id="returnUrlHideBanner" name="returnUrl"/>
         @* SonarLint says turn this div into a section -- but this construct is mandated by Gov UK guidelines *@
-        <div id="cookies-preference-chosen" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Check an Early Years Qualification service">
+        <div id="cookies-preference-chosen" class="govuk-cookie-banner" data-nosnippet role="region"
+             aria-label="Cookies on Check an Early Years Qualification service">
             <div class="govuk-cookie-banner__message govuk-width-container">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
@@ -53,7 +57,8 @@ else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
                     </div>
                 </div>
                 <div class="govuk-button-group">
-                    <button id="hide-cookie-banner-button" value="yes" type="submit" name="cookies" class="govuk-button" data-module="govuk-button">
+                    <button id="hide-cookie-banner-button" value="yes" type="submit" name="cookies" class="govuk-button"
+                            data-module="govuk-button">
                         @Model.HideCookieBannerButtonText
                     </button>
                 </div>

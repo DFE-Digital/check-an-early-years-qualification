@@ -55,7 +55,7 @@ public class QuestionsControllerTests
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
-                          .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
+                          .ReturnsAsync((RadioQuestionPage?)null).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
@@ -326,16 +326,26 @@ public class QuestionsControllerTests
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DatesQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
-                               ErrorMessage = "Test error message",
-                               MonthLabel = "Test month label",
-                               YearLabel = "Test year label",
-                               QuestionHint = "Test question hint"
+                               StartedQuestion = new DateQuestion
+                                                 {
+                                                     ErrorMessage = "started- Test error message",
+                                                     MonthLabel = "started- Test month label",
+                                                     YearLabel = "started- Test year label",
+                                                     QuestionHint = "started- Test question hint"
+                                                 },
+                               AwardedQuestion = new DateQuestion
+                                                 {
+                                                     ErrorMessage = "awarded- Test error message",
+                                                     MonthLabel = "awarded- Test month label",
+                                                     YearLabel = "awarded- Test year label",
+                                                     QuestionHint = "awarded- Test question hint"
+                                                 }
                            };
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
                           .ReturnsAsync(questionPage);
 
         mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns<string>(x => x);
@@ -351,15 +361,15 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as DateQuestionModel;
+        var model = resultType!.Model as DatesQuestionModel;
         model.Should().NotBeNull();
 
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
-        model.MonthLabel.Should().Be(questionPage.MonthLabel);
-        model.YearLabel.Should().Be(questionPage.YearLabel);
-        model.QuestionHint.Should().Be(questionPage.QuestionHint);
+        model.ErrorBannerHeading.Should().Be(string.Empty);
+        model.StartedQuestion.Should().NotBeNull();
+        model.AwardedQuestion.Should().NotBeNull();
+        model.HasErrors.Should().BeFalse();
     }
 
     [TestMethod]
@@ -373,8 +383,8 @@ public class QuestionsControllerTests
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
-                          .ReturnsAsync((DateQuestionPage?)default).Verifiable();
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+                          .ReturnsAsync((DatesQuestionPage?)null).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
@@ -393,7 +403,7 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task Post_WhenWasTheQualificationStarted_InvalidModel_ReturnsDateQuestionPage()
+    public async Task Post_WhenWasTheQualificationStarted_InvalidModel_ReturnsDatesQuestionPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -403,48 +413,83 @@ public class QuestionsControllerTests
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
-        var questionPage = new DateQuestionPage
+        var questionPage = new DatesQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
-                               ErrorMessage = "Test error message",
-                               MonthLabel = "Test month label",
-                               YearLabel = "Test year label",
-                               QuestionHint = "Test question hint"
+                               ErrorBannerHeading = "Error banner heading",
+                               StartedQuestion = new DateQuestion
+                                                 {
+                                                     ErrorMessage = "started- Test error message",
+                                                     MonthLabel = "started- Test month label",
+                                                     YearLabel = "started- Test year label",
+                                                     QuestionHint = "started- Test question hint"
+                                                 },
+                               AwardedQuestion = new DateQuestion
+                                                 {
+                                                     ErrorMessage = "awarded- Test error message",
+                                                     MonthLabel = "awarded- Test month label",
+                                                     YearLabel = "awarded- Test year label",
+                                                     QuestionHint = "awarded- Test question hint"
+                                                 }
                            };
-        mockContentService.Setup(x => x.GetDateQuestionPage(QuestionPages.WhenWasTheQualificationStarted))
+        mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
                           .ReturnsAsync(questionPage);
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
-        mockQuestionModelValidator.Setup(x => x.IsValid(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestionPage>()))
-                                  .Returns(new DateValidationResult
-                                           { MonthValid = false, YearValid = false, ErrorMessages = ["Test error message"] });
+        mockQuestionModelValidator.Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
+                                  .Returns(new DatesValidationResult
+                                           {
+                                               StartedValidationResult = new DateValidationResult
+                                                                         {
+                                                                             MonthValid = false, YearValid = false,
+                                                                             ErrorMessages = ["Test error message"]
+                                                                         },
+                                               AwardedValidationResult = new DateValidationResult
+                                                                         {
+                                                                             MonthValid = false, YearValid = false,
+                                                                             ErrorMessages = ["Test error message"]
+                                                                         }
+                                           });
 
         mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns<string>(x => x);
 
-        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel());
+        var result = await controller.WhenWasTheQualificationStarted(new DatesQuestionModel());
 
         result.Should().NotBeNull();
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("Date");
+        resultType!.ViewName.Should().Be("Dates");
 
-        var model = resultType.Model as DateQuestionModel;
+        var model = resultType.Model as DatesQuestionModel;
         model.Should().NotBeNull();
 
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
-        model.MonthLabel.Should().Be(questionPage.MonthLabel);
-        model.YearLabel.Should().Be(questionPage.YearLabel);
-        model.QuestionHint.Should().Be(questionPage.QuestionHint);
+        model.Errors!.ErrorBannerHeading.Should().Be(questionPage.ErrorBannerHeading);
+        model.StartedQuestion!.Prefix.Should().Be("started");
+        model.StartedQuestion.QuestionId.Should().Be("date-started");
+        model.StartedQuestion.MonthId.Should().Be("StartedQuestion.SelectedMonth");
+        model.StartedQuestion.YearId.Should().Be("StartedQuestion.SelectedYear");
+        model.StartedQuestion.MonthLabel.Should().Be(questionPage.StartedQuestion.MonthLabel);
+        model.StartedQuestion.YearLabel.Should().Be(questionPage.StartedQuestion.YearLabel);
+        model.StartedQuestion.QuestionHint.Should().Be(questionPage.StartedQuestion.QuestionHint);
+
+        model.AwardedQuestion!.Prefix.Should().Be("awarded");
+        model.AwardedQuestion.QuestionId.Should().Be("date-awarded");
+        model.AwardedQuestion.MonthId.Should().Be("AwardedQuestion.SelectedMonth");
+        model.AwardedQuestion.YearId.Should().Be("AwardedQuestion.SelectedYear");  
+        model.AwardedQuestion.MonthLabel.Should().Be(questionPage.AwardedQuestion.MonthLabel);
+        model.AwardedQuestion.YearLabel.Should().Be(questionPage.AwardedQuestion.YearLabel);
+        model.AwardedQuestion.QuestionHint.Should().Be(questionPage.AwardedQuestion.QuestionHint);
 
         mockUserJourneyCookieService.Verify(x => x.SetWhenWasQualificationStarted(It.IsAny<string>()), Times.Never);
+        mockUserJourneyCookieService.Verify(x => x.SetWhenWasQualificationAwarded(It.IsAny<string>()), Times.Never);
     }
 
     [TestMethod]
@@ -459,20 +504,33 @@ public class QuestionsControllerTests
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockQuestionModelValidator
-            .Setup(x => x.IsValid(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestionPage>()))
-            .Returns(new DateValidationResult { MonthValid = true, YearValid = true, });
+            .Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
+            .Returns(new DatesValidationResult
+                     {
+                         StartedValidationResult = new DateValidationResult { MonthValid = true, YearValid = true },
+                         AwardedValidationResult = new DateValidationResult { MonthValid = true, YearValid = true }
+                     });
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
-        const int selectedMonth = 12;
-        const int selectedYear = 2024;
-
-        var result = await controller.WhenWasTheQualificationStarted(new DateQuestionModel
+        const int startedSelectedMonth = 12;
+        const int startedSelectedYear = 2024;
+        const int awardedSelectedMonth = 1;
+        const int awardedSelectedYear = 2025;
+        var result = await controller.WhenWasTheQualificationStarted(new DatesQuestionModel
                                                                      {
-                                                                         SelectedMonth = selectedMonth,
-                                                                         SelectedYear = selectedYear
+                                                                         StartedQuestion = new DateQuestionModel
+                                                                             {
+                                                                                 SelectedMonth = startedSelectedMonth,
+                                                                                 SelectedYear = startedSelectedYear
+                                                                             },
+                                                                         AwardedQuestion = new DateQuestionModel
+                                                                             {
+                                                                                 SelectedMonth = awardedSelectedMonth,
+                                                                                 SelectedYear = awardedSelectedYear
+                                                                             }
                                                                      });
 
         result.Should().NotBeNull();
@@ -483,7 +541,10 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("WhatLevelIsTheQualification");
 
         mockUserJourneyCookieService
-            .Verify(x => x.SetWhenWasQualificationStarted($"{selectedMonth}/{selectedYear}"),
+            .Verify(x => x.SetWhenWasQualificationStarted($"{startedSelectedMonth}/{startedSelectedYear}"),
+                    Times.Once);
+        mockUserJourneyCookieService
+            .Verify(x => x.SetWhenWasQualificationAwarded($"{awardedSelectedMonth}/{awardedSelectedYear}"),
                     Times.Once);
     }
 
@@ -499,7 +560,7 @@ public class QuestionsControllerTests
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
-                          .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
+                          .ReturnsAsync((RadioQuestionPage?)null).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
@@ -676,7 +737,7 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
-    
+
     [TestMethod]
     public async Task Post_WhatLevelIsTheQualification_Level7StartedBetween2014And2019_ReturnsRedirectResponse()
     {
@@ -687,28 +748,28 @@ public class QuestionsControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
-    
+
         mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019())
                                     .Returns(true);
-    
+
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
-    
+
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
                                                                       Option = "7"
                                                                   });
-    
+
         result.Should().NotBeNull();
-    
+
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-    
+
         resultType!.ActionName.Should().Be("Level7QualificationStartedBetweenSept2014AndAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
-    
+
     [TestMethod]
     public async Task Post_WhatLevelIsTheQualification_Level7Post2019_ReturnsRedirectResponse()
     {
@@ -719,28 +780,28 @@ public class QuestionsControllerTests
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
-    
+
         mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2019())
                                     .Returns(true);
-    
+
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
-    
+
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
                                                                       Option = "7"
                                                                   });
-    
+
         result.Should().NotBeNull();
-    
+
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-    
+
         resultType!.ActionName.Should().Be("Level7QualificationAfterAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
-    
+
     [TestMethod]
     public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
@@ -753,7 +814,7 @@ public class QuestionsControllerTests
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
-                          .ReturnsAsync((DropdownQuestionPage?)default).Verifiable();
+                          .ReturnsAsync((DropdownQuestionPage?)null).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
@@ -1040,7 +1101,7 @@ public class QuestionsControllerTests
 
     [TestMethod]
     public async Task
-        Post_WhatIsTheAwardingOrganisation_AwardingOrgPassedIn_SetsJourneyCookieAndRedirectsToTheQualificationListPage()
+        Post_WhatIsTheAwardingOrganisation_AwardingOrgPassedIn_SetsJourneyCookieAndRedirectsToTheCheckYourAnswersPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -1079,8 +1140,8 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationSearch");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckYourAnswers");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
@@ -1088,7 +1149,7 @@ public class QuestionsControllerTests
 
     [TestMethod]
     public async Task
-        Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_SetsJourneyCookieAndRedirectsToTheQualificationListPage()
+        Post_WhatIsTheAwardingOrganisation_NotInTheListPassedIn_SetsJourneyCookieAndRedirectsToTheCheckYourAnswersPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
@@ -1127,8 +1188,8 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Get");
-        resultType.ControllerName.Should().Be("QualificationSearch");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckYourAnswers");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);
