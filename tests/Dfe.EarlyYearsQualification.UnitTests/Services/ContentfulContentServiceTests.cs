@@ -1119,7 +1119,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<CheckYourAnswersPage> { Items = [data] });
 
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, GetCache());
 
         var result = await service.GetCheckYourAnswersPage();
 
@@ -1135,7 +1135,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<CheckYourAnswersPage> { Items = [] });
 
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, GetCache());
 
         var result = await service.GetCheckYourAnswersPage();
 
