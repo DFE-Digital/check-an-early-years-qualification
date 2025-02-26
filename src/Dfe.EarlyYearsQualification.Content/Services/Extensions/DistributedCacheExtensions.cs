@@ -1,20 +1,14 @@
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Dfe.EarlyYearsQualification.Content.Services.Extensions;
 
 public static class DistributedCacheExtensions
 {
-    private static readonly JsonSerializerOptions SerializerOptions = new()
-                                                                      {
-                                                                          PropertyNamingPolicy = null,
-                                                                          WriteIndented = true,
-                                                                          AllowTrailingCommas = true,
-                                                                          DefaultIgnoreCondition =
-                                                                              JsonIgnoreCondition.WhenWritingNull
-                                                                      };
+    public static JsonSerializer Serializer { get; set; } = null!;
+    public static JsonSerializerSettings SerializerSettings { get; set; } = null!;
 
     public static Task SetAsync<T>(this IDistributedCache cache, string key, T value)
     {
@@ -26,25 +20,37 @@ public static class DistributedCacheExtensions
     private static Task SetAsync<T>(IDistributedCache cache, string key, T value,
                                     DistributedCacheEntryOptions options)
     {
-        var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, SerializerOptions));
+        byte[] bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value, SerializerSettings));
         return cache.SetAsync(key, bytes, options);
     }
 
     private static bool TryGetValue<T>(IDistributedCache cache, string key, out T? value)
     {
-        var val = cache.Get(key);
+        byte[]? val = cache.Get(key);
         value = default;
-        if (val == null) return false;
-        value = JsonSerializer.Deserialize<T>(val, SerializerOptions);
+        if (val == null)
+        {
+            return false;
+        }
+
+        using var memoryStream = new MemoryStream(val);
+        using var streamReader = new StreamReader(memoryStream);
+        using var jsonTextReader = new JsonTextReader(streamReader);
+
+        string s = streamReader.ReadToEnd();
+
+        memoryStream.Seek(0, SeekOrigin.Begin);
+
+        value = Serializer.Deserialize<T>(jsonTextReader);
         return true;
     }
 
-    public static async Task<T?> GetOrSetAsync<T>(this IDistributedCache cache, string key, Func<Task<T>>? task,
+    public static async Task<T?> GetOrSetAsync<T>(this IDistributedCache cache, string key, Func<Task<T>> task,
                                                   DistributedCacheEntryOptions? options = null)
     {
         options ??= new DistributedCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(30))
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1));
+                    .SetSlidingExpiration(TimeSpan.FromHours(12))
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(24));
 
         if (TryGetValue(cache, key, out T? value) && value is not null)
         {
