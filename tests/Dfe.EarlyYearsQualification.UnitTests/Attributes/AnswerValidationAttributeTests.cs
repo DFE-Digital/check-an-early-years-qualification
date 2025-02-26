@@ -60,12 +60,14 @@ internal class InvalidPropertyModel
 {
     // ReSharper disable once UnusedMember.Global
     // This class enables a test, it is not being tested itself.
-    [AnswerValidation] public string Answers { get; set; } = string.Empty;
+    [AnswerValidation]
+    public string Answers { get; set; } = string.Empty;
 }
 
 internal class ValidPropertyModel
 {
     // ReSharper disable once CollectionNeverQueried.Global
     // This class enables a test, it is not being tested itself.
-    [AnswerValidation] public Dictionary<string, string> Answers { get; } = [];
+    [AnswerValidation]
+    public Dictionary<string, string> Answers { get; } = [];
 }

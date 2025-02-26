@@ -6,7 +6,7 @@ public class DateValidationResult
 
     public bool YearValid { get; set; } = true;
 
-    public List<string> BannerErrorMessages { get; set; } = [];
+    public List<string> BannerErrorMessages { get; } = [];
 
-    public List<string> ErrorMessages { get; set; } = [];
+    public List<string> ErrorMessages { get; init; } = [];
 }

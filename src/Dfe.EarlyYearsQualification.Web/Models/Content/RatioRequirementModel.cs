@@ -19,7 +19,6 @@ public class RatioRequirementModel
                    && ApprovedForLevel6 != QualificationApprovalStatus.Approved;
         }
     }
-        
 
     public string RequirementsHeadingForLevel2 { get; set; } = string.Empty;
 
@@ -34,7 +33,7 @@ public class RatioRequirementModel
     public string RequirementsForLevel6 { get; set; } = string.Empty;
 
     public bool ShowRequirementsForLevel6ByDefault { get; set; }
-    
+
     public bool ShowRequirementsForLevel2ByDefault { get; set; }
 
     public string RequirementsHeadingForUnqualified { get; set; } = string.Empty;

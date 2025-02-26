@@ -1,9 +1,10 @@
-@model Dfe.EarlyYearsQualification.Web.Models.RatioRowModel
+@model RatioRowModel
 
 <div class="govuk-grid-row ratio-row">
     <div class="govuk-!-width-one-half">
         <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
-            <h3 class="govuk-body govuk-!-text-align-left ratio-heading" id="@{@Model.LevelText}_heading"><strong>@Model.LevelText</strong></h3>
+            <h3 class="govuk-body govuk-!-text-align-left ratio-heading" id="@{@Model.LevelText}_heading">
+                <strong>@Model.LevelText</strong></h3>
         </div>
     </div>
     <div class="govuk-!-width-one-half tag-padding-right">
@@ -31,7 +32,7 @@
         </div>
     </div>
 </div>
-@if ((!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody) && !string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationHeader)) 
+@if ((!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody) && !string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationHeader))
      || Model.AdditionalInformation.ShowAdditionalInformationBodyByDefault)
 {
     <div id="ratio-@Model.RatioId-additional-info" class="govuk-grid-row">

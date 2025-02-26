@@ -6,6 +6,7 @@ import {
     journeyCookieName,
     checkUrl,
     clickBackButton,
+    checkDisclaimer,
     exists
 } from '../shared/playwrightWrapper';
 
@@ -22,11 +23,11 @@ test.describe('A spec used to test the check additional requirements answer page
         await checkText(page, "#question-1-question", "Test question");
         await checkText(page, "#question-1-answer", "Yes");
         await checkText(page, "#question-1-change", "Test change answer text");
-        await checkText(page, "#question-2-question", "Test question");
+        await checkText(page, "#question-2-question", "Test question 2");
         await checkText(page, "#question-2-answer", "Yes");
         await checkText(page, "#question-2-change", "Test change answer text");
         await exists(page, '#warning-text-container');
-        await checkText(page, ".govuk-warning-text__text", "Test answer disclaimer text");
+        await checkDisclaimer(page, "Test answer disclaimer text");
         await checkText(page, "#confirm-answers", "Test button text");
     });
 

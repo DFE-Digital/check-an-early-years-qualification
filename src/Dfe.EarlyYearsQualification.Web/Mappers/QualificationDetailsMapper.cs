@@ -11,6 +11,7 @@ public static class QualificationDetailsMapper
         NavigationLink? backNavLink,
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
+        string dateAwarded,
         string checkAnotherQualificationTextHtml,
         string furtherInfoTextHtml,
         string requirementsTextHtml,
@@ -27,6 +28,7 @@ public static class QualificationDetailsMapper
                    BackButton = NavigationLinkMapper.Map(backNavLink),
                    AdditionalRequirementAnswers = additionalRequirementAnswers,
                    DateStarted = dateStarted,
+                   DateAwarded = dateAwarded,
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
@@ -44,10 +46,12 @@ public static class QualificationDetailsMapper
                                  RequirementsHeading = content.RequirementsHeading,
                                  RequirementsText = requirementsTextHtml,
                                  RatiosHeading = content.RatiosHeading,
-                                 CheckAnotherQualificationLink = NavigationLinkMapper.Map(content.CheckAnotherQualificationLink),
+                                 CheckAnotherQualificationLink =
+                                     NavigationLinkMapper.Map(content.CheckAnotherQualificationLink),
                                  PrintButtonText = content.PrintButtonText,
                                  QualificationNameLabel = content.QualificationNameLabel,
                                  QualificationStartDateLabel = content.QualificationStartDateLabel,
+                                 QualificationAwardedDateLabel = content.QualificationAwardedDateLabel,
                                  QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader,
                                  FeedbackBanner = FeedbackBannerMapper.Map(content.FeedbackBanner, feedbackBodyHtml)
                              }

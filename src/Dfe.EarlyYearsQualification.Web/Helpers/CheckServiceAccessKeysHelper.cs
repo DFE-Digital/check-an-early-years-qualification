@@ -11,10 +11,10 @@ public class CheckServiceAccessKeysHelper(IConfiguration configuration) : ICheck
     {
         get
         {
-            var keys = configuration
-                       .GetSection("ServiceAccess")
-                       .GetSection("Keys")
-                       .Get<string[]>();
+            string[]? keys = configuration
+                             .GetSection("ServiceAccess")
+                             .GetSection("Keys")
+                             .Get<string[]>();
 
             return keys == null ? [] : keys.Where(k => !string.IsNullOrWhiteSpace(k));
         }

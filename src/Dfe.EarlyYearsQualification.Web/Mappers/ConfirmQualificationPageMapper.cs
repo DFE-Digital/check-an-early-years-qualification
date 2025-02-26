@@ -7,12 +7,12 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers;
 public static class ConfirmQualificationPageMapper
 {
     public static ConfirmQualificationPageModel Map(ConfirmQualificationPage content,
-                                                     Qualification qualification,
-                                                     string postHeadingContentHtml,
-                                                     string variousAwardingOrganisationsExplanationHtml)
+                                                    Qualification qualification,
+                                                    string postHeadingContentHtml,
+                                                    string variousAwardingOrganisationsExplanationHtml)
     {
         var hasAnyAdditionalRequirementQuestions = qualification.AdditionalRequirementQuestions is { Count: > 0 };
-        
+
         return new ConfirmQualificationPageModel
                {
                    Heading = content.Heading,
@@ -25,7 +25,9 @@ public static class ConfirmQualificationPageMapper
                    AwardingOrganisationLabel = content.AwardingOrganisationLabel,
                    ErrorBannerHeading = content.ErrorBannerHeading,
                    ErrorBannerLink = content.ErrorBannerLink,
-                   ButtonText = hasAnyAdditionalRequirementQuestions ? content.ButtonText : content.NoAdditionalRequirementsButtonText,
+                   ButtonText = hasAnyAdditionalRequirementQuestions
+                                    ? content.ButtonText
+                                    : content.NoAdditionalRequirementsButtonText,
                    HasErrors = false,
                    QualificationName = qualification.QualificationName,
                    QualificationLevel = qualification.QualificationLevel.ToString(),

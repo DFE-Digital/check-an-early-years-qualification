@@ -18,11 +18,11 @@ test.describe('A spec that tests the qualification not on list page', () => {
 
         await checkText(page, ".govuk-notification-banner__title", "Banner title", 0);
         await checkText(page, ".govuk-notification-banner__heading", "Feedback banner heading", 0);
-        await checkText(page, ".govuk-notification-banner__content", "Banner body text", 0);
+        await checkText(page, ".govuk-notification-banner__content > .govuk-body", "Banner body text", 0);
 
         await checkText(page, ".govuk-notification-banner__title", "Banner title", 1);
         await checkText(page, ".govuk-notification-banner__heading", "Feedback banner heading", 1);
-        await checkText(page, ".govuk-notification-banner__content", "Banner body text", 1);
+        await checkText(page, ".govuk-notification-banner__content > .govuk-body", "Banner body text", 1);
     });
 
     test("Checks content renders for the level 4 specific qualification not on the list page", async ({
@@ -37,11 +37,11 @@ test.describe('A spec that tests the qualification not on list page', () => {
 
         await checkText(page, ".govuk-notification-banner__title", "Banner title", 0);
         await checkText(page, ".govuk-notification-banner__heading", "Feedback banner heading", 0);
-        await checkText(page, ".govuk-notification-banner__content", "Banner body text", 0);
+        await checkText(page, ".govuk-notification-banner__content > .govuk-body", "Banner body text", 0);
 
         await checkText(page, ".govuk-notification-banner__title", "Banner title", 1);
         await checkText(page, ".govuk-notification-banner__heading", "Feedback banner heading", 1);
-        await checkText(page, ".govuk-notification-banner__content", "Banner body text", 1);
+        await checkText(page, ".govuk-notification-banner__content > .govuk-body", "Banner body text", 1);
     });
 
     test("Checks default content renders when no specific qualification not on the list page exists", async ({
@@ -56,10 +56,10 @@ test.describe('A spec that tests the qualification not on list page', () => {
 
         await checkText(page, ".govuk-notification-banner__title", "Test banner title", 0);
         await checkText(page, ".govuk-notification-banner__heading", "Feedback heading", 0);
-        await checkText(page, ".govuk-notification-banner__content", "This is the body text", 0);
+        await checkText(page, ".govuk-notification-banner__content > .govuk-body", "This is the body text", 0);
 
         await checkText(page, ".govuk-notification-banner__title", "Test banner title", 1);
         await checkText(page, ".govuk-notification-banner__heading", "Feedback heading", 1);
-        await checkText(page, ".govuk-notification-banner__content", "This is the body text", 1);
+        await checkText(page, ".govuk-notification-banner__content > .govuk-body", "This is the body text", 1);
     });
 });

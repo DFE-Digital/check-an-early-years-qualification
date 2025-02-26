@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
-[Route("qualifications/check-additional-questions")]
+[Route("qualifications/check-additional-questions/{qualificationId}")]
 [RedirectIfDateMissing]
 public class CheckAdditionalRequirementsController(
     ILogger<CheckAdditionalRequirementsController> logger,
@@ -23,7 +23,7 @@ public class CheckAdditionalRequirementsController(
     IUserJourneyCookieService userJourneyCookieService)
     : ServiceController
 {
-    [HttpGet("{qualificationId}/{questionIndex}")]
+    [HttpGet("{questionIndex:int}")]
     public async Task<IActionResult> Index(string qualificationId, int questionIndex)
     {
         if (ModelState.IsValid)
@@ -36,16 +36,21 @@ public class CheckAdditionalRequirementsController(
         return RedirectToAction("Index", "Error");
     }
 
-    [HttpPost("{qualificationId}/{questionIndex}")]
-    public async Task<IActionResult> Post(string qualificationId, int questionIndex, [FromForm]CheckAdditionalRequirementsPageModel model)
+    [HttpPost("{questionIndex:int}")]
+    public async Task<IActionResult> Post(string qualificationId, int questionIndex,
+                                          [FromForm] CheckAdditionalRequirementsPageModel model)
     {
         if (ModelState.IsValid)
         {
-            var previouslyAnsweredQuestions = userJourneyCookieService.GetAdditionalQuestionsAnswers() ?? new Dictionary<string, string>();
-            var additionalRequirementQuestions = previouslyAnsweredQuestions.ToDictionary(previouslyAnsweredQuestion => previouslyAnsweredQuestion.Key, previouslyAnsweredQuestion => previouslyAnsweredQuestion.Value);
+            var previouslyAnsweredQuestions = userJourneyCookieService.GetAdditionalQuestionsAnswers() ??
+                                              new Dictionary<string, string>();
+            var additionalRequirementQuestions =
+                previouslyAnsweredQuestions.ToDictionary(previouslyAnsweredQuestion => previouslyAnsweredQuestion.Key,
+                                                         previouslyAnsweredQuestion =>
+                                                             previouslyAnsweredQuestion.Value);
             additionalRequirementQuestions[model.Question] = model.Answer;
             userJourneyCookieService.SetAdditionalQuestionsAnswers(additionalRequirementQuestions);
-            
+
             var qualification = await qualificationsRepository.GetById(qualificationId);
             if (qualification is null)
             {
@@ -59,11 +64,12 @@ public class CheckAdditionalRequirementsController(
             if (qualification.AdditionalRequirementQuestions is null)
                 return RedirectToAction("ConfirmAnswers", "CheckAdditionalRequirements",
                                         new { model.QualificationId });
-            
+
             // If the user answer matches the answer to be full and relevant to the Qts question, then go straight to the confirm answers page
             var modelAnswerAsBool = model.Answer == "yes";
             var question = qualification.AdditionalRequirementQuestions[questionIndex - 1];
-            if (question.Sys.Id == AdditionalRequirementQuestions.QtsQuestion && question.AnswerToBeFullAndRelevant == modelAnswerAsBool)
+            if (question.Sys.Id == AdditionalRequirementQuestions.QtsQuestion &&
+                question.AnswerToBeFullAndRelevant == modelAnswerAsBool)
             {
                 var overrideAdditionalRequirementQuestion = new Dictionary<string, string>
                                                             {
@@ -89,7 +95,7 @@ public class CheckAdditionalRequirementsController(
     }
 
     [HttpGet]
-    [Route("{qualificationId}/confirm-answers")]
+    [Route("confirm-answers")]
     public async Task<IActionResult> ConfirmAnswers(string qualificationId)
     {
         var content = await contentService.GetCheckAdditionalRequirementsAnswerPage();
@@ -98,7 +104,7 @@ public class CheckAdditionalRequirementsController(
             logger.LogError("No content for the check additional requirements answer page content");
             return RedirectToAction("Index", "Error");
         }
-        
+
         var qualification = await qualificationsRepository.GetById(qualificationId);
         if (qualification is null)
         {
@@ -114,15 +120,13 @@ public class CheckAdditionalRequirementsController(
             return RedirectToAction("Index", "QualificationDetails",
                                     new { qualificationId });
         }
-        
+
         var answers = userJourneyCookieService.GetAdditionalQuestionsAnswers();
 
-        if (answers == null || !UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, answers))
+        if ((answers == null || !UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, answers))
+            && answers?.Count != qualification.AdditionalRequirementQuestions!.Count)
         {
-            if (answers?.Count != qualification.AdditionalRequirementQuestions!.Count)
-            {
-                return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId, questionIndex = 1 });
-            }
+            return RedirectToAction("Index", "CheckAdditionalRequirements", new { qualificationId, questionIndex = 1 });
         }
 
         var model = MapCheckAnswers(content, answers, qualificationId);
@@ -167,28 +171,32 @@ public class CheckAdditionalRequirementsController(
             var index = questionIndex - 1;
             mappedModel.Answer = answers.ElementAt(index).Value;
         }
+
         return View("Index", mappedModel);
     }
 
     private async Task<CheckAdditionalRequirementsPageModel> MapModel(CheckAdditionalRequirementsPage content,
                                                                       Qualification qualification,
                                                                       int questionIndex,
-                                                                      CheckAdditionalRequirementsPageModel? model = null)
+                                                                      CheckAdditionalRequirementsPageModel? model =
+                                                                          null)
     {
         var backButton = CalculateBackButton(qualification.QualificationId, questionIndex, content);
         var additionalRequirementQuestion =
             await MapAdditionalRequirementQuestion(qualification.AdditionalRequirementQuestions!, questionIndex);
-        return CheckAdditionalRequirementsPageMapper.Map(content, qualification.QualificationId, questionIndex, backButton,
+        return CheckAdditionalRequirementsPageMapper.Map(content, qualification.QualificationId, questionIndex,
+                                                         backButton,
                                                          additionalRequirementQuestion, model);
     }
 
-    private static NavigationLinkModel? CalculateBackButton(string qualificationId, int questionIndex, CheckAdditionalRequirementsPage content)
+    private static NavigationLinkModel? CalculateBackButton(string qualificationId, int questionIndex,
+                                                            CheckAdditionalRequirementsPage content)
     {
         if (questionIndex == 1)
         {
             return NavigationLinkMapper.Map(content.BackButton);
         }
-        
+
         var link = content.PreviousQuestionBackButton;
 
         if (link == null)
@@ -205,7 +213,8 @@ public class CheckAdditionalRequirementsController(
         return NavigationLinkMapper.Map(link);
     }
 
-    private async Task<AdditionalRequirementQuestionModel> MapAdditionalRequirementQuestion(List<AdditionalRequirementQuestion> additionalRequirementQuestions, int questionIndex)
+    private async Task<AdditionalRequirementQuestionModel> MapAdditionalRequirementQuestion(
+        List<AdditionalRequirementQuestion> additionalRequirementQuestions, int questionIndex)
     {
         var additionalRequirementQuestion = additionalRequirementQuestions[questionIndex - 1];
         return new AdditionalRequirementQuestionModel
@@ -223,13 +232,16 @@ public class CheckAdditionalRequirementsController(
         return options.Select(option => new OptionModel { Label = option.Label, Value = option.Value }).ToList();
     }
 
-    private static CheckAdditionalRequirementsAnswerPageModel MapCheckAnswers(CheckAdditionalRequirementsAnswerPage pageModel, Dictionary<string, string> answers, string qualificationId)
+    private static CheckAdditionalRequirementsAnswerPageModel MapCheckAnswers(
+        CheckAdditionalRequirementsAnswerPage pageModel, Dictionary<string, string> answers, string qualificationId)
     {
         var backButtonIndex = answers.Count;
 
         pageModel.BackButton!.Href = pageModel.BackButton.Href + $"/{qualificationId}/{backButtonIndex}";
 
-        var answersToDisplay = answers.ToDictionary(answer => answer.Key, answer => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(answer.Value));
+        var answersToDisplay = answers.ToDictionary(answer => answer.Key,
+                                                    answer =>
+                                                        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(answer.Value));
 
         return new CheckAdditionalRequirementsAnswerPageModel
                {
@@ -243,19 +255,21 @@ public class CheckAdditionalRequirementsController(
                    ChangeQuestionHref = $"/qualifications/check-additional-questions/{qualificationId}/"
                };
     }
-    
+
     private static bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification,
-                                                                              Dictionary<string, string> additionalRequirementAnswers)
+                                                                              Dictionary<string, string>
+                                                                                  additionalRequirementAnswers)
     {
-        if (qualification.AdditionalRequirementQuestions is null 
-            || qualification.AdditionalRequirementQuestions.All(x => x.Sys.Id != AdditionalRequirementQuestions.QtsQuestion))
+        if (qualification.AdditionalRequirementQuestions is null
+            || qualification.AdditionalRequirementQuestions.All(x => x.Sys.Id != AdditionalRequirementQuestions
+                                                                         .QtsQuestion))
         {
             return false;
         }
-        
+
         var qtsQuestion =
             qualification.AdditionalRequirementQuestions.First(x => x.Sys.Id == AdditionalRequirementQuestions
-                                                                         .QtsQuestion);
+                                                                        .QtsQuestion);
 
         var userAnsweredQuestion = additionalRequirementAnswers.First(x => x.Key == qtsQuestion.Question);
         var answerAsBool = userAnsweredQuestion.Value == "yes";

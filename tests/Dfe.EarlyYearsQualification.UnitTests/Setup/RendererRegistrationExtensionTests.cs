@@ -61,7 +61,7 @@ public class RendererRegistrationExtensionTests
         VerifyService<IContentRenderer, UnorderedListHyperlinksRenderer>(services, ServiceLifetime.Singleton);
 
         VerifyService<IGovUkContentParser, GovUkContentParser>(services, ServiceLifetime.Transient, AllowNulls.Yes);
-        
+
         VerifyService<IContentRenderer, EmbeddedParagraphRenderer>(services, ServiceLifetime.Singleton);
     }
 
@@ -171,11 +171,7 @@ public class RendererRegistrationExtensionTests
         Yes
     }
 
-    private interface IStuffDoer
-    {
-    }
+    private interface IStuffDoer;
 
-    private class StuffDoer : IStuffDoer
-    {
-    }
+    private class StuffDoer : IStuffDoer;
 }

@@ -21,7 +21,7 @@ public class CheckAdditionalRequirementsPageModel
     public AdditionalRequirementQuestionModel AdditionalRequirementQuestion { get; set; } = new();
 
     [Required]
-    public string Question { get; set; } = string.Empty;
+    public string Question { get; init; } = string.Empty;
 
     [Required]
     public string Answer { get; set; } = string.Empty;

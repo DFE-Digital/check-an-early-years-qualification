@@ -61,8 +61,9 @@ public class MockContentfulService : IContentService
                                                               body, QualificationsPath)),
 
                    AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
-                       await Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
-                                                              body, WhatLevelIsTheQualificationPath)),
+                       await
+                           Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
+                                                            body, WhatLevelIsTheQualificationPath)),
                    AdvicePages.Level7QualificationAfterAug2019 =>
                        await Task.FromResult(CreateAdvicePage("Level 7 qualification after aug 2019",
                                                               body, WhatLevelIsTheQualificationPath)),
@@ -112,7 +113,8 @@ public class MockContentfulService : IContentService
         var furtherInfoText = ContentfulContentHelper.Paragraph("Test Further Info Text");
         var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
-        var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 = ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
+        var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
+            ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
         var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
         return await Task.FromResult(new DetailsPage
                                      {
@@ -161,7 +163,8 @@ public class MockContentfulService : IContentService
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
                                          RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
-                                         RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19,
+                                         RatiosTextL3PlusNotFrBetweenSep14Aug19 =
+                                             ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19,
                                          RequirementsHeading = "Test requirements heading",
                                          RequirementsText = requirementsText,
                                          CheckAnotherQualificationLink = new NavigationLink
@@ -174,6 +177,7 @@ public class MockContentfulService : IContentService
                                          QualificationDetailsSummaryHeader = "Qualification details",
                                          QualificationNameLabel = "Qualification",
                                          QualificationStartDateLabel = "Qualification start date",
+                                         QualificationAwardedDateLabel = "Qualification awarded date",
                                          FeedbackBanner = new FeedbackBanner
                                                           {
                                                               Body = ContentfulContentHelper.Paragraph("Test body"),
@@ -238,12 +242,12 @@ public class MockContentfulService : IContentService
                };
     }
 
-    public async Task<DateQuestionPage?> GetDateQuestionPage(string entryId)
+    public async Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId)
     {
         return entryId switch
                {
-                   QuestionPages.WhenWasTheQualificationStarted =>
-                       await Task.FromResult(CreateDateQuestionPage()),
+                   QuestionPages.WhenWasTheQualificationStartedAndAwarded =>
+                       await Task.FromResult(CreateDatesQuestionPage()),
                    _ => throw new NotImplementedException($"No date question page mock for entry {entryId}")
                };
     }
@@ -269,25 +273,26 @@ public class MockContentfulService : IContentService
                                                           Href = "/questions/what-is-the-awarding-organisation",
                                                           OpenInNewTab = false
                                                       },
-                                         LevelHeading = "Level",
-                                         AwardingOrganisationHeading = "Awarding organisation",
+                                         QualificationFoundPrefix = "We found",
                                          SearchButtonText = "Refine",
                                          SearchCriteriaHeading = "Your search",
-                                         MultipleQualificationsFoundText = "qualifications found",
-                                         SingleQualificationFoundText = "qualification found",
+                                         MultipleQualificationsFoundText = "matching qualifications",
+                                         SingleQualificationFoundText = "matching qualification",
                                          PreSearchBoxContent =
                                              ContentfulContentHelper.Text("Pre search box content"),
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
                                                                           "/advice/qualification-not-on-the-list"),
-                                         PostSearchCriteriaContent =
-                                             ContentfulContentHelper.Text("Post search criteria content"),
-                                         AnyLevelHeading = "Any level",
-                                         AnyAwardingOrganisationHeading = "Various awarding organisations",
+                                         AnyLevelHeading = "any level",
+                                         AnyAwardingOrganisationHeading = "various awarding organisations",
                                          NoResultsText =
                                              ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
                                          ClearSearchText = "Clear search",
-                                         NoQualificationsFoundText = "No"
+                                         AwardedLocationPrefixText = "awarded in",
+                                         StartDatePrefixText = "started in",
+                                         AwardedDatePrefixText = "awarded in",
+                                         LevelPrefixText = "level",
+                                         AwardedByPrefixText = "awarded by"
                                      });
     }
 
@@ -348,7 +353,8 @@ public class MockContentfulService : IContentService
                                          PreviousQuestionBackButton = new NavigationLink
                                                                       {
                                                                           DisplayText = "Previous",
-                                                                          Href = "/qualifications/check-additional-questions",
+                                                                          Href =
+                                                                              "/qualifications/check-additional-questions",
                                                                           OpenInNewTab = false
                                                                       },
                                          CtaButtonText = "Get result",
@@ -427,7 +433,7 @@ public class MockContentfulService : IContentService
                                                       {
                                                           DisplayText = "Test display text",
                                                           OpenInNewTab = false,
-                                                          Href = "/qualifications/check-additional-questions",
+                                                          Href = "/qualifications/check-additional-questions"
                                                       },
                                          ButtonText = "Test button text",
                                          PageHeading = "Test page heading",
@@ -449,8 +455,27 @@ public class MockContentfulService : IContentService
                                                             {
                                                                 Url = "test/url/og-image.png"
                                                             }
-                                                     
                                                  }
+                                     });
+    }
+
+    public async Task<CheckYourAnswersPage?> GetCheckYourAnswersPage()
+    {
+        return await Task.FromResult(new CheckYourAnswersPage
+                                     {
+                                         PageHeading = "Check your answers",
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "TEST",
+                                                          Href = WhereWasTheQualificationAwardedPath,
+                                                          OpenInNewTab = false
+                                                      },
+                                         CtaButtonText = "Continue",
+                                         ChangeAnswerText = "Change",
+                                         QualificationAwardedText = "Awarded in",
+                                         QualificationStartedText = "Started in",
+                                         AnyAwardingOrganisationText = "Various awarding organisations",
+                                         AnyLevelText = "Any level"
                                      });
     }
 
@@ -555,7 +580,7 @@ public class MockContentfulService : IContentService
                           }
                       };
         return CreateRadioQuestionPage("What level is the qualification?", options,
-                                       "/questions/when-was-the-qualification-started");
+                                       "/questions/when-was-the-qualification-started-and-awarded");
     }
 
     private static RadioQuestionPage CreateRadioQuestionPage(string question, List<IOptionItem> options,
@@ -581,40 +606,45 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static DateQuestionPage CreateDateQuestionPage()
+    private static DatesQuestionPage CreateDatesQuestionPage()
     {
-        return new DateQuestionPage
+        return new DatesQuestionPage
                {
-                   Question = "Test Date Question",
-                   CtaButtonText = "Continue",
-                   MonthLabel = "Test Month Label",
-                   YearLabel = "Test Year Label",
-                   QuestionHintHeader = "Test Question Hint Header",
-                   QuestionHint = "Test Question Hint",
+                   Question = "Test Dates Questions",
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",
                                     Href = WhereWasTheQualificationAwardedPath,
                                     OpenInNewTab = false
                                 },
-                   AdditionalInformationBody =
-                       ContentfulContentHelper.Paragraph("This is the additional information body"),
-                   PostHeaderContent = 
-                       ContentfulContentHelper.Paragraph("This is post header content"),
-                   AdditionalInformationHeader = "This is the additional information header",
+                   CtaButtonText = "Continue",
                    ErrorBannerHeading = "There is a problem",
-                   ErrorBannerLinkText = "Test error banner link text",
-                   ErrorMessage = "Test Error Message",
-                   FutureDateErrorBannerLinkText = "Future date error message banner link",
-                   FutureDateErrorMessage = "Future date error message",
-                   MissingMonthErrorMessage = "Missing Month Error Message",
-                   MissingYearErrorMessage = "Missing Year Error Message",
-                   MissingMonthBannerLinkText = "Missing Month Banner Link Text",
-                   MissingYearBannerLinkText = "Missing Year Banner Link Text",
-                   MonthOutOfBoundsErrorLinkText = "Month Out Of Bounds Error Link Text",
-                   MonthOutOfBoundsErrorMessage = "Month Out Of Bounds Error Message",
-                   YearOutOfBoundsErrorLinkText = "Year Out Of Bounds Error Link Text",
-                   YearOutOfBoundsErrorMessage = "Year Out Of Bounds Error Message"
+                   AwardedDateIsAfterStartedDateErrorText = "Error- AwardedDateIsAfterStartedDateErrorText",
+                   StartedQuestion = CreateDatesQuestionPage("started- "),
+                   AwardedQuestion = CreateDatesQuestionPage("awarded- ")
+               };
+    }
+
+    private static DateQuestion CreateDatesQuestionPage(string prefix)
+    {
+        return new DateQuestion
+               {
+                   MonthLabel = prefix + "Test Month Label",
+                   YearLabel = prefix + "Test Year Label",
+                   QuestionHeader = prefix + "Test Question Hint Header",
+                   QuestionHint = prefix + "Test Question Hint",
+                   ErrorBannerLinkText = prefix + "Test error banner link text",
+                   ErrorMessage = prefix + "Test Error Message",
+                   FutureDateErrorBannerLinkText = prefix + "Future date error message banner link",
+                   FutureDateErrorMessage = prefix + "Future date error message",
+                   MissingMonthErrorMessage = prefix + "Missing Month Error Message",
+                   MissingYearErrorMessage = prefix + "Missing Year Error Message",
+                   MissingMonthBannerLinkText = prefix + "Missing Month Banner Link Text",
+                   MissingYearBannerLinkText = prefix + "Missing Year Banner Link Text",
+                   MonthOutOfBoundsErrorLinkText = prefix + "Month Out Of Bounds Error Link Text",
+                   MonthOutOfBoundsErrorMessage = prefix + "Month Out Of Bounds Error Message",
+                   YearOutOfBoundsErrorLinkText = prefix + "Year Out Of Bounds Error Link Text",
+                   YearOutOfBoundsErrorMessage = prefix + "Year Out Of Bounds Error Message"
                };
     }
 

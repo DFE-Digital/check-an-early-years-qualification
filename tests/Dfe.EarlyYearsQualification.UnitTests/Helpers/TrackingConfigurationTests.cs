@@ -15,11 +15,12 @@ public class TrackingConfigurationTests
 
         mockCookiePreferenceService.Setup(x => x.GetCookie()).Returns(new DfeCookie());
 
-        var trackingConfiguration = new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
+        var trackingConfiguration =
+            new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
 
         trackingConfiguration.UseCookies.Should().BeFalse();
     }
-    
+
     [TestMethod]
     public void UseCookies_ReturnsTrue()
     {
@@ -28,11 +29,12 @@ public class TrackingConfigurationTests
 
         mockCookiePreferenceService.Setup(x => x.GetCookie()).Returns(new DfeCookie { HasApproved = true });
 
-        var trackingConfiguration = new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
+        var trackingConfiguration =
+            new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
 
         trackingConfiguration.UseCookies.Should().BeTrue();
     }
-    
+
     [TestMethod]
     public void GtmTag_ReturnsEmpty()
     {
@@ -41,12 +43,13 @@ public class TrackingConfigurationTests
         var mockSection = new Mock<IConfigurationSection>();
         mockSection.Setup(x => x.Value).Returns(value: null);
         mockConfiguration.Setup(x => x.GetSection("GTM:Tag")).Returns(mockSection.Object);
-        
-        var trackingConfiguration = new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
+
+        var trackingConfiguration =
+            new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
 
         trackingConfiguration.GtmTag.Should().BeEmpty();
     }
-    
+
     [TestMethod]
     public void GtmTag_ReturnsConfigValue()
     {
@@ -56,12 +59,13 @@ public class TrackingConfigurationTests
         var mockSection = new Mock<IConfigurationSection>();
         mockSection.Setup(x => x.Value).Returns(tag);
         mockConfiguration.Setup(x => x.GetSection("GTM:Tag")).Returns(mockSection.Object);
-        
-        var trackingConfiguration = new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
+
+        var trackingConfiguration =
+            new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
 
         trackingConfiguration.GtmTag.Should().Be(tag);
     }
-    
+
     [TestMethod]
     public void ClarityTag_ReturnsEmpty()
     {
@@ -70,12 +74,13 @@ public class TrackingConfigurationTests
         var mockSection = new Mock<IConfigurationSection>();
         mockSection.Setup(x => x.Value).Returns(value: null);
         mockConfiguration.Setup(x => x.GetSection("Clarity:Tag")).Returns(mockSection.Object);
-        
-        var trackingConfiguration = new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
+
+        var trackingConfiguration =
+            new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
 
         trackingConfiguration.ClarityTag.Should().BeEmpty();
     }
-    
+
     [TestMethod]
     public void ClarityTag_ReturnsConfigValue()
     {
@@ -85,8 +90,9 @@ public class TrackingConfigurationTests
         var mockSection = new Mock<IConfigurationSection>();
         mockSection.Setup(x => x.Value).Returns(tag);
         mockConfiguration.Setup(x => x.GetSection("Clarity:Tag")).Returns(mockSection.Object);
-        
-        var trackingConfiguration = new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
+
+        var trackingConfiguration =
+            new TrackingConfiguration(mockCookiePreferenceService.Object, mockConfiguration.Object);
 
         trackingConfiguration.ClarityTag.Should().Be(tag);
     }

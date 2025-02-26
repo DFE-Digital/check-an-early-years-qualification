@@ -23,11 +23,17 @@
             await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
                                                                    {
                                                                        ErrorBannerHeading = Model.ErrorBannerHeading,
-                                                                       ErrorBannerLinkText = Model.ErrorBannerLinkText,
-                                                                       ElementLinkId = Model.DropdownId
+                                                                       ErrorSummaryLinks =
+                                                                       [
+                                                                           new ErrorSummaryLink
+                                                                           {
+                                                                               ErrorBannerLinkText = Model.ErrorBannerLinkText,
+                                                                               ElementLinkId = Model.DropdownId
+                                                                           }
+                                                                       ]
                                                                    });
         }
-        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "dropdown-question-form"}))
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "dropdown-question-form" }))
         {
             <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
@@ -52,9 +58,8 @@
 
                     @if (Model.HasErrors)
                     {
-                        <p id="dropdown-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
-                        </p>
+                        <p id="dropdown-error" class="govuk-error-message"><span
+                                class="govuk-visually-hidden">Error:</span>@Model.ErrorMessage</p>
                     }
 
                     <div class="govuk-form-group">

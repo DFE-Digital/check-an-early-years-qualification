@@ -1,4 +1,4 @@
-@model Dfe.EarlyYearsQualification.Web.Models.ErrorSummaryModel
+@model ErrorSummaryModel
 
 <div id="error-banner" class="govuk-error-summary" data-module="govuk-error-summary">
     <div role="alert">
@@ -7,9 +7,12 @@
         </h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
-                <li>
-                    <a id="error-banner-link" href="#@{@Model.ElementLinkId}">@Html.Raw(Model.ErrorBannerLinkText)</a> 
-                </li>
+                @foreach (var link in Model.ErrorSummaryLinks)
+                {
+                    <li>
+                        <a id="error-banner-link" href="#@{@link.ElementLinkId}">@Html.Raw(link.ErrorBannerLinkText)</a>
+                    </li>
+                }
             </ul>
         </div>
     </div>

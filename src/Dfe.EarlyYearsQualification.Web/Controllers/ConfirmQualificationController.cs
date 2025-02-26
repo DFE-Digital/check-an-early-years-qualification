@@ -79,7 +79,11 @@ public class ConfirmQualificationController(
             userJourneyCookieService.SetUserSelectedQualificationFromList(YesOrNo.Yes);
             userJourneyCookieService.ClearAdditionalQuestionsAnswers();
 
-            var hasAdditionalQuestions = qualification is { IsAutomaticallyApprovedAtLevel6: false, AdditionalRequirementQuestions.Count: > 0 };
+            var hasAdditionalQuestions = qualification is
+                                         {
+                                             IsAutomaticallyApprovedAtLevel6: false,
+                                             AdditionalRequirementQuestions.Count: > 0
+                                         };
 
             return model.ConfirmQualificationAnswer switch
                    {
@@ -87,7 +91,8 @@ public class ConfirmQualificationController(
                                                                              "CheckAdditionalRequirements",
                                                                              new
                                                                              {
-                                                                                 qualificationId = model.QualificationId,
+                                                                                 qualificationId =
+                                                                                     model.QualificationId,
                                                                                  questionIndex = 1
                                                                              }),
 

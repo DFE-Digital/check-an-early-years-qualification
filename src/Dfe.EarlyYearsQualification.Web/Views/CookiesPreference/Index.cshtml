@@ -21,9 +21,12 @@
             var userPreferenceSet = TempData["UserPreferenceRecorded"] as bool? ?? false;
             if (userPreferenceSet)
             {
-                <div id="cookies-set-banner" class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                <div id="cookies-set-banner" class="govuk-notification-banner govuk-notification-banner--success"
+                     role="alert" aria-labelledby="govuk-notification-banner-title"
+                     data-module="govuk-notification-banner">
                     <div class="govuk-notification-banner__header">
-                        <h2 id="cookies-set-banner-heading" class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                        <h2 id="cookies-set-banner-heading" class="govuk-notification-banner__title"
+                            id="govuk-notification-banner-title">
                             @Model.SuccessBannerHeading
                         </h2>
                     </div>
@@ -48,8 +51,7 @@
 
                     <div class="govuk-radios" data-module="govuk-radios">
                         <p id="cookies-choice-error" class="govuk-error-message" hidden>
-                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorText
-                        </p>
+                            <span class="govuk-visually-hidden">Error:</span>@Model.ErrorText</p>
                         @foreach (var option in Model.Options)
                         {
                             <div class="govuk-radios__item">
