@@ -12,6 +12,7 @@ public class MockContentfulService : IContentService
     private const string WhereWasTheQualificationAwardedPath = "/questions/where-was-the-qualification-awarded";
     private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
     private const string QualificationsPath = "/qualifications";
+    private const string HomePath = "/";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -67,6 +68,9 @@ public class MockContentfulService : IContentService
                    AdvicePages.Level7QualificationAfterAug2019 =>
                        await Task.FromResult(CreateAdvicePage("Level 7 qualification after aug 2019",
                                                               body, WhatLevelIsTheQualificationPath)),
+                   AdvicePages.Help =>
+                       await Task.FromResult(CreateAdvicePage("Help",
+                                                              body, HomePath)),
                    _ => null
                };
     }
