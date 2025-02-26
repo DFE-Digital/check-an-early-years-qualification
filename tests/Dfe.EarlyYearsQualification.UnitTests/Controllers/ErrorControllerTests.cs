@@ -21,35 +21,35 @@ public class ErrorControllerTests
     public void HttpStatusCodeHandler_404_ReturnsNotFoundView()
     {
         var controller = new ErrorController();
-        
+
         controller.ControllerContext = new ControllerContext
                                        {
                                            HttpContext = new DefaultHttpContext()
                                        };
 
         var result = controller.HttpStatusCodeHandler(404);
-        
+
         result.Should().BeAssignableTo<ViewResult>()
               .Which.ViewName.Should().Be("NotFound");
 
         controller.ControllerContext.HttpContext.Response.StatusCode.Should().Be(404);
     }
-    
+
     [TestMethod]
     public void HttpStatusCodeHandler_Not404_ReturnsProblemWithServiceView()
     {
         var controller = new ErrorController();
-        
+
         controller.ControllerContext = new ControllerContext
                                        {
                                            HttpContext = new DefaultHttpContext()
                                        };
 
         var result = controller.HttpStatusCodeHandler(500);
-        
+
         result.Should().BeAssignableTo<ViewResult>()
               .Which.ViewName.Should().Be("ProblemWithTheService");
-        
+
         controller.ControllerContext.HttpContext.Response.StatusCode.Should().Be(500);
     }
 }

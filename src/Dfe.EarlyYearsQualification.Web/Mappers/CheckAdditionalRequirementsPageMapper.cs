@@ -6,11 +6,12 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers;
 public static class CheckAdditionalRequirementsPageMapper
 {
     public static CheckAdditionalRequirementsPageModel Map(CheckAdditionalRequirementsPage content,
-                                                                      string qualificationId,
-                                                                      int questionIndex,
-                                                                      NavigationLinkModel? backButton,
-                                                                      AdditionalRequirementQuestionModel additionalRequirementQuestionModel,
-                                                                      CheckAdditionalRequirementsPageModel? model = null)
+                                                           string qualificationId,
+                                                           int questionIndex,
+                                                           NavigationLinkModel? backButton,
+                                                           AdditionalRequirementQuestionModel
+                                                               additionalRequirementQuestionModel,
+                                                           CheckAdditionalRequirementsPageModel? model = null)
     {
         var mappedModel = model ?? new CheckAdditionalRequirementsPageModel();
         mappedModel.QualificationId = qualificationId;

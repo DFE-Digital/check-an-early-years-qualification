@@ -18,7 +18,7 @@ public class EmbeddedParagraphRendererTests
 
     [TestMethod]
     public void EmbeddedParagraphRenderer_DataTargetIsNull_DoesNotSupport()
-    { 
+    {
         var content = new EntryStructure { Data = new EntryStructureData { Target = null } };
 
         new EmbeddedParagraphRenderer().SupportsContent(content).Should().BeFalse();
@@ -61,16 +61,14 @@ public class EmbeddedParagraphRendererTests
 
         new EmbeddedParagraphRenderer().SupportsContent(content).Should().BeTrue();
     }
-    
+
     [TestMethod]
     public async Task EmbeddedParagraphRenderer_RendersContent()
     {
         var embeddedParagraph = new EmbeddedParagraph
-                                  {
-                                      Content = ContentfulContentHelper.Paragraph("Test Content")
-                                  };
-
-        
+                                {
+                                    Content = ContentfulContentHelper.Paragraph("Test Content")
+                                };
 
         var content = new EntryStructure
                       {

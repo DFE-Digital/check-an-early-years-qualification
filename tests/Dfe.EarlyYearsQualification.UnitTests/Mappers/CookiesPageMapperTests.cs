@@ -24,7 +24,7 @@ public class CookiesPageMapperTests
                                                DisplayText = "Back",
                                                OpenInNewTab = true,
                                                Href = "/"
-                                           },
+                                           }
                           };
 
         var result = CookiesPageMapper.Map(cookiesPage, bodyContentHtml, successBannerContentHtml);

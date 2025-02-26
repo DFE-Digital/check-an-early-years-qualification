@@ -29,9 +29,9 @@ public class DetailsPage
     public Document? FurtherInfoText { get; init; }
 
     public NavigationLink? BackButton { get; init; }
-    
+
     public NavigationLink? BackToConfirmAnswers { get; init; }
-    
+
     public NavigationLink? BackToLevelSixAdviceBefore2014 { get; init; }
 
     public NavigationLink? BackToLevelSixAdvice { get; init; }
@@ -56,7 +56,7 @@ public class DetailsPage
     public string QualificationAwardedDateLabel { get; init; } = string.Empty;
 
     public Document? RatiosTextNotFullAndRelevant { get; init; }
-    
+
     public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
 
     public FeedbackBanner? FeedbackBanner { get; init; }

@@ -47,17 +47,21 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id="refine-search-form" }))
+                @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id = "refine-search-form" }))
                 {
-                    <input class="govuk-input" style="width: 75%" id="refineSearch" name="refineSearch" aria-label="refine search box" type="text" value="@Model.SearchCriteria">
-                    <button id="refineSearchButton" type="submit" class="govuk-button govuk-button--secondary govuk-!-static-margin-left-1" data-module="govuk-button">
+                    <input class="govuk-input" style="width: 75%" id="refineSearch" name="refineSearch"
+                           aria-label="refine search box" type="text" value="@Model.SearchCriteria">
+                    <button id="refineSearchButton" type="submit"
+                            class="govuk-button govuk-button--secondary govuk-!-static-margin-left-1"
+                            data-module="govuk-button">
                         @Model.SearchButtonText
                     </button>
                 }
-                @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id="clear-search-form" }))
+                @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id = "clear-search-form" }))
                 {
                     <input name="refineSearch" type="hidden" value="">
-                    <button id="clear-search" type="submit" class="govuk-link button-as-link float-left govuk-!-static-margin-top-1 govuk-!-font-size-19">@Model.ClearSearchText</button>
+                    <button id="clear-search" type="submit"
+                            class="govuk-link button-as-link float-left govuk-!-static-margin-top-1 govuk-!-font-size-19">@Model.ClearSearchText</button>
                 }
             </div>
         </div>
@@ -68,7 +72,7 @@
                 <div class="govuk-grid-column-full">
                     <div id="no-result-content">
                         @Html.Raw(Model.NoResultText)
-                        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />
+                        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible"/>
                     </div>
                 </div>
             </div>
@@ -79,7 +83,8 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
                     <div class="chevron-card__wrapper">
-                        <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })" class="govuk-link govuk-heading-m chevron-card__link">
+                        <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })"
+                           class="govuk-link govuk-heading-m chevron-card__link">
                             @qualification.QualificationName
                         </a>
                         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">

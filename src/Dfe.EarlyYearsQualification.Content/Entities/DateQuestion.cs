@@ -8,7 +8,7 @@ public class DateQuestion
     public string MonthLabel { get; init; } = string.Empty;
 
     public string YearLabel { get; init; } = string.Empty;
-    
+
     public string ErrorBannerLinkText { get; init; } = string.Empty;
 
     public string ErrorMessage { get; init; } = string.Empty;

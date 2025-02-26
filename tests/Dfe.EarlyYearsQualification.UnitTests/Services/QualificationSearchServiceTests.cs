@@ -10,9 +10,9 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class QualificationSearchServiceTests
 {
-    private Mock<IQualificationsRepository> _mockRepository = new();
-    private Mock<IContentService> _mockContentService = new();
     private Mock<IGovUkContentParser> _mockContentParser = new();
+    private Mock<IContentService> _mockContentService = new();
+    private Mock<IQualificationsRepository> _mockRepository = new();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
 
     private QualificationSearchService GetSut()
@@ -104,7 +104,8 @@ public class QualificationSearchServiceTests
         const string qualificationName = "qualification name";
 
         _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(levelOfQualification);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startDateMonth, startDateYear));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
+                                     .Returns((startDateMonth, startDateYear));
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns(awardingOrganisation);
         _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(qualificationName);
 
@@ -127,19 +128,19 @@ public class QualificationSearchServiceTests
                              {
                                  new("qual-1", "qual-name-1", "org-1", 1),
                                  new("qual-2", "qual-name-2", "org-2", 2),
-                                 new("qual-3", "qual-name-3", "org-2", 3),
+                                 new("qual-3", "qual-name-3", "org-2", 3)
                              };
 
         var sut = GetSut();
 
         var result = await sut.MapList(new QualificationListPage(), qualifications);
 
-        var quals = result.Qualifications;
-        quals.Count.Should().Be(qualifications.Count);
+        var resultQualifications = result.Qualifications;
+        resultQualifications.Count.Should().Be(qualifications.Count);
 
-        for (int i = 0; i < quals.Count; i++)
+        for (var i = 0; i < resultQualifications.Count; i++)
         {
-            var thisResult = quals[i];
+            var thisResult = resultQualifications[i];
             var expectedResult = qualifications[i];
 
             thisResult.QualificationId.Should().Be(expectedResult.QualificationId);
@@ -178,7 +179,7 @@ public class QualificationSearchServiceTests
                                         AwardedLocationPrefixText = awardedIn,
                                         AwardedByPrefixText = awardedBy,
                                         AnyLevelHeading = anyLevelHeading,
-                                        AnyAwardingOrganisationHeading = anyAwardingOrganisation,
+                                        AnyAwardingOrganisationHeading = anyAwardingOrganisation
                                     };
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
@@ -200,16 +201,18 @@ public class QualificationSearchServiceTests
                                     {
                                         StartDatePrefixText = "started"
                                     };
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startDateMonth, startDateYear));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
+                                     .Returns((startDateMonth, startDateYear));
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
 
         var expectedDt = new DateOnly(startDateYear, startDateMonth, 1);
-        var expectedStartDate = $"{qualificationListPage.StartDatePrefixText} {expectedDt.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear}";
+        var expectedStartDate =
+            $"{qualificationListPage.StartDatePrefixText} {expectedDt.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear}";
 
         result.StartDate.Should().Be(expectedStartDate);
     }
-    
+
     [TestMethod]
     public void GetFilterModel_GotAwardedDates_Sets_AwardedDate()
     {
@@ -219,12 +222,14 @@ public class QualificationSearchServiceTests
                                     {
                                         AwardedDatePrefixText = "awarded"
                                     };
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardedDateMonth, awardedDateYear));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded())
+                                     .Returns((awardedDateMonth, awardedDateYear));
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
 
         var expectedDt = new DateOnly(awardedDateYear, awardedDateMonth, 1);
-        var expectedAwardedDate = $"{qualificationListPage.AwardedDatePrefixText} {expectedDt.ToString("MMMM", CultureInfo.InvariantCulture)} {awardedDateYear}";
+        var expectedAwardedDate =
+            $"{qualificationListPage.AwardedDatePrefixText} {expectedDt.ToString("MMMM", CultureInfo.InvariantCulture)} {awardedDateYear}";
 
         result.AwardedDate.Should().Be(expectedAwardedDate);
     }
@@ -287,11 +292,15 @@ public class QualificationSearchServiceTests
     {
         const string awardedBy = "awarded by";
         const string awardingOrganisation = "various awarding organisations";
-        var qualificationListPage = new QualificationListPage { AwardedByPrefixText = "awarded by", AnyAwardingOrganisationHeading = awardingOrganisation };
+        var qualificationListPage = new QualificationListPage
+                                    {
+                                        AwardedByPrefixText = "awarded by",
+                                        AnyAwardingOrganisationHeading = awardingOrganisation
+                                    };
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
         var sut = GetSut();
         var result = sut.GetFilterModel(qualificationListPage);
-        
+
         const string expectedResult = $"{awardedBy} {awardingOrganisation}";
 
         result.AwardingOrganisation.Should().Be(expectedResult);

@@ -24,7 +24,7 @@ public class AccessibilityStatementMapperTests
                    };
 
         var result = AccessibilityStatementMapper.Map(page, body);
-        
+
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(page.Heading);
         result.BodyContent.Should().BeSameAs(body);

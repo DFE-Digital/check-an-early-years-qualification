@@ -55,7 +55,7 @@ public class QuestionsControllerTests
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
-                          .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
+                          .ReturnsAsync((RadioQuestionPage?)null).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
@@ -444,9 +444,15 @@ public class QuestionsControllerTests
                                   .Returns(new DatesValidationResult
                                            {
                                                StartedValidationResult = new DateValidationResult
-                                                                         { MonthValid = false, YearValid = false, ErrorMessages = ["Test error message"] },
+                                                                         {
+                                                                             MonthValid = false, YearValid = false,
+                                                                             ErrorMessages = ["Test error message"]
+                                                                         },
                                                AwardedValidationResult = new DateValidationResult
-                                                                         { MonthValid = false, YearValid = false, ErrorMessages = ["Test error message"] }
+                                                                         {
+                                                                             MonthValid = false, YearValid = false,
+                                                                             ErrorMessages = ["Test error message"]
+                                                                         }
                                            });
 
         mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns<string>(x => x);
@@ -516,15 +522,15 @@ public class QuestionsControllerTests
         var result = await controller.WhenWasTheQualificationStarted(new DatesQuestionModel
                                                                      {
                                                                          StartedQuestion = new DateQuestionModel
-                                                                                           {
-                                                                                               SelectedMonth = startedSelectedMonth,
-                                                                                               SelectedYear = startedSelectedYear
-                                                                                           },
+                                                                             {
+                                                                                 SelectedMonth = startedSelectedMonth,
+                                                                                 SelectedYear = startedSelectedYear
+                                                                             },
                                                                          AwardedQuestion = new DateQuestionModel
-                                                                                           {
-                                                                                               SelectedMonth = awardedSelectedMonth,
-                                                                                               SelectedYear = awardedSelectedYear
-                                                                                           }
+                                                                             {
+                                                                                 SelectedMonth = awardedSelectedMonth,
+                                                                                 SelectedYear = awardedSelectedYear
+                                                                             }
                                                                      });
 
         result.Should().NotBeNull();
@@ -554,7 +560,7 @@ public class QuestionsControllerTests
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
-                          .ReturnsAsync((RadioQuestionPage?)default).Verifiable();
+                          .ReturnsAsync((RadioQuestionPage?)null).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
@@ -808,7 +814,7 @@ public class QuestionsControllerTests
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
-                          .ReturnsAsync((DropdownQuestionPage?)default).Verifiable();
+                          .ReturnsAsync((DropdownQuestionPage?)null).Verifiable();
 
         var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,

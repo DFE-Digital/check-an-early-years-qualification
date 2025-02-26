@@ -66,11 +66,12 @@ public class AdviceController(
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+
         if (level is not null && startMonth is not null && startYear is not null)
         {
             var specificCannotFindQualificationPage =
-                await contentService.GetCannotFindQualificationPage(level.Value, startMonth!.Value, startYear!.Value);
-            
+                await contentService.GetCannotFindQualificationPage(level.Value, startMonth.Value, startYear.Value);
+
             if (specificCannotFindQualificationPage is not null)
             {
                 var model = await Map(specificCannotFindQualificationPage);
@@ -78,17 +79,17 @@ public class AdviceController(
                 return View("Advice", model);
             }
         }
-        
+
         return await GetView(AdvicePages.QualificationNotOnTheList);
     }
-    
+
     [HttpGet("level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019")]
     [RedirectIfDateMissing]
     public async Task<IActionResult> Level7QualificationStartedBetweenSept2014AndAug2019()
     {
         return await GetView(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019);
     }
-    
+
     [HttpGet("level-7-qualification-after-aug-2019")]
     [RedirectIfDateMissing]
     public async Task<IActionResult> Level7QualificationAfterAug2019()
@@ -116,11 +117,12 @@ public class AdviceController(
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(advicePage.FeedbackBanner, contentParser);
         return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml);
     }
-    
+
     private async Task<AdvicePageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
     {
         var bodyHtml = await contentParser.ToHtml(cannotFindQualificationPage.Body);
-        var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
+        var feedbackBodyHtml =
+            await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
         return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml);
     }
 }

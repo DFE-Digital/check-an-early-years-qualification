@@ -32,7 +32,8 @@ public class QualificationDetailsController(
         var qualification = await qualificationDetailsService.GetQualification(qualificationId);
         if (qualification is null)
         {
-            logger.LogError("Could not find details for qualification with ID: {QualificationId}", qualificationId.Replace(Environment.NewLine, ""));
+            logger.LogError("Could not find details for qualification with ID: {QualificationId}",
+                            qualificationId.Replace(Environment.NewLine, ""));
             return RedirectToAction("Index", "Error");
         }
 
@@ -41,7 +42,7 @@ public class QualificationDetailsController(
         var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
 
         model.Content!.QualificationResultHeading = detailsPageContent.QualificationResultHeading;
-        
+
         if (!validateAdditionalRequirementQuestions.isValid)
         {
             await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
@@ -49,7 +50,7 @@ public class QualificationDetailsController(
             await qualificationDetailsService.SetRatioText(model, detailsPageContent);
             return validateAdditionalRequirementQuestions.actionResult!;
         }
-        
+
         await qualificationDetailsService.CheckRatioRequirements(qualification, model);
         if (model.RatioRequirements.IsNotFullAndRelevant)
         {
@@ -59,20 +60,22 @@ public class QualificationDetailsController(
         {
             qualificationDetailsService.SetQualificationResultSuccessDetails(model, detailsPageContent);
         }
-        
+
         await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
         await qualificationDetailsService.SetRatioText(model, detailsPageContent);
 
         return View(model);
     }
 
-    private async Task<(bool isValid, IActionResult? actionResult)> ValidateAdditionalQuestions(QualificationDetailsModel details, Qualification qualification)
+    private async Task<(bool isValid, IActionResult? actionResult)> ValidateAdditionalQuestions(
+        QualificationDetailsModel details, Qualification qualification)
     {
         // If the qualification has no additional requirements then skip all checks and return.
         if (details.AdditionalRequirementAnswers == null) return (true, null);
 
         // If qualification contains the QTS question, check the answers
-        if (qualificationDetailsService.QualificationContainsQtsQuestion(qualification)) return await CheckAnswersWhereQtsAnswered(details, qualification);
+        if (qualificationDetailsService.QualificationContainsQtsQuestion(qualification))
+            return await CheckAnswersWhereQtsAnswered(details, qualification);
 
         // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
         if (qualificationDetailsService.DoAdditionalAnswersMatchQuestions(details))
@@ -89,7 +92,8 @@ public class QualificationDetailsController(
         }
 
         // If there are not any answers to the questions that are not full and relevant we can continue back to check the ratios.
-        if (!qualificationDetailsService.AnswersIndicateNotFullAndRelevant(details.AdditionalRequirementAnswers)) return (true, null);
+        if (!qualificationDetailsService.AnswersIndicateNotFullAndRelevant(details.AdditionalRequirementAnswers))
+            return (true, null);
 
         // At this point, there will be at least one question answered in a non full and relevant way.
         // we mark the ratios as not full and relevant and return.
@@ -97,18 +101,23 @@ public class QualificationDetailsController(
         return (false, View(details));
     }
 
-    private async Task<(bool isValid, IActionResult? actionResult)> CheckAnswersWhereQtsAnswered(QualificationDetailsModel details, Qualification qualification)
+    private async Task<(bool isValid, IActionResult? actionResult)> CheckAnswersWhereQtsAnswered(
+        QualificationDetailsModel details, Qualification qualification)
     {
-        var qtsQuestion = qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions.QtsQuestion);
+        var qtsQuestion =
+            qualification.AdditionalRequirementQuestions!.First(x => x.Sys.Id == AdditionalRequirementQuestions
+                                                                         .QtsQuestion);
 
-        if (qualificationDetailsService.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, details.AdditionalRequirementAnswers))
+        if (qualificationDetailsService.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification,
+                 details.AdditionalRequirementAnswers))
         {
             // Remove the additional requirements that they didn't answer following the bypass.
             details.AdditionalRequirementAnswers!.RemoveAll(x => x.Question != qtsQuestion.Question);
             return (true, null);
         }
 
-        var remainingAnswersIndicateFullAndRelevant = qualificationDetailsService.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
+        var remainingAnswersIndicateFullAndRelevant =
+            qualificationDetailsService.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
         if (remainingAnswersIndicateFullAndRelevant.isFullAndRelevant) return (true, null);
 
         details = await qualificationDetailsService.CheckLevel6Requirements(qualification, details);

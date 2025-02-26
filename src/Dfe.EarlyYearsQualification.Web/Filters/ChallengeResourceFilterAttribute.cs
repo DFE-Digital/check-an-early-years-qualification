@@ -58,7 +58,9 @@ public class ChallengeResourceFilterAttribute(
 
         switch (cookieIsPresent)
         {
-            case true when accessKeysHelper.ConfiguredKeys.Contains(context.HttpContext.Request.Cookies[AuthSecretCookieName]):
+            case true
+                when accessKeysHelper.ConfiguredKeys.Contains(context.HttpContext.Request.Cookies[AuthSecretCookieName])
+                :
                 return;
             case true:
                 logger.LogWarning($"Access denied by {nameof(ChallengeResourceFilterAttribute)} (incorrect value submitted)");

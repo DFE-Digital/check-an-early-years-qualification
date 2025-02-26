@@ -17,11 +17,11 @@ public class DropdownQuestionPage
     public string DefaultText { get; init; } = string.Empty;
 
     public NavigationLink? BackButton { get; init; }
-    
+
     public string ErrorBannerHeading { get; init; } = string.Empty;
 
     public string ErrorBannerLinkText { get; init; } = string.Empty;
-    
+
     public string AdditionalInformationHeader { get; init; } = string.Empty;
 
     public Document? AdditionalInformationBody { get; init; }

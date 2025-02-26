@@ -12,8 +12,6 @@ namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentServiceBase
 {
-    protected readonly IContentfulClient ContentfulClient;
-    
     protected const int Day = 28;
 
     private static readonly ReadOnlyDictionary<string, int>
@@ -33,7 +31,9 @@ public class ContentfulContentServiceBase
                          { "Nov", 11 },
                          { "Dec", 12 }
                      });
-    
+
+    protected readonly IContentfulClient ContentfulClient;
+
     protected readonly Dictionary<Type, string> ContentTypeLookup
         = new()
           {
@@ -106,10 +106,10 @@ public class ContentfulContentServiceBase
             var typeName = type.Name;
             Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.",
                             typeName);
-            return default;
+            return null;
         }
     }
-    
+
     protected static T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate, T entry)
     {
         if (startDate is not null
@@ -130,7 +130,7 @@ public class ContentfulContentServiceBase
             // if qualification start date is null, check entered start date is <= ToWhichYear & add to results
             return entry;
         }
-        
+
         // if qualification end date is null, check entered start date is >= FromWhichYear & add to results
         if (startDate is not null
             && endDate is null
@@ -141,7 +141,7 @@ public class ContentfulContentServiceBase
 
         return default;
     }
-    
+
     protected DateOnly? GetDate(string? dateString)
     {
         if (string.IsNullOrEmpty(dateString) || dateString == "null")
@@ -168,7 +168,7 @@ public class ContentfulContentServiceBase
 
     private (bool isValid, int month, int yearMod2000) ValidateDate(string dateString)
     {
-        var splitDateString = dateString.Split('-');
+        string[] splitDateString = dateString.Split('-');
         if (splitDateString.Length != 2)
         {
             Logger.LogError("dateString {DateString} has unexpected format", dateString);

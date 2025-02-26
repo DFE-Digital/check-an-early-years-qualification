@@ -18,7 +18,7 @@ public static class DateQuestionMapper
         model.QuestionHint = question.QuestionHint;
         model.MonthLabel = question.MonthLabel;
         model.YearLabel = question.YearLabel;
-    
+
         model.MonthError = !validationResult?.MonthValid ?? false;
         model.YearError = !validationResult?.YearValid ?? false;
         model.ErrorMessage = errorMessage;

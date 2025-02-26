@@ -6,10 +6,7 @@ public class RatioRowModel
 
     public string RatioId
     {
-        get
-        {
-            return string.Concat(LevelText.Where(c => !char.IsWhiteSpace(c)));
-        }
+        get { return string.Concat(LevelText.Where(c => !char.IsWhiteSpace(c))); }
     }
 
     public QualificationApprovalStatus ApprovalStatus { get; init; }

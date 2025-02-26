@@ -5,7 +5,9 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
 public static class ChallengePageMapper
 {
-    public static ChallengePageModel Map(ChallengePageModel model, ChallengePage content, string sanitisedReferralAddress, string footerContentHtml, string mainContentHtml)
+    public static ChallengePageModel Map(ChallengePageModel model, ChallengePage content,
+                                         string sanitisedReferralAddress, string footerContentHtml,
+                                         string mainContentHtml)
     {
         model.RedirectAddress = sanitisedReferralAddress;
         model.FooterContent = footerContentHtml;

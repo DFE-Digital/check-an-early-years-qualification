@@ -51,7 +51,8 @@
 
                     @if (Model.HasErrors)
                     {
-                        <p id="option-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span>@Model.ErrorMessage</p>
+                        <p id="option-error" class="govuk-error-message"><span
+                                class="govuk-visually-hidden">Error:</span>@Model.ErrorMessage</p>
                     }
                     <div class="govuk-radios" data-module="govuk-radios">
                         @foreach (var option in Model.OptionsItems)

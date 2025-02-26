@@ -79,7 +79,8 @@ public class QuestionsController(
     [HttpGet("when-was-the-qualification-started-and-awarded")]
     public async Task<IActionResult> WhenWasTheQualificationStarted()
     {
-        var questionPage = await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
+        var questionPage =
+            await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
         if (questionPage is null)
         {
             logger.LogError("No content for the question page");
@@ -100,7 +101,8 @@ public class QuestionsController(
     public async Task<IActionResult> WhenWasTheQualificationStarted(DatesQuestionModel model)
 #pragma warning restore S6967
     {
-        var questionPage = await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
+        var questionPage =
+            await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
         var dateModelValidationResult = questionModelValidator.IsValid(model, questionPage!);
         if (!dateModelValidationResult.Valid)
         {
@@ -108,14 +110,17 @@ public class QuestionsController(
             // ReSharper disable once InvertIf
             if (questionPage is not null)
             {
-                model = MapDatesModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions, dateModelValidationResult);
+                model = MapDatesModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions,
+                                      dateModelValidationResult);
             }
 
             return View("Dates", model);
         }
 
-        userJourneyCookieService.SetWhenWasQualificationStarted(model.StartedQuestion!.SelectedMonth.ToString() + '/' + model.StartedQuestion.SelectedYear);
-        userJourneyCookieService.SetWhenWasQualificationAwarded(model.AwardedQuestion!.SelectedMonth.ToString() + '/' + model.AwardedQuestion.SelectedYear);
+        userJourneyCookieService.SetWhenWasQualificationStarted(model.StartedQuestion!.SelectedMonth.ToString() + '/' +
+                                                                model.StartedQuestion.SelectedYear);
+        userJourneyCookieService.SetWhenWasQualificationAwarded(model.AwardedQuestion!.SelectedMonth.ToString() + '/' +
+                                                                model.AwardedQuestion.SelectedYear);
 
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
@@ -154,7 +159,8 @@ public class QuestionsController(
                    "2" when userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() =>
                        RedirectToAction("QualificationsStartedBetweenSept2014AndAug2019", "Advice"),
                    "7" when userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() =>
-                       RedirectToAction(nameof(AdviceController.Level7QualificationStartedBetweenSept2014AndAug2019), "Advice"),
+                       RedirectToAction(nameof(AdviceController.Level7QualificationStartedBetweenSept2014AndAug2019),
+                                        "Advice"),
                    "7" when userJourneyCookieService.WasStartedOnOrAfterSeptember2019() =>
                        RedirectToAction(nameof(AdviceController.Level7QualificationAfterAug2019), "Advice"),
                    _ => RedirectToAction(nameof(this.WhatIsTheAwardingOrganisation))
@@ -266,16 +272,20 @@ public class QuestionsController(
 
         var errorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
 
-        return DateQuestionMapper.Map(model, question, errorBannerLinkText, errorMessage, validationResult, selectedMonth, selectedYear);
+        return DateQuestionMapper.Map(model, question, errorBannerLinkText, errorMessage, validationResult,
+                                      selectedMonth, selectedYear);
     }
 
-    private DatesQuestionModel MapDatesModel(DatesQuestionModel model, DatesQuestionPage question, string actionName, string controllerName, DatesValidationResult? validationResult)
+    private DatesQuestionModel MapDatesModel(DatesQuestionModel model, DatesQuestionPage question, string actionName,
+                                             string controllerName, DatesValidationResult? validationResult)
     {
         var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        var startedModel = MapDateModel(new DateQuestionModel(), question.StartedQuestion, validationResult?.StartedValidationResult, startMonth, startYear);
+        var startedModel = MapDateModel(new DateQuestionModel(), question.StartedQuestion,
+                                        validationResult?.StartedValidationResult, startMonth, startYear);
 
         var (awardedMonth, awardedYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        var awardedModel = MapDateModel(new DateQuestionModel(), question.AwardedQuestion, validationResult?.AwardedValidationResult, awardedMonth, awardedYear);
+        var awardedModel = MapDateModel(new DateQuestionModel(), question.AwardedQuestion,
+                                        validationResult?.AwardedValidationResult, awardedMonth, awardedYear);
 
         return DatesQuestionMapper.Map(model, question, actionName, controllerName, startedModel, awardedModel);
     }
@@ -287,7 +297,7 @@ public class QuestionsController(
                                                                string? selectedAwardingOrganisation,
                                                                bool selectedNotOnTheList)
     {
-        var awardingOrganisationExclusions =
+        string[] awardingOrganisationExclusions =
             new[] { AwardingOrganisations.AllHigherEducation, AwardingOrganisations.Various };
 
         var uniqueAwardingOrganisations

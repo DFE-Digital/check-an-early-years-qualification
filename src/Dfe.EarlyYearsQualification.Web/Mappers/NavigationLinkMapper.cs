@@ -8,7 +8,7 @@ public static class NavigationLinkMapper
     public static NavigationLinkModel? Map(NavigationLink? navigationLink)
     {
         if (navigationLink is null) return null;
-        
+
         return new NavigationLinkModel
                {
                    Href = navigationLink.Href,

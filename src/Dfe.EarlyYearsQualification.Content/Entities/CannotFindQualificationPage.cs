@@ -7,7 +7,7 @@ public class CannotFindQualificationPage
     public string FromWhichYear { get; init; } = string.Empty;
 
     public string ToWhichYear { get; init; } = string.Empty;
-    
+
     public string Heading { get; init; } = string.Empty;
 
     public Document? Body { get; init; }

@@ -12,7 +12,9 @@ public static class CookiesPageMapper
                {
                    Heading = content.Heading,
                    BodyContent = bodyContentHtml,
-                   Options = content.Options.Select(x => new OptionModel { Label = x.Label, Value = x.Value, Hint = x.Hint }).ToList(),
+                   Options = content.Options
+                                    .Select(x => new OptionModel { Label = x.Label, Value = x.Value, Hint = x.Hint })
+                                    .ToList(),
                    ButtonText = content.ButtonText,
                    SuccessBannerContent = successBannerContentHtml,
                    SuccessBannerHeading = content.SuccessBannerHeading,

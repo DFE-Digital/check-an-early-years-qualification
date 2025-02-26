@@ -39,7 +39,7 @@ public static class ContentfulContentHelper
                    ]
                };
     }
-    
+
     public static Document ParagraphWithBold(string text)
     {
         return new Document
@@ -92,12 +92,12 @@ public static class ContentfulContentHelper
                          };
 
         var externalNavigationLink = new EntryStructure
-                      {
-                          Data = new EntryStructureData
-                                 {
-                                     Target = customNode
-                                 }
-                      };
+                                     {
+                                         Data = new EntryStructureData
+                                                {
+                                                    Target = customNode
+                                                }
+                                     };
 
         return new Paragraph
                {

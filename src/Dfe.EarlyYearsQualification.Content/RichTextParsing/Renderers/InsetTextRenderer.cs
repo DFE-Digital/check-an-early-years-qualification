@@ -26,7 +26,7 @@ public class InsetTextRenderer : IContentRenderer
         var sb = new StringBuilder();
 
         if (model!.Content == null || model.Content.Content.Count <= 0) return sb.ToString();
-        
+
         sb.Append("<div class=\"govuk-inset-text\">");
 
         sb.Append(await NestedContentHelper.Render(model.Content!.Content));

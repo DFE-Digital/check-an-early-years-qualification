@@ -22,7 +22,7 @@ public class HomeControllerTests
         var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                             mockUserJourneyCookieService.Object);
 
-        mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage?)default);
+        mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage?)null);
 
         var result = await controller.Index();
 

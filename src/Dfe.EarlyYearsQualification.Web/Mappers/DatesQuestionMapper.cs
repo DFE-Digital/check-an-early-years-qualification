@@ -1,8 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
-using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
-using Microsoft.IdentityModel.Abstractions;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
@@ -10,7 +8,8 @@ public static class DatesQuestionMapper
 {
     public static DatesQuestionModel Map(DatesQuestionModel model, DatesQuestionPage question,
                                          string actionName,
-                                         string controllerName, DateQuestionModel? startedQuestion, DateQuestionModel? awardedQuestion)
+                                         string controllerName, DateQuestionModel? startedQuestion,
+                                         DateQuestionModel? awardedQuestion)
     {
         model.Question = question.Question;
         model.CtaButtonText = question.CtaButtonText;
@@ -40,12 +39,16 @@ public static class DatesQuestionMapper
 
         var errorLinks = new List<ErrorSummaryLink>();
 
-        if (model.StartedQuestion is not null && (model.StartedQuestion.MonthError || model.StartedQuestion.YearError) && model.StartedQuestion.ErrorSummaryLink is not null)
+        if (model.StartedQuestion is not null &&
+            (model.StartedQuestion.MonthError || model.StartedQuestion.YearError) &&
+            model.StartedQuestion.ErrorSummaryLink is not null)
         {
             errorLinks.Add(model.StartedQuestion.ErrorSummaryLink);
         }
 
-        if (model.AwardedQuestion is not null && (model.AwardedQuestion.MonthError || model.AwardedQuestion.YearError) && model.AwardedQuestion.ErrorSummaryLink is not null)
+        if (model.AwardedQuestion is not null &&
+            (model.AwardedQuestion.MonthError || model.AwardedQuestion.YearError) &&
+            model.AwardedQuestion.ErrorSummaryLink is not null)
         {
             errorLinks.Add(model.AwardedQuestion.ErrorSummaryLink);
         }

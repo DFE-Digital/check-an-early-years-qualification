@@ -25,7 +25,7 @@ public class NavigationLinkMapperTests
                          };
 
         var result = NavigationLinkMapper.Map(backButton);
-        
+
         result.Should().NotBeNull();
         result!.DisplayText.Should().BeSameAs(backButton.DisplayText);
         result.OpenInNewTab.Should().BeTrue();

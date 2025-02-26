@@ -61,8 +61,9 @@ public class MockContentfulService : IContentService
                                                               body, QualificationsPath)),
 
                    AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
-                       await Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
-                                                              body, WhatLevelIsTheQualificationPath)),
+                       await
+                           Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
+                                                            body, WhatLevelIsTheQualificationPath)),
                    AdvicePages.Level7QualificationAfterAug2019 =>
                        await Task.FromResult(CreateAdvicePage("Level 7 qualification after aug 2019",
                                                               body, WhatLevelIsTheQualificationPath)),
@@ -112,7 +113,8 @@ public class MockContentfulService : IContentService
         var furtherInfoText = ContentfulContentHelper.Paragraph("Test Further Info Text");
         var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
-        var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 = ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
+        var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
+            ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
         var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
         return await Task.FromResult(new DetailsPage
                                      {
@@ -161,7 +163,8 @@ public class MockContentfulService : IContentService
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
                                          RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
-                                         RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19,
+                                         RatiosTextL3PlusNotFrBetweenSep14Aug19 =
+                                             ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19,
                                          RequirementsHeading = "Test requirements heading",
                                          RequirementsText = requirementsText,
                                          CheckAnotherQualificationLink = new NavigationLink
@@ -350,7 +353,8 @@ public class MockContentfulService : IContentService
                                          PreviousQuestionBackButton = new NavigationLink
                                                                       {
                                                                           DisplayText = "Previous",
-                                                                          Href = "/qualifications/check-additional-questions",
+                                                                          Href =
+                                                                              "/qualifications/check-additional-questions",
                                                                           OpenInNewTab = false
                                                                       },
                                          CtaButtonText = "Get result",
@@ -429,7 +433,7 @@ public class MockContentfulService : IContentService
                                                       {
                                                           DisplayText = "Test display text",
                                                           OpenInNewTab = false,
-                                                          Href = "/qualifications/check-additional-questions",
+                                                          Href = "/qualifications/check-additional-questions"
                                                       },
                                          ButtonText = "Test button text",
                                          PageHeading = "Test page heading",
@@ -451,7 +455,6 @@ public class MockContentfulService : IContentService
                                                             {
                                                                 Url = "test/url/og-image.png"
                                                             }
-                                                     
                                                  }
                                      });
     }
@@ -460,19 +463,19 @@ public class MockContentfulService : IContentService
     {
         return await Task.FromResult(new CheckYourAnswersPage
                                      {
-                                        PageHeading = "Check your answers",
-                                        BackButton = new NavigationLink
-                                                     {
-                                                         DisplayText = "TEST",
-                                                         Href = WhereWasTheQualificationAwardedPath,
-                                                         OpenInNewTab = false
-                                                     },
-                                        CtaButtonText = "Continue",
-                                        ChangeAnswerText = "Change",
-                                        QualificationAwardedText = "Awarded in",
-                                        QualificationStartedText = "Started in",
-                                        AnyAwardingOrganisationText = "Various awarding organisations",
-                                        AnyLevelText = "Any level"
+                                         PageHeading = "Check your answers",
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "TEST",
+                                                          Href = WhereWasTheQualificationAwardedPath,
+                                                          OpenInNewTab = false
+                                                      },
+                                         CtaButtonText = "Continue",
+                                         ChangeAnswerText = "Change",
+                                         QualificationAwardedText = "Awarded in",
+                                         QualificationStartedText = "Started in",
+                                         AnyAwardingOrganisationText = "Various awarding organisations",
+                                         AnyLevelText = "Any level"
                                      });
     }
 

@@ -33,7 +33,7 @@ public class QualificationsRepository(
             var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
             Logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
                               encodedQualificationId);
-            return default;
+            return null;
         }
 
         var qualification = qualifications.First();
@@ -169,7 +169,8 @@ public class QualificationsRepository(
             var qualificationStartDate = GetDate(qualification.FromWhichYear);
             var qualificationEndDate = GetDate(qualification.ToWhichYear);
 
-            var result = ValidateDateEntry(qualificationStartDate, qualificationEndDate, enteredStartDate, qualification);
+            var result = ValidateDateEntry(qualificationStartDate, qualificationEndDate, enteredStartDate,
+                                           qualification);
             if (result is not null)
             {
                 results.Add(result);

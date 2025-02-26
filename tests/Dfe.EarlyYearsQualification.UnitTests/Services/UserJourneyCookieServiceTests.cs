@@ -1008,8 +1008,8 @@ public class UserJourneyCookieServiceTests
         CheckSerializedModelWasSet(mockCookieManager,
                                    new UserJourneyCookieService.UserJourneyModel());
     }
-    
-      [TestMethod]
+
+    [TestMethod]
     public void GetWhenWasQualificationAwarded_CookieValueIsEmpty_ReturnsNull()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
@@ -1062,7 +1062,7 @@ public class UserJourneyCookieServiceTests
         awardedMonth.Should().Be(4);
         awardedYear.Should().Be(2015);
     }
-    
+
     [TestMethod]
     public void SetWhenWasQualificationAwarded_StringProvided_SetsCookieCorrectly()
     {
@@ -1082,7 +1082,6 @@ public class UserJourneyCookieServiceTests
         CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
 
-    
     private static (Mock<ICookieManager> cookieManager, Dictionary<string, string> cookies)
         SetCookieManagerWithExistingCookie(
             UserJourneyCookieService.UserJourneyModel? model)

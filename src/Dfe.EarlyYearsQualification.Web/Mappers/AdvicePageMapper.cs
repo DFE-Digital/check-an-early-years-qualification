@@ -15,15 +15,17 @@ public static class AdvicePageMapper
                    FeedbackBanner = FeedbackBannerMapper.Map(advicePage.FeedbackBanner, feedbackBodyHtml)
                };
     }
-    
-    public static AdvicePageModel Map(CannotFindQualificationPage cannotFindQualificationPage, string bodyHtml, string? feedbackBodyHtml)
+
+    public static AdvicePageModel Map(CannotFindQualificationPage cannotFindQualificationPage, string bodyHtml,
+                                      string? feedbackBodyHtml)
     {
         return new AdvicePageModel
                {
                    Heading = cannotFindQualificationPage.Heading,
                    BodyContent = bodyHtml,
                    BackButton = NavigationLinkMapper.Map(cannotFindQualificationPage.BackButton),
-                   FeedbackBanner = FeedbackBannerMapper.Map(cannotFindQualificationPage.FeedbackBanner, feedbackBodyHtml)
+                   FeedbackBanner =
+                       FeedbackBannerMapper.Map(cannotFindQualificationPage.FeedbackBanner, feedbackBodyHtml)
                };
     }
 }

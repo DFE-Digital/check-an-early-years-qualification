@@ -15,10 +15,11 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Base;
 [ServiceFilter<IChallengeResourceFilterAttribute>]
 public class ServiceController : Controller
 {
-    protected static async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner, IGovUkContentParser contentParser)
+    protected static async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner,
+                                                                     IGovUkContentParser contentParser)
     {
         return feedbackBanner is not null
-                                   ? await contentParser.ToHtml(feedbackBanner.Body)
-                                   : null;
+                   ? await contentParser.ToHtml(feedbackBanner.Body)
+                   : null;
     }
 }

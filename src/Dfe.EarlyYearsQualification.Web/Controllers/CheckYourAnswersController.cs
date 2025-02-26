@@ -57,15 +57,15 @@ public class CheckYourAnswersController(
         var whenWasTheQualificationAwardedAnswer = userJourneyCookieService.GetWhenWasQualificationAwarded();
         var whatLevelIsTheQualificationAnswer = userJourneyCookieService.GetLevelOfQualification();
         var whatIsTheAwardingOrganisationAnswer = userJourneyCookieService.GetAwardingOrganisation();
-        
-        return CheckYourAnswersPageMapper.Map(pageContent,whereWasQualificationAwardedQuestion.Question,
-                                       whenWasTheQualificationStartedAndAwardedQuestion.Question,
-                                       whatLevelIsTheQualificationQuestion.Question,
-                                       whatIsTheAwardingOrganisationQuestion.Question,
-                                       whereWasQualificationAwardedAnswer,
-                                       whenWasTheQualificationStartedAnswer,
-                                       whenWasTheQualificationAwardedAnswer,
-                                       whatLevelIsTheQualificationAnswer,
-                                       whatIsTheAwardingOrganisationAnswer);
+
+        return CheckYourAnswersPageMapper.Map(pageContent, whereWasQualificationAwardedQuestion.Question,
+                                              whenWasTheQualificationStartedAndAwardedQuestion.Question,
+                                              whatLevelIsTheQualificationQuestion.Question,
+                                              whatIsTheAwardingOrganisationQuestion.Question,
+                                              whereWasQualificationAwardedAnswer,
+                                              whenWasTheQualificationStartedAnswer,
+                                              whenWasTheQualificationAwardedAnswer,
+                                              whatLevelIsTheQualificationAnswer,
+                                              whatIsTheAwardingOrganisationAnswer);
     }
 }

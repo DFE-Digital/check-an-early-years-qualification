@@ -16,23 +16,23 @@ public class RatioRequirement
 
     public bool FullAndRelevantForLevel4Before2014 { get; set; }
 
-    public bool FullAndRelevantForLevel4After2014 { get; set; }
+    public bool FullAndRelevantForLevel4After2014 { get; init; }
 
     public bool FullAndRelevantForLevel5Before2014 { get; set; }
 
-    public bool FullAndRelevantForLevel5After2014 { get; set; }
+    public bool FullAndRelevantForLevel5After2014 { get; init; }
 
     public bool FullAndRelevantForLevel6Before2014 { get; set; }
 
-    public bool FullAndRelevantForLevel6After2014 { get; set; }
+    public bool FullAndRelevantForLevel6After2014 { get; init; }
 
     public bool FullAndRelevantForQtsEtcBefore2014 { get; set; }
 
-    public bool FullAndRelevantForQtsEtcAfter2014 { get; set; }
+    public bool FullAndRelevantForQtsEtcAfter2014 { get; init; }
 
     public bool FullAndRelevantForLevel7Before2014 { get; set; }
 
-    public bool FullAndRelevantForLevel7After2014 { get; set; }
+    public bool FullAndRelevantForLevel7After2014 { get; init; }
 
     public string RequirementHeading { get; set; } = string.Empty;
 
@@ -56,13 +56,13 @@ public class RatioRequirement
 
     public Document? RequirementForLevel6After2014 { get; set; }
 
-    public Document? RequirementForQtsEtcBefore2014 { get; set; }
+    public Document? RequirementForQtsEtcBefore2014 { get; init; }
 
     public Document? RequirementForQtsEtcAfter2014 { get; set; }
 
     public Document? RequirementForLevel7Before2014 { get; set; }
 
     public Document? RequirementForLevel7After2014 { get; set; }
-    
-    public Document? RequirementForLevel2BetweenSept14AndAug19 { get; set; }
+
+    public Document? RequirementForLevel2BetweenSept14AndAug19 { get; init; }
 }
