@@ -44,7 +44,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    [Ignore("Deserialization from cache doesn't work yet")]
+    //    [Ignore("Deserialization from cache doesn't work yet")]
     public async Task GetStartPage_PageFound_SecondInvocation_ReturnsExpectedResultFromCache()
     {
         var startPage = new StartPage { CtaButtonText = "CtaButton" };
@@ -77,7 +77,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         result = await service.GetStartPage();
 
         result.Should().NotBeNull();
-        result.Should().BeSameAs(startPage);
+        result.Should().NotBeSameAs(startPage); // it'll have reconstructed it from cache this time
+        result.Should().BeEquivalentTo(startPage); // ...but it'll still be the same shape
 
         // GetEntriesByType should not have been called a second time
         ClientMock.Verify(client =>

@@ -1,10 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
 using Contentful.AspNetCore;
-using Contentful.Core;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
-using Dfe.EarlyYearsQualification.Content.Services.Extensions;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Dfe.EarlyYearsQualification.Web.Filters;
@@ -35,10 +33,10 @@ var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
 builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
-bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
+var useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
 if (!useMockContentful)
 {
-    string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
+    var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
     builder.Services
@@ -48,7 +46,7 @@ if (!useMockContentful)
 
     if (!builder.Environment.IsDevelopment())
     {
-        string? blobStorageConnectionString =
+        var blobStorageConnectionString =
             builder.Configuration
                    .GetSection("Storage")
                    .GetValue<string>("ConnectionString");
@@ -125,7 +123,7 @@ builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 
-bool accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
+var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
 
 if (accessIsChallenged)
@@ -167,17 +165,7 @@ app.MapControllerRoute(
                        "default",
                        "{controller=Home}/{action=Index}/{id?}");
 
-SetupContentfulSerializationForCaching(app);
-
 await app.RunAsync();
-return;
-
-static void SetupContentfulSerializationForCaching(WebApplication webApplication)
-{
-    var contentfulClient = webApplication.Services.GetRequiredService<IContentfulClient>();
-    DistributedCacheExtensions.Serializer = contentfulClient.Serializer;
-    DistributedCacheExtensions.SerializerSettings = contentfulClient.SerializerSettings;
-}
 
 [ExcludeFromCodeCoverage]
 // ReSharper disable once UnusedType.Global

@@ -4,6 +4,7 @@ using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Extensions;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -15,31 +16,39 @@ public class QualificationsRepository(
     IContentfulClient contentfulClient,
     IDistributedCache distributedCache,
     IFuzzyAdapter fuzzyAdapter)
-    : ContentfulContentServiceBase(logger, contentfulClient, distributedCache), IQualificationsRepository
+    : ContentfulContentServiceBase(logger, contentfulClient), IQualificationsRepository
 {
     // Used by the unit tests to inject a mock builder that returns the query params
     public QueryBuilder<Qualification> QueryBuilder { get; init; } = QueryBuilder<Qualification>.New;
 
     public async Task<Qualification?> GetById(string qualificationId)
     {
-        var queryBuilder =
-            new QueryBuilder<Qualification>()
-                .ContentTypeIs(ContentTypeLookup[typeof(Qualification)])
-                .Include(2)
-                .FieldEquals("fields.qualificationId", qualificationId.ToUpper());
+        var cacheKey = $"qualification:{qualificationId}";
+        var qualification = await distributedCache.GetOrSetAsync(cacheKey, InternalGetById);
 
-        var qualifications = await GetEntriesByType(queryBuilder);
-
-        if (qualifications is null || !qualifications.Any())
-        {
-            var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
-            Logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
-                              encodedQualificationId);
-            return null;
-        }
-
-        var qualification = qualifications.First();
         return qualification;
+
+        async Task<Qualification?> InternalGetById()
+        {
+            var queryBuilder =
+                new QueryBuilder<Qualification>()
+                    .ContentTypeIs(ContentTypeLookup[typeof(Qualification)])
+                    .Include(2)
+                    .FieldEquals("fields.qualificationId", qualificationId.ToUpper());
+
+            var qualifications = await GetEntriesByType(queryBuilder);
+
+            if (qualifications is null || !qualifications.Any())
+            {
+                var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
+                Logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
+                                  encodedQualificationId);
+                return null;
+            }
+
+            var innerQualification = qualifications.First();
+            return innerQualification;
+        }
     }
 
     public async Task<List<Qualification>> Get()

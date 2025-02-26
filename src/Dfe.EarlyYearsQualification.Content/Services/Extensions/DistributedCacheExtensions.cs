@@ -1,15 +1,14 @@
-using System.Diagnostics;
-using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Dfe.EarlyYearsQualification.Content.Services.Extensions;
 
 public static class DistributedCacheExtensions
 {
-    public static JsonSerializer Serializer { get; set; } = null!;
-    public static JsonSerializerSettings SerializerSettings { get; set; } = null!;
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+                                                                      {
+                                                                          WriteIndented = true
+                                                                      };
 
     public static Task SetAsync<T>(this IDistributedCache cache, string key, T value)
     {
@@ -21,14 +20,15 @@ public static class DistributedCacheExtensions
     private static Task SetAsync<T>(IDistributedCache cache, string key, T value,
                                     DistributedCacheEntryOptions options)
     {
-        byte[] bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value, SerializerSettings));
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(value, SerializerOptions);
         return cache.SetAsync(key, bytes, options);
     }
 
     private static bool TryGetValue<T>(IDistributedCache cache, string key, out T? value)
     {
-        byte[]? val = cache.Get(key);
+        var val = cache.Get(key);
         value = default;
+
         if (val == null)
         {
             return false;
@@ -36,16 +36,11 @@ public static class DistributedCacheExtensions
 
         using var memoryStream = new MemoryStream(val);
         using var streamReader = new StreamReader(memoryStream);
-        using var jsonTextReader = new JsonTextReader(streamReader);
 
-#if DEBUG
-        string s = streamReader.ReadToEnd();
-        Debug.Write($"Value from cache: {s}");
+        var json = streamReader.ReadToEnd();
 
-        memoryStream.Seek(0, SeekOrigin.Begin);
-#endif
+        value = JsonSerializer.Deserialize<T>(json, SerializerOptions);
 
-        value = Serializer.Deserialize<T>(jsonTextReader);
         return true;
     }
 

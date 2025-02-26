@@ -6,8 +6,6 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Resolvers;
-using Dfe.EarlyYearsQualification.Content.Services.Extensions;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
@@ -33,8 +31,6 @@ public class ContentfulContentServiceBase
                          { "Nov", 11 },
                          { "Dec", 12 }
                      });
-
-    private readonly IDistributedCache _distributedCache;
 
     protected readonly IContentfulClient ContentfulClient;
 
@@ -65,74 +61,53 @@ public class ContentfulContentServiceBase
 
     protected readonly ILogger Logger;
 
-    protected ContentfulContentServiceBase(ILogger logger, IContentfulClient contentfulClient,
-                                           IDistributedCache distributedCache)
+    protected ContentfulContentServiceBase(ILogger logger, IContentfulClient contentfulClient)
     {
         ContentfulClient = contentfulClient;
         ContentfulClient.ContentTypeResolver = new EntityResolver();
-
-        _distributedCache = distributedCache;
 
         Logger = logger;
     }
 
     protected async Task<T?> GetEntryById<T>(string entryId)
     {
-        var type = typeof(T);
-        string cacheKey = $"entry:type({type}):id({entryId})";
-
-        var val = await _distributedCache.GetOrSetAsync(cacheKey, GetEntry);
-
-        return val;
-
-        async Task<T?> GetEntry()
+        try
         {
-            try
-            {
-                // NOTE: ContentfulClient.GetEntry doesn't bind linked references which is why we are using GetEntriesByType
-                string contentType = ContentTypeLookup[typeof(T)];
+            // NOTE: ContentfulClient.GetEntry doesn't bind linked references which is why we are using GetEntriesByType
+            var contentType = ContentTypeLookup[typeof(T)];
 
-                var queryBuilder = new QueryBuilder<T>().ContentTypeIs(contentType)
-                                                        .Include(2)
-                                                        .FieldEquals("sys.id", entryId);
+            var queryBuilder = new QueryBuilder<T>().ContentTypeIs(contentType)
+                                                    .Include(2)
+                                                    .FieldEquals("sys.id", entryId);
 
-                var entries = await ContentfulClient.GetEntriesByType(contentType, queryBuilder);
+            var entries = await ContentfulClient.GetEntriesByType(contentType, queryBuilder);
 
-                return entries.FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex,
-                                "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
-                                entryId, nameof(T));
-                return default;
-            }
+            return entries.FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex,
+                            "Exception trying to retrieve entryId {EntryId} for type {Type} from Contentful.",
+                            entryId, nameof(T));
+            return default;
         }
     }
 
     protected async Task<ContentfulCollection<T>?> GetEntriesByType<T>(QueryBuilder<T>? queryBuilder = null)
     {
         var type = typeof(T);
-        string cacheKey = $"content:type({type})";
 
-        async Task<ContentfulCollection<T>?> GetEntries()
+        try
         {
-            try
-            {
-                var results = await ContentfulClient.GetEntriesByType(ContentTypeLookup[type], queryBuilder);
-                return results;
-            }
-            catch (Exception ex)
-            {
-                string typeName = type.Name;
-                Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
-                return null;
-            }
+            var results = await ContentfulClient.GetEntriesByType(ContentTypeLookup[type], queryBuilder);
+            return results;
         }
-
-        var val = await _distributedCache.GetOrSetAsync(cacheKey, GetEntries);
-
-        return val;
+        catch (Exception ex)
+        {
+            var typeName = type.Name;
+            Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
+            return null;
+        }
     }
 
     protected static T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate,
@@ -180,34 +155,34 @@ public class ContentfulContentServiceBase
 
     private DateOnly? ConvertToDateTime(string dateString)
     {
-        (bool isValid, int month, int yearMod2000) = ValidateDate(dateString);
+        var (isValid, month, yearMod2000) = ValidateDate(dateString);
 
         if (!isValid)
         {
             return null;
         }
 
-        int year = yearMod2000 + 2000;
+        var year = yearMod2000 + 2000;
 
         return new DateOnly(year, month, Day);
     }
 
     private (bool isValid, int month, int yearMod2000) ValidateDate(string dateString)
     {
-        string[] splitDateString = dateString.Split('-');
+        var splitDateString = dateString.Split('-');
         if (splitDateString.Length != 2)
         {
             Logger.LogError("dateString {DateString} has unexpected format", dateString);
             return (false, 0, 0);
         }
 
-        string abbreviatedMonth = splitDateString[0];
-        string yearFilter = splitDateString[1];
+        var abbreviatedMonth = splitDateString[0];
+        var yearFilter = splitDateString[1];
 
-        bool yearIsValid = int.TryParse(yearFilter,
-                                        NumberStyles.Integer,
-                                        NumberFormatInfo.InvariantInfo,
-                                        out int yearPart);
+        var yearIsValid = int.TryParse(yearFilter,
+                                       NumberStyles.Integer,
+                                       NumberFormatInfo.InvariantInfo,
+                                       out var yearPart);
 
         if (!yearIsValid)
         {
@@ -216,7 +191,7 @@ public class ContentfulContentServiceBase
             return (false, 0, 0);
         }
 
-        if (Months.TryGetValue(abbreviatedMonth, out int month))
+        if (Months.TryGetValue(abbreviatedMonth, out var month))
         {
             return (true, month, yearPart);
         }
