@@ -22,8 +22,8 @@ describe('A spec used to smoke test the environment once a deployment has happen
             expect(loc.pathname).to.eq('/questions/when-was-the-qualification-started-and-awarded');
         })
 
-        cy.get('#date-started-month').type("7");
-        cy.get('#date-started-year').type("2015");
+        cy.get('#StartedQuestion.SelectedMonth').type("7");
+        cy.get('#StartedQuestion.SelectedYear').type("2015");
         cy.get('button[id="question-submit"]').click();
 
         // what-level-is-the-qualification page

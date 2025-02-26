@@ -472,11 +472,19 @@ public class QuestionsControllerTests
         model!.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.Errors!.ErrorBannerHeading.Should().Be(questionPage.ErrorBannerHeading);
-        model.StartedQuestion!.MonthLabel.Should().Be(questionPage.StartedQuestion.MonthLabel);
+        model.StartedQuestion!.Prefix.Should().Be("started");
+        model.StartedQuestion.QuestionId.Should().Be("date-started");
+        model.StartedQuestion.MonthId.Should().Be("StartedQuestion.SelectedMonth");
+        model.StartedQuestion.YearId.Should().Be("StartedQuestion.SelectedYear");
+        model.StartedQuestion.MonthLabel.Should().Be(questionPage.StartedQuestion.MonthLabel);
         model.StartedQuestion.YearLabel.Should().Be(questionPage.StartedQuestion.YearLabel);
         model.StartedQuestion.QuestionHint.Should().Be(questionPage.StartedQuestion.QuestionHint);
 
-        model.AwardedQuestion!.MonthLabel.Should().Be(questionPage.AwardedQuestion.MonthLabel);
+        model.AwardedQuestion!.Prefix.Should().Be("awarded");
+        model.AwardedQuestion.QuestionId.Should().Be("date-awarded");
+        model.AwardedQuestion.MonthId.Should().Be("AwardedQuestion.SelectedMonth");
+        model.AwardedQuestion.YearId.Should().Be("AwardedQuestion.SelectedYear");  
+        model.AwardedQuestion.MonthLabel.Should().Be(questionPage.AwardedQuestion.MonthLabel);
         model.AwardedQuestion.YearLabel.Should().Be(questionPage.AwardedQuestion.YearLabel);
         model.AwardedQuestion.QuestionHint.Should().Be(questionPage.AwardedQuestion.QuestionHint);
 

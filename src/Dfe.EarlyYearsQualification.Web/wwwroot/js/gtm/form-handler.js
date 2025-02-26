@@ -11,10 +11,10 @@ $("#radio-question-form").on("submit", function(){
 
 $("#date-question-form").on("submit", function () {
     let question = $("#question").text();
-    let startedMonth = $("#date-started-month").val();
-    let startedYear = $('#date-started-year').val();
-    let awardedMonth = $("#date-awarded-month").val();
-    let awardedYear = $('#date-awarded-year').val();
+    let startedMonth = $("#StartedQuestion.SelectedMonth").val();
+    let startedYear = $('#StartedQuestion.SelectedYear').val();
+    let awardedMonth = $("#AwardedQuestion.SelectedMonth").val();
+    let awardedYear = $('#AwardedQuestion.SelectedYear').val();
     window.dataLayer.push({
         'event': 'dateQuestionFormSubmission',
         'question': question,

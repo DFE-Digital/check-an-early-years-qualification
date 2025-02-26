@@ -20,21 +20,21 @@ public static class DatesQuestionMapper
         if (startedQuestion != null)
         {
             model.StartedQuestion = startedQuestion;
+            model.StartedQuestion.Prefix = "started";
             model.StartedQuestion.QuestionId = "date-started";
-            model.StartedQuestion.MonthId = "date-started-month";
-            model.StartedQuestion.YearId = "date-started-year";
-            model.StartedQuestion.ErrorSummaryLink!.ElementLinkId =
-                model.StartedQuestion.MonthError ? model.StartedQuestion.MonthId : model.StartedQuestion.YearId;
+            model.StartedQuestion.MonthId = "StartedQuestion.SelectedMonth";
+            model.StartedQuestion.YearId = "StartedQuestion.SelectedYear";
+            model.StartedQuestion.ErrorSummaryLink!.ElementLinkId = model.StartedQuestion.MonthError ? model.StartedQuestion.MonthId : model.StartedQuestion.YearId;
         }
 
         if (awardedQuestion != null)
         {
             model.AwardedQuestion = awardedQuestion;
+            model.AwardedQuestion.Prefix = "awarded";
             model.AwardedQuestion.QuestionId = "date-awarded";
-            model.AwardedQuestion.MonthId = "date-awarded-month";
-            model.AwardedQuestion.YearId = "date-awarded-year";
-            model.AwardedQuestion.ErrorSummaryLink!.ElementLinkId =
-                model.AwardedQuestion.MonthError ? model.AwardedQuestion.MonthId : model.AwardedQuestion.YearId;
+            model.AwardedQuestion.MonthId = "AwardedQuestion.SelectedMonth";
+            model.AwardedQuestion.YearId = "AwardedQuestion.SelectedYear";
+            model.AwardedQuestion.ErrorSummaryLink!.ElementLinkId = model.AwardedQuestion.MonthError ? model.AwardedQuestion.MonthId : model.AwardedQuestion.YearId;
         }
 
         var errorLinks = new List<ErrorSummaryLink>();
