@@ -41,4 +41,9 @@ public static class AdvicePages
     ///     Entry ID for the "Level 7 qualification after aug 2019" advice page.
     /// </summary>
     public const string Level7QualificationAfterAug2019 = "1lITwifQ5M2M1cSPDutEPi";
+    
+    /// <summary>
+    ///     Entry ID for the "Help" advice page.
+    /// </summary>
+    public const string Help = "2zlEp4oHEJVItEZT7WCeoV";
 }

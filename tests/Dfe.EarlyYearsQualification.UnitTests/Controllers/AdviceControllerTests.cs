@@ -579,6 +579,66 @@ public class AdviceControllerTests
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task Help_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Help))
+                          .ReturnsAsync((AdvicePage?)null).Verifiable();
+        var result = await controller.Help();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the advice page");
+    }
+
+    [TestMethod]
+    public async Task Help_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object);
+
+        var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Help))
+                          .ReturnsAsync(advicePage);
+
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+
+        var result = await controller.Help();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as AdvicePageModel;
+        model.Should().NotBeNull();
+
+        model!.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be("Test html body");
+
+        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+    }
 
     [TestMethod]
     public void OnActionExecuting_ClearsCookies()

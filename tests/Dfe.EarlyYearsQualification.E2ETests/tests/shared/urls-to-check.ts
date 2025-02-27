@@ -18,7 +18,8 @@ export const pages = [
     "/advice/qualifications-achieved-in-northern-ireland",
     "/advice/qualification-not-on-the-list",
     "/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019",
-    "/advice/level-7-qualification-after-aug-2019"
+    "/advice/level-7-qualification-after-aug-2019",
+    "/advice/help"
 ];
 
 export const pagesWithForms = [
@@ -40,6 +41,7 @@ export const pagesWithoutFormsOrRedirects = [
     "/advice/qualifications-achieved-in-wales",
     "/advice/qualifications-achieved-in-northern-ireland",
     "/advice/qualification-not-on-the-list",
+    "/advice/help",
     "/questions/check-your-answers",
 ]
 
