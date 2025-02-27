@@ -11,10 +11,10 @@ $("#radio-question-form").on("submit", function(){
 
 $("#date-question-form").on("submit", function () {
     let question = $("#question").text();
-    let startedMonth = $("#StartedQuestion.SelectedMonth").val();
-    let startedYear = $('#StartedQuestion.SelectedYear').val();
-    let awardedMonth = $("#AwardedQuestion.SelectedMonth").val();
-    let awardedYear = $('#AwardedQuestion.SelectedYear').val();
+    let startedMonth = $('#StartedQuestion\\.SelectedMonth').val();
+    let startedYear = $('#StartedQuestion\\.SelectedYear').val();
+    let awardedMonth = $('#AwardedQuestion\\.SelectedMonth').val();
+    let awardedYear = $('#AwardedQuestion\\.SelectedYear').val();
     window.dataLayer.push({
         'event': 'dateQuestionFormSubmission',
         'question': question,
@@ -94,13 +94,5 @@ $("#refine-search-form").on("submit", function(){
 $("#clear-search-form").on("submit", function(){
     window.dataLayer.push({
         'event': 'clearSearchFormSubmission'
-    });
-});
-
-$("#challenge-form").on("submit", function(){
-    let passwordValue = $("#PasswordValue").val();
-    window.dataLayer.push({
-        'event': 'challengePageFormSubmission',
-        'challengeValue': passwordValue
     });
 });
