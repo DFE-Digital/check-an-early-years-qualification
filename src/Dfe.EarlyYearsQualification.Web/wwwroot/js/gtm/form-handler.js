@@ -58,23 +58,22 @@ $("#confirm-qualification").on("submit", function(){
 });
 
 $("#check-additional-requirements").on("submit", function() {
-    let questionCount = $("input[name='QuestionCount']").val();
     let qualificationId = $("input[name='qualificationId']").val();
+    let questionIndex = $("input[name='questionIndex']").val();
+    let question = $("input[name='question']").val();
+    let selectedAnswer = $(`input[name='Answer']:checked`).val();
+
+    const questionId = `question_${questionIndex}`;
+    const answerId = `answer_${questionIndex}`;
+    
     let questions = new Map();
     let answers = new Map();
-    for (let i = 0; i < questionCount; i++) {
-        const questionId = `question_${i}`;
-        const answerId = `answer_${i}`;
-        
-        let question = $(`#${questionId}`).text();
-        const answerName = `Answers[${question}]`;
-        let selectedAnswer = $(`input[name='${answerName}']:checked`).val();
-        
-        questions.set(questionId, question);
-        answers.set(answerId, selectedAnswer)
-    }
+    questions.set(questionId, question);
+    answers.set(answerId, selectedAnswer)
+
     let questionsObj = Object.fromEntries(questions);
     let answersObj = Object.fromEntries(answers);
+    
     window.dataLayer.push({
         'event': 'checkAdditionalRequirementsFormSubmission',
         'qualificationId': qualificationId,
