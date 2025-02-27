@@ -96,6 +96,12 @@ public class AdviceController(
     {
         return await GetView(AdvicePages.Level7QualificationAfterAug2019);
     }
+    
+    [HttpGet("help")]
+    public async Task<IActionResult> Help()
+    {
+        return await GetView(AdvicePages.Help);
+    }
 
     private async Task<IActionResult> GetView(string advicePageId)
     {
