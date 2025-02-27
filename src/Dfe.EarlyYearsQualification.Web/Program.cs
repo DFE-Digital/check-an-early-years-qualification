@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
 using Contentful.AspNetCore;
+using Dfe.EarlyYearsQualification.Content.Caching;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -21,6 +22,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Caching.Distributed;
 using OwaspHeaders.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -160,6 +162,34 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+var cacheType = builder.Configuration.GetValue<string>("CacheType") ?? "";
+
+if (cacheType.Equals("Redis") || cacheType.Equals("Memory"))
+{
+    if (cacheType.Equals("Redis"))
+    {
+        builder.Services
+               .AddStackExchangeRedisCache(options =>
+                                           {
+                                               options.Configuration =
+                                                   builder.Configuration
+                                                          .GetConnectionString("RedisConnectionString");
+                                               options.InstanceName =
+                                                   builder.Configuration.GetValue<string>("RedisInstanceName");
+                                           });
+    }
+    else
+    {
+        builder.Services.AddDistributedMemoryCache();
+    }
+
+    app.Services.SetupCacheSerialization();
+}
+else
+{
+    builder.Services.AddSingleton<IDistributedCache, NoCache>();
+}
 
 app.MapControllerRoute(
                        "default",

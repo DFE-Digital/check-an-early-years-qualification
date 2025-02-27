@@ -44,7 +44,6 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    //    [Ignore("Deserialization from cache doesn't work yet")]
     public async Task GetStartPage_PageFound_SecondInvocation_ReturnsExpectedResultFromCache()
     {
         var startPage = new StartPage { CtaButtonText = "CtaButton" };
@@ -195,6 +194,50 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
+    public async Task GetAccessibilityStatementPage_SecondInvocation_ReturnsExpectedResultFromCache()
+    {
+        var accessibilityStatementPage = new AccessibilityStatementPage { Heading = "Heading" };
+
+        var pages = new ContentfulCollection<AccessibilityStatementPage>
+                    { Items = [accessibilityStatementPage] };
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, GetCache());
+
+        var result = await service.GetAccessibilityStatementPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(accessibilityStatementPage);
+
+        ClientMock.Verify(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
+                                                      It.IsAny<CancellationToken>()),
+                          Times.Once);
+
+        result = await service.GetAccessibilityStatementPage();
+
+        result.Should().NotBeNull();
+        result.Should().NotBeSameAs(accessibilityStatementPage); // should have read from cache
+        result.Should().BeEquivalentTo(accessibilityStatementPage); // ...but should be equivalent object
+
+        // ...and not called the client again
+        ClientMock.Verify(client =>
+                              client.GetEntriesByType(
+                                                      It.IsAny<string>(),
+                                                      It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
+                                                      It.IsAny<CancellationToken>()),
+                          Times.Once);
+    }
+
+    [TestMethod]
     public async Task GetCookiesPage_NoContent_ReturnsNull()
     {
         var pages = new ContentfulCollection<CookiesPage> { Items = new List<CookiesPage>() };
@@ -260,6 +303,51 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(cookiesPage);
+    }
+
+    [TestMethod]
+    public async Task GetCookiesPage_SecondInvocation_ReturnsExpectedResultFromCache()
+    {
+        var cookiesPage = new CookiesPage
+                          {
+                              Heading = "Heading", Body = ContentfulContentHelper.Paragraph("Test Body"),
+                              ButtonText = "ButtonText",
+                              SuccessBannerHeading = "SuccessBannerHeading",
+                              SuccessBannerContent = ContentfulContentHelper.Paragraph("SuccessBannerContentHtml")
+                          };
+
+        var pages = new ContentfulCollection<CookiesPage> { Items = [cookiesPage] };
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, GetCache());
+
+        var result = await service.GetCookiesPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(cookiesPage);
+
+        ClientMock.Verify(client => client.GetEntriesByType(It.IsAny<string>(),
+                                                            It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                            It.IsAny<CancellationToken>()),
+                          Times.Once);
+
+        result = await service.GetCookiesPage();
+
+        result.Should().NotBeNull();
+        result.Should().NotBeSameAs(cookiesPage); // read from cache
+        result.Should().BeEquivalentTo(cookiesPage); // ...but equivalent object
+
+        // ...and didn't call the client again
+        ClientMock.Verify(client => client.GetEntriesByType(It.IsAny<string>(),
+                                                            It.IsAny<QueryBuilder<CookiesPage>>(),
+                                                            It.IsAny<CancellationToken>()),
+                          Times.Once);
     }
 
     [TestMethod]

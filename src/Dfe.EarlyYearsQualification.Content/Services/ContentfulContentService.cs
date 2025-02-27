@@ -1,8 +1,8 @@
 ﻿using Contentful.Core;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Caching;
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Services.Extensions;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
