@@ -693,7 +693,11 @@ public class MockContentfulService : IContentService
                                         Heading = "Feedback heading",
                                         Body = ContentfulContentHelper.Paragraph("This is the body text"),
                                         BannerTitle = "Test banner title"
-                                    }
+                                    }, 
+                   UpDownFeedback = new UpDownFeedback
+                                    {
+                                        
+                                    },
                };
     }
 }

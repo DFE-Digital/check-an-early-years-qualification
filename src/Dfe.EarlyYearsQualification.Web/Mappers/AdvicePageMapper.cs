@@ -12,7 +12,8 @@ public static class AdvicePageMapper
                    Heading = advicePage.Heading,
                    BodyContent = bodyHtml,
                    BackButton = NavigationLinkMapper.Map(advicePage.BackButton),
-                   FeedbackBanner = FeedbackBannerMapper.Map(advicePage.FeedbackBanner, feedbackBodyHtml)
+                   FeedbackBanner = FeedbackBannerMapper.Map(advicePage.FeedbackBanner, feedbackBodyHtml),
+                   UpDownFeedback = UpDownFeedbackMapper.Map(advicePage.UpDownFeedback)
                };
     }
 

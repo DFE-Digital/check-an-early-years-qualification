@@ -9,4 +9,5 @@ public class AdvicePageModel
     public NavigationLinkModel? BackButton { get; init; }
 
     public FeedbackBannerModel? FeedbackBanner { get; init; }
+    public UpDownFeedbackModel? UpDownFeedback { get; init; }
 }
