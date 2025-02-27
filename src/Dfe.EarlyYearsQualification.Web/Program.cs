@@ -10,6 +10,7 @@ using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Security;
+using Dfe.EarlyYearsQualification.Web.Services.Caching;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
@@ -22,7 +23,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.Extensions.Caching.Distributed;
 using OwaspHeaders.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -165,30 +165,11 @@ app.UseAuthorization();
 
 var cacheType = builder.Configuration.GetValue<string>("CacheType") ?? "";
 
+builder.UseDistributedCache(cacheType);
+
 if (cacheType.Equals("Redis") || cacheType.Equals("Memory"))
 {
-    if (cacheType.Equals("Redis"))
-    {
-        builder.Services
-               .AddStackExchangeRedisCache(options =>
-                                           {
-                                               options.Configuration =
-                                                   builder.Configuration
-                                                          .GetConnectionString("RedisConnectionString");
-                                               options.InstanceName =
-                                                   builder.Configuration.GetValue<string>("RedisInstanceName");
-                                           });
-    }
-    else
-    {
-        builder.Services.AddDistributedMemoryCache();
-    }
-
     app.Services.SetupCacheSerialization();
-}
-else
-{
-    builder.Services.AddSingleton<IDistributedCache, NoCache>();
 }
 
 app.MapControllerRoute(
