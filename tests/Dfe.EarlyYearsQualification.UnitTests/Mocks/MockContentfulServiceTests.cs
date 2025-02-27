@@ -123,6 +123,20 @@ public class MockContentfulServiceTests
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
     }
+    
+    [TestMethod]
+    public async Task GetAdvicePage_Help_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.Help);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().Be("Help");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+    }
 
     [TestMethod]
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
