@@ -9,14 +9,15 @@ public static class SetupExtensions
     {
         if (cacheType.Equals("Redis"))
         {
+            string? redisConnectionString = builder.Configuration.GetConnectionString("RedisConnectionString");
+
+            string? redisInstance = builder.Configuration.GetValue<string>("RedisInstanceName");
+
             builder.Services
                    .AddStackExchangeRedisCache(options =>
                                                {
-                                                   options.Configuration =
-                                                       builder.Configuration
-                                                              .GetConnectionString("RedisConnectionString");
-                                                   options.InstanceName =
-                                                       builder.Configuration.GetValue<string>("RedisInstanceName");
+                                                   options.Configuration = redisConnectionString;
+                                                   options.InstanceName = redisInstance;
                                                });
         }
         else if (cacheType.Equals("Memory"))
