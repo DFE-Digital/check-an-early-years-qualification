@@ -1,10 +1,10 @@
 $(window).on('load', function() {
     let qualificationCount = $("#hdnQualificationCount").val();
-    let filterCountry = $("#filter-country").val();
-    let filterStartDate = $("#filter-start-date").val();
-    let filterAwardedDate = $("#filter-awarded-date").val();
-    let filterLevel = $("#filter-level").val();
-    let filterOrg = $("#filter-org").val();
+    let filterCountry = $("#filter-country").text();
+    let filterStartDate = $("#filter-start-date").text();
+    let filterAwardedDate = $("#filter-awarded-date").text();
+    let filterLevel = $("#filter-level").text();
+    let filterOrg = $("#filter-org").text();
     let searchTerm = $("#refineSearch").val();
     
     let eventName = qualificationCount === '0' ? 'no-search-results-returned' : 'search-results-returned';
