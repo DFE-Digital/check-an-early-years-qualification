@@ -8,7 +8,9 @@ $(window).on('load', function() {
     let searchTerm = $("#refineSearch").val();
     
     let eventName = qualificationCount === '0' ? 'no-search-results-returned' : 'search-results-returned';
-    let eventData = {
+
+    window.dataLayer.push({
+        'event': eventName,
         'filterCountry': filterCountry,
         'filterStartDate': filterStartDate,
         'filterAwardedDate': filterAwardedDate,
@@ -16,10 +18,5 @@ $(window).on('load', function() {
         'filterOrg': filterOrg,
         'totalQualifications': qualificationCount,
         'searchTerm': searchTerm
-    };
-
-    window.dataLayer.push({
-        'event': eventName,
-        ...eventData
     });
 });
