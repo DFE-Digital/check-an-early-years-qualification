@@ -75,8 +75,10 @@ public class AdviceController(
             if (specificCannotFindQualificationPage is not null)
             {
                 var model = await Map(specificCannotFindQualificationPage);
+                model.Level = level == 0 ? "Any level" : level.ToString();
+                model.StartedDate = $"{startMonth}-{startYear}";
 
-                return View("Advice", model);
+                return View("QualificationNotOnList", model);
             }
         }
 
@@ -124,7 +126,7 @@ public class AdviceController(
         return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml);
     }
 
-    private async Task<AdvicePageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
+    private async Task<QualificationNotOnListPageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
     {
         var bodyHtml = await contentParser.ToHtml(cannotFindQualificationPage.Body);
         var feedbackBodyHtml =
