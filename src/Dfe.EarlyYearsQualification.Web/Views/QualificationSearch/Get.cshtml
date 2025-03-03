@@ -10,6 +10,13 @@
     }
 }
 
+@section Scripts
+{
+    <script src="~/js/pages/search-results-page.js" asp-append-version="true"></script>
+}
+
+@Html.HiddenFor(x => x.Qualifications.Count, new { id="hdnQualificationCount" })
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <div class="govuk-grid-row">
