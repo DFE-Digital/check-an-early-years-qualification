@@ -11,6 +11,7 @@ using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Security;
 using Dfe.EarlyYearsQualification.Web.Services.Caching;
+using Dfe.EarlyYearsQualification.Web.Services.Contentful;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
@@ -32,13 +33,15 @@ var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
                                             EnableAdaptiveSampling = false
                                         };
 
+builder.Services.AddTransient<CachingHandler>();
+
 builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
-var useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
+bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
 if (!useMockContentful)
 {
-    var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
+    string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
     builder.Services
@@ -48,7 +51,7 @@ if (!useMockContentful)
 
     if (!builder.Environment.IsDevelopment())
     {
-        var blobStorageConnectionString =
+        string? blobStorageConnectionString =
             builder.Configuration
                    .GetSection("Storage")
                    .GetValue<string>("ConnectionString");
@@ -98,8 +101,7 @@ if (useMockContentful)
 }
 else
 {
-    builder.Services.AddTransient<IContentService, ContentfulContentService>();
-    builder.Services.AddTransient<IQualificationsRepository, QualificationsRepository>();
+    builder.Services.SetupContentfulServices();
 }
 
 builder.Services.AddTransient<IQualificationDetailsService, QualificationDetailsService>();
@@ -125,7 +127,7 @@ builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 
-var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
+bool accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
 
 if (accessIsChallenged)
@@ -163,14 +165,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-var cacheType = builder.Configuration.GetValue<string>("CacheType") ?? "";
+string cacheType = builder.Configuration.GetValue<string>("CacheType") ?? "";
 
 builder.UseDistributedCache(cacheType);
-
-if (cacheType.Equals("Redis") || cacheType.Equals("Memory"))
-{
-    app.Services.SetupCacheSerialization();
-}
 
 app.MapControllerRoute(
                        "default",
