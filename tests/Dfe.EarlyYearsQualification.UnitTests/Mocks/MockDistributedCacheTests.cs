@@ -22,7 +22,7 @@ public class MockDistributedCacheTests
     }
 
     [TestMethod]
-    public async Task SetAsyncToCache_ThenRetrieve_ReturnsCachedValue()
+    public async Task SetAsyncToCache_ThenRetrieveAsync_ReturnsCachedValue()
     {
         const string key = "cache_key";
         byte[] value = [2, 3, 5, 7, 11, 13];
@@ -35,4 +35,18 @@ public class MockDistributedCacheTests
 
         bytes.Should().ContainInOrder(value);
     }
-}
+
+    [TestMethod]
+    public void SetToCache_ThenRetrieve_ReturnsCachedValue()
+    {
+        const string key = "cache_key";
+        byte[] value = [2, 3, 5, 7, 11, 13];
+
+        var cache = GetCache();
+
+        cache.Set(key, value, new DistributedCacheEntryOptions());
+
+        byte[]? bytes = cache.Get(key);
+
+        bytes.Should().ContainInOrder(value);
+    }}
