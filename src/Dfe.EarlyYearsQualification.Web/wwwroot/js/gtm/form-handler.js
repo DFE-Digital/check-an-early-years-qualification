@@ -11,10 +11,10 @@ $("#radio-question-form").on("submit", function(){
 
 $("#date-question-form").on("submit", function () {
     let question = $("#question").text();
-    let startedMonth = $("#StartedQuestion.SelectedMonth").val();
-    let startedYear = $('#StartedQuestion.SelectedYear').val();
-    let awardedMonth = $("#AwardedQuestion.SelectedMonth").val();
-    let awardedYear = $('#AwardedQuestion.SelectedYear').val();
+    let startedMonth = $('#StartedQuestion\\.SelectedMonth').val();
+    let startedYear = $('#StartedQuestion\\.SelectedYear').val();
+    let awardedMonth = $('#AwardedQuestion\\.SelectedMonth').val();
+    let awardedYear = $('#AwardedQuestion\\.SelectedYear').val();
     window.dataLayer.push({
         'event': 'dateQuestionFormSubmission',
         'question': question,
@@ -58,23 +58,22 @@ $("#confirm-qualification").on("submit", function(){
 });
 
 $("#check-additional-requirements").on("submit", function() {
-    let questionCount = $("input[name='QuestionCount']").val();
     let qualificationId = $("input[name='qualificationId']").val();
+    let questionIndex = $("input[name='questionIndex']").val();
+    let question = $("input[name='question']").val();
+    let selectedAnswer = $(`input[name='Answer']:checked`).val();
+
+    const questionId = `question_${questionIndex}`;
+    const answerId = `answer_${questionIndex}`;
+    
     let questions = new Map();
     let answers = new Map();
-    for (let i = 0; i < questionCount; i++) {
-        const questionId = `question_${i}`;
-        const answerId = `answer_${i}`;
-        
-        let question = $(`#${questionId}`).text();
-        const answerName = `Answers[${question}]`;
-        let selectedAnswer = $(`input[name='${answerName}']:checked`).val();
-        
-        questions.set(questionId, question);
-        answers.set(answerId, selectedAnswer)
-    }
+    questions.set(questionId, question);
+    answers.set(answerId, selectedAnswer)
+
     let questionsObj = Object.fromEntries(questions);
     let answersObj = Object.fromEntries(answers);
+    
     window.dataLayer.push({
         'event': 'checkAdditionalRequirementsFormSubmission',
         'qualificationId': qualificationId,
@@ -94,13 +93,5 @@ $("#refine-search-form").on("submit", function(){
 $("#clear-search-form").on("submit", function(){
     window.dataLayer.push({
         'event': 'clearSearchFormSubmission'
-    });
-});
-
-$("#challenge-form").on("submit", function(){
-    let passwordValue = $("#PasswordValue").val();
-    window.dataLayer.push({
-        'event': 'challengePageFormSubmission',
-        'challengeValue': passwordValue
     });
 });
