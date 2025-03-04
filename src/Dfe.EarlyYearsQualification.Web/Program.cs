@@ -35,10 +35,10 @@ var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
 builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
-var useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
+bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
 if (!useMockContentful)
 {
-    var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
+    string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
     builder.Services
@@ -48,7 +48,7 @@ if (!useMockContentful)
 
     if (!builder.Environment.IsDevelopment())
     {
-        var blobStorageConnectionString =
+        string? blobStorageConnectionString =
             builder.Configuration
                    .GetSection("Storage")
                    .GetValue<string>("ConnectionString");
@@ -125,7 +125,7 @@ builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 
-var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
+bool accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
 
 if (accessIsChallenged)
@@ -137,7 +137,16 @@ else
     builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
 }
 
+string cacheType = builder.Configuration.GetValue<string>("CacheType") ?? "";
+
+builder.UseDistributedCache(cacheType);
+
 var app = builder.Build();
+
+if (cacheType.Equals("Redis") || cacheType.Equals("Memory"))
+{
+    app.Services.SetupCacheSerialization();
+}
 
 app.UseSecureHeadersMiddleware(
                                SecureHeaderConfiguration.CustomConfiguration()
@@ -162,15 +171,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
-var cacheType = builder.Configuration.GetValue<string>("CacheType") ?? "";
-
-builder.UseDistributedCache(cacheType);
-
-if (cacheType.Equals("Redis") || cacheType.Equals("Memory"))
-{
-    app.Services.SetupCacheSerialization();
-}
 
 app.MapControllerRoute(
                        "default",
