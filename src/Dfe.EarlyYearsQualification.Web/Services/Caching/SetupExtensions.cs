@@ -5,28 +5,41 @@ namespace Dfe.EarlyYearsQualification.Web.Services.Caching;
 
 public static class SetupExtensions
 {
-    public static void UseDistributedCache(this WebApplicationBuilder builder, string cacheType)
+    public static void UseDistributedCache(this WebApplicationBuilder builder)
     {
-        if (cacheType.Equals("Redis"))
-        {
-            string? redisConnectionString = builder.Configuration.GetConnectionString("RedisConnectionString");
+        string? cacheType = builder.Configuration.GetValue<string>("CacheType");
 
-            string? redisInstance = builder.Configuration.GetValue<string>("RedisInstanceName");
+        if (cacheType is "Redis")
+        {
+            SetupRedisCache(builder);
+            return;
+        }
 
-            builder.Services
-                   .AddStackExchangeRedisCache(options =>
-                                               {
-                                                   options.Configuration = redisConnectionString;
-                                                   options.InstanceName = redisInstance;
-                                               });
-        }
-        else if (cacheType.Equals("Memory"))
+        if (cacheType is "Memory")
         {
-            builder.Services.AddDistributedMemoryCache();
+            SetupInMemoryCache(builder);
+            return;
         }
-        else
-        {
-            builder.Services.AddSingleton<IDistributedCache, NoCache>();
-        }
+
+        builder.Services.AddSingleton<IDistributedCache, NoCache>();
+    }
+
+    private static void SetupInMemoryCache(WebApplicationBuilder builder)
+    {
+        builder.Services.AddDistributedMemoryCache();
+    }
+
+    private static void SetupRedisCache(WebApplicationBuilder builder)
+    {
+        string? redisConnectionString = builder.Configuration.GetConnectionString("RedisConnectionString");
+
+        string? redisInstance = builder.Configuration.GetValue<string>("RedisInstanceName");
+
+        builder.Services
+               .AddStackExchangeRedisCache(options =>
+                                           {
+                                               options.Configuration = redisConnectionString;
+                                               options.InstanceName = redisInstance;
+                                           });
     }
 }

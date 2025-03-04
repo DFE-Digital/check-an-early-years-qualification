@@ -165,9 +165,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-string cacheType = builder.Configuration.GetValue<string>("CacheType") ?? "";
-
-builder.UseDistributedCache(cacheType);
+builder.UseDistributedCache();
 
 app.MapControllerRoute(
                        "default",
