@@ -139,6 +139,8 @@ else
     builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
 }
 
+builder.UseDistributedCache();
+
 var app = builder.Build();
 
 app.UseSecureHeadersMiddleware(
@@ -164,8 +166,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
-builder.UseDistributedCache();
 
 app.MapControllerRoute(
                        "default",
