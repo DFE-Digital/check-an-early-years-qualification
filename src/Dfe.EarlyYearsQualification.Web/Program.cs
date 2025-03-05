@@ -139,7 +139,9 @@ else
     builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
 }
 
-builder.UseDistributedCache();
+var cacheConfiguration = builder.Configuration.GetSection("Cache");
+
+builder.UseDistributedCache(cacheConfiguration);
 
 var app = builder.Build();
 
