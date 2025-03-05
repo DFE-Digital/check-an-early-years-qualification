@@ -96,6 +96,7 @@ public class ContentfulContentServiceBase
     protected async Task<ContentfulCollection<T>?> GetEntriesByType<T>(QueryBuilder<T>? queryBuilder = null)
     {
         var type = typeof(T);
+
         try
         {
             var results = await ContentfulClient.GetEntriesByType(ContentTypeLookup[type], queryBuilder);
@@ -104,13 +105,13 @@ public class ContentfulContentServiceBase
         catch (Exception ex)
         {
             var typeName = type.Name;
-            Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.",
-                            typeName);
+            Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
             return null;
         }
     }
 
-    protected static T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate, T entry)
+    protected static T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate,
+                                             T entry)
     {
         if (startDate is not null
             && endDate is not null
@@ -168,7 +169,7 @@ public class ContentfulContentServiceBase
 
     private (bool isValid, int month, int yearMod2000) ValidateDate(string dateString)
     {
-        string[] splitDateString = dateString.Split('-');
+        var splitDateString = dateString.Split('-');
         if (splitDateString.Length != 2)
         {
             Logger.LogError("dateString {DateString} has unexpected format", dateString);
