@@ -27,7 +27,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(pages);
 
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+        var service =
+            new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetStartPage();
 
