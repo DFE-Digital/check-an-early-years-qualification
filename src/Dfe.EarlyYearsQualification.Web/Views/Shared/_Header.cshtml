@@ -1,5 +1,5 @@
 @using GovUk.Frontend.AspNetCore.TagHelpers
-<header class="govuk-header" role="banner">
+<header class="govuk-header govuk-header--full-width-border" role="banner">
     @{
         var url = ViewContext.HttpContext.Request.Path.ToString().ToLower();
         if (url != "/challenge" && url != "/challenge/post")
@@ -7,6 +7,7 @@
             @(await Component.InvokeAsync("CookiesBanner"))
         }
     }
+    
     <div class="govuk-width-container govuk-header__container">
         <div class="govuk-header__logo">
             <a href="/" class="govuk-header__link govuk-header__link--homepage">
@@ -25,13 +26,19 @@
                 </svg>
             </a>
         </div>
-        <div class="govuk-header__content">
-            <a href="/" class="govuk-header__link govuk-header__service-name">
-                Check an early years qualification
-            </a>
-        </div>
     </div>
 </header>
+<section aria-label="Service information" class="govuk-service-navigation" data-module="govuk-service-navigation">
+    <div class="govuk-width-container">
+        <div class="govuk-service-navigation__container">
+            <span class="govuk-service-navigation__service-name">
+                <a href="/" class="govuk-service-navigation__link">
+                  Check an early years qualification
+                </a>
+            </span>
+        </div>
+    </div>
+</section>
 <div class="govuk-width-container app-width-container">
     @await Component.InvokeAsync("PhaseBanner")
 </div>
