@@ -80,4 +80,13 @@ test.describe('A spec that tests advice pages', () => {
 
         await checkFeedbackBanners(page);
     });
+
+    test("Checks the Help details are on the page", async ({page, context}) => {
+
+        await page.goto("/advice/help");
+        await checkText(page, "#advice-page-heading", "Help");
+        await checkText(page, "#advice-page-body", "Test Advice Page Body");
+
+        await checkFeedbackBanners(page);
+    });
 });
