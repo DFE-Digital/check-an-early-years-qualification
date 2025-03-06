@@ -10,7 +10,7 @@ $(document).ready(function () {
     const somethingIsWrongButton = $("#ud-something-is-wrong");
     const feedbackButtons = $(".feedback-buttons");
     const promptSuccessMessage = $("#ud-prompt-success");
-    console.log(prompt)
+
     if (prompt.length !== 0) {
 
         setHidden(prompt, false);
