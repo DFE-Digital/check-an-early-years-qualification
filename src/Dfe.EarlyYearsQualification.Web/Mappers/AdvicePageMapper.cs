@@ -17,10 +17,10 @@ public static class AdvicePageMapper
                };
     }
 
-    public static AdvicePageModel Map(CannotFindQualificationPage cannotFindQualificationPage, string bodyHtml,
-                                      string? feedbackBodyHtml, string? improveServiceBodyHtml)
+    public static QualificationNotOnListPageModel Map(CannotFindQualificationPage cannotFindQualificationPage, string bodyHtml,
+                                                      string? feedbackBodyHtml, string? improveServiceBodyHtml)
     {
-        return new AdvicePageModel
+        return new QualificationNotOnListPageModel
                {
                    Heading = cannotFindQualificationPage.Heading,
                    BodyContent = bodyHtml,
