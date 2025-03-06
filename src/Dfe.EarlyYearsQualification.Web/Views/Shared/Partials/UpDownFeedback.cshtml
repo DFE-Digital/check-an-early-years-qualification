@@ -1,53 +1,63 @@
+@using Dfe.EarlyYearsQualification.Web.Helpers
 @model Dfe.EarlyYearsQualification.Web.Models.Content.UpDownFeedbackModel
+@inject TrackingConfiguration TrackingConfiguration
 
+<div class="up-down-feedback govuk-!-display-none-print">
+    @if (TrackingConfiguration.UseCookies)
+    {
+        <div class="up-down-feedback__prompt up-down-feedback__js-show js-prompt" tabindex="-1" hidden>
+            <div class="up-down-feedback__prompt-content">
+                <div class="up-down-feedback__prompt-questions js-prompt-questions">
+                    <div class="up-down-feedback__prompt-question-answer">
+                        <h2 class="up-down-feedback__prompt-question">@Model.Question</h2>
+                        <ul class="up-down-feedback__option-list">
+                            <li class="up-down-feedback__option-list-item">
+                                <button class="govuk-button up-down-feedback__prompt-link js-page-is-useful">
+                                    @Model.YesButtonText
+                                    <span
+                                        class="govuk-visually-hidden">@Model.YesButtonSubText</span>
+                                </button>
+                            </li>
+                            <li class="up-down-feedback__option-list-item">
+                                <button
+                                    class="govuk-button up-down-feedback__prompt-link js-page-is-not-useful"
+                                    aria-expanded="false">
+                                    @Model.NoButtonText
+                                    <span
+                                        class="govuk-visually-hidden">@Model.NoButtonSubText</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-<div data-module="feedback ga4-event-tracker" class="gem-c-feedback govuk-!-display-none-print"
-     data-feedback-module-started="true" data-ga4-event-tracker-module-started="true">
+                <div class="up-down-feedback__prompt-questions up-down-feedback__prompt-success js-prompt-success"
+                     role="alert">
+                    @Model.UsefulResponse
+                </div>
 
-    <div class="gem-c-feedback__prompt gem-c-feedback__js-show js-prompt" tabindex="-1">
-        <div class="gem-c-feedback__prompt-content">
-            <div class="gem-c-feedback__prompt-questions js-prompt-questions">
-                <div class="gem-c-feedback__prompt-question-answer">
-                    <h2 class="gem-c-feedback__prompt-question">@Model.Question</h2>
-                    <ul class="gem-c-feedback__option-list">
-                        <li class="gem-c-feedback__option-list-item">
-                            <button class="govuk-button gem-c-feedback__prompt-link js-page-is-useful">
-                                @Model.YesButtonText <span class="govuk-visually-hidden">@Model.YesButtonSubText</span>
-                            </button>
-                        </li>
-                        <li class="gem-c-feedback__option-list-item">
-                            <button
-                                class="govuk-button gem-c-feedback__prompt-link js-toggle-form js-page-is-not-useful"
-                                aria-expanded="false">
-                                @Model.NoButtonText <span class="govuk-visually-hidden">@Model.NoButtonSubText</span>
-                            </button>
-                        </li>
-                    </ul>
+                <div
+                    class="up-down-feedback__prompt-questions up-down-feedback__prompt-questions--something-is-wrong js-prompt-questions">
+                    <button class="govuk-button up-down-feedback__prompt-link js-something-is-wrong"
+                            aria-expanded="false">
+                        @Model.RaPButtonText
+                    </button>
                 </div>
             </div>
-
-            <div class="gem-c-feedback__prompt-questions gem-c-feedback__prompt-success js-prompt-success" role="alert">
-                @Model.UsefulResponse
-            </div>
-
-            <div
-                class="gem-c-feedback__prompt-questions gem-c-feedback__prompt-questions--something-is-wrong js-prompt-questions">
-                <button class="govuk-button gem-c-feedback__prompt-link js-toggle-form js-something-is-wrong"
-                        aria-expanded="false">
-                    @Model.RaPButtonText
-                </button>
-            </div>
         </div>
-    </div>
+    }
 
     <div id="page-is-not-useful"
-         class="gem-c-feedback__form gem-c-feedback__form--email gem-c-feedback__js-show js-feedback-form">
+         class="up-down-feedback__form up-down-feedback__form--email up-down-feedback__js-show js-feedback-form">
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds" id="survey-wrapper">
+            <div class="govuk-grid-column-two-thirds">
                 @Html.Raw(Model.ImproveServiceBody)
-                <button class="govuk-button govuk-button--secondary js-close-form" aria-expanded="true">
-                    @Model.CancelButtonText
-                </button>
+                @if (TrackingConfiguration.UseCookies)
+                {
+                    <button class="govuk-button govuk-button--secondary js-close-form" aria-expanded="true" hidden>
+                        @Model.CancelButtonText
+                    </button>
+                }
             </div>
         </div>
     </div>

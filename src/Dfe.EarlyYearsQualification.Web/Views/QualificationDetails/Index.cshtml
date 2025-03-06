@@ -23,7 +23,7 @@
 }
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop dont-float">
         <h1 class="govuk-heading-xl" id="page-header">@Model.Content!.MainHeader</h1>
         <h2 class="govuk-heading-l"
             id="qualification-details-header">@Model.Content.QualificationDetailsSummaryHeader</h2>
@@ -93,7 +93,8 @@
             </div>
         </dl>
     </div>
-    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop govuk-!-static-margin-top-6">
+    <div class="govuk-grid-column-full govuk-!-static-margin-top-6">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
         @{ await Html.RenderPartialAsync("Partials/QualificationResult", new QualificationResultModel
                                                                          {
                                                                              Heading = Model.Content.QualificationResultHeading,
@@ -254,4 +255,10 @@
             await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.Content.FeedbackBanner);
         }
     </div>
+
+    @if (Model.UpDownFeedback is not null)
+    {
+        await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);
+    }
+</div>
 </div>

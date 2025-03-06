@@ -39,38 +39,38 @@ public class MockContentfulService : IContentService
                {
                    AdvicePages.QualificationsAchievedOutsideTheUk =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved outside the United Kingdom",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath, true)),
                    AdvicePages.QualificationsStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
-                                                            body, WhatLevelIsTheQualificationPath)),
+                                                            body, WhatLevelIsTheQualificationPath, false)),
 
                    AdvicePages.QualificationsAchievedInScotland =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Scotland",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath, true)),
 
                    AdvicePages.QualificationsAchievedInWales =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Wales",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath, true)),
 
                    AdvicePages.QualificationsAchievedInNorthernIreland =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Northern Ireland",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath, true)),
 
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
-                                                              body, QualificationsPath)),
+                                                              body, QualificationsPath, true)),
 
                    AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
-                                                            body, WhatLevelIsTheQualificationPath)),
+                                                            body, WhatLevelIsTheQualificationPath, false)),
                    AdvicePages.Level7QualificationAfterAug2019 =>
                        await Task.FromResult(CreateAdvicePage("Level 7 qualification after aug 2019",
-                                                              body, WhatLevelIsTheQualificationPath)),
+                                                              body, WhatLevelIsTheQualificationPath, false)),
                    AdvicePages.Help =>
                        await Task.FromResult(CreateAdvicePage("Help",
-                                                              body, HomePath)),
+                                                              body, HomePath, false)),
                    _ => null
                };
     }
@@ -194,7 +194,19 @@ public class MockContentfulService : IContentService
                                          QualificationResultNotFrMessageHeading = "Not full and relevant",
                                          QualificationResultNotFrMessageBody = "Not full and relevant body",
                                          QualificationResultNotFrL3MessageHeading = "Not full and relevant L3",
-                                         QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body"
+                                         QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body",
+                                         UpDownFeedback = new UpDownFeedback
+                                                          {
+                                                              Question = "Did you get everything you needed today?",
+                                                              YesButtonText = "Yes",
+                                                              YesButtonSubText = "this service is useful",
+                                                              NoButtonText = "No",
+                                                              NoButtonSubText = " this service is not useful",
+                                                              RaPButtonText = "Report a problem with this page",
+                                                              CancelButtonText = "Cancel",
+                                                              UsefulResponse = "Thank you for your feedback",
+                                                              ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
+                                                          }
                                      });
     }
 
@@ -691,7 +703,7 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static AdvicePage CreateAdvicePage(string heading, Document body, string backButtonUrl)
+    private static AdvicePage CreateAdvicePage(string heading, Document body, string backButtonUrl, bool hasUpDownFeedback)
     {
         return new AdvicePage
                {
@@ -709,18 +721,20 @@ public class MockContentfulService : IContentService
                                         Body = ContentfulContentHelper.Paragraph("This is the body text"),
                                         BannerTitle = "Test banner title"
                                     },
-                   UpDownFeedback = new UpDownFeedback
-                                    {
-                                        Question = "Did you get everything you needed today?",
-                                        YesButtonText = "Yes",
-                                        YesButtonSubText = "this service is useful",
-                                        NoButtonText = "No",
-                                        NoButtonSubText = " this service is not useful",
-                                        RaPButtonText = "Report a problem with this page",
-                                        CancelButtonText = "Cancel",
-                                        UsefulResponse = "Thank you for your feedback",
-                                        ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
-                                    }
+                   UpDownFeedback = hasUpDownFeedback
+                                        ? new UpDownFeedback
+                                          {
+                                              Question = "Did you get everything you needed today?",
+                                              YesButtonText = "Yes",
+                                              YesButtonSubText = "this service is useful",
+                                              NoButtonText = "No",
+                                              NoButtonSubText = " this service is not useful",
+                                              RaPButtonText = "Report a problem with this page",
+                                              CancelButtonText = "Cancel",
+                                              UsefulResponse = "Thank you for your feedback",
+                                              ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
+                                          }
+                                        : null
                };
     }
 }
