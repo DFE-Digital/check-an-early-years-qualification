@@ -4,13 +4,13 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class UpDownFeedback
 {
-    public string Question { get; set; }
-    public string YesButtonText { get; set; }
-    public string YesButtonSubText { get; set; }
-    public string NoButtonText { get; set; }
-    public string NoButtonSubText { get; set; }
-    public string RaPButtonText { get; set; }
-    public string CancelButtonText { get; set; }
-    public Document? ImproveServiceContent { get; set; }
-    public string UsefulResponse { get; set; }
+    public string Question { get; init; } = string.Empty;
+    public string YesButtonText { get; init; } = string.Empty;
+    public string YesButtonSubText { get; init; } = string.Empty;
+    public string NoButtonText { get; init; } = string.Empty;
+    public string NoButtonSubText { get; init; } = string.Empty;
+    public string RaPButtonText { get; init; } = string.Empty;
+    public string CancelButtonText { get; init; } = string.Empty;
+    public Document? ImproveServiceContent { get; init; }
+    public string UsefulResponse { get; init; } = string.Empty;
 }
