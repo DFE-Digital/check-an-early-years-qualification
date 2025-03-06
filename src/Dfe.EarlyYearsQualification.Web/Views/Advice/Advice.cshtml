@@ -27,6 +27,7 @@
         {
             await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
         }
+        
         @if (Model.UpDownFeedback is not null)
         {
             await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);

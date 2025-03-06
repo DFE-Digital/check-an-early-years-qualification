@@ -405,6 +405,19 @@ public class MockContentfulService : IContentService
                                  Body = ContentfulContentHelper.Paragraph("Banner body text")
                              };
 
+        var upDownFeedback = new UpDownFeedback
+                             {
+                                 Question = "Did you get everything you needed today?",
+                                 YesButtonText = "Yes",
+                                 YesButtonSubText = "this service is useful",
+                                 NoButtonText = "No",
+                                 NoButtonSubText = " this service is not useful",
+                                 RaPButtonText = "Report a problem with this page",
+                                 CancelButtonText = "Cancel",
+                                 UsefulResponse = "Thank you for your feedback",
+                                 ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
+                             };
+
         return (level switch
                 {
                     3 => Task.FromResult(new CannotFindQualificationPage
@@ -414,7 +427,8 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-14",
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
-                                             FeedbackBanner = feedbackBanner
+                                             FeedbackBanner = feedbackBanner,
+                                             UpDownFeedback = upDownFeedback
                                          }),
                     4 => Task.FromResult(new CannotFindQualificationPage
                                          {
@@ -423,7 +437,8 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-19",
                                              ToWhichYear = string.Empty,
                                              BackButton = backButton,
-                                             FeedbackBanner = feedbackBanner
+                                             FeedbackBanner = feedbackBanner,
+                                             UpDownFeedback = upDownFeedback
                                          }),
                     _ => Task.FromResult<CannotFindQualificationPage>(null!)
                 })!;
@@ -693,11 +708,19 @@ public class MockContentfulService : IContentService
                                         Heading = "Feedback heading",
                                         Body = ContentfulContentHelper.Paragraph("This is the body text"),
                                         BannerTitle = "Test banner title"
-                                    }, 
+                                    },
                    UpDownFeedback = new UpDownFeedback
                                     {
-                                        
-                                    },
+                                        Question = "Did you get everything you needed today?",
+                                        YesButtonText = "Yes",
+                                        YesButtonSubText = "this service is useful",
+                                        NoButtonText = "No",
+                                        NoButtonSubText = " this service is not useful",
+                                        RaPButtonText = "Report a problem with this page",
+                                        CancelButtonText = "Cancel",
+                                        UsefulResponse = "Thank you for your feedback",
+                                        ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
+                                    }
                };
     }
 }
