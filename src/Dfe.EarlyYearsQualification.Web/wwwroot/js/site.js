@@ -2,22 +2,22 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 $(document).ready(function () {
-    const improveServiceBody = $("#page-is-not-useful");
-    const prompt = $(".js-prompt");
-    const closeForm = $(".js-close-form");
-    const pageIsUsefulButton = $(".js-page-is-useful");
-    const pageIsNotUsefulButton = $(".js-page-is-not-useful");
-    const somethingIsWrongButton = $(".js-something-is-wrong");
-    const promptQuestions = $(".js-prompt-questions");
-    const promptSuccessMessage = $(".js-prompt-success");
+    const improveServiceBody = $("#ud-improve-service");
+    const prompt = $("#ud-prompt");
+    const cancelButton = $("#ud-cancel");
+    const pageIsUsefulButton = $("#ud-page-is-useful");
+    const pageIsNotUsefulButton = $("#ud-page-is-not-useful");
+    const somethingIsWrongButton = $("#ud-something-is-wrong");
+    const feedbackButtons = $(".feedback-buttons");
+    const promptSuccessMessage = $("#ud-prompt-success");
     console.log(prompt)
     if (prompt.length !== 0) {
 
         setHidden(prompt, false);
         setHidden(promptSuccessMessage, true);
         setHidden(improveServiceBody, true);
-        for (const promptQuestion of promptQuestions) setHidden($(promptQuestion), false);
-        setHidden(closeForm, false);
+        for (const promptQuestion of feedbackButtons) setHidden($(promptQuestion), false);
+        setHidden(cancelButton, false);
 
         function revealInitialPrompt() {
             setHidden(prompt, false);
@@ -40,7 +40,7 @@ $(document).ready(function () {
 
         pageIsUsefulButton.on('click', function (e) {
             e.preventDefault();
-            for (const element of promptQuestions) setHidden($(element), true);
+            for (const element of feedbackButtons) setHidden($(element), true);
             setHidden(promptSuccessMessage, false);
             promptSuccessMessage.focus();
             revealInitialPrompt();
@@ -51,11 +51,11 @@ $(document).ready(function () {
             toggleForm();
         });
 
-        somethingIsWrongButton.on('click', function (e) {
+        somethingIsWrongButton.on('click', function () {
             window.location.href = "/advice/help";
         });
 
-        closeForm.on('click', function (e) {
+        cancelButton.on('click', function (e) {
             e.preventDefault();
             toggleForm();
             revealInitialPrompt();
