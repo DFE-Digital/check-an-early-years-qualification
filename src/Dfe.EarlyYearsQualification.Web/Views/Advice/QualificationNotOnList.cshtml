@@ -19,19 +19,24 @@
 @Html.HiddenFor(x => x.StartedDate, new { id="hdnStartDateValue" })
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+    <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-two-thirds-from-desktop dont-float">
+            @if (Model.FeedbackBanner is not null)
+            {
+                await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
+            }
 
-        @if (Model.FeedbackBanner is not null)
+            <h1 class="govuk-heading-xl" id="advice-page-heading">@Model.Heading</h1>
+            <div class="govuk-body govuk-!-margin-bottom-9" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
+
+            @if (Model.FeedbackBanner is not null)
+            {
+                await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
+            }
+        </div>
+        @if (Model.UpDownFeedback is not null)
         {
-            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
-        }
-
-        <h1 class="govuk-heading-xl" id="advice-page-heading">@Model.Heading</h1>
-        <div class="govuk-body govuk-!-margin-bottom-9" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
-
-        @if (Model.FeedbackBanner is not null)
-        {
-            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
+            await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);
         }
 
     </div>

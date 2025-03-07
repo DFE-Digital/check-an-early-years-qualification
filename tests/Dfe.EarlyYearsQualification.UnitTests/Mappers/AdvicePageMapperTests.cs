@@ -12,6 +12,7 @@ public class AdvicePageMapperTests
     {
         const string body = "This is the body";
         const string feedbackBannerBody = "This is the feedback banner body";
+        const string improveServiceBody = "This is the improve service body";
         var advicePage = new AdvicePage
                          {
                              Heading = "This is the heading",
@@ -27,10 +28,14 @@ public class AdvicePageMapperTests
                                                   Heading = "Feedback banner heading",
                                                   Body = ContentfulContentHelper.Paragraph(feedbackBannerBody),
                                                   BannerTitle = "This is the title"
+                                              },
+                             UpDownFeedback = new UpDownFeedback
+                                              {
+                                                  ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
                                               }
                          };
 
-        var result = AdvicePageMapper.Map(advicePage, body, feedbackBannerBody);
+        var result = AdvicePageMapper.Map(advicePage, body, feedbackBannerBody, improveServiceBody);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(advicePage.Heading);
@@ -38,6 +43,8 @@ public class AdvicePageMapperTests
         result.BackButton.Should().BeEquivalentTo(advicePage.BackButton, options => options.Excluding(x => x.Sys));
         result.FeedbackBanner.Should()
               .BeEquivalentTo(advicePage.FeedbackBanner, options => options.Excluding(x => x.Body));
+        result.UpDownFeedback.Should().BeEquivalentTo(advicePage.UpDownFeedback,
+                                                      options => options.Excluding(x => x!.ImproveServiceContent));
     }
 
     [TestMethod]
@@ -45,6 +52,7 @@ public class AdvicePageMapperTests
     {
         const string body = "This is the body";
         const string feedbackBannerBody = "This is the feedback banner body";
+        const string improveServiceBody = "This is the improve service body";
         var cannotFindQualificationPage = new CannotFindQualificationPage
                                           {
                                               Heading = "This is the heading",
@@ -62,10 +70,14 @@ public class AdvicePageMapperTests
                                                                        ContentfulContentHelper
                                                                            .Paragraph(feedbackBannerBody),
                                                                    BannerTitle = "This is the title"
+                                                               },
+                                              UpDownFeedback = new UpDownFeedback
+                                                               {
+                                                                   ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
                                                                }
                                           };
 
-        var result = AdvicePageMapper.Map(cannotFindQualificationPage, body, feedbackBannerBody);
+        var result = AdvicePageMapper.Map(cannotFindQualificationPage, body, feedbackBannerBody, improveServiceBody);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(cannotFindQualificationPage.Heading);
@@ -74,5 +86,7 @@ public class AdvicePageMapperTests
               .BeEquivalentTo(cannotFindQualificationPage.BackButton, options => options.Excluding(x => x.Sys));
         result.FeedbackBanner.Should().BeEquivalentTo(cannotFindQualificationPage.FeedbackBanner,
                                                       options => options.Excluding(x => x.Body));
+        result.UpDownFeedback.Should().BeEquivalentTo(cannotFindQualificationPage.UpDownFeedback,
+                                                      options => options.Excluding(x => x!.ImproveServiceContent));
     }
 }

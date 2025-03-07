@@ -578,7 +578,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                   FurtherInfoText = _testRichText,
                                   LevelLabel = "Test level label",
                                   MainHeader = "Test main header",
-                                  QualificationNumberLabel = "Test qualification number label"
+                                  QualificationNumberLabel = "Test qualification number label",
+                                  UpDownFeedback = new UpDownFeedback()
                               }
                           ]
                       };
@@ -1008,7 +1009,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                         {
                                             Heading = "Test heading sep 15 to aug 19",
                                             FromWhichYear = "Sep-15",
-                                            ToWhichYear = "Aug-19"
+                                            ToWhichYear = "Aug-19",
+                                            UpDownFeedback = new UpDownFeedback()
                                         }
                                     ]
                                 });

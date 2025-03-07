@@ -60,6 +60,7 @@ public class DetailsPage
     public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
 
     public FeedbackBanner? FeedbackBanner { get; init; }
+    public UpDownFeedback? UpDownFeedback { get; init; }
 
     public string QualificationResultHeading { get; init; } = string.Empty;
 

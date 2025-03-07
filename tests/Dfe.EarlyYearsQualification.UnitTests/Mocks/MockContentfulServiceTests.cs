@@ -30,6 +30,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -43,6 +44,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().BeNull();
     }
 
     [TestMethod]
@@ -56,6 +58,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().Be("Qualifications achieved in Scotland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -69,6 +72,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().Be("Qualifications achieved in Wales");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -82,6 +86,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().Be("Qualifications achieved in Northern Ireland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -95,6 +100,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().Be("Qualification not on the list");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -109,6 +115,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().BeNull();
     }
 
     [TestMethod]
@@ -122,8 +129,9 @@ public class MockContentfulServiceTests
         result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_Help_ReturnsExpectedDetails()
     {
@@ -136,6 +144,7 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Help");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().BeNull();
     }
 
     [TestMethod]

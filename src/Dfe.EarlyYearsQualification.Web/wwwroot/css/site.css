@@ -203,3 +203,287 @@ body {
 .qualification-result-container {
     margin-bottom: 60px;
 }
+
+
+#ud-feedback {
+    background: #fff;
+    margin-top: 30px;
+    padding-top: 40px;
+}
+
+@media (min-width: 48.0625em) {
+    #ud-feedback {
+        margin-top: 60px
+    }
+}
+
+@media (max-width: 40.0525em) {
+    #ud-feedback {
+        margin-right: -15px;
+        margin-left: -15px
+    }
+}
+
+@media (min-width: 40.0625em)and (max-width: 48.0525em) {
+    #ud-feedback {
+        margin-right: -30px;
+        margin-left: -30px
+    }
+}
+
+#ud-feedback [hidden] {
+    display: none !important
+}
+
+.ud-feedback__prompt {
+    background-color: #f3f2f1;
+    color: #0b0c0c;
+    border-top: 1px solid #b1b4b6;
+    outline: 0
+}
+
+.ud-feedback__prompt-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px
+}
+
+@media (min-width: 40.0625em) {
+    .ud-feedback__prompt-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between
+    }
+}
+
+.ud-feedback__prompt-questions {
+    text-align: left;
+    padding: 20px 0
+}
+
+@media (min-width: 40.0625em) {
+    .ud-feedback__prompt-questions {
+        margin: 0 15px
+    }
+}
+
+.ud-feedback__prompt-questions--get-help {
+    border-top: 1px solid #b1b4b6
+}
+
+@media (min-width: 40.0625em) {
+    .ud-feedback__prompt-questions--get-help {
+        border: 0
+    }
+}
+
+.ud-feedback__prompt-question-answer {
+    display: flex;
+    align-items: center
+}
+
+@media (max-width: 19.99em) {
+    .ud-feedback__prompt-question-answer {
+        justify-content: center;
+        flex-wrap: wrap
+    }
+}
+
+.ud-feedback__prompt-question, .ud-feedback__prompt-success {
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737
+}
+
+@media print {
+    .ud-feedback__prompt-question, .ud-feedback__prompt-success {
+        font-family: sans-serif
+    }
+}
+
+@media print {
+    .ud-feedback__prompt-question, .ud-feedback__prompt-success {
+        font-size: 14pt;
+        line-height: 1.15
+    }
+}
+
+@media (min-width: 40.0625em) {
+    .ud-feedback__prompt-question, .ud-feedback__prompt-success {
+        font-family: "GDS Transport", arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.25
+    }
+}
+
+@media print and (min-width: 40.0625em) {
+    .ud-feedback__prompt-question, .ud-feedback__prompt-success {
+        font-family: sans-serif
+    }
+}
+
+@media print and (min-width: 40.0625em) {
+    .ud-feedback__prompt-question, .ud-feedback__prompt-success {
+        font-size: 14pt;
+        line-height: 1.2
+    }
+}
+
+.ud-feedback__prompt-question {
+    margin: 0;
+    padding-bottom: 10px
+}
+
+.ud-feedback__prompt-question:focus {
+    outline: 0
+}
+
+@media (min-width: 20em) {
+    .ud-feedback__prompt-question {
+        padding-bottom: 0;
+        margin-right: 10px
+    }
+}
+
+@media (min-width: 48.0625em) {
+    .ud-feedback__prompt-question {
+        margin-right: 20px
+    }
+}
+
+.ud-feedback__button {
+    background: rgba(0, 0, 0, 0);
+    color: #0b0c0c;
+    box-shadow: 0 3px 0 #0b0c0c;
+    border: 1px #0b0c0c solid;
+    margin-bottom: 0;
+    width: 100%;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737
+}
+
+@media print {
+    .ud-feedback__button {
+        font-family: sans-serif
+    }
+}
+
+@media print {
+    .ud-feedback__button {
+        font-size: 14pt;
+        line-height: 1.15
+    }
+}
+
+@media (min-width: 40.0625em) {
+    .ud-feedback__button {
+        font-family: "GDS Transport", arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.25
+    }
+}
+
+@media print and (min-width: 40.0625em) {
+    .ud-feedback__button {
+        font-family: sans-serif
+    }
+}
+
+@media print and (min-width: 40.0625em) {
+    .ud-feedback__button {
+        font-size: 14pt;
+        line-height: 1.2
+    }
+}
+
+.ud-feedback__button:focus, .ud-feedback__button:focus:not(:active):not(:hover) {
+    background: #fd0;
+    border-color: #0b0c0c;
+    box-shadow: 0 5px 0 #0b0c0c
+}
+
+.ud-feedback__button:active {
+    color: #0b0c0c
+}
+
+.ud-feedback__button:hover {
+    background: #b1b4b6;
+    color: #0b0c0c
+}
+
+.ud-feedback__button:link, .ud-feedback__button:visited {
+    color: #0b0c0c
+}
+
+.ud-feedback__button:link:focus, .ud-feedback__button:link:active, .ud-feedback__button:visited:focus, .ud-feedback__button:visited:active {
+    color: #0b0c0c
+}
+
+.ud-feedback__option-list {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0
+}
+
+.ud-feedback__option-list-item:last-child {
+    margin-left: 10px
+}
+
+@media (min-width: 48.0625em) {
+    .ud-feedback__option-list-item:last-child {
+        margin-left: 20px
+    }
+}
+
+.ud-feedback__option-list-item .ud-feedback__button {
+    min-width: 100px
+}
+
+@media (max-width: 48.0525em) {
+    .ud-feedback__option-list-item .ud-feedback__button {
+        min-width: 80px
+    }
+}
+
+#ud-improve-service {
+    padding: 15px;
+    border-top: 1px solid #b1b4b6
+}
+
+@media (min-width: 40.0625em) {
+    #ud-improve-service {
+        padding: 30px
+    }
+}
+
+#ud-cancel {
+    margin: 0 10px
+}
+
+@media (max-width: 40.0525em) {
+    #ud-cancel {
+        margin: 20px 0 0
+    }
+}
+
+.govuk-main-wrapper:has(#ud-feedback) {
+    padding-bottom: 0;
+}
+
+.dont-float {
+    float: none;
+}
