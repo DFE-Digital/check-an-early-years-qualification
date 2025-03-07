@@ -30,7 +30,7 @@ public class QualificationsRepository(
 
         if (qualifications is null || !qualifications.Any())
         {
-            var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
+            string encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
             Logger.LogWarning("No qualifications returned for qualificationId: {QualificationId}",
                               encodedQualificationId);
             return null;
@@ -146,7 +146,7 @@ public class QualificationsRepository(
         var matchedQualifications = new List<Qualification>();
         foreach (var qualification in qualifications)
         {
-            var weight =
+            int weight =
                 fuzzyAdapter.PartialRatio(qualificationName.ToLower(), qualification.QualificationName.ToLower());
             if (weight > 70)
             {
