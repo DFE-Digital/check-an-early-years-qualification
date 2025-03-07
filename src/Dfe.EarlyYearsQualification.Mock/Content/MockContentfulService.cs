@@ -202,7 +202,7 @@ public class MockContentfulService : IContentService
                                                               YesButtonSubText = "this service is useful",
                                                               NoButtonText = "No",
                                                               NoButtonSubText = " this service is not useful",
-                                                              RaPButtonText = "Report a problem with this page",
+                                                              HelpButtonText = "Get help with this page",
                                                               CancelButtonText = "Cancel",
                                                               UsefulResponse = "Thank you for your feedback",
                                                               ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
@@ -424,7 +424,7 @@ public class MockContentfulService : IContentService
                                  YesButtonSubText = "this service is useful",
                                  NoButtonText = "No",
                                  NoButtonSubText = " this service is not useful",
-                                 RaPButtonText = "Report a problem with this page",
+                                 HelpButtonText = "Get help with this page",
                                  CancelButtonText = "Cancel",
                                  UsefulResponse = "Thank you for your feedback",
                                  ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
@@ -729,7 +729,7 @@ public class MockContentfulService : IContentService
                                               YesButtonSubText = "this service is useful",
                                               NoButtonText = "No",
                                               NoButtonSubText = " this service is not useful",
-                                              RaPButtonText = "Report a problem with this page",
+                                              HelpButtonText = "Get help with this page",
                                               CancelButtonText = "Cancel",
                                               UsefulResponse = "Thank you for your feedback",
                                               ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")

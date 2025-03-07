@@ -34,7 +34,7 @@ public class UpDownFeedbackMapperTests
                                  YesButtonSubText = "YesButtonSubText",
                                  NoButtonText = "NoButtonText",
                                  NoButtonSubText = "NoButtonSubText",
-                                 RaPButtonText = "RaPButtonText",
+                                 HelpButtonText = "HelpButtonText",
                                  CancelButtonText = "CancelButtonText",
                                  ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceContent),
                                  UsefulResponse = "UsefulResponse"
@@ -50,7 +50,7 @@ public class UpDownFeedbackMapperTests
         result.YesButtonSubText.Should().Be(upDownFeedback.YesButtonSubText);
         result.NoButtonText.Should().Be(upDownFeedback.NoButtonText);
         result.NoButtonSubText.Should().Be(upDownFeedback.NoButtonSubText);
-        result.RaPButtonText.Should().Be(upDownFeedback.RaPButtonText);
+        result.HelpButtonText.Should().Be(upDownFeedback.HelpButtonText);
         result.CancelButtonText.Should().Be(upDownFeedback.CancelButtonText);
         result.ImproveServiceBody.Should().Be(improveServiceContent);
         result.UsefulResponse.Should().Be(upDownFeedback.UsefulResponse);

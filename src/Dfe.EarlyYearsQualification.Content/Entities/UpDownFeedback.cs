@@ -9,7 +9,7 @@ public class UpDownFeedback
     public string YesButtonSubText { get; init; } = string.Empty;
     public string NoButtonText { get; init; } = string.Empty;
     public string NoButtonSubText { get; init; } = string.Empty;
-    public string RaPButtonText { get; init; } = string.Empty;
+    public string HelpButtonText { get; init; } = string.Empty;
     public string CancelButtonText { get; init; } = string.Empty;
     public Document? ImproveServiceContent { get; init; }
     public string UsefulResponse { get; init; } = string.Empty;

@@ -1,5 +1,4 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
@@ -16,7 +15,7 @@ public static class UpDownFeedbackMapper
                    YesButtonSubText = feedback.YesButtonSubText,
                    NoButtonText = feedback.NoButtonText,
                    NoButtonSubText = feedback.NoButtonSubText,
-                   RaPButtonText = feedback.RaPButtonText,
+                   HelpButtonText = feedback.HelpButtonText,
                    CancelButtonText = feedback.CancelButtonText,
                    UsefulResponse = feedback.UsefulResponse,
                    ImproveServiceBody = improveServiceBodyHtml

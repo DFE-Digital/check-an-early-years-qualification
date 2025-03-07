@@ -7,7 +7,7 @@ public class UpDownFeedbackModel
     public string YesButtonSubText { get; set; }
     public string NoButtonText { get; set; }
     public string NoButtonSubText { get; set; }
-    public string RaPButtonText { get; set; }
+    public string HelpButtonText { get; set; }
     public string CancelButtonText { get; set; }
     public string UsefulResponse { get; set; }
     public string ImproveServiceBody { get; set; }

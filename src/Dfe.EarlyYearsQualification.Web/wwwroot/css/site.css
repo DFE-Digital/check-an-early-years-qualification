@@ -267,12 +267,12 @@ body {
     }
 }
 
-.ud-feedback__prompt-questions--something-is-wrong {
+.ud-feedback__prompt-questions--get-help {
     border-top: 1px solid #b1b4b6
 }
 
 @media (min-width: 40.0625em) {
-    .ud-feedback__prompt-questions--something-is-wrong {
+    .ud-feedback__prompt-questions--get-help {
         border: 0
     }
 }
