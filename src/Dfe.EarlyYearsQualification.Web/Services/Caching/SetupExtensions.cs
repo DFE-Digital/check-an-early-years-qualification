@@ -13,20 +13,15 @@ public static class SetupExtensions
     public static void UseDistributedCache(this WebApplicationBuilder builder,
                                            IConfigurationSection? cacheConfiguration)
     {
-        if (cacheConfiguration == null)
-        {
-            return;
-        }
-
-        string? cacheType = cacheConfiguration.GetValue<string>("CacheType");
+        string cacheType = cacheConfiguration?.GetValue<string>("CacheType") ?? "None";
 
         if (cacheType is "Redis")
         {
-            string? instanceName = cacheConfiguration.GetValue<string>("InstanceName");
+            string? instanceName = cacheConfiguration?.GetValue<string>("InstanceName");
 
             if (instanceName == null)
             {
-                throw new ConfigurationErrorsException("For Redis cache, InstanceName must be configured");
+                throw new ConfigurationErrorsException("For Redis cache, Cache.InstanceName must be configured");
             }
 
             SetupRedisCache(builder, instanceName);
@@ -49,21 +44,32 @@ public static class SetupExtensions
 
     private static void SetupRedisCache(WebApplicationBuilder builder, string instanceName)
     {
-        var redisDnsEndPoint = new
-            DnsEndPoint($"{instanceName}.redis.cache.windows.net",
-                        6380);
+        string hostName = $"{instanceName}.redis.cache.windows.net";
+
+        var redisDnsEndPoint = new DnsEndPoint(hostName, 6380);
 
         builder.Services
-               .AddStackExchangeRedisCache(options =>
-                                           {
-                                               options.SetRedisEndpoint(redisDnsEndPoint);
-
-                                               options.ConnectionMultiplexerFactory =
-                                                   async () => await SetupRedisConnection(options);
-                                           });
+               .AddStackExchangeRedisCache(options => { options.SetupRedisConnection(redisDnsEndPoint); });
     }
 
-    private static async Task<IConnectionMultiplexer> SetupRedisConnection(RedisCacheOptions options)
+    private static void SetupRedisConnection(
+        this RedisCacheOptions options, DnsEndPoint redisDnsEndPoint)
+    {
+        options.ConfigurationOptions
+            = new ConfigurationOptions
+              {
+                  EndPoints =
+                      new EndPointCollection(
+                                             [
+                                                 redisDnsEndPoint
+                                             ])
+              };
+
+        options.ConnectionMultiplexerFactory =
+            async () => await CreateRedisMultiplexer(options);
+    }
+
+    private static async Task<ConnectionMultiplexer> CreateRedisMultiplexer(RedisCacheOptions options)
     {
         if (options.ConfigurationOptions == null)
         {
@@ -77,18 +83,5 @@ public static class SetupExtensions
         return await ConnectionMultiplexer
                      .ConnectAsync(options.ConfigurationOptions)
                      .ConfigureAwait(false);
-    }
-
-    private static void SetRedisEndpoint(this RedisCacheOptions options, DnsEndPoint redisDnsEndPoint)
-    {
-        options.ConfigurationOptions
-            = new ConfigurationOptions
-              {
-                  EndPoints =
-                      new EndPointCollection(
-                                             [
-                                                 redisDnsEndPoint
-                                             ])
-              };
     }
 }
