@@ -2,6 +2,9 @@
 @model Dfe.EarlyYearsQualification.Web.Models.Content.UpDownFeedbackModel
 @inject TrackingConfiguration TrackingConfiguration
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/pages/components/up-down-feedback-component.js" asp-append-version="true"></script>
+
 <div id="ud-feedback" class="govuk-!-display-none-print">
     @if (TrackingConfiguration.UseCookies)
     {
