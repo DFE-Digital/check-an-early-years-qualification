@@ -41,4 +41,6 @@ public interface IContentService
     Task<OpenGraphData?> GetOpenGraphData();
 
     Task<CheckYourAnswersPage?> GetCheckYourAnswersPage();
+
+    Task<HelpPage?> GetHelpPage();
 }

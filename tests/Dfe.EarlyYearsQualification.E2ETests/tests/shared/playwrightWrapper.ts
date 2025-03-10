@@ -29,6 +29,10 @@ export async function checkText(page: Page, locator: string, expectedText: strin
     await expect(element).toHaveText(expectedText);
 }
 
+export async function inputText(page: Page, locator: string, text: string) {
+    await page.locator(locator).fill(text);
+}
+
 export async function checkError(page: Page, locator: string, expectedText: string) {
     await checkText(page, locator + " > span", "Error:");
     await checkText(page, locator, `Error:${expectedText}`);

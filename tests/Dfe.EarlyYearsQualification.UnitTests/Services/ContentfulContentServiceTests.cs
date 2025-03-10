@@ -1088,6 +1088,40 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
+    
+    [TestMethod]
+    public async Task GetHelpPage_ReturnsData()
+    {
+        var data = new HelpPage { Heading = "test heading" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetHelpPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpPage();
+
+        result.Should().BeNull();
+    }
 }
 
 public class ContentfulContentServiceTestsBase<T>
