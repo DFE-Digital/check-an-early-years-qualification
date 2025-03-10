@@ -255,11 +255,25 @@ public class ContentfulContentService(
         // ReSharper disable once InvertIf
         if (checkYourAnswersPages is null || !checkYourAnswersPages.Any())
         {
-            Logger.LogWarning("No open graph data entry returned");
+            Logger.LogWarning("No 'Check your answers pages' returned");
             return null;
         }
 
         return checkYourAnswersPages.First();
+    }
+
+    public async Task<HelpPage?> GetHelpPage()
+    {
+        var helpPage = await GetEntriesByType<HelpPage>();
+
+        // ReSharper disable once InvertIf
+        if (helpPage is null || !helpPage.Any())
+        {
+            Logger.LogWarning("No 'Help Page' returned");
+            return null;
+        }
+
+        return helpPage.First();
     }
 
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(

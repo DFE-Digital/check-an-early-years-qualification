@@ -22,4 +22,5 @@ public static class ContentTypes
     public const string CheckAdditionalRequirementsAnswerPage = "checkAdditionalRequirementsAnswerPage";
     public const string OpenGraphData = "openGraphData";
     public const string CheckYourAnswersPage = "checkYourAnswersPage";
+    public const string HelpPage = "helpPage";
 }

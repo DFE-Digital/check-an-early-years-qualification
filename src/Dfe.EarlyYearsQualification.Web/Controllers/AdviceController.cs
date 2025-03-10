@@ -6,6 +6,7 @@ using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -17,7 +18,8 @@ public class AdviceController(
     ILogger<AdviceController> logger,
     IContentService contentService,
     IGovUkContentParser contentParser,
-    IUserJourneyCookieService userJourneyCookieService)
+    IUserJourneyCookieService userJourneyCookieService,
+    INotificationService notificationService)
     : ServiceController
 {
     public override void OnActionExecuting(ActionExecutingContext context)
@@ -102,7 +104,48 @@ public class AdviceController(
     [HttpGet("help")]
     public async Task<IActionResult> Help()
     {
-        return await GetView(AdvicePages.Help);
+        var helpPage = await contentService.GetHelpPage();
+        if (helpPage is null)
+        {
+            logger.LogError("No content for the help page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var model = await Map(helpPage);
+
+        return View("Help", model);
+    }
+    
+    [HttpPost("help")]
+    public async Task<IActionResult> Help(HelpPageModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            notificationService.SendFeedbackNotification(new FeedbackNotification
+                                                         {
+                                                             EmailAddress = model.EmailAddress!,
+                                                             Subject = model.SelectedOption,
+                                                             Message = model.AdditionalInformationMessage
+                                                         });
+            return RedirectToAction("Index", "Home");
+        }
+        
+        var helpPage = await contentService.GetHelpPage();
+        if (helpPage is null)
+        {
+            logger.LogError("No content for the help page");
+            return RedirectToAction("Index", "Error");
+        }
+        
+        var newModel = await Map(helpPage);
+        newModel.HasInvalidEmailAddressError = ModelState.Keys.Any(_ => ModelState["EmailAddress"]?.Errors.Count > 0);
+        newModel.HasFurtherInformationError = ModelState.Keys.Any(_ => ModelState["AdditionalInformationMessage"]?.Errors.Count > 0);
+        newModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0);
+        newModel.EmailAddress = model.EmailAddress;
+        newModel.SelectedOption = model.SelectedOption;
+        newModel.AdditionalInformationMessage = model.AdditionalInformationMessage;
+
+        return View("Help", newModel);
     }
 
     private async Task<IActionResult> GetView(string advicePageId)
@@ -132,5 +175,11 @@ public class AdviceController(
         var feedbackBodyHtml =
             await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
         return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml);
+    }
+    
+    private async Task<HelpPageModel> Map(HelpPage helpPage)
+    {
+        var postHeadingContentHtml = await contentParser.ToHtml(helpPage.PostHeadingContent);
+        return HelpPageMapper.Map(helpPage, postHeadingContentHtml);
     }
 }
