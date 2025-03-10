@@ -694,6 +694,76 @@ public class AdviceControllerTests
     }
 
     [TestMethod]
+    public async Task Get_Post_ValidModelState_CallsNotificationService()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockNotificationService = new Mock<INotificationService>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object, mockNotificationService.Object);
+        controller.ModelState.Clear();
+
+        const string emailAddress = "test@test.com";
+        const string selectedOption = "I need help";
+        const string message = "This is a test message";
+
+        var result = await controller.Help(new HelpPageModel
+                                           {
+                                               EmailAddress = emailAddress, AdditionalInformationMessage = message,
+                                               SelectedOption = selectedOption
+                                           });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Home");
+
+        mockNotificationService.Verify(x => x.SendFeedbackNotification(It.IsAny<FeedbackNotification>()), Times.Once());
+    }
+    
+    [TestMethod]
+    public async Task Get_Post_InvalidModelState_ReturnsView()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockNotificationService = new Mock<INotificationService>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object, mockNotificationService.Object);
+        var helpPage = new HelpPage { Heading = "Heading" };
+        mockContentService.Setup(x => x.GetHelpPage())
+                          .ReturnsAsync(helpPage);
+
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        
+        controller.ModelState.AddModelError(nameof(HelpPageModel.EmailAddress), "Invalid");
+        controller.ModelState.AddModelError(nameof(HelpPageModel.SelectedOption), "Invalid");
+        controller.ModelState.AddModelError(nameof(HelpPageModel.AdditionalInformationMessage), "Invalid");
+
+        var result = await controller.Help(new HelpPageModel());
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+
+        resultType.Should().NotBeNull();
+        resultType!.ViewName.Should().Be("Help");
+
+        var model = resultType.Model as HelpPageModel;
+        model.Should().NotBeNull();
+        model!.HasErrors.Should().BeTrue();
+        model.HasInvalidEmailAddressError.Should().BeTrue();
+        model.HasFurtherInformationError.Should().BeTrue();
+        model.HasNoEnquiryOptionSelectedError.Should().BeTrue();
+    }
+
+    [TestMethod]
     public void OnActionExecuting_ClearsCookies()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();

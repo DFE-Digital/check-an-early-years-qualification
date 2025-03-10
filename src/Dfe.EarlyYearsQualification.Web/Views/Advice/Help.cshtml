@@ -54,15 +54,15 @@
         <h1 class="govuk-heading-xl" id="help-page-heading">@Model.Heading</h1>
         <div class="govuk-body govuk-!-margin-bottom-9" id="post-heading-content">@Html.Raw(Model.PostHeadingContent)</div>
 
-        @using (Html.BeginForm("Help", "Advice", FormMethod.Post, new { id = "feedback-form" }))
+        @using (Html.BeginForm("Help", "Advice", FormMethod.Post, new { id = "help-form" }))
         {
             <div class="govuk-form-group @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h2 class="govuk-heading-m mb-3" id="question">
+                        <h2 class="govuk-heading-m mb-3" id="reason-for-enquiry-heading">
                             @Model.ReasonForEnquiryHeading
                         </h2>
-                        <div id="event-name-hint" class="govuk-hint">
+                        <div id="reason-for-enquiry-heading-hint" class="govuk-hint">
                             @Model.ReasonForEnquiryHintText
                         </div>
                     </legend>
@@ -91,12 +91,12 @@
             </div>
 
             <div class="govuk-form-group @(Model.HasFurtherInformationError ? "govuk-form-group--error" : "")">
-                <h2 class="govuk-label-wrapper">
+                <h2 class="govuk-label-wrapper" id="additional-information-heading">
                     <label class="govuk-label govuk-label--m" for="AdditionalInformationMessage">
                         @Model.AdditionalInformationHeading
                     </label>
                 </h2>
-                <div id="more-detail-hint" class="govuk-hint">
+                <div id="additional-information-hint" class="govuk-hint">
                     @Model.AdditionalInformationHintText
                 </div>
                 @{ await Html.RenderPartialAsync("Partials/WarningText", Model.AdditionalInformationWarningText); }
@@ -113,7 +113,7 @@
             </div>
 
             <div class="govuk-form-group @(Model.HasInvalidEmailAddressError ? "govuk-form-group--error" : "")">
-                <h2 class="govuk-label-wrapper">
+                <h2 class="govuk-label-wrapper" id="email-address-heading">
                     <label class="govuk-label govuk-label--m" for="EmailAddress">
                         @Model.EmailAddressHeading
                     </label>
@@ -134,7 +134,7 @@
             </div>
 
             <div class="govuk-form-group">
-                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                <button id="help-form-submit" type="submit" class="govuk-button" data-module="govuk-button">
                     @Model.CtaButtonText
                 </button>
             </div>
