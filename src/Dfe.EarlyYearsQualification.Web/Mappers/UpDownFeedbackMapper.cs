@@ -16,6 +16,7 @@ public static class UpDownFeedbackMapper
                    NoButtonText = feedback.NoButtonText,
                    NoButtonSubText = feedback.NoButtonSubText,
                    HelpButtonText = feedback.HelpButtonText,
+                   HelpButtonLink = feedback.HelpButtonLink,
                    CancelButtonText = feedback.CancelButtonText,
                    UsefulResponse = feedback.UsefulResponse,
                    ImproveServiceBody = improveServiceBodyHtml

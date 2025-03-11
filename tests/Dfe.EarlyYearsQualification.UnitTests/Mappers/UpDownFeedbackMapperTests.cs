@@ -35,6 +35,7 @@ public class UpDownFeedbackMapperTests
                                  NoButtonText = "NoButtonText",
                                  NoButtonSubText = "NoButtonSubText",
                                  HelpButtonText = "HelpButtonText",
+                                 HelpButtonLink = "HelpButtonLink",
                                  CancelButtonText = "CancelButtonText",
                                  ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceContent),
                                  UsefulResponse = "UsefulResponse"
@@ -42,7 +43,6 @@ public class UpDownFeedbackMapperTests
 
         var result = UpDownFeedbackMapper.Map(upDownFeedback, improveServiceContent);
 
-        
         upDownFeedback.ImproveServiceContent.Should().NotBeNull();
         result.Should().NotBeNull();
         result!.Question.Should().Be(upDownFeedback.Question);
@@ -51,6 +51,7 @@ public class UpDownFeedbackMapperTests
         result.NoButtonText.Should().Be(upDownFeedback.NoButtonText);
         result.NoButtonSubText.Should().Be(upDownFeedback.NoButtonSubText);
         result.HelpButtonText.Should().Be(upDownFeedback.HelpButtonText);
+        result.HelpButtonLink.Should().Be(upDownFeedback.HelpButtonLink);
         result.CancelButtonText.Should().Be(upDownFeedback.CancelButtonText);
         result.ImproveServiceBody.Should().Be(improveServiceContent);
         result.UsefulResponse.Should().Be(upDownFeedback.UsefulResponse);

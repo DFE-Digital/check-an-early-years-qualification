@@ -195,18 +195,7 @@ public class MockContentfulService : IContentService
                                          QualificationResultNotFrMessageBody = "Not full and relevant body",
                                          QualificationResultNotFrL3MessageHeading = "Not full and relevant L3",
                                          QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body",
-                                         UpDownFeedback = new UpDownFeedback
-                                                          {
-                                                              Question = "Did you get everything you needed today?",
-                                                              YesButtonText = "Yes",
-                                                              YesButtonSubText = "this service is useful",
-                                                              NoButtonText = "No",
-                                                              NoButtonSubText = " this service is not useful",
-                                                              HelpButtonText = "Get help with this page",
-                                                              CancelButtonText = "Cancel",
-                                                              UsefulResponse = "Thank you for your feedback",
-                                                              ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
-                                                          }
+                                         UpDownFeedback = GetUpDownFeedback()
                                      });
     }
 
@@ -417,18 +406,7 @@ public class MockContentfulService : IContentService
                                  Body = ContentfulContentHelper.Paragraph("Banner body text")
                              };
 
-        var upDownFeedback = new UpDownFeedback
-                             {
-                                 Question = "Did you get everything you needed today?",
-                                 YesButtonText = "Yes",
-                                 YesButtonSubText = "this service is useful",
-                                 NoButtonText = "No",
-                                 NoButtonSubText = " this service is not useful",
-                                 HelpButtonText = "Get help with this page",
-                                 CancelButtonText = "Cancel",
-                                 UsefulResponse = "Thank you for your feedback",
-                                 ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
-                             };
+        var upDownFeedback = GetUpDownFeedback();
 
         return (level switch
                 {
@@ -721,20 +699,24 @@ public class MockContentfulService : IContentService
                                         Body = ContentfulContentHelper.Paragraph("This is the body text"),
                                         BannerTitle = "Test banner title"
                                     },
-                   UpDownFeedback = hasUpDownFeedback
-                                        ? new UpDownFeedback
-                                          {
-                                              Question = "Did you get everything you needed today?",
-                                              YesButtonText = "Yes",
-                                              YesButtonSubText = "this service is useful",
-                                              NoButtonText = "No",
-                                              NoButtonSubText = " this service is not useful",
-                                              HelpButtonText = "Get help with this page",
-                                              CancelButtonText = "Cancel",
-                                              UsefulResponse = "Thank you for your feedback",
-                                              ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
-                                          }
-                                        : null
+                   UpDownFeedback = hasUpDownFeedback ? GetUpDownFeedback() : null
+               };
+    }
+
+    private static UpDownFeedback GetUpDownFeedback()
+    {
+        return new UpDownFeedback
+               {
+                   Question = "Did you get everything you needed today?",
+                   YesButtonText = "Yes",
+                   YesButtonSubText = "this service is useful",
+                   NoButtonText = "No",
+                   NoButtonSubText = " this service is not useful",
+                   HelpButtonText = "Get help with this page",
+                   HelpButtonLink = "/advice/help",
+                   CancelButtonText = "Cancel",
+                   UsefulResponse = "Thank you for your feedback",
+                   ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
                };
     }
 }

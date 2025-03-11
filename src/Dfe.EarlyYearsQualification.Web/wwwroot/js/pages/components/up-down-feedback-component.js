@@ -4,7 +4,6 @@
     const cancelButton = $("#ud-cancel");
     const pageIsUsefulButton = $("#ud-page-is-useful");
     const pageIsNotUsefulButton = $("#ud-page-is-not-useful");
-    const getHelpButton = $("#ud-get-help");
     const feedbackButtons = $(".feedback-buttons");
     const promptSuccessMessage = $("#ud-prompt-success");
 
@@ -46,10 +45,6 @@
         pageIsNotUsefulButton.on('click', function (e) {
             e.preventDefault();
             toggleForm();
-        });
-
-        getHelpButton.on('click', function () {
-            window.location.href = "/advice/help";
         });
 
         cancelButton.on('click', function (e) {
