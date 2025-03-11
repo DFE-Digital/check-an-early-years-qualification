@@ -13,6 +13,7 @@ public class MockContentfulService : IContentService
     private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
     private const string QualificationsPath = "/qualifications";
     private const string HomePath = "/";
+    private const string ThereIsAProblem = "There is a problem";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -512,7 +513,7 @@ public class MockContentfulService : IContentService
                                                          Href = HomePath,
                                                          OpenInNewTab = false
                                                      },
-                                        ErrorBannerHeading = "There is a problem",
+                                        ErrorBannerHeading = ThereIsAProblem,
                                         InvalidEmailAddressErrorMessage = "Enter a valid email address",
                                         NoEnquiryOptionSelectedErrorMessage = "Select one option",
                                         FurtherInformationErrorMessage = "Enter further information about your enquiry"
@@ -647,7 +648,7 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    ErrorBannerLinkText = "Test error banner link text",
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),
@@ -667,7 +668,7 @@ public class MockContentfulService : IContentService
                                     OpenInNewTab = false
                                 },
                    CtaButtonText = "Continue",
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    AwardedDateIsAfterStartedDateErrorText = "Error- AwardedDateIsAfterStartedDateErrorText",
                    StartedQuestion = CreateDatesQuestionPage("started- "),
                    AwardedQuestion = CreateDatesQuestionPage("awarded- ")
@@ -713,7 +714,7 @@ public class MockContentfulService : IContentService
                                     Href = "/questions/what-level-is-the-qualification",
                                     OpenInNewTab = false
                                 },
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    ErrorBannerLinkText = "Test error banner link text",
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),
