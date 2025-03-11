@@ -519,6 +519,15 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
+    {
+        return await Task.FromResult(new HelpConfirmationPage
+                                     {
+                                         SuccessMessage = "This is the success message",
+                                         Body = ContentfulContentHelper.Paragraph("This is the body")
+                                     });
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =

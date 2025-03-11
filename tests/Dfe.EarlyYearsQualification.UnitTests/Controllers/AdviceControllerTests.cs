@@ -720,8 +720,7 @@ public class AdviceControllerTests
         var resultType = result as RedirectToActionResult;
 
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
-        resultType.ControllerName.Should().Be("Home");
+        resultType!.ActionName.Should().Be("HelpConfirmation");
 
         mockNotificationService.Verify(x => x.SendFeedbackNotification(It.IsAny<FeedbackNotification>()), Times.Once());
     }
@@ -761,6 +760,69 @@ public class AdviceControllerTests
         model.HasInvalidEmailAddressError.Should().BeTrue();
         model.HasFurtherInformationError.Should().BeTrue();
         model.HasNoEnquiryOptionSelectedError.Should().BeTrue();
+    }
+    
+        [TestMethod]
+    public async Task HelpConfirmation_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockNotificationService = new Mock<INotificationService>();
+
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockNotificationService.Object);
+
+        mockContentService.Setup(x => x.GetHelpConfirmationPage())
+                          .ReturnsAsync((HelpConfirmationPage?)null).Verifiable();
+        var result = await controller.HelpConfirmation();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the help confirmation page");
+    }
+
+    [TestMethod]
+    public async Task HelpConfirmation_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockNotificationService = new Mock<INotificationService>();
+
+        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                              UserJourneyMockNoOp.Object, mockNotificationService.Object);
+
+        var helpConfirmationPage = new HelpConfirmationPage { SuccessMessage = "Success" };
+        mockContentService.Setup(x => x.GetHelpConfirmationPage())
+                          .ReturnsAsync(helpConfirmationPage);
+
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+
+        var result = await controller.HelpConfirmation();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as HelpConfirmationPageModel;
+        model.Should().NotBeNull();
+
+        model!.SuccessMessage.Should().Be(helpConfirmationPage.SuccessMessage);
+        model.Body.Should().Be("Test html body");
+
+        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
 
     [TestMethod]

@@ -23,4 +23,5 @@ public static class ContentTypes
     public const string OpenGraphData = "openGraphData";
     public const string CheckYourAnswersPage = "checkYourAnswersPage";
     public const string HelpPage = "helpPage";
+    public const string HelpConfirmationPage = "helpConfirmationPage";
 }

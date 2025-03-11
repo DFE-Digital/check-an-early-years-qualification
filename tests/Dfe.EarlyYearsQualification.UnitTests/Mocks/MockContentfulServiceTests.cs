@@ -685,4 +685,17 @@ public class MockContentfulServiceTests
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
         result.FurtherInformationErrorMessage.Should().Be("Enter further information about your enquiry");
     }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpConfirmationPage();
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpConfirmationPage>();
+        result!.SuccessMessage.Should().Be("This is the success message");
+        result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the body");
+    }
 }

@@ -276,6 +276,20 @@ public class ContentfulContentService(
         return helpPage.First();
     }
 
+    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
+    {
+        var helpConfirmationPage = await GetEntriesByType<HelpConfirmationPage>();
+
+        // ReSharper disable once InvertIf
+        if (helpConfirmationPage is null || !helpConfirmationPage.Any())
+        {
+            Logger.LogWarning("No 'Help Confirmation Page' returned");
+            return null;
+        }
+
+        return helpConfirmationPage.First();
+    }
+
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(
         int startDateMonth, int startDateYear,
         List<CannotFindQualificationPage> cannotFindQualificationPages)

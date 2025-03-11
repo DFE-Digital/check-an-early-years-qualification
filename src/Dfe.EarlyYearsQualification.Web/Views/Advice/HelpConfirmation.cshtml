@@ -1,0 +1,16 @@
+﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpConfirmationPageModel
+
+@{
+    ViewData["Title"] = "Help Confirmation Page";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        <div class="govuk-panel govuk-panel--confirmation">
+            <h1 class="govuk-panel__title" id="success-message">
+                @Model.SuccessMessage
+            </h1>
+        </div>
+        <div class="govuk-body govuk-!-margin-top-7" id="help-confirmation-body">@Html.Raw(Model.Body)</div>
+    </div>
+</div>

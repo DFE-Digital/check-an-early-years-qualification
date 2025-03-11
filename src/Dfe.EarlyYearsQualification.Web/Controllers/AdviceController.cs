@@ -127,7 +127,7 @@ public class AdviceController(
                                                              Subject = model.SelectedOption,
                                                              Message = model.AdditionalInformationMessage
                                                          });
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("HelpConfirmation");
         }
         
         var helpPage = await contentService.GetHelpPage();
@@ -146,6 +146,21 @@ public class AdviceController(
         newModel.AdditionalInformationMessage = model.AdditionalInformationMessage;
 
         return View("Help", newModel);
+    }
+    
+    [HttpGet("help/confirmation")]
+    public async Task<IActionResult> HelpConfirmation()
+    {
+        var helpConfirmationPage = await contentService.GetHelpConfirmationPage();
+        if (helpConfirmationPage is null)
+        {
+            logger.LogError("No content for the help confirmation page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var model = await Map(helpConfirmationPage);
+
+        return View("HelpConfirmation", model);
     }
 
     private async Task<IActionResult> GetView(string advicePageId)
@@ -181,5 +196,11 @@ public class AdviceController(
     {
         var postHeadingContentHtml = await contentParser.ToHtml(helpPage.PostHeadingContent);
         return HelpPageMapper.Map(helpPage, postHeadingContentHtml);
+    }
+    
+    private async Task<HelpConfirmationPageModel> Map(HelpConfirmationPage helpConfirmationPage)
+    {
+        var bodyHtml = await contentParser.ToHtml(helpConfirmationPage.Body);
+        return new HelpConfirmationPageModel { SuccessMessage = helpConfirmationPage.SuccessMessage, Body = bodyHtml };
     }
 }

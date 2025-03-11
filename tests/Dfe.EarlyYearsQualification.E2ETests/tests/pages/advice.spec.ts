@@ -1,5 +1,17 @@
 ﻿import {Page, test} from '@playwright/test';
-import {startJourney, checkText, inputText, setCookie, journeyCookieName, exists, doesNotExist, doesNotHaveClass, checkUrl, isVisible, checkError, hasClass} from '../shared/playwrightWrapper';
+import {
+    startJourney,
+    checkText,
+    inputText,
+    setCookie,
+    journeyCookieName,
+    exists,
+    doesNotExist,
+    doesNotHaveClass,
+    checkUrl,
+    isVisible,
+    checkTextContains
+} from '../shared/playwrightWrapper';
 
 async function checkFeedbackBanners(page: Page) {
     await checkText(page, ".govuk-notification-banner__title", "Test banner title", 0);
@@ -110,9 +122,24 @@ test.describe('A spec that tests advice pages', () => {
         await checkUrl(page, "/advice/help");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "Select one option", 0);
-        await checkText(page, "#error-banner-link", "Enter further information about your enquiry", 1);
-        await checkText(page, "#error-banner-link", "Enter a valid email address", 2);
-        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+        await checkText(page, ".govuk-error-summary__list > li", "Select one option", 0);
+        await checkText(page, ".govuk-error-summary__list > li", "Enter further information about your enquiry", 1);
+        await checkText(page, ".govuk-error-summary__list > li", "Enter a valid email address", 2);
+        await isVisible(page, "#option-error");
+        await isVisible(page, "#additional-information-error");
+        await isVisible(page, "#email-address-error");
+        await checkTextContains(page, "#option-error", "Select one option");
+        await checkTextContains(page, "#additional-information-error", "Enter further information about your enquiry");
+        await checkTextContains(page, "#email-address-error", "Enter a valid email address");
+    });
+
+    test("Checks the details are on the help confirmation page", async ({page}) => {
+        await page.goto("/advice/help/confirmation");
+
+        await isVisible(page, "#success-message");
+        await isVisible(page, "#help-confirmation-body");
+        
+        await checkText(page, "#success-message" ,"This is the success message");
+        await checkText(page, "#help-confirmation-body" ,"This is the body");
     });
 });

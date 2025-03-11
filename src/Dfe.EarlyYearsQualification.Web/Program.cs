@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Notify.Client;
+using Notify.Interfaces;
 using OwaspHeaders.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -124,8 +126,20 @@ builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 
-builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection("Notifications"));
-builder.Services.AddSingleton<INotificationService, GovUkNotifyService>();
+if (useMockContentful)
+{
+    builder.Services.AddSingleton<INotificationService, MockNotificationService>();
+}
+else
+{
+    builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection("Notifications"));
+    builder.Services.AddSingleton<INotificationClient, NotificationClient>(_ =>
+                                                                           {
+                                                                               var options = builder.Configuration.GetSection("Notifications").Get<NotificationOptions>();
+                                                                               return new NotificationClient(options!.ApiKey);
+                                                                           });
+    builder.Services.AddSingleton<INotificationService, GovUkNotifyService>();
+}
 
 var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
