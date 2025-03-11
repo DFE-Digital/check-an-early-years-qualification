@@ -30,7 +30,7 @@
             {
                 errors.Add(new ErrorSummaryLink
                            {
-                               ErrorBannerLinkText = Model.FurtherInformationErrorMessage,
+                               ErrorBannerLinkText = Model.AdditionalInformationErrorMessage,
                                ElementLinkId = "AdditionalInformationMessage"
                            });
             }
@@ -106,7 +106,7 @@
                         <span
                             class="govuk-visually-hidden">
                             Error:
-                        </span>@Model.FurtherInformationErrorMessage
+                        </span>@Model.AdditionalInformationErrorMessage
                     </p>
                 }
                 @Html.TextAreaFor(x => x.AdditionalInformationMessage, 5, 1, new { @class = "govuk-textarea", aria_describedby = "more-detail-hint" })

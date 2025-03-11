@@ -17,7 +17,7 @@ public static class HelpPageMapper
                    BackButton = NavigationLinkMapper.Map(helpPage.BackButton),
                    CtaButtonText = helpPage.CtaButtonText,
                    EmailAddressHeading = helpPage.EmailAddressHeading,
-                   FurtherInformationErrorMessage = helpPage.FurtherInformationErrorMessage,
+                   AdditionalInformationErrorMessage = helpPage.FurtherInformationErrorMessage,
                    EmailAddressHintText = helpPage.EmailAddressHintText,
                    ReasonForEnquiryHeading = helpPage.ReasonForEnquiryHeading,
                    ErrorBannerHeading = helpPage.ErrorBannerHeading,

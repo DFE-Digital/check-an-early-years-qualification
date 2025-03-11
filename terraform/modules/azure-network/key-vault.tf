@@ -224,3 +224,9 @@ resource "azurerm_key_vault_secret" "contentful_space_id" {
   value        = var.contentful_space_id
   key_vault_id = azurerm_key_vault.kv.id
 }
+
+resource "azurerm_key_vault_secret" "govuk_notify_api_key" {
+  name         = "Notifications--ApiKey"
+  value        = var.govuk_notify_api_key
+  key_vault_id = azurerm_key_vault.kv.id
+}

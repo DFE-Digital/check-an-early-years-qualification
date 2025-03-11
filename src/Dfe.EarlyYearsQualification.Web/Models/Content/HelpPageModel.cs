@@ -48,7 +48,7 @@ public class HelpPageModel
     
     public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;
     
-    public string FurtherInformationErrorMessage { get; init; } = string.Empty;
+    public string AdditionalInformationErrorMessage { get; init; } = string.Empty;
 
     [Required]
     public string SelectedOption { get; set; } = string.Empty;
