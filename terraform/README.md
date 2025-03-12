@@ -49,8 +49,6 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_custom_domain_name"></a> [custom\_domain\_name](#input\_custom\_domain\_name) | Custom domain hostname for the education.gov.uk domain | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | `"development"` | no |
 | <a name="input_govuk_notify_api_key"></a> [govuk\_notify\_api\_key](#input\_govuk\_notify\_api\_key) | GovUK Notify API Key | `string` | n/a | yes |
-| <a name="input_govuk_notify_feedback_email_address"></a> [govuk\_notify\_feedback\_email\_address](#input\_govuk\_notify\_feedback\_email\_address) | GovUK Notify Feedback Email Address | `string` | n/a | yes |
-| <a name="input_govuk_notify_feedback_template_id"></a> [govuk\_notify\_feedback\_template\_id](#input\_govuk\_notify\_feedback\_template\_id) | GovUK Notify Feedback Email Template Id | `string` | n/a | yes |
 | <a name="input_gtm_tag"></a> [gtm\_tag](#input\_gtm\_tag) | The Google Analytics tag | `string` | `""` | no |
 | <a name="input_kv_certificate_authority_admin_first_name"></a> [kv\_certificate\_authority\_admin\_first\_name](#input\_kv\_certificate\_authority\_admin\_first\_name) | First Name of the Certificate Authority Admin | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_admin_last_name"></a> [kv\_certificate\_authority\_admin\_last\_name](#input\_kv\_certificate\_authority\_admin\_last\_name) | Last Name of the Certificate Authority Admin | `string` | n/a | yes |
@@ -61,6 +59,9 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_kv_certificate_subject"></a> [kv\_certificate\_subject](#input\_kv\_certificate\_subject) | Subject of the education.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_label"></a> [kv\_service\_gov\_uk\_certificate\_label](#input\_kv\_service\_gov\_uk\_certificate\_label) | Label for the service.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_subject"></a> [kv\_service\_gov\_uk\_certificate\_subject](#input\_kv\_service\_gov\_uk\_certificate\_subject) | Subject of the service.gov.uk certificate | `string` | n/a | yes |
+| <a name="input_notifications_feedback_email_address"></a> [notifications\_feedback\_email\_address](#input\_notifications\_feedback\_email\_address) | GovUK Notify Feedback Email Address | `string` | n/a | yes |
+| <a name="input_notifications_feedback_template_id"></a> [notifications\_feedback\_template\_id](#input\_notifications\_feedback\_template\_id) | GovUK Notify Feedback Email Template Id | `string` | n/a | yes |
+| <a name="input_notifications_is_test_environment"></a> [notifications\_is\_test\_environment](#input\_notifications\_is\_test\_environment) | Flag to indicate if the notification comes from a test environment | `bool` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
 | <a name="input_service_gov_uk_custom_domain_name"></a> [service\_gov\_uk\_custom\_domain\_name](#input\_service\_gov\_uk\_custom\_domain\_name) | Custom domain hostname for the service.gov.uk domain | `string` | n/a | yes |
 | <a name="input_webapp_access_is_public"></a> [webapp\_access\_is\_public](#input\_webapp\_access\_is\_public) | Web app service is public, and access is unchallenged | `bool` | `false` | no |
