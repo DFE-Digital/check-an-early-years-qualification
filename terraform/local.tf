@@ -24,6 +24,7 @@ locals {
     "Clarity__Tag"                          = var.clarity_tag
     "Notifications__Feedback__TemplateId"   = var.govuk_notify_feedback_template_id
     "Notifications__Feedback__EmailAddress" = var.govuk_notify_feedback_email_address
+    "Notifications__IsTestEnvironment"      = var.notifications_is_test_environment
   }
 
   webapp_slot_app_settings = {

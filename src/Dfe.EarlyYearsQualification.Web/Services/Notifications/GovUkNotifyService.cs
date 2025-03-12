@@ -15,9 +15,11 @@ public class GovUkNotifyService(
         try
         {
             var options = notificationOptions.Value;
+            var subjectPrefix = options.IsTestEnvironment ? "TEST - " : string.Empty;
             var personalisation = new Dictionary<string, dynamic>
                                   {
-                                      { "subject", feedbackNotification.Subject },
+                                      { "subject", $"{subjectPrefix}{feedbackNotification.Subject}" },
+                                      { "selected_option", feedbackNotification.Subject },
                                       { "email_address", feedbackNotification.EmailAddress },
                                       { "message", feedbackNotification.Message }
                                   };
