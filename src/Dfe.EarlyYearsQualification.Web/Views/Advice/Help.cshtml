@@ -52,14 +52,14 @@
         }
 
         <h1 class="govuk-heading-xl" id="help-page-heading">@Model.Heading</h1>
-        <div class="govuk-body govuk-!-margin-bottom-9" id="post-heading-content">@Html.Raw(Model.PostHeadingContent)</div>
+        <div class="govuk-body govuk-!-margin-bottom-7" id="post-heading-content">@Html.Raw(Model.PostHeadingContent)</div>
 
         @using (Html.BeginForm("Help", "Advice", FormMethod.Post, new { id = "help-form" }))
         {
-            <div class="govuk-form-group @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h2 class="govuk-heading-m mb-3" id="reason-for-enquiry-heading">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l mb-0">
+                        <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="reason-for-enquiry-heading">
                             @Model.ReasonForEnquiryHeading
                         </h2>
                         <div id="reason-for-enquiry-heading-hint" class="govuk-hint">
@@ -90,8 +90,8 @@
                 </fieldset>
             </div>
 
-            <div class="govuk-form-group @(Model.HasFurtherInformationError ? "govuk-form-group--error" : "")">
-                <h2 class="govuk-label-wrapper" id="additional-information-heading">
+            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasFurtherInformationError ? "govuk-form-group--error" : "")">
+                <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="additional-information-heading">
                     <label class="govuk-label govuk-label--m" for="AdditionalInformationMessage">
                         @Model.AdditionalInformationHeading
                     </label>
@@ -112,8 +112,8 @@
                 @Html.TextAreaFor(x => x.AdditionalInformationMessage, 5, 1, new { @class = "govuk-textarea", aria_describedby = "more-detail-hint" })
             </div>
 
-            <div class="govuk-form-group @(Model.HasInvalidEmailAddressError ? "govuk-form-group--error" : "")">
-                <h2 class="govuk-label-wrapper" id="email-address-heading">
+            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasInvalidEmailAddressError ? "govuk-form-group--error" : "")">
+                <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="email-address-heading">
                     <label class="govuk-label govuk-label--m" for="EmailAddress">
                         @Model.EmailAddressHeading
                     </label>
