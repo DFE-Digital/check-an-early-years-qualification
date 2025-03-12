@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
+using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Microsoft.Extensions.Options;
 using Notify.Exceptions;
 using Notify.Interfaces;
