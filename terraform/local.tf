@@ -22,8 +22,8 @@ locals {
     "ServiceAccess__Keys__3"                = var.webapp_access_key_2
     "GTM__Tag"                              = var.gtm_tag
     "Clarity__Tag"                          = var.clarity_tag
-    "Notifications__Feedback__TemplateId"   = var.govuk_notify_feedback_template_id
-    "Notifications__Feedback__EmailAddress" = var.govuk_notify_feedback_email_address
+    "Notifications__Feedback__TemplateId"   = var.notifications_feedback_template_id
+    "Notifications__Feedback__EmailAddress" = var.notifications_feedback_email_address
     "Notifications__IsTestEnvironment"      = var.notifications_is_test_environment
   }
 
