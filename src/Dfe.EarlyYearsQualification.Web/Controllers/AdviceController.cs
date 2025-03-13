@@ -123,7 +123,7 @@ public class AdviceController(
         {
             notificationService.SendFeedbackNotification(new FeedbackNotification
                                                          {
-                                                             EmailAddress = model.EmailAddress!,
+                                                             EmailAddress = model.EmailAddress,
                                                              Subject = model.SelectedOption,
                                                              Message = model.AdditionalInformationMessage
                                                          });
