@@ -99,7 +99,7 @@
                 <div id="additional-information-hint" class="govuk-hint">
                     @Model.AdditionalInformationHintText
                 </div>
-                @{ await Html.RenderPartialAsync("Partials/WarningText", Model.AdditionalInformationWarningText); }
+                @{ await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AdditionalInformationWarningText, ReduceMargin = true }); }
                 @if (Model.HasFurtherInformationError)
                 {
                     <p id="additional-information-error" class="govuk-error-message">

@@ -695,6 +695,7 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpConfirmationPage>();
         result!.SuccessMessage.Should().Be("This is the success message");
+        result.BodyHeading.Should().Be("Body heading");
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the body");
     }

@@ -11,6 +11,7 @@
                 @Model.SuccessMessage
             </h1>
         </div>
-        <div class="govuk-body govuk-!-margin-top-7" id="help-confirmation-body">@Html.Raw(Model.Body)</div>
+        <h2 class="govuk-heading-m govuk-!-margin-top-8" id="help-confirmation-body-heading">@Model.BodyHeading</h2>
+        <div class="govuk-body" id="help-confirmation-body">@Html.Raw(Model.Body)</div>
     </div>
 </div>

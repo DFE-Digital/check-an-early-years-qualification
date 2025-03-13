@@ -803,7 +803,7 @@ public class AdviceControllerTests
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                               UserJourneyMockNoOp.Object, mockNotificationService.Object);
 
-        var helpConfirmationPage = new HelpConfirmationPage { SuccessMessage = "Success" };
+        var helpConfirmationPage = new HelpConfirmationPage { SuccessMessage = "Success", BodyHeading = "Body heading"};
         mockContentService.Setup(x => x.GetHelpConfirmationPage())
                           .ReturnsAsync(helpConfirmationPage);
 
@@ -820,6 +820,7 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model!.SuccessMessage.Should().Be(helpConfirmationPage.SuccessMessage);
+        model.BodyHeading.Should().Be(helpConfirmationPage.BodyHeading);
         model.Body.Should().Be("Test html body");
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);

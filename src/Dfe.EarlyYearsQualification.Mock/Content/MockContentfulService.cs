@@ -525,6 +525,7 @@ public class MockContentfulService : IContentService
         return await Task.FromResult(new HelpConfirmationPage
                                      {
                                          SuccessMessage = "This is the success message",
+                                         BodyHeading = "Body heading",
                                          Body = ContentfulContentHelper.Paragraph("This is the body")
                                      });
     }

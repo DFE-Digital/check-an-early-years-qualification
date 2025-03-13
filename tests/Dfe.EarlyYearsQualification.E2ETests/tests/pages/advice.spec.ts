@@ -137,9 +137,11 @@ test.describe('A spec that tests advice pages', () => {
         await page.goto("/advice/help/confirmation");
 
         await isVisible(page, "#success-message");
+        await isVisible(page, "#help-confirmation-body-heading");
         await isVisible(page, "#help-confirmation-body");
         
         await checkText(page, "#success-message" ,"This is the success message");
+        await checkText(page, "#help-confirmation-body-heading" ,"Body heading");
         await checkText(page, "#help-confirmation-body" ,"This is the body");
     });
 });
