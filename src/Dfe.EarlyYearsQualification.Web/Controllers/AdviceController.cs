@@ -181,7 +181,10 @@ public class AdviceController(
     {
         var bodyHtml = await contentParser.ToHtml(advicePage.Body);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(advicePage.FeedbackBanner, contentParser);
-        return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml);
+        var improveServiceBodyHtml = advicePage.UpDownFeedback is not null
+                                         ? await contentParser.ToHtml(advicePage.UpDownFeedback.ImproveServiceContent)
+                                         : null;
+        return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml);
     }
 
     private async Task<QualificationNotOnListPageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
@@ -189,7 +192,10 @@ public class AdviceController(
         var bodyHtml = await contentParser.ToHtml(cannotFindQualificationPage.Body);
         var feedbackBodyHtml =
             await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
-        return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml);
+        var improveServiceBodyHtml = cannotFindQualificationPage.UpDownFeedback is not null
+                                         ? await contentParser.ToHtml(cannotFindQualificationPage.UpDownFeedback.ImproveServiceContent)
+                                         : null;
+        return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml);
     }
     
     private async Task<HelpPageModel> Map(HelpPage helpPage)

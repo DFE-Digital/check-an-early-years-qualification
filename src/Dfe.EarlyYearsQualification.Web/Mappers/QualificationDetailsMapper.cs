@@ -15,7 +15,8 @@ public static class QualificationDetailsMapper
         string checkAnotherQualificationTextHtml,
         string furtherInfoTextHtml,
         string requirementsTextHtml,
-        string? feedbackBodyHtml)
+        string? feedbackBodyHtml,
+        string? improveServiceBodyHtml)
     {
         return new QualificationDetailsModel
                {
@@ -54,7 +55,8 @@ public static class QualificationDetailsMapper
                                  QualificationAwardedDateLabel = content.QualificationAwardedDateLabel,
                                  QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader,
                                  FeedbackBanner = FeedbackBannerMapper.Map(content.FeedbackBanner, feedbackBodyHtml)
-                             }
+                             },
+                   UpDownFeedback = UpDownFeedbackMapper.Map(content.UpDownFeedback, improveServiceBodyHtml)
                };
     }
 }
