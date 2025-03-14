@@ -38,7 +38,7 @@
         </table>
 
         @{
-            await Html.RenderPartialAsync("Partials/WarningText", Model.AnswerDisclaimerText);
+            await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel{ WarningText = Model.AnswerDisclaimerText });
         }
 
         <a id="confirm-answers" href="@Model.GetResultsHref" class="govuk-button" data-module="govuk-button">

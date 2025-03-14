@@ -18,6 +18,7 @@ public class QualificationDetailsMapperTests
                             };
 
         const string feedbackBannerBody = "This is the feedback banner body";
+        const string improveServiceBody = "This is the improve service body";
         const string checkAnotherQualificationText = "Check another qualification text";
         const string furtherInfoText = "Further info text";
         const string requirementsText = "Requirements text";
@@ -54,6 +55,10 @@ public class QualificationDetailsMapperTests
                                                    Heading = "Feedback banner heading",
                                                    Body = ContentfulContentHelper.Paragraph(feedbackBannerBody),
                                                    BannerTitle = "This is the title"
+                                               },
+                              UpDownFeedback = new UpDownFeedback
+                                               {
+                                                   ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
                                                }
                           };
 
@@ -80,7 +85,7 @@ public class QualificationDetailsMapperTests
         var result = QualificationDetailsMapper.Map(qualification, detailsPage, backNavLink,
                                                     additionalRequirementAnswers, dateStarted, dateAwarded,
                                                     checkAnotherQualificationText, furtherInfoText, requirementsText,
-                                                    feedbackBannerBody);
+                                                    feedbackBannerBody, improveServiceBody);
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);
@@ -126,5 +131,7 @@ public class QualificationDetailsMapperTests
               .BeSameAs(detailsPage.QualificationDetailsSummaryHeader);
         result.Content.FeedbackBanner.Should()
               .BeEquivalentTo(detailsPage.FeedbackBanner, options => options.Excluding(x => x.Body));
+        result.UpDownFeedback.Should()
+              .BeEquivalentTo(detailsPage.UpDownFeedback, options => options.Excluding(x => x.ImproveServiceContent));
     }
 }
