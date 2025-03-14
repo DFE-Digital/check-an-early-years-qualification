@@ -32,7 +32,7 @@
                         }
                     </td>
                     <td id="question-@(answer.index + 1)-change" class="govuk-table__cell govuk-!-text-align-right ">
-                        <a href="@answer.value.ChangeAnswerHref" class="govuk-link">@Model.ChangeAnswerText</a>
+                        <a href="@answer.value.ChangeAnswerHref" class="govuk-link">@Model.ChangeAnswerText<span id="question-@(answer.index + 1)-change-hidden" class="govuk-visually-hidden"> @answer.value.Question</span></a>
                     </td>
                 </tr>
             }
