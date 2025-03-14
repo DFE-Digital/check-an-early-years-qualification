@@ -22,10 +22,12 @@ test.describe('A spec used to test the check additional requirements answer page
         await checkText(page, ".govuk-heading-xl", "Test page heading");
         await checkText(page, "#question-1-question", "Test question");
         await checkText(page, "#question-1-answer", "Yes");
-        await checkText(page, "#question-1-change", "Test change answer text");
+        await checkText(page, "#question-1-change", "Test change answer text Test question");
+        await checkText(page, "#question-1-change-hidden", "Test question");
         await checkText(page, "#question-2-question", "Test question 2");
         await checkText(page, "#question-2-answer", "Yes");
-        await checkText(page, "#question-2-change", "Test change answer text");
+        await checkText(page, "#question-2-change", "Test change answer text Test question 2");
+        await checkText(page, "#question-2-change-hidden", "Test question 2"); 
         await exists(page, '#warning-text-container');
         await checkDisclaimer(page, "Test answer disclaimer text");
         await checkText(page, "#confirm-answers", "Test button text");
