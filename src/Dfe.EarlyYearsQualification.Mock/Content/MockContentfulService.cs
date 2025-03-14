@@ -13,6 +13,7 @@ public class MockContentfulService : IContentService
     private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
     private const string QualificationsPath = "/qualifications";
     private const string HomePath = "/";
+    private const string ThereIsAProblem = "There is a problem";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -483,6 +484,52 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public async Task<HelpPage?> GetHelpPage()
+    {
+        return await Task.FromResult(new HelpPage
+                                     {
+                                        Heading = "Help Page Heading",
+                                        PostHeadingContent = ContentfulContentHelper.Paragraph("This is the post heading text"),
+                                        EmailAddressHeading = "Enter your email address (optional)",
+                                        EmailAddressHintText = "If you do not enter your email address we will not be able to contact you in relation to your enquiry",
+                                        ReasonForEnquiryHeading = "Choose the reason of your enquiry",
+                                        ReasonForEnquiryHintText = "Select one option",
+                                        EnquiryReasons =
+                                        [
+                                            new EnquiryOption
+                                            { Label = "Option 1", Value = "Option 1" },
+                                            new EnquiryOption
+                                            { Label = "Option 2", Value = "Option 2" },
+                                            new EnquiryOption
+                                            { Label = "Option 3", Value = "Option 3" }
+                                        ],
+                                        AdditionalInformationHeading = "Provide further information about your enquiry",
+                                        AdditionalInformationHintText = "Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.",
+                                        AdditionalInformationWarningText = "Do not include personal information, for example the name of the qualification holder",
+                                        CtaButtonText = "Send message",
+                                        BackButton = new NavigationLink
+                                                     {
+                                                         DisplayText = "Home",
+                                                         Href = HomePath,
+                                                         OpenInNewTab = false
+                                                     },
+                                        ErrorBannerHeading = ThereIsAProblem,
+                                        InvalidEmailAddressErrorMessage = "Enter a valid email address",
+                                        NoEnquiryOptionSelectedErrorMessage = "Select one option",
+                                        FurtherInformationErrorMessage = "Enter further information about your enquiry"
+                                     });
+    }
+
+    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
+    {
+        return await Task.FromResult(new HelpConfirmationPage
+                                     {
+                                         SuccessMessage = "This is the success message",
+                                         BodyHeading = "Body heading",
+                                         Body = ContentfulContentHelper.Paragraph("This is the body")
+                                     });
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =
@@ -602,7 +649,7 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    ErrorBannerLinkText = "Test error banner link text",
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),
@@ -622,7 +669,7 @@ public class MockContentfulService : IContentService
                                     OpenInNewTab = false
                                 },
                    CtaButtonText = "Continue",
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    AwardedDateIsAfterStartedDateErrorText = "Error- AwardedDateIsAfterStartedDateErrorText",
                    StartedQuestion = CreateDatesQuestionPage("started- "),
                    AwardedQuestion = CreateDatesQuestionPage("awarded- ")
@@ -668,7 +715,7 @@ public class MockContentfulService : IContentService
                                     Href = "/questions/what-level-is-the-qualification",
                                     OpenInNewTab = false
                                 },
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    ErrorBannerLinkText = "Test error banner link text",
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),

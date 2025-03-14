@@ -1088,6 +1088,74 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
+    
+    [TestMethod]
+    public async Task GetHelpPage_ReturnsData()
+    {
+        var data = new HelpPage { Heading = "test heading" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetHelpPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpPage();
+
+        result.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReturnsData()
+    {
+        var data = new HelpConfirmationPage { SuccessMessage = "test message" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpConfirmationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpConfirmationPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpConfirmationPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpConfirmationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpConfirmationPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpConfirmationPage();
+
+        result.Should().BeNull();
+    }
 }
 
 public class ContentfulContentServiceTestsBase<T>
