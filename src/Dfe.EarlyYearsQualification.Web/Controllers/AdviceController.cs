@@ -111,7 +111,7 @@ public class AdviceController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await Map(helpPage);
+        var model = await Map(helpPage, string.Empty);
 
         return View("Help", model);
     }
@@ -137,11 +137,11 @@ public class AdviceController(
             return RedirectToAction("Index", "Error");
         }
         
-        var newModel = await Map(helpPage);
+        var emailAddressErrorMessage = string.IsNullOrEmpty(model.EmailAddress)
+                                            ? helpPage.NoEmailAddressEnteredErrorMessage
+                                            : helpPage.InvalidEmailAddressErrorMessage;
+        var newModel = await Map(helpPage, emailAddressErrorMessage);
         newModel.HasEmailAddressError = string.IsNullOrEmpty(model.EmailAddress) || ModelState.Keys.Any(_ => ModelState["EmailAddress"]?.Errors.Count > 0);
-        newModel.EmailAddressErrorMessage = string.IsNullOrEmpty(model.EmailAddress)
-                                                ? helpPage.NoEmailAddressEnteredErrorMessage
-                                                : helpPage.InvalidEmailAddressErrorMessage;
         newModel.HasFurtherInformationError = ModelState.Keys.Any(_ => ModelState["AdditionalInformationMessage"]?.Errors.Count > 0);
         newModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0);
         newModel.EmailAddress = model.EmailAddress;
@@ -201,10 +201,10 @@ public class AdviceController(
         return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml);
     }
     
-    private async Task<HelpPageModel> Map(HelpPage helpPage)
+    private async Task<HelpPageModel> Map(HelpPage helpPage, string emailAddressErrorMessage)
     {
         var postHeadingContentHtml = await contentParser.ToHtml(helpPage.PostHeadingContent);
-        return HelpPageMapper.Map(helpPage, postHeadingContentHtml);
+        return HelpPageMapper.Map(helpPage, postHeadingContentHtml, emailAddressErrorMessage);
     }
     
     private async Task<HelpConfirmationPageModel> Map(HelpConfirmationPage helpConfirmationPage)

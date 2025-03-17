@@ -5,7 +5,7 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
 public static class HelpPageMapper
 {
-    public static HelpPageModel Map(HelpPage helpPage, string postHeadingContent)
+    public static HelpPageModel Map(HelpPage helpPage, string postHeadingContent, string emailAddressErrorMessage)
     {
         return new HelpPageModel
                {
@@ -22,6 +22,7 @@ public static class HelpPageMapper
                    ReasonForEnquiryHeading = helpPage.ReasonForEnquiryHeading,
                    ErrorBannerHeading = helpPage.ErrorBannerHeading,
                    ReasonForEnquiryHintText = helpPage.ReasonForEnquiryHintText,
+                   EmailAddressErrorMessage = emailAddressErrorMessage,
                    NoEnquiryOptionSelectedErrorMessage = helpPage.NoEnquiryOptionSelectedErrorMessage,
                    EnquiryReasons = MapEnquiryReasons(helpPage.EnquiryReasons)
                };
