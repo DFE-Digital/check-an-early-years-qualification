@@ -519,6 +519,7 @@ public class MockContentfulService : IContentService
                                                          OpenInNewTab = false
                                                      },
                                         ErrorBannerHeading = ThereIsAProblem,
+                                        NoEmailAddressEnteredErrorMessage = "Enter an email address",
                                         InvalidEmailAddressErrorMessage = "Enter a valid email address",
                                         NoEnquiryOptionSelectedErrorMessage = "Select one option",
                                         FurtherInformationErrorMessage = "Enter further information about your enquiry"

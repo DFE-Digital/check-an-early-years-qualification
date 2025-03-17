@@ -32,19 +32,19 @@ public class HelpPageModel
     {
         get
         {
-            return HasFurtherInformationError || HasInvalidEmailAddressError || HasNoEnquiryOptionSelectedError;
+            return HasFurtherInformationError || HasEmailAddressError || HasNoEnquiryOptionSelectedError;
         }
     }
 
     public string ErrorBannerHeading { get; init; } = string.Empty;
 
-    public bool HasInvalidEmailAddressError { get; set; }
+    public bool HasEmailAddressError { get; set; }
 
     public bool HasNoEnquiryOptionSelectedError { get; set; }
 
     public bool HasFurtherInformationError { get; set; }
 
-    public string InvalidEmailAddressErrorMessage { get; init; } = string.Empty;
+    public string EmailAddressErrorMessage { get; set; } = string.Empty;
     
     public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;
     
@@ -54,7 +54,8 @@ public class HelpPageModel
     public string SelectedOption { get; set; } = string.Empty;
 
     [EmailAddress]
-    public string? EmailAddress { get; set; } = string.Empty;
+    [Required]
+    public string EmailAddress { get; set; } = string.Empty;
 
     [Required]
     public string AdditionalInformationMessage { get; set; } = string.Empty;

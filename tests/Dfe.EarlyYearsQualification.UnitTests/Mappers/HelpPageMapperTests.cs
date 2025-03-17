@@ -43,6 +43,7 @@ public class HelpPageMapperTests
                                             OpenInNewTab = false
                                         },
                            ErrorBannerHeading = "There is a problem",
+                           NoEmailAddressEnteredErrorMessage = "Enter an email address",
                            InvalidEmailAddressErrorMessage = "Enter a valid email address",
                            NoEnquiryOptionSelectedErrorMessage = "Select one option",
                            FurtherInformationErrorMessage = "Enter further information about your enquiry"
@@ -76,7 +77,6 @@ public class HelpPageMapperTests
                                                       Href = "/"
                                                   });
         result.ErrorBannerHeading.Should().Be("There is a problem");
-        result.InvalidEmailAddressErrorMessage.Should().Be("Enter a valid email address");
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
         result.AdditionalInformationErrorMessage.Should().Be("Enter further information about your enquiry");
     }

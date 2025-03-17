@@ -21,7 +21,6 @@ public static class HelpPageMapper
                    EmailAddressHintText = helpPage.EmailAddressHintText,
                    ReasonForEnquiryHeading = helpPage.ReasonForEnquiryHeading,
                    ErrorBannerHeading = helpPage.ErrorBannerHeading,
-                   InvalidEmailAddressErrorMessage = helpPage.InvalidEmailAddressErrorMessage,
                    ReasonForEnquiryHintText = helpPage.ReasonForEnquiryHintText,
                    NoEnquiryOptionSelectedErrorMessage = helpPage.NoEnquiryOptionSelectedErrorMessage,
                    EnquiryReasons = MapEnquiryReasons(helpPage.EnquiryReasons)

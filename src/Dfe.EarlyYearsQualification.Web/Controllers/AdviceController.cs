@@ -138,7 +138,10 @@ public class AdviceController(
         }
         
         var newModel = await Map(helpPage);
-        newModel.HasInvalidEmailAddressError = ModelState.Keys.Any(_ => ModelState["EmailAddress"]?.Errors.Count > 0);
+        newModel.HasEmailAddressError = string.IsNullOrEmpty(model.EmailAddress) || ModelState.Keys.Any(_ => ModelState["EmailAddress"]?.Errors.Count > 0);
+        newModel.EmailAddressErrorMessage = string.IsNullOrEmpty(model.EmailAddress)
+                                                ? helpPage.NoEmailAddressEnteredErrorMessage
+                                                : helpPage.InvalidEmailAddressErrorMessage;
         newModel.HasFurtherInformationError = ModelState.Keys.Any(_ => ModelState["AdditionalInformationMessage"]?.Errors.Count > 0);
         newModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0);
         newModel.EmailAddress = model.EmailAddress;

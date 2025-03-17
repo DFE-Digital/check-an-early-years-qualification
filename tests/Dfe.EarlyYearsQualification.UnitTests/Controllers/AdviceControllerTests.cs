@@ -757,7 +757,7 @@ public class AdviceControllerTests
         var model = resultType.Model as HelpPageModel;
         model.Should().NotBeNull();
         model!.HasErrors.Should().BeTrue();
-        model.HasInvalidEmailAddressError.Should().BeTrue();
+        model.HasEmailAddressError.Should().BeTrue();
         model.HasFurtherInformationError.Should().BeTrue();
         model.HasNoEnquiryOptionSelectedError.Should().BeTrue();
     }
