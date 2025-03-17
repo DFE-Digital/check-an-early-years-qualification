@@ -1,0 +1,143 @@
+﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpPageModel
+
+@{
+    ViewData["Title"] = Model.Heading;
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+
+        @if (Model.HasErrors)
+        {
+            var errors = new List<ErrorSummaryLink>();
+            if (Model.HasNoEnquiryOptionSelectedError)
+            {
+                errors.Add(new ErrorSummaryLink
+                           {
+                               ErrorBannerLinkText = Model.NoEnquiryOptionSelectedErrorMessage,
+                               ElementLinkId = Model.EnquiryReasons[0].Value
+                           });
+            }
+
+            if (Model.HasFurtherInformationError)
+            {
+                errors.Add(new ErrorSummaryLink
+                           {
+                               ErrorBannerLinkText = Model.AdditionalInformationErrorMessage,
+                               ElementLinkId = "AdditionalInformationMessage"
+                           });
+            }
+
+            if (Model.HasInvalidEmailAddressError)
+            {
+                errors.Add(new ErrorSummaryLink
+                           {
+                               ErrorBannerLinkText = Model.InvalidEmailAddressErrorMessage,
+                               ElementLinkId = "EmailAddress"
+                           });
+            }
+
+            await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
+                                                                   {
+                                                                       ErrorBannerHeading = Model.ErrorBannerHeading,
+                                                                       ErrorSummaryLinks = errors
+                                                                   });
+        }
+
+        <h1 class="govuk-heading-xl" id="help-page-heading">@Model.Heading</h1>
+        <div class="govuk-body govuk-!-margin-bottom-7" id="post-heading-content">@Html.Raw(Model.PostHeadingContent)</div>
+
+        @using (Html.BeginForm("Help", "Advice", FormMethod.Post, new { id = "help-form" }))
+        {
+            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l mb-0">
+                        <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="reason-for-enquiry-heading">
+                            @Model.ReasonForEnquiryHeading
+                        </h2>
+                        <div id="reason-for-enquiry-heading-hint" class="govuk-hint">
+                            @Model.ReasonForEnquiryHintText
+                        </div>
+                    </legend>
+
+                    @if (Model.HasNoEnquiryOptionSelectedError)
+                    {
+                        <p id="option-error" class="govuk-error-message">
+                            <span
+                                class="govuk-visually-hidden">
+                                Error:
+                            </span>@Model.NoEnquiryOptionSelectedErrorMessage
+                        </p>
+                    }
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @foreach (var option in Model.EnquiryReasons)
+                        {
+                            <div class="govuk-radios__item">
+                                @Html.RadioButtonFor(x => x.SelectedOption, option.Value, new { @class = "govuk-radios__input", id = option.Value })
+                                <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                    @option.Label
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasFurtherInformationError ? "govuk-form-group--error" : "")">
+                <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="additional-information-heading">
+                    <label class="govuk-label govuk-label--m" for="AdditionalInformationMessage">
+                        @Model.AdditionalInformationHeading
+                    </label>
+                </h2>
+                <div id="additional-information-hint" class="govuk-hint">
+                    @Model.AdditionalInformationHintText
+                </div>
+                @{ await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AdditionalInformationWarningText, ReduceMargin = true }); }
+                @if (Model.HasFurtherInformationError)
+                {
+                    <p id="additional-information-error" class="govuk-error-message">
+                        <span
+                            class="govuk-visually-hidden">
+                            Error:
+                        </span>@Model.AdditionalInformationErrorMessage
+                    </p>
+                }
+                @Html.TextAreaFor(x => x.AdditionalInformationMessage, 5, 1, new { @class = "govuk-textarea", aria_describedby = "more-detail-hint" })
+            </div>
+
+            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasInvalidEmailAddressError ? "govuk-form-group--error" : "")">
+                <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="email-address-heading">
+                    <label class="govuk-label govuk-label--m" for="EmailAddress">
+                        @Model.EmailAddressHeading
+                    </label>
+                </h2>
+                <div id="email-address-hint" class="govuk-hint">
+                    @Model.EmailAddressHintText
+                </div>
+                @if (Model.HasInvalidEmailAddressError)
+                {
+                    <p id="email-address-error" class="govuk-error-message">
+                        <span
+                            class="govuk-visually-hidden">
+                            Error:
+                        </span>@Model.InvalidEmailAddressErrorMessage
+                    </p>
+                }
+                @Html.TextBoxFor(x => x.EmailAddress, new { @class = "govuk-input", aria_describedby = "email-address-hint" })
+            </div>
+
+            <div class="govuk-form-group">
+                <button id="help-form-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        }
+    </div>
+</div>

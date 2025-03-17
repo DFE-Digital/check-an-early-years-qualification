@@ -13,6 +13,7 @@ public class MockContentfulService : IContentService
     private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
     private const string QualificationsPath = "/qualifications";
     private const string HomePath = "/";
+    private const string ThereIsAProblem = "There is a problem";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -39,38 +40,38 @@ public class MockContentfulService : IContentService
                {
                    AdvicePages.QualificationsAchievedOutsideTheUk =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved outside the United Kingdom",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath, true)),
                    AdvicePages.QualificationsStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
-                                                            body, WhatLevelIsTheQualificationPath)),
+                                                            body, WhatLevelIsTheQualificationPath, false)),
 
                    AdvicePages.QualificationsAchievedInScotland =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Scotland",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath, true)),
 
                    AdvicePages.QualificationsAchievedInWales =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Wales",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath, true)),
 
                    AdvicePages.QualificationsAchievedInNorthernIreland =>
                        await Task.FromResult(CreateAdvicePage("Qualifications achieved in Northern Ireland",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath, true)),
 
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
-                                                              body, QualificationsPath)),
+                                                              body, QualificationsPath, true)),
 
                    AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
-                                                            body, WhatLevelIsTheQualificationPath)),
+                                                            body, WhatLevelIsTheQualificationPath, false)),
                    AdvicePages.Level7QualificationAfterAug2019 =>
                        await Task.FromResult(CreateAdvicePage("Level 7 qualification after aug 2019",
-                                                              body, WhatLevelIsTheQualificationPath)),
+                                                              body, WhatLevelIsTheQualificationPath, false)),
                    AdvicePages.Help =>
                        await Task.FromResult(CreateAdvicePage("Help",
-                                                              body, HomePath)),
+                                                              body, HomePath, false)),
                    _ => null
                };
     }
@@ -194,7 +195,8 @@ public class MockContentfulService : IContentService
                                          QualificationResultNotFrMessageHeading = "Not full and relevant",
                                          QualificationResultNotFrMessageBody = "Not full and relevant body",
                                          QualificationResultNotFrL3MessageHeading = "Not full and relevant L3",
-                                         QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body"
+                                         QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body",
+                                         UpDownFeedback = GetUpDownFeedback()
                                      });
     }
 
@@ -405,6 +407,8 @@ public class MockContentfulService : IContentService
                                  Body = ContentfulContentHelper.Paragraph("Banner body text")
                              };
 
+        var upDownFeedback = GetUpDownFeedback();
+
         return (level switch
                 {
                     3 => Task.FromResult(new CannotFindQualificationPage
@@ -414,7 +418,8 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-14",
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
-                                             FeedbackBanner = feedbackBanner
+                                             FeedbackBanner = feedbackBanner,
+                                             UpDownFeedback = upDownFeedback
                                          }),
                     4 => Task.FromResult(new CannotFindQualificationPage
                                          {
@@ -423,7 +428,8 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-19",
                                              ToWhichYear = string.Empty,
                                              BackButton = backButton,
-                                             FeedbackBanner = feedbackBanner
+                                             FeedbackBanner = feedbackBanner,
+                                             UpDownFeedback = upDownFeedback
                                          }),
                     _ => Task.FromResult<CannotFindQualificationPage>(null!)
                 })!;
@@ -480,6 +486,52 @@ public class MockContentfulService : IContentService
                                          QualificationStartedText = "Started in",
                                          AnyAwardingOrganisationText = "Various awarding organisations",
                                          AnyLevelText = "Any level"
+                                     });
+    }
+
+    public async Task<HelpPage?> GetHelpPage()
+    {
+        return await Task.FromResult(new HelpPage
+                                     {
+                                        Heading = "Help Page Heading",
+                                        PostHeadingContent = ContentfulContentHelper.Paragraph("This is the post heading text"),
+                                        EmailAddressHeading = "Enter your email address (optional)",
+                                        EmailAddressHintText = "If you do not enter your email address we will not be able to contact you in relation to your enquiry",
+                                        ReasonForEnquiryHeading = "Choose the reason of your enquiry",
+                                        ReasonForEnquiryHintText = "Select one option",
+                                        EnquiryReasons =
+                                        [
+                                            new EnquiryOption
+                                            { Label = "Option 1", Value = "Option 1" },
+                                            new EnquiryOption
+                                            { Label = "Option 2", Value = "Option 2" },
+                                            new EnquiryOption
+                                            { Label = "Option 3", Value = "Option 3" }
+                                        ],
+                                        AdditionalInformationHeading = "Provide further information about your enquiry",
+                                        AdditionalInformationHintText = "Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.",
+                                        AdditionalInformationWarningText = "Do not include personal information, for example the name of the qualification holder",
+                                        CtaButtonText = "Send message",
+                                        BackButton = new NavigationLink
+                                                     {
+                                                         DisplayText = "Home",
+                                                         Href = HomePath,
+                                                         OpenInNewTab = false
+                                                     },
+                                        ErrorBannerHeading = ThereIsAProblem,
+                                        InvalidEmailAddressErrorMessage = "Enter a valid email address",
+                                        NoEnquiryOptionSelectedErrorMessage = "Select one option",
+                                        FurtherInformationErrorMessage = "Enter further information about your enquiry"
+                                     });
+    }
+
+    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
+    {
+        return await Task.FromResult(new HelpConfirmationPage
+                                     {
+                                         SuccessMessage = "This is the success message",
+                                         BodyHeading = "Body heading",
+                                         Body = ContentfulContentHelper.Paragraph("This is the body")
                                      });
     }
 
@@ -602,7 +654,7 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    ErrorBannerLinkText = "Test error banner link text",
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),
@@ -622,7 +674,7 @@ public class MockContentfulService : IContentService
                                     OpenInNewTab = false
                                 },
                    CtaButtonText = "Continue",
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    AwardedDateIsAfterStartedDateErrorText = "Error- AwardedDateIsAfterStartedDateErrorText",
                    StartedQuestion = CreateDatesQuestionPage("started- "),
                    AwardedQuestion = CreateDatesQuestionPage("awarded- ")
@@ -668,7 +720,7 @@ public class MockContentfulService : IContentService
                                     Href = "/questions/what-level-is-the-qualification",
                                     OpenInNewTab = false
                                 },
-                   ErrorBannerHeading = "There is a problem",
+                   ErrorBannerHeading = ThereIsAProblem,
                    ErrorBannerLinkText = "Test error banner link text",
                    AdditionalInformationBody =
                        ContentfulContentHelper.Paragraph("This is the additional information body"),
@@ -676,7 +728,7 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static AdvicePage CreateAdvicePage(string heading, Document body, string backButtonUrl)
+    private static AdvicePage CreateAdvicePage(string heading, Document body, string backButtonUrl, bool hasUpDownFeedback)
     {
         return new AdvicePage
                {
@@ -693,7 +745,25 @@ public class MockContentfulService : IContentService
                                         Heading = "Feedback heading",
                                         Body = ContentfulContentHelper.Paragraph("This is the body text"),
                                         BannerTitle = "Test banner title"
-                                    }
+                                    },
+                   UpDownFeedback = hasUpDownFeedback ? GetUpDownFeedback() : null
+               };
+    }
+
+    private static UpDownFeedback GetUpDownFeedback()
+    {
+        return new UpDownFeedback
+               {
+                   Question = "Did you get everything you needed today?",
+                   YesButtonText = "Yes",
+                   YesButtonSubText = "this service is useful",
+                   NoButtonText = "No",
+                   NoButtonSubText = " this service is not useful",
+                   HelpButtonText = "Get help with this page",
+                   HelpButtonLink = "/advice/help",
+                   CancelButtonText = "Cancel",
+                   UsefulResponse = "Thank you for your feedback",
+                   ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
                };
     }
 }

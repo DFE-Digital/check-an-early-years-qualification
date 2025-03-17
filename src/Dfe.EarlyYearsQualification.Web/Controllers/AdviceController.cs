@@ -6,6 +6,7 @@ using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -17,7 +18,8 @@ public class AdviceController(
     ILogger<AdviceController> logger,
     IContentService contentService,
     IGovUkContentParser contentParser,
-    IUserJourneyCookieService userJourneyCookieService)
+    IUserJourneyCookieService userJourneyCookieService,
+    INotificationService notificationService)
     : ServiceController
 {
     public override void OnActionExecuting(ActionExecutingContext context)
@@ -102,7 +104,63 @@ public class AdviceController(
     [HttpGet("help")]
     public async Task<IActionResult> Help()
     {
-        return await GetView(AdvicePages.Help);
+        var helpPage = await contentService.GetHelpPage();
+        if (helpPage is null)
+        {
+            logger.LogError("No content for the help page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var model = await Map(helpPage);
+
+        return View("Help", model);
+    }
+    
+    [HttpPost("help")]
+    public async Task<IActionResult> Help(HelpPageModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            notificationService.SendFeedbackNotification(new FeedbackNotification
+                                                         {
+                                                             EmailAddress = model.EmailAddress,
+                                                             Subject = model.SelectedOption,
+                                                             Message = model.AdditionalInformationMessage
+                                                         });
+            return RedirectToAction("HelpConfirmation");
+        }
+        
+        var helpPage = await contentService.GetHelpPage();
+        if (helpPage is null)
+        {
+            logger.LogError("No content for the help page");
+            return RedirectToAction("Index", "Error");
+        }
+        
+        var newModel = await Map(helpPage);
+        newModel.HasInvalidEmailAddressError = ModelState.Keys.Any(_ => ModelState["EmailAddress"]?.Errors.Count > 0);
+        newModel.HasFurtherInformationError = ModelState.Keys.Any(_ => ModelState["AdditionalInformationMessage"]?.Errors.Count > 0);
+        newModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0);
+        newModel.EmailAddress = model.EmailAddress;
+        newModel.SelectedOption = model.SelectedOption;
+        newModel.AdditionalInformationMessage = model.AdditionalInformationMessage;
+
+        return View("Help", newModel);
+    }
+    
+    [HttpGet("help/confirmation")]
+    public async Task<IActionResult> HelpConfirmation()
+    {
+        var helpConfirmationPage = await contentService.GetHelpConfirmationPage();
+        if (helpConfirmationPage is null)
+        {
+            logger.LogError("No content for the help confirmation page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var model = await Map(helpConfirmationPage);
+
+        return View("HelpConfirmation", model);
     }
 
     private async Task<IActionResult> GetView(string advicePageId)
@@ -123,7 +181,10 @@ public class AdviceController(
     {
         var bodyHtml = await contentParser.ToHtml(advicePage.Body);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(advicePage.FeedbackBanner, contentParser);
-        return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml);
+        var improveServiceBodyHtml = advicePage.UpDownFeedback is not null
+                                         ? await contentParser.ToHtml(advicePage.UpDownFeedback.ImproveServiceContent)
+                                         : null;
+        return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml);
     }
 
     private async Task<QualificationNotOnListPageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
@@ -131,6 +192,26 @@ public class AdviceController(
         var bodyHtml = await contentParser.ToHtml(cannotFindQualificationPage.Body);
         var feedbackBodyHtml =
             await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
-        return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml);
+        var improveServiceBodyHtml = cannotFindQualificationPage.UpDownFeedback is not null
+                                         ? await contentParser.ToHtml(cannotFindQualificationPage.UpDownFeedback.ImproveServiceContent)
+                                         : null;
+        return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml);
+    }
+    
+    private async Task<HelpPageModel> Map(HelpPage helpPage)
+    {
+        var postHeadingContentHtml = await contentParser.ToHtml(helpPage.PostHeadingContent);
+        return HelpPageMapper.Map(helpPage, postHeadingContentHtml);
+    }
+    
+    private async Task<HelpConfirmationPageModel> Map(HelpConfirmationPage helpConfirmationPage)
+    {
+        var bodyHtml = await contentParser.ToHtml(helpConfirmationPage.Body);
+        return new HelpConfirmationPageModel
+               {
+                   SuccessMessage = helpConfirmationPage.SuccessMessage,
+                   BodyHeading = helpConfirmationPage.BodyHeading,
+                   Body = bodyHtml
+               };
     }
 }

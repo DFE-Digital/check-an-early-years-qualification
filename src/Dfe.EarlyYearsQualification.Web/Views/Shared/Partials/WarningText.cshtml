@@ -1,6 +1,6 @@
-@model string
+@model Dfe.EarlyYearsQualification.Web.Models.WarningTextModel
 
-<div class="govuk-warning-text" id="warning-text-container">
+<div class="govuk-warning-text @(Model.ReduceMargin ? "govuk-!-margin-bottom-3" : "")" id="warning-text-container">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text"><span class="govuk-visually-hidden">Warning:</span>@Model</strong>
+    <strong class="govuk-warning-text__text"><span class="govuk-visually-hidden">Warning:</span>@Model.WarningText</strong>
 </div>

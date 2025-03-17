@@ -102,7 +102,7 @@
 
             @if (Model.ShowAnswerDisclaimerText)
             {
-                await Html.RenderPartialAsync("Partials/WarningText", Model.AnswerDisclaimerText);
+                await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel{ WarningText = Model.AnswerDisclaimerText });
             }
 
             <div class="govuk-form-group">

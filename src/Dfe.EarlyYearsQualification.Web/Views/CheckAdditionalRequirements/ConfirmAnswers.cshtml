@@ -30,14 +30,15 @@
                     </td>
                     <td id="question-@(answer.index + 1)-change" class="govuk-table__cell govuk-!-text-align-right ">
                         <a href="@(Model.ChangeQuestionHref + (answer.index + 1))"
-                           class="govuk-link">@Model.ChangeAnswerText</a>
+                           class="govuk-link">@Model.ChangeAnswerText <span
+                               id="question-@(answer.index + 1)-change-hidden" class="govuk-visually-hidden">@answer.value.Key</span></a>
                     </td>
                 </tr>
             }
         </table>
 
         @{
-            await Html.RenderPartialAsync("Partials/WarningText", Model.AnswerDisclaimerText);
+            await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel{ WarningText = Model.AnswerDisclaimerText });
         }
 
         <a id="confirm-answers" href="@Model.GetResultsHref" class="govuk-button" data-module="govuk-button">
