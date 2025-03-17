@@ -35,11 +35,11 @@
                            });
             }
 
-            if (Model.HasInvalidEmailAddressError)
+            if (Model.HasEmailAddressError)
             {
                 errors.Add(new ErrorSummaryLink
                            {
-                               ErrorBannerLinkText = Model.InvalidEmailAddressErrorMessage,
+                               ErrorBannerLinkText = Model.EmailAddressErrorMessage,
                                ElementLinkId = "EmailAddress"
                            });
             }
@@ -112,7 +112,7 @@
                 @Html.TextAreaFor(x => x.AdditionalInformationMessage, 5, 1, new { @class = "govuk-textarea", aria_describedby = "more-detail-hint" })
             </div>
 
-            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasInvalidEmailAddressError ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasEmailAddressError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="email-address-heading">
                     <label class="govuk-label govuk-label--m" for="EmailAddress">
                         @Model.EmailAddressHeading
@@ -121,13 +121,13 @@
                 <div id="email-address-hint" class="govuk-hint">
                     @Model.EmailAddressHintText
                 </div>
-                @if (Model.HasInvalidEmailAddressError)
+                @if (Model.HasEmailAddressError)
                 {
                     <p id="email-address-error" class="govuk-error-message">
-                        <span
-                            class="govuk-visually-hidden">
-                            Error:
-                        </span>@Model.InvalidEmailAddressErrorMessage
+                            <span
+                                class="govuk-visually-hidden">
+                                Error:
+                            </span>@Model.EmailAddressErrorMessage
                     </p>
                 }
                 @Html.TextBoxFor(x => x.EmailAddress, new { @class = "govuk-input", aria_describedby = "email-address-hint" })

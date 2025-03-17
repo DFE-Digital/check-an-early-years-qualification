@@ -30,6 +30,8 @@ public class HelpPage
 
     public string ErrorBannerHeading { get; init; } = string.Empty;
 
+    public string NoEmailAddressEnteredErrorMessage { get; init; } = string.Empty;
+
     public string InvalidEmailAddressErrorMessage { get; init; } = string.Empty;
     
     public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;

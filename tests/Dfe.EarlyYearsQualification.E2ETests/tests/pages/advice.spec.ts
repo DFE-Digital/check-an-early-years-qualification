@@ -117,19 +117,34 @@ test.describe('A spec that tests advice pages', () => {
         await doesNotExist(page, ".govuk-error-summary");
         await doesNotExist(page, "#option-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await inputText(page, "#EmailAddress", "test");
         await page.click("#help-form-submit");
         await checkUrl(page, "/advice/help");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
         await checkText(page, ".govuk-error-summary__list > li", "Select one option", 0);
         await checkText(page, ".govuk-error-summary__list > li", "Enter further information about your enquiry", 1);
-        await checkText(page, ".govuk-error-summary__list > li", "Enter a valid email address", 2);
+        await checkText(page, ".govuk-error-summary__list > li", "Enter an email address", 2);
         await isVisible(page, "#option-error");
         await isVisible(page, "#additional-information-error");
         await isVisible(page, "#email-address-error");
         await checkTextContains(page, "#option-error", "Select one option");
         await checkTextContains(page, "#additional-information-error", "Enter further information about your enquiry");
+        await checkTextContains(page, "#email-address-error", "Enter an email address");
+    });
+
+    test("shows an error message when a user doesnt enter a valid email address on help page", async ({page}) => {
+        await page.goto("/advice/help");
+
+        await doesNotExist(page, ".govuk-error-summary");
+        await doesNotExist(page, "#option-error");
+        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+        await inputText(page, "#EmailAddress", "test");
+        await page.click("#help-form-submit");
+        await checkUrl(page, "/advice/help");
+        await isVisible(page, ".govuk-error-summary");
+        await checkText(page, ".govuk-error-summary__title", "There is a problem");
+        await checkText(page, ".govuk-error-summary__list > li", "Enter a valid email address", 2);
+        await isVisible(page, "#email-address-error");
         await checkTextContains(page, "#email-address-error", "Enter a valid email address");
     });
 

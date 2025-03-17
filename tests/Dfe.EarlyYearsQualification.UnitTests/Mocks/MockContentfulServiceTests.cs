@@ -690,6 +690,7 @@ public class MockContentfulServiceTests
                                                       Href = "/"
                                                   });
         result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.NoEmailAddressEnteredErrorMessage.Should().Be("Enter an email address");
         result.InvalidEmailAddressErrorMessage.Should().Be("Enter a valid email address");
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
         result.FurtherInformationErrorMessage.Should().Be("Enter further information about your enquiry");

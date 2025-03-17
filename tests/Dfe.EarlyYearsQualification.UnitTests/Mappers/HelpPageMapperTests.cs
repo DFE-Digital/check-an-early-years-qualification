@@ -12,6 +12,7 @@ public class HelpPageMapperTests
     public void Map_MapsToModel()
     {
         const string postHeadingContent = "This is the post heading text";
+        const string emailAddressErrorMessage = "Email address error";
         var helpPage = new HelpPage
                        {
                            Heading = "Help Page Heading",
@@ -43,12 +44,13 @@ public class HelpPageMapperTests
                                             OpenInNewTab = false
                                         },
                            ErrorBannerHeading = "There is a problem",
+                           NoEmailAddressEnteredErrorMessage = "Enter an email address",
                            InvalidEmailAddressErrorMessage = "Enter a valid email address",
                            NoEnquiryOptionSelectedErrorMessage = "Select one option",
                            FurtherInformationErrorMessage = "Enter further information about your enquiry"
                        };
 
-        var result = HelpPageMapper.Map(helpPage, postHeadingContent);
+        var result = HelpPageMapper.Map(helpPage, postHeadingContent, emailAddressErrorMessage);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpPageModel>();
         result!.Heading.Should().Be("Help Page Heading");
@@ -76,7 +78,7 @@ public class HelpPageMapperTests
                                                       Href = "/"
                                                   });
         result.ErrorBannerHeading.Should().Be("There is a problem");
-        result.InvalidEmailAddressErrorMessage.Should().Be("Enter a valid email address");
+        result.EmailAddressErrorMessage.Should().Be(emailAddressErrorMessage);
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
         result.AdditionalInformationErrorMessage.Should().Be("Enter further information about your enquiry");
     }
