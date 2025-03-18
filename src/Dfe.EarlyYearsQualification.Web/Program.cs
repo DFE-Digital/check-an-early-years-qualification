@@ -15,6 +15,8 @@ using Dfe.EarlyYearsQualification.Web.Services.Contentful;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
+using Dfe.EarlyYearsQualification.Web.Services.Notifications;
+using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -24,6 +26,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Notify.Client;
+using Notify.Interfaces;
 using OwaspHeaders.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -126,6 +130,21 @@ builder.Services.AddTransient<TrackingConfiguration>();
 builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddSingleton<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
+
+if (useMockContentful)
+{
+    builder.Services.AddSingleton<INotificationService, MockNotificationService>();
+}
+else
+{
+    builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection("Notifications"));
+    builder.Services.AddSingleton<INotificationClient, NotificationClient>(_ =>
+                                                                           {
+                                                                               var options = builder.Configuration.GetSection("Notifications").Get<NotificationOptions>();
+                                                                               return new NotificationClient(options!.ApiKey);
+                                                                           });
+    builder.Services.AddSingleton<INotificationService, GovUkNotifyService>();
+}
 
 bool accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off

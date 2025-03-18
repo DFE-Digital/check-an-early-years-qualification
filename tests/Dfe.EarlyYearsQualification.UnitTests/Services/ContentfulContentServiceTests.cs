@@ -579,7 +579,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                   FurtherInfoText = _testRichText,
                                   LevelLabel = "Test level label",
                                   MainHeader = "Test main header",
-                                  QualificationNumberLabel = "Test qualification number label"
+                                  QualificationNumberLabel = "Test qualification number label",
+                                  UpDownFeedback = new UpDownFeedback()
                               }
                           ]
                       };
@@ -1009,7 +1010,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                         {
                                             Heading = "Test heading sep 15 to aug 19",
                                             FromWhichYear = "Sep-15",
-                                            ToWhichYear = "Aug-19"
+                                            ToWhichYear = "Aug-19",
+                                            UpDownFeedback = new UpDownFeedback()
                                         }
                                     ]
                                 });
@@ -1086,6 +1088,74 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
 
         var result = await service.GetCheckYourAnswersPage();
+
+        result.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetHelpPage_ReturnsData()
+    {
+        var data = new HelpPage { Heading = "test heading" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetHelpPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpPage();
+
+        result.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReturnsData()
+    {
+        var data = new HelpConfirmationPage { SuccessMessage = "test message" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpConfirmationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpConfirmationPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpConfirmationPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpConfirmationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpConfirmationPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object);
+
+        var result = await service.GetHelpConfirmationPage();
 
         result.Should().BeNull();
     }

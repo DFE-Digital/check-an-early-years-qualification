@@ -15,12 +15,27 @@ import {
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
     checkDetailsPage,
-    checkEmptyValue
+    checkEmptyValue,
+    inputText,
+    isVisible
 } from '../shared/playwrightWrapper';
 
 test.describe('A spec used to test the various routes through the journey', () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
+    });
+
+    test("should redirect user to the help confirmation page when form is submitted on the help page", async ({page}) => {
+        await page.goto("/advice/help");
+
+        await page.click("#Option\\ 1");
+        await inputText(page, "#EmailAddress", "test@test.com");
+        await inputText(page, "#AdditionalInformationMessage", "This is the message");
+        await page.click("#help-form-submit");
+        
+        await checkUrl(page, "/advice/help/confirmation");
+        await isVisible(page, "#success-message");
+        await isVisible(page, "#help-confirmation-body");
     });
 
     test("should redirect the user when they select qualification was awarded outside the UK", async ({page}) => {

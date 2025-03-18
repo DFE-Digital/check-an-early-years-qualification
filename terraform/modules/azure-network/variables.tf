@@ -92,3 +92,8 @@ variable "contentful_space_id" {
   description = "Contentful space ID"
   type        = string
 }
+
+variable "govuk_notify_api_key" {
+  description = "GovUK Notify API Key"
+  type        = string
+}

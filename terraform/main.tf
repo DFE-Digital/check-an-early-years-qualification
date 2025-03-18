@@ -67,6 +67,7 @@ module "network" {
   contentful_delivery_api_key               = var.contentful_delivery_api_key
   contentful_preview_api_key                = var.contentful_preview_api_key
   contentful_space_id                       = var.contentful_space_id
+  govuk_notify_api_key                      = var.govuk_notify_api_key
 }
 
 # Create storage account for web app

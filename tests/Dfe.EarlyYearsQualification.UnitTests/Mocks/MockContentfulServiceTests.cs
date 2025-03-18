@@ -30,6 +30,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -43,6 +44,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().BeNull();
     }
 
     [TestMethod]
@@ -56,6 +58,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().Be("Qualifications achieved in Scotland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -69,6 +72,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().Be("Qualifications achieved in Wales");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -82,6 +86,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().Be("Qualifications achieved in Northern Ireland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -95,6 +100,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().Be("Qualification not on the list");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -109,6 +115,7 @@ public class MockContentfulServiceTests
         result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().BeNull();
     }
 
     [TestMethod]
@@ -122,8 +129,9 @@ public class MockContentfulServiceTests
         result!.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetAdvicePage_Help_ReturnsExpectedDetails()
     {
@@ -136,6 +144,7 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Help");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().BeNull();
     }
 
     [TestMethod]
@@ -644,5 +653,60 @@ public class MockContentfulServiceTests
         result.QualificationStartedText.Should().Be("Started in");
         result.AnyAwardingOrganisationText.Should().Be("Various awarding organisations");
         result.AnyLevelText.Should().Be("Any level");
+    }
+    
+    [TestMethod]
+    public async Task GetHelpPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpPage>();
+        result!.Heading.Should().Be("Help Page Heading");
+        result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post heading text");
+        result.EmailAddressHeading.Should().Be("Enter your email address (optional)");
+        result.EmailAddressHintText.Should().Be("If you do not enter your email address we will not be able to contact you in relation to your enquiry");
+        result.ReasonForEnquiryHeading.Should().Be("Choose the reason of your enquiry");
+        result.ReasonForEnquiryHintText.Should().Be("Select one option");
+        result.EnquiryReasons.Should().NotBeNull();
+        result.EnquiryReasons.Count.Should().Be(3);
+        result.EnquiryReasons[0].Label.Should().Be("Option 1");
+        result.EnquiryReasons[0].Value.Should().Be("Option 1");
+        result.EnquiryReasons[1].Label.Should().Be("Option 2");
+        result.EnquiryReasons[1].Value.Should().Be("Option 2");
+        result.EnquiryReasons[2].Label.Should().Be("Option 3");
+        result.EnquiryReasons[2].Value.Should().Be("Option 3");
+        result.AdditionalInformationHeading.Should().Be("Provide further information about your enquiry");
+        result.AdditionalInformationHintText.Should().Be("Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.");
+        result.AdditionalInformationWarningText.Should().Be("Do not include personal information, for example the name of the qualification holder");
+        result.CtaButtonText.Should().Be("Send message");
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "Home",
+                                                      OpenInNewTab = false,
+                                                      Href = "/"
+                                                  });
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.NoEmailAddressEnteredErrorMessage.Should().Be("Enter an email address");
+        result.InvalidEmailAddressErrorMessage.Should().Be("Enter a valid email address");
+        result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
+        result.FurtherInformationErrorMessage.Should().Be("Enter further information about your enquiry");
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpConfirmationPage();
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpConfirmationPage>();
+        result!.SuccessMessage.Should().Be("This is the success message");
+        result.BodyHeading.Should().Be("Body heading");
+        result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the body");
     }
 }
