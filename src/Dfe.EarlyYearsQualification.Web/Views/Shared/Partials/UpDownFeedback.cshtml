@@ -45,19 +45,14 @@
 
     <div id="ud-improve-service"
          class="ud-feedback__form ud-feedback__form--email ud-feedback__js-show">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <div id="ud-improve-service-body">
-                    @Html.Raw(Model.ImproveServiceBody)
-                </div>
-                @if (TrackingConfiguration.UseCookies)
-                {
-                    <button id="ud-cancel" class="govuk-button govuk-button--secondary" aria-expanded="true" hidden>
-                        @Model.CancelButtonText
-                    </button>
-                }
-            </div>
+        <div id="ud-improve-service-body">
+            @Html.Raw(Model.ImproveServiceBody)
         </div>
+        @if (TrackingConfiguration.UseCookies)
+        {
+            <button id="ud-cancel" class="govuk-button govuk-button--secondary" aria-expanded="true" hidden>
+                @Model.CancelButtonText
+            </button>
+        }
     </div>
-
 </div>
