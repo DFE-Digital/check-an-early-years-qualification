@@ -42,7 +42,3 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
     is_manual_connection           = false
   }
 }
-
-output "redis_cache_id" {
-  value = azurerm_redis_cache.cache.id
-}
