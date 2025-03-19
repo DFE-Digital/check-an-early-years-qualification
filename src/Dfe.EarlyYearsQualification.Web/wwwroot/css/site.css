@@ -487,3 +487,7 @@ body {
 .dont-float {
     float: none;
 }
+
+#qualification-result {
+    padding: 0;
+}

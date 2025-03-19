@@ -94,7 +94,7 @@
         </dl>
     </div>
     <div class="govuk-grid-column-full govuk-!-static-margin-top-6 dont-float">
-        <div class="govuk-grid-column-two-thirds-from-desktop dont-float">
+        <div id="qualification-result" class="govuk-grid-column-two-thirds-from-desktop dont-float">
             @{ await Html.RenderPartialAsync("Partials/QualificationResult", new QualificationResultModel
                                                                              {
                                                                                  Heading = Model.Content.QualificationResultHeading,
