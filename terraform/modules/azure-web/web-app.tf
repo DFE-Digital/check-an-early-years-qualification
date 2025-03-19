@@ -475,3 +475,12 @@ resource "azurerm_app_service_certificate_binding" "webapp_service_gov_uk_custom
   certificate_id      = azurerm_app_service_certificate.webapp_service_gov_uk_custom_domain_cert[0].id
   ssl_state           = "SniEnabled"
 }
+
+
+resource "azure_redis_cache_access_policy_assignment" "web_app_contrib" {
+  name               = "web-app-redis-contributor"
+  redis_cache_id     = var.azurerm_redis_cache_id
+  access_policy_name = "Data Contributor"
+  object_id          = azurerm_linux_web_app.webapp.identity.object_id
+  object_id_alias    = "ServicePrincipal"
+}

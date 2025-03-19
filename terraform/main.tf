@@ -82,6 +82,18 @@ module "storage" {
   tags                        = local.common_tags
 }
 
+# Create Redis cache
+module "cache" {
+  source = "./modules/azure-cache"
+
+  environment          = var.environment
+  location             = var.azure_region
+  resource_group       = azurerm_resource_group.rg.name
+  resource_name_prefix = var.resource_name_prefix
+  webapp_subnet_id     = module.network.webapp_subnet_id
+  tags                 = local.common_tags
+}
+
 # Create web application resources
 module "webapp" {
   source = "./modules/azure-web"
