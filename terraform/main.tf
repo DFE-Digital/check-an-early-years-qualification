@@ -83,16 +83,16 @@ module "storage" {
 }
 
 # Create Redis cache
-#module "cache" {
-#  source = "./modules/azure-cache"
+module "cache" {
+  source = "./modules/azure-cache"
 
-#  environment          = var.environment
-#  location             = var.azure_region
-#  resource_group       = azurerm_resource_group.rg.name
-#  resource_name_prefix = var.resource_name_prefix
-#  webapp_subnet_id     = module.network.webapp_subnet_id
-#  tags                 = local.common_tags
-#}
+  environment          = var.environment
+  location             = var.azure_region
+  resource_group       = azurerm_resource_group.rg.name
+  resource_name_prefix = var.resource_name_prefix
+  webapp_subnet_id     = module.network.webapp_subnet_id
+  tags                 = local.common_tags
+}
 
 # Create web application resources
 module "webapp" {
@@ -129,6 +129,7 @@ module "webapp" {
   kv_cert_secret_id                                     = module.network.kv_cert_secret_id
   kv_service_gov_uk_cert_secret_id                      = module.network.kv_service_gov_uk_cert_secret_id
   kv_mi_id                                              = module.network.kv_mi_id
+  redis_cache_id                                        = module.cache.redis_cache_id
   tags                                                  = local.common_tags
   depends_on                                            = [module.network]
 }

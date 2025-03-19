@@ -162,6 +162,11 @@ variable "kv_mi_id" {
   type        = string
 }
 
+variable "redis_cache_id" {
+  description = "ID of the Redis cache"
+  type        = string
+}
+
 variable "tags" {
   description = "Resource tags"
   type        = map(string)
