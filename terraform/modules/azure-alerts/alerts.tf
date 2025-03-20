@@ -1,9 +1,13 @@
 # Supported Metrics can be found here: https://learn.microsoft.com/en-us/azure/azure-monitor/reference/metrics-index
 
+data "azurerm_resource_group" "resource_group" {
+  name = var.resource_group
+}
+
 # Create the Dev Team action group - Manual step to add / update users in the group
 resource "azurerm_monitor_action_group" "dev_team" {
   name                = "dev-team-action-group"
-  resource_group_name = var.resource_group
+  resource_group_name = data.azurerm_resource_group.resource_group.name
   short_name          = "Dev Team"
   tags                = var.tags
 
@@ -21,7 +25,7 @@ resource "azurerm_monitor_action_group" "dev_team" {
 # Alert for CPU >= 90%
 resource "azurerm_monitor_metric_alert" "cpu_alert" {
   name                = "cpu-alert"
-  resource_group_name = var.resource_group
+  resource_group_name = data.azurerm_resource_group.resource_group.name
   scopes              = [var.app_service_plan_id]
   description         = "Action will be triggered when CPU Percentage is greater than 90%"
   tags                = var.tags
@@ -51,7 +55,7 @@ resource "azurerm_monitor_metric_alert" "cpu_alert" {
 # Alert for Memory >= 90%
 resource "azurerm_monitor_metric_alert" "memory_alert" {
   name                = "memory-alert"
-  resource_group_name = var.resource_group
+  resource_group_name = data.azurerm_resource_group.resource_group.name
   scopes              = [var.app_service_plan_id]
   description         = "Action will be triggered when Memory Percentage is greater than 90%"
   tags                = var.tags
@@ -81,7 +85,7 @@ resource "azurerm_monitor_metric_alert" "memory_alert" {
 # Alert for Http4xx errors Avg >= 10
 resource "azurerm_monitor_metric_alert" "http4xx_errors" {
   name                = "http4xx-alert"
-  resource_group_name = var.resource_group
+  resource_group_name = data.azurerm_resource_group.resource_group.name
   scopes              = [var.app_service_webapp_id]
   description         = "Action will be triggered when Http4xx errors occur"
   tags                = var.tags
@@ -111,7 +115,7 @@ resource "azurerm_monitor_metric_alert" "http4xx_errors" {
 # Alert for Http5xx errors Avg >= 10
 resource "azurerm_monitor_metric_alert" "http5xx_errors" {
   name                = "http5xx-alert"
-  resource_group_name = var.resource_group
+  resource_group_name = data.azurerm_resource_group.resource_group.name
   scopes              = [var.app_service_webapp_id]
   description         = "Action will be triggered when Http5xx errors occur"
   tags                = var.tags
@@ -141,7 +145,8 @@ resource "azurerm_monitor_metric_alert" "http5xx_errors" {
 # Alert for App Service Plan Instance increase
 resource "azurerm_monitor_activity_log_alert" "instance_count_increase" {
   name                = "instance-count-increase-alert"
-  resource_group_name = var.resource_group
+  resource_group_name = data.azurerm_resource_group.resource_group.name
+  location            = data.azurerm_resource_group.resource_group.location
   scopes              = [var.app_service_plan_id]
   description         = "Action will be triggered when the instance count increases"
   tags                = var.tags
@@ -168,7 +173,8 @@ resource "azurerm_monitor_activity_log_alert" "instance_count_increase" {
 # Alert for App Service Plan Instance decrease
 resource "azurerm_monitor_activity_log_alert" "instance_count_decrease" {
   name                = "instance-count-decrease-alert"
-  resource_group_name = var.resource_group
+  resource_group_name = data.azurerm_resource_group.resource_group.name
+  location            = data.azurerm_resource_group.resource_group.location
   scopes              = [var.app_service_plan_id]
   description         = "Action will be triggered when the instance count decreases"
   tags                = var.tags
