@@ -217,20 +217,6 @@ body {
     }
 }
 
-@media (max-width: 40.0525em) {
-    #ud-feedback {
-        margin-right: -15px;
-        margin-left: -15px
-    }
-}
-
-@media (min-width: 40.0625em)and (max-width: 48.0525em) {
-    #ud-feedback {
-        margin-right: -30px;
-        margin-left: -30px
-    }
-}
-
 #ud-feedback [hidden] {
     display: none !important
 }
@@ -471,13 +457,7 @@ body {
 }
 
 #ud-cancel {
-    margin: 0 10px
-}
-
-@media (max-width: 40.0525em) {
-    #ud-cancel {
-        margin: 20px 0 0
-    }
+    margin: 20px 0 0
 }
 
 .govuk-main-wrapper:has(#ud-feedback) {
@@ -486,4 +466,12 @@ body {
 
 .dont-float {
     float: none;
+}
+
+#qualification-result {
+    padding: 0;
+}
+
+#qualification-details-summary{
+    margin-bottom: 30px;
 }
