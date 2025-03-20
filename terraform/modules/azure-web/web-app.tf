@@ -481,6 +481,6 @@ resource "azurerm_redis_cache_access_policy_assignment" "web_app_contrib" {
   name               = "web-app-redis-contributor"
   redis_cache_id     = var.redis_cache_id
   access_policy_name = "Data Contributor"
-  object_id          = azurerm_linux_web_app.webapp.identity[0].object_id
+  object_id          = azurerm_linux_web_app.webapp.identity[0].principal_id
   object_id_alias    = "ServicePrincipal"
 }
