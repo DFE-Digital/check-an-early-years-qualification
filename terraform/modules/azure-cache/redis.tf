@@ -5,17 +5,15 @@ resource "azurerm_redis_cache" "cache" {
   capacity                           = var.environment != "development" ? 0 : 1
   family                             = "C"
   sku_name                           = var.environment != "development" ? "Standard" : "Basic"
+  access_keys_authentication_enabled = false
   non_ssl_port_enabled               = false
   minimum_tls_version                = "1.2"
   public_network_access_enabled      = false
-  access_keys_authentication_enabled = false
 
 
   redis_configuration {
+    authentication_enabled                  = true
     active_directory_authentication_enabled = true
-    maxmemory_reserved                      = 30
-    maxfragmentationmemory_reserved         = 30
-    maxmemory_delta                         = 30
   }
 
 
