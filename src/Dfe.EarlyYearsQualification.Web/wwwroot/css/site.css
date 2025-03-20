@@ -471,3 +471,7 @@ body {
 #qualification-result {
     padding: 0;
 }
+
+#qualification-details-summary{
+    margin-bottom: 30px;
+}
