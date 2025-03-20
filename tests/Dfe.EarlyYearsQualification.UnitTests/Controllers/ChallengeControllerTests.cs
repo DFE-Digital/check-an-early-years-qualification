@@ -499,4 +499,39 @@ public class ChallengeControllerTests
         modelToReturn.ErrorSummaryModel!.ErrorSummaryLinks.First().ErrorBannerLinkText.Should()
                      .Be(content!.IncorrectPasswordText);
     }
+
+    [TestMethod]
+    public async Task Get_WhenSetForPublicAccess_RedirectsToStartPage()
+    {
+        var mockLogger = new Mock<ILogger<ChallengeController>>();
+
+        var mockUrlHelper = new Mock<IUrlHelper>();
+        var contentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+
+        accessKeysHelper.SetupGet(x => x.AllowPublicAccess).Returns(true);
+
+        var controller = new ChallengeController(mockLogger.Object,
+                                                 mockUrlHelper.Object,
+                                                 contentService.Object,
+                                                 mockContentParser.Object,
+                                                 accessKeysHelper.Object);
+
+        controller.ControllerContext = new ControllerContext
+                                       {
+                                           HttpContext = new DefaultHttpContext()
+                                       };
+
+        var result = await controller.Index(new ChallengePageModel
+                                            { RedirectAddress = "/", PasswordValue = "Not A Correct Key" });
+
+        result.Should().BeAssignableTo<RedirectToActionResult>();
+
+        var redirect = result as RedirectToActionResult;
+
+        redirect.Should().NotBeNull();
+        redirect!.ActionName.Should().Be("Index");
+        redirect!.ControllerName.Should().Be("Home");
+    }
 }
