@@ -68,8 +68,12 @@ resource "azurerm_storage_account_network_rules" "sa_network_rules" {
 
 resource "azurerm_storage_container" "data_protection" {
   name                  = "data-protection"
-  storage_account_name  = azurerm_storage_account.sa.name
+  storage_account_id    = azurerm_storage_account.sa.id
   container_access_type = "private"
+
+  lifecycle {
+    ignore_changes = [storage_account_name]
+  }
 
   #checkov:skip=CKV2_AZURE_21:Logging not required
 }
