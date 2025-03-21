@@ -28,7 +28,7 @@ public class ContentfulContentService(
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-        var detailsPageType = ContentTypeLookup[typeof(DetailsPage)];
+        string detailsPageType = ContentTypeLookup[typeof(DetailsPage)];
 
         var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(detailsPageType)
                                                           .Include(2);
@@ -227,7 +227,7 @@ public class ContentfulContentService(
     public async Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(
         int level, int startMonth, int startYear)
     {
-        var cannotFindQualificationPageType = ContentTypeLookup[typeof(CannotFindQualificationPage)];
+        string cannotFindQualificationPageType = ContentTypeLookup[typeof(CannotFindQualificationPage)];
         var queryBuilder = new QueryBuilder<CannotFindQualificationPage>()
                            .ContentTypeIs(cannotFindQualificationPageType)
                            .Include(2)
@@ -300,7 +300,6 @@ public class ContentfulContentService(
         {
             var pageStartDate = GetDate(page.FromWhichYear);
             var pageEndDate = GetDate(page.ToWhichYear);
-
             var result = ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, page);
             if (result is not null)
             {
