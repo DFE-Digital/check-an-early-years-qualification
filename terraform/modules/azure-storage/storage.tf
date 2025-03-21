@@ -73,6 +73,8 @@ resource "azurerm_storage_container" "data_protection" {
 
   lifecycle {
     ignore_changes = [storage_account_name]
+    # ...reports storage_account_name as deprecated, but this ignore_changes block is necessary here.
+    # Without it, the switch from storage_account_name to storage_account_id causes destruction and recreation.
   }
 
   #checkov:skip=CKV2_AZURE_21:Logging not required
