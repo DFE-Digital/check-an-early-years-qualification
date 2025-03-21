@@ -42,4 +42,6 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
       "redisCache"
     ]
   }
+
+  tags = var.tags
 }
