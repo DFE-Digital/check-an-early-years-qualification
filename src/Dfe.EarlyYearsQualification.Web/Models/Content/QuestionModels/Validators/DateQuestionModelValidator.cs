@@ -1,5 +1,4 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Web.Exceptions;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -96,11 +95,8 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
         }
         catch (Exception e)
         {
-            throw new DatesValidationException(e,
-                                               startedQuestion?.SelectedMonth,
-                                               startedQuestion?.SelectedYear,
-                                               awardedQuestion?.SelectedMonth,
-                                               awardedQuestion?.SelectedYear);
+            string message = $"Failed to validate dates (startedMonth:'{startedQuestion?.SelectedMonth}'|startedYear:'{startedQuestion?.SelectedYear}'|awardedMonth:'{awardedQuestion?.SelectedMonth}'|awardedYear:'{awardedQuestion?.SelectedYear}')";
+            throw new ArgumentException(message, e);
         }
     }
 
