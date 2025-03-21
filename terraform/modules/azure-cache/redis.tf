@@ -32,7 +32,7 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
   name                = "${var.resource_name_prefix}-redis-nic"
   location            = var.location
   resource_group_name = var.resource_group
-  subnet_id           = var.webapp_subnet_id
+  subnet_id           = var.cache_subnet_id
 
   private_service_connection {
     name                           = "${var.resource_name_prefix}-redis-con"

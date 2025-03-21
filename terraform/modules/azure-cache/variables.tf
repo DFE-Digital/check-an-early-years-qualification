@@ -18,8 +18,8 @@ variable "resource_name_prefix" {
   type        = string
 }
 
-variable "webapp_subnet_id" {
-  description = "ID of the delegated Subnet for the Web Application"
+variable "cache_subnet_id" {
+  description = "ID of the delegated Subnet for the Redis cache"
   type        = string
 }
 
