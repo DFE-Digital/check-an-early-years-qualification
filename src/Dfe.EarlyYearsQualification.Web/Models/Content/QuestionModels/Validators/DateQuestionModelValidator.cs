@@ -71,25 +71,33 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
     {
         var startedQuestion = model.StartedQuestion;
         var awardedQuestion = model.AwardedQuestion;
-        if (startedQuestion is null || awardedQuestion is null)
-            throw new NullReferenceException("Started question or awarded question is null");
-        var startedValidationResult = IsValid(startedQuestion, questionPage.StartedQuestion!);
-        var awardedValidationResult = IsValid(awardedQuestion, questionPage.AwardedQuestion!);
-
-        if (awardedValidationResult.YearValid &&
-            DisplayAwardedDateBeforeStartDateError(startedQuestion, awardedQuestion))
+        try
         {
-            awardedValidationResult.MonthValid = false;
-            awardedValidationResult.YearValid = false;
-            awardedValidationResult.ErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
-            awardedValidationResult.BannerErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
-        }
+            if (startedQuestion is null || awardedQuestion is null)
+                throw new NullReferenceException("Started question or awarded question is null");
+            var startedValidationResult = IsValid(startedQuestion, questionPage.StartedQuestion!);
+            var awardedValidationResult = IsValid(awardedQuestion, questionPage.AwardedQuestion!);
 
-        return new DatesValidationResult
-               {
-                   StartedValidationResult = startedValidationResult,
-                   AwardedValidationResult = awardedValidationResult
-               };
+            if (awardedValidationResult.YearValid &&
+                DisplayAwardedDateBeforeStartDateError(startedQuestion, awardedQuestion))
+            {
+                awardedValidationResult.MonthValid = false;
+                awardedValidationResult.YearValid = false;
+                awardedValidationResult.ErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
+                awardedValidationResult.BannerErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
+            }
+
+            return new DatesValidationResult
+                   {
+                       StartedValidationResult = startedValidationResult,
+                       AwardedValidationResult = awardedValidationResult
+                   };
+        }
+        catch (Exception e)
+        {
+            string message = $"Failed to validate dates (startedMonth:'{startedQuestion?.SelectedMonth}'|startedYear:'{startedQuestion?.SelectedYear}'|awardedMonth:'{awardedQuestion?.SelectedMonth}'|awardedYear:'{awardedQuestion?.SelectedYear}')";
+            throw new ArgumentException(message, e);
+        }
     }
 
     public bool DisplayAwardedDateBeforeStartDateError(DateQuestionModel startedQuestion,
@@ -103,6 +111,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
         if (startDateYear is null || awardedDateYear is null) return false;
         if (awardedDateYear.Value < startDateYear.Value) return true;
         if (startDateMonth is null || awardedDateMonth is null) return false;
+        if (startDateMonth is < 1 or > 12 || awardedDateMonth is < 1 or > 12) return false;
 
         var startedDate = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
         var awardedDate = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
