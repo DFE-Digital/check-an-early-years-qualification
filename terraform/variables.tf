@@ -201,3 +201,14 @@ variable "notifications_is_test_environment" {
   description = "Flag to indicate if the notification comes from a test environment"
   type        = bool
 }
+
+variable "cache_type" {
+  description = "Cache type (\"Redis\", \"Memory\", or \"None\")"
+  type        = string
+  nullable    = false
+  default     = "None"
+  validation {
+    condition     = contains(["Redis", "Memory", "None"], var.cache_type)
+    error_message = "Invalid cache type. Must be one of: Redis, Memory, None."
+  }
+}

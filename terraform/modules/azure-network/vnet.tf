@@ -47,3 +47,11 @@ resource "azurerm_subnet" "agw_snet" {
 
   #checkov:skip=CKV2_AZURE_31:NSG not required
 }
+
+# Create Subnet for Redis Cache
+resource "azurerm_subnet" "cache_snet" {
+  name                 = "${var.resource_name_prefix}-redis-snet"
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name  = var.resource_group
+  address_prefixes     = ["172.1.0.128/26"]
+}
