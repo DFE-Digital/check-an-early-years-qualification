@@ -274,6 +274,20 @@ public class DateQuestionModelValidatorTests
     [DataRow(1, 2025, null, 2020, true)]
     [DataRow(1, 2025, 12, null, false)]
     [DataRow(1, 2025, 1, 2025, true)]
+    [DataRow(0, 2019, 1, 2025, false)]
+    [DataRow(13, 2019, 1, 2025, false)]
+    [DataRow(1, 2019, 0, 2025, false)]
+    [DataRow(1, 2019, 13, 2025, false)]
+    [DataRow(0, 2019, 0, 2025, false)]
+    [DataRow(0, 2019, 13, 2025, false)]
+    [DataRow(13, 2019, 0, 2025, false)]
+    [DataRow(13, 2019, 13, 2025, false)]
+    [DataRow(0, 2025, 1, 2019, true)]
+    [DataRow(0, 2025, 0, 2019, true)]
+    [DataRow(0, 2025, 13, 2019, true)]
+    [DataRow(13, 2025, 1, 2019, true)]
+    [DataRow(13, 2025, 0, 2019, true)]
+    [DataRow(15, 2025, 15, 2019, true)]
     public void DisplayAwardedDateBeforeStartDateError_GoodDates_ReturnsExpected(
         int? startedMonth, int? startedYear, int? awardedMonth, int? awardedYear, bool expectedResult)
     {
