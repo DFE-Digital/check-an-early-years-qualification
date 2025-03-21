@@ -44,4 +44,12 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
   }
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
 }
