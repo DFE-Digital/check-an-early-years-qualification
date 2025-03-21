@@ -66,6 +66,7 @@ resource "azurerm_linux_web_app" "webapp" {
     "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+    "Cache__Instance"                            = var.redis_cache_name
   }, var.webapp_app_settings)
 
   identity {

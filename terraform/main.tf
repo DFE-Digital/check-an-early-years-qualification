@@ -130,6 +130,7 @@ module "webapp" {
   kv_service_gov_uk_cert_secret_id                      = module.network.kv_service_gov_uk_cert_secret_id
   kv_mi_id                                              = module.network.kv_mi_id
   redis_cache_id                                        = module.cache.redis_cache_id
+  redis_cache_name                                      = module.cache.redis_cache_name
   tags                                                  = local.common_tags
   depends_on                                            = [module.network]
 }
