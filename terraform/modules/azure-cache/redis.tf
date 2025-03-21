@@ -38,6 +38,8 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
     name                           = "${var.resource_name_prefix}-redis-con"
     private_connection_resource_id = azurerm_redis_cache.cache.id
     is_manual_connection           = false
-    subresource_names              = [redisCache]
+    subresource_names = [
+      "redisCache"
+    ]
   }
 }
