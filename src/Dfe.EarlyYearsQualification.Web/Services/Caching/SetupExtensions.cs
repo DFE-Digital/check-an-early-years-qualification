@@ -17,11 +17,11 @@ public static class SetupExtensions
 
         if (cacheType is "Redis")
         {
-            string? instanceName = cacheConfiguration?.GetValue<string>("InstanceName");
+            string? instanceName = cacheConfiguration?.GetValue<string>("Instance");
 
             if (instanceName == null)
             {
-                throw new ConfigurationErrorsException("For Redis cache, Cache.InstanceName must be configured");
+                throw new ConfigurationErrorsException("For Redis cache, Cache.Instance must be configured");
             }
 
             SetupRedisCache(builder, instanceName);
