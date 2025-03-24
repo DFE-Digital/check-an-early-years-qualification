@@ -13,7 +13,7 @@ public static class SetupExtensions
     public static void UseDistributedCache(this WebApplicationBuilder builder,
                                            IConfigurationSection? cacheConfiguration)
     {
-        string cacheType = cacheConfiguration?.GetValue<string>("CacheType") ?? "None";
+        string cacheType = cacheConfiguration?.GetValue<string>("Type") ?? "None";
 
         if (cacheType is "Redis")
         {
