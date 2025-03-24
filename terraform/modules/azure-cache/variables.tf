@@ -18,6 +18,11 @@ variable "resource_name_prefix" {
   type        = string
 }
 
+variable "vnet_id" {
+  description = "ID of the virtual network"
+  type        = string
+}
+
 variable "cache_subnet_id" {
   description = "ID of the delegated Subnet for the Redis cache"
   type        = string

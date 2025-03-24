@@ -90,6 +90,7 @@ module "cache" {
   location             = var.azure_region
   resource_group       = azurerm_resource_group.rg.name
   resource_name_prefix = var.resource_name_prefix
+  vnet_id              = module.network.vnet_id
   cache_subnet_id      = module.network.cache_subnet_id
   tags                 = local.common_tags
 }
