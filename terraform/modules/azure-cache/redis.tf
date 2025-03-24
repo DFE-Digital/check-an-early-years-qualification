@@ -63,7 +63,7 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
 }
 
 resource "azurerm_private_dns_zone" "dns_zone" {
-  name                = "${azurerm_redis_cache.cache}.redis.cache.windows.net"
+  name                = "${azurerm_redis_cache.cache.name}.redis.cache.windows.net"
   resource_group_name = var.resource_group
 }
 
