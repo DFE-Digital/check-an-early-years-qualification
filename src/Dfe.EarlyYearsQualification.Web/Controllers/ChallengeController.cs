@@ -24,6 +24,11 @@ public class ChallengeController(
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public async Task<IActionResult> Index([FromQuery] ChallengePageModel model)
     {
+        if (accessKeysHelper.AllowPublicAccess)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
         if (!ModelState.IsValid)
         {
             logger.LogWarning("Invalid challenge model (get)");
