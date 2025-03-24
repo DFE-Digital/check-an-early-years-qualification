@@ -8,7 +8,7 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers;
 public static class DateQuestionMapper
 {
     public static DateQuestionModel Map(DateQuestionModel model, DateQuestion question,
-                                        string errorBannerLinkText,
+                                        List<BannerError> errorBannerMessages,
                                         string errorMessage,
                                         DateValidationResult? validationResult,
                                         int? selectedMonth,
@@ -22,10 +22,15 @@ public static class DateQuestionMapper
         model.MonthError = !validationResult?.MonthValid ?? false;
         model.YearError = !validationResult?.YearValid ?? false;
         model.ErrorMessage = errorMessage;
-        model.ErrorSummaryLink = new ErrorSummaryLink
-                                 {
-                                     ErrorBannerLinkText = errorBannerLinkText
-                                 };
+        model.ErrorSummaryLinks = [];
+        foreach (var errorBannerMessage in errorBannerMessages)
+        {
+            model.ErrorSummaryLinks.Add(new ErrorSummaryLink
+                                        {
+                                            ErrorBannerLinkText = errorBannerMessage.Message,
+                                            ElementLinkId = errorBannerMessage.FieldId.ToString()
+                                        });
+        }
 
         if (selectedMonth.HasValue && selectedYear.HasValue)
         {

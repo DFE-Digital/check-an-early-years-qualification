@@ -199,8 +199,8 @@ public class DateQuestionModelValidatorTests
         result.YearValid.Should().BeFalse();
         result.ErrorMessages.Should().Contain(questionPage.MonthOutOfBoundsErrorMessage);
         result.ErrorMessages.Should().Contain(questionPage.YearOutOfBoundsErrorMessage);
-        result.BannerErrorMessages.Should().Contain(questionPage.MonthOutOfBoundsErrorLinkText);
-        result.BannerErrorMessages.Should().Contain(questionPage.YearOutOfBoundsErrorLinkText);
+        result.BannerErrorMessages.Select(o=>o.Message).Should().Contain(questionPage.MonthOutOfBoundsErrorLinkText);
+        result.BannerErrorMessages.Select(o=>o.Message).Should().Contain(questionPage.YearOutOfBoundsErrorLinkText);
     }
 
     [TestMethod]
