@@ -43,6 +43,14 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
     ]
   }
 
+  private_dns_zone_group {
+    name = "redis-dns"
+
+    private_dns_zone_ids = [
+      azurerm_private_dns_zone.dns_zone.id
+    ]
+  }
+
   tags = var.tags
 
   lifecycle {
@@ -52,4 +60,18 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
       tags["Service Offering"]
     ]
   }
+}
+
+resource "azurerm_private_dns_zone" "dns_zone" {
+  name                = "${azurerm_redis_cache.cache}.redis.cache.windows.net"
+  resource_group_name = var.resource_group
+}
+
+
+
+resource "azurerm_private_dns_zone_virtual_network_link" "redis_snet" {
+  name                  = "${var.resource_name_prefix}-redis-vnet-link"
+  resource_group_name   = var.resource_group
+  private_dns_zone_name = azurerm_private_dns_zone.dns_zone.name
+  virtual_network_id    = var.cache_subnet_id
 }
