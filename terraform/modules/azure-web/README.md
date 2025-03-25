@@ -28,12 +28,10 @@ No modules.
 | [azurerm_app_service_custom_hostname_binding.webapp_custom_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_custom_hostname_binding) | resource |
 | [azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_custom_hostname_binding) | resource |
 | [azurerm_application_gateway.agw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway) | resource |
-| [azurerm_application_insights.web](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights) | resource |
 | [azurerm_key_vault_access_policy.webapp_kv_app_service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.webapp_kv_app_service_slot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_linux_web_app.webapp](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app) | resource |
 | [azurerm_linux_web_app_slot.webapp_slot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app_slot) | resource |
-| [azurerm_log_analytics_workspace.webapp_logs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) | resource |
 | [azurerm_monitor_autoscale_setting.asp_as](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_autoscale_setting) | resource |
 | [azurerm_monitor_diagnostic_setting.agw_logs_monitor](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
 | [azurerm_monitor_diagnostic_setting.webapp_logs_monitor](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
@@ -51,11 +49,16 @@ No modules.
 | <a name="input_agw_subnet_id"></a> [agw\_subnet\_id](#input\_agw\_subnet\_id) | ID of the Subnet for the App Gateway | `string` | n/a | yes |
 | <a name="input_asp_sku"></a> [asp\_sku](#input\_asp\_sku) | SKU name for the App Service Plan | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | n/a | yes |
+| <a name="input_insights_connection_string"></a> [insights\_connection\_string](#input\_insights\_connection\_string) | App Insights connection string | `string` | n/a | yes |
+| <a name="input_instrumentation_key"></a> [instrumentation\_key](#input\_instrumentation\_key) | App Insights instrumentation key | `string` | n/a | yes |
 | <a name="input_kv_cert_secret_id"></a> [kv\_cert\_secret\_id](#input\_kv\_cert\_secret\_id) | education.gov.uk SSL certificate Secret ID | `string` | n/a | yes |
 | <a name="input_kv_id"></a> [kv\_id](#input\_kv\_id) | ID of the Key Vault | `string` | n/a | yes |
 | <a name="input_kv_mi_id"></a> [kv\_mi\_id](#input\_kv\_mi\_id) | ID of the Managed Identity for the Key Vault | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_cert_secret_id"></a> [kv\_service\_gov\_uk\_cert\_secret\_id](#input\_kv\_service\_gov\_uk\_cert\_secret\_id) | service.gov.uk SSL certificate Secret ID | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Name of the Azure region to deploy resources | `string` | n/a | yes |
+| <a name="input_logs_id"></a> [logs\_id](#input\_logs\_id) | Log Analytics workspace ID | `string` | n/a | yes |
+| <a name="input_redis_cache_id"></a> [redis\_cache\_id](#input\_redis\_cache\_id) | ID of the Redis cache | `string` | n/a | yes |
+| <a name="input_redis_cache_name"></a> [redis\_cache\_name](#input\_redis\_cache\_name) | Name of the Redis cache | `string` | n/a | yes |
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Name of the Azure Resource Group to deploy resources | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(string)` | n/a | yes |
