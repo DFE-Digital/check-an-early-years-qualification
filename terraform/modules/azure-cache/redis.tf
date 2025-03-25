@@ -111,5 +111,5 @@ resource "azurerm_private_dns_a_record" "arecord" {
   resource_group_name = var.resource_group
   zone_name           = azurerm_private_dns_zone.dns_zone.name
   ttl                 = 300
-  records             = [data.azurerm_private_endpoint_connection.private_ip.private_service_connection.private_ip_address]
+  records             = [data.azurerm_private_endpoint_connection.private_ip.private_service_connection.0.private_ip_address]
 }
