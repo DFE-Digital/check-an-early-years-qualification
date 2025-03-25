@@ -38,25 +38,8 @@ resource "azurerm_monitor_diagnostic_setting" "redis_log_monitor" {
 */
 
 resource "azurerm_private_dns_zone" "dns_zone" {
-  name                = "plink.redis.cache.windows.net"
+  name                = "privatelink.redis.cache.windows.net"
   resource_group_name = var.resource_group
-
-  tags = var.tags
-
-  lifecycle {
-    ignore_changes = [
-      tags["Environment"],
-      tags["Product"],
-      tags["Service Offering"]
-    ]
-  }
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "redis_snet" {
-  name                  = "${azurerm_redis_cache.cache.name}-to-${var.vnet_name}"
-  resource_group_name   = var.resource_group
-  virtual_network_id    = var.vnet_id
-  private_dns_zone_name = azurerm_private_dns_zone.dns_zone.name
 
   tags = var.tags
 
@@ -70,10 +53,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "redis_snet" {
 }
 
 resource "azurerm_private_endpoint" "cache_endpoint" {
-  name                = "${var.resource_name_prefix}-redis-nic"
-  location            = var.location
-  resource_group_name = var.resource_group
-  subnet_id           = var.cache_subnet_id
+  name                          = "${var.resource_name_prefix}-redis-cache-nic"
+  location                      = var.location
+  resource_group_name           = var.resource_group
+  subnet_id                     = var.cache_subnet_id
+  custom_network_interface_name = "${var.resource_name_prefix}-redis-cache"
 
   private_service_connection {
     name                           = "${var.resource_name_prefix}-redis-pe"
@@ -85,9 +69,26 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
   }
 
   private_dns_zone_group {
-    name                 = "redis-dns"
+    name                 = "default"
     private_dns_zone_ids = [azurerm_private_dns_zone.dns_zone.id]
   }
+
+  tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "redis_snet" {
+  name                  = "default_vnet"
+  resource_group_name   = var.resource_group
+  virtual_network_id    = var.vnet_id
+  private_dns_zone_name = azurerm_private_dns_zone.dns_zone.name
 
   tags = var.tags
 
