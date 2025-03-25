@@ -26,3 +26,18 @@ resource "azurerm_redis_cache" "redis" {
     ]
   }
 }
+
+# Create diagnostic settings for Redis
+resource "azurerm_monitor_diagnostic_setting" "redis_monitor" {
+  name                       = "${var.resource_name_prefix}-cache-mon"
+  target_resource_id         = azurerm_redis_cache.redis.id
+  log_analytics_workspace_id = var.logs_id
+
+  enabled_log {
+    category = "ConnectedClientList"
+  }
+
+  metric {
+    category = "AllMetrics"
+  }
+}
