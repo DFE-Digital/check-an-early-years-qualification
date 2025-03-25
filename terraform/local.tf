@@ -25,7 +25,6 @@ locals {
     "Notifications__Feedback__TemplateId"   = var.notifications_feedback_template_id
     "Notifications__Feedback__EmailAddress" = var.notifications_feedback_email_address
     "Notifications__IsTestEnvironment"      = var.notifications_is_test_environment
-    "Cache__Type"                           = var.cache_type
   }
 
   webapp_slot_app_settings = {
