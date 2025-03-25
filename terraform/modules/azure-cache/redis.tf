@@ -9,7 +9,7 @@ resource "azurerm_redis_cache" "redis" {
   access_keys_authentication_enabled = false
   non_ssl_port_enabled               = false
   minimum_tls_version                = "1.2"
-  public_network_access_enabled      = true
+  public_network_access_enabled      = false
 
   redis_configuration {
     authentication_enabled                  = true
