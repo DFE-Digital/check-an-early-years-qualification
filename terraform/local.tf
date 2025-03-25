@@ -25,6 +25,7 @@ locals {
     "Notifications__Feedback__TemplateId"   = var.notifications_feedback_template_id
     "Notifications__Feedback__EmailAddress" = var.notifications_feedback_email_address
     "Notifications__IsTestEnvironment"      = var.notifications_is_test_environment
+    "Cache__Type"                           = var.cache_type
   }
 
   webapp_slot_app_settings = {
@@ -39,5 +40,6 @@ locals {
     "ServiceAccess__Keys__1"              = var.webapp_team_access_key
     "ServiceAccess__Keys__2"              = var.webapp_access_key_1
     "ServiceAccess__Keys__3"              = var.webapp_access_key_2
+    "Cache__Type"                         = var.cache_type
   }
 }
