@@ -1,6 +1,6 @@
 output "logs_id" {
   description = "ID of the Log Analytics workspace"
-  value       = azurerm_log_analytics_workspace.log_analytics
+  value       = azurerm_log_analytics_workspace.log_analytics.id
 }
 
 output "insights_instrumentation_key" {
