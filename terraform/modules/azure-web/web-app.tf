@@ -125,8 +125,8 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
   app_settings = merge({
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
   }, var.webapp_slot_app_settings)
 
