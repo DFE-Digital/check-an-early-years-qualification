@@ -107,7 +107,7 @@ data "azurerm_private_endpoint_connection" "private_ip" {
 }
 
 resource "azurerm_private_dns_a_record" "arecord" {
-  name                = "${var.resource_name_prefix}-dns-a"
+  name                = azurerm_redis_cache.cache.name
   resource_group_name = var.resource_group
   zone_name           = azurerm_private_dns_zone.dns_zone.name
   ttl                 = 300
