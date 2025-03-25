@@ -44,7 +44,7 @@ public static class SetupExtensions
 
     private static void SetupRedisCache(WebApplicationBuilder builder, string instanceName)
     {
-        string hostName = $"{instanceName}.privatelink.redis.cache.windows.net";
+        string hostName = $"{instanceName}.redis.cache.windows.net";
 
         var redisDnsEndPoint = new DnsEndPoint(hostName, 6380);
 
