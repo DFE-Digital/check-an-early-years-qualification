@@ -17,7 +17,7 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azurerm_private_dns_zone.redis_dns](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) | resource |
+| [azurerm_redis_cache.redis](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/redis_cache) | resource |
 
 ## Inputs
 
