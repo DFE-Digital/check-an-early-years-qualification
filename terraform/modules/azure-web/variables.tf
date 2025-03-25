@@ -166,3 +166,18 @@ variable "tags" {
   description = "Resource tags"
   type        = map(string)
 }
+
+variable "logs_id" {
+  description = "Log Analytics workspace ID"
+  type        = string
+}
+
+variable "instrumentation_key" {
+  description = "App Insights instrumentation key"
+  type        = string
+}
+
+variable "insights_connection_string" {
+  description = "App Insights connection string"
+  type        = string
+}

@@ -28,6 +28,16 @@ moved {
   to   = module.webapp.azurerm_monitor_diagnostic_setting.webapp_slot_logs_monitor[0]
 }
 
+moved {
+  from = module.webapp.azurerm_log_analytics_workspace.webapp_logs
+  to   = module.monitor.azurerm_log_analytics_workspace.log_analytics
+}
+
+moved {
+  from = module.webapp.azurerm_application_insights.web
+  to   = module.monitor.azurerm_application_insights.app_insights
+}
+
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.resource_name_prefix}-rg"
@@ -42,6 +52,16 @@ resource "azurerm_resource_group" "rg" {
       tags["Service Offering"]
     ]
   }
+}
+
+module "monitor" {
+  source = "./modules/azure-monitoring"
+
+  environment          = var.environment
+  location             = var.azure_region
+  resource_group       = azurerm_resource_group.rg.name
+  resource_name_prefix = var.resource_name_prefix
+  tags                 = local.common_tags
 }
 
 # Create network resources
@@ -111,6 +131,9 @@ module "webapp" {
   webapp_service_gov_uk_custom_domain_cert_secret_label = var.kv_service_gov_uk_certificate_label
   webapp_health_check_path                              = "/health"
   webapp_health_check_eviction_time_in_min              = 10
+  logs_id                                               = module.monitor.logs_id
+  instrumentation_key                                   = module.monitor.insights_instrumentation_key
+  insights_connection_string                            = module.monitor.insights_connection_string
   agw_subnet_id                                         = module.network.agw_subnet_id
   agw_pip_id                                            = module.network.agw_pip_id
   kv_id                                                 = module.network.kv_id
