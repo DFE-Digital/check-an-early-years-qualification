@@ -100,3 +100,16 @@ resource "azurerm_private_dns_zone_virtual_network_link" "redis_snet" {
     ]
   }
 }
+
+data "azurerm_private_endpoint_connection" "private_ip" {
+  name                = azurerm_private_endpoint.cache_endpoint.name
+  resource_group_name = var.resource_group
+}
+
+resource "azurerm_private_dns_a_record" "arecord" {
+  name                = "${var.resource_name_prefix}-dns-a"
+  resource_group_name = var.resource_group
+  zone_name           = azurerm_private_dns_zone.dns_zone.name
+  ttl                 = 300
+  records             = [data.azurerm_private_endpoint_connection.private_ip.private_service_connection.private_ip_address]
+}
