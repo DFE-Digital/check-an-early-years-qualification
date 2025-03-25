@@ -17,6 +17,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [azurerm_monitor_diagnostic_setting.redis_monitor](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
 | [azurerm_redis_cache.redis](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/redis_cache) | resource |
 
 ## Inputs
