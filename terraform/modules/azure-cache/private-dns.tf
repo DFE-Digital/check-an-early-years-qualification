@@ -28,7 +28,7 @@ resource "azurerm_private_endpoint" "redis_endpoint" {
 
   private_dns_zone_group {
     name                 = "default"
-    private_dns_zone_ids = [azure_private_dns_zone.redis_pdz.id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.redis_pdz.id]
   }
 
   tags = var.tags
