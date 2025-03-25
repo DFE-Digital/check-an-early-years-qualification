@@ -38,7 +38,7 @@ resource "azurerm_monitor_diagnostic_setting" "redis_log_monitor" {
 */
 
 resource "azurerm_private_dns_zone" "dns_zone" {
-  name                = "privatelink.redis.cache.windows.net"
+  name                = "${azurerm_redis_cache.cache.name}.redis.cache.windows.net"
   resource_group_name = var.resource_group
 
   tags = var.tags
@@ -53,7 +53,7 @@ resource "azurerm_private_dns_zone" "dns_zone" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "redis_snet" {
-  name                  = "privatelink_to_${var.vnet_name}"
+  name                  = "${azurerm_redis_cache.cache.name}-to-${var.vnet_name}"
   resource_group_name   = var.resource_group
   private_dns_zone_name = azurerm_private_dns_zone.dns_zone.name
   virtual_network_id    = var.vnet_id
