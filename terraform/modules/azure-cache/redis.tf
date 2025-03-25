@@ -38,7 +38,7 @@ resource "azurerm_monitor_diagnostic_setting" "redis_log_monitor" {
 */
 
 resource "azurerm_private_dns_zone" "dns_zone" {
-  name                = "privatelink.redis.cache.windows.net"
+  name                = "pvtlink.redis.cache.windows.net" # todo: change this to "privatelink.redis.cache.windows.net"
   resource_group_name = var.resource_group
 
   tags = var.tags
