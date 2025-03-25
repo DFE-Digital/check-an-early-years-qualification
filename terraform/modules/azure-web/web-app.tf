@@ -132,6 +132,9 @@ resource "azurerm_linux_web_app" "webapp" {
       tags["Environment"],
       tags["Product"],
       tags["Service Offering"],
+      tags["hidden-link: /app-insights-conn-string"],
+      tags["hidden-link: /app-insights-instrumentation-key"],
+      tags["hidden-link: /app-insights-resource-id"],
       site_config.0.application_stack
     ]
   }
