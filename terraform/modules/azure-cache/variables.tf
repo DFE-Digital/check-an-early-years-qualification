@@ -23,6 +23,11 @@ variable "vnet_id" {
   type        = string
 }
 
+variable "vnet_name" {
+  description = "Name of the virtual network"
+  type        = string
+}
+
 variable "cache_subnet_id" {
   description = "ID of the delegated Subnet for the Redis cache"
   type        = string

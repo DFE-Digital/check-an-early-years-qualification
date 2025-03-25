@@ -28,25 +28,18 @@ resource "azurerm_redis_cache" "cache" {
   }
 }
 
-resource "azurerm_private_endpoint" "cache_endpoint" {
-  name                = "${var.resource_name_prefix}-redis-nic"
-  location            = var.location
+/* todo: log-analytics workspace
+first pull log analytics and app insights into a separate module, and output the log details
+resource "azurerm_monitor_diagnostic_setting" "redis_log_monitor" {
+  name = "${var.resource_name_prefix}-redis-mon"
+  target_resource_id = azurerm_redis_cache.cache.id
+  log_analytics_workspace_id = 
+}
+*/
+
+resource "azurerm_private_dns_zone" "dns_zone" {
+  name                = "privatelink.redis.cache.windows.net"
   resource_group_name = var.resource_group
-  subnet_id           = var.cache_subnet_id
-
-  private_service_connection {
-    name                           = "${var.resource_name_prefix}-redis-con"
-    private_connection_resource_id = azurerm_redis_cache.cache.id
-    is_manual_connection           = false
-    subresource_names = [
-      "redisCache"
-    ]
-  }
-
-  private_dns_zone_group {
-    name                 = "redis-dns"
-    private_dns_zone_ids = [azurerm_private_dns_zone.dns_zone.id]
-  }
 
   tags = var.tags
 
@@ -59,16 +52,42 @@ resource "azurerm_private_endpoint" "cache_endpoint" {
   }
 }
 
-resource "azurerm_private_dns_zone" "dns_zone" {
-  name                = "${azurerm_redis_cache.cache.name}.redis.cache.windows.net"
-  resource_group_name = var.resource_group
-}
-
 resource "azurerm_private_dns_zone_virtual_network_link" "redis_snet" {
-  name                  = "${var.resource_name_prefix}-redis-vnet-link"
+  name                  = "privatelink_to_${var.vnet_name}"
   resource_group_name   = var.resource_group
   private_dns_zone_name = azurerm_private_dns_zone.dns_zone.name
   virtual_network_id    = var.vnet_id
+
+  tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
+}
+
+resource "azurerm_private_endpoint" "cache_endpoint" {
+  name                = "${var.resource_name_prefix}-redis-nic"
+  location            = var.location
+  resource_group_name = var.resource_group
+  subnet_id           = var.cache_subnet_id
+
+  private_service_connection {
+    name                           = "${var.resource_name_prefix}-redis-pe"
+    private_connection_resource_id = azurerm_redis_cache.cache.id
+    is_manual_connection           = false
+    subresource_names = [
+      "redisCache"
+    ]
+  }
+
+  private_dns_zone_group {
+    name                 = "redis-dns"
+    private_dns_zone_ids = [azurerm_private_dns_zone.dns_zone.id]
+  }
 
   tags = var.tags
 
