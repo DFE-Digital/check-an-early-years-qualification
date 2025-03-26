@@ -16,8 +16,6 @@ public class CachingHandler(
             throw new ArgumentException(nameof(request.RequestUri));
         }
 
-        logger.LogInformation("Caching handler executing request");
-
         string cacheKey = request.RequestUri.ToString();
 
         var response =
@@ -30,7 +28,7 @@ public class CachingHandler(
     private async Task<HttpResponseMessage> InternalSendAsync(HttpRequestMessage request,
                                                               CancellationToken cancellationToken)
     {
-        logger.LogInformation("Service calling Contentful API");
+        logger.LogInformation("Caching handler invoking Contentful API");
         return await base.SendAsync(request, cancellationToken);
     }
 }
