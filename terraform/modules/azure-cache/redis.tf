@@ -3,9 +3,9 @@ resource "azurerm_redis_cache" "redis" {
   name                               = "${var.resource_name_prefix}-redis-cache"
   location                           = var.location
   resource_group_name                = var.resource_group
-  capacity                           = var.environment != "development" ? 0 : 1
+  capacity                           = 0
   family                             = "C"
-  sku_name                           = var.environment != "development" ? "Standard" : "Basic"
+  sku_name                           = var.environment == "development" ? "Basic" : "Standard"
   access_keys_authentication_enabled = false
   non_ssl_port_enabled               = false
   minimum_tls_version                = "1.2"
