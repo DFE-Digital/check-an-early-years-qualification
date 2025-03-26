@@ -8,13 +8,13 @@ It should be easy to tell what resources are included in the Infrastructure as C
 
 ## Decision Drivers
 
-- Easy to implement
-- Documentation in a central place, preferably _with_ the code
+* Easy to implement
+* Documentation in a central place, preferably _with_ the code
 
 ## Considered Options
 
-- Manual maintenance
-- GitHub `terraform-docs/gh-actions` action
+* Manual maintenance
+* GitHub `terraform-docs/gh-actions` action
 
 GitHub action can be built into pipeline, to output Markdown README documentation, and automatically
 commit it back to the repo. Initial results seemed comprehensive.

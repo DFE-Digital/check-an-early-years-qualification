@@ -33,3 +33,4 @@ General information about architectural decision records is available at <https:
 | [0019 - Software License](./0019-license.md)                                    | Accepted |
 | [0020 - Load Testing Framework](./0020-load-test-framework.md)                  | Accepted |
 | [0021 - Storage Account Key Rotation](./0021-storage-account-key-rotation.md)   | Accepted |
+| [0022 - Caching Contentful responses](./0022-cache.md)                          | Accepted |
