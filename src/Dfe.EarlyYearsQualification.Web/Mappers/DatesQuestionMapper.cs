@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
@@ -24,7 +25,19 @@ public static class DatesQuestionMapper
             model.StartedQuestion.QuestionId = "date-started";
             model.StartedQuestion.MonthId = "StartedQuestion.SelectedMonth";
             model.StartedQuestion.YearId = "StartedQuestion.SelectedYear";
-            model.StartedQuestion.ErrorSummaryLink!.ElementLinkId = model.StartedQuestion.MonthError ? model.StartedQuestion.MonthId : model.StartedQuestion.YearId;
+
+            foreach (var errorSummaryLink in model.StartedQuestion.ErrorSummaryLinks)
+            {
+                if (errorSummaryLink.ElementLinkId == FieldId.Month.ToString())
+                {
+                    errorSummaryLink.ElementLinkId = model.StartedQuestion.MonthId;
+                }
+
+                else if (errorSummaryLink.ElementLinkId == FieldId.Year.ToString())
+                {
+                    errorSummaryLink.ElementLinkId = model.StartedQuestion.YearId;
+                }
+            }
         }
 
         if (awardedQuestion != null)
@@ -34,23 +47,34 @@ public static class DatesQuestionMapper
             model.AwardedQuestion.QuestionId = "date-awarded";
             model.AwardedQuestion.MonthId = "AwardedQuestion.SelectedMonth";
             model.AwardedQuestion.YearId = "AwardedQuestion.SelectedYear";
-            model.AwardedQuestion.ErrorSummaryLink!.ElementLinkId = model.AwardedQuestion.MonthError ? model.AwardedQuestion.MonthId : model.AwardedQuestion.YearId;
+            foreach (var errorSummaryLink in model.AwardedQuestion.ErrorSummaryLinks)
+            {
+                if (errorSummaryLink.ElementLinkId == FieldId.Month.ToString())
+                {
+                    errorSummaryLink.ElementLinkId = model.AwardedQuestion.MonthId;
+                }
+
+                else if (errorSummaryLink.ElementLinkId == FieldId.Year.ToString())
+                {
+                    errorSummaryLink.ElementLinkId = model.AwardedQuestion.YearId;
+                }
+            }
         }
 
         var errorLinks = new List<ErrorSummaryLink>();
 
         if (model.StartedQuestion is not null &&
             (model.StartedQuestion.MonthError || model.StartedQuestion.YearError) &&
-            model.StartedQuestion.ErrorSummaryLink is not null)
+            model.StartedQuestion.ErrorSummaryLinks is not null)
         {
-            errorLinks.Add(model.StartedQuestion.ErrorSummaryLink);
+            errorLinks.AddRange(model.StartedQuestion.ErrorSummaryLinks);
         }
 
         if (model.AwardedQuestion is not null &&
             (model.AwardedQuestion.MonthError || model.AwardedQuestion.YearError) &&
-            model.AwardedQuestion.ErrorSummaryLink is not null)
+            model.AwardedQuestion.ErrorSummaryLinks is not null)
         {
-            errorLinks.Add(model.AwardedQuestion.ErrorSummaryLink);
+            errorLinks.AddRange(model.AwardedQuestion.ErrorSummaryLinks);
         }
 
         model.Errors = new ErrorSummaryModel
