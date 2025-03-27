@@ -29,7 +29,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cache_subnet_id"></a> [cache\_subnet\_id](#input\_cache\_subnet\_id) | ID of the delegated Subnet for the Redis cache | `string` | n/a | yes |
-| <a name="input_dns_zone_tags"></a> [dns\_zone\_tags](#input\_dns\_zone\_tags) | DNS Zone resource tags | `map(string)` | n/a | yes |
+| <a name="input_dns_zone_link_tags"></a> [dns\_zone\_link\_tags](#input\_dns\_zone\_link\_tags) | DNS Zone Virtual Network Link resource tags | `map(string)` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Name of the Azure region to deploy resources | `string` | n/a | yes |
 | <a name="input_logs_id"></a> [logs\_id](#input\_logs\_id) | The ID of the Log Analytics workspace | `string` | n/a | yes |
