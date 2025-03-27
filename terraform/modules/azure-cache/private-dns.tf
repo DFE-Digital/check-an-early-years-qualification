@@ -3,7 +3,7 @@ resource "azurerm_private_dns_zone" "redis_pdz" {
   resource_group_name = var.resource_group
 
   # bug in Azure: tags with space are not added to private DNS zone resources
-  tags = delete(var.tags, "Parent Business")
+  tags = var.dns_zone_tags
 
   lifecycle {
     ignore_changes = [

@@ -7,6 +7,13 @@ locals {
     "Service Offering" = "Early Years Qualifications"
   }
 
+  # Tags used for private DNS zone resources [to work around a bug in Azure]
+  dns_zone_tags = {
+    "Environment" = var.environment
+    "Product"     = "Early Years Qualifications"
+    # ...the bug is that Azure does not add tags with names containing a space to private DNS zones!
+  }
+
   # Web Application Configuration
   webapp_app_settings = {
     "ENVIRONMENT"                           = var.environment

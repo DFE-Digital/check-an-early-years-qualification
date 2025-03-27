@@ -38,6 +38,11 @@ variable "logs_id" {
   type        = string
 }
 
+variable "dns_zone_tags" {
+  description = "DNS Zone resource tags"
+  type        = map(string)
+}
+
 variable "tags" {
   description = "Resource tags"
   type        = map(string)

@@ -115,6 +115,7 @@ module "cache" {
   cache_subnet_id      = module.network.cache_subnet_id
   logs_id              = module.monitor.logs_id
   tags                 = local.common_tags
+  dns_zone_tags        = local.dns_zone_tags
 }
 
 # Create web application resources
