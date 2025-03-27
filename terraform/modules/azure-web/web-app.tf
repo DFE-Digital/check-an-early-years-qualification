@@ -131,6 +131,7 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+    "Cache__Instance"                            = var.redis_cache_name
   }, var.webapp_slot_app_settings)
 
   site_config {
