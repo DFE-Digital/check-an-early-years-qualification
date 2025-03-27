@@ -6,7 +6,10 @@ resource "azurerm_private_dns_zone" "redis_pdz" {
 
   lifecycle {
     ignore_changes = [
-      tags
+      tags["Environment"],
+      tags["Parent Business"],
+      tags["Product"],
+      tags["Service Offering"]
     ]
   }
 }
