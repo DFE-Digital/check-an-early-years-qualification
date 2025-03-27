@@ -2,14 +2,12 @@ resource "azurerm_private_dns_zone" "redis_pdz" {
   name                = "privatelink.redis.cache.windows.net"
   resource_group_name = var.resource_group
 
-  tags = var.tags
+  # bug in Azure: tags with space are not added to private DNS zone resources
+  tags = delete(var.tags, "Parent Business")
 
   lifecycle {
     ignore_changes = [
-      tags["Environment"],
-      tags["Parent Business"],
-      tags["Product"],
-      tags["Service Offering"]
+      tags
     ]
   }
 }
