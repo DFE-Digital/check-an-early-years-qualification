@@ -38,8 +38,8 @@ variable "logs_id" {
   type        = string
 }
 
-variable "dns_zone_tags" {
-  description = "DNS Zone resource tags"
+variable "dns_zone_link_tags" {
+  description = "DNS Zone Virtual Network Link resource tags"
   type        = map(string)
 }
 

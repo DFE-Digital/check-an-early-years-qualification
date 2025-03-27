@@ -8,10 +8,10 @@ locals {
   }
 
   # Tags used for private DNS zone resources [to work around a bug in Azure]
-  dns_zone_tags = {
+  dns_zone_link_tags = {
     "Environment" = var.environment
     "Product"     = "Early Years Qualifications"
-    # ...the bug is that Azure does not add tags with names containing a space to private DNS zones!
+    # ...the bug is that Azure does not add tags with names containing a space to private DNS zones vnet link
   }
 
   # Web Application Configuration
