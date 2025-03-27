@@ -76,7 +76,7 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   sticky_settings {
-    app_setting_names = keys(var.webapp_app_settings)
+    app_setting_names = concat(keys(var.webapp_app_settings), ["Cache__Instance"])
   }
 
   logs {
