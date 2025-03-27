@@ -44,6 +44,8 @@ resource "azurerm_linux_web_app" "webapp" {
     health_check_eviction_time_in_min = var.webapp_health_check_eviction_time_in_min
     http2_enabled                     = true
     vnet_route_all_enabled            = true
+    ip_restriction_default_action     = "Allow"
+    scm_ip_restriction_default_action = "Allow"
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
@@ -137,6 +139,8 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     health_check_eviction_time_in_min = var.webapp_health_check_eviction_time_in_min
     http2_enabled                     = true
     vnet_route_all_enabled            = true
+    ip_restriction_default_action     = "Allow"
+    scm_ip_restriction_default_action = "Allow"
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
@@ -336,7 +340,8 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
     ignore_changes = [
       tags["Environment"],
       tags["Product"],
-      tags["Service Offering"]
+      tags["Service Offering"],
+      target_resource_id
     ]
   }
 }
