@@ -1,4 +1,8 @@
 # Create Azure Cache for Redis
+resource "azurerm_resource_provider_registration" "cache_provider" {
+  name = "Microsoft.Cache"
+}
+
 resource "azurerm_redis_cache" "redis" {
   name                               = "${var.resource_name_prefix}-redis-cache"
   location                           = var.location
