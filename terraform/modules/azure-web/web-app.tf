@@ -374,7 +374,8 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
     ignore_changes = [
       tags["Environment"],
       tags["Product"],
-      tags["Service Offering"]
+      tags["Service Offering"],
+      target_resource_id
     ]
   }
 }
