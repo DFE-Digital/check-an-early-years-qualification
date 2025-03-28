@@ -38,6 +38,11 @@ moved {
   to   = module.monitor.azurerm_application_insights.app_insights
 }
 
+moved {
+  from = module.cache.azurerm_resource_provider_registration.cache_provider
+  to   = module.cache.azurerm_resource_provider_registration.cache_provider[0]
+}
+
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.resource_name_prefix}-rg"
