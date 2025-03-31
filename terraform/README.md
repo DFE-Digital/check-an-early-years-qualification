@@ -24,6 +24,7 @@ This module provisions a new Azure Resource Group that assembles together the in
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_alerts"></a> [alerts](#module\_alerts) | ./modules/azure-alerts | n/a |
+| <a name="module_cache"></a> [cache](#module\_cache) | ./modules/azure-cache | n/a |
 | <a name="module_monitor"></a> [monitor](#module\_monitor) | ./modules/azure-monitoring | n/a |
 | <a name="module_network"></a> [network](#module\_network) | ./modules/azure-network | n/a |
 | <a name="module_storage"></a> [storage](#module\_storage) | ./modules/azure-storage | n/a |
@@ -42,6 +43,7 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_admin_email_address"></a> [admin\_email\_address](#input\_admin\_email\_address) | Email Address of the Admin | `string` | n/a | yes |
 | <a name="input_asp_sku"></a> [asp\_sku](#input\_asp\_sku) | SKU name for the App Service Plan | `string` | n/a | yes |
 | <a name="input_azure_region"></a> [azure\_region](#input\_azure\_region) | Name of the Azure region to deploy resources | `string` | `"westeurope"` | no |
+| <a name="input_cache_type"></a> [cache\_type](#input\_cache\_type) | Cache type ("Redis", "Memory", or "None") | `string` | `"None"` | no |
 | <a name="input_clarity_tag"></a> [clarity\_tag](#input\_clarity\_tag) | The Microsoft Clarity tag | `string` | `""` | no |
 | <a name="input_contentful_delivery_api_key"></a> [contentful\_delivery\_api\_key](#input\_contentful\_delivery\_api\_key) | Contentful delivery API key | `string` | n/a | yes |
 | <a name="input_contentful_preview_api_key"></a> [contentful\_preview\_api\_key](#input\_contentful\_preview\_api\_key) | Contentful preview API key | `string` | n/a | yes |

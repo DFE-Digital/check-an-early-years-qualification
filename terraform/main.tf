@@ -38,6 +38,11 @@ moved {
   to   = module.monitor.azurerm_application_insights.app_insights
 }
 
+moved {
+  from = module.cache.azurerm_resource_provider_registration.cache_provider
+  to   = module.cache.azurerm_resource_provider_registration.cache_provider[0]
+}
+
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.resource_name_prefix}-rg"
@@ -102,6 +107,22 @@ module "storage" {
   tags                        = local.common_tags
 }
 
+# Create Redis cache
+module "cache" {
+  source = "./modules/azure-cache"
+
+  environment          = var.environment
+  location             = var.azure_region
+  resource_group       = azurerm_resource_group.rg.name
+  resource_name_prefix = var.resource_name_prefix
+  vnet_id              = module.network.vnet_id
+  vnet_name            = module.network.vnet_name
+  cache_subnet_id      = module.network.cache_subnet_id
+  logs_id              = module.monitor.logs_id
+  tags                 = local.common_tags
+  dns_zone_link_tags   = local.dns_zone_link_tags
+}
+
 # Create web application resources
 module "webapp" {
   source = "./modules/azure-web"
@@ -140,6 +161,8 @@ module "webapp" {
   kv_cert_secret_id                                     = module.network.kv_cert_secret_id
   kv_service_gov_uk_cert_secret_id                      = module.network.kv_service_gov_uk_cert_secret_id
   kv_mi_id                                              = module.network.kv_mi_id
+  redis_cache_id                                        = module.cache.redis_cache_id
+  redis_cache_name                                      = module.cache.redis_cache_name
   tags                                                  = local.common_tags
   depends_on                                            = [module.network]
 }

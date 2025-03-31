@@ -5,6 +5,7 @@
 ## Context and Problem Statement
 
 As part of the IT Health Check (ITHC), it was recommended that the storage account keys are periodically rotated.
+
 ## Decision Drivers
 
 * Ideally an automated process
