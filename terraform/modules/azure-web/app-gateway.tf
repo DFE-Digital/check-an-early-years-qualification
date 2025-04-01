@@ -65,11 +65,12 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
   }
 
   policy_settings {
-    enabled                     = true
-    file_upload_limit_in_mb     = 100
-    max_request_body_size_in_kb = 128
-    mode                        = "Prevention"
-    request_body_check          = true
+    enabled                                   = true
+    file_upload_limit_in_mb                   = 100
+    max_request_body_size_in_kb               = 128
+    mode                                      = "Prevention"
+    request_body_check                        = true
+    js_challenge_cookie_expiration_in_minutes = 30
   }
 
   lifecycle {
@@ -212,7 +213,7 @@ resource "azurerm_monitor_diagnostic_setting" "agw_logs_monitor" {
 
   name                       = "${var.resource_name_prefix}-agw-mon"
   target_resource_id         = azurerm_application_gateway.agw[0].id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
+  log_analytics_workspace_id = var.logs_id
 
   enabled_log {
     category = "ApplicationGatewayFirewallLog"

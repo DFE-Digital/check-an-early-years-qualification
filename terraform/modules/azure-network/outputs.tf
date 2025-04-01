@@ -18,6 +18,11 @@ output "agw_subnet_id" {
   value       = var.environment != "development" ? azurerm_subnet.agw_snet[0].id : null
 }
 
+output "cache_subnet_id" {
+  description = "ID of the Subnet for the Redis cache"
+  value       = azurerm_subnet.cache_snet.id
+}
+
 output "agw_pip_id" {
   description = "ID of the Public IP address for the App Gateway"
   value       = var.environment != "development" ? azurerm_public_ip.agw_pip[0].id : null

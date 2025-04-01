@@ -7,6 +7,13 @@ locals {
     "Service Offering" = "Early Years Qualifications"
   }
 
+  # Tags used for private DNS zone resources [to work around a bug in Azure]
+  dns_zone_link_tags = {
+    "Environment" = var.environment
+    "Product"     = "Early Years Qualifications"
+    # ...the bug is that Azure does not add tags with names containing a space to private DNS zones vnet link
+  }
+
   # Web Application Configuration
   webapp_app_settings = {
     "ENVIRONMENT"                           = var.environment
@@ -25,6 +32,7 @@ locals {
     "Notifications__Feedback__TemplateId"   = var.notifications_feedback_template_id
     "Notifications__Feedback__EmailAddress" = var.notifications_feedback_email_address
     "Notifications__IsTestEnvironment"      = var.notifications_is_test_environment
+    "Cache__Type"                           = var.cache_type
   }
 
   webapp_slot_app_settings = {
@@ -39,5 +47,6 @@ locals {
     "ServiceAccess__Keys__1"              = var.webapp_team_access_key
     "ServiceAccess__Keys__2"              = var.webapp_access_key_1
     "ServiceAccess__Keys__3"              = var.webapp_access_key_2
+    "Cache__Type"                         = var.cache_type
   }
 }
