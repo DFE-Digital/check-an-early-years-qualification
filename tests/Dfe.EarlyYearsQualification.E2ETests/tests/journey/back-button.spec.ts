@@ -40,7 +40,7 @@ test.describe("A spec used to test the main back button route through the journe
         await clickBackButton(page);
         await checkUrl(page, "/qualifications/check-additional-questions/EYQ-240/1");
         await clickBackButton(page);
-        await checkUrl(page, "/qualifications");
+        await checkUrl(page, "/select-a-qualification-to-check");
         await clickBackButton(page);
         await checkUrl(page, "/questions/what-is-the-awarding-organisation");
         await clickBackButton(page);
