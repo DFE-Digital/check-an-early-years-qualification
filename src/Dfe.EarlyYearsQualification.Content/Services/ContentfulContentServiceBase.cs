@@ -63,7 +63,8 @@ public class ContentfulContentServiceBase
 
     protected readonly ILogger Logger;
 
-    protected ContentfulContentServiceBase(ILogger logger, IContentfulClient contentfulClient)
+    protected ContentfulContentServiceBase(ILogger logger,
+                                           IContentfulClient contentfulClient)
     {
         ContentfulClient = contentfulClient;
         ContentfulClient.ContentTypeResolver = new EntityResolver();
@@ -76,7 +77,7 @@ public class ContentfulContentServiceBase
         try
         {
             // NOTE: ContentfulClient.GetEntry doesn't bind linked references which is why we are using GetEntriesByType
-            var contentType = ContentTypeLookup[typeof(T)];
+            string contentType = ContentTypeLookup[typeof(T)];
 
             var queryBuilder = new QueryBuilder<T>().ContentTypeIs(contentType)
                                                     .Include(2)
@@ -98,6 +99,7 @@ public class ContentfulContentServiceBase
     protected async Task<ContentfulCollection<T>?> GetEntriesByType<T>(QueryBuilder<T>? queryBuilder = null)
     {
         var type = typeof(T);
+
         try
         {
             var results = await ContentfulClient.GetEntriesByType(ContentTypeLookup[type], queryBuilder);
@@ -105,14 +107,14 @@ public class ContentfulContentServiceBase
         }
         catch (Exception ex)
         {
-            var typeName = type.Name;
-            Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.",
-                            typeName);
+            string typeName = type.Name;
+            Logger.LogError(ex, "Exception trying to retrieve {TypeName} from Contentful.", typeName);
             return null;
         }
     }
 
-    protected static T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate, T entry)
+    protected static T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate,
+                                             T entry)
     {
         if (startDate is not null
             && endDate is not null
@@ -156,14 +158,14 @@ public class ContentfulContentServiceBase
 
     private DateOnly? ConvertToDateTime(string dateString)
     {
-        var (isValid, month, yearMod2000) = ValidateDate(dateString);
+        (bool isValid, int month, int yearMod2000) = ValidateDate(dateString);
 
         if (!isValid)
         {
             return null;
         }
 
-        var year = yearMod2000 + 2000;
+        int year = yearMod2000 + 2000;
 
         return new DateOnly(year, month, Day);
     }
@@ -177,13 +179,13 @@ public class ContentfulContentServiceBase
             return (false, 0, 0);
         }
 
-        var abbreviatedMonth = splitDateString[0];
-        var yearFilter = splitDateString[1];
+        string abbreviatedMonth = splitDateString[0];
+        string yearFilter = splitDateString[1];
 
-        var yearIsValid = int.TryParse(yearFilter,
-                                       NumberStyles.Integer,
-                                       NumberFormatInfo.InvariantInfo,
-                                       out var yearPart);
+        bool yearIsValid = int.TryParse(yearFilter,
+                                        NumberStyles.Integer,
+                                        NumberFormatInfo.InvariantInfo,
+                                        out int yearPart);
 
         if (!yearIsValid)
         {
@@ -192,7 +194,7 @@ public class ContentfulContentServiceBase
             return (false, 0, 0);
         }
 
-        if (Months.TryGetValue(abbreviatedMonth, out var month))
+        if (Months.TryGetValue(abbreviatedMonth, out int month))
         {
             return (true, month, yearPart);
         }
