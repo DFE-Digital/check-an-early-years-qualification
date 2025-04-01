@@ -5,17 +5,17 @@
 ## Context and Problem Statement
 
 What tool should be adopted in Check an Early Years Qualification service pipelines
-to ensure adequate unit-test coverage? 
+to ensure adequate unit-test coverage?
 
 ## Decision Drivers
 
-- Easy to implement in GitHub pipelines
-- Can fail a build if minimum threshold not met
+* Easy to implement in GitHub pipelines
+* Can fail a build if minimum threshold not met
 
 ## Considered Options
 
-- Coverlet
-- SonarQube / SonarCloud
+* Coverlet
+* SonarQube / SonarCloud
 
 SonarQube / SonarCloud may be a better long term solution, since it will meet the requirement
 for code coverage _and_ static analysis of code quality. Wider discussion across the DfE

@@ -34,6 +34,7 @@ No modules.
 | [azurerm_key_vault_secret.govuk_notify_api_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) | resource |
 | [azurerm_public_ip.agw_pip](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip) | resource |
 | [azurerm_subnet.agw_snet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
+| [azurerm_subnet.cache_snet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
 | [azurerm_subnet.webapp_snet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
 | [azurerm_user_assigned_identity.kv_mi](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
 | [azurerm_virtual_network.vnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) | resource |
@@ -70,6 +71,7 @@ No modules.
 |------|-------------|
 | <a name="output_agw_pip_id"></a> [agw\_pip\_id](#output\_agw\_pip\_id) | ID of the Public IP address for the App Gateway |
 | <a name="output_agw_subnet_id"></a> [agw\_subnet\_id](#output\_agw\_subnet\_id) | ID of the Subnet for the App Gateway |
+| <a name="output_cache_subnet_id"></a> [cache\_subnet\_id](#output\_cache\_subnet\_id) | ID of the Subnet for the Redis cache |
 | <a name="output_kv_cert_secret_id"></a> [kv\_cert\_secret\_id](#output\_kv\_cert\_secret\_id) | education.gov.uk SSL certificate Secret ID |
 | <a name="output_kv_id"></a> [kv\_id](#output\_kv\_id) | ID of the Key Vault |
 | <a name="output_kv_mi_id"></a> [kv\_mi\_id](#output\_kv\_mi\_id) | ID of the Managed Identity for the Key Vault |

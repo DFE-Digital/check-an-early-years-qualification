@@ -10,8 +10,8 @@ What tool should be adopted within the Check an Early Years Qualification servic
 
 * Within DfE’s Technical Guidance
 * DfE projects using Cypress
-	* [find-a-tuition-partner](https://github.com/DFE-Digital/find-a-tuition-partner)
-	* [trams-data-api](https://github.com/DFE-Digital/trams-data-api)
+  * [find-a-tuition-partner](https://github.com/DFE-Digital/find-a-tuition-partner)
+  * [trams-data-api](https://github.com/DFE-Digital/trams-data-api)
   
 ## Considered Options
 

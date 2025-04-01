@@ -1,38 +1,3 @@
-# Create Log Analytics
-resource "azurerm_log_analytics_workspace" "webapp_logs" {
-  name                = "${var.resource_name_prefix}-log"
-  location            = var.location
-  resource_group_name = var.resource_group
-  sku                 = "PerGB2018"
-  retention_in_days   = 30
-  daily_quota_gb      = 1
-
-  lifecycle {
-    ignore_changes = [
-      tags["Environment"],
-      tags["Product"],
-      tags["Service Offering"]
-    ]
-  }
-}
-
-resource "azurerm_application_insights" "web" {
-  name                = "${var.resource_name_prefix}-appinsights"
-  resource_group_name = var.resource_group
-  location            = var.location
-  application_type    = "web"
-  workspace_id        = azurerm_log_analytics_workspace.webapp_logs.id
-  tags                = var.tags
-
-  lifecycle {
-    ignore_changes = [
-      tags["Environment"],
-      tags["Product"],
-      tags["Service Offering"]
-    ]
-  }
-}
-
 # Create App Service Plan
 resource "azurerm_service_plan" "asp" {
   name                = "${var.resource_name_prefix}-asp"
@@ -63,9 +28,10 @@ resource "azurerm_linux_web_app" "webapp" {
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
   app_settings = merge({
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+    "Cache__Instance"                            = var.redis_cache_name
   }, var.webapp_app_settings)
 
   identity {
@@ -78,6 +44,8 @@ resource "azurerm_linux_web_app" "webapp" {
     health_check_eviction_time_in_min = var.webapp_health_check_eviction_time_in_min
     http2_enabled                     = true
     vnet_route_all_enabled            = true
+    ip_restriction_default_action     = "Allow"
+    scm_ip_restriction_default_action = "Allow"
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
@@ -108,7 +76,7 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   sticky_settings {
-    app_setting_names = keys(var.webapp_app_settings)
+    app_setting_names = concat(keys(var.webapp_app_settings), ["Cache__Instance"])
   }
 
   logs {
@@ -132,6 +100,9 @@ resource "azurerm_linux_web_app" "webapp" {
       tags["Environment"],
       tags["Product"],
       tags["Service Offering"],
+      tags["hidden-link: /app-insights-conn-string"],
+      tags["hidden-link: /app-insights-instrumentation-key"],
+      tags["hidden-link: /app-insights-resource-id"],
       site_config.0.application_stack
     ]
   }
@@ -157,9 +128,10 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
   app_settings = merge({
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+    "Cache__Instance"                            = var.redis_cache_name
   }, var.webapp_slot_app_settings)
 
   site_config {
@@ -168,6 +140,8 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     health_check_eviction_time_in_min = var.webapp_health_check_eviction_time_in_min
     http2_enabled                     = true
     vnet_route_all_enabled            = true
+    ip_restriction_default_action     = "Allow"
+    scm_ip_restriction_default_action = "Allow"
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
@@ -209,7 +183,7 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_logs_monitor" {
 
   name                       = "${var.resource_name_prefix}-webapp-mon"
   target_resource_id         = azurerm_linux_web_app.webapp.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
+  log_analytics_workspace_id = var.logs_id
 
   enabled_log {
     category = "AppServiceConsoleLogs"
@@ -234,7 +208,7 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_slot_logs_monitor" {
 
   name                       = "${var.resource_name_prefix}-webapp-${var.webapp_slot_name}-mon"
   target_resource_id         = azurerm_linux_web_app_slot.webapp_slot.0.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
+  log_analytics_workspace_id = var.logs_id
 
   enabled_log {
     category = "AppServiceConsoleLogs"
@@ -367,7 +341,8 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
     ignore_changes = [
       tags["Environment"],
       tags["Product"],
-      tags["Service Offering"]
+      tags["Service Offering"],
+      target_resource_id
     ]
   }
 }
@@ -474,4 +449,12 @@ resource "azurerm_app_service_certificate_binding" "webapp_service_gov_uk_custom
   hostname_binding_id = azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain[0].id
   certificate_id      = azurerm_app_service_certificate.webapp_service_gov_uk_custom_domain_cert[0].id
   ssl_state           = "SniEnabled"
+}
+
+resource "azurerm_redis_cache_access_policy_assignment" "web_app_contrib" {
+  name               = "web-app-redis-contributor"
+  redis_cache_id     = var.redis_cache_id
+  access_policy_name = "Data Contributor"
+  object_id          = azurerm_linux_web_app.webapp.identity[0].principal_id
+  object_id_alias    = "ServicePrincipal"
 }
