@@ -1,7 +1,7 @@
 ﻿import {test} from '@playwright/test';
 import {startJourney, checkText, setCookie, journeyCookieName, doesNotExist} from '../shared/playwrightWrapper';
 
-test.describe(`A spec used to test the qualification list page`, () => {
+test.describe('A spec used to test the qualification list page', () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
     });
