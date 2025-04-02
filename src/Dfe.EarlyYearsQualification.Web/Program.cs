@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
 using Contentful.AspNetCore;
+using Dfe.EarlyYearsQualification.Caching;
+using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -9,6 +11,8 @@ using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Security;
+using Dfe.EarlyYearsQualification.Web.Services.Caching;
+using Dfe.EarlyYearsQualification.Web.Services.Contentful;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
@@ -33,6 +37,9 @@ var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
                                         {
                                             EnableAdaptiveSampling = false
                                         };
+
+builder.Services.AddTransient<CachingHandler>();
+builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToCacheKeyConverter>();
 
 builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
@@ -100,8 +107,7 @@ if (useMockContentful)
 }
 else
 {
-    builder.Services.AddTransient<IContentService, ContentfulContentService>();
-    builder.Services.AddTransient<IQualificationsRepository, QualificationsRepository>();
+    builder.Services.SetupContentfulServices();
 }
 
 builder.Services.AddTransient<IQualificationDetailsService, QualificationDetailsService>();
@@ -134,11 +140,15 @@ if (useMockContentful)
 else
 {
     builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection("Notifications"));
-    builder.Services.AddSingleton<INotificationClient, NotificationClient>(_ =>
-                                                                           {
-                                                                               var options = builder.Configuration.GetSection("Notifications").Get<NotificationOptions>();
-                                                                               return new NotificationClient(options!.ApiKey);
-                                                                           });
+    builder.Services.AddSingleton<INotificationClient, NotificationClient>
+        (_ =>
+         {
+             var options = builder.Configuration
+                                  .GetSection("Notifications")
+                                  .Get<NotificationOptions>();
+             return new NotificationClient(options!
+                                               .ApiKey);
+         });
     builder.Services.AddSingleton<INotificationService, GovUkNotifyService>();
 }
 
@@ -153,6 +163,10 @@ else
 {
     builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
 }
+
+var cacheConfiguration = builder.Configuration.GetSection("Cache");
+
+builder.UseDistributedCache(cacheConfiguration);
 
 var app = builder.Build();
 
