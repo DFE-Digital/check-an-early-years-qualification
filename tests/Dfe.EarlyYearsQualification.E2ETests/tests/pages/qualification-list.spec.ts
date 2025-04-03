@@ -8,7 +8,7 @@ test.describe('A spec used to test the qualification list page', () => {
 
     test("Checks the details are showing on the page", async ({page, context}) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
-        await page.goto("/qualifications");
+        await page.goto("/select-a-qualification-to-check");
 
         await checkText(page, "#your-search-header", "Your search");
         await checkText(page, "#filter-country", "awarded in England");
@@ -29,7 +29,7 @@ test.describe('A spec used to test the qualification list page', () => {
                                                                                                        context
                                                                                                    }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
-        await page.goto("/qualifications");
+        await page.goto("/select-a-qualification-to-check");
 
         await checkText(page, "#filter-level", "any level");
         await checkText(page, "#filter-org", "awarded by various awarding organisations");
@@ -40,7 +40,7 @@ test.describe('A spec used to test the qualification list page', () => {
                                                                                                     context
                                                                                                 }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
-        await page.goto("/qualifications");
+        await page.goto("/select-a-qualification-to-check");
 
         await checkText(page, "#found-heading", "We found 0 matching qualifications");
         await checkText(page, "#no-result-content", "Test no qualifications text");
