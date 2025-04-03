@@ -4,7 +4,7 @@ namespace Dfe.EarlyYearsQualification.Caching.Services;
 
 public class NoCacheInvalidator : ICacheInvalidator
 {
-    public Task ClearCacheAsync()
+    public Task ClearCacheAsync(string keyPrefix)
     {
         return Task.CompletedTask;
     }

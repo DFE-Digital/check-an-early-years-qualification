@@ -39,7 +39,7 @@ var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
                                         };
 
 builder.Services.AddTransient<CachingHandler>();
-builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToCacheKeyConverter>();
+builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToPathAndQueryCacheKeyConverter>();
 
 builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });

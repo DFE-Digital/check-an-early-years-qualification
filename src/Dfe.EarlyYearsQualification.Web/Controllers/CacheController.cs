@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Services.Contentful;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -30,7 +31,7 @@ public class CacheController(
             return new UnauthorizedResult();
         }
 
-        await cacheInvalidator.ClearCacheAsync();
+        await cacheInvalidator.ClearCacheAsync(ContentfulUrlToPathAndQueryCacheKeyConverter.KeyPrefix);
 
         return new NoContentResult();
     }

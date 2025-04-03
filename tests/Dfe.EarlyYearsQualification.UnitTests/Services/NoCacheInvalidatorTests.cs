@@ -10,7 +10,7 @@ public class NoCacheInvalidatorTests
     {
         var sut = new NoCacheInvalidator();
 
-        var action = async () => await sut.ClearCacheAsync();
+        var action = async () => await sut.ClearCacheAsync("key_prefix");
 
         await action.Should().NotThrowAsync();
     }
