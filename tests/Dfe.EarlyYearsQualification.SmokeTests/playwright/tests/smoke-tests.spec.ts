@@ -30,6 +30,7 @@ test.describe("A spec used to smoke test the environment once a deployment has h
         // when-was-the-qualification-started-and-awarded page
         await page.waitForLoadState("domcontentloaded");
         expect(page.url()).toContain("/questions/when-was-the-qualification-started-and-awarded");
+        expect(page.locator('#back-button')).toHaveAttribute("href", "/questions/where-was-the-qualification-awarded");
         await page.locator("#StartedQuestion\\.SelectedMonth").fill("7");
         await page.locator("#StartedQuestion\\.SelectedYear").fill("2015");
         await page.locator("#AwardedQuestion\\.SelectedMonth").fill("9");
@@ -39,23 +40,27 @@ test.describe("A spec used to smoke test the environment once a deployment has h
         // what-level-is-the-qualification page
         await page.waitForLoadState("domcontentloaded");
         expect(page.url()).toContain("/questions/what-level-is-the-qualification");
+        expect(page.locator('#back-button')).toHaveAttribute("href", "/questions/when-was-the-qualification-started-and-awarded");
         await page.locator('input[id="0"]').click();
         await page.locator("#question-submit").click();
 
         // what-is-the-awarding-organisation page
         await page.waitForLoadState("domcontentloaded");
         expect(page.url()).toContain("/questions/what-is-the-awarding-organisation");
+        expect(page.locator('#back-button')).toHaveAttribute("href", "/questions/what-level-is-the-qualification");
         await page.locator("#awarding-organisation-not-in-list").click();
         await page.locator("#question-submit").click();
 
         // check-your-answers page
         await page.waitForLoadState("domcontentloaded");
         expect(page.url()).toContain("/questions/check-your-answers");
+        expect(page.locator('#back-button')).toHaveAttribute("href", "/questions/what-is-the-awarding-organisation");
         await page.locator("#cta-button").click();
 
         // qualifications page
         await page.waitForLoadState("domcontentloaded");
         expect(page.url()).toContain("/qualifications");
+        expect(page.locator('#back-button')).toHaveAttribute("href", "/questions/check-your-answers");
         // If this shows then no qualifications are getting returned indicating possible issue
         await expect(page.locator("#no-result-content")).not.toBeVisible();
     });
