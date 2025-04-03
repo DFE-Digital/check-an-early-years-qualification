@@ -63,6 +63,48 @@ public class CachingHandlerTests
         response.Content.ReadAsByteArrayAsync().Result.Should().ContainInOrder(value);
     }
 
+    [TestMethod]
+    public async Task Request_NotFoundInCache_CallsBaseSend_AndWritesToCache()
+    {
+        // Arrange...
+        var address = new Uri("https://example.com/");
+        // NB this test does a real request to that address, as you can't mock an HttpHandler's HttpClient
+
+        const string key = "some key";
+
+        var urlToKeyConverter = new Mock<IUrlToKeyConverter>();
+        urlToKeyConverter
+            .Setup(c => c.GetKeyAsync(It.IsAny<Uri>()))
+            .ReturnsAsync(key);
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, address);
+
+        var distributedCache = GetCache();
+
+        var handler = new TestCachingHandler(distributedCache,
+                                             urlToKeyConverter.Object,
+                                             NullLogger<CachingHandler>.Instance);
+
+        // Act...
+        await handler.PublicSendAsync(httpRequestMessage,
+                                      CancellationToken.None);
+
+        // Assert...
+        var cache = Moq.Mock.Get(distributedCache);
+
+        cache.Verify(c => c.Get(key), Times.Once);
+
+        cache.Verify(c => c.SetAsync(key,
+                                     It.IsAny<byte[]>(),
+                                     It.IsAny<DistributedCacheEntryOptions>(),
+                                     It.IsAny<CancellationToken>()),
+                     Times.Once);
+
+        var cached = await distributedCache.GetAsync(key);
+
+        cached.Should().NotBeNull();
+    }
+
     private class TestCachingHandler(
         IDistributedCache cache,
         IUrlToKeyConverter converter,
