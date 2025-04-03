@@ -24,7 +24,9 @@ check-an-early-years-qualification/
 |   ├─ Dfe.EarlyYearsQualification.Node - a node.js project used to import, minify and export Gov.UK and DfE css styling for consumption by the MVC app.
 |   ├─ Dfe.EarlyYearsQualification.Content - Project to store all the Contentful SDK helpers and models.
 ├─ tests/
-|   ├─ Dfe.EarlyYearsQualification.E2ETests - a Cypress Project used to run E2E tests across multiple browsers
+|   ├─ Dfe.EarlyYearsQualification.AccessibilityTests - a JS Project used to run accessibility tests
+|   ├─ Dfe.EarlyYearsQualification.E2ETests - a Playwright Project used to run E2E tests across multiple browsers
+|   ├─ Dfe.EarlyYearsQualification.SmokeTests - a Playwright Project used to run smoke tests tests across multiple browsers
 |   ├─ Dfe.EarlyYearsQualification.UnitTests - a .NET MSTests project used to build and run unit tests.
 ├─ terraform/ - Terraform project used to implement all the Azure infrastructure as code.
 ```
@@ -69,7 +71,7 @@ End to end tests are ran using [Playwright](https://playwright.dev/).
 To run the tests, run the following commands:
 - Navigate to the correct folder, be it:
   - ``cd tests/Dfe.EarlyYearsQualification.E2ETests`` for the E2E tests.
-  - ``cd tests/Dfe.EarlyYearsQualification.SmokeTests/playwright`` for the smoke tests.
+  - ``cd tests/Dfe.EarlyYearsQualification.SmokeTests`` for the smoke tests.
 - Tell Node Version Manager that you want the latest version with: ``nvm use node --lts``
 - Run the tests with: ``npx playwright install`` (install all playwright browsers)
 - Run the tests with: ``npx playwright test`` (add --ui to run the tests in playwrights UI)

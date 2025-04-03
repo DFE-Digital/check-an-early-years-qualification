@@ -55,7 +55,7 @@ test.describe("A spec used to smoke test the environment once a deployment has h
 
         // qualifications page
         await page.waitForLoadState("domcontentloaded");
-        expect(page.url()).toContain("/qualifications");
+        expect(page.url()).toContain("/select-a-qualification-to-check");
         // If this shows then no qualifications are getting returned indicating possible issue
         await expect(page.locator("#no-result-content")).not.toBeVisible();
     });
