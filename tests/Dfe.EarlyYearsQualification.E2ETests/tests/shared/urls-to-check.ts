@@ -7,7 +7,7 @@ export const pages = [
     "/questions/what-level-is-the-qualification",
     "/questions/what-is-the-awarding-organisation",
     "/questions/check-your-answers",
-    "/qualifications",
+    "/select-a-qualification-to-check",
     "/confirm-qualification/EYQ-240",
     "/qualifications/qualification-details/EYQ-240",
     "/qualifications/check-additional-questions/EYQ-240/1",
@@ -28,7 +28,7 @@ export const pagesWithForms = [
     "/questions/what-level-is-the-qualification",
     "/questions/what-is-the-awarding-organisation",
     "/cookies",
-    "/qualifications",
+    "/select-a-qualification-to-check",
     "/confirm-qualification/EYQ-240",
     "/qualifications/check-additional-questions/EYQ-240/1"
 ];
@@ -56,7 +56,7 @@ export const pagesThatRedirectIfDateMissing = [
     "/questions/what-level-is-the-qualification",
     "/questions/what-is-the-awarding-organisation",
     "/questions/check-your-answers",
-    "/qualifications",
+    "/select-a-qualification-to-check",
     "/confirm-qualification/EYQ-240",
     "/qualifications/qualification-details/EYQ-240",
     "/qualifications/check-additional-questions/EYQ-240/1",

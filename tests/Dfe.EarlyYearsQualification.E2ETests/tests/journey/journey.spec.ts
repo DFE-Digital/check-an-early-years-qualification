@@ -80,7 +80,7 @@ test.describe('A spec used to test the various routes through the journey', () =
         await checkYourAnswersPage(page);
 
         // qualifications page - click a qualification in the list to move us on
-        await checkUrl(page, "/qualifications");
+        await checkUrl(page, "/select-a-qualification-to-check");
 
         // click not on the list link
         await page.locator('a[href="/advice/qualification-not-on-the-list"]').click();
@@ -91,7 +91,7 @@ test.describe('A spec used to test the various routes through the journey', () =
 
         // check back button goes back to the qualifications list page
         await clickBackButton(page);
-        await checkUrl(page, "/qualifications");
+        await checkUrl(page, "/select-a-qualification-to-check");
     });
 
     test("Selecting qualification level 7 started after 1 Sept 2014 should navigate to the level 7 post 2014 advice page", async ({page}) => {
@@ -122,13 +122,13 @@ test.describe('A spec used to test the various routes through the journey', () =
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
-        await checkUrl(page, "/qualifications");
+        await checkUrl(page, "/select-a-qualification-to-check");
         await refineQualificationSearch(page, 'test');
-        await checkUrl(page, "/qualifications");
+        await checkUrl(page, "/select-a-qualification-to-check");
         await clickBackButton(page);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
-        await checkUrl(page, "/qualifications");
+        await checkUrl(page, "/select-a-qualification-to-check");
         await checkEmptyValue(page, "#refineSearch");
     });
 

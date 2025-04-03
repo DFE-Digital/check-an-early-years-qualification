@@ -20,7 +20,7 @@ test.describe('A spec that tests the check additional questions page', () => {
         await page.goto(`/qualifications/check-additional-questions/eyq-240/1`);
 
         await hasAttribute(page, "#back-button", 'href');
-        await attributeContains(page, "#back-button", 'href', '/qualifications');
+        await attributeContains(page, "#back-button", 'href', '/select-a-qualification-to-check');
 
         await checkText(page, '#question', 'Test question');
         await checkText(page, '#hint', 'This is the hint text: answer yes for full and relevant');

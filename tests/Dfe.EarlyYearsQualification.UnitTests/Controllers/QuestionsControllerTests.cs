@@ -7,6 +7,7 @@ using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -433,6 +434,22 @@ public class QuestionsControllerTests
                                                      QuestionHint = "awarded- Test question hint"
                                                  }
                            };
+
+        var validationResult = new DatesValidationResult
+                               {
+                                   StartedValidationResult = new DateValidationResult
+                                                             {
+                                                                 MonthValid = false, YearValid = false,
+                                                                 ErrorMessages = ["Test error message"],
+                                                                 BannerErrorMessages = [new BannerError("Test banner error message", FieldId.Month), new BannerError("Test banner error message", FieldId.Year)]
+                                                             },
+                                   AwardedValidationResult = new DateValidationResult
+                                                             {
+                                                                 MonthValid = false, YearValid = false,
+                                                                 ErrorMessages = ["Test error message"],
+                                                                 BannerErrorMessages = [new BannerError("Test banner error message", FieldId.Month), new BannerError("Test banner error message", FieldId.Year)]
+                                                             }
+                               };
         mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
                           .ReturnsAsync(questionPage);
 
@@ -441,19 +458,7 @@ public class QuestionsControllerTests
                                                  mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         mockQuestionModelValidator.Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
-                                  .Returns(new DatesValidationResult
-                                           {
-                                               StartedValidationResult = new DateValidationResult
-                                                                         {
-                                                                             MonthValid = false, YearValid = false,
-                                                                             ErrorMessages = ["Test error message"]
-                                                                         },
-                                               AwardedValidationResult = new DateValidationResult
-                                                                         {
-                                                                             MonthValid = false, YearValid = false,
-                                                                             ErrorMessages = ["Test error message"]
-                                                                         }
-                                           });
+                                  .Returns(validationResult);
 
         mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns<string>(x => x);
 
@@ -479,14 +484,16 @@ public class QuestionsControllerTests
         model.StartedQuestion.MonthLabel.Should().Be(questionPage.StartedQuestion.MonthLabel);
         model.StartedQuestion.YearLabel.Should().Be(questionPage.StartedQuestion.YearLabel);
         model.StartedQuestion.QuestionHint.Should().Be(questionPage.StartedQuestion.QuestionHint);
+        model.StartedQuestion.ErrorMessage.Should().Be(validationResult.StartedValidationResult.ErrorMessages[0]);
 
         model.AwardedQuestion!.Prefix.Should().Be("awarded");
         model.AwardedQuestion.QuestionId.Should().Be("date-awarded");
         model.AwardedQuestion.MonthId.Should().Be("AwardedQuestion.SelectedMonth");
-        model.AwardedQuestion.YearId.Should().Be("AwardedQuestion.SelectedYear");  
+        model.AwardedQuestion.YearId.Should().Be("AwardedQuestion.SelectedYear");
         model.AwardedQuestion.MonthLabel.Should().Be(questionPage.AwardedQuestion.MonthLabel);
         model.AwardedQuestion.YearLabel.Should().Be(questionPage.AwardedQuestion.YearLabel);
         model.AwardedQuestion.QuestionHint.Should().Be(questionPage.AwardedQuestion.QuestionHint);
+        model.AwardedQuestion.ErrorMessage.Should().Be(validationResult.AwardedValidationResult.ErrorMessages[0]);
 
         mockUserJourneyCookieService.Verify(x => x.SetWhenWasQualificationStarted(It.IsAny<string>()), Times.Never);
         mockUserJourneyCookieService.Verify(x => x.SetWhenWasQualificationAwarded(It.IsAny<string>()), Times.Never);
@@ -522,15 +529,15 @@ public class QuestionsControllerTests
         var result = await controller.WhenWasTheQualificationStarted(new DatesQuestionModel
                                                                      {
                                                                          StartedQuestion = new DateQuestionModel
-                                                                             {
-                                                                                 SelectedMonth = startedSelectedMonth,
-                                                                                 SelectedYear = startedSelectedYear
-                                                                             },
+                                                                                           {
+                                                                                               SelectedMonth = startedSelectedMonth,
+                                                                                               SelectedYear = startedSelectedYear
+                                                                                           },
                                                                          AwardedQuestion = new DateQuestionModel
-                                                                             {
-                                                                                 SelectedMonth = awardedSelectedMonth,
-                                                                                 SelectedYear = awardedSelectedYear
-                                                                             }
+                                                                                           {
+                                                                                               SelectedMonth = awardedSelectedMonth,
+                                                                                               SelectedYear = awardedSelectedYear
+                                                                                           }
                                                                      });
 
         result.Should().NotBeNull();

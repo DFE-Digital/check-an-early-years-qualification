@@ -265,7 +265,7 @@ test.describe("A spec that tests question pages", () => {
         await exists(page, '#awarded-error');
         await checkError(page, '#awarded-error', "Error- AwardedDateIsAfterStartedDateErrorText");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/,3);
+        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 3);
         await doesNotHaveClass(page, "#StartedQuestion\\.SelectedMonth", /govuk-input--error/);
         await doesNotHaveClass(page, "#StartedQuestion\\.SelectedYear", /govuk-input--error/);
         await hasClass(page, "#AwardedQuestion\\.SelectedMonth", /govuk-input--error/);
@@ -285,8 +285,8 @@ test.describe("A spec that tests question pages", () => {
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "started- Missing Month Banner Link Text",0);
-        await checkText(page, "#error-banner-link", "Error- AwardedDateIsAfterStartedDateErrorText",1);
+        await checkText(page, "#error-banner-link", "started- Missing Month Banner Link Text", 0);
+        await checkText(page, "#error-banner-link", "Error- AwardedDateIsAfterStartedDateErrorText", 1);
         await exists(page, "#started-error");
         await exists(page, '#awarded-error');
         await checkError(page, '#started-error', "started- Missing Month Error Message");
@@ -313,7 +313,8 @@ test.describe("A spec that tests question pages", () => {
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "awarded- Missing Month Banner Link TextError- AwardedDateIsAfterStartedDateErrorText");
+        await checkText(page, "#error-banner-link", "awarded- Missing Month Banner Link Text", 0);
+        await checkText(page, "#error-banner-link", "Error- AwardedDateIsAfterStartedDateErrorText", 1);
         await doesNotExist(page, "#started-error");
         await exists(page, '#awarded-error');
         await checkError(page, '#awarded-error', "awarded- Missing Month Error MessageError- AwardedDateIsAfterStartedDateErrorText");
@@ -433,7 +434,8 @@ test.describe("A spec that tests question pages", () => {
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "started- Month Out Of Bounds Error Link Textstarted- Year Out Of Bounds Error Link Text", 0);
+        await checkText(page, "#error-banner-link", "started- Month Out Of Bounds Error Link Text", 0);
+        await checkText(page, "#error-banner-link", "started- Year Out Of Bounds Error Link Text", 1);
         await exists(page, '#started-error');
         await checkError(page, '#started-error', "started- Month Out Of Bounds Error Messagestarted- Year Out Of Bounds Error Message");
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
@@ -452,7 +454,8 @@ test.describe("A spec that tests question pages", () => {
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "started- Month Out Of Bounds Error Link Textstarted- Missing Year Banner Link Text", 0);
+        await checkText(page, "#error-banner-link", "started- Month Out Of Bounds Error Link Text", 0);
+        await checkText(page, "#error-banner-link", "started- Missing Year Banner Link Text", 1);
         await exists(page, '#started-error');
         await checkError(page, '#started-error', "started- Month Out Of Bounds Error Messagestarted- Missing Year Error Message");
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
@@ -471,7 +474,8 @@ test.describe("A spec that tests question pages", () => {
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "started- Missing Month Banner Link Textstarted- Year Out Of Bounds Error Link Text", 0);
+        await checkText(page, "#error-banner-link", "started- Missing Month Banner Link Text", 0);
+        await checkText(page, "#error-banner-link", "started- Year Out Of Bounds Error Link Text", 1);
         await exists(page, '#started-error');
         await checkError(page, '#started-error', "started- Missing Month Error Messagestarted- Year Out Of Bounds Error Message");
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
@@ -491,7 +495,8 @@ test.describe("A spec that tests question pages", () => {
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "awarded- Month Out Of Bounds Error Link Textawarded- Year Out Of Bounds Error Link Text", 1);
+        await checkText(page, "#error-banner-link", "awarded- Month Out Of Bounds Error Link Text", 1);
+        await checkText(page, "#error-banner-link", "awarded- Year Out Of Bounds Error Link Text", 2);
         await exists(page, '#awarded-error');
         await checkError(page, '#awarded-error', "awarded- Month Out Of Bounds Error Messageawarded- Year Out Of Bounds Error Message");
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
@@ -510,7 +515,8 @@ test.describe("A spec that tests question pages", () => {
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "awarded- Month Out Of Bounds Error Link Textawarded- Missing Year Banner Link Text", 1);
+        await checkText(page, "#error-banner-link", "awarded- Month Out Of Bounds Error Link Text", 1);
+        await checkText(page, "#error-banner-link", "awarded- Missing Year Banner Link Text", 2);
         await exists(page, '#awarded-error');
         await checkError(page, '#awarded-error', "awarded- Month Out Of Bounds Error Messageawarded- Missing Year Error Message");
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
@@ -529,7 +535,8 @@ test.describe("A spec that tests question pages", () => {
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link", "awarded- Missing Month Banner Link Textawarded- Year Out Of Bounds Error Link Text", 1);
+        await checkText(page, "#error-banner-link", "awarded- Missing Month Banner Link Text", 1);
+        await checkText(page, "#error-banner-link", "awarded- Year Out Of Bounds Error Link Text", 2);
         await exists(page, '#awarded-error');
         await checkError(page, '#awarded-error', "awarded- Missing Month Error Messageawarded- Year Out Of Bounds Error Message");
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);

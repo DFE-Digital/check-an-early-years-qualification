@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
-[Route("/qualifications")]
+[Route("/select-a-qualification-to-check")]
 [RedirectIfDateMissing]
 public class QualificationSearchController(
     ILogger<QualificationSearchController> logger,

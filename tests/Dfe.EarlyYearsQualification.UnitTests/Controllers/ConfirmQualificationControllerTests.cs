@@ -153,7 +153,7 @@ public class ConfirmQualificationControllerTests
                                                   {
                                                       DisplayText = "Test back button",
                                                       OpenInNewTab = false,
-                                                      Href = "/qualifications"
+                                                      Href = "/select-a-qualification-to-check"
                                                   });
         model.HasErrors.Should().BeFalse();
         model.Options.Should().BeEquivalentTo([
@@ -353,7 +353,7 @@ public class ConfirmQualificationControllerTests
                                                   {
                                                       DisplayText = "Test back button",
                                                       OpenInNewTab = false,
-                                                      Href = "/qualifications"
+                                                      Href = "/select-a-qualification-to-check"
                                                   });
         model.HasErrors.Should().BeTrue();
         model.Options.Should().BeEquivalentTo([
@@ -626,7 +626,7 @@ public class ConfirmQualificationControllerTests
                                 {
                                     DisplayText = "Test back button",
                                     OpenInNewTab = false,
-                                    Href = "/qualifications"
+                                    Href = "/select-a-qualification-to-check"
                                 },
                    ErrorText = "Test error text",
                    ButtonText = "Test button text",
