@@ -6,7 +6,7 @@
 
 What tool should be adopted within the Check an Early Years Qualification service to facilitate automated UI tests?
 
-The previous ADR [0012 - Tools for Creating UI Tests](./0012-tools-for-creating-ui-tests.md) decided to use Cypress however it was found to be slow and flakey when it came to the smoke tests. We decided to review our approach. 
+The previous ADR [0012 - Tools for Creating UI Tests](./0012-tools-for-creating-ui-tests.md) decided to use Cypress however it was found to be slow and flakey when it came to the smoke tests. We decided to review our approach.
 
 ## Decision Drivers
 
