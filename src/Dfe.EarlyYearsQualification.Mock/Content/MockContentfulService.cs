@@ -634,6 +634,10 @@ public class MockContentfulService : IContentService
                           new Option
                           {
                               Label = "Level 7", Value = "7"
+                          },
+                          new Option
+                          {
+                              Label = "Not Sure", Value ="0"
                           }
                       };
         return CreateRadioQuestionPage("What level is the qualification?", options,
