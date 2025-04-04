@@ -18,14 +18,23 @@ public static class SetupExtensions
 
         if (cacheType is "Redis")
         {
-            var instanceName = cacheConfiguration?.GetValue<string>("Instance");
+            var isLocal = cacheConfiguration?.GetValue<bool>("IsLocal") ?? false;
 
-            if (instanceName == null)
+            if (isLocal)
             {
-                throw new ConfigurationErrorsException("For Redis cache, Cache.Instance must be configured");
+                SetupLocalRedisCache(builder);
+            }
+            else
+            {
+                SetupAzureRedisCache(builder, cacheConfiguration);
             }
 
-            SetupRedisCache(builder, instanceName);
+            /*
+             * A side-effect of the Redis cache setup is that the correct RedisCacheOptions object is
+             * also placed into the services at start-up, so the RedisCacheInvalidator also receives
+             * it and therefore uses the same method to connect to Redis.
+             */
+            builder.Services.AddSingleton<ICacheInvalidator, RedisCacheInvalidator>();
         }
         else if (cacheType is "Memory")
         {
@@ -47,18 +56,21 @@ public static class SetupExtensions
         builder.Services.AddSingleton<ICacheInvalidator, NoCacheInvalidator>();
     }
 
-    private static void SetupRedisCache(WebApplicationBuilder builder, string instanceName)
+    private static void SetupAzureRedisCache(WebApplicationBuilder builder, IConfigurationSection? cacheConfiguration)
     {
-        var redisDnsEndPoint = GetRedisDnsEndPoint(instanceName);
+        var instanceName = cacheConfiguration?.GetValue<string>("Instance");
+        if (instanceName == null)
+        {
+            throw new ConfigurationErrorsException("For Azure Redis cache, Cache.Instance must be configured");
+        }
+
+        var redisDnsEndPoint = GetAzureRedisDnsEndPoint(instanceName);
 
         builder.Services
-               .AddStackExchangeRedisCache(options => { options.SetupRedisConnection(redisDnsEndPoint); });
-
-        builder.Services
-               .AddSingleton<ICacheInvalidator, RedisCacheInvalidator>();
+               .AddStackExchangeRedisCache(options => { options.SetupAzureRedisConnection(redisDnsEndPoint); });
     }
 
-    private static DnsEndPoint GetRedisDnsEndPoint(string instanceName)
+    private static DnsEndPoint GetAzureRedisDnsEndPoint(string instanceName)
     {
         var hostName = $"{instanceName}.redis.cache.windows.net";
 
@@ -66,7 +78,7 @@ public static class SetupExtensions
         return redisDnsEndPoint;
     }
 
-    private static void SetupRedisConnection(
+    private static void SetupAzureRedisConnection(
         this RedisCacheOptions options, DnsEndPoint redisDnsEndPoint)
     {
         options.ConfigurationOptions
@@ -80,10 +92,10 @@ public static class SetupExtensions
               };
 
         options.ConnectionMultiplexerFactory =
-            async () => await CreateRedisMultiplexer(options);
+            async () => await CreateAzureRedisMultiplexer(options);
     }
 
-    private static async Task<ConnectionMultiplexer> CreateRedisMultiplexer(RedisCacheOptions options)
+    private static async Task<ConnectionMultiplexer> CreateAzureRedisMultiplexer(RedisCacheOptions options)
     {
         if (options.ConfigurationOptions == null)
         {
@@ -97,5 +109,10 @@ public static class SetupExtensions
         return await ConnectionMultiplexer
                      .ConnectAsync(options.ConfigurationOptions)
                      .ConfigureAwait(false);
+    }
+
+    private static void SetupLocalRedisCache(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddStackExchangeRedisCache(o => o.Configuration = "localhost:6379");
     }
 }

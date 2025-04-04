@@ -15,13 +15,18 @@ public class RedisCacheInvalidator(
 
     private readonly RedisCacheOptions _options = redisCacheOptions.Value;
 
-    public async Task ClearCacheAsync(string keyPrefix)
+    public Task ClearCacheAsync(string keyPrefix)
     {
         if (string.IsNullOrWhiteSpace(keyPrefix))
         {
             throw new ArgumentException("Must not be null or empty.", nameof(keyPrefix));
         }
 
+        return ClearCacheInternalAsync(keyPrefix);
+    }
+
+    private async Task<RedisResult> ClearCacheInternalAsync(string keyPrefix)
+    {
         logger.LogInformation("Clearing cache items with prefix {KeyPrefix}.", keyPrefix);
 
         var connection = await ConnectionMultiplexer.ConnectAsync(_options.Configuration!);
@@ -31,8 +36,9 @@ public class RedisCacheInvalidator(
 
         var result = await database.ScriptEvaluateAsync(ClearCacheLuaScript, values: redisValues);
 
-        logger.LogInformation("Redis result {Result}", result);
-
         await connection.CloseAsync();
+
+        logger.LogInformation("Redis result {Result}", result);
+        return result;
     }
 }

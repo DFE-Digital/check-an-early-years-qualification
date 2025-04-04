@@ -38,9 +38,31 @@ public class CacheController(
 
     private string? GetSubmittedCacheAuthSecret()
     {
-        var cacheSecrets = Request.Headers["Cache-Secret"];
+        var cacheSecret =
+            GetCacheSecretFromHeader()
+            ?? GetCacheSecretFromQuery();
 
+        return cacheSecret;
+    }
+
+    private string? GetCacheSecretFromQuery()
+    {
         string? cacheSecret = null;
+
+        var ok = Request.Query.TryGetValue("cache-secret", out var submitted);
+        if (ok && submitted.Count > 0)
+        {
+            cacheSecret = submitted[0];
+        }
+
+        return cacheSecret;
+    }
+
+    private string? GetCacheSecretFromHeader()
+    {
+        string? cacheSecret = null;
+
+        var cacheSecrets = Request.Headers["Cache-Secret"];
 
         if (cacheSecrets.Count > 0)
         {
@@ -52,7 +74,16 @@ public class CacheController(
 
     private string GetExpectedCacheAuthSecret()
     {
-        var expectedSecret = configuration.GetSection("Cache")["AuthSecret"];
+        string? expectedSecret = null;
+
+        try
+        {
+            expectedSecret = configuration.GetSection("Cache")["AuthSecret"];
+        }
+        catch
+        {
+            logger.LogError("Error reading configuration.");
+        }
 
         if (string.IsNullOrWhiteSpace(expectedSecret))
         {
