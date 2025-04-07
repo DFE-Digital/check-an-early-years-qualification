@@ -1,6 +1,6 @@
 # 0012 - Tools For creating UI Tests
 
-* **Status**: accepted
+* **Status**: deprecated - replaced by [0023 - Changed Tools for Creating UI Tests](./0023-changed-tools-for-creating-ui-tests.md)
 
 ## Context and Problem Statement
 
