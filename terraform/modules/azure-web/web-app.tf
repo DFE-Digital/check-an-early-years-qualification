@@ -32,6 +32,7 @@ resource "azurerm_linux_web_app" "webapp" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
+    "Cache__AuthSecret"                          = var.cache_endpoint_secret
   }, var.webapp_app_settings)
 
   identity {
@@ -132,6 +133,7 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
+    "Cache__AuthSecret"                          = var.cache_endpoint_secret
   }, var.webapp_slot_app_settings)
 
   site_config {
