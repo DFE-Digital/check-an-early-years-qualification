@@ -11,7 +11,7 @@ public class MockContentfulService : IContentService
 {
     private const string WhereWasTheQualificationAwardedPath = "/questions/where-was-the-qualification-awarded";
     private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
-    private const string QualificationsPath = "/qualifications";
+    private const string QualificationsPath = "/select-a-qualification-to-check";
     private const string HomePath = "/";
     private const string ThereIsAProblem = "There is a problem";
 
