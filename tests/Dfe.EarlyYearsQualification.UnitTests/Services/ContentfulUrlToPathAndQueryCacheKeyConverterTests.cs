@@ -18,7 +18,7 @@ public class ContentfulUrlToPathAndQueryCacheKeyConverterTests
          */
         ContentfulUrlToPathAndQueryCacheKeyConverter
             .KeyPrefix
-            .Should().Be("contentful:", "Extra action required if this value changes");
+            .Should().Be("ceyq/contentful:", "Extra action required if this value changes");
     }
 
     [TestMethod]

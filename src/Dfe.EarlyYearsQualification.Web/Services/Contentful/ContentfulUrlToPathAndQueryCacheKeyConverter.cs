@@ -4,7 +4,10 @@ namespace Dfe.EarlyYearsQualification.Web.Services.Contentful;
 
 public class ContentfulUrlToPathAndQueryCacheKeyConverter : IUrlToKeyConverter
 {
-    public const string KeyPrefix = "contentful:";
+    /// <summary>
+    ///     Cache key prefix for Check An Early Years Qualification service: Contentful
+    /// </summary>
+    public const string KeyPrefix = "ceyq/contentful:";
 
     public Task<string> GetKeyAsync(Uri uri)
     {
