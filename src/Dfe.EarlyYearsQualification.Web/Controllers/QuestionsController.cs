@@ -7,6 +7,7 @@ using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -260,19 +261,28 @@ public class QuestionsController(
                                             int? selectedYear)
     {
         if (question is null) return null;
-        var bannerErrorText = validationResult is { BannerErrorMessages.Count: > 0 }
-                                  ? string.Join("<br />", validationResult.BannerErrorMessages)
-                                  : null;
+        var bannerErrors = validationResult is { BannerErrorMessages.Count: > 0 } ? validationResult.BannerErrorMessages : null;
 
         var errorMessageText = validationResult is { ErrorMessages.Count: > 0 }
                                    ? string.Join("<br />", validationResult.ErrorMessages)
                                    : null;
 
-        var errorBannerLinkText = placeholderUpdater.Replace(bannerErrorText ?? question.ErrorBannerLinkText);
+        var errorBannerMessages = new List<BannerError>();
+        if (bannerErrors is null)
+        {
+            errorBannerMessages.Add(new BannerError(question.ErrorMessage, FieldId.Month));
+        }
+        else
+        {
+            foreach (var bannerError in bannerErrors)
+            {
+                errorBannerMessages.Add(new BannerError(placeholderUpdater.Replace(bannerError.Message), bannerError.FieldId));
+            }
+        }
 
         var errorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
 
-        return DateQuestionMapper.Map(model, question, errorBannerLinkText, errorMessage, validationResult,
+        return DateQuestionMapper.Map(model, question, errorBannerMessages, errorMessage, validationResult,
                                       selectedMonth, selectedYear);
     }
 
