@@ -454,9 +454,10 @@ resource "azurerm_app_service_certificate_binding" "webapp_service_gov_uk_custom
 }
 
 resource "azurerm_redis_cache_access_policy_assignment" "web_app_contrib" {
-  name               = "web-app-redis-contributor"
-  redis_cache_id     = var.redis_cache_id
-  access_policy_name = "Data Contributor"
+  name           = "web-app-redis-contributor"
+  redis_cache_id = var.redis_cache_id
+  # Grant Data Owner, as the endpoint to clear the cache requires access to a `dangerous` function
+  access_policy_name = "Data Owner"
   object_id          = azurerm_linux_web_app.webapp.identity[0].principal_id
   object_id_alias    = "ServicePrincipal"
 }
