@@ -37,7 +37,7 @@ public class RedisCacheInvalidator(
 
         RedisResult result;
 
-        var connection = await ConnectionMultiplexer.ConnectAsync(_options.Configuration!);
+        var connection = await ConnectionMultiplexer.ConnectAsync(_options.ConfigurationOptions!);
 
         try
         {
