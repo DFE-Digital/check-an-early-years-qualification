@@ -28,6 +28,9 @@ public static class SetupExtensions
                 SetupNoCache(builder);
                 break;
         }
+
+        builder.Services.AddScoped<ICachingOptionsManager, CachingOptionsManager>();
+        // ...when running in production, this code need to add a NeverBypassCacheManager singleton here instead
     }
 
     private static void SetupRedisCache(WebApplicationBuilder builder, IConfigurationSection? cacheConfiguration)

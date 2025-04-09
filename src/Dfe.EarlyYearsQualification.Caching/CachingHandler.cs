@@ -7,6 +7,7 @@ namespace Dfe.EarlyYearsQualification.Caching;
 public class CachingHandler(
     IDistributedCache cache,
     IUrlToKeyConverter urlToKeyConverter,
+    ICachingOptionsManager cachingOptionsManager,
     ILogger<CachingHandler> logger)
     : DelegatingHandler(new HttpClientHandler())
 {
@@ -16,6 +17,13 @@ public class CachingHandler(
         if (request.RequestUri is null)
         {
             throw new ArgumentException(nameof(request.RequestUri));
+        }
+
+        var cachingOption = await cachingOptionsManager.GetCachingOption();
+
+        if (cachingOption == CachingOption.BypassCache)
+        {
+            return await InternalSendAsync(request, cancellationToken);
         }
 
         var cacheKey = await urlToKeyConverter.GetKeyAsync(request.RequestUri);

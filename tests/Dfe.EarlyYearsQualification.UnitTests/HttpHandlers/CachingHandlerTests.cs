@@ -19,6 +19,7 @@ public class CachingHandlerTests
     {
         var handler = new TestCachingHandler(GetCache(),
                                              new Mock<IUrlToKeyConverter>().Object,
+                                             new Mock<ICachingOptionsManager>().Object,
                                              NullLogger<CachingHandler>.Instance);
 
         var action = async () =>
@@ -33,6 +34,10 @@ public class CachingHandlerTests
     {
         // Arrange...
         var address = new Uri("https://google.co.uk/path?query=q#fragment");
+
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(m => m.GetCachingOption())
+                             .ReturnsAsync(CachingOption.None);
 
         const string key = "some key";
 
@@ -50,6 +55,7 @@ public class CachingHandlerTests
 
         var handler = new TestCachingHandler(distributedCache,
                                              urlToKeyConverter.Object,
+                                             cachingOptionsManager.Object,
                                              NullLogger<CachingHandler>.Instance);
 
         // Act...
@@ -70,6 +76,10 @@ public class CachingHandlerTests
         var address = new Uri("https://example.com/");
         // NB this test does a real request to that address, as you can't mock an HttpHandler's HttpClient
 
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(m => m.GetCachingOption())
+                             .ReturnsAsync(CachingOption.None);
+
         const string key = "some key";
 
         var urlToKeyConverter = new Mock<IUrlToKeyConverter>();
@@ -83,6 +93,7 @@ public class CachingHandlerTests
 
         var handler = new TestCachingHandler(distributedCache,
                                              urlToKeyConverter.Object,
+                                             cachingOptionsManager.Object,
                                              NullLogger<CachingHandler>.Instance);
 
         // Act...
@@ -105,11 +116,57 @@ public class CachingHandlerTests
         cached.Should().NotBeNull();
     }
 
+    [TestMethod]
+    public async Task Request_WhenBypassingCache_DoesNotReadCacheBeforeSend()
+    {
+        // Arrange...
+        var address = new Uri("https://example.com/");
+        // NB this test does a real request to that address, as you can't mock an HttpHandler's HttpClient
+
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(m => m.GetCachingOption())
+                             .ReturnsAsync(CachingOption.BypassCache);
+
+        const string key = "some key";
+
+        var urlToKeyConverter = new Mock<IUrlToKeyConverter>();
+        urlToKeyConverter
+            .Setup(c => c.GetKeyAsync(It.IsAny<Uri>()))
+            .ReturnsAsync(key);
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, address);
+
+        var distributedCache = GetCache();
+
+        var handler = new TestCachingHandler(distributedCache,
+                                             urlToKeyConverter.Object,
+                                             cachingOptionsManager.Object,
+                                             NullLogger<CachingHandler>.Instance);
+
+        // Act...
+        var response = await handler.PublicSendAsync(httpRequestMessage,
+                                                     CancellationToken.None);
+
+        // Assert...
+        var cache = Moq.Mock.Get(distributedCache);
+
+        cache.Verify(c => c.Get(key), Times.Never);
+
+        cache.Verify(c => c.SetAsync(key,
+                                     It.IsAny<byte[]>(),
+                                     It.IsAny<DistributedCacheEntryOptions>(),
+                                     It.IsAny<CancellationToken>()),
+                     Times.Never);
+
+        response.Should().NotBeNull();
+    }
+
     private class TestCachingHandler(
         IDistributedCache cache,
         IUrlToKeyConverter converter,
+        ICachingOptionsManager optionsManager,
         ILogger<CachingHandler> logger)
-        : CachingHandler(cache, converter, logger)
+        : CachingHandler(cache, converter, optionsManager, logger)
     {
         public async Task<HttpResponseMessage> PublicSendAsync(HttpRequestMessage request,
                                                                CancellationToken cancellationToken)

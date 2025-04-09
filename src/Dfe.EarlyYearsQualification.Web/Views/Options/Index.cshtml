@@ -1,0 +1,44 @@
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model Dfe.EarlyYearsQualification.Web.Models.Content.OptionsPageModel
+
+@{
+    ViewData["Title"] = "Options";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        <form id="options-form" asp-controller="Options" method="post">
+            <div id="cookies-form-group" class="govuk-form-group">
+                <fieldset class="govuk-fieldset" role="group" aria-describedby="cookies-choice-error">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h4 id="cookies-form-heading" class="govuk-heading-m">@Model.FormHeading</h4>
+                    </legend>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @foreach (var option in Model.Options)
+                        {
+                            var @checked = option.Value == Model.Option ? "checked" : "";
+                            <div class="govuk-radios__item">
+                                @Html.RadioButtonFor(x => x.Option, option.Value, new { @class = "govuk-radios__input", id = option.Value, @checked })
+                                <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                    @option.Label
+                                </label>
+                                @if (!string.IsNullOrEmpty(option.Hint))
+                                {
+                                    var hintId = $"{option.Value}_hint";
+                                    <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                        @option.Hint
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="govuk-form-group">
+                        <button id="cookies-button" class="govuk-button" data-module="govuk-button">
+                            @Model.ButtonText
+                        </button>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</div>
