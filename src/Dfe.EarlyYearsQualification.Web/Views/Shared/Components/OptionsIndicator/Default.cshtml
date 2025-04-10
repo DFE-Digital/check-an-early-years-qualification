@@ -1,0 +1,11 @@
+@using Dfe.EarlyYearsQualification.Caching
+@model OptionsPageModel
+
+@{
+    if (!Model.Option.Equals(CachingOption.None.ToString(), StringComparison.Ordinal))
+    {
+        <div class="options-stamp">
+            Options: @Model.Option
+        </div>
+    }
+}

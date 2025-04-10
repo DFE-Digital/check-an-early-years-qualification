@@ -1,7 +1,7 @@
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -36,7 +36,7 @@ public class OptionsController(
             await SetCachingOption(model.Option);
         }
 
-        return View(model);
+        return RedirectToAction("Index", "Home");
     }
 
     private async Task SetModelCachingOption(OptionsPageModel model)

@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
-namespace Dfe.EarlyYearsQualification.Web.Models.Content;
+namespace Dfe.EarlyYearsQualification.Web.Models;
 
 public class OptionsPageModel
 {
-    private const string DefaultOptionValue = "Normal";
+    private const string DefaultOptionValue = "None";
     public string FormHeading { get; init; } = "Select an option";
 
     public List<OptionModel> Options { get; init; } =

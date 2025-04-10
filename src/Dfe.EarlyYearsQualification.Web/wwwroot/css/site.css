@@ -472,6 +472,16 @@ body {
     padding: 0;
 }
 
-#qualification-details-summary{
+#qualification-details-summary {
     margin-bottom: 30px;
+}
+
+.options-stamp {
+    position: fixed;
+    border: 3px solid maroon;
+    color: maroon;
+    padding: 5px;
+    margin: 2px;
+    bottom: 0;
+    right: 0;
 }
