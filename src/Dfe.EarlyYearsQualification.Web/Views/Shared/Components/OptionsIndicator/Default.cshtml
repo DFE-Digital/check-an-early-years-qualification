@@ -4,8 +4,10 @@
 @{
     if (!Model.Option.Equals(CachingOption.None.ToString(), StringComparison.Ordinal))
     {
-        <a class="options-stamp" href="/" tabindex="0">
-            Options: @Model.Option
-        </a>
+        @Html.ActionLink(Model.Option,
+                         "Index",
+                         "Options",
+                         null,
+                         new { @class = "options-stamp", tabindex = "0" })
     }
 }

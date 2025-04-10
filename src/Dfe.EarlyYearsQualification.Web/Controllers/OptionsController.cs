@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
-[Route("options")]
+[Route("/options")]
 public class OptionsController(
     ILogger<OptionsController> logger,
     ICachingOptionsManager cachingOptionsManager,
