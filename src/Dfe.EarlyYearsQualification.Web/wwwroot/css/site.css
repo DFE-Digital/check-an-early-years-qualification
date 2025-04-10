@@ -476,7 +476,7 @@ body {
     margin-bottom: 30px;
 }
 
-.options-stamp {
+.options-stamp, .options-stamp:visited, .options-stamp:hover, .options-stamp:active {
     position: fixed;
     border: 3px solid maroon;
     color: maroon;
