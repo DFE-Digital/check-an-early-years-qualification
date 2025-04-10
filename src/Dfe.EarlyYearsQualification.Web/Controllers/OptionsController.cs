@@ -9,7 +9,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [Route("options")]
 public class OptionsController(
     ILogger<OptionsController> logger,
-    ICachingOptionsManager cachingOptionsManager)
+    ICachingOptionsManager cachingOptionsManager,
+    IConfiguration config)
     : ServiceController
 {
     [HttpGet]
@@ -17,11 +18,16 @@ public class OptionsController(
     {
         logger.LogInformation("Options page accessed.");
 
+        if (config["ENVIRONMENT"]?.StartsWith("prod", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            return NotFound();
+        }
+
         var model = new OptionsPageModel();
 
         model.Option = model.Options.FirstOrDefault()!.Value;
 
-        await SetModelCachingOption(model);
+        await UseCachingOptionForModel(model);
 
         return View(model);
     }
@@ -31,6 +37,11 @@ public class OptionsController(
     {
         logger.LogInformation("Options page submitted.");
 
+        if (config["ENVIRONMENT"]?.StartsWith("prod", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            return NotFound();
+        }
+
         if (ModelState.IsValid)
         {
             await SetCachingOption(model.Option);
@@ -39,7 +50,7 @@ public class OptionsController(
         return RedirectToAction("Index", "Home");
     }
 
-    private async Task SetModelCachingOption(OptionsPageModel model)
+    private async Task UseCachingOptionForModel(OptionsPageModel model)
     {
         var option = await cachingOptionsManager.GetCachingOption();
 
