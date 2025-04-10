@@ -4,8 +4,9 @@
 @{
     if (!Model.Option.Equals(CachingOption.None.ToString(), StringComparison.Ordinal))
     {
-        <div class="options-stamp">
+        <button class="options-stamp" onclick="window.location.href = '/options/';"
+                onKeyDown="window.location.href = '/options';" tabindex="0">
             Options: @Model.Option
-        </div>
+        </button>
     }
 }
