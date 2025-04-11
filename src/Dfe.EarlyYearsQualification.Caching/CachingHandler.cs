@@ -8,8 +8,9 @@ public class CachingHandler(
     IDistributedCache cache,
     IUrlToKeyConverter urlToKeyConverter,
     ICachingOptionsManager cachingOptionsManager,
-    ILogger<CachingHandler> logger)
-    : DelegatingHandler(new HttpClientHandler())
+    ILogger<CachingHandler> logger,
+    HttpClientHandler httpClientHandler)
+    : DelegatingHandler(httpClientHandler)
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
                                                                  CancellationToken cancellationToken)

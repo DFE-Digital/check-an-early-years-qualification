@@ -13,7 +13,7 @@ public class NeverBypassCacheManagerTests
 
         var option = await sut.GetCachingOption();
 
-        option.Should().Be(CachingOption.None);
+        option.Should().Be(CachingOption.UseCache);
     }
 
     [TestMethod]
@@ -35,6 +35,6 @@ public class NeverBypassCacheManagerTests
 
         var option = await sut.GetCachingOption();
 
-        option.Should().Be(CachingOption.None);
+        option.Should().Be(CachingOption.UseCache);
     }
 }

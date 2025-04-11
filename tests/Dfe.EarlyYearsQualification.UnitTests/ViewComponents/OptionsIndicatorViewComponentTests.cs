@@ -15,26 +15,27 @@ public class OptionsIndicatorViewComponentTests
     public async Task InvokeAsync_InProduction_ReturnsView_WithDefaultOption()
     {
         var optionsManager = new Mock<ICachingOptionsManager>();
-        optionsManager.Setup(o => o.GetCachingOption()).ReturnsAsync(CachingOption.BypassCache);
+        optionsManager.Setup(o => o.GetCachingOption())
+                      .ReturnsAsync(CachingOption.BypassCache);
 
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("production");
 
-        var sut = new OptionsIndicatorViewComponent(NullLogger<OptionsIndicatorViewComponent>.Instance,
-                                                    optionsManager.Object,
-                                                    config.Object);
+        OptionsIndicatorViewComponent sut = new(NullLogger<OptionsIndicatorViewComponent>.Instance,
+                                                optionsManager.Object,
+                                                config.Object);
 
-        var result = await sut.InvokeAsync();
+        IViewComponentResult result = await sut.InvokeAsync();
 
         result.Should().BeOfType<ViewViewComponentResult>();
 
-        var componentResult = result as ViewViewComponentResult;
+        ViewViewComponentResult? componentResult = result as ViewViewComponentResult;
 
         componentResult!.ViewData!.Model.Should().BeOfType<OptionsPageModel>();
 
-        var model = componentResult.ViewData.Model as OptionsPageModel;
+        OptionsPageModel? model = componentResult.ViewData.Model as OptionsPageModel;
 
-        model!.Option.Should().Be(CachingOption.None.ToString());
+        model!.Option.Should().Be(OptionsPageModel.DefaultOptionValue);
     }
 
     [TestMethod]
@@ -46,21 +47,21 @@ public class OptionsIndicatorViewComponentTests
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns((string)null!);
 
-        var sut = new OptionsIndicatorViewComponent(NullLogger<OptionsIndicatorViewComponent>.Instance,
-                                                    optionsManager.Object,
-                                                    config.Object);
+        OptionsIndicatorViewComponent sut = new(NullLogger<OptionsIndicatorViewComponent>.Instance,
+                                                optionsManager.Object,
+                                                config.Object);
 
-        var result = await sut.InvokeAsync();
+        IViewComponentResult result = await sut.InvokeAsync();
 
         result.Should().BeOfType<ViewViewComponentResult>();
 
-        var componentResult = result as ViewViewComponentResult;
+        ViewViewComponentResult? componentResult = result as ViewViewComponentResult;
 
         componentResult!.ViewData!.Model.Should().BeOfType<OptionsPageModel>();
 
-        var model = componentResult.ViewData.Model as OptionsPageModel;
+        OptionsPageModel? model = componentResult.ViewData.Model as OptionsPageModel;
 
-        model!.Option.Should().Be(CachingOption.None.ToString());
+        model!.Option.Should().Be(OptionsPageModel.DefaultOptionValue);
     }
 
     [TestMethod]
@@ -72,20 +73,20 @@ public class OptionsIndicatorViewComponentTests
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("development");
 
-        var sut = new OptionsIndicatorViewComponent(NullLogger<OptionsIndicatorViewComponent>.Instance,
-                                                    optionsManager.Object,
-                                                    config.Object);
+        OptionsIndicatorViewComponent sut = new(NullLogger<OptionsIndicatorViewComponent>.Instance,
+                                                optionsManager.Object,
+                                                config.Object);
 
-        var result = await sut.InvokeAsync();
+        IViewComponentResult result = await sut.InvokeAsync();
 
         result.Should().BeOfType<ViewViewComponentResult>();
 
-        var componentResult = result as ViewViewComponentResult;
+        ViewViewComponentResult? componentResult = result as ViewViewComponentResult;
 
         componentResult!.ViewData!.Model.Should().BeOfType<OptionsPageModel>();
 
-        var model = componentResult.ViewData.Model as OptionsPageModel;
+        OptionsPageModel? model = componentResult.ViewData.Model as OptionsPageModel;
 
-        model!.Option.Should().Be(CachingOption.BypassCache.ToString());
+        model!.Option.Should().Be(OptionsPageModel.BypassCacheOptionValue);
     }
 }

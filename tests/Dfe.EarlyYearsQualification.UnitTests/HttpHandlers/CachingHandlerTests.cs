@@ -37,7 +37,7 @@ public class CachingHandlerTests
 
         var cachingOptionsManager = new Mock<ICachingOptionsManager>();
         cachingOptionsManager.Setup(m => m.GetCachingOption())
-                             .ReturnsAsync(CachingOption.None);
+                             .ReturnsAsync(CachingOption.UseCache);
 
         const string key = "some key";
 
@@ -78,7 +78,7 @@ public class CachingHandlerTests
 
         var cachingOptionsManager = new Mock<ICachingOptionsManager>();
         cachingOptionsManager.Setup(m => m.GetCachingOption())
-                             .ReturnsAsync(CachingOption.None);
+                             .ReturnsAsync(CachingOption.UseCache);
 
         const string key = "some key";
 
@@ -111,7 +111,7 @@ public class CachingHandlerTests
                                      It.IsAny<CancellationToken>()),
                      Times.Once);
 
-        var cached = await distributedCache.GetAsync(key);
+        byte[]? cached = await distributedCache.GetAsync(key);
 
         cached.Should().NotBeNull();
     }
@@ -166,7 +166,7 @@ public class CachingHandlerTests
         IUrlToKeyConverter converter,
         ICachingOptionsManager optionsManager,
         ILogger<CachingHandler> logger)
-        : CachingHandler(cache, converter, optionsManager, logger)
+        : CachingHandler(cache, converter, optionsManager, logger, new HttpClientHandler())
     {
         public async Task<HttpResponseMessage> PublicSendAsync(HttpRequestMessage request,
                                                                CancellationToken cancellationToken)

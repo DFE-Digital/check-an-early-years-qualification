@@ -2,7 +2,7 @@
 @model OptionsPageModel
 
 @{
-    if (!Model.Option.Equals(CachingOption.None.ToString(), StringComparison.Ordinal))
+    if (!Model.Option.Equals(CachingOption.UseCache.ToString(), StringComparison.Ordinal))
     {
         @Html.ActionLink(Model.Option,
                          "Index",

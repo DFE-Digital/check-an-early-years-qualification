@@ -33,6 +33,9 @@ using OwaspHeaders.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+string environment = builder.Configuration.GetValue<string?>("ENVIRONMENT") ?? "production";
+bool isProductionEnvironment = environment.StartsWith("prod", StringComparison.OrdinalIgnoreCase);
+
 var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
                                         {
                                             EnableAdaptiveSampling = false
@@ -44,10 +47,10 @@ builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToPathAndQueryCac
 builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
-var useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
+bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
 if (!useMockContentful)
 {
-    var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
+    string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
     builder.Services
@@ -57,7 +60,7 @@ if (!useMockContentful)
 
     if (!builder.Environment.IsDevelopment())
     {
-        var blobStorageConnectionString =
+        string? blobStorageConnectionString =
             builder.Configuration
                    .GetSection("Storage")
                    .GetValue<string>("ConnectionString");
@@ -152,7 +155,7 @@ else
     builder.Services.AddSingleton<INotificationService, GovUkNotifyService>();
 }
 
-var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
+bool accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
 
 if (accessIsChallenged)
@@ -166,7 +169,7 @@ else
 
 var cacheConfiguration = builder.Configuration.GetSection("Cache");
 
-builder.UseDistributedCache(cacheConfiguration);
+builder.UseDistributedCache(cacheConfiguration, isProductionEnvironment);
 
 var app = builder.Build();
 

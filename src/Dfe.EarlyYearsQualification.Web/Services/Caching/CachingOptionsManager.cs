@@ -17,14 +17,14 @@ public class CachingOptionsManager(
         var cookies = cookieManager.ReadInboundCookies();
 
         if (cookies == null
-            || !cookies.TryGetValue(OptionsCookieKey, out var optionVal)
+            || !cookies.TryGetValue(OptionsCookieKey, out string? optionVal)
             || string.IsNullOrWhiteSpace(optionVal))
         {
             logger.LogInformation("User's caching option not set, using default value");
-            return Task.FromResult(CachingOption.None);
+            return Task.FromResult(CachingOption.UseCache);
         }
 
-        var ok = Enum.TryParse<CachingOption>(optionVal, out var optionEnum);
+        bool ok = Enum.TryParse<CachingOption>(optionVal, out CachingOption optionEnum);
 
         if (ok)
         {
@@ -33,19 +33,19 @@ public class CachingOptionsManager(
 
         logger.LogWarning("User's caching option set to unexpected value {OptionVal}", optionVal);
 
-        return Task.FromResult(CachingOption.None);
+        return Task.FromResult(CachingOption.UseCache);
     }
 
     public Task SetCachingOption(CachingOption option)
     {
         logger.LogInformation("Setting user's caching option to {Option}", option);
 
-        var cookieOptions = new CookieOptions
-                            {
-                                Expires = DateTimeOffset.UtcNow.AddDays(1),
-                                HttpOnly = true,
-                                Secure = true
-                            };
+        CookieOptions cookieOptions = new()
+                                      {
+                                          Expires = DateTimeOffset.UtcNow.AddDays(1),
+                                          HttpOnly = true,
+                                          Secure = true
+                                      };
 
         cookieManager.SetOutboundCookie(OptionsCookieKey, option.ToString(), cookieOptions);
 

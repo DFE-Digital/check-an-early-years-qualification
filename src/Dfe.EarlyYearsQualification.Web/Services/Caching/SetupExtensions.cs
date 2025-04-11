@@ -12,9 +12,16 @@ namespace Dfe.EarlyYearsQualification.Web.Services.Caching;
 public static class SetupExtensions
 {
     public static void UseDistributedCache(this WebApplicationBuilder builder,
-                                           IConfigurationSection? cacheConfiguration)
+                                           IConfigurationSection? cacheConfiguration, bool isProductionEnvironment)
     {
-        var cacheType = cacheConfiguration?.GetValue<string>("Type") ?? "None";
+        SetupCacheServices(builder, cacheConfiguration);
+
+        SetupCacheOptionsManagement(builder, isProductionEnvironment);
+    }
+
+    private static void SetupCacheServices(WebApplicationBuilder builder, IConfigurationSection? cacheConfiguration)
+    {
+        string cacheType = cacheConfiguration?.GetValue<string>("Type") ?? "None";
 
         switch (cacheType)
         {
@@ -28,14 +35,11 @@ public static class SetupExtensions
                 SetupNoCache(builder);
                 break;
         }
-
-        builder.Services.AddScoped<ICachingOptionsManager, CachingOptionsManager>();
-        // ...when running in production, this code need to add a NeverBypassCacheManager singleton here instead
     }
 
     private static void SetupRedisCache(WebApplicationBuilder builder, IConfigurationSection? cacheConfiguration)
     {
-        var isLocal = cacheConfiguration?.GetValue<bool>("IsLocal") ?? false;
+        bool isLocal = cacheConfiguration?.GetValue<bool>("IsLocal") ?? false;
 
         if (isLocal)
         {
@@ -71,7 +75,7 @@ public static class SetupExtensions
 
     private static void SetupAzureRedisCache(WebApplicationBuilder builder, IConfigurationSection? cacheConfiguration)
     {
-        var instanceName = cacheConfiguration?.GetValue<string>("Instance");
+        string? instanceName = cacheConfiguration?.GetValue<string>("Instance");
         if (instanceName == null)
         {
             throw new ConfigurationErrorsException("For Azure Redis cache, Cache.Instance must be configured");
@@ -85,7 +89,7 @@ public static class SetupExtensions
 
     private static DnsEndPoint GetAzureRedisDnsEndPoint(string instanceName)
     {
-        var hostName = $"{instanceName}.redis.cache.windows.net";
+        string hostName = $"{instanceName}.redis.cache.windows.net";
 
         var redisDnsEndPoint = new DnsEndPoint(hostName, 6380);
         return redisDnsEndPoint;
@@ -127,5 +131,17 @@ public static class SetupExtensions
     private static void SetupLocalRedisCache(this WebApplicationBuilder builder)
     {
         builder.Services.AddStackExchangeRedisCache(o => o.Configuration = "localhost:6379");
+    }
+
+    private static void SetupCacheOptionsManagement(WebApplicationBuilder builder, bool isProductionEnvironment)
+    {
+        if (isProductionEnvironment)
+        {
+            builder.Services.AddSingleton<ICachingOptionsManager, NeverBypassCacheManager>();
+        }
+        else
+        {
+            builder.Services.AddScoped<ICachingOptionsManager, CachingOptionsManager>();
+        }
     }
 }

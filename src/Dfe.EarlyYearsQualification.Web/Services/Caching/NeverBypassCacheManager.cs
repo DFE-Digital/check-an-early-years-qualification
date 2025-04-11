@@ -10,7 +10,7 @@ public class NeverBypassCacheManager : ICachingOptionsManager
 {
     public Task<CachingOption> GetCachingOption()
     {
-        return Task.FromResult(CachingOption.None);
+        return Task.FromResult(CachingOption.UseCache);
     }
 
     public Task SetCachingOption(CachingOption option)

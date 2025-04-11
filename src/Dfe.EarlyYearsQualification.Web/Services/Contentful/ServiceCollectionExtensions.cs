@@ -1,6 +1,11 @@
+using System.Net;
+using Contentful.Core.Configuration;
 using Dfe.EarlyYearsQualification.Caching;
+using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.Contentful;
 
@@ -17,10 +22,35 @@ public static class ServiceCollectionExtensions
     /// <param name="serviceCollection"></param>
     public static void SetupContentfulServices(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddTransient<IContentService, ContentfulContentService>();
-        serviceCollection.AddTransient<IQualificationsRepository, QualificationsRepository>();
+        serviceCollection.AddScoped<IContentService, ContentfulContentService>();
+        serviceCollection.AddScoped<IQualificationsRepository, QualificationsRepository>();
+
+        serviceCollection.AddScoped<HttpClientHandler>(sp => new HttpClientHandler());
 
         serviceCollection.AddHttpClient(ContentfulClientHttpClientName)
-                         .ConfigurePrimaryHttpMessageHandler<CachingHandler>();
+                         .ConfigurePrimaryHttpMessageHandler(ConfigureHandler);
+    }
+
+    private static HttpMessageHandler ConfigureHandler(IServiceProvider serviceProvider)
+    {
+        var options = serviceProvider.GetService<IOptions<ContentfulOptions>>()!.Value;
+
+        var httpHandler = serviceProvider.GetService<HttpClientHandler>()!;
+
+        if (options.AllowHttpResponseCompression && httpHandler.SupportsAutomaticDecompression)
+        {
+            httpHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        }
+
+        var cache = serviceProvider.GetService<IDistributedCache>()!;
+        var urlToKeyConverter = serviceProvider.GetService<IUrlToKeyConverter>()!;
+        var cachingOptionsManager = serviceProvider.GetService<ICachingOptionsManager>()!;
+        var logger = serviceProvider.GetService<ILogger<CachingHandler>>()!;
+
+        return new CachingHandler(cache,
+                                  urlToKeyConverter,
+                                  cachingOptionsManager,
+                                  logger,
+                                  httpHandler);
     }
 }

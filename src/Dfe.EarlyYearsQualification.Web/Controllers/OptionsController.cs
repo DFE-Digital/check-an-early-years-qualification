@@ -54,19 +54,27 @@ public class OptionsController(
     {
         var option = await cachingOptionsManager.GetCachingOption();
 
-        if (option != CachingOption.None)
+        switch (option)
         {
-            model.Option = option.ToString();
+            case CachingOption.UseCache:
+                model.Option = OptionsPageModel.DefaultOptionValue;
+                break;
+            case CachingOption.BypassCache:
+                model.Option = OptionsPageModel.BypassCacheOptionValue;
+                break;
         }
     }
 
     private async Task SetCachingOption(string option)
     {
-        var optionOk = Enum.TryParse(option, out CachingOption cachingOption);
+        var cachingOption =
+            option switch
+            {
+                OptionsPageModel.DefaultOptionValue => CachingOption.UseCache,
+                OptionsPageModel.BypassCacheOptionValue => CachingOption.BypassCache,
+                _ => CachingOption.UseCache
+            };
 
-        if (optionOk)
-        {
-            await cachingOptionsManager.SetCachingOption(cachingOption);
-        }
+        await cachingOptionsManager.SetCachingOption(cachingOption);
     }
 }

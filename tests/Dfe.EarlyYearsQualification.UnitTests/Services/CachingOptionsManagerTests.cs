@@ -38,7 +38,7 @@ public class CachingOptionsManagerTests
 
         var option = await sut.GetCachingOption();
 
-        option.Should().Be(CachingOption.None);
+        option.Should().Be(CachingOption.UseCache);
     }
 
     [TestMethod]
@@ -54,7 +54,7 @@ public class CachingOptionsManagerTests
 
         var option = await sut.GetCachingOption();
 
-        option.Should().Be(CachingOption.None);
+        option.Should().Be(CachingOption.UseCache);
     }
 
     [TestMethod]
@@ -69,11 +69,12 @@ public class CachingOptionsManagerTests
         cookieManager.Setup(m => m.ReadInboundCookies())
                      .Returns(cookies);
 
-        var sut = new CachingOptionsManager(NullLogger<CachingOptionsManager>.Instance, cookieManager.Object);
+        var sut =
+            new CachingOptionsManager(NullLogger<CachingOptionsManager>.Instance, cookieManager.Object);
 
         var option = await sut.GetCachingOption();
 
-        option.Should().Be(CachingOption.None);
+        option.Should().Be(CachingOption.UseCache);
     }
 
     [TestMethod]
@@ -92,7 +93,7 @@ public class CachingOptionsManagerTests
 
         var option = await sut.GetCachingOption();
 
-        option.Should().Be(CachingOption.None);
+        option.Should().Be(CachingOption.UseCache);
     }
 
     [TestMethod]
@@ -100,7 +101,7 @@ public class CachingOptionsManagerTests
     {
         var cookies = new Dictionary<string, string>
                       {
-                          { "option", nameof(CachingOption.None) }
+                          { "option", nameof(CachingOption.UseCache) }
                       };
 
         var cookieManager = new Mock<ICookieManager>();
@@ -111,6 +112,6 @@ public class CachingOptionsManagerTests
 
         var option = await sut.GetCachingOption();
 
-        option.Should().Be(CachingOption.None);
+        option.Should().Be(CachingOption.UseCache);
     }
 }

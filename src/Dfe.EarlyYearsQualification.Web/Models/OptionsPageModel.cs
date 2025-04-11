@@ -5,22 +5,24 @@ namespace Dfe.EarlyYearsQualification.Web.Models;
 
 public class OptionsPageModel
 {
-    private const string DefaultOptionValue = "None";
+    public const string DefaultOptionValue = "None";
+    public const string BypassCacheOptionValue = "BypassCache";
+
     public string FormHeading { get; init; } = "Select an option";
 
     public List<OptionModel> Options { get; init; } =
         [
-            new()
+            new OptionModel
             {
                 Label = "Normal operation",
-                Hint = "Use the cache",
+                Hint = "Use published Contentful content with caching, just like in production",
                 Value = DefaultOptionValue
             },
-            new()
+            new OptionModel
             {
                 Label = "Bypass cache",
-                Hint = "The service will always ask for the latest content",
-                Value = "BypassCache"
+                Hint = "The service will always ask for the latest preview content, and not cache it",
+                Value = BypassCacheOptionValue
             }
         ];
 
