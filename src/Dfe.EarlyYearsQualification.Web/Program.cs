@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
-using Contentful.AspNetCore;
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
@@ -100,9 +99,9 @@ builder.Services.AddControllersWithViews(options =>
                                                                  });
                                          });
 
-builder.Services.AddContentful(builder.Configuration);
-
-builder.Services.AddGovUkFrontend();
+builder.Services
+       .AddContentful(builder.Configuration)
+       .AddGovUkFrontend();
 
 if (useMockContentful)
 {

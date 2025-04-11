@@ -8,7 +8,7 @@ public class CachingOptionsManager(
     ILogger<CachingOptionsManager> logger,
     ICookieManager cookieManager) : ICachingOptionsManager
 {
-    private const string OptionsCookieKey = "option";
+    public const string OptionsCookieKey = "cachingOption";
 
     public Task<CachingOption> GetCachingOption()
     {
@@ -24,14 +24,14 @@ public class CachingOptionsManager(
             return Task.FromResult(CachingOption.UseCache);
         }
 
-        bool ok = Enum.TryParse<CachingOption>(optionVal, out CachingOption optionEnum);
+        bool ok = Enum.TryParse(optionVal, out CachingOption optionEnum);
 
         if (ok)
         {
             return Task.FromResult(optionEnum);
         }
 
-        logger.LogWarning("User's caching option set to unexpected value {OptionVal}", optionVal);
+        logger.LogWarning("User's caching option set to unexpected value '{OptionVal}'", optionVal);
 
         return Task.FromResult(CachingOption.UseCache);
     }
@@ -40,12 +40,12 @@ public class CachingOptionsManager(
     {
         logger.LogInformation("Setting user's caching option to {Option}", option);
 
-        CookieOptions cookieOptions = new()
-                                      {
-                                          Expires = DateTimeOffset.UtcNow.AddDays(1),
-                                          HttpOnly = true,
-                                          Secure = true
-                                      };
+        var cookieOptions = new CookieOptions
+                            {
+                                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                                HttpOnly = true,
+                                Secure = true
+                            };
 
         cookieManager.SetOutboundCookie(OptionsCookieKey, option.ToString(), cookieOptions);
 

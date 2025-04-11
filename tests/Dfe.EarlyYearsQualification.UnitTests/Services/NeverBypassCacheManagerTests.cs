@@ -7,7 +7,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 public class NeverBypassCacheManagerTests
 {
     [TestMethod]
-    public async Task Get_ReturnsNone()
+    public async Task Get_ReturnsUseCache()
     {
         var sut = new NeverBypassCacheManager();
 
@@ -27,7 +27,7 @@ public class NeverBypassCacheManagerTests
     }
 
     [TestMethod]
-    public async Task SetToBypassCache_ThenGet_ReturnsNone()
+    public async Task SetToBypassCache_ThenGet_ReturnsUseCache()
     {
         var sut = new NeverBypassCacheManager();
 

@@ -2,7 +2,7 @@ namespace Dfe.EarlyYearsQualification.Content.Options;
 
 public interface IContentOptionsManager
 {
-    public Task<ContentOptions> GetContentOption();
+    public Task<ContentOption> GetContentOption();
 
-    public Task SetContentOption(ContentOptions option);
+    public Task SetContentOption(ContentOption option);
 }

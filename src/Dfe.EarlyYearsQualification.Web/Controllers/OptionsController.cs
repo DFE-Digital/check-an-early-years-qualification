@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class OptionsController(
     ILogger<OptionsController> logger,
     ICachingOptionsManager cachingOptionsManager,
+    IContentOptionsManager contentOptionsManager,
     IConfiguration config)
     : ServiceController
 {
@@ -25,9 +27,7 @@ public class OptionsController(
 
         var model = new OptionsPageModel();
 
-        model.Option = model.Options.FirstOrDefault()!.Value;
-
-        await UseCachingOptionForModel(model);
+        await SetModelFromSelectedOptions(model);
 
         return View(model);
     }
@@ -44,37 +44,39 @@ public class OptionsController(
 
         if (ModelState.IsValid)
         {
-            await SetCachingOption(model.Option);
+            await SetOptions(model.Option);
         }
 
         return RedirectToAction("Index", "Home");
     }
 
-    private async Task UseCachingOptionForModel(OptionsPageModel model)
+    private async Task SetModelFromSelectedOptions(OptionsPageModel model)
     {
-        var option = await cachingOptionsManager.GetCachingOption();
+        var option = await contentOptionsManager.GetContentOption();
 
-        switch (option)
-        {
-            case CachingOption.UseCache:
-                model.Option = OptionsPageModel.DefaultOptionValue;
-                break;
-            case CachingOption.BypassCache:
-                model.Option = OptionsPageModel.BypassCacheOptionValue;
-                break;
-        }
+        model.SetOption(option);
     }
 
-    private async Task SetCachingOption(string option)
+    private async Task SetOptions(string option)
     {
         var cachingOption =
             option switch
             {
-                OptionsPageModel.DefaultOptionValue => CachingOption.UseCache,
-                OptionsPageModel.BypassCacheOptionValue => CachingOption.BypassCache,
+                OptionsPageModel.PublishedOptionValue => CachingOption.UseCache,
+                OptionsPageModel.PreviewOptionValue => CachingOption.BypassCache,
                 _ => CachingOption.UseCache
             };
 
         await cachingOptionsManager.SetCachingOption(cachingOption);
+
+        var contentOption =
+            option switch
+            {
+                OptionsPageModel.PublishedOptionValue => ContentOption.UsePublished,
+                OptionsPageModel.PreviewOptionValue => ContentOption.UsePreview,
+                _ => ContentOption.UsePublished
+            };
+
+        await contentOptionsManager.SetContentOption(contentOption);
     }
 }

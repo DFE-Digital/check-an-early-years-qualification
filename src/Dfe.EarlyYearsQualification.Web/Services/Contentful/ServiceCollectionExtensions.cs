@@ -1,10 +1,14 @@
 using System.Net;
+using Contentful.Core;
 using Contentful.Core.Configuration;
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.Contentful;
@@ -13,6 +17,59 @@ public static class ServiceCollectionExtensions
 {
     // "ContentfulClient" is set in Contentful.AspNetCore.IServiceCollectionExtensions.HttpClientName
     private const string ContentfulClientHttpClientName = "ContentfulClient";
+
+    public static IServiceCollection AddContentful(this IServiceCollection services, IConfigurationRoot configuration)
+    {
+        services.AddOptions();
+        services.Configure<ContentfulOptions>(configuration.GetSection("ContentfulOptions"));
+
+        services.AddScoped<HttpClientHandler>(_ => new HttpClientHandler());
+
+        services.TryAddSingleton<HttpClient>();
+
+        services.AddHttpClient(ContentfulClientHttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(ConfigureHttpMessageHandler);
+
+        services.TryAddTransient(ContentfulClientFactory);
+
+        services.AddTransient<HtmlRenderer>();
+
+        SetupCacheOptionsManagement(services, IsProductionEnvironment(configuration));
+
+        return services;
+    }
+
+    private static IContentfulClient ContentfulClientFactory(IServiceProvider sp)
+    {
+        var config = sp.GetService<IConfiguration>();
+
+        var contentOption = ContentOption.UsePublished;
+
+        if (IsProductionEnvironment(config))
+        {
+            var contentOptionsManager = sp.GetService<IContentOptionsManager>();
+
+            contentOption = contentOptionsManager!.GetContentOption().Result;
+        }
+
+        var options = sp.GetService<IOptions<ContentfulOptions>>()!.Value;
+        if (contentOption == ContentOption.UsePreview)
+        {
+            options.UsePreviewApi = true;
+        }
+
+        var factory = sp.GetService<IHttpClientFactory>();
+
+        return new ContentfulClient(factory!.CreateClient(ContentfulClientHttpClientName), options);
+    }
+
+    private static bool IsProductionEnvironment(IConfiguration? config)
+    {
+        string environmentName = config?["ENVIRONMENT"] ?? "production";
+
+        bool isProductionEnvironment = !environmentName.StartsWith("prod", StringComparison.OrdinalIgnoreCase);
+        return isProductionEnvironment;
+    }
 
     /// <summary>
     ///     Sets up the Contentful services for <see cref="IContentService" /> and <see cref="IQualificationsRepository" />.
@@ -24,14 +81,9 @@ public static class ServiceCollectionExtensions
     {
         serviceCollection.AddScoped<IContentService, ContentfulContentService>();
         serviceCollection.AddScoped<IQualificationsRepository, QualificationsRepository>();
-
-        serviceCollection.AddScoped<HttpClientHandler>(sp => new HttpClientHandler());
-
-        serviceCollection.AddHttpClient(ContentfulClientHttpClientName)
-                         .ConfigurePrimaryHttpMessageHandler(ConfigureHandler);
     }
 
-    private static HttpMessageHandler ConfigureHandler(IServiceProvider serviceProvider)
+    private static HttpMessageHandler ConfigureHttpMessageHandler(IServiceProvider serviceProvider)
     {
         var options = serviceProvider.GetService<IOptions<ContentfulOptions>>()!.Value;
 
@@ -52,5 +104,17 @@ public static class ServiceCollectionExtensions
                                   cachingOptionsManager,
                                   logger,
                                   httpHandler);
+    }
+
+    private static void SetupCacheOptionsManagement(IServiceCollection services, bool isProductionEnvironment)
+    {
+        if (isProductionEnvironment)
+        {
+            services.AddSingleton<IContentOptionsManager, UsePublishedContentOptionsManager>();
+        }
+        else
+        {
+            services.AddScoped<IContentOptionsManager, ContentOptionsManager>();
+        }
     }
 }

@@ -1,4 +1,4 @@
-using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +6,7 @@ namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 
 public class OptionsIndicatorViewComponent(
     ILogger<OptionsIndicatorViewComponent> logger,
-    ICachingOptionsManager cachingOptionsManager,
+    IContentOptionsManager contentOptionsManager,
     IConfiguration config) : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
@@ -17,9 +17,9 @@ public class OptionsIndicatorViewComponent(
 
         if (config["ENVIRONMENT"]?.StartsWith("prod", StringComparison.OrdinalIgnoreCase) == false)
         {
-            var option = await cachingOptionsManager.GetCachingOption();
+            var option = await contentOptionsManager.GetContentOption();
 
-            model.Option = option.ToString();
+            model.SetOption(option);
         }
 
         return View(model);

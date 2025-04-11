@@ -1,10 +1,9 @@
-@using Dfe.EarlyYearsQualification.Caching
 @model OptionsPageModel
 
 @{
-    if (!Model.Option.Equals(CachingOption.UseCache.ToString(), StringComparison.Ordinal))
+    if (!Model.Option.Equals(OptionsPageModel.PublishedOptionValue, StringComparison.Ordinal))
     {
-        @Html.ActionLink(Model.Option,
+        @Html.ActionLink(Model.OptionShortText,
                          "Index",
                          "Options",
                          null,

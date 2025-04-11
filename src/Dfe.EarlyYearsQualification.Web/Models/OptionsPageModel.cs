@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models;
 
 public class OptionsPageModel
 {
-    public const string DefaultOptionValue = "None";
-    public const string BypassCacheOptionValue = "BypassCache";
+    public const string PublishedOptionValue = "Published";
+    public const string PreviewOptionValue = "Preview";
+    private const string DefaultOptionValue = PublishedOptionValue;
 
     public string FormHeading { get; init; } = "Select an option";
 
@@ -14,25 +16,47 @@ public class OptionsPageModel
         [
             new OptionModel
             {
-                Label = "Normal operation",
+                Label = "Published",
                 Hint = "Use published Contentful content with caching, just like in production",
-                Value = DefaultOptionValue
+                Value = PublishedOptionValue
             },
             new OptionModel
             {
-                Label = "Bypass cache",
-                Hint = "The service will always ask for the latest preview content, and not cache it",
-                Value = BypassCacheOptionValue
+                Label = "Preview",
+                Hint =
+                    "The service will always ask for the latest preview content from Contentful, and not use the cache",
+                Value = PreviewOptionValue
             }
         ];
 
     [Required]
-    public string Option { get; set; } = DefaultOptionValue;
+    public string Option { get; private set; } = DefaultOptionValue;
+
+    public string OptionShortText
+    {
+        get
+        {
+            return Option switch
+                   {
+                       PublishedOptionValue => "Published content",
+                       PreviewOptionValue => "Preview content",
+                       _ => "?"
+                   };
+        }
+    }
 
     public string? ButtonText { get; init; } = "Select option and continue";
 
     public static string OptionAnswer
     {
         get { return "OptionAnswer"; }
+    }
+
+    public void SetOption(ContentOption contentOption)
+    {
+        Option =
+            contentOption == ContentOption.UsePreview
+                ? PreviewOptionValue
+                : PublishedOptionValue;
     }
 }

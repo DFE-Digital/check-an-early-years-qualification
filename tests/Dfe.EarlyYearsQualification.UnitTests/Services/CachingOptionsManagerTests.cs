@@ -9,11 +9,11 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 public class CachingOptionsManagerTests
 {
     [TestMethod]
-    public async Task GetCachingOption_ReturnsExpectedValue()
+    public async Task GetCachingOption_ReturnsValueFromCookie()
     {
         var cookies = new Dictionary<string, string>
                       {
-                          { "option", nameof(CachingOption.BypassCache) }
+                          { CachingOptionsManager.OptionsCookieKey, nameof(CachingOption.BypassCache) }
                       };
 
         var cookieManager = new Mock<ICookieManager>();
@@ -28,7 +28,7 @@ public class CachingOptionsManagerTests
     }
 
     [TestMethod]
-    public async Task WhenCookiesIsNull_GetCachingOption_ReturnsNone()
+    public async Task WhenCookiesIsNull_GetCachingOption_ReturnsDefault()
     {
         var cookieManager = new Mock<ICookieManager>();
         cookieManager.Setup(m => m.ReadInboundCookies())
@@ -42,7 +42,7 @@ public class CachingOptionsManagerTests
     }
 
     [TestMethod]
-    public async Task WhenCookiesHasNoOptionValue_GetCachingOption_ReturnsNone()
+    public async Task WhenCookiesHasNoOptionValue_GetCachingOption_ReturnsDefault()
     {
         var cookies = new Dictionary<string, string>();
 
@@ -58,11 +58,11 @@ public class CachingOptionsManagerTests
     }
 
     [TestMethod]
-    public async Task WhenCookiesHasEmptyOptionValue_GetCachingOption_ReturnsNone()
+    public async Task WhenCookiesHasEmptyOptionValue_GetCachingOption_ReturnsDefault()
     {
         var cookies = new Dictionary<string, string>
                       {
-                          { "option", "" }
+                          { CachingOptionsManager.OptionsCookieKey, "" }
                       };
 
         var cookieManager = new Mock<ICookieManager>();
@@ -78,11 +78,11 @@ public class CachingOptionsManagerTests
     }
 
     [TestMethod]
-    public async Task WhenCookiesHasUnexpectedOptionValue_GetCachingOption_ReturnsNone()
+    public async Task WhenCookiesHasUnexpectedOptionValue_GetCachingOption_ReturnsDefault()
     {
         var cookies = new Dictionary<string, string>
                       {
-                          { "option", "NotAValidValue" }
+                          { CachingOptionsManager.OptionsCookieKey, "NotAValidValue" }
                       };
 
         var cookieManager = new Mock<ICookieManager>();
@@ -97,11 +97,34 @@ public class CachingOptionsManagerTests
     }
 
     [TestMethod]
-    public async Task WhenCookiesHasOptionValueNone_GetCachingOption_ReturnsNone()
+    public async Task WhenCookiesHasUnexpectedOptionValue_GetCachingOption_LogsWarning()
+    {
+        const string invalidOptionValue = "NotAValidValue";
+
+        var cookies = new Dictionary<string, string>
+                      {
+                          { CachingOptionsManager.OptionsCookieKey, invalidOptionValue }
+                      };
+
+        var cookieManager = new Mock<ICookieManager>();
+        cookieManager.Setup(m => m.ReadInboundCookies())
+                     .Returns(cookies);
+
+        var logger = new Mock<ILogger<CachingOptionsManager>>();
+
+        var sut = new CachingOptionsManager(logger.Object, cookieManager.Object);
+
+        await sut.GetCachingOption();
+
+        logger.VerifyWarning($@"User's caching option set to unexpected value '{invalidOptionValue}'");
+    }
+
+    [TestMethod]
+    public async Task WhenCookiesHasOptionValueDefault_GetCachingOption_ReturnsDefault()
     {
         var cookies = new Dictionary<string, string>
                       {
-                          { "option", nameof(CachingOption.UseCache) }
+                          { CachingOptionsManager.OptionsCookieKey, nameof(CachingOption.UseCache) }
                       };
 
         var cookieManager = new Mock<ICookieManager>();

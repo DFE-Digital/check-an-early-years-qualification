@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Microsoft.Extensions.Configuration;
@@ -13,17 +14,19 @@ public class OptionsControllerTests
     [TestMethod]
     public async Task Get_InProduction_ReturnsNotFound()
     {
-        var optionsManager = new Mock<ICachingOptionsManager>();
-        optionsManager.Setup(o => o.GetCachingOption()).ReturnsAsync(CachingOption.UseCache);
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+
+        var contentOptionsManager = new Mock<IContentOptionsManager>();
 
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("production");
 
-        OptionsController controller = new(NullLogger<OptionsController>.Instance,
-                                           optionsManager.Object,
-                                           config.Object);
+        var controller = new OptionsController(NullLogger<OptionsController>.Instance,
+                                               cachingOptionsManager.Object,
+                                               contentOptionsManager.Object,
+                                               config.Object);
 
-        IActionResult result = await controller.Index();
+        var result = await controller.Index();
 
         result.Should().BeOfType<NotFoundResult>();
     }
@@ -31,69 +34,83 @@ public class OptionsControllerTests
     [TestMethod]
     public async Task Get_InLowerEnvironments_ReturnsView()
     {
-        var optionsManager = new Mock<ICachingOptionsManager>();
-        optionsManager.Setup(o => o.GetCachingOption()).ReturnsAsync(CachingOption.UseCache);
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(o => o.GetCachingOption())
+                             .ReturnsAsync(CachingOption.UseCache);
+
+        var contentOptionsManager = new Mock<IContentOptionsManager>();
+        contentOptionsManager.Setup(o => o.GetContentOption())
+                             .ReturnsAsync(ContentOption.UsePublished);
 
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("development");
 
-        OptionsController controller = new(NullLogger<OptionsController>.Instance,
-                                           optionsManager.Object,
-                                           config.Object);
+        var controller = new OptionsController(NullLogger<OptionsController>.Instance,
+                                               cachingOptionsManager.Object,
+                                               contentOptionsManager.Object,
+                                               config.Object);
 
-        IActionResult result = await controller.Index();
+        var result = await controller.Index();
 
         result.Should().BeOfType<ViewResult>();
 
-        ViewResult viewResult = (ViewResult)result;
+        var viewResult = (ViewResult)result;
 
         viewResult.Model.Should().BeOfType<OptionsPageModel>();
 
-        OptionsPageModel? model = viewResult.Model as OptionsPageModel;
+        var model = viewResult.Model as OptionsPageModel;
 
-        model!.Option.Should().Be(OptionsPageModel.DefaultOptionValue);
+        model!.Option.Should().Be(OptionsPageModel.PublishedOptionValue);
     }
 
     [TestMethod]
     public async Task Get_InLowerEnvironments_ReturnsViewWithOptionSet()
     {
-        var optionsManager = new Mock<ICachingOptionsManager>();
-        optionsManager.Setup(o => o.GetCachingOption()).ReturnsAsync(CachingOption.BypassCache);
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(o => o.GetCachingOption())
+                             .ReturnsAsync(CachingOption.BypassCache);
+
+        var contentOptionsManager = new Mock<IContentOptionsManager>();
+        contentOptionsManager.Setup(o => o.GetContentOption())
+                             .ReturnsAsync(ContentOption.UsePreview);
 
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("development");
 
-        OptionsController controller = new(NullLogger<OptionsController>.Instance,
-                                           optionsManager.Object,
-                                           config.Object);
+        var controller = new OptionsController(NullLogger<OptionsController>.Instance,
+                                               cachingOptionsManager.Object,
+                                               contentOptionsManager.Object,
+                                               config.Object);
 
-        IActionResult result = await controller.Index();
+        var result = await controller.Index();
 
         result.Should().BeOfType<ViewResult>();
 
-        ViewResult viewResult = (ViewResult)result;
+        var viewResult = (ViewResult)result;
 
         viewResult.Model.Should().BeOfType<OptionsPageModel>();
 
-        OptionsPageModel? model = viewResult.Model as OptionsPageModel;
+        var model = viewResult.Model as OptionsPageModel;
 
-        model!.Option.Should().Be(OptionsPageModel.BypassCacheOptionValue);
+        model!.Option.Should().Be(OptionsPageModel.PreviewOptionValue);
     }
 
     [TestMethod]
     public async Task Post_InProduction_ReturnsNotFound()
     {
-        var optionsManager = new Mock<ICachingOptionsManager>();
-        optionsManager.Setup(o => o.GetCachingOption()).ReturnsAsync(CachingOption.UseCache);
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+
+        var contentOptionsManager = new Mock<IContentOptionsManager>();
 
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("production");
 
-        OptionsController controller = new(NullLogger<OptionsController>.Instance,
-                                           optionsManager.Object,
-                                           config.Object);
+        var controller = new OptionsController(NullLogger<OptionsController>.Instance,
+                                               cachingOptionsManager.Object,
+                                               contentOptionsManager.Object,
+                                               config.Object);
 
-        IActionResult result = await controller.Index(new OptionsPageModel());
+        var result = await controller.Index(new OptionsPageModel());
 
         result.Should().BeOfType<NotFoundResult>();
     }
@@ -101,57 +118,83 @@ public class OptionsControllerTests
     [TestMethod]
     public async Task Post_InLowerEnvironments_ReturnsRedirectToStartPage()
     {
-        var optionsManager = new Mock<ICachingOptionsManager>();
-        optionsManager.Setup(o => o.GetCachingOption()).ReturnsAsync(CachingOption.UseCache);
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(o => o.GetCachingOption())
+                             .ReturnsAsync(CachingOption.UseCache);
+
+        var contentOptionsManager = new Mock<IContentOptionsManager>();
+        contentOptionsManager.Setup(o => o.GetContentOption())
+                             .ReturnsAsync(ContentOption.UsePublished);
 
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("development");
 
-        OptionsController controller = new(NullLogger<OptionsController>.Instance,
-                                           optionsManager.Object,
-                                           config.Object);
+        var controller = new OptionsController(NullLogger<OptionsController>.Instance,
+                                               cachingOptionsManager.Object,
+                                               contentOptionsManager.Object,
+                                               config.Object);
 
-        IActionResult result = await controller.Index(new OptionsPageModel());
+        var result = await controller.Index(new OptionsPageModel());
 
         result.Should().BeOfType<RedirectToActionResult>();
 
-        RedirectToActionResult? toActionResult = result as RedirectToActionResult;
+        var toActionResult = result as RedirectToActionResult;
 
         toActionResult!.ActionName.Should().Be("Index");
-        toActionResult!.ControllerName.Should().Be("Home");
+        toActionResult.ControllerName.Should().Be("Home");
     }
 
     [TestMethod]
-    public async Task PostToUseCache_InLowerEnvironments_SetsOption()
+    public async Task PostToUsePublished_InLowerEnvironments_SetsOptions()
     {
-        var optionsManager = new Mock<ICachingOptionsManager>();
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+
+        var contentOptionsManager = new Mock<IContentOptionsManager>();
 
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("development");
 
-        OptionsController controller = new(NullLogger<OptionsController>.Instance,
-                                           optionsManager.Object,
-                                           config.Object);
+        var controller = new OptionsController(NullLogger<OptionsController>.Instance,
+                                               cachingOptionsManager.Object,
+                                               contentOptionsManager.Object,
+                                               config.Object);
 
-        await controller.Index(new OptionsPageModel { Option = OptionsPageModel.DefaultOptionValue });
+        var model = new OptionsPageModel();
+        model.SetOption(ContentOption.UsePublished);
 
-        optionsManager.Verify(x => x.SetCachingOption(CachingOption.UseCache), Times.Once);
+        await controller.Index(model);
+
+        cachingOptionsManager.Verify(x => x.SetCachingOption(CachingOption.UseCache),
+                                     Times.Once);
+
+        contentOptionsManager.Verify(x => x.SetContentOption(ContentOption.UsePublished),
+                                     Times.Once);
     }
 
     [TestMethod]
-    public async Task PostToBypassCache_InLowerEnvironments_SetsOption()
+    public async Task PostToUsePreview_InLowerEnvironments_SetsOption()
     {
-        var optionsManager = new Mock<ICachingOptionsManager>();
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+
+        var contentOptionsManager = new Mock<IContentOptionsManager>();
 
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("development");
 
-        OptionsController controller = new(NullLogger<OptionsController>.Instance,
-                                           optionsManager.Object,
-                                           config.Object);
+        var controller = new OptionsController(NullLogger<OptionsController>.Instance,
+                                               cachingOptionsManager.Object,
+                                               contentOptionsManager.Object,
+                                               config.Object);
 
-        await controller.Index(new OptionsPageModel { Option = OptionsPageModel.BypassCacheOptionValue });
+        var model = new OptionsPageModel();
+        model.SetOption(ContentOption.UsePreview);
 
-        optionsManager.Verify(x => x.SetCachingOption(CachingOption.BypassCache), Times.Once);
+        await controller.Index(model);
+
+        cachingOptionsManager.Verify(x => x.SetCachingOption(CachingOption.BypassCache),
+                                     Times.Once);
+
+        contentOptionsManager.Verify(x => x.SetContentOption(ContentOption.UsePreview),
+                                     Times.Once);
     }
 }

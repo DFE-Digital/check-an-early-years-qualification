@@ -1,6 +1,6 @@
 namespace Dfe.EarlyYearsQualification.Content.Options;
 
-public enum ContentOptions
+public enum ContentOption
 {
     None = 0,
     UsePublished = 0,
