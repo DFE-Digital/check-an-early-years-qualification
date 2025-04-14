@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
@@ -51,12 +52,16 @@ public class HelpPageModel
     public string AdditionalInformationErrorMessage { get; init; } = string.Empty;
 
     [Required]
+    [IncludeInTelemetry]
     public string SelectedOption { get; set; } = string.Empty;
 
     [EmailAddress]
     [Required]
+    [Sensitive]
+    [IncludeInTelemetry]
     public string EmailAddress { get; set; } = string.Empty;
 
     [Required]
+    [IncludeInTelemetry]
     public string AdditionalInformationMessage { get; set; } = string.Empty;
 }

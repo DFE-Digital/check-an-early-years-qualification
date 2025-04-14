@@ -45,7 +45,7 @@ public class QuestionsController(
     }
 
     [HttpPost("where-was-the-qualification-awarded")]
-    public async Task<IActionResult> WhereWasTheQualificationAwarded(RadioQuestionModel model)
+    public async Task<IActionResult> WhereWasTheQualificationAwarded([FromForm] RadioQuestionModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -99,7 +99,7 @@ public class QuestionsController(
 
     [HttpPost("when-was-the-qualification-started-and-awarded")]
 #pragma warning disable S6967
-    public async Task<IActionResult> WhenWasTheQualificationStarted(DatesQuestionModel model)
+    public async Task<IActionResult> WhenWasTheQualificationStarted([FromForm] DatesQuestionModel model)
 #pragma warning restore S6967
     {
         var questionPage =
@@ -136,7 +136,7 @@ public class QuestionsController(
 
     [RedirectIfDateMissing]
     [HttpPost("what-level-is-the-qualification")]
-    public async Task<IActionResult> WhatLevelIsTheQualification(RadioQuestionModel model)
+    public async Task<IActionResult> WhatLevelIsTheQualification([FromForm] RadioQuestionModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -192,7 +192,7 @@ public class QuestionsController(
 
     [RedirectIfDateMissing]
     [HttpPost("what-is-the-awarding-organisation")]
-    public async Task<IActionResult> WhatIsTheAwardingOrganisation(DropdownQuestionModel model)
+    public async Task<IActionResult> WhatIsTheAwardingOrganisation([FromForm] DropdownQuestionModel model)
     {
         if (!ModelState.IsValid || (string.IsNullOrEmpty(model.SelectedValue) && !model.NotInTheList))
         {
