@@ -27,7 +27,7 @@ public class OptionsController(
 
         var model = new OptionsPageModel();
 
-        await SetModelFromSelectedOptions(model);
+        await SetModelFromSelectedOption(model);
 
         return View(model);
     }
@@ -50,11 +50,13 @@ public class OptionsController(
         return RedirectToAction("Index", "Home");
     }
 
-    private async Task SetModelFromSelectedOptions(OptionsPageModel model)
+    private async Task SetModelFromSelectedOption(OptionsPageModel model)
     {
         var option = await contentOptionsManager.GetContentOption();
 
-        model.SetOption(option);
+        model.Option = option == ContentOption.UsePreview
+                           ? OptionsPageModel.PreviewOptionValue
+                           : OptionsPageModel.PublishedOptionValue;
     }
 
     private async Task SetOptions(string option)

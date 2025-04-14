@@ -159,8 +159,10 @@ public class OptionsControllerTests
                                                contentOptionsManager.Object,
                                                config.Object);
 
-        var model = new OptionsPageModel();
-        model.SetOption(ContentOption.UsePublished);
+        var model = new OptionsPageModel
+                    {
+                        Option = OptionsPageModel.PublishedOptionValue
+                    };
 
         await controller.Index(model);
 
@@ -186,8 +188,10 @@ public class OptionsControllerTests
                                                contentOptionsManager.Object,
                                                config.Object);
 
-        var model = new OptionsPageModel();
-        model.SetOption(ContentOption.UsePreview);
+        var model = new OptionsPageModel
+                    {
+                        Option = OptionsPageModel.PreviewOptionValue
+                    };
 
         await controller.Index(model);
 

@@ -30,27 +30,20 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient(ContentfulClientHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(ConfigureHttpMessageHandler);
 
-        services.TryAddTransient(ContentfulClientFactory);
+        services.TryAddScoped(ContentfulClientFactory);
 
         services.AddTransient<HtmlRenderer>();
 
-        SetupCacheOptionsManagement(services, IsProductionEnvironment(configuration));
+        SetupContentOptionsManagement(services, configuration);
 
         return services;
     }
 
     private static IContentfulClient ContentfulClientFactory(IServiceProvider sp)
     {
-        var config = sp.GetService<IConfiguration>();
+        var contentOptionsManager = sp.GetService<IContentOptionsManager>();
 
-        var contentOption = ContentOption.UsePublished;
-
-        if (IsProductionEnvironment(config))
-        {
-            var contentOptionsManager = sp.GetService<IContentOptionsManager>();
-
-            contentOption = contentOptionsManager!.GetContentOption().Result;
-        }
+        var contentOption = contentOptionsManager!.GetContentOption().Result;
 
         var options = sp.GetService<IOptions<ContentfulOptions>>()!.Value;
         if (contentOption == ContentOption.UsePreview)
@@ -61,14 +54,6 @@ public static class ServiceCollectionExtensions
         var factory = sp.GetService<IHttpClientFactory>();
 
         return new ContentfulClient(factory!.CreateClient(ContentfulClientHttpClientName), options);
-    }
-
-    private static bool IsProductionEnvironment(IConfiguration? config)
-    {
-        string environmentName = config?["ENVIRONMENT"] ?? "production";
-
-        bool isProductionEnvironment = !environmentName.StartsWith("prod", StringComparison.OrdinalIgnoreCase);
-        return isProductionEnvironment;
     }
 
     /// <summary>
@@ -106,9 +91,9 @@ public static class ServiceCollectionExtensions
                                   httpHandler);
     }
 
-    private static void SetupCacheOptionsManagement(IServiceCollection services, bool isProductionEnvironment)
+    private static void SetupContentOptionsManagement(IServiceCollection services, IConfiguration? configuration)
     {
-        if (isProductionEnvironment)
+        if (IsProductionEnvironment(configuration))
         {
             services.AddSingleton<IContentOptionsManager, UsePublishedContentOptionsManager>();
         }
@@ -116,5 +101,12 @@ public static class ServiceCollectionExtensions
         {
             services.AddScoped<IContentOptionsManager, ContentOptionsManager>();
         }
+    }
+
+    private static bool IsProductionEnvironment(IConfiguration? config)
+    {
+        string environmentName = config?["ENVIRONMENT"] ?? "production";
+
+        return environmentName.StartsWith("prod", StringComparison.OrdinalIgnoreCase);
     }
 }

@@ -478,10 +478,11 @@ body {
 
 .options-stamp, .options-stamp:visited, .options-stamp:hover, .options-stamp:active {
     position: fixed;
-    border: 3px solid maroon;
+    border: 10px solid maroon;
     color: maroon;
-    padding: 5px;
-    margin: 2px;
-    bottom: 0;
+    background-color: white;
+    padding: 10px;
+    margin: 30px;
+    top: 0;
     right: 0;
 }

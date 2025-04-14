@@ -19,7 +19,9 @@ public class OptionsIndicatorViewComponent(
         {
             var option = await contentOptionsManager.GetContentOption();
 
-            model.SetOption(option);
+            model.Option = option == ContentOption.UsePreview
+                               ? OptionsPageModel.PreviewOptionValue
+                               : OptionsPageModel.PublishedOptionValue;
         }
 
         return View(model);

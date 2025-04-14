@@ -1,14 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models;
 
 public class OptionsPageModel
 {
-    public const string PublishedOptionValue = "Published";
+    public const string PublishedOptionValue = "Published"; // default
     public const string PreviewOptionValue = "Preview";
-    private const string DefaultOptionValue = PublishedOptionValue;
+    private string _option = PublishedOptionValue;
 
     public string FormHeading { get; init; } = "Select an option";
 
@@ -30,7 +29,19 @@ public class OptionsPageModel
         ];
 
     [Required]
-    public string Option { get; private set; } = DefaultOptionValue;
+    public string Option
+    {
+        get { return _option; }
+        set
+        {
+            _option = value;
+
+            if (value != PreviewOptionValue)
+            {
+                _option = PublishedOptionValue;
+            }
+        }
+    }
 
     public string OptionShortText
     {
@@ -50,13 +61,5 @@ public class OptionsPageModel
     public static string OptionAnswer
     {
         get { return "OptionAnswer"; }
-    }
-
-    public void SetOption(ContentOption contentOption)
-    {
-        Option =
-            contentOption == ContentOption.UsePreview
-                ? PreviewOptionValue
-                : PublishedOptionValue;
     }
 }
