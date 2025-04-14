@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -12,7 +13,7 @@ public class OptionsController(
     ILogger<OptionsController> logger,
     ICachingOptionsManager cachingOptionsManager,
     IContentOptionsManager contentOptionsManager,
-    IConfiguration config)
+    IEnvironmentService environmentService)
     : ServiceController
 {
     [HttpGet]
@@ -20,7 +21,7 @@ public class OptionsController(
     {
         logger.LogInformation("Options page accessed.");
 
-        if (config["ENVIRONMENT"]?.StartsWith("prod", StringComparison.OrdinalIgnoreCase) == true)
+        if (environmentService.IsProduction())
         {
             return NotFound();
         }
@@ -37,7 +38,7 @@ public class OptionsController(
     {
         logger.LogInformation("Options page submitted.");
 
-        if (config["ENVIRONMENT"]?.StartsWith("prod", StringComparison.OrdinalIgnoreCase) == true)
+        if (environmentService.IsProduction())
         {
             return NotFound();
         }

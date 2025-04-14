@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
@@ -7,7 +8,7 @@ namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 public class OptionsIndicatorViewComponent(
     ILogger<OptionsIndicatorViewComponent> logger,
     IContentOptionsManager contentOptionsManager,
-    IConfiguration config) : ViewComponent
+    IEnvironmentService environmentService) : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
     {
@@ -15,7 +16,7 @@ public class OptionsIndicatorViewComponent(
 
         var model = new OptionsPageModel();
 
-        if (config["ENVIRONMENT"]?.StartsWith("prod", StringComparison.OrdinalIgnoreCase) == false)
+        if (!environmentService.IsProduction())
         {
             var option = await contentOptionsManager.GetContentOption();
 

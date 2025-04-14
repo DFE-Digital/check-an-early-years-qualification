@@ -15,6 +15,7 @@ using Dfe.EarlyYearsQualification.Web.Services.Contentful;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
@@ -32,8 +33,9 @@ using OwaspHeaders.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string environment = builder.Configuration.GetValue<string?>("ENVIRONMENT") ?? "production";
-bool isProductionEnvironment = environment.StartsWith("prod", StringComparison.OrdinalIgnoreCase);
+bool isProductionEnvironment = new EnvironmentService(builder.Configuration).IsProduction();
+
+builder.Services.AddSingleton<IEnvironmentService, EnvironmentService>();
 
 var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
                                         {

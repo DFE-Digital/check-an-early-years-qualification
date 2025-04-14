@@ -3,7 +3,7 @@ using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models;
-using Microsoft.Extensions.Configuration;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -18,13 +18,13 @@ public class OptionsControllerTests
 
         var contentOptionsManager = new Mock<IContentOptionsManager>();
 
-        var config = new Mock<IConfiguration>();
-        config.Setup(c => c["ENVIRONMENT"]).Returns("production");
+        var environmentService = new Mock<IEnvironmentService>();
+        environmentService.Setup(o => o.IsProduction()).Returns(true);
 
         var controller = new OptionsController(NullLogger<OptionsController>.Instance,
                                                cachingOptionsManager.Object,
                                                contentOptionsManager.Object,
-                                               config.Object);
+                                               environmentService.Object);
 
         var result = await controller.Index();
 
@@ -42,13 +42,13 @@ public class OptionsControllerTests
         contentOptionsManager.Setup(o => o.GetContentOption())
                              .ReturnsAsync(ContentOption.UsePublished);
 
-        var config = new Mock<IConfiguration>();
-        config.Setup(c => c["ENVIRONMENT"]).Returns("development");
+        var environmentService = new Mock<IEnvironmentService>();
+        environmentService.Setup(o => o.IsProduction()).Returns(false);
 
         var controller = new OptionsController(NullLogger<OptionsController>.Instance,
                                                cachingOptionsManager.Object,
                                                contentOptionsManager.Object,
-                                               config.Object);
+                                               environmentService.Object);
 
         var result = await controller.Index();
 
@@ -74,13 +74,13 @@ public class OptionsControllerTests
         contentOptionsManager.Setup(o => o.GetContentOption())
                              .ReturnsAsync(ContentOption.UsePreview);
 
-        var config = new Mock<IConfiguration>();
-        config.Setup(c => c["ENVIRONMENT"]).Returns("development");
+        var environmentService = new Mock<IEnvironmentService>();
+        environmentService.Setup(o => o.IsProduction()).Returns(false);
 
         var controller = new OptionsController(NullLogger<OptionsController>.Instance,
                                                cachingOptionsManager.Object,
                                                contentOptionsManager.Object,
-                                               config.Object);
+                                               environmentService.Object);
 
         var result = await controller.Index();
 
@@ -102,13 +102,13 @@ public class OptionsControllerTests
 
         var contentOptionsManager = new Mock<IContentOptionsManager>();
 
-        var config = new Mock<IConfiguration>();
-        config.Setup(c => c["ENVIRONMENT"]).Returns("production");
+        var environmentService = new Mock<IEnvironmentService>();
+        environmentService.Setup(o => o.IsProduction()).Returns(true);
 
         var controller = new OptionsController(NullLogger<OptionsController>.Instance,
                                                cachingOptionsManager.Object,
                                                contentOptionsManager.Object,
-                                               config.Object);
+                                               environmentService.Object);
 
         var result = await controller.Index(new OptionsPageModel());
 
@@ -126,13 +126,13 @@ public class OptionsControllerTests
         contentOptionsManager.Setup(o => o.GetContentOption())
                              .ReturnsAsync(ContentOption.UsePublished);
 
-        var config = new Mock<IConfiguration>();
-        config.Setup(c => c["ENVIRONMENT"]).Returns("development");
+        var environmentService = new Mock<IEnvironmentService>();
+        environmentService.Setup(o => o.IsProduction()).Returns(false);
 
         var controller = new OptionsController(NullLogger<OptionsController>.Instance,
                                                cachingOptionsManager.Object,
                                                contentOptionsManager.Object,
-                                               config.Object);
+                                               environmentService.Object);
 
         var result = await controller.Index(new OptionsPageModel());
 
@@ -151,13 +151,13 @@ public class OptionsControllerTests
 
         var contentOptionsManager = new Mock<IContentOptionsManager>();
 
-        var config = new Mock<IConfiguration>();
-        config.Setup(c => c["ENVIRONMENT"]).Returns("development");
+        var environmentService = new Mock<IEnvironmentService>();
+        environmentService.Setup(o => o.IsProduction()).Returns(false);
 
         var controller = new OptionsController(NullLogger<OptionsController>.Instance,
                                                cachingOptionsManager.Object,
                                                contentOptionsManager.Object,
-                                               config.Object);
+                                               environmentService.Object);
 
         var model = new OptionsPageModel
                     {
@@ -180,13 +180,13 @@ public class OptionsControllerTests
 
         var contentOptionsManager = new Mock<IContentOptionsManager>();
 
-        var config = new Mock<IConfiguration>();
-        config.Setup(c => c["ENVIRONMENT"]).Returns("development");
+        var environmentService = new Mock<IEnvironmentService>();
+        environmentService.Setup(o => o.IsProduction()).Returns(false);
 
         var controller = new OptionsController(NullLogger<OptionsController>.Instance,
                                                cachingOptionsManager.Object,
                                                contentOptionsManager.Object,
-                                               config.Object);
+                                               environmentService.Object);
 
         var model = new OptionsPageModel
                     {

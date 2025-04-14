@@ -7,6 +7,7 @@ using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -93,7 +94,7 @@ public static class ServiceCollectionExtensions
 
     private static void SetupContentOptionsManagement(IServiceCollection services, IConfiguration? configuration)
     {
-        if (IsProductionEnvironment(configuration))
+        if (new EnvironmentService(configuration).IsProduction())
         {
             services.AddSingleton<IContentOptionsManager, UsePublishedContentOptionsManager>();
         }
@@ -101,12 +102,5 @@ public static class ServiceCollectionExtensions
         {
             services.AddScoped<IContentOptionsManager, ContentOptionsManager>();
         }
-    }
-
-    private static bool IsProductionEnvironment(IConfiguration? config)
-    {
-        string environmentName = config?["ENVIRONMENT"] ?? "production";
-
-        return environmentName.StartsWith("prod", StringComparison.OrdinalIgnoreCase);
     }
 }
