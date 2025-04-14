@@ -271,4 +271,38 @@ public class ApplicationInsightsActionFilterAttributeTests
         requestBodyValue.Should().Match(expectedRequestBodyValue);
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task OnActionExecutionAsync_ExceptionThrown_CallsLogger()
+    {
+        var mockHttpRequest = new Mock<HttpRequest>();
+        var mockHttpContext = new Mock<HttpContext>();
+        var mockActionExecutionDelegate = new Mock<ActionExecutionDelegate>();
+        var mockLogger = new Mock<ILogger<ApplicationInsightsActionFilterAttribute>>();
+
+        mockHttpRequest.SetupGet(r => r.Method).Throws(new Exception("Test exception"));
+        mockHttpContext.SetupGet(c => c.Request).Returns(mockHttpRequest.Object);
+        
+        var filter = new ApplicationInsightsActionFilterAttribute(mockLogger.Object);
+        
+        var mockActionDescriptor = new ActionDescriptor();
+        var actionContext = new ActionContext(
+                                              mockHttpContext.Object,
+                                              new Mock<RouteData>().Object,
+                                              mockActionDescriptor,
+                                              new ModelStateDictionary()
+                                             );
+        
+        var actionExecutingContext = new ActionExecutingContext(
+                                                                actionContext,
+                                                                new List<IFilterMetadata>(),
+                                                                new Dictionary<string, object?>(),
+                                                                new Mock<HomeController>()
+                                                               );
+        
+        await filter.OnActionExecutionAsync(actionExecutingContext, mockActionExecutionDelegate.Object);
+        
+        mockLogger.VerifyCritical("Error executing the application insights telemetry task");
+        mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
+    }
 }
