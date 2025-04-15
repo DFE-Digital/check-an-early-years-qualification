@@ -12,8 +12,6 @@ public static class QualificationDetailsMapper
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
         string dateAwarded,
-        string checkAnotherQualificationTextHtml,
-        string furtherInfoTextHtml,
         string requirementsTextHtml,
         string? feedbackBodyHtml,
         string? improveServiceBodyHtml)
@@ -33,17 +31,9 @@ public static class QualificationDetailsMapper
                    Content = new DetailsPageModel
                              {
                                  AwardingOrgLabel = content.AwardingOrgLabel,
-                                 BookmarkHeading = content.BookmarkHeading,
-                                 BookmarkText = content.BookmarkText,
-                                 CheckAnotherQualificationHeading = content.CheckAnotherQualificationHeading,
-                                 CheckAnotherQualificationText = checkAnotherQualificationTextHtml,
-                                 DateAddedLabel = content.DateAddedLabel,
                                  DateOfCheckLabel = content.DateOfCheckLabel,
-                                 FurtherInfoHeading = content.FurtherInfoHeading,
-                                 FurtherInfoText = furtherInfoTextHtml,
                                  LevelLabel = content.LevelLabel,
                                  MainHeader = content.MainHeader,
-                                 QualificationNumberLabel = content.QualificationNumberLabel,
                                  RequirementsHeading = content.RequirementsHeading,
                                  RequirementsText = requirementsTextHtml,
                                  RatiosHeading = content.RatiosHeading,
