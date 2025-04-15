@@ -75,4 +75,7 @@ public class DetailsPage
     public string QualificationResultNotFrL3MessageHeading { get; init; } = string.Empty;
 
     public string QualificationResultNotFrL3MessageBody { get; init; } = string.Empty;
+    public string QualificationResultNotFrL3OrL6MessageHeading { get; init; } = string.Empty;
+
+    public string QualificationResultNotFrL3OrL6MessageBody { get; init; } = string.Empty;
 }

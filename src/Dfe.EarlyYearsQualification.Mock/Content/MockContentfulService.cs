@@ -195,7 +195,9 @@ public class MockContentfulService : IContentService
                                          QualificationResultNotFrMessageHeading = "Not full and relevant",
                                          QualificationResultNotFrMessageBody = "Not full and relevant body",
                                          QualificationResultNotFrL3MessageHeading = "Not full and relevant L3",
-                                         QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body",
+                                         QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body",   
+                                         QualificationResultNotFrL3OrL6MessageHeading = "Not full and relevant L3 or L6",
+                                         QualificationResultNotFrL3OrL6MessageBody = "Not full and relevant L3 or L6 body",
                                          UpDownFeedback = GetUpDownFeedback()
                                      });
     }

@@ -213,6 +213,8 @@ public class MockContentfulServiceTests
         result.QualificationResultNotFrMessageBody.Should().Be("Not full and relevant body");
         result.QualificationResultNotFrL3MessageHeading.Should().Be("Not full and relevant L3");
         result.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
+        result.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
+        result.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
     }
 
     [TestMethod]

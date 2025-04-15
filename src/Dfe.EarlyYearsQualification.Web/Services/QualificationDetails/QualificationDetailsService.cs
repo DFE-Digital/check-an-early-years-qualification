@@ -368,8 +368,16 @@ public class QualificationDetailsService(
         if (model.RatioRequirements.IsNotFullAndRelevant && model.QualificationLevel > 2 &&
             userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019())
         {
-            model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrL3MessageHeading;
-            model.Content.QualificationResultMessageBody = content.QualificationResultNotFrL3MessageBody;
+            if (model.QualificationLevel < 6)
+            {
+                model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrL3MessageHeading;
+                model.Content.QualificationResultMessageBody = content.QualificationResultNotFrL3MessageBody;
+            }
+            else
+            {
+                model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrL3OrL6MessageHeading;
+                model.Content.QualificationResultMessageBody = content.QualificationResultNotFrL3OrL6MessageBody;
+            }
         }
         else
         {

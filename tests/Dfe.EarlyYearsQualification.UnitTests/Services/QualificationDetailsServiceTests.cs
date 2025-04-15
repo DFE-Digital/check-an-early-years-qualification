@@ -1105,4 +1105,41 @@ public class QualificationDetailsServiceTests
         model.Content.QualificationResultMessageBody.Should()
              .Be(detailsPageContent.QualificationResultNotFrL3MessageBody);
     }
+    
+    [TestMethod]
+    public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_Level_6_ShowsCorrectText()
+    {
+        var detailsPageContent = new DetailsPage
+                                 {
+                                     QualificationResultHeading = "Result heading",
+                                     QualificationResultNotFrL3OrL6MessageHeading = "Message heading",
+                                     QualificationResultNotFrL3OrL6MessageBody = "Message body"
+                                 };
+
+        var model = new QualificationDetailsModel
+                    {
+                        QualificationLevel = 6,
+                        RatioRequirements = new RatioRequirementModel
+                                            {
+                                                ApprovedForLevel6 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
+                                            },
+                        Content = new DetailsPageModel()
+                    };
+
+        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
+
+        var sut = GetSut();
+
+        sut.SetQualificationResultFailureDetails(model, detailsPageContent);
+
+        model.Content.Should().NotBeNull();
+        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.QualificationResultHeading);
+        model.Content.QualificationResultMessageHeading.Should()
+             .Be(detailsPageContent.QualificationResultNotFrL3OrL6MessageHeading);
+        model.Content.QualificationResultMessageBody.Should()
+             .Be(detailsPageContent.QualificationResultNotFrL3OrL6MessageBody);
+    }
 }

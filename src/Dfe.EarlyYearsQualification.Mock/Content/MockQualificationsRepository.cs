@@ -14,6 +14,10 @@ public class MockQualificationsRepository : IQualificationsRepository
                {
                    "eyq-250" => await Task.FromResult(CreateQualification("EYQ-250", "BTEC",
                                                                           AwardingOrganisations.Various, 3)),
+                   "eyq-105" => await Task.FromResult(CreateQtsQualification("EYQ-108", "BTEC",
+                                                                             AwardingOrganisations.Various, 4)),
+                   "eyq-107" => await Task.FromResult(CreateQtsQualification("EYQ-107", "BTEC",
+                                                                             AwardingOrganisations.Various, 5)),
                    "eyq-108" => await Task.FromResult(CreateQtsQualification("EYQ-108", "BTEC",
                                                                              AwardingOrganisations.Various, 6)),
                    "eyq-115" => await Task.FromResult(CreateQualification("EYQ-115", "NCFE",
@@ -86,6 +90,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQualification("EYQ-100", AwardingOrganisations.Cache, 2, null, endDate),
                 CreateQualification("EYQ-101", AwardingOrganisations.Ncfe, 2, startDate, endDate),
                 CreateQualification("EYQ-240", AwardingOrganisations.Pearson, 3, startDate, endDate),
+                CreateQualification("EYQ-241", AwardingOrganisations.Pearson, 2, startDate, endDate),
                 CreateQualification("EYQ-103", AwardingOrganisations.Ncfe, 3, startDate, endDate),
                 CreateQualification("EYQ-104", "City & Guilds", 4, startDate, endDate),
                 CreateQualification("EYQ-105", "Montessori Centre International", 4, startDate, endDate),
