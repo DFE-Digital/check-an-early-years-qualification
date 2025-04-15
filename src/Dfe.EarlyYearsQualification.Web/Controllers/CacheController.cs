@@ -11,11 +11,12 @@ public class CacheController(
     : Controller // Do not inherit from Dfe.EarlyYearsQualification.Web.Controllers.Base.ServiceController
 {
     [HttpGet("api/clear-distributed-cache")]
+    [HttpPost("api/clear-distributed-cache")]
     public async Task<IActionResult> Index()
     {
         logger.LogWarning("Call to endpoint to clear distributed cache");
 
-        var submittedSecret = GetSubmittedCacheAuthSecret();
+        string? submittedSecret = GetSubmittedCacheAuthSecret();
 
         if (string.IsNullOrWhiteSpace(submittedSecret))
         {
@@ -23,7 +24,7 @@ public class CacheController(
             return new UnauthorizedResult();
         }
 
-        var expectedSecret = GetExpectedCacheAuthSecret();
+        string expectedSecret = GetExpectedCacheAuthSecret();
 
         if (!submittedSecret.Equals(expectedSecret, StringComparison.Ordinal))
         {
@@ -38,7 +39,7 @@ public class CacheController(
 
     private string? GetSubmittedCacheAuthSecret()
     {
-        var cacheSecret =
+        string? cacheSecret =
             GetCacheSecretFromHeader()
             ?? GetCacheSecretFromQuery();
 
@@ -49,7 +50,7 @@ public class CacheController(
     {
         string? cacheSecret = null;
 
-        var ok = Request.Query.TryGetValue("cache-secret", out var submitted);
+        bool ok = Request.Query.TryGetValue("cache-secret", out var submitted);
         if (ok && submitted.Count > 0)
         {
             cacheSecret = submitted[0];
