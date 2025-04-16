@@ -443,7 +443,7 @@ public class MockContentfulServiceTests
                                                   {
                                                       DisplayText = "Test back button",
                                                       OpenInNewTab = false,
-                                                      Href = "/qualifications"
+                                                      Href = "/select-a-qualification-to-check"
                                                   });
         result.LevelLabel.Should().Be("Test level label");
         result.ButtonText.Should().Be("Test button text");
@@ -548,7 +548,7 @@ public class MockContentfulServiceTests
                                                    {
                                                        DisplayText = "Back",
                                                        OpenInNewTab = false,
-                                                       Href = "/qualifications"
+                                                       Href = "/select-a-qualification-to-check"
                                                    });
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorSummaryHeading.Should().NotBeNullOrEmpty();
@@ -573,7 +573,7 @@ public class MockContentfulServiceTests
                                                    {
                                                        DisplayText = "TEST",
                                                        OpenInNewTab = false,
-                                                       Href = "/qualifications"
+                                                       Href = "/select-a-qualification-to-check"
                                                    });
 
         result.Heading.Should().Be("This is the level 3 page");
@@ -595,7 +595,7 @@ public class MockContentfulServiceTests
                                                    {
                                                        DisplayText = "TEST",
                                                        OpenInNewTab = false,
-                                                       Href = "/qualifications"
+                                                       Href = "/select-a-qualification-to-check"
                                                    });
 
         result.Heading.Should().Be("This is the level 4 page");
