@@ -11,7 +11,7 @@ public class MockQualificationsRepositoryTests
 #pragma warning disable CA1861
     // An attribute argument must be a constant expression, 'typeof()' expression or array creation
     // expression of an attribute parameter type
-    [DataRow(2, new[] { "EYQ-100", "EYQ-101" })]
+    [DataRow(2, new[] { "EYQ-100", "EYQ-101", "EYQ-241" })]
     [DataRow(3, new[] { "EYQ-240", "EYQ-103", "EYQ-909" })]
     [DataRow(4, new[] { "EYQ-104", "EYQ-105" })]
     [DataRow(5, new[] { "EYQ-106", "EYQ-107" })]

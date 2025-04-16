@@ -1,5 +1,14 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName, hasClass, hasCount} from '../shared/playwrightWrapper';
+import {
+    startJourney,
+    checkText,
+    setCookie,
+    journeyCookieName,
+    hasClass,
+    hasCount,
+    checkJourneyCookieValue,
+    setJourneyState
+} from '../shared/playwrightWrapper';
 
 test.describe("A spec used to test the qualification details page", () => {
     test.beforeEach(async ({page, context}) => {
@@ -47,7 +56,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-108");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 6", 0);
         await checkText(page, ".ratio-heading", "Level 3", 1);
         await checkText(page, ".ratio-heading", "Level 2", 2);
@@ -69,7 +78,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22no%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-108");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 3", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Unqualified", 2);
@@ -91,7 +100,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 3", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Unqualified", 2);
@@ -113,7 +122,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-241");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Unqualified", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Level 3", 2);
@@ -150,7 +159,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
     });
 
-    test("When the user selects a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is not full and relevant with no questions, they see the level 2 qualification markes as 'Further action required'", async ({
+    test("When the user selects a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is not full and relevant with no questions, they see the level 2 qualification marked as 'Further action required'", async ({
                                                                                                                                                                                                                                                      page,
                                                                                                                                                                                                                                                      context
                                                                                                                                                                                                                                                  }) => {
@@ -161,7 +170,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, "#ratio-Level2-additional-info", "Level 2 further action required text");
     });
 
-    test("When the user selects a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is not full and relevant due to their answers, they see the level 2 qualification markes as 'Further action required'", async ({
+    test("When the user selects a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is not full and relevant due to their answers, they see the level 2 qualification marked as 'Further action required'", async ({
                                                                                                                                                                                                                                                         page,
                                                                                                                                                                                                                                                         context
                                                                                                                                                                                                                                                     }) => {
@@ -185,9 +194,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started between Sep14 & Aug19", async ({
-                                                                                                                                                    page,
-                                                                                                                                                    context
-                                                                                                                                                }) => {
+                                                                                                                                                              page,
+                                                                                                                                                              context
+                                                                                                                                                          }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
@@ -197,9 +206,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started after Sep19", async ({
-                                                                                                                                          page,
-                                                                                                                                          context
-                                                                                                                                      }) => {
+                                                                                                                                                    page,
+                                                                                                                                                    context
+                                                                                                                                                }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
@@ -209,14 +218,170 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test("Checks the qualification result inset shows correctly when full and relevant", async ({
-                                                                                           page,
-                                                                                           context
-                                                                                        }) => {
+                                                                                                    page,
+                                                                                                    context
+                                                                                                }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#qualification-result-heading", "Qualification result heading");
         await checkText(page, "#qualification-result-message-heading", "Full and relevant");
         await checkText(page, "#qualification-result-message-body", "Full and relevant body");
+    });
+
+
+    test("Checks default cookie", async ({
+                                             page,
+                                             context
+                                         }) => {
+
+        await page.goto("/");
+
+        await checkJourneyCookieValue(context, '%7B%22WhereWasQualificationAwarded%22%3A%22%22%2C%22WhenWasQualificationStarted%22%3A%22%22%2C%22WhenWasQualificationAwarded%22%3A%22%22%2C%22LevelOfQualification%22%3A%22%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A0%7D');
+
+
+        await setJourneyState({
+            context: context,
+            location: null,
+            startDate: null,
+            awardDate: null,
+            level: null,
+            organisation: null,
+            organisationNotOnList: null,
+            searchCriteria: null,
+            additionalQuestions: null,
+            selectedFromList: null
+        });
+
+        await checkJourneyCookieValue(context, '%7B%22WhereWasQualificationAwarded%22%3A%22%22%2C%22WhenWasQualificationStarted%22%3A%22%22%2C%22WhenWasQualificationAwarded%22%3A%22%22%2C%22LevelOfQualification%22%3A%22%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A0%7D');
+    });
+
+    test("Checks the qualification result inset shows correctly when not full and relevant level 2", async ({
+                                                                                                                page,
+                                                                                                                context
+                                                                                                            }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+
+        await checkJourneyCookieValue(context, "%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%222%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D");
+
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant body");
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 qual started sept 2014 -> aug 2019 (level 3)', async ({
+                                                                                                                                                 page,
+                                                                                                                                                 context
+                                                                                                                                             }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 3,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-240');
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 body");
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 qual started sept 2014 -> aug 2019 (level 4)', async ({
+                                                                                                                                                 page,
+                                                                                                                                                 context
+                                                                                                                                             }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 4,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-105');
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 body");
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 qual started sept 2014 -> aug 2019 (level 5)', async ({
+                                                                                                                                                 page,
+                                                                                                                                                 context
+                                                                                                                                             }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 5,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-107');
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 body");
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 or level 6 qual started sept 2014 -> aug 2019 (level 6)', async ({
+                                                                                                                                                            page,
+                                                                                                                                                            context
+                                                                                                                                                        }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-108");
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3 or L6");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 or L6 body");
     });
 });
