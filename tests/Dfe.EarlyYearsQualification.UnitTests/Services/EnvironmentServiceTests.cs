@@ -48,7 +48,7 @@ public class EnvironmentServiceTests
     }
 
     [TestMethod]
-    public void WhenStagingConfigured_IsProduction_ShouldReturnTrue()
+    public void WhenStagingConfigured_IsProduction_ShouldReturnFalse()
     {
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["ENVIRONMENT"]).Returns("staging");
