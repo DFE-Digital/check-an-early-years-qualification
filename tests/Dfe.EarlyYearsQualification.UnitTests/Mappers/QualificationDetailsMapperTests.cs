@@ -19,29 +19,19 @@ public class QualificationDetailsMapperTests
 
         const string feedbackBannerBody = "This is the feedback banner body";
         const string improveServiceBody = "This is the improve service body";
-        const string checkAnotherQualificationText = "Check another qualification text";
-        const string furtherInfoText = "Further info text";
         const string requirementsText = "Requirements text";
         var detailsPage = new DetailsPage
                           {
                               AwardingOrgLabel = "Awarding org label",
-                              BookmarkHeading = "Bookmark heading",
-                              BookmarkText = "Bookmark text",
-                              CheckAnotherQualificationHeading = "check another qualification heading",
-                              CheckAnotherQualificationText =
-                                  ContentfulContentHelper.Paragraph(checkAnotherQualificationText),
                               CheckAnotherQualificationLink = new NavigationLink
                                                               {
                                                                   DisplayText = "Check another qualification",
                                                                   OpenInNewTab = true,
                                                                   Href = "/"
                                                               },
-                              DateAddedLabel = "Date added label",
                               DateOfCheckLabel = "Date of check label",
-                              FurtherInfoText = ContentfulContentHelper.Paragraph(furtherInfoText),
                               LevelLabel = "Level label",
                               MainHeader = "Main header",
-                              QualificationNumberLabel = "Qualification number label",
                               RequirementsHeading = "Requirements heading",
                               RequirementsText = ContentfulContentHelper.Paragraph(requirementsText),
                               RatiosHeading = "Ratios heading",
@@ -83,8 +73,7 @@ public class QualificationDetailsMapperTests
         const string dateAwarded = "Date awarded";
 
         var result = QualificationDetailsMapper.Map(qualification, detailsPage, backNavLink,
-                                                    additionalRequirementAnswers, dateStarted, dateAwarded,
-                                                    checkAnotherQualificationText, furtherInfoText, requirementsText,
+                                                    additionalRequirementAnswers, dateStarted, dateAwarded, requirementsText,
                                                     feedbackBannerBody, improveServiceBody);
 
         result.Should().NotBeNull();
@@ -108,16 +97,9 @@ public class QualificationDetailsMapperTests
         result.DateAwarded.Should().BeSameAs(dateAwarded);
         result.Content.Should().NotBeNull();
         result.Content!.AwardingOrgLabel.Should().BeSameAs(detailsPage.AwardingOrgLabel);
-        result.Content.BookmarkHeading.Should().BeSameAs(detailsPage.BookmarkHeading);
-        result.Content.BookmarkText.Should().BeSameAs(detailsPage.BookmarkText);
-        result.Content.CheckAnotherQualificationHeading.Should().BeSameAs(detailsPage.CheckAnotherQualificationHeading);
-        result.Content.CheckAnotherQualificationText.Should().BeSameAs(checkAnotherQualificationText);
-        result.Content.DateAddedLabel.Should().BeSameAs(detailsPage.DateAddedLabel);
         result.Content.DateOfCheckLabel.Should().BeSameAs(detailsPage.DateOfCheckLabel);
-        result.Content.FurtherInfoHeading.Should().BeSameAs(detailsPage.FurtherInfoHeading);
         result.Content.LevelLabel.Should().BeSameAs(detailsPage.LevelLabel);
         result.Content.MainHeader.Should().BeSameAs(detailsPage.MainHeader);
-        result.Content.QualificationNumberLabel.Should().BeSameAs(detailsPage.QualificationNumberLabel);
         result.Content.RequirementsHeading.Should().BeSameAs(detailsPage.RequirementsHeading);
         result.Content.RequirementsText.Should().BeSameAs(requirementsText);
         result.Content.RatiosHeading.Should().BeSameAs(detailsPage.RatiosHeading);

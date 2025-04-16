@@ -271,97 +271,6 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public void CalculateBackButton_NoAdditionalQuestions_Calls_Cookies_GetLevelOfQualification()
-    {
-        const string qualificationId = "qualificationId";
-
-        var detailsPage = new DetailsPage();
-
-        _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(false);
-        var sut = GetSut();
-
-        _ = sut.CalculateBackButton(detailsPage, qualificationId);
-
-        _mockUserJourneyCookieService.Verify(o => o.GetLevelOfQualification(), Times.Once);
-    }
-
-    [TestMethod]
-    [DataRow(YesOrNo.No, 1, false)]
-    [DataRow(YesOrNo.No, 2, false)]
-    [DataRow(YesOrNo.No, 3, false)]
-    [DataRow(YesOrNo.No, 4, false)]
-    [DataRow(YesOrNo.No, 5, false)]
-    [DataRow(YesOrNo.No, 6, true)]
-    [DataRow(YesOrNo.Yes, 1, false)]
-    [DataRow(YesOrNo.Yes, 2, false)]
-    [DataRow(YesOrNo.Yes, 3, false)]
-    [DataRow(YesOrNo.Yes, 4, false)]
-    [DataRow(YesOrNo.Yes, 5, false)]
-    [DataRow(YesOrNo.Yes, 6, false)]
-    public void CalculateBackButton_NoAdditionalQuestions_Calls_Cookies_WasStartedBeforeSeptember2014_WhenItShould(
-        YesOrNo selectedFromList, int level, bool shouldCall)
-    {
-        const string qualificationId = "qualificationId";
-
-        var detailsPage = new DetailsPage();
-
-        _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(false);
-        _mockUserJourneyCookieService.Setup(o => o.GetQualificationWasSelectedFromList()).Returns(selectedFromList);
-        _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(level);
-
-        var sut = GetSut();
-
-        _ = sut.CalculateBackButton(detailsPage, qualificationId);
-
-        _mockUserJourneyCookieService.Verify(o => o.WasStartedBeforeSeptember2014(), Times.Exactly(shouldCall ? 1 : 0));
-    }
-
-    [TestMethod]
-    public void
-        CalculateBackButton_NoAdditionalQuestions_Lvl6NotInList_BeforeSept2014_Returns_BackToLevelSixAdviceBefore2014()
-    {
-        const string qualificationId = "qualificationId";
-        const string backToLevelSixAdviceBefore2014 = "backToLevelSixAdviceBefore2014";
-
-        var detailsPage = new DetailsPage
-                          {
-                              BackToLevelSixAdviceBefore2014 =
-                                  new NavigationLink { Href = backToLevelSixAdviceBefore2014 }
-                          };
-
-        _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(false);
-        _mockUserJourneyCookieService.Setup(o => o.GetQualificationWasSelectedFromList()).Returns(YesOrNo.No);
-        _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(6);
-        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014()).Returns(true);
-
-        var sut = GetSut();
-
-        var result = sut.CalculateBackButton(detailsPage, qualificationId);
-        result.Should().NotBeNull();
-        result!.Href.Should().BeEquivalentTo(backToLevelSixAdviceBefore2014);
-    }
-
-    [TestMethod]
-    public void CalculateBackButton_NoAdditionalQuestions_Lvl6NotInList_AfterSept2014_Returns_BackToLevelSixAdvice()
-    {
-        const string qualificationId = "qualificationId";
-        const string backToLevelSixAdvice = "backToLevelSixAdvice";
-
-        var detailsPage = new DetailsPage { BackToLevelSixAdvice = new NavigationLink { Href = backToLevelSixAdvice } };
-
-        _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(false);
-        _mockUserJourneyCookieService.Setup(o => o.GetQualificationWasSelectedFromList()).Returns(YesOrNo.No);
-        _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(6);
-        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014()).Returns(false);
-
-        var sut = GetSut();
-
-        var result = sut.CalculateBackButton(detailsPage, qualificationId);
-        result.Should().NotBeNull();
-        result!.Href.Should().BeEquivalentTo(backToLevelSixAdvice);
-    }
-
-    [TestMethod]
     public void CalculateBackButton_NoAdditionalQuestions_NotLvl6NotInList_AfterSept2014_Returns_BackToLevelSixAdvice()
     {
         const string qualificationId = "qualificationId";
@@ -730,12 +639,8 @@ public class QualificationDetailsServiceTests
         const string qualificationName = "qualificationName";
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
         const int qualificationLevel = 1;
-        const string checkAnotherQualification = "checkAnotherQualification";
-        const string furtherInfo = "furtherInfo";
         const string requirements = "requirements";
         const string feedback = "feedback";
-        var checkAnotherQualificationText = new Document { NodeType = checkAnotherQualification };
-        var furtherInfoText = new Document { NodeType = furtherInfo };
         var requirementsText = new Document { NodeType = requirements };
         var feedbackText = new Document { NodeType = feedback };
         var feedbackBanner = new FeedbackBanner { Body = feedbackText };
@@ -745,15 +650,11 @@ public class QualificationDetailsServiceTests
             { FromWhichYear = "FromWhichYear" };
         var detailsPage = new DetailsPage
                           {
-                              CheckAnotherQualificationText = checkAnotherQualificationText,
-                              FurtherInfoText = furtherInfoText,
                               RequirementsText = requirementsText,
                               FeedbackBanner = feedbackBanner,
                               BackButton = backButton
                           };
-
-        _mockContentParser.Setup(o => o.ToHtml(checkAnotherQualificationText)).ReturnsAsync(checkAnotherQualification);
-        _mockContentParser.Setup(o => o.ToHtml(furtherInfoText)).ReturnsAsync(furtherInfo);
+        
         _mockContentParser.Setup(o => o.ToHtml(requirementsText)).ReturnsAsync(requirements);
         _mockContentParser.Setup(o => o.ToHtml(feedbackText)).ReturnsAsync(feedback);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
@@ -761,9 +662,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
         var result = await sut.MapDetails(qualification, detailsPage);
-
-        _mockContentParser.Verify(o => o.ToHtml(checkAnotherQualificationText), Times.Once);
-        _mockContentParser.Verify(o => o.ToHtml(furtherInfoText), Times.Once);
+        
         _mockContentParser.Verify(o => o.ToHtml(requirementsText), Times.Once);
         _mockContentParser.Verify(o => o.ToHtml(feedbackText), Times.Once);
 
@@ -778,8 +677,6 @@ public class QualificationDetailsServiceTests
         result.DateAwarded.Should().Be(dateAwarded);
 
         var content = result.Content!;
-        content.CheckAnotherQualificationText.Should().Be(checkAnotherQualification);
-        content.FurtherInfoText.Should().Be(furtherInfo);
         content.RequirementsText.Should().Be(requirements);
         content.FeedbackBanner!.Body.Should().Be(feedback);
     }

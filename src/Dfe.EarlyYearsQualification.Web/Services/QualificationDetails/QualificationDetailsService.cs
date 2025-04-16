@@ -194,20 +194,7 @@ public class QualificationDetailsService(
             return link;
         }
 
-        var level = userJourneyCookieService.GetLevelOfQualification();
-
-        NavigationLink? backButton = null;
-
-        if (userJourneyCookieService.GetQualificationWasSelectedFromList() != YesOrNo.Yes
-            && level == 6)
-        {
-            // Advice is different for qualifications started before September 2014
-            backButton = userJourneyCookieService.WasStartedBeforeSeptember2014()
-                             ? content.BackToLevelSixAdviceBefore2014
-                             : content.BackToLevelSixAdvice;
-        }
-
-        return backButton ?? content.BackButton;
+        return content.BackButton;
     }
 
     public async Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model)
@@ -322,9 +309,7 @@ public class QualificationDetailsService(
             var dateOnly = new DateOnly(awardedYear.Value, awardedMonth.Value, 1);
             dateAwarded = dateOnly.ToString("MMMM yyyy");
         }
-
-        var checkAnotherQualificationText = await contentParser.ToHtml(content.CheckAnotherQualificationText);
-        var furtherInfoText = await contentParser.ToHtml(content.FurtherInfoText);
+        
         var requirementsText = await contentParser.ToHtml(content.RequirementsText);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner);
         var improveServiceBodyHtml = content.UpDownFeedback is not null
@@ -333,7 +318,7 @@ public class QualificationDetailsService(
         return QualificationDetailsMapper.Map(qualification, content, backNavLink,
                                               MapAdditionalRequirementAnswers(qualification
                                                                                   .AdditionalRequirementQuestions),
-                                              dateStarted, dateAwarded, checkAnotherQualificationText, furtherInfoText,
+                                              dateStarted, dateAwarded,
                                               requirementsText, feedbackBodyHtml, improveServiceBodyHtml);
     }
 

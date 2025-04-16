@@ -186,18 +186,9 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<DetailsPage>();
         result!.AwardingOrgLabel.Should().NotBeNullOrEmpty();
-        result.BookmarkHeading.Should().NotBeNullOrEmpty();
-        result.BookmarkText.Should().NotBeNullOrEmpty();
-        result.CheckAnotherQualificationHeading.Should().NotBeNullOrEmpty();
-        result.CheckAnotherQualificationText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Check Another Qualification Text");
-        result.DateAddedLabel.Should().NotBeNullOrEmpty();
         result.DateOfCheckLabel.Should().NotBeNullOrEmpty();
-        result.FurtherInfoText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Further Info Text");
         result.LevelLabel.Should().NotBeNullOrEmpty();
         result.MainHeader.Should().NotBeNullOrEmpty();
-        result.QualificationNumberLabel.Should().NotBeNullOrEmpty();
         result.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
         result.QualificationNameLabel.Should().NotBeNullOrEmpty();
         result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
