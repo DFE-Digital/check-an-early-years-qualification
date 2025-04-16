@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
-using Contentful.AspNetCore;
+using Dfe.EarlyYearsQualification.Caching;
+using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -9,9 +10,12 @@ using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Security;
+using Dfe.EarlyYearsQualification.Web.Services.Caching;
+using Dfe.EarlyYearsQualification.Web.Services.Contentful;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
@@ -29,18 +33,25 @@ using OwaspHeaders.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+bool isProductionEnvironment = new EnvironmentService(builder.Configuration).IsProduction();
+
+builder.Services.AddSingleton<IEnvironmentService, EnvironmentService>();
+
 var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
                                         {
                                             EnableAdaptiveSampling = false
                                         };
 
+builder.Services.AddTransient<CachingHandler>();
+builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToPathAndQueryCacheKeyConverter>();
+
 builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
-var useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
+bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
 if (!useMockContentful)
 {
-    var keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
+    string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
     builder.Services
@@ -50,7 +61,7 @@ if (!useMockContentful)
 
     if (!builder.Environment.IsDevelopment())
     {
-        var blobStorageConnectionString =
+        string? blobStorageConnectionString =
             builder.Configuration
                    .GetSection("Storage")
                    .GetValue<string>("ConnectionString");
@@ -90,9 +101,9 @@ builder.Services.AddControllersWithViews(options =>
                                                                  });
                                          });
 
-builder.Services.AddContentful(builder.Configuration);
-
-builder.Services.AddGovUkFrontend();
+builder.Services
+       .AddContentful(builder.Configuration)
+       .AddGovUkFrontend();
 
 if (useMockContentful)
 {
@@ -100,8 +111,7 @@ if (useMockContentful)
 }
 else
 {
-    builder.Services.AddTransient<IContentService, ContentfulContentService>();
-    builder.Services.AddTransient<IQualificationsRepository, QualificationsRepository>();
+    builder.Services.SetupContentfulServices();
 }
 
 builder.Services.AddTransient<IQualificationDetailsService, QualificationDetailsService>();
@@ -134,15 +144,19 @@ if (useMockContentful)
 else
 {
     builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection("Notifications"));
-    builder.Services.AddSingleton<INotificationClient, NotificationClient>(_ =>
-                                                                           {
-                                                                               var options = builder.Configuration.GetSection("Notifications").Get<NotificationOptions>();
-                                                                               return new NotificationClient(options!.ApiKey);
-                                                                           });
+    builder.Services.AddSingleton<INotificationClient, NotificationClient>
+        (_ =>
+         {
+             var options = builder.Configuration
+                                  .GetSection("Notifications")
+                                  .Get<NotificationOptions>();
+             return new NotificationClient(options!
+                                               .ApiKey);
+         });
     builder.Services.AddSingleton<INotificationService, GovUkNotifyService>();
 }
 
-var accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
+bool accessIsChallenged = !builder.Configuration.GetValue<bool>("ServiceAccess:IsPublic");
 // ...by default, challenge the user for the secret value unless that's explicitly turned off
 
 if (accessIsChallenged)
@@ -153,6 +167,10 @@ else
 {
     builder.Services.AddSingleton<IChallengeResourceFilterAttribute, NoChallengeResourceFilterAttribute>();
 }
+
+var cacheConfiguration = builder.Configuration.GetSection("Cache");
+
+builder.UseDistributedCache(cacheConfiguration, isProductionEnvironment);
 
 var app = builder.Build();
 

@@ -187,6 +187,11 @@ variable "insights_connection_string" {
   type        = string
 }
 
+variable "cache_endpoint_secret" {
+  description = "Secret value to be supplied when calling Cache endpoint"
+  type        = string
+}
+
 variable "tags" {
   description = "Resource tags"
   type        = map(string)

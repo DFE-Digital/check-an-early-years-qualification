@@ -49,6 +49,7 @@ No modules.
 | <a name="input_agw_pip_id"></a> [agw\_pip\_id](#input\_agw\_pip\_id) | ID of the Public IP address for the App Gateway | `string` | n/a | yes |
 | <a name="input_agw_subnet_id"></a> [agw\_subnet\_id](#input\_agw\_subnet\_id) | ID of the Subnet for the App Gateway | `string` | n/a | yes |
 | <a name="input_asp_sku"></a> [asp\_sku](#input\_asp\_sku) | SKU name for the App Service Plan | `string` | n/a | yes |
+| <a name="input_cache_endpoint_secret"></a> [cache\_endpoint\_secret](#input\_cache\_endpoint\_secret) | Secret value to be supplied when calling Cache endpoint | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | n/a | yes |
 | <a name="input_insights_connection_string"></a> [insights\_connection\_string](#input\_insights\_connection\_string) | App Insights connection string | `string` | n/a | yes |
 | <a name="input_instrumentation_key"></a> [instrumentation\_key](#input\_instrumentation\_key) | App Insights instrumentation key | `string` | n/a | yes |

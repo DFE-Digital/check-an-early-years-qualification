@@ -187,6 +187,11 @@ variable "govuk_notify_api_key" {
   type        = string
 }
 
+variable "cache_endpoint_secret" {
+  description = "Secret value to be supplied when calling cache endpoint"
+  type        = string
+}
+
 variable "notifications_feedback_template_id" {
   description = "GovUK Notify Feedback Email Template Id"
   type        = string
