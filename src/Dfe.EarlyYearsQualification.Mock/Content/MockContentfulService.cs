@@ -115,7 +115,6 @@ public class MockContentfulService : IContentService
     public async Task<DetailsPage?> GetDetailsPage()
     {
         var checkAnotherQualificationText = ContentfulContentHelper.Paragraph("Test Check Another Qualification Text");
-        var furtherInfoText = ContentfulContentHelper.Paragraph("Test Further Info Text");
         var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
@@ -124,17 +123,9 @@ public class MockContentfulService : IContentService
         return await Task.FromResult(new DetailsPage
                                      {
                                          AwardingOrgLabel = "Awarding Org Label",
-                                         BookmarkHeading = "Test Bookmark Heading",
-                                         BookmarkText = "Test Bookmark Text",
-                                         CheckAnotherQualificationHeading = "Test Check Another Qualification Heading",
-                                         DateAddedLabel = "Test Date Added Label",
                                          DateOfCheckLabel = "Test Date Of Check Label",
-                                         FurtherInfoHeading = "Test Further Info Heading",
                                          LevelLabel = "Test Level Label",
                                          MainHeader = "Test Main Heading",
-                                         QualificationNumberLabel = "Test Qualification Number Label",
-                                         CheckAnotherQualificationText = checkAnotherQualificationText,
-                                         FurtherInfoText = furtherInfoText,
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "TEST",
@@ -149,22 +140,6 @@ public class MockContentfulService : IContentService
                                                                         "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers",
                                                                     OpenInNewTab = false
                                                                 },
-                                         BackToLevelSixAdvice = new NavigationLink
-                                                                {
-                                                                    DisplayText =
-                                                                        "TEST (back to level 6 advice post 2014)",
-                                                                    Href =
-                                                                        "/advice/level-6-qualification-post-2014",
-                                                                    OpenInNewTab = false
-                                                                },
-                                         BackToLevelSixAdviceBefore2014 = new NavigationLink
-                                                                          {
-                                                                              DisplayText =
-                                                                                  "TEST (back to level 6 advice pre 2014)",
-                                                                              Href =
-                                                                                  "/advice/level-6-qualification-pre-2014",
-                                                                              OpenInNewTab = false
-                                                                          },
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
                                          RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
