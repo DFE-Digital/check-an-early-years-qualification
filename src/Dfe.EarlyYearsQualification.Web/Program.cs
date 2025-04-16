@@ -88,6 +88,7 @@ builder.Services.AddControllersWithViews(options =>
                                                                      NoStore = true,
                                                                      Location = ResponseCacheLocation.None
                                                                  });
+                                             options.Filters.Add<ApplicationInsightsActionFilterAttribute>();
                                          });
 
 builder.Services.AddContentful(builder.Configuration);
