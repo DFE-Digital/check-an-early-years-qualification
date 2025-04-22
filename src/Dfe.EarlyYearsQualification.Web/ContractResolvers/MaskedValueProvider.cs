@@ -2,7 +2,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Dfe.EarlyYearsQualification.Web.ContractResolvers;
 
-public class ObfuscatorValueProvider : IValueProvider
+public class MaskedValueProvider : IValueProvider
 {
     public void SetValue(object target, object? value)
     {
