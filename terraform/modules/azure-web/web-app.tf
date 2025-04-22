@@ -463,6 +463,9 @@ resource "azurerm_redis_cache_access_policy_assignment" "web_app_contrib" {
 }
 
 resource "azurerm_redis_cache_access_policy_assignment" "web_app_slot_contrib" {
+
+  count = var.environment != "development" ? 1 : 0
+
   name           = "web-app-slot-redis-contributor"
   redis_cache_id = var.redis_cache_id
   # Grant Data Owner, as the endpoint to clear the cache requires access to a `dangerous` function
