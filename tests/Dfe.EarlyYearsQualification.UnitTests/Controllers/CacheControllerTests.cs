@@ -321,4 +321,13 @@ public class CacheControllerTests
 
         result.Should().BeOfType<UnauthorizedResult>();
     }
+
+    [TestMethod]
+    public void CacheController_Has_IgnoreAntiForgeryAttribute()
+    {
+        object[] customAttributes = typeof(CacheController).GetCustomAttributes(false);
+
+        customAttributes.Should().Contain(x => x is IgnoreAntiforgeryTokenAttribute,
+                                          "Anti-forgery not used for API POST");
+    }
 }

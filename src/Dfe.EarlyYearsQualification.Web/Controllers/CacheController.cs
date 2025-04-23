@@ -4,14 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
+[IgnoreAntiforgeryToken]
+[Route("api/clear-distributed-cache")]
 public class CacheController(
     ILogger<CacheController> logger,
     ICacheInvalidator cacheInvalidator,
     IConfiguration configuration)
     : Controller // Do not inherit from Dfe.EarlyYearsQualification.Web.Controllers.Base.ServiceController
 {
-    [HttpGet("api/clear-distributed-cache")]
-    [HttpPost("api/clear-distributed-cache")]
+    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> Index()
     {
         logger.LogWarning("Call to endpoint to clear distributed cache");
