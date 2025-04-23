@@ -1,0 +1,12 @@
+@model OptionsPageModel
+
+@{
+    if (!Model.Option.Equals(OptionsPageModel.PublishedOptionValue, StringComparison.Ordinal))
+    {
+        @Html.ActionLink(Model.OptionShortText,
+                         "Index",
+                         "Options",
+                         null,
+                         new { @class = "options-stamp", tabindex = "0" })
+    }
+}
