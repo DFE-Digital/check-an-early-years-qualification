@@ -176,6 +176,9 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
       tags["Environment"],
       tags["Product"],
       tags["Service Offering"],
+      tags["hidden-link: /app-insights-conn-string"],
+      tags["hidden-link: /app-insights-instrumentation-key"],
+      tags["hidden-link: /app-insights-resource-id"],
       site_config.0.application_stack
     ]
   }
