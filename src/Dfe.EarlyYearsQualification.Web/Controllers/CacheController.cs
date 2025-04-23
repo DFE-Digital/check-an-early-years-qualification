@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
+[IgnoreAntiforgeryToken]
 public class CacheController(
     ILogger<CacheController> logger,
     ICacheInvalidator cacheInvalidator,
