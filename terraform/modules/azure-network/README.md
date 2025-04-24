@@ -24,7 +24,6 @@ No modules.
 | [azurerm_key_vault.kv](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault) | resource |
 | [azurerm_key_vault_access_policy.kv_gh_ap](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.kv_mi_ap](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
-| [azurerm_key_vault_certificate.kv_cert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_certificate) | resource |
 | [azurerm_key_vault_certificate.kv_service_gov_uk_cert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_certificate) | resource |
 | [azurerm_key_vault_certificate_issuer.kv_ca](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_certificate_issuer) | resource |
 | [azurerm_key_vault_key.data-protection](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_key) | resource |
@@ -57,8 +56,6 @@ No modules.
 | <a name="input_kv_certificate_authority_name"></a> [kv\_certificate\_authority\_name](#input\_kv\_certificate\_authority\_name) | Name of the Certificate Authority | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_password"></a> [kv\_certificate\_authority\_password](#input\_kv\_certificate\_authority\_password) | Password the Certificate provider | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_username"></a> [kv\_certificate\_authority\_username](#input\_kv\_certificate\_authority\_username) | Username for the Certificate provider | `string` | n/a | yes |
-| <a name="input_kv_certificate_label"></a> [kv\_certificate\_label](#input\_kv\_certificate\_label) | Label for the education.gov.uk certificate | `string` | n/a | yes |
-| <a name="input_kv_certificate_subject"></a> [kv\_certificate\_subject](#input\_kv\_certificate\_subject) | Subject of the education.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_label"></a> [kv\_service\_gov\_uk\_certificate\_label](#input\_kv\_service\_gov\_uk\_certificate\_label) | Label for the service.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_subject"></a> [kv\_service\_gov\_uk\_certificate\_subject](#input\_kv\_service\_gov\_uk\_certificate\_subject) | Subject of the service.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Name of the Azure region to deploy resources | `string` | n/a | yes |
@@ -72,7 +69,6 @@ No modules.
 | <a name="output_agw_pip_id"></a> [agw\_pip\_id](#output\_agw\_pip\_id) | ID of the Public IP address for the App Gateway |
 | <a name="output_agw_subnet_id"></a> [agw\_subnet\_id](#output\_agw\_subnet\_id) | ID of the Subnet for the App Gateway |
 | <a name="output_cache_subnet_id"></a> [cache\_subnet\_id](#output\_cache\_subnet\_id) | ID of the Subnet for the Redis cache |
-| <a name="output_kv_cert_secret_id"></a> [kv\_cert\_secret\_id](#output\_kv\_cert\_secret\_id) | education.gov.uk SSL certificate Secret ID |
 | <a name="output_kv_id"></a> [kv\_id](#output\_kv\_id) | ID of the Key Vault |
 | <a name="output_kv_mi_id"></a> [kv\_mi\_id](#output\_kv\_mi\_id) | ID of the Managed Identity for the Key Vault |
 | <a name="output_kv_service_gov_uk_cert_secret_id"></a> [kv\_service\_gov\_uk\_cert\_secret\_id](#output\_kv\_service\_gov\_uk\_cert\_secret\_id) | service.gov.uk SSL certificate Secret ID |

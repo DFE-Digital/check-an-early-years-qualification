@@ -85,8 +85,6 @@ module "network" {
   kv_certificate_authority_admin_first_name = var.kv_certificate_authority_admin_first_name
   kv_certificate_authority_admin_last_name  = var.kv_certificate_authority_admin_last_name
   kv_certificate_authority_admin_phone_no   = var.kv_certificate_authority_admin_phone_no
-  kv_certificate_label                      = var.kv_certificate_label
-  kv_certificate_subject                    = var.kv_certificate_subject
   kv_service_gov_uk_certificate_label       = var.kv_service_gov_uk_certificate_label
   kv_service_gov_uk_certificate_subject     = var.kv_service_gov_uk_certificate_subject
   contentful_delivery_api_key               = var.contentful_delivery_api_key

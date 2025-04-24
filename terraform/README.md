@@ -59,8 +59,6 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_kv_certificate_authority_admin_phone_no"></a> [kv\_certificate\_authority\_admin\_phone\_no](#input\_kv\_certificate\_authority\_admin\_phone\_no) | Phone No. of the Certificate Authority Admin | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_password"></a> [kv\_certificate\_authority\_password](#input\_kv\_certificate\_authority\_password) | Password the Certificate provider | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_username"></a> [kv\_certificate\_authority\_username](#input\_kv\_certificate\_authority\_username) | Username for the Certificate provider | `string` | n/a | yes |
-| <a name="input_kv_certificate_label"></a> [kv\_certificate\_label](#input\_kv\_certificate\_label) | Label for the education.gov.uk certificate | `string` | n/a | yes |
-| <a name="input_kv_certificate_subject"></a> [kv\_certificate\_subject](#input\_kv\_certificate\_subject) | Subject of the education.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_label"></a> [kv\_service\_gov\_uk\_certificate\_label](#input\_kv\_service\_gov\_uk\_certificate\_label) | Label for the service.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_subject"></a> [kv\_service\_gov\_uk\_certificate\_subject](#input\_kv\_service\_gov\_uk\_certificate\_subject) | Subject of the service.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_notifications_feedback_email_address"></a> [notifications\_feedback\_email\_address](#input\_notifications\_feedback\_email\_address) | GovUK Notify Feedback Email Address | `string` | n/a | yes |
