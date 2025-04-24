@@ -51,16 +51,6 @@ variable "kv_certificate_authority_admin_phone_no" {
   sensitive   = true
 }
 
-variable "kv_certificate_label" {
-  description = "Label for the education.gov.uk certificate"
-  type        = string
-}
-
-variable "kv_certificate_subject" {
-  description = "Subject of the education.gov.uk certificate"
-  type        = string
-}
-
 variable "kv_service_gov_uk_certificate_label" {
   description = "Label for the service.gov.uk certificate"
   type        = string
