@@ -352,20 +352,6 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
   }
 }
 
-# Create Custom Domain Name
-resource "azurerm_app_service_custom_hostname_binding" "webapp_custom_domain" {
-  # Custom hostname only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
-  resource_group_name = var.resource_group
-  hostname            = var.webapp_custom_domain_name
-  app_service_name    = azurerm_linux_web_app.webapp.name
-
-  lifecycle {
-    ignore_changes = [ssl_state, thumbprint]
-  }
-}
-
 resource "azurerm_app_service_custom_hostname_binding" "webapp_service_gov_uk_custom_domain" {
   # Custom hostname only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
@@ -416,25 +402,6 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   lifecycle {
     ignore_changes = [object_id, tenant_id]
   }
-}
-
-resource "azurerm_app_service_certificate" "webapp_custom_domain_cert" {
-  # Custom hostname only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
-  name                = var.webapp_custom_domain_cert_secret_label
-  resource_group_name = var.resource_group
-  location            = var.location
-  key_vault_secret_id = var.kv_cert_secret_id
-}
-
-resource "azurerm_app_service_certificate_binding" "webapp_custom_domain_cert_bind" {
-  # Custom hostname only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
-  hostname_binding_id = azurerm_app_service_custom_hostname_binding.webapp_custom_domain[0].id
-  certificate_id      = azurerm_app_service_certificate.webapp_custom_domain_cert[0].id
-  ssl_state           = "SniEnabled"
 }
 
 resource "azurerm_app_service_certificate" "webapp_service_gov_uk_custom_domain_cert" {
