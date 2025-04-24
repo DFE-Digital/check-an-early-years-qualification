@@ -41,5 +41,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
       - name: Restart Service
-        run: |
-          az webapp restart --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }}
+        uses: ./.github/actions/restart-app-service
+        with:
+          resource_name_prefix: ${{ vars.RESOURCE_NAME_PREFIX }}
+          webapp_name: ${{ vars.WEBAPP_NAME }} 
