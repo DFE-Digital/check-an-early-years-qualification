@@ -262,7 +262,7 @@ public class MockContentfulServiceTests
         result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.Options.Should().NotBeNullOrEmpty();
-        result.Options.Count.Should().Be(4);
+        result.Options.Count.Should().Be(5);
         (result.Options[0] as Option)!.Label.Should().Be("Level 2");
         (result.Options[0] as Option)!.Value.Should().Be("2");
         (result.Options[1] as Option)!.Label.Should().Be("Level 3");
@@ -271,6 +271,8 @@ public class MockContentfulServiceTests
         (result.Options[2] as Option)!.Value.Should().Be("6");
         (result.Options[3] as Option)!.Label.Should().Be("Level 7");
         (result.Options[3] as Option)!.Value.Should().Be("7");
+        (result.Options[4] as Option)!.Label.Should().Be("Not Sure");
+        (result.Options[4] as Option)!.Value.Should().Be("0");
     }
 
     [TestMethod]
