@@ -10,4 +10,4 @@ To run the tests, run the following commands:
 - Run the tests with: ``npx playwright install`` (install all playwright browsers)
 - Run the tests with: ``npx playwright test`` (add --ui to run the tests in playwrights UI)
 
-The e2e tests are set up to use mock content, the smoke tests are set up to use contentful. If smoke tests fail, check that the mock content contains required content
+The e2e tests are set up to use mock content, the smoke tests are set up to use contentful. If e2e tests fail, check that the mock content contains required content
