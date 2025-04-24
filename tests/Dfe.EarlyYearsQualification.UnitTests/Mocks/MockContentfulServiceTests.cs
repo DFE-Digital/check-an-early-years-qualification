@@ -186,18 +186,9 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<DetailsPage>();
         result!.AwardingOrgLabel.Should().NotBeNullOrEmpty();
-        result.BookmarkHeading.Should().NotBeNullOrEmpty();
-        result.BookmarkText.Should().NotBeNullOrEmpty();
-        result.CheckAnotherQualificationHeading.Should().NotBeNullOrEmpty();
-        result.CheckAnotherQualificationText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Check Another Qualification Text");
-        result.DateAddedLabel.Should().NotBeNullOrEmpty();
         result.DateOfCheckLabel.Should().NotBeNullOrEmpty();
-        result.FurtherInfoText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Further Info Text");
         result.LevelLabel.Should().NotBeNullOrEmpty();
         result.MainHeader.Should().NotBeNullOrEmpty();
-        result.QualificationNumberLabel.Should().NotBeNullOrEmpty();
         result.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
         result.QualificationNameLabel.Should().NotBeNullOrEmpty();
         result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
@@ -445,7 +436,7 @@ public class MockContentfulServiceTests
                                                   {
                                                       DisplayText = "Test back button",
                                                       OpenInNewTab = false,
-                                                      Href = "/qualifications"
+                                                      Href = "/select-a-qualification-to-check"
                                                   });
         result.LevelLabel.Should().Be("Test level label");
         result.ButtonText.Should().Be("Test button text");
@@ -550,7 +541,7 @@ public class MockContentfulServiceTests
                                                    {
                                                        DisplayText = "Back",
                                                        OpenInNewTab = false,
-                                                       Href = "/qualifications"
+                                                       Href = "/select-a-qualification-to-check"
                                                    });
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorSummaryHeading.Should().NotBeNullOrEmpty();
@@ -575,7 +566,7 @@ public class MockContentfulServiceTests
                                                    {
                                                        DisplayText = "TEST",
                                                        OpenInNewTab = false,
-                                                       Href = "/qualifications"
+                                                       Href = "/select-a-qualification-to-check"
                                                    });
 
         result.Heading.Should().Be("This is the level 3 page");
@@ -597,7 +588,7 @@ public class MockContentfulServiceTests
                                                    {
                                                        DisplayText = "TEST",
                                                        OpenInNewTab = false,
-                                                       Href = "/qualifications"
+                                                       Href = "/select-a-qualification-to-check"
                                                    });
 
         result.Heading.Should().Be("This is the level 4 page");

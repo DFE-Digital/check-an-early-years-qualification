@@ -11,6 +11,13 @@ inputs:
   webapp_name:
     required: true
     description: The name of the webapp
+  restart_slot:
+    required: true
+    description: A flag indicating whether to restart the slot or not
+  slot_name:
+    required: true
+    description: The name of the slot
+    default: 'production'
   secret_name:
     required: false
     description: The name of the KeyVault secret
@@ -41,3 +48,10 @@ runs:
       shell: bash
       run: |
         az storage account keys renew --account-name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key2
+
+    # Restart the slot
+    - name: Restart the slot
+      if: ${{ inputs.restart_slot }}
+      shell: bash
+      run: |
+        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }} --slot ${{ inputs.slot_name }}

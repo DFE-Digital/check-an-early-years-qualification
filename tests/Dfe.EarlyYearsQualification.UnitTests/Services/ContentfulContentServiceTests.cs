@@ -568,17 +568,9 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                               new DetailsPage
                               {
                                   AwardingOrgLabel = "Test Awarding Org Label",
-                                  BookmarkHeading = "Test bookmark heading",
-                                  BookmarkText = "Test bookmark text",
-                                  CheckAnotherQualificationHeading = "Test check another qualification heading",
-                                  CheckAnotherQualificationText = _testRichText,
-                                  DateAddedLabel = "Test date added label",
                                   DateOfCheckLabel = "Test date of check label",
-                                  FurtherInfoHeading = "Test further info heading",
-                                  FurtherInfoText = _testRichText,
                                   LevelLabel = "Test level label",
                                   MainHeader = "Test main header",
-                                  QualificationNumberLabel = "Test qualification number label",
                                   UpDownFeedback = new UpDownFeedback()
                               }
                           ]
@@ -596,19 +588,9 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var result = await service.GetDetailsPage();
 
         result!.AwardingOrgLabel.Should().Be("Test Awarding Org Label");
-        result.BookmarkHeading.Should().Be("Test bookmark heading");
-        result.BookmarkText.Should().Be("Test bookmark text");
-        result.CheckAnotherQualificationHeading.Should().Be("Test check another qualification heading");
-        result.CheckAnotherQualificationText.Should().Be(_testRichText);
-        result.CheckAnotherQualificationText.Should().NotBeNull();
-        result.DateAddedLabel.Should().Be("Test date added label");
         result.DateOfCheckLabel.Should().Be("Test date of check label");
-        result.FurtherInfoHeading.Should().Be("Test further info heading");
-        result.FurtherInfoText.Should().Be(_testRichText);
-        result.FurtherInfoText.Should().NotBeNull();
         result.LevelLabel.Should().Be("Test level label");
         result.MainHeader.Should().Be("Test main header");
-        result.QualificationNumberLabel.Should().Be("Test qualification number label");
     }
 
     [TestMethod]

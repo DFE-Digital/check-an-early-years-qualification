@@ -163,6 +163,7 @@ module "webapp" {
   kv_mi_id                                              = module.network.kv_mi_id
   redis_cache_id                                        = module.cache.redis_cache_id
   redis_cache_name                                      = module.cache.redis_cache_name
+  cache_endpoint_secret                                 = var.cache_endpoint_secret
   tags                                                  = local.common_tags
   depends_on                                            = [module.network]
 }

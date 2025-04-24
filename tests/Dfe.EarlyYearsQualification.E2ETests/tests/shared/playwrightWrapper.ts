@@ -174,7 +174,7 @@ export async function checkYourAnswersPage(page: Page) {
 
 export async function selectQualification(page: Page, qualificationId: string) {
     // qualifications page - click a qualification in the list to move us on
-    checkUrl(page, "/qualifications");
+    checkUrl(page, "/select-a-qualification-to-check");
     await page.locator("a[href=\"/confirm-qualification/" + qualificationId + "\"]").click();
     checkUrl(page, "/confirm-qualification/" + qualificationId);
 }

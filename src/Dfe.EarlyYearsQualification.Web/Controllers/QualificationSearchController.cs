@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
-[Route("/qualifications")]
+[Route("/select-a-qualification-to-check")]
 [RedirectIfDateMissing]
 public class QualificationSearchController(
     ILogger<QualificationSearchController> logger,
@@ -26,7 +26,7 @@ public class QualificationSearchController(
     }
 
     [HttpPost]
-    public IActionResult Refine(string? refineSearch)
+    public IActionResult Refine([FromForm] string? refineSearch)
     {
         if (!ModelState.IsValid)
         {

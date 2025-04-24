@@ -117,7 +117,7 @@ public class AdviceController(
     }
     
     [HttpPost("help")]
-    public async Task<IActionResult> Help(HelpPageModel model)
+    public async Task<IActionResult> Help([FromForm] HelpPageModel model)
     {
         if (ModelState.IsValid)
         {

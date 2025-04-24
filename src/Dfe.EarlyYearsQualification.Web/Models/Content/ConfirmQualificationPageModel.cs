@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -18,11 +19,13 @@ public class ConfirmQualificationPageModel
     public string ErrorText { get; init; } = string.Empty;
 
     [Required]
+    [IncludeInTelemetry]
     public string? ConfirmQualificationAnswer { get; init; } = string.Empty;
 
     public string ButtonText { get; init; } = string.Empty;
 
     [Required]
+    [IncludeInTelemetry]
     public string QualificationId { get; init; } = string.Empty;
 
     public string QualificationName { get; init; } = string.Empty;

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
@@ -19,14 +20,16 @@ public class DateQuestionModel
     public bool YearError { get; set; }
 
     [Required]
+    [IncludeInTelemetry]
     public int? SelectedMonth { get; set; }
 
     [Required]
+    [IncludeInTelemetry]
     public int? SelectedYear { get; set; }
 
     public string ErrorMessage { get; set; } = string.Empty;
 
     public string Prefix { get; set; } = string.Empty;
 
-    public ErrorSummaryLink? ErrorSummaryLink { get; set; }
+    public List<ErrorSummaryLink> ErrorSummaryLinks { get; set; } = [];
 }

@@ -14,7 +14,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.MonthValid = false;
             resultToReturn.YearValid = false;
             resultToReturn.ErrorMessages.Add(question.ErrorMessage);
-            resultToReturn.BannerErrorMessages.Add(question.ErrorBannerLinkText);
+            resultToReturn.BannerErrorMessages.Add(new BannerError(question.ErrorBannerLinkText, FieldId.Month));
 
             return resultToReturn;
         }
@@ -23,21 +23,21 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
         {
             resultToReturn.MonthValid = false;
             resultToReturn.ErrorMessages.Add(question.MissingMonthErrorMessage);
-            resultToReturn.BannerErrorMessages.Add(question.MissingMonthBannerLinkText);
+            resultToReturn.BannerErrorMessages.Add(new BannerError(question.MissingMonthBannerLinkText, FieldId.Month));
         }
 
         if (model.SelectedMonth is <= 0 or > 12)
         {
             resultToReturn.MonthValid = false;
             resultToReturn.ErrorMessages.Add(question.MonthOutOfBoundsErrorMessage);
-            resultToReturn.BannerErrorMessages.Add(question.MonthOutOfBoundsErrorLinkText);
+            resultToReturn.BannerErrorMessages.Add(new BannerError(question.MonthOutOfBoundsErrorLinkText, FieldId.Month));
         }
 
         if (model.SelectedYear == null)
         {
             resultToReturn.YearValid = false;
             resultToReturn.ErrorMessages.Add(question.MissingYearErrorMessage);
-            resultToReturn.BannerErrorMessages.Add(question.MissingYearBannerLinkText);
+            resultToReturn.BannerErrorMessages.Add(new BannerError(question.MissingYearBannerLinkText, FieldId.Year));
         }
 
         var now = dateTimeAdapter.Now();
@@ -46,7 +46,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
         {
             resultToReturn.YearValid = false;
             resultToReturn.ErrorMessages.Add(question.YearOutOfBoundsErrorMessage);
-            resultToReturn.BannerErrorMessages.Add(question.YearOutOfBoundsErrorLinkText);
+            resultToReturn.BannerErrorMessages.Add(new BannerError(question.YearOutOfBoundsErrorLinkText, FieldId.Year));
         }
 
         if (resultToReturn.ErrorMessages.Count != 0)
@@ -61,7 +61,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.MonthValid = false;
             resultToReturn.YearValid = false;
             resultToReturn.ErrorMessages.Add(question.FutureDateErrorMessage);
-            resultToReturn.BannerErrorMessages.Add(question.FutureDateErrorBannerLinkText);
+            resultToReturn.BannerErrorMessages.Add(new BannerError(question.FutureDateErrorBannerLinkText, FieldId.Month));
         }
 
         return resultToReturn;
@@ -84,7 +84,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
                 awardedValidationResult.MonthValid = false;
                 awardedValidationResult.YearValid = false;
                 awardedValidationResult.ErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
-                awardedValidationResult.BannerErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
+                awardedValidationResult.BannerErrorMessages.Add(new BannerError(questionPage.AwardedDateIsAfterStartedDateErrorText, FieldId.Month));
             }
 
             return new DatesValidationResult
