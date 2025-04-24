@@ -18,15 +18,15 @@ runs:
         node-version: lts/*
     - name: Install dependencies
       shell: bash
-      working-directory: ./tests/Dfe.EarlyYearsQualification.SmokeTests/playwright
+      working-directory: ./tests/Dfe.EarlyYearsQualification.SmokeTests
       run: npm ci
     - name: Install Playwright Browsers
       shell: bash
-      working-directory: ./tests/Dfe.EarlyYearsQualification.SmokeTests/playwright
+      working-directory: ./tests/Dfe.EarlyYearsQualification.SmokeTests
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       shell: bash
-      working-directory: ./tests/Dfe.EarlyYearsQualification.SmokeTests/playwright
+      working-directory: ./tests/Dfe.EarlyYearsQualification.SmokeTests
       run: WEBAPP_URL=https://${{ inputs.webapp_url }}.azurewebsites.net DOMAIN=https://${{ inputs.webapp_url }}.azurewebsites.net AUTH_SECRET=${{ inputs.auth_secret }} npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}

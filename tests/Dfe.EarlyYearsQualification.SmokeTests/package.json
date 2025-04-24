@@ -1,15 +1,15 @@
 {
-  "name": "dfe.earlyyearsqualification.smoketests",
+  "name": "playwright",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "cypress:open": "cypress open",
-    "test": "cypress run"
-  },
+  "scripts": {},
+  "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "cypress": "^13.14.2"
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.10.1",
+    "dotenv": "^16.4.7"
   }
 }

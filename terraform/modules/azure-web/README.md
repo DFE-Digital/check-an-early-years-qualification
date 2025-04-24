@@ -21,11 +21,8 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azurerm_app_service_certificate.webapp_custom_domain_cert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_certificate) | resource |
 | [azurerm_app_service_certificate.webapp_service_gov_uk_custom_domain_cert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_certificate) | resource |
-| [azurerm_app_service_certificate_binding.webapp_custom_domain_cert_bind](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_certificate_binding) | resource |
 | [azurerm_app_service_certificate_binding.webapp_service_gov_uk_custom_domain_cert_bind](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_certificate_binding) | resource |
-| [azurerm_app_service_custom_hostname_binding.webapp_custom_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_custom_hostname_binding) | resource |
 | [azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_custom_hostname_binding) | resource |
 | [azurerm_application_gateway.agw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway) | resource |
 | [azurerm_key_vault_access_policy.webapp_kv_app_service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
@@ -54,7 +51,6 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | n/a | yes |
 | <a name="input_insights_connection_string"></a> [insights\_connection\_string](#input\_insights\_connection\_string) | App Insights connection string | `string` | n/a | yes |
 | <a name="input_instrumentation_key"></a> [instrumentation\_key](#input\_instrumentation\_key) | App Insights instrumentation key | `string` | n/a | yes |
-| <a name="input_kv_cert_secret_id"></a> [kv\_cert\_secret\_id](#input\_kv\_cert\_secret\_id) | education.gov.uk SSL certificate Secret ID | `string` | n/a | yes |
 | <a name="input_kv_id"></a> [kv\_id](#input\_kv\_id) | ID of the Key Vault | `string` | n/a | yes |
 | <a name="input_kv_mi_id"></a> [kv\_mi\_id](#input\_kv\_mi\_id) | ID of the Managed Identity for the Key Vault | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_cert_secret_id"></a> [kv\_service\_gov\_uk\_cert\_secret\_id](#input\_kv\_service\_gov\_uk\_cert\_secret\_id) | service.gov.uk SSL certificate Secret ID | `string` | n/a | yes |
@@ -70,8 +66,6 @@ No modules.
 | <a name="input_webapp_cookie_auth_secret_name"></a> [webapp\_cookie\_auth\_secret\_name](#input\_webapp\_cookie\_auth\_secret\_name) | Name of the cookie holding the auth secret | `string` | n/a | yes |
 | <a name="input_webapp_cookie_preference_name"></a> [webapp\_cookie\_preference\_name](#input\_webapp\_cookie\_preference\_name) | Name of the user's cookie preference cookie | `string` | n/a | yes |
 | <a name="input_webapp_cookie_user_journey_name"></a> [webapp\_cookie\_user\_journey\_name](#input\_webapp\_cookie\_user\_journey\_name) | Name of the cookie holding the user's filter selections | `string` | n/a | yes |
-| <a name="input_webapp_custom_domain_cert_secret_label"></a> [webapp\_custom\_domain\_cert\_secret\_label](#input\_webapp\_custom\_domain\_cert\_secret\_label) | Label for the education.gov.uk certificate | `string` | n/a | yes |
-| <a name="input_webapp_custom_domain_name"></a> [webapp\_custom\_domain\_name](#input\_webapp\_custom\_domain\_name) | education.gov.uk custom domain hostname | `string` | n/a | yes |
 | <a name="input_webapp_docker_image"></a> [webapp\_docker\_image](#input\_webapp\_docker\_image) | Docker Image to deploy | `string` | n/a | yes |
 | <a name="input_webapp_docker_image_tag"></a> [webapp\_docker\_image\_tag](#input\_webapp\_docker\_image\_tag) | Tag for the Docker Image | `string` | n/a | yes |
 | <a name="input_webapp_docker_registry_url"></a> [webapp\_docker\_registry\_url](#input\_webapp\_docker\_registry\_url) | URL to the Docker Registry | `string` | n/a | yes |
