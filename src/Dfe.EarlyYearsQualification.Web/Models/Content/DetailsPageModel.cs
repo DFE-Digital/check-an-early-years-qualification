@@ -25,6 +25,7 @@ public class DetailsPageModel
     public string RatiosHeading { get; init; } = string.Empty;
 
     public string RatiosText { get; set; } = string.Empty;
+    public string RatiosAdditionalInfoText { get; set; } = string.Empty;
 
     public string RequirementsHeading { get; init; } = string.Empty;
 

@@ -14,10 +14,16 @@ public class MockQualificationsRepository : IQualificationsRepository
                {
                    "eyq-250" => await Task.FromResult(CreateQualification("EYQ-250", "BTEC",
                                                                           AwardingOrganisations.Various, 3)),
-                   "eyq-105" => await Task.FromResult(CreateQtsQualification("EYQ-108", "BTEC",
-                                                                             AwardingOrganisations.Various, 4)),
-                   "eyq-107" => await Task.FromResult(CreateQtsQualification("EYQ-107", "BTEC",
-                                                                             AwardingOrganisations.Various, 5)),
+                   "eyq-105" => await Task.FromResult(CreateQualification("EYQ-105", "BTEC",
+                                                                          AwardingOrganisations.Various, 4)),
+                   "eyq-107" => await Task.FromResult(CreateQualification("EYQ-107", "BTEC",
+                                                                          AwardingOrganisations.Various, 5)),
+                   "eyq-109" => await Task.FromResult(CreateQtsQualification("EYQ-109", "BTEC",
+                                                                             AwardingOrganisations.Various, 6)),
+                   "eyq-110" => await Task.FromResult(CreateQualification("EYQ-110", "BTEC",
+                                                                          AwardingOrganisations.Various, 6)),
+                   "eyq-111" => await Task.FromResult(CreateQtsQualification("EYQ-111", "BTEC",
+                                                                             AwardingOrganisations.Various, 7)),
                    "eyq-108" => await Task.FromResult(CreateQtsQualification("EYQ-108", "BTEC",
                                                                              AwardingOrganisations.Various, 6)),
                    "eyq-115" => await Task.FromResult(CreateQualification("EYQ-115", "NCFE",
@@ -224,7 +230,18 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level2RatioRequirementName,
+                           FullAndRelevantForLevel2Before2014 = true,
+                           FullAndRelevantForLevel2After2014 = true,
+                           FullAndRelevantForLevel3Before2014 = true,
                            FullAndRelevantForLevel3After2014 = true,
+                           FullAndRelevantForLevel4Before2014 = true,
+                           FullAndRelevantForLevel4After2014 = true,
+                           FullAndRelevantForLevel5Before2014 = true,
+                           FullAndRelevantForLevel5After2014 = true,
+                           FullAndRelevantForLevel6Before2014 = true,
+                           FullAndRelevantForLevel6After2014 = true,
+                           FullAndRelevantForLevel7Before2014 = true,
+                           FullAndRelevantForLevel7After2014 = true,
                            RequirementForLevel2BetweenSept14AndAug19 =
                                ContentfulContentHelper.Paragraph("Level 2 further action required text")
                        },
@@ -234,7 +251,12 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level3RatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
+                           FullAndRelevantForLevel3Before2014 = true,
+                           FullAndRelevantForLevel3After2014 = true,
+                           FullAndRelevantForLevel4Before2014 = true,
+                           FullAndRelevantForLevel4After2014 = true,
+                           FullAndRelevantForLevel5Before2014 = true,
+                           FullAndRelevantForLevel5After2014 = true
                        },
 
                        new RatioRequirement
@@ -248,7 +270,14 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .UnqualifiedRatioRequirementName,
-                           FullAndRelevantForLevel3After2014 = true
+                           FullAndRelevantForLevel2Before2014 = true,
+                           FullAndRelevantForLevel2After2014 = true,
+                           FullAndRelevantForLevel3Before2014 = true,
+                           FullAndRelevantForLevel3After2014 = true,
+                           FullAndRelevantForLevel4Before2014 = true,
+                           FullAndRelevantForLevel4After2014 = true,
+                           FullAndRelevantForLevel5Before2014 = true,
+                           FullAndRelevantForLevel5After2014 = true
                        }
                    ]
                };
@@ -308,8 +337,12 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level2RatioRequirementName,
+                           FullAndRelevantForQtsEtcBefore2014 = true,
                            FullAndRelevantForQtsEtcAfter2014 = true,
-                           FullAndRelevantForLevel6After2014 = true
+                           FullAndRelevantForLevel6Before2014 = true,
+                           FullAndRelevantForLevel6After2014 = true,
+                           FullAndRelevantForLevel7Before2014 = true,
+                           FullAndRelevantForLevel7After2014 = true
                        },
 
                        new RatioRequirement
@@ -317,8 +350,12 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level3RatioRequirementName,
+                           FullAndRelevantForQtsEtcBefore2014 = true,
                            FullAndRelevantForQtsEtcAfter2014 = true,
-                           FullAndRelevantForLevel6After2014 = true
+                           FullAndRelevantForLevel6Before2014 = true,
+                           FullAndRelevantForLevel6After2014 = true,
+                           FullAndRelevantForLevel7Before2014 = true,
+                           FullAndRelevantForLevel7After2014 = true
                        },
 
                        new RatioRequirement
@@ -326,6 +363,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName = RatioRequirements
                                .Level6RatioRequirementName,
                            FullAndRelevantForQtsEtcAfter2014 = true,
+                           FullAndRelevantForQtsEtcBefore2014 = true,
                            FullAndRelevantForLevel6After2014 = false
                        },
 
@@ -334,8 +372,12 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .UnqualifiedRatioRequirementName,
+                           FullAndRelevantForLevel6Before2014 = true,
+                           FullAndRelevantForQtsEtcBefore2014 = true,
                            FullAndRelevantForQtsEtcAfter2014 = true,
-                           FullAndRelevantForLevel6After2014 = true
+                           FullAndRelevantForLevel6After2014 = true,
+                           FullAndRelevantForLevel7Before2014 = true,
+                           FullAndRelevantForLevel7After2014 = true
                        }
                    ],
                    IsAutomaticallyApprovedAtLevel6 = false

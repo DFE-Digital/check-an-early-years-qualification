@@ -223,7 +223,7 @@ public class QualificationDetailsService(
 
         if (qualification.IsAutomaticallyApprovedAtLevel6 || (QualificationContainsQtsQuestion(qualification) &&
                                                               UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification,
-                                                                   model.AdditionalRequirementAnswers)))
+                                                                                                                    model.AdditionalRequirementAnswers)))
         {
             // Check user against QTS criteria and swap to Qts Criteria if matches
             fullAndRelevantPropertyToCheck = $"FullAndRelevantForQtsEtc{beforeOrAfter}2014";
@@ -341,15 +341,83 @@ public class QualificationDetailsService(
     {
         switch (model.RatioRequirements.IsNotFullAndRelevant)
         {
-            case true when model.QualificationLevel >= 3 &&
-                           userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019():
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
-                break;
             case true:
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant);
+                await SetRatioTextWhereIsNotFullAndRelevant(model, content);
                 break;
+            case false:
+                await SetRatioTextWhereIsFullAndRelevant(model, content);
+                break;
+        }
+    }
+
+    private async Task SetRatioTextWhereIsFullAndRelevant(QualificationDetailsModel model, DetailsPage content)
+    {
+        var wasAwardedBeforeSeptember2014 = userJourneyCookieService.WasAwardedBeforeSeptember2014();
+        var wasAwardedOnOrAfterSeptember2014 = userJourneyCookieService.WasAwardedOnOrAfterSeptember2014();
+        var wasAwardedBeforeJune2016 = userJourneyCookieService.WasAwardedBeforeJune2016();
+        var wasAwardedInJune2016 = userJourneyCookieService.WasAwardedInJune2016();
+        var wasAwardedAfterJune2016 = userJourneyCookieService.WasAwardedAfterJune2016();
+        var approvedAllLevels = model.RatioRequirements is
+                                {
+                                    ApprovedForUnqualified: QualificationApprovalStatus.Approved,
+                                    ApprovedForLevel2: QualificationApprovalStatus.Approved,
+                                    ApprovedForLevel3: QualificationApprovalStatus.Approved,
+                                    ApprovedForLevel6: QualificationApprovalStatus.Approved
+                                };
+
+        var approvedAllLevelsButL6 = model.RatioRequirements is
+                                     {
+                                         ApprovedForUnqualified: QualificationApprovalStatus.Approved,
+                                         ApprovedForLevel2: QualificationApprovalStatus.Approved,
+                                         ApprovedForLevel3: QualificationApprovalStatus.Approved,
+                                         ApprovedForLevel6: QualificationApprovalStatus.NotApproved
+                                     };
+        switch (model.QualificationLevel)
+        {
+            case 2 when wasAwardedBeforeJune2016:
+            case 3 or 4 or 5 when wasAwardedBeforeSeptember2014:
+            case 6 or 7 when approvedAllLevels:
+            case 6 or 7 when approvedAllLevelsButL6 && wasAwardedBeforeSeptember2014:
+                model.Content!.RatiosText = string.Empty;
+                break;
+
+            case 2 when wasAwardedInJune2016:
+            case 3 or 4 or 5 when wasAwardedOnOrAfterSeptember2014:
+            case 6 or 7 when approvedAllLevelsButL6 && wasAwardedOnOrAfterSeptember2014:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextMaybePfa);
+                break;
+
+            case 2 when wasAwardedAfterJune2016:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextPfa);
+                break;
+
             default:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosText);
+                break;
+        }
+    }
+
+    private async Task SetRatioTextWhereIsNotFullAndRelevant(QualificationDetailsModel model, DetailsPage content)
+    {
+        var wasStartedBetweenSeptember2014AndAugust2019 = userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019();
+        var wasStartedBeforeSeptember2014 = userJourneyCookieService.WasStartedBeforeSeptember2014();
+        var wasStartedOnOrAfterSeptember2019 = userJourneyCookieService.WasStartedOnOrAfterSeptember2019();
+
+        switch (model.QualificationLevel)
+        {
+            case 2:
+                model.Content!.RatiosText = string.Empty;
+                break;
+            case >= 3 when wasStartedBetweenSeptember2014AndAugust2019:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
+                model.Content!.RatiosAdditionalInfoText = await contentParser.ToHtml(content.RatiosTextL3Ebr);
+                break;
+            case >= 3 when wasStartedBeforeSeptember2014 || wasStartedOnOrAfterSeptember2019:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant);
+                model.Content!.RatiosAdditionalInfoText = await contentParser.ToHtml(content.RatiosTextL3Ebr);
+                break;
+            default:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant);
                 break;
         }
     }

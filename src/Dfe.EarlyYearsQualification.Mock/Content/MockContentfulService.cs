@@ -118,8 +118,11 @@ public class MockContentfulService : IContentService
         var furtherInfoText = ContentfulContentHelper.Paragraph("Test Further Info Text");
         var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
+        var ratioTextMaybePfa = ContentfulContentHelper.Paragraph("This is the ratio text maybe PFA");
+        var ratioTextPfa = ContentfulContentHelper.Paragraph("This is the ratio text PFA");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
             ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
+        var ratioTextL3Ebr = ContentfulContentHelper.Paragraph("This is the ratio text L3 EBR");
         var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
         return await Task.FromResult(new DetailsPage
                                      {
@@ -167,6 +170,9 @@ public class MockContentfulService : IContentService
                                                                           },
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
+                                         RatiosTextMaybePfa = ratioTextMaybePfa,
+                                         RatiosTextPfa = ratioTextPfa,
+                                         RatiosTextL3Ebr = ratioTextL3Ebr,
                                          RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
                                          RatiosTextL3PlusNotFrBetweenSep14Aug19 =
                                              ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19,
@@ -628,6 +634,14 @@ public class MockContentfulService : IContentService
                           new Option
                           {
                               Label = "Level 3", Value = "3"
+                          },
+                          new Option
+                          {
+                              Label = "Level 4", Value = "4"
+                          },
+                          new Option
+                          {
+                              Label = "Level 5", Value = "5"
                           },
                           new Option
                           {

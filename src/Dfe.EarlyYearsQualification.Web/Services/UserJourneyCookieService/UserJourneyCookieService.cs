@@ -333,6 +333,75 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public bool WasAwardedBeforeJune2016()
+    {
+        var (awardedDateMonth, awardedDateYear) = GetWhenWasQualificationAwarded();
+
+        if (awardedDateMonth is null || awardedDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was awarded before 06-2016");
+        }
+
+        var date = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
+        return date < new DateOnly(2016, 6, 1);
+    }
+
+    public bool WasAwardedInJune2016()
+    {
+        var (awardedDateMonth, awardedDateYear) = GetWhenWasQualificationAwarded();
+
+        if (awardedDateMonth is null || awardedDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was awarded in 06-2016");
+        }
+
+        return awardedDateMonth == 6 && awardedDateYear == 2016;
+    }
+
+    public bool WasAwardedAfterJune2016()
+    {
+        var (awardedDateMonth, awardedDateYear) = GetWhenWasQualificationAwarded();
+
+        if (awardedDateMonth is null || awardedDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was awarded after 06-2016");
+        }
+
+        var date = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
+        return date > new DateOnly(2016, 6, 1);
+    }
+
+    public bool WasAwardedBeforeSeptember2014()
+    {
+        var (awardedDateMonth, awardedDateYear) = GetWhenWasQualificationAwarded();
+
+        if (awardedDateMonth is null || awardedDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was awarded before 09-2014");
+        }
+
+        var date = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
+        return date < new DateOnly(2014, 9, 1);
+    }
+
+    public bool WasAwardedOnOrAfterSeptember2014()
+    {
+        var (awardedDateMonth, awardedDateYear) = GetWhenWasQualificationAwarded();
+
+        if (awardedDateMonth is null || awardedDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was awarded on or after 09-2014");
+        }
+
+        var date = new DateOnly(awardedDateYear.Value, awardedDateMonth.Value, 1);
+        return date >= new DateOnly(2014, 09, 01);
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)

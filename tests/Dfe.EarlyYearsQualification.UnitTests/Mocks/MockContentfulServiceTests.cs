@@ -206,6 +206,12 @@ public class MockContentfulServiceTests
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text");
         result.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
+        result.RatiosTextMaybePfa!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text maybe PFA");
+        result.RatiosTextPfa!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text PFA");
+        result.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text L3 EBR");
         result.QualificationResultHeading.Should().Be("Qualification result heading");
         result.QualificationResultFrMessageHeading.Should().Be("Full and relevant");
         result.QualificationResultFrMessageBody.Should().Be("Full and relevant body");
@@ -273,15 +279,19 @@ public class MockContentfulServiceTests
         result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.Options.Should().NotBeNullOrEmpty();
-        result.Options.Count.Should().Be(4);
+        result.Options.Count.Should().Be(6);
         (result.Options[0] as Option)!.Label.Should().Be("Level 2");
         (result.Options[0] as Option)!.Value.Should().Be("2");
         (result.Options[1] as Option)!.Label.Should().Be("Level 3");
         (result.Options[1] as Option)!.Value.Should().Be("3");
-        (result.Options[2] as Option)!.Label.Should().Be("Level 6");
-        (result.Options[2] as Option)!.Value.Should().Be("6");
-        (result.Options[3] as Option)!.Label.Should().Be("Level 7");
-        (result.Options[3] as Option)!.Value.Should().Be("7");
+        (result.Options[2] as Option)!.Label.Should().Be("Level 4");
+        (result.Options[2] as Option)!.Value.Should().Be("4");
+        (result.Options[3] as Option)!.Label.Should().Be("Level 5");
+        (result.Options[3] as Option)!.Value.Should().Be("5");
+        (result.Options[4] as Option)!.Label.Should().Be("Level 6");
+        (result.Options[4] as Option)!.Value.Should().Be("6");
+        (result.Options[5] as Option)!.Label.Should().Be("Level 7");
+        (result.Options[5] as Option)!.Value.Should().Be("7");
     }
 
     [TestMethod]
@@ -656,7 +666,7 @@ public class MockContentfulServiceTests
         result.AnyAwardingOrganisationText.Should().Be("Various awarding organisations");
         result.AnyLevelText.Should().Be("Any level");
     }
-    
+
     [TestMethod]
     public async Task GetHelpPage_ReturnsExpectedDetails()
     {

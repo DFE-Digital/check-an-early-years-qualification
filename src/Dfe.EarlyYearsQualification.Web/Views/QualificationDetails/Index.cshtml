@@ -104,7 +104,17 @@
                                                                              }); }
 
             <h2 class="govuk-heading-l" id="ratio-heading">@Model.Content.RatiosHeading</h2>
-            @Html.Raw(Model.Content.RatiosText)
+            @if (!string.IsNullOrEmpty(Model.Content.RatiosText))
+            {
+                @Html.Raw(Model.Content.RatiosText)
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Content.RatiosAdditionalInfoText))
+            {
+                <div id="ratio-additional-info">
+                    @Html.Raw(Model.Content.RatiosAdditionalInfoText)
+                </div>
+            }
 
             @{
                 if (Model.RatioRequirements.ApprovedForLevel2 == QualificationApprovalStatus.Approved
@@ -256,7 +266,7 @@
             }
         </div>
     </div>
-    
+
     @if (Model.UpDownFeedback is not null)
     {
         await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);

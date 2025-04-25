@@ -39,6 +39,8 @@ public class DetailsPage
     public string RatiosHeading { get; init; } = string.Empty;
 
     public Document? RatiosText { get; init; }
+    public Document? RatiosTextMaybePfa { get; init; }
+    public Document? RatiosTextPfa { get; init; }
 
     public string RequirementsHeading { get; init; } = string.Empty;
 
@@ -58,6 +60,7 @@ public class DetailsPage
     public Document? RatiosTextNotFullAndRelevant { get; init; }
 
     public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
+    public Document? RatiosTextL3Ebr { get; init; }
 
     public FeedbackBanner? FeedbackBanner { get; init; }
     public UpDownFeedback? UpDownFeedback { get; init; }
