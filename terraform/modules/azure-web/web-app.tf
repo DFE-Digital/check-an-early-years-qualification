@@ -32,6 +32,7 @@ resource "azurerm_linux_web_app" "webapp" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
+    "Cache__AuthSecret"                          = var.cache_endpoint_secret
   }, var.webapp_app_settings)
 
   identity {
@@ -132,6 +133,7 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
+    "Cache__AuthSecret"                          = var.cache_endpoint_secret
   }, var.webapp_slot_app_settings)
 
   site_config {
@@ -174,6 +176,9 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
       tags["Environment"],
       tags["Product"],
       tags["Service Offering"],
+      tags["hidden-link: /app-insights-conn-string"],
+      tags["hidden-link: /app-insights-instrumentation-key"],
+      tags["hidden-link: /app-insights-resource-id"],
       site_config.0.application_stack
     ]
   }
@@ -347,20 +352,6 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
   }
 }
 
-# Create Custom Domain Name
-resource "azurerm_app_service_custom_hostname_binding" "webapp_custom_domain" {
-  # Custom hostname only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
-  resource_group_name = var.resource_group
-  hostname            = var.webapp_custom_domain_name
-  app_service_name    = azurerm_linux_web_app.webapp.name
-
-  lifecycle {
-    ignore_changes = [ssl_state, thumbprint]
-  }
-}
-
 resource "azurerm_app_service_custom_hostname_binding" "webapp_service_gov_uk_custom_domain" {
   # Custom hostname only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
@@ -413,25 +404,6 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
   }
 }
 
-resource "azurerm_app_service_certificate" "webapp_custom_domain_cert" {
-  # Custom hostname only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
-  name                = var.webapp_custom_domain_cert_secret_label
-  resource_group_name = var.resource_group
-  location            = var.location
-  key_vault_secret_id = var.kv_cert_secret_id
-}
-
-resource "azurerm_app_service_certificate_binding" "webapp_custom_domain_cert_bind" {
-  # Custom hostname only deployed to the Test and Production subscription
-  count = var.environment != "development" ? 1 : 0
-
-  hostname_binding_id = azurerm_app_service_custom_hostname_binding.webapp_custom_domain[0].id
-  certificate_id      = azurerm_app_service_certificate.webapp_custom_domain_cert[0].id
-  ssl_state           = "SniEnabled"
-}
-
 resource "azurerm_app_service_certificate" "webapp_service_gov_uk_custom_domain_cert" {
   # Custom hostname only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
@@ -452,9 +424,22 @@ resource "azurerm_app_service_certificate_binding" "webapp_service_gov_uk_custom
 }
 
 resource "azurerm_redis_cache_access_policy_assignment" "web_app_contrib" {
-  name               = "web-app-redis-contributor"
-  redis_cache_id     = var.redis_cache_id
-  access_policy_name = "Data Contributor"
+  name           = "web-app-redis-contributor"
+  redis_cache_id = var.redis_cache_id
+  # Grant Data Owner, as the endpoint to clear the cache requires access to a `dangerous` function
+  access_policy_name = "Data Owner"
   object_id          = azurerm_linux_web_app.webapp.identity[0].principal_id
   object_id_alias    = "ServicePrincipal"
+}
+
+resource "azurerm_redis_cache_access_policy_assignment" "web_app_slot_contrib" {
+
+  count = var.environment != "development" ? 1 : 0
+
+  name           = "web-app-slot-redis-contributor"
+  redis_cache_id = var.redis_cache_id
+  # Grant Data Owner, as the endpoint to clear the cache requires access to a `dangerous` function
+  access_policy_name = "Data Owner"
+  object_id          = azurerm_linux_web_app_slot.webapp_slot[0].identity[0].principal_id
+  object_id_alias    = "SlotServicePrincipal"
 }

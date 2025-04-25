@@ -51,16 +51,6 @@ variable "kv_certificate_authority_admin_phone_no" {
   sensitive   = true
 }
 
-variable "kv_certificate_label" {
-  description = "Label for the education.gov.uk certificate"
-  type        = string
-}
-
-variable "kv_certificate_subject" {
-  description = "Subject of the education.gov.uk certificate"
-  type        = string
-}
-
 variable "kv_service_gov_uk_certificate_label" {
   description = "Label for the service.gov.uk certificate"
   type        = string
@@ -184,6 +174,11 @@ variable "clarity_tag" {
 
 variable "govuk_notify_api_key" {
   description = "GovUK Notify API Key"
+  type        = string
+}
+
+variable "cache_endpoint_secret" {
+  description = "Secret value to be supplied when calling cache endpoint"
   type        = string
 }
 

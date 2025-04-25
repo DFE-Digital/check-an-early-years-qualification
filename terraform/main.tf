@@ -85,8 +85,6 @@ module "network" {
   kv_certificate_authority_admin_first_name = var.kv_certificate_authority_admin_first_name
   kv_certificate_authority_admin_last_name  = var.kv_certificate_authority_admin_last_name
   kv_certificate_authority_admin_phone_no   = var.kv_certificate_authority_admin_phone_no
-  kv_certificate_label                      = var.kv_certificate_label
-  kv_certificate_subject                    = var.kv_certificate_subject
   kv_service_gov_uk_certificate_label       = var.kv_service_gov_uk_certificate_label
   kv_service_gov_uk_certificate_subject     = var.kv_service_gov_uk_certificate_subject
   contentful_delivery_api_key               = var.contentful_delivery_api_key
@@ -146,8 +144,6 @@ module "webapp" {
   webapp_cookie_preference_name                         = "cookies_preferences_set"
   webapp_cookie_auth_secret_name                        = "auth-secret"
   webapp_cookie_user_journey_name                       = "user_journey"
-  webapp_custom_domain_name                             = var.custom_domain_name
-  webapp_custom_domain_cert_secret_label                = var.kv_certificate_label
   webapp_service_gov_uk_custom_domain_name              = var.service_gov_uk_custom_domain_name
   webapp_service_gov_uk_custom_domain_cert_secret_label = var.kv_service_gov_uk_certificate_label
   webapp_health_check_path                              = "/health"
@@ -158,11 +154,11 @@ module "webapp" {
   agw_subnet_id                                         = module.network.agw_subnet_id
   agw_pip_id                                            = module.network.agw_pip_id
   kv_id                                                 = module.network.kv_id
-  kv_cert_secret_id                                     = module.network.kv_cert_secret_id
   kv_service_gov_uk_cert_secret_id                      = module.network.kv_service_gov_uk_cert_secret_id
   kv_mi_id                                              = module.network.kv_mi_id
   redis_cache_id                                        = module.cache.redis_cache_id
   redis_cache_name                                      = module.cache.redis_cache_name
+  cache_endpoint_secret                                 = var.cache_endpoint_secret
   tags                                                  = local.common_tags
   depends_on                                            = [module.network]
 }

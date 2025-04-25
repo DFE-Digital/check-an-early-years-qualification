@@ -106,16 +106,6 @@ variable "webapp_health_check_eviction_time_in_min" {
   type        = number
 }
 
-variable "webapp_custom_domain_name" {
-  description = "education.gov.uk custom domain hostname"
-  type        = string
-}
-
-variable "webapp_custom_domain_cert_secret_label" {
-  description = "Label for the education.gov.uk certificate"
-  type        = string
-}
-
 variable "webapp_service_gov_uk_custom_domain_name" {
   description = "service.gov.uk custom domain hostname"
   type        = string
@@ -144,11 +134,6 @@ variable "agw_pip_id" {
 
 variable "kv_id" {
   description = "ID of the Key Vault"
-  type        = string
-}
-
-variable "kv_cert_secret_id" {
-  description = "education.gov.uk SSL certificate Secret ID"
   type        = string
 }
 
@@ -184,6 +169,11 @@ variable "instrumentation_key" {
 
 variable "insights_connection_string" {
   description = "App Insights connection string"
+  type        = string
+}
+
+variable "cache_endpoint_secret" {
+  description = "Secret value to be supplied when calling Cache endpoint"
   type        = string
 }
 

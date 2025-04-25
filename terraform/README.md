@@ -43,6 +43,7 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_admin_email_address"></a> [admin\_email\_address](#input\_admin\_email\_address) | Email Address of the Admin | `string` | n/a | yes |
 | <a name="input_asp_sku"></a> [asp\_sku](#input\_asp\_sku) | SKU name for the App Service Plan | `string` | n/a | yes |
 | <a name="input_azure_region"></a> [azure\_region](#input\_azure\_region) | Name of the Azure region to deploy resources | `string` | `"westeurope"` | no |
+| <a name="input_cache_endpoint_secret"></a> [cache\_endpoint\_secret](#input\_cache\_endpoint\_secret) | Secret value to be supplied when calling cache endpoint | `string` | n/a | yes |
 | <a name="input_cache_type"></a> [cache\_type](#input\_cache\_type) | Cache type ("Redis", "Memory", or "None") | `string` | `"None"` | no |
 | <a name="input_clarity_tag"></a> [clarity\_tag](#input\_clarity\_tag) | The Microsoft Clarity tag | `string` | `""` | no |
 | <a name="input_contentful_delivery_api_key"></a> [contentful\_delivery\_api\_key](#input\_contentful\_delivery\_api\_key) | Contentful delivery API key | `string` | n/a | yes |
@@ -58,8 +59,6 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_kv_certificate_authority_admin_phone_no"></a> [kv\_certificate\_authority\_admin\_phone\_no](#input\_kv\_certificate\_authority\_admin\_phone\_no) | Phone No. of the Certificate Authority Admin | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_password"></a> [kv\_certificate\_authority\_password](#input\_kv\_certificate\_authority\_password) | Password the Certificate provider | `string` | n/a | yes |
 | <a name="input_kv_certificate_authority_username"></a> [kv\_certificate\_authority\_username](#input\_kv\_certificate\_authority\_username) | Username for the Certificate provider | `string` | n/a | yes |
-| <a name="input_kv_certificate_label"></a> [kv\_certificate\_label](#input\_kv\_certificate\_label) | Label for the education.gov.uk certificate | `string` | n/a | yes |
-| <a name="input_kv_certificate_subject"></a> [kv\_certificate\_subject](#input\_kv\_certificate\_subject) | Subject of the education.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_label"></a> [kv\_service\_gov\_uk\_certificate\_label](#input\_kv\_service\_gov\_uk\_certificate\_label) | Label for the service.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_subject"></a> [kv\_service\_gov\_uk\_certificate\_subject](#input\_kv\_service\_gov\_uk\_certificate\_subject) | Subject of the service.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_notifications_feedback_email_address"></a> [notifications\_feedback\_email\_address](#input\_notifications\_feedback\_email\_address) | GovUK Notify Feedback Email Address | `string` | n/a | yes |

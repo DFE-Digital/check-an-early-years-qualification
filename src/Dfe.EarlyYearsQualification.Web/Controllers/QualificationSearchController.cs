@@ -26,7 +26,7 @@ public class QualificationSearchController(
     }
 
     [HttpPost]
-    public IActionResult Refine(string? refineSearch)
+    public IActionResult Refine([FromForm] string? refineSearch)
     {
         if (!ModelState.IsValid)
         {

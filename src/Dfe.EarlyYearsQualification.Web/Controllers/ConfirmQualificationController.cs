@@ -56,7 +56,7 @@ public class ConfirmQualificationController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> Confirm(ConfirmQualificationPageModel model)
+    public async Task<IActionResult> Confirm([FromForm] ConfirmQualificationPageModel model)
     {
         if (string.IsNullOrEmpty(model.QualificationId))
         {

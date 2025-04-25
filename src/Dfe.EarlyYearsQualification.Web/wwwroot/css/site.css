@@ -472,6 +472,17 @@ body {
     padding: 0;
 }
 
-#qualification-details-summary{
+#qualification-details-summary {
     margin-bottom: 30px;
+}
+
+.options-stamp, .options-stamp:visited, .options-stamp:hover, .options-stamp:active {
+    position: fixed;
+    border: 10px solid maroon;
+    color: maroon;
+    background-color: white;
+    padding: 10px;
+    margin: 30px;
+    top: 0;
+    right: 0;
 }

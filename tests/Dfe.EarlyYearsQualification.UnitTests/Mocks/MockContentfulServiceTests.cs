@@ -186,18 +186,9 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<DetailsPage>();
         result!.AwardingOrgLabel.Should().NotBeNullOrEmpty();
-        result.BookmarkHeading.Should().NotBeNullOrEmpty();
-        result.BookmarkText.Should().NotBeNullOrEmpty();
-        result.CheckAnotherQualificationHeading.Should().NotBeNullOrEmpty();
-        result.CheckAnotherQualificationText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Check Another Qualification Text");
-        result.DateAddedLabel.Should().NotBeNullOrEmpty();
         result.DateOfCheckLabel.Should().NotBeNullOrEmpty();
-        result.FurtherInfoText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Further Info Text");
         result.LevelLabel.Should().NotBeNullOrEmpty();
         result.MainHeader.Should().NotBeNullOrEmpty();
-        result.QualificationNumberLabel.Should().NotBeNullOrEmpty();
         result.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
         result.QualificationNameLabel.Should().NotBeNullOrEmpty();
         result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
@@ -279,7 +270,7 @@ public class MockContentfulServiceTests
         result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
         result.Options.Should().NotBeNullOrEmpty();
-        result.Options.Count.Should().Be(6);
+        result.Options.Count.Should().Be(7);
         (result.Options[0] as Option)!.Label.Should().Be("Level 2");
         (result.Options[0] as Option)!.Value.Should().Be("2");
         (result.Options[1] as Option)!.Label.Should().Be("Level 3");
@@ -292,6 +283,8 @@ public class MockContentfulServiceTests
         (result.Options[4] as Option)!.Value.Should().Be("6");
         (result.Options[5] as Option)!.Label.Should().Be("Level 7");
         (result.Options[5] as Option)!.Value.Should().Be("7");
+        (result.Options[6] as Option)!.Label.Should().Be("Not Sure");
+        (result.Options[6] as Option)!.Value.Should().Be("0");
     }
 
     [TestMethod]

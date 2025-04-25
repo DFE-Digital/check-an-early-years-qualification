@@ -122,11 +122,10 @@ jobs:
         if: ${{ inputs.action == 'Plan & Apply' }}
         run: terraform apply -auto-approve tfplan
         
-  restart-app-service:
-    needs: terraform
-    if: ${{ inputs.action == 'Plan & Apply' }}
-    name: Restart App Service
-    uses: ./.github/workflows/restart-service.yml
-    secrets: inherit
-    with:
-      environment: ${{ inputs.environment }}
+      - name: Restart App Service
+        if: ${{ inputs.action == 'Plan & Apply' }}
+        uses: ./.github/actions/restart-app-service
+        with:
+          resource_name_prefix: ${{ vars.RESOURCE_NAME_PREFIX }}
+          webapp_name: ${{ vars.WEBAPP_NAME }}        
+        

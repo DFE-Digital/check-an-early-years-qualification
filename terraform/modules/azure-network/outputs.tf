@@ -33,11 +33,6 @@ output "kv_id" {
   value       = azurerm_key_vault.kv.id
 }
 
-output "kv_cert_secret_id" {
-  description = "education.gov.uk SSL certificate Secret ID"
-  value       = var.environment != "development" ? azurerm_key_vault_certificate.kv_cert[0].secret_id : null
-}
-
 output "kv_service_gov_uk_cert_secret_id" {
   description = "service.gov.uk SSL certificate Secret ID"
   value       = var.environment != "development" ? azurerm_key_vault_certificate.kv_service_gov_uk_cert[0].secret_id : null
