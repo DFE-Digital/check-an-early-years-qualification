@@ -21,7 +21,7 @@ runs:
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       env:
         CI: true
-      run: npx playwright test --workers=10
+      run: npx playwright test --workers=4
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
