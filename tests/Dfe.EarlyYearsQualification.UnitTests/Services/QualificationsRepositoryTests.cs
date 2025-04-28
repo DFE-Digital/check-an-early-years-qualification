@@ -20,7 +20,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<Qualification>)null!);
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationFilterFactory>().Object);
+        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.GetById("SomeId");
 
@@ -39,7 +39,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = new List<Qualification>() });
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationFilterFactory>().Object);
+        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.GetById("SomeId");
 
@@ -69,7 +69,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                   .ReturnsAsync(new ContentfulCollection<Qualification>
                                 { Items = [qualification] });
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationFilterFactory>().Object);
+        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.GetById("SomeId");
 
@@ -94,7 +94,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [qualification] });
 
-        var mockQualificationFilterFactory = new Mock<IQualificationFilterFactory>();
+        var mockQualificationFilterFactory = new Mock<IQualificationListFilter>();
 
         mockQualificationFilterFactory.Setup(x => x.ApplyFilters(It.IsAny<List<Qualification>>(), It.IsAny<int?>(),
                                                                  It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(),
@@ -117,7 +117,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [] });
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationFilterFactory>().Object);
+        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.Get(null, null, null, null, null);
 
@@ -135,7 +135,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
 
         var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var repository =
-            new QualificationsRepository(mockLogger.Object, mockContentfulClient.Object, new Mock<IQualificationFilterFactory>().Object);
+            new QualificationsRepository(mockLogger.Object, mockContentfulClient.Object, new Mock<IQualificationListFilter>().Object);
 
         var filteredQualifications = await repository.Get(4, 5, 2016, null, null);
 

@@ -5,7 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Validators;
 
 namespace Dfe.EarlyYearsQualification.Content.Filters;
 
-public class QualificationFilterFactory(IFuzzyAdapter fuzzyAdapter, IDateValidator dateValidator) : IQualificationFilterFactory
+public class QualificationListFilter(IFuzzyAdapter fuzzyAdapter, IDateValidator dateValidator) : IQualificationListFilter
 {
     public List<Qualification> ApplyFilters(List<Qualification> qualifications, int? level, int? startDateMonth, int? startDateYear,
                                             string? awardingOrganisation, string? qualificationName)

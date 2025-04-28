@@ -12,7 +12,7 @@ namespace Dfe.EarlyYearsQualification.Content.Services;
 public class QualificationsRepository(
     ILogger<QualificationsRepository> logger,
     IContentfulClient contentfulClient,
-    IQualificationFilterFactory qualificationFilterFactory)
+    IQualificationListFilter qualificationListFilter)
     : ContentfulContentServiceBase(logger, contentfulClient), IQualificationsRepository
 {
     public async Task<Qualification?> GetById(string qualificationId)
@@ -46,7 +46,7 @@ public class QualificationsRepository(
         }
 
         var filteredQualifications =
-            qualificationFilterFactory.ApplyFilters(qualifications, level, startDateMonth, startDateYear,
+            qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear,
                                                     awardingOrganisation, qualificationName);
         
         return filteredQualifications;

@@ -68,7 +68,7 @@ public static class ServiceCollectionExtensions
     public static void SetupContentfulServices(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IDateValidator, DateValidator>();
-        serviceCollection.AddScoped<IQualificationFilterFactory, QualificationFilterFactory>();
+        serviceCollection.AddScoped<IQualificationListFilter, QualificationListFilter>();
         serviceCollection.AddScoped<IContentService, ContentfulContentService>();
         serviceCollection.AddScoped<IQualificationsRepository, QualificationsRepository>();
     }
