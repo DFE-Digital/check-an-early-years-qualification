@@ -142,13 +142,4 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Should().BeEmpty();
     }
-    
-}
-
-public class MockQueryBuilder : QueryBuilder<Qualification>
-{
-    public List<KeyValuePair<string, string>> GetQueryString()
-    {
-        return _querystringValues;
-    }
 }
