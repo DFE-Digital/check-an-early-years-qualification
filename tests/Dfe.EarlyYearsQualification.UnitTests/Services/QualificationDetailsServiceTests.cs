@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
@@ -13,11 +14,11 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class QualificationDetailsServiceTests
 {
-    private Mock<IGovUkContentParser> _mockContentParser = new();
-    private Mock<IContentService> _mockContentService = new();
-    private Mock<ILogger<QualificationDetailsService>> _mockLogger = new();
-    private Mock<IQualificationsRepository> _mockRepository = new();
-    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
+    private Mock<IGovUkContentParser> _mockContentParser = new Mock<IGovUkContentParser>();
+    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
+    private Mock<ILogger<QualificationDetailsService>> _mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+    private Mock<IQualificationsRepository> _mockRepository = new Mock<IQualificationsRepository>();
+    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
     private QualificationDetailsService GetSut()
     {
@@ -80,7 +81,7 @@ public class QualificationDetailsServiceTests
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
         var sut = GetSut();
 
-        var result = sut.HasStartDate();
+        bool result = sut.HasStartDate();
 
         result.Should().BeFalse();
     }
@@ -92,7 +93,7 @@ public class QualificationDetailsServiceTests
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
         var sut = GetSut();
 
-        var result = sut.HasStartDate();
+        bool result = sut.HasStartDate();
 
         result.Should().BeTrue();
     }
@@ -103,7 +104,7 @@ public class QualificationDetailsServiceTests
         FeedbackBanner? feedbackBanner = null;
         var sut = GetSut();
 
-        var result = await sut.GetFeedbackBannerBodyToHtml(feedbackBanner);
+        string? result = await sut.GetFeedbackBannerBodyToHtml(feedbackBanner);
 
         result.Should().BeNull();
     }
@@ -116,7 +117,7 @@ public class QualificationDetailsServiceTests
         _mockContentParser.Setup(o => o.ToHtml(feedbackBanner.Body)).ReturnsAsync(expectedContent);
         var sut = GetSut();
 
-        var result = await sut.GetFeedbackBannerBodyToHtml(feedbackBanner);
+        string? result = await sut.GetFeedbackBannerBodyToHtml(feedbackBanner);
 
         _mockContentParser.Verify(o => o.ToHtml(feedbackBanner.Body), Times.Once);
         result.Should().BeEquivalentTo(expectedContent);
@@ -136,7 +137,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        var result = sut.QualificationContainsQtsQuestion(qualification);
+        bool result = sut.QualificationContainsQtsQuestion(qualification);
 
         result.Should().BeFalse();
     }
@@ -164,7 +165,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        var result = sut.QualificationContainsQtsQuestion(qualification);
+        bool result = sut.QualificationContainsQtsQuestion(qualification);
 
         result.Should().Be(expectedResult);
     }
@@ -193,7 +194,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        var result = sut.DoAdditionalAnswersMatchQuestions(details);
+        bool result = sut.DoAdditionalAnswersMatchQuestions(details);
 
         result.Should().BeTrue();
     }
@@ -218,7 +219,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        var result = sut.DoAdditionalAnswersMatchQuestions(details);
+        bool result = sut.DoAdditionalAnswersMatchQuestions(details);
 
         result.Should().Be(expectedResult);
     }
@@ -298,7 +299,7 @@ public class QualificationDetailsServiceTests
     {
         var additionalRequirementsAnswers = new List<AdditionalRequirementAnswerModel>
                                             {
-                                                new()
+                                                new AdditionalRequirementAnswerModel
                                                 {
                                                     AnswerToBeFullAndRelevant = fullAndRelevant,
                                                     Answer = answer
@@ -307,7 +308,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        var result = sut.AnswersIndicateNotFullAndRelevant(additionalRequirementsAnswers);
+        bool result = sut.AnswersIndicateNotFullAndRelevant(additionalRequirementsAnswers);
 
         result.Should().Be(expectedResult);
     }
@@ -320,7 +321,7 @@ public class QualificationDetailsServiceTests
         List<AdditionalRequirementAnswerModel> additionalRequirementAnswerModels = null!;
         var sut = GetSut();
 
-        var result =
+        bool result =
             sut.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
 
         result.Should().BeFalse();
@@ -348,10 +349,13 @@ public class QualificationDetailsServiceTests
                 AdditionalRequirementQuestions = [qts]
             };
         var additionalRequirementAnswerModels = new List<AdditionalRequirementAnswerModel>
-                                                { new() { Question = qts.Question, Answer = answer } };
+                                                {
+                                                    new AdditionalRequirementAnswerModel
+                                                    { Question = qts.Question, Answer = answer }
+                                                };
         var sut = GetSut();
 
-        var result =
+        bool result =
             sut.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
 
         result.Should().Be(expectedResult);
@@ -480,19 +484,19 @@ public class QualificationDetailsServiceTests
     {
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>
                                              {
-                                                 new()
+                                                 new AdditionalRequirementQuestion
                                                  {
                                                      Question = "Question 1",
                                                      AnswerToBeFullAndRelevant = true,
                                                      ConfirmationStatement = "confirmation statement 1"
                                                  },
-                                                 new()
+                                                 new AdditionalRequirementQuestion
                                                  {
                                                      Question = "Question 2",
                                                      AnswerToBeFullAndRelevant = false,
                                                      ConfirmationStatement = "confirmation statement 2"
                                                  },
-                                                 new()
+                                                 new AdditionalRequirementQuestion
                                                  {
                                                      Question = "Question 3",
                                                      AnswerToBeFullAndRelevant = true,
@@ -509,21 +513,21 @@ public class QualificationDetailsServiceTests
 
         var expected = new List<AdditionalRequirementAnswerModel>
                        {
-                           new()
+                           new AdditionalRequirementAnswerModel
                            {
                                Question = "Question 1",
                                AnswerToBeFullAndRelevant = true,
                                ConfirmationStatement = "confirmation statement 1",
                                Answer = "Answer 1"
                            },
-                           new()
+                           new AdditionalRequirementAnswerModel
                            {
                                Question = "Question 2",
                                AnswerToBeFullAndRelevant = false,
                                ConfirmationStatement = "confirmation statement 2",
                                Answer = "Answer 2"
                            },
-                           new()
+                           new AdditionalRequirementAnswerModel
                            {
                                Question = "Question 3",
                                AnswerToBeFullAndRelevant = true,
@@ -654,7 +658,7 @@ public class QualificationDetailsServiceTests
                               FeedbackBanner = feedbackBanner,
                               BackButton = backButton
                           };
-        
+
         _mockContentParser.Setup(o => o.ToHtml(requirementsText)).ReturnsAsync(requirements);
         _mockContentParser.Setup(o => o.ToHtml(feedbackText)).ReturnsAsync(feedback);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
@@ -662,7 +666,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
         var result = await sut.MapDetails(qualification, detailsPage);
-        
+
         _mockContentParser.Verify(o => o.ToHtml(requirementsText), Times.Once);
         _mockContentParser.Verify(o => o.ToHtml(feedbackText), Times.Once);
 

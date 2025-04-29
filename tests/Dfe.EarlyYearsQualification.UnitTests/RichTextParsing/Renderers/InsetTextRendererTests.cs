@@ -1,7 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
@@ -96,7 +96,7 @@ public class InsetTextRendererTests
 
         var renderer = new InsetTextRenderer();
 
-        var result = await renderer.RenderAsync(content);
+        string result = await renderer.RenderAsync(content);
 
         result.Should().Be("<div class=\"govuk-inset-text\">Test GovUk Inset Text Content</div>");
     }

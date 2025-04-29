@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -376,7 +377,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var questions = new List<AdditionalRequirementQuestion>
                         {
-                            new()
+                            new AdditionalRequirementQuestion
                             {
                                 Sys = new SystemProperties
                                       {
@@ -385,7 +386,7 @@ public class CheckAdditionalRequirementsControllerTests
                                 AnswerToBeFullAndRelevant = true,
                                 Question = "This is the qts question"
                             },
-                            new()
+                            new AdditionalRequirementQuestion
                             {
                                 Sys = new SystemProperties
                                       {

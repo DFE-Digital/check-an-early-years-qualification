@@ -1,9 +1,10 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
@@ -14,7 +15,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class AdviceControllerTests
 {
-    private static readonly Mock<IUserJourneyCookieService> UserJourneyMockNoOp = new();
+    private static readonly Mock<IUserJourneyCookieService> UserJourneyMockNoOp = new Mock<IUserJourneyCookieService>();
 
     [TestMethod]
     public async Task QualificationOutsideTheUnitedKingdom_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
@@ -629,7 +630,7 @@ public class AdviceControllerTests
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task Help_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {
@@ -724,7 +725,7 @@ public class AdviceControllerTests
 
         mockNotificationService.Verify(x => x.SendFeedbackNotification(It.IsAny<FeedbackNotification>()), Times.Once());
     }
-    
+
     [TestMethod]
     public async Task Get_Post_InvalidModelState_ReturnsView()
     {
@@ -740,7 +741,7 @@ public class AdviceControllerTests
                           .ReturnsAsync(helpPage);
 
         mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
-        
+
         controller.ModelState.AddModelError(nameof(HelpPageModel.EmailAddress), "Invalid");
         controller.ModelState.AddModelError(nameof(HelpPageModel.SelectedOption), "Invalid");
         controller.ModelState.AddModelError(nameof(HelpPageModel.AdditionalInformationMessage), "Invalid");
@@ -761,8 +762,8 @@ public class AdviceControllerTests
         model.HasFurtherInformationError.Should().BeTrue();
         model.HasNoEnquiryOptionSelectedError.Should().BeTrue();
     }
-    
-        [TestMethod]
+
+    [TestMethod]
     public async Task HelpConfirmation_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
@@ -803,7 +804,8 @@ public class AdviceControllerTests
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                               UserJourneyMockNoOp.Object, mockNotificationService.Object);
 
-        var helpConfirmationPage = new HelpConfirmationPage { SuccessMessage = "Success", BodyHeading = "Body heading"};
+        var helpConfirmationPage = new HelpConfirmationPage
+                                   { SuccessMessage = "Success", BodyHeading = "Body heading" };
         mockContentService.Setup(x => x.GetHelpConfirmationPage())
                           .ReturnsAsync(helpConfirmationPage);
 

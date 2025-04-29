@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Newtonsoft.Json.Linq;
 
-namespace Dfe.EarlyYearsQualification.Mock.Helpers;
+namespace Dfe.EarlyYearsQualification.Content.Helpers;
 
 public static class ContentfulContentHelper
 {

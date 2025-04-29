@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Microsoft.AspNetCore.Http;
@@ -128,10 +129,10 @@ public class ChallengeResourceFilterAttributeTests
                               }
                           };
 
-        var cookie = new[]
-                     {
-                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={accessKey}"
-                     };
+        string[] cookie = new[]
+                          {
+                              $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={accessKey}"
+                          };
 
         httpContext.Request.Headers.Cookie = cookie;
 
@@ -176,10 +177,10 @@ public class ChallengeResourceFilterAttributeTests
                               }
                           };
 
-        var cookie = new[]
-                     {
-                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={accessKey}"
-                     };
+        string[] cookie = new[]
+                          {
+                              $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}={accessKey}"
+                          };
 
         httpContext.Request.Headers.Cookie = cookie;
 
@@ -281,10 +282,10 @@ public class ChallengeResourceFilterAttributeTests
                               }
                           };
 
-        var cookie = new[]
-                     {
-                         $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{accessKey}"
-                     };
+        string[] cookie = new[]
+                          {
+                              $"{ChallengeResourceFilterAttribute.AuthSecretCookieName}=not-{accessKey}"
+                          };
 
         httpContext.Request.Headers.Cookie = cookie;
 

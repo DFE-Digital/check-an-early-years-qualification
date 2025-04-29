@@ -1,8 +1,8 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Mock.Content;
 
@@ -34,16 +34,16 @@ public class MockQualificationsRepository : IQualificationsRepository
     {
         return Task.FromResult(new List<Qualification>
                                {
-                                   new("1", "TEST",
-                                       "A awarding organisation", 123),
-                                   new("2", "TEST",
-                                       "B awarding organisation", 123),
-                                   new("3", "TEST",
-                                       "C awarding organisation", 123),
-                                   new("4", "TEST",
-                                       "D awarding organisation", 123),
-                                   new("5", "TEST with additional requirements",
-                                       "E awarding organisation", 123)
+                                   new Qualification("1", "TEST",
+                                                     "A awarding organisation", 123),
+                                   new Qualification("2", "TEST",
+                                                     "B awarding organisation", 123),
+                                   new Qualification("3", "TEST",
+                                                     "C awarding organisation", 123),
+                                   new Qualification("4", "TEST",
+                                                     "D awarding organisation", 123),
+                                   new Qualification("5", "TEST with additional requirements",
+                                                     "E awarding organisation", 123)
                                    {
                                        AdditionalRequirements = "Additional requirements",
                                        AdditionalRequirementQuestions =
@@ -169,7 +169,7 @@ public class MockQualificationsRepository : IQualificationsRepository
         var additionalRequirementQuestions = includeAdditionalRequirementQuestions
                                                  ? new List<AdditionalRequirementQuestion>
                                                    {
-                                                       new()
+                                                       new AdditionalRequirementQuestion
                                                        {
                                                            Question = "Test question",
                                                            HintText =

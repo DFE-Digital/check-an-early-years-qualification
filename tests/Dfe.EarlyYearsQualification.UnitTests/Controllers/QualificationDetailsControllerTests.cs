@@ -1,6 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -12,8 +13,11 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class QualificationDetailsControllerTests
 {
-    private readonly Mock<ILogger<QualificationDetailsController>> _mockLogger = new();
-    private readonly Mock<IQualificationDetailsService> _mockQualificationDetailsService = new();
+    private readonly Mock<ILogger<QualificationDetailsController>> _mockLogger =
+        new Mock<ILogger<QualificationDetailsController>>();
+
+    private readonly Mock<IQualificationDetailsService> _mockQualificationDetailsService =
+        new Mock<IQualificationDetailsService>();
 
     private static Qualification DummyQualification
     {

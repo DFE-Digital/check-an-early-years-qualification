@@ -1,4 +1,9 @@
-namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
+using Dfe.EarlyYearsQualification.TestSupport;
+using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
+
+namespace Dfe.EarlyYearsQualification.TestSupportTests;
 
 [TestClass]
 public class MockLoggerExtensionsTests
@@ -8,7 +13,7 @@ public class MockLoggerExtensionsTests
     {
         var mockLogger = new Mock<ILogger<object>>();
 
-        var exceptionWasCaught = false;
+        bool exceptionWasCaught = false;
 
         try
         {
@@ -44,7 +49,7 @@ public class MockLoggerExtensionsTests
         var mockLogger = new Mock<ILogger<object>>();
         mockLogger.Object.LogError($"Not the {expectedMessage}");
 
-        var exceptionWasCaught = false;
+        bool exceptionWasCaught = false;
 
         try
         {
@@ -69,7 +74,7 @@ public class MockLoggerExtensionsTests
         mockLogger.Object.LogError(expectedMessage);
         mockLogger.Object.LogError(expectedMessage);
 
-        var exceptionWasCaught = false;
+        bool exceptionWasCaught = false;
 
         try
         {
@@ -96,7 +101,7 @@ public class MockLoggerExtensionsTests
         var mockLogger = new Mock<ILogger<object>>();
         mockLogger.Object.LogWarning(expectedMessage);
 
-        var exceptionWasCaught = false;
+        bool exceptionWasCaught = false;
 
         try
         {
@@ -117,7 +122,7 @@ public class MockLoggerExtensionsTests
     {
         var mockLogger = new Mock<ILogger<object>>();
 
-        var exceptionWasCaught = false;
+        bool exceptionWasCaught = false;
 
         try
         {
@@ -153,7 +158,7 @@ public class MockLoggerExtensionsTests
         var mockLogger = new Mock<ILogger<object>>();
         mockLogger.Object.LogWarning($"Not the {expectedMessage}");
 
-        var exceptionWasCaught = false;
+        bool exceptionWasCaught = false;
 
         try
         {
@@ -178,7 +183,7 @@ public class MockLoggerExtensionsTests
         mockLogger.Object.LogWarning(expectedMessage);
         mockLogger.Object.LogWarning(expectedMessage);
 
-        var exceptionWasCaught = false;
+        bool exceptionWasCaught = false;
 
         try
         {
@@ -205,7 +210,7 @@ public class MockLoggerExtensionsTests
         var mockLogger = new Mock<ILogger<object>>();
         mockLogger.Object.LogError(expectedMessage);
 
-        var exceptionWasCaught = false;
+        bool exceptionWasCaught = false;
 
         try
         {

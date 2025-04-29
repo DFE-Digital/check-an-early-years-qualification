@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Filters;
@@ -19,7 +20,7 @@ public class ApplicationInsightsActionFilterAttributeTests
     private const string FromFormParameterName = "Parameter Name";
     private const string CookieValueKey = "Cookie-Value";
     private const string RequestBodyKey = "Request-Body";
-    
+
     [TestMethod]
     public async Task OnActionExecutionAsync_NotPostMethod_Returns()
     {
@@ -28,12 +29,13 @@ public class ApplicationInsightsActionFilterAttributeTests
         var mockHttpContext = new Mock<HttpContext>();
         var mockFeatureCollection = new Mock<IFeatureCollection>();
         var mockActionExecutionDelegate = new Mock<ActionExecutionDelegate>();
-        
+
         mockHttpRequest.SetupGet(r => r.Method).Returns(HttpMethods.Get);
         mockHttpContext.SetupGet(c => c.Request).Returns(mockHttpRequest.Object);
         mockFeatureCollection.Setup(x => x.Get<RequestTelemetry>()).Returns(mockRequestTelemetry);
-        
-        var filter = new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
+
+        var filter =
+            new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
         var actionContext = new ActionContext(
                                               mockHttpContext.Object,
                                               new Mock<RouteData>().Object,
@@ -47,13 +49,13 @@ public class ApplicationInsightsActionFilterAttributeTests
                                                                 new Dictionary<string, object?>(),
                                                                 new Mock<HomeController>()
                                                                );
-        
+
         await filter.OnActionExecutionAsync(actionExecutingContext, mockActionExecutionDelegate.Object);
-        
+
         mockRequestTelemetry.Properties.Should().BeEmpty();
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task OnActionExecutionAsync_NoFromFormParameter_Returns()
     {
@@ -62,12 +64,13 @@ public class ApplicationInsightsActionFilterAttributeTests
         var mockHttpContext = new Mock<HttpContext>();
         var mockFeatureCollection = new Mock<IFeatureCollection>();
         var mockActionExecutionDelegate = new Mock<ActionExecutionDelegate>();
-        
+
         mockHttpRequest.SetupGet(r => r.Method).Returns(HttpMethods.Post);
         mockHttpContext.SetupGet(c => c.Request).Returns(mockHttpRequest.Object);
         mockFeatureCollection.Setup(x => x.Get<RequestTelemetry>()).Returns(mockRequestTelemetry);
-        
-        var filter = new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
+
+        var filter =
+            new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
         var actionContext = new ActionContext(
                                               mockHttpContext.Object,
                                               new Mock<RouteData>().Object,
@@ -81,25 +84,25 @@ public class ApplicationInsightsActionFilterAttributeTests
                                                                 new Dictionary<string, object?>(),
                                                                 new Mock<HomeController>()
                                                                );
-        
+
         await filter.OnActionExecutionAsync(actionExecutingContext, mockActionExecutionDelegate.Object);
-        
+
         mockRequestTelemetry.Properties.Should().BeEmpty();
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task OnActionExecutionAsync_HasFromFormParameter_AddsCookieToRequestTelemetry()
     {
         const string cookieValue = "Fake cookie value";
-        
+
         var mockRequestTelemetry = new RequestTelemetry();
         var mockCookiesCollection = new Mock<IRequestCookieCollection>();
         var mockHttpRequest = new Mock<HttpRequest>();
         var mockHttpContext = new Mock<HttpContext>();
         var mockFeatureCollection = new Mock<IFeatureCollection>();
         var mockActionExecutionDelegate = new Mock<ActionExecutionDelegate>();
-        
+
         mockCookiesCollection.Setup(c => c[CookieKeyNames.UserJourneyKey]).Returns(cookieValue);
         mockCookiesCollection.Setup(x => x.ContainsKey(CookieKeyNames.UserJourneyKey)).Returns(true);
         mockHttpRequest.SetupGet(x => x.Cookies).Returns(mockCookiesCollection.Object);
@@ -107,14 +110,15 @@ public class ApplicationInsightsActionFilterAttributeTests
         mockHttpContext.SetupGet(c => c.Request).Returns(mockHttpRequest.Object);
         mockFeatureCollection.Setup(x => x.Get<RequestTelemetry>()).Returns(mockRequestTelemetry);
         mockHttpContext.Setup(x => x.Features).Returns(mockFeatureCollection.Object);
-        
-        var filter = new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
-        
+
+        var filter =
+            new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
+
         var mockActionDescriptor = new ActionDescriptor
                                    {
                                        Parameters = new List<ParameterDescriptor>
                                                     {
-                                                        new ()
+                                                        new ParameterDescriptor
                                                         {
                                                             BindingInfo = new BindingInfo
                                                                           {
@@ -137,7 +141,7 @@ public class ApplicationInsightsActionFilterAttributeTests
                                                                 new Dictionary<string, object?>(),
                                                                 new Mock<HomeController>()
                                                                );
-        
+
         await filter.OnActionExecutionAsync(actionExecutingContext, mockActionExecutionDelegate.Object);
 
         mockRequestTelemetry.Properties.Count.Should().Be(1);
@@ -145,7 +149,7 @@ public class ApplicationInsightsActionFilterAttributeTests
         mockRequestTelemetry.Properties.Values.First().Should().Be(cookieValue);
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task OnActionExecutionAsync_CookieNotFound_RequestTelemetryCookieValueIsNotFound()
     {
@@ -155,21 +159,22 @@ public class ApplicationInsightsActionFilterAttributeTests
         var mockHttpContext = new Mock<HttpContext>();
         var mockFeatureCollection = new Mock<IFeatureCollection>();
         var mockActionExecutionDelegate = new Mock<ActionExecutionDelegate>();
-        
+
         mockCookiesCollection.Setup(x => x.ContainsKey(CookieKeyNames.UserJourneyKey)).Returns(false);
         mockHttpRequest.SetupGet(x => x.Cookies).Returns(mockCookiesCollection.Object);
         mockHttpRequest.SetupGet(r => r.Method).Returns(HttpMethods.Post);
         mockHttpContext.SetupGet(c => c.Request).Returns(mockHttpRequest.Object);
         mockFeatureCollection.Setup(x => x.Get<RequestTelemetry>()).Returns(mockRequestTelemetry);
         mockHttpContext.Setup(x => x.Features).Returns(mockFeatureCollection.Object);
-        
-        var filter = new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
-        
+
+        var filter =
+            new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
+
         var mockActionDescriptor = new ActionDescriptor
                                    {
                                        Parameters = new List<ParameterDescriptor>
                                                     {
-                                                        new ()
+                                                        new ParameterDescriptor
                                                         {
                                                             BindingInfo = new BindingInfo
                                                                           {
@@ -192,7 +197,7 @@ public class ApplicationInsightsActionFilterAttributeTests
                                                                 new Dictionary<string, object?>(),
                                                                 new Mock<HomeController>()
                                                                );
-        
+
         await filter.OnActionExecutionAsync(actionExecutingContext, mockActionExecutionDelegate.Object);
 
         mockRequestTelemetry.Properties.Count.Should().Be(1);
@@ -200,19 +205,19 @@ public class ApplicationInsightsActionFilterAttributeTests
         mockRequestTelemetry.Properties.Values.First().Should().Be("Not found");
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task OnActionExecutionAsync_SerialisesRequestBody_AddsRequestBodyToRequestTelemetry()
     {
         const string cookieValue = "Fake cookie value";
-        
+
         var mockRequestTelemetry = new RequestTelemetry();
         var mockCookiesCollection = new Mock<IRequestCookieCollection>();
         var mockHttpRequest = new Mock<HttpRequest>();
         var mockHttpContext = new Mock<HttpContext>();
         var mockFeatureCollection = new Mock<IFeatureCollection>();
         var mockActionExecutionDelegate = new Mock<ActionExecutionDelegate>();
-        
+
         mockCookiesCollection.Setup(c => c[CookieKeyNames.UserJourneyKey]).Returns(cookieValue);
         mockCookiesCollection.Setup(x => x.ContainsKey(CookieKeyNames.UserJourneyKey)).Returns(true);
         mockHttpRequest.SetupGet(x => x.Cookies).Returns(mockCookiesCollection.Object);
@@ -220,14 +225,15 @@ public class ApplicationInsightsActionFilterAttributeTests
         mockHttpContext.SetupGet(c => c.Request).Returns(mockHttpRequest.Object);
         mockFeatureCollection.Setup(x => x.Get<RequestTelemetry>()).Returns(mockRequestTelemetry);
         mockHttpContext.Setup(x => x.Features).Returns(mockFeatureCollection.Object);
-        
-        var filter = new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
-        
+
+        var filter =
+            new ApplicationInsightsActionFilterAttribute(NullLogger<ApplicationInsightsActionFilterAttribute>.Instance);
+
         var mockActionDescriptor = new ActionDescriptor
                                    {
                                        Parameters = new List<ParameterDescriptor>
                                                     {
-                                                        new ()
+                                                        new ParameterDescriptor
                                                         {
                                                             BindingInfo = new BindingInfo
                                                                           {
@@ -245,33 +251,38 @@ public class ApplicationInsightsActionFilterAttributeTests
                                              );
 
         var actionArguments = new Dictionary<string, object?>
-                              { { FromFormParameterName, new HelpPageModel
-                                                         {
-                                                             EmailAddress = "test@test.com",
-                                                             AdditionalInformationMessage = "Test message",
-                                                             SelectedOption = "This is the selected option"
-                                                         } } };
-        
+                              {
+                                  {
+                                      FromFormParameterName, new HelpPageModel
+                                                             {
+                                                                 EmailAddress = "test@test.com",
+                                                                 AdditionalInformationMessage = "Test message",
+                                                                 SelectedOption = "This is the selected option"
+                                                             }
+                                  }
+                              };
+
         var actionExecutingContext = new ActionExecutingContext(
                                                                 actionContext,
                                                                 new List<IFilterMetadata>(),
                                                                 actionArguments,
                                                                 new Mock<HomeController>()
                                                                );
-        
+
         await filter.OnActionExecutionAsync(actionExecutingContext, mockActionExecutionDelegate.Object);
 
         mockRequestTelemetry.Properties.Count.Should().Be(2);
         mockRequestTelemetry.Properties.Keys.Should().Contain(CookieValueKey);
-        mockRequestTelemetry.Properties.TryGetValue(CookieValueKey, out var requestCookieValue); 
+        mockRequestTelemetry.Properties.TryGetValue(CookieValueKey, out string? requestCookieValue);
         requestCookieValue.Should().Be(cookieValue);
         mockRequestTelemetry.Properties.Keys.Should().Contain(RequestBodyKey);
-        mockRequestTelemetry.Properties.TryGetValue(RequestBodyKey, out var requestBodyValue); 
-        const string expectedRequestBodyValue = "{\"SelectedOption\":\"This is the selected option\",\"EmailAddress\":\"****\",\"AdditionalInformationMessage\":\"Test message\"}";
+        mockRequestTelemetry.Properties.TryGetValue(RequestBodyKey, out string? requestBodyValue);
+        const string expectedRequestBodyValue =
+            "{\"SelectedOption\":\"This is the selected option\",\"EmailAddress\":\"****\",\"AdditionalInformationMessage\":\"Test message\"}";
         requestBodyValue.Should().Match(expectedRequestBodyValue);
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task OnActionExecutionAsync_ExceptionThrown_CallsLogger()
     {
@@ -282,9 +293,9 @@ public class ApplicationInsightsActionFilterAttributeTests
 
         mockHttpRequest.SetupGet(r => r.Method).Throws(new Exception("Test exception"));
         mockHttpContext.SetupGet(c => c.Request).Returns(mockHttpRequest.Object);
-        
+
         var filter = new ApplicationInsightsActionFilterAttribute(mockLogger.Object);
-        
+
         var mockActionDescriptor = new ActionDescriptor();
         var actionContext = new ActionContext(
                                               mockHttpContext.Object,
@@ -292,16 +303,16 @@ public class ApplicationInsightsActionFilterAttributeTests
                                               mockActionDescriptor,
                                               new ModelStateDictionary()
                                              );
-        
+
         var actionExecutingContext = new ActionExecutingContext(
                                                                 actionContext,
                                                                 new List<IFilterMetadata>(),
                                                                 new Dictionary<string, object?>(),
                                                                 new Mock<HomeController>()
                                                                );
-        
+
         await filter.OnActionExecutionAsync(actionExecutingContext, mockActionExecutionDelegate.Object);
-        
+
         mockLogger.VerifyCritical("Error executing the application insights telemetry task");
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }

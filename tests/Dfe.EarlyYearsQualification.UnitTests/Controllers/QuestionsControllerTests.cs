@@ -1,9 +1,10 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Helpers;
@@ -441,13 +442,25 @@ public class QuestionsControllerTests
                                                              {
                                                                  MonthValid = false, YearValid = false,
                                                                  ErrorMessages = ["Test error message"],
-                                                                 BannerErrorMessages = [new BannerError("Test banner error message", FieldId.Month), new BannerError("Test banner error message", FieldId.Year)]
+                                                                 BannerErrorMessages =
+                                                                 [
+                                                                     new BannerError("Test banner error message",
+                                                                      FieldId.Month),
+                                                                     new BannerError("Test banner error message",
+                                                                      FieldId.Year)
+                                                                 ]
                                                              },
                                    AwardedValidationResult = new DateValidationResult
                                                              {
                                                                  MonthValid = false, YearValid = false,
                                                                  ErrorMessages = ["Test error message"],
-                                                                 BannerErrorMessages = [new BannerError("Test banner error message", FieldId.Month), new BannerError("Test banner error message", FieldId.Year)]
+                                                                 BannerErrorMessages =
+                                                                 [
+                                                                     new BannerError("Test banner error message",
+                                                                      FieldId.Month),
+                                                                     new BannerError("Test banner error message",
+                                                                      FieldId.Year)
+                                                                 ]
                                                              }
                                };
         mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
@@ -529,15 +542,15 @@ public class QuestionsControllerTests
         var result = await controller.WhenWasTheQualificationStarted(new DatesQuestionModel
                                                                      {
                                                                          StartedQuestion = new DateQuestionModel
-                                                                                           {
-                                                                                               SelectedMonth = startedSelectedMonth,
-                                                                                               SelectedYear = startedSelectedYear
-                                                                                           },
+                                                                             {
+                                                                                 SelectedMonth = startedSelectedMonth,
+                                                                                 SelectedYear = startedSelectedYear
+                                                                             },
                                                                          AwardedQuestion = new DateQuestionModel
-                                                                                           {
-                                                                                               SelectedMonth = awardedSelectedMonth,
-                                                                                               SelectedYear = awardedSelectedYear
-                                                                                           }
+                                                                             {
+                                                                                 SelectedMonth = awardedSelectedMonth,
+                                                                                 SelectedYear = awardedSelectedYear
+                                                                             }
                                                                      });
 
         result.Should().NotBeNull();
@@ -922,16 +935,16 @@ public class QuestionsControllerTests
 
         var listOfQualifications = new List<Qualification>
                                    {
-                                       new("1", "TEST",
-                                           "D awarding organisation", 123),
-                                       new("2", "TEST",
-                                           "E awarding organisation", 123),
-                                       new("3", "TEST",
-                                           "A awarding organisation", 123),
-                                       new("4", "TEST",
-                                           "C awarding organisation", 123),
-                                       new("5", "TEST",
-                                           "B awarding organisation", 123)
+                                       new Qualification("1", "TEST",
+                                                         "D awarding organisation", 123),
+                                       new Qualification("2", "TEST",
+                                                         "E awarding organisation", 123),
+                                       new Qualification("3", "TEST",
+                                                         "A awarding organisation", 123),
+                                       new Qualification("4", "TEST",
+                                                         "C awarding organisation", 123),
+                                       new Qualification("5", "TEST",
+                                                         "B awarding organisation", 123)
                                    };
 
         mockRepository
@@ -988,14 +1001,14 @@ public class QuestionsControllerTests
 
         var listOfQualifications = new List<Qualification>
                                    {
-                                       new("1", "TEST",
-                                           "D awarding organisation", 123),
-                                       new("2", "TEST",
-                                           "E awarding organisation", 123),
-                                       new("3", "TEST",
-                                           AwardingOrganisations.Various, 123),
-                                       new("4", "TEST",
-                                           AwardingOrganisations.AllHigherEducation, 123)
+                                       new Qualification("1", "TEST",
+                                                         "D awarding organisation", 123),
+                                       new Qualification("2", "TEST",
+                                                         "E awarding organisation", 123),
+                                       new Qualification("3", "TEST",
+                                                         AwardingOrganisations.Various, 123),
+                                       new Qualification("4", "TEST",
+                                                         AwardingOrganisations.AllHigherEducation, 123)
                                    };
 
         mockRepository

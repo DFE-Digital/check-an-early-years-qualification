@@ -2,8 +2,9 @@ using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.Services;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Newtonsoft.Json;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -251,13 +252,13 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     {
         var links = new List<NavigationLink>
                     {
-                        new()
+                        new NavigationLink
                         {
                             DisplayText = "Some Link",
                             Href = "/some-link",
                             OpenInNewTab = true
                         },
-                        new()
+                        new NavigationLink
                         {
                             DisplayText = "Another Link",
                             Href = "/another-link",
@@ -1072,7 +1073,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetHelpPage_ReturnsData()
     {
@@ -1106,7 +1107,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetHelpConfirmationPage_ReturnsData()
     {
@@ -1144,8 +1145,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
 public class ContentfulContentServiceTestsBase<T>
 {
-    protected Mock<IContentfulClient> ClientMock = new();
-    protected Mock<ILogger<T>> Logger = new();
+    protected Mock<IContentfulClient> ClientMock = new Mock<IContentfulClient>();
+    protected Mock<ILogger<T>> Logger = new Mock<ILogger<T>>();
 
     [TestInitialize]
     public void BeforeEachTest()

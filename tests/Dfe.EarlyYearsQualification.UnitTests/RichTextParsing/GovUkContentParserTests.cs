@@ -1,6 +1,6 @@
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
 using ParagraphRenderer = Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers.ParagraphRenderer;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing;
@@ -18,7 +18,7 @@ public class GovUkContentParserTests
 
         var govUkContentfulParser = new GovUkContentParser(renderers);
 
-        var result = await govUkContentfulParser.ToHtml(null);
+        string result = await govUkContentfulParser.ToHtml(null);
         result.Should().Be(string.Empty);
     }
 
@@ -32,7 +32,7 @@ public class GovUkContentParserTests
 
         var govUkContentfulParser = new GovUkContentParser(renderers);
 
-        var result = await govUkContentfulParser.ToHtml(ContentfulContentHelper.Paragraph("TEST"));
+        string result = await govUkContentfulParser.ToHtml(ContentfulContentHelper.Paragraph("TEST"));
         result.Should().Be("<p class=\"govuk-body\">TEST</p>");
     }
 }

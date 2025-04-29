@@ -1,8 +1,9 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
@@ -28,7 +29,7 @@ public class CookiesBannerViewComponentTests
 
         result.Should().BeAssignableTo<IViewComponentResult>();
 
-        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
+        object? model = (result as ViewViewComponentResult)?.ViewData?.Model;
         model.Should().NotBeNull();
 
         var data = (CookiesBannerModel)model!;
@@ -68,7 +69,7 @@ public class CookiesBannerViewComponentTests
 
         result.Should().BeAssignableTo<IViewComponentResult>();
 
-        var model = (result as ViewViewComponentResult)?.ViewData?.Model;
+        object? model = (result as ViewViewComponentResult)?.ViewData?.Model;
         model.Should().NotBeNull();
 
         var data = (CookiesBannerModel)model!;

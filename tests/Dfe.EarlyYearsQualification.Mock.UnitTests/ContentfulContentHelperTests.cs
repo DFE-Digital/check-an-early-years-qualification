@@ -1,7 +1,8 @@
 using Contentful.Core.Models;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Content.Helpers;
+using FluentAssertions;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
+namespace Dfe.EarlyYearsQualification.Mock.UnitTests;
 
 [TestClass]
 public class ContentfulContentHelperTests

@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
@@ -8,8 +9,10 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class QualificationSearchControllerTests
 {
-    private Mock<ILogger<QualificationSearchController>> _mockLogger = new();
-    private Mock<IQualificationSearchService> _mockQualificationSearchService = new();
+    private Mock<ILogger<QualificationSearchController>> _mockLogger =
+        new Mock<ILogger<QualificationSearchController>>();
+
+    private Mock<IQualificationSearchService> _mockQualificationSearchService = new Mock<IQualificationSearchService>();
 
     private QualificationSearchController GetSut()
     {

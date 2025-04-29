@@ -1,5 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
@@ -56,7 +56,8 @@ public class HelpPageMapperTests
         result!.Heading.Should().Be("Help Page Heading");
         result.PostHeadingContent.Should().Be(postHeadingContent);
         result.EmailAddressHeading.Should().Be("Enter your email address (optional)");
-        result.EmailAddressHintText.Should().Be("If you do not enter your email address we will not be able to contact you in relation to your enquiry");
+        result.EmailAddressHintText.Should()
+              .Be("If you do not enter your email address we will not be able to contact you in relation to your enquiry");
         result.ReasonForEnquiryHeading.Should().Be("Choose the reason of your enquiry");
         result.ReasonForEnquiryHintText.Should().Be("Select one option");
         result.EnquiryReasons.Should().NotBeNull();
@@ -68,8 +69,10 @@ public class HelpPageMapperTests
         result.EnquiryReasons[2].Label.Should().Be("Option 3");
         result.EnquiryReasons[2].Value.Should().Be("Option 3");
         result.AdditionalInformationHeading.Should().Be("Provide further information about your enquiry");
-        result.AdditionalInformationHintText.Should().Be("Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.");
-        result.AdditionalInformationWarningText.Should().Be("Do not include personal information, for example the name of the qualification holder");
+        result.AdditionalInformationHintText.Should()
+              .Be("Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.");
+        result.AdditionalInformationWarningText.Should()
+              .Be("Do not include personal information, for example the name of the qualification holder");
         result.CtaButtonText.Should().Be("Send message");
         result.BackButton.Should().BeEquivalentTo(new NavigationLinkModel
                                                   {

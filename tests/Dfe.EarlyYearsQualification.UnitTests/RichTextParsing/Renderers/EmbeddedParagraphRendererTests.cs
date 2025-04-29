@@ -1,7 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
@@ -80,7 +80,7 @@ public class EmbeddedParagraphRendererTests
 
         var renderer = new EmbeddedParagraphRenderer();
 
-        var result = await renderer.RenderAsync(content);
+        string result = await renderer.RenderAsync(content);
 
         result.Should().Be("<p class=\"govuk-body\">Test Content</p>");
     }

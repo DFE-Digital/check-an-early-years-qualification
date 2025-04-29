@@ -1,9 +1,11 @@
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Setup;
+namespace Dfe.EarlyYearsQualification.Mock.UnitTests;
 
 [TestClass]
 public class MockContentfulSetupTests

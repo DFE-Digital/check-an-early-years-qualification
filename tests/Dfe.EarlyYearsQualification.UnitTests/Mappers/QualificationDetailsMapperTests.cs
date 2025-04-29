@@ -1,5 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
@@ -48,7 +48,8 @@ public class QualificationDetailsMapperTests
                                                },
                               UpDownFeedback = new UpDownFeedback
                                                {
-                                                   ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
+                                                   ImproveServiceContent =
+                                                       ContentfulContentHelper.Paragraph(improveServiceBody)
                                                }
                           };
 
@@ -61,7 +62,7 @@ public class QualificationDetailsMapperTests
 
         var additionalRequirementAnswers = new List<AdditionalRequirementAnswerModel>
                                            {
-                                               new()
+                                               new AdditionalRequirementAnswerModel
                                                {
                                                    Question = "Question", Answer = "Answer",
                                                    AnswerToBeFullAndRelevant = true,
@@ -73,7 +74,8 @@ public class QualificationDetailsMapperTests
         const string dateAwarded = "Date awarded";
 
         var result = QualificationDetailsMapper.Map(qualification, detailsPage, backNavLink,
-                                                    additionalRequirementAnswers, dateStarted, dateAwarded, requirementsText,
+                                                    additionalRequirementAnswers, dateStarted, dateAwarded,
+                                                    requirementsText,
                                                     feedbackBannerBody, improveServiceBody);
 
         result.Should().NotBeNull();

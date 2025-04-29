@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -175,7 +176,7 @@ public class CheckYourAnswersControllerTests
         result.Should().NotBeNull();
 
         var viewResult = result as ViewResult;
-        var data = viewResult!.Model;
+        object? data = viewResult!.Model;
 
         data.Should().NotBeNull();
         data.Should().BeOfType<CheckYourAnswersPageModel>();

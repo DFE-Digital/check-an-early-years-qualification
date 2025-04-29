@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -393,7 +394,7 @@ public class ConfirmQualificationControllerTests
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var additionalRequirements = new List<AdditionalRequirementQuestion> { new() };
+        var additionalRequirements = new List<AdditionalRequirementQuestion> { new AdditionalRequirementQuestion() };
 
         var qualification = new Qualification("Some ID",
                                               "Qualification Name",
@@ -443,7 +444,7 @@ public class ConfirmQualificationControllerTests
         var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockContentService = new Mock<IContentService>();
-        var additionalRequirements = new List<AdditionalRequirementQuestion> { new() };
+        var additionalRequirements = new List<AdditionalRequirementQuestion> { new AdditionalRequirementQuestion() };
 
         var qualification = new Qualification("Some ID",
                                               "Qualification Name",

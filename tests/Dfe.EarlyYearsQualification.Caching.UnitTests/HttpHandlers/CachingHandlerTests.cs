@@ -1,10 +1,11 @@
-using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
-using Dfe.EarlyYearsQualification.UnitTests.TestHelpers;
+using Dfe.EarlyYearsQualification.Caching.UnitTests.TestHelpers;
+using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.HttpHandlers;
+namespace Dfe.EarlyYearsQualification.Caching.UnitTests.HttpHandlers;
 
 [TestClass]
 public class CachingHandlerTests
@@ -63,8 +64,8 @@ public class CachingHandlerTests
                                                      CancellationToken.None);
 
         // Assert...
-        Moq.Mock.Get(distributedCache)
-           .Verify(c => c.Get(key), Times.Once);
+        Mock.Get(distributedCache)
+            .Verify(c => c.Get(key), Times.Once);
 
         response.Content.ReadAsByteArrayAsync().Result.Should().ContainInOrder(value);
     }
@@ -101,7 +102,7 @@ public class CachingHandlerTests
                                       CancellationToken.None);
 
         // Assert...
-        var cache = Moq.Mock.Get(distributedCache);
+        var cache = Mock.Get(distributedCache);
 
         cache.Verify(c => c.Get(key), Times.Once);
 
@@ -148,7 +149,7 @@ public class CachingHandlerTests
                                                      CancellationToken.None);
 
         // Assert...
-        var cache = Moq.Mock.Get(distributedCache);
+        var cache = Mock.Get(distributedCache);
 
         cache.Verify(c => c.Get(key), Times.Never);
 
@@ -165,7 +166,7 @@ public class CachingHandlerTests
         IDistributedCache cache,
         IUrlToKeyConverter converter,
         ICachingOptionsManager optionsManager,
-        ILogger<CachingHandler> logger)
+        NullLogger<CachingHandler> logger)
         : CachingHandler(cache, converter, optionsManager, logger, new HttpClientHandler())
     {
         public async Task<HttpResponseMessage> PublicSendAsync(HttpRequestMessage request,

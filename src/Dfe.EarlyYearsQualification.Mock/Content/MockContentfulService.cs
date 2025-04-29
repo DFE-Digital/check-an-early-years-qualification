@@ -1,8 +1,8 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
 using File = Contentful.Core.Models.File;
 
 namespace Dfe.EarlyYearsQualification.Mock.Content;
@@ -114,7 +114,6 @@ public class MockContentfulService : IContentService
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-        var checkAnotherQualificationText = ContentfulContentHelper.Paragraph("Test Check Another Qualification Text");
         var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
@@ -179,12 +178,12 @@ public class MockContentfulService : IContentService
     {
         return await Task.FromResult(new List<NavigationLink>
                                      {
-                                         new()
+                                         new NavigationLink
                                          {
                                              DisplayText = "Privacy notice",
                                              Href = "/link-to-privacy-notice"
                                          },
-                                         new()
+                                         new NavigationLink
                                          {
                                              DisplayText = "Accessibility statement",
                                              Href = "/link-to-accessibility-statement"
@@ -468,36 +467,41 @@ public class MockContentfulService : IContentService
     {
         return await Task.FromResult(new HelpPage
                                      {
-                                        Heading = "Help Page Heading",
-                                        PostHeadingContent = ContentfulContentHelper.Paragraph("This is the post heading text"),
-                                        EmailAddressHeading = "Enter your email address (optional)",
-                                        EmailAddressHintText = "If you do not enter your email address we will not be able to contact you in relation to your enquiry",
-                                        ReasonForEnquiryHeading = "Choose the reason of your enquiry",
-                                        ReasonForEnquiryHintText = "Select one option",
-                                        EnquiryReasons =
-                                        [
-                                            new EnquiryOption
-                                            { Label = "Option 1", Value = "Option 1" },
-                                            new EnquiryOption
-                                            { Label = "Option 2", Value = "Option 2" },
-                                            new EnquiryOption
-                                            { Label = "Option 3", Value = "Option 3" }
-                                        ],
-                                        AdditionalInformationHeading = "Provide further information about your enquiry",
-                                        AdditionalInformationHintText = "Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.",
-                                        AdditionalInformationWarningText = "Do not include personal information, for example the name of the qualification holder",
-                                        CtaButtonText = "Send message",
-                                        BackButton = new NavigationLink
-                                                     {
-                                                         DisplayText = "Home",
-                                                         Href = HomePath,
-                                                         OpenInNewTab = false
-                                                     },
-                                        ErrorBannerHeading = ThereIsAProblem,
-                                        NoEmailAddressEnteredErrorMessage = "Enter an email address",
-                                        InvalidEmailAddressErrorMessage = "Enter a valid email address",
-                                        NoEnquiryOptionSelectedErrorMessage = "Select one option",
-                                        FurtherInformationErrorMessage = "Enter further information about your enquiry"
+                                         Heading = "Help Page Heading",
+                                         PostHeadingContent =
+                                             ContentfulContentHelper.Paragraph("This is the post heading text"),
+                                         EmailAddressHeading = "Enter your email address (optional)",
+                                         EmailAddressHintText =
+                                             "If you do not enter your email address we will not be able to contact you in relation to your enquiry",
+                                         ReasonForEnquiryHeading = "Choose the reason of your enquiry",
+                                         ReasonForEnquiryHintText = "Select one option",
+                                         EnquiryReasons =
+                                         [
+                                             new EnquiryOption
+                                             { Label = "Option 1", Value = "Option 1" },
+                                             new EnquiryOption
+                                             { Label = "Option 2", Value = "Option 2" },
+                                             new EnquiryOption
+                                             { Label = "Option 3", Value = "Option 3" }
+                                         ],
+                                         AdditionalInformationHeading =
+                                             "Provide further information about your enquiry",
+                                         AdditionalInformationHintText =
+                                             "Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.",
+                                         AdditionalInformationWarningText =
+                                             "Do not include personal information, for example the name of the qualification holder",
+                                         CtaButtonText = "Send message",
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "Home",
+                                                          Href = HomePath,
+                                                          OpenInNewTab = false
+                                                      },
+                                         ErrorBannerHeading = ThereIsAProblem,
+                                         NoEmailAddressEnteredErrorMessage = "Enter an email address",
+                                         InvalidEmailAddressErrorMessage = "Enter a valid email address",
+                                         NoEnquiryOptionSelectedErrorMessage = "Select one option",
+                                         FurtherInformationErrorMessage = "Enter further information about your enquiry"
                                      });
     }
 
@@ -612,7 +616,7 @@ public class MockContentfulService : IContentService
                           },
                           new Option
                           {
-                              Label = "Not Sure", Value ="0"
+                              Label = "Not Sure", Value = "0"
                           }
                       };
         return CreateRadioQuestionPage("What level is the qualification?", options,
@@ -708,7 +712,8 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static AdvicePage CreateAdvicePage(string heading, Document body, string backButtonUrl, bool hasUpDownFeedback)
+    private static AdvicePage CreateAdvicePage(string heading, Document body, string backButtonUrl,
+                                               bool hasUpDownFeedback)
     {
         return new AdvicePage
                {

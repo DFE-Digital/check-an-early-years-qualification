@@ -1,8 +1,9 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Mock.Content;
+using FluentAssertions;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
+namespace Dfe.EarlyYearsQualification.Mock.UnitTests;
 
 [TestClass]
 public class MockQualificationsRepositoryTests
@@ -47,12 +48,12 @@ public class MockQualificationsRepositoryTests
 
         qualificationWithAdditionalRequirements.Should().NotBeNull();
 
-        qualificationWithAdditionalRequirements!.AdditionalRequirementQuestions.Should().HaveCount(1);
+        qualificationWithAdditionalRequirements.AdditionalRequirementQuestions.Should().HaveCount(1);
 
         var additionalRequirementQuestions = qualificationWithAdditionalRequirements.AdditionalRequirementQuestions;
 
         additionalRequirementQuestions.Should().HaveCount(1);
-        additionalRequirementQuestions![0].AnswerToBeFullAndRelevant.Should().Be(true);
+        additionalRequirementQuestions[0].AnswerToBeFullAndRelevant.Should().Be(true);
 
         var answers = additionalRequirementQuestions[0].Answers;
 
@@ -70,7 +71,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("test_id");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result!.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -143,7 +144,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-108");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result!.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -216,7 +217,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-115");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result!.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -267,7 +268,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-250");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result!.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -341,7 +342,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-114");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result!.AdditionalRequirements.Should().BeNull();
+        result.AdditionalRequirements.Should().BeNull();
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -410,7 +411,7 @@ public class MockQualificationsRepositoryTests
         var additionalRequirementQuestions = qualificationWithAdditionalRequirements.AdditionalRequirementQuestions;
 
         additionalRequirementQuestions.Should().HaveCount(1);
-        additionalRequirementQuestions![0].AnswerToBeFullAndRelevant.Should().Be(true);
+        additionalRequirementQuestions[0].AnswerToBeFullAndRelevant.Should().Be(true);
 
         var answers = additionalRequirementQuestions[0].Answers;
 

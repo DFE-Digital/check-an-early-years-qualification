@@ -1,7 +1,8 @@
-using Dfe.EarlyYearsQualification.UnitTests.TestHelpers;
+using Dfe.EarlyYearsQualification.Caching.UnitTests.TestHelpers;
+using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
+namespace Dfe.EarlyYearsQualification.Caching.UnitTests.Mocks;
 
 [TestClass]
 public class MockDistributedCacheTests
@@ -16,7 +17,7 @@ public class MockDistributedCacheTests
     {
         var cache = GetCache();
 
-        var bytes = cache.Get("any_key");
+        byte[]? bytes = cache.Get("any_key");
 
         bytes.Should().BeNull();
     }
@@ -31,7 +32,7 @@ public class MockDistributedCacheTests
 
         await cache.SetAsync(key, value, new DistributedCacheEntryOptions(), CancellationToken.None);
 
-        var bytes = await cache.GetAsync(key);
+        byte[]? bytes = await cache.GetAsync(key);
 
         bytes.Should().ContainInOrder(value);
     }
@@ -46,7 +47,7 @@ public class MockDistributedCacheTests
 
         cache.Set(key, value, new DistributedCacheEntryOptions());
 
-        var bytes = cache.Get(key);
+        byte[]? bytes = cache.Get(key);
 
         bytes.Should().ContainInOrder(value);
     }

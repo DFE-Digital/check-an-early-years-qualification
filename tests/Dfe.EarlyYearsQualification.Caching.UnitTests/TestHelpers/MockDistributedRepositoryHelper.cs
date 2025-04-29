@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Caching.Distributed;
+using Moq;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.TestHelpers;
+namespace Dfe.EarlyYearsQualification.Caching.UnitTests.TestHelpers;
 
 public static class MockDistributedRepositoryHelper
 {
@@ -25,11 +26,11 @@ public static class MockDistributedRepositoryHelper
 
         distributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                         .ReturnsAsync((string key, CancellationToken _)
-                                          => dic.TryGetValue(key, out var expression) ? expression : null);
+                                          => dic.TryGetValue(key, out byte[]? expression) ? expression : null);
 
         distributedCache.Setup(x => x.Get(It.IsAny<string>()))
                         .Returns((string key)
-                                     => dic.TryGetValue(key, out var expression) ? expression : null);
+                                     => dic.TryGetValue(key, out byte[]? expression) ? expression : null);
 
         return distributedCache.Object;
     }

@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.TestSupport;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Microsoft.Extensions.Options;
@@ -48,7 +49,7 @@ public class GovUkNotifyServiceTests
             .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
                     Times.Once());
     }
-    
+
     [TestMethod]
     public void SendFeedbackNotification_TestEnvironmentIsTrue_MatchesExpected()
     {
@@ -88,7 +89,7 @@ public class GovUkNotifyServiceTests
             .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
                     Times.Once());
     }
-    
+
     [TestMethod]
     public void SendFeedbackNotification_UserEmailAddressIsNull_MatchesExpected()
     {
@@ -140,7 +141,7 @@ public class GovUkNotifyServiceTests
                                     null, null, null)).Throws(new NotifyClientException("Test message"));
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
-        
+
         service.SendFeedbackNotification(new FeedbackNotification());
 
         mockLogger.VerifyError("Error thrown from GovUKNotifyService: Test message");

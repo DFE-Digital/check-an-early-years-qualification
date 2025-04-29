@@ -1,6 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Helpers;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -12,7 +12,7 @@ public class ServiceControllerTests
     public async Task GetFeedbackBannerBodyToHtml_PassInNullFeedbackBanner_ReturnsNull()
     {
         var mockGovUkContentParser = new Mock<IGovUkContentParser>();
-        var result = await DummyController.GetFeedbackBannerBody(null, mockGovUkContentParser.Object);
+        string? result = await DummyController.GetFeedbackBannerBody(null, mockGovUkContentParser.Object);
         result.Should().BeNull();
     }
 
@@ -31,7 +31,7 @@ public class ServiceControllerTests
                                  Body = feedbackBannerContentDocument
                              };
 
-        var result = await DummyController.GetFeedbackBannerBody(feedbackBanner, mockGovUkContentParser.Object);
+        string? result = await DummyController.GetFeedbackBannerBody(feedbackBanner, mockGovUkContentParser.Object);
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(feedbackBannerContent);
