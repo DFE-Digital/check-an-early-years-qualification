@@ -130,11 +130,6 @@ variable "webapp_docker_image_tag" {
   type        = string
 }
 
-variable "custom_domain_name" {
-  description = "Custom domain hostname for the education.gov.uk domain"
-  type        = string
-}
-
 variable "service_gov_uk_custom_domain_name" {
   description = "Custom domain hostname for the service.gov.uk domain"
   type        = string
