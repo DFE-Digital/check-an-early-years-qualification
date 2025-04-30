@@ -15,7 +15,7 @@ public class MockQualificationsRepositoryTests
     [DataRow(3, new[] { "EYQ-240", "EYQ-103", "EYQ-909" })]
     [DataRow(4, new[] { "EYQ-104", "EYQ-105" })]
     [DataRow(5, new[] { "EYQ-106", "EYQ-107" })]
-    [DataRow(6, new[] { "EYQ-108", "EYQ-109" })]
+    [DataRow(6, new[] { "EYQ-108", "EYQ-109", "EYQ-114", "EYQ-115" })]
     [DataRow(7, new[] { "EYQ-110", "EYQ-111" })]
     [DataRow(8, new[] { "EYQ-112", "EYQ-113" })]
 #pragma warning restore CA1861
