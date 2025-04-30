@@ -1041,10 +1041,17 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public async Task SetRatiosText_L2_NotFullAndRelevant_ShowNoText()
+    public async Task SetRatiosText_L2_NotFullAndRelevant_ShowNotFullAndRelevantText()
     {
-        var detailsPageContent = new DetailsPage();
-
+        const string ratiosTextNotFullAndRelevant = "Not approved";
+        var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
+        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+                          .ReturnsAsync(ratiosTextNotFullAndRelevant);
+        var detailsPageContent = new DetailsPage
+                                 {
+                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                                 };
+        
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 2,
@@ -1063,7 +1070,7 @@ public class QualificationDetailsServiceTests
         await sut.SetRatioText(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(string.Empty);
+        model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
     }
 
     [TestMethod]
@@ -1189,15 +1196,15 @@ public class QualificationDetailsServiceTests
     [DataRow(3)]
     [DataRow(4)]
     [DataRow(5)]
-    public async Task SetRatiosText_IsFullAndRelevantAwardedOnOrAfterSept2014_ShowsMayNeedRequirements(int level)
+    public async Task SetRatiosText_IsFullAndRelevantAwardedOnOrAfterSept2014_ShowsWillNeedRequirements(int level)
     {
-        const string mayNeedPfaText = "May need PFA";
-        var mayNeedPfaDoc = new Document { NodeType = mayNeedPfaText };
-        _mockContentParser.Setup(o => o.ToHtml(mayNeedPfaDoc)).ReturnsAsync(mayNeedPfaText);
+        const string needPfaText = "Need PFA";
+        var needPfaDoc = new Document { NodeType = needPfaText };
+        _mockContentParser.Setup(o => o.ToHtml(needPfaDoc)).ReturnsAsync(needPfaText);
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextMaybePfa = mayNeedPfaDoc
+                                     RatiosTextPfa = needPfaDoc
                                  };
         var model = new QualificationDetailsModel
                     {
@@ -1218,7 +1225,7 @@ public class QualificationDetailsServiceTests
         await sut.SetRatioText(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(mayNeedPfaText);
+        model.Content.RatiosText.Should().Be(needPfaText);
     }
 
     [TestMethod]
@@ -1283,15 +1290,15 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     [DataRow(6)]
     [DataRow(7)]
-    public async Task SetRatiosText_IsFullAndRelevantForAllLevelsButL6AwardedOnOrAfterSeptember2014_ShowsMayNeedRequirements(int level)
+    public async Task SetRatiosText_IsFullAndRelevantForAllLevelsButL6AwardedOnOrAfterSeptember2014_ShowsNeedRequirements(int level)
     {
-        const string mayNeedPfaText = "May need PFA";
-        var mayNeedPfaDoc = new Document { NodeType = mayNeedPfaText };
-        _mockContentParser.Setup(o => o.ToHtml(mayNeedPfaDoc)).ReturnsAsync(mayNeedPfaText);
+        const string needPfaText = "Need PFA";
+        var needPfaDoc = new Document { NodeType = needPfaText };
+        _mockContentParser.Setup(o => o.ToHtml(needPfaDoc)).ReturnsAsync(needPfaText);
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextMaybePfa = mayNeedPfaDoc
+                                     RatiosTextPfa = needPfaDoc
                                  };
         var model = new QualificationDetailsModel
                     {
@@ -1314,7 +1321,7 @@ public class QualificationDetailsServiceTests
         await sut.SetRatioText(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(mayNeedPfaText);
+        model.Content.RatiosText.Should().Be(needPfaText);
     }
 
     [TestMethod]

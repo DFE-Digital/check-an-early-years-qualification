@@ -367,12 +367,12 @@ public class QualificationDetailsService(
                 break;
 
             case 2 when wasAwardedInJune2016:
-            case 3 or 4 or 5 when wasAwardedOnOrAfterSeptember2014:
-            case 6 or 7 when approvedAllLevelsButL6 && wasAwardedOnOrAfterSeptember2014:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextMaybePfa);
                 break;
 
             case 2 when wasAwardedAfterJune2016:
+            case 3 or 4 or 5 when wasAwardedOnOrAfterSeptember2014:
+            case 6 or 7 when approvedAllLevelsButL6 && wasAwardedOnOrAfterSeptember2014:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextPfa);
                 break;
 
@@ -390,9 +390,6 @@ public class QualificationDetailsService(
 
         switch (model.QualificationLevel)
         {
-            case 2:
-                model.Content!.RatiosText = string.Empty;
-                break;
             case >= 3 when wasStartedBetweenSeptember2014AndAugust2019:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
                 model.Content!.RatiosAdditionalInfoText = await contentParser.ToHtml(content.RatiosTextL3Ebr);

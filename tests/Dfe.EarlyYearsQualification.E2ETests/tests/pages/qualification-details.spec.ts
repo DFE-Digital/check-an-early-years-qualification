@@ -38,7 +38,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, "#additional-requirement-1-value", "No");
         await checkText(page, "#date-of-check-label", "Test Date Of Check Label");
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
         await checkText(page, "#requirements-heading", "Test requirements heading");
         await checkText(page, "#requirements-heading + p[class='govuk-body']", "This is the requirements text");
         await checkText(page, "#check-another-qualification-link", "Check another qualification");
@@ -409,7 +409,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 or L6 body");
     });
 
-    test('Checks level 2 not F&R sees no content under ratio header', async ({
+    test('Checks level 2 not F&R sees not full and relevant ratio detail', async ({
                                                                                  page,
                                                                                  context
                                                                              }) => {
@@ -429,7 +429,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto("/qualifications/qualification-details/eyq-241");
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -577,7 +577,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await doesNotExist(page, "#ratio-additional-info");
     });
 
-    test('Checks level 3 F&R awarded on or after September 2014 sees additional requirement maybe content', async ({
+    test('Checks level 3 F&R awarded on or after September 2014 sees additional requirement will content', async ({
                                                                                                                        page,
                                                                                                                        context
                                                                                                                    }) => {
@@ -597,11 +597,11 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
-    test('Checks level 4 F&R awarded before September 2014 sees additional requirement maybe content', async ({
+    test('Checks level 4 F&R awarded on or after September 2014 sees additional requirement will content', async ({
                                                                                                                   page,
                                                                                                                   context
                                                                                                               }) => {
@@ -621,11 +621,11 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-105');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
-    test('Checks level 5 F&R awarded before September 2014 sees additional requirement maybe content', async ({
+    test('Checks level 5 F&R awarded on or after September 2014 sees additional requirement will content', async ({
                                                                                                                   page,
                                                                                                                   context
                                                                                                               }) => {
@@ -645,7 +645,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-107');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -746,7 +746,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await doesNotExist(page, "#ratio-additional-info");
     });
 
-    test('Checks level 6 F&R (all but L6) awarded on September 2014 sees additional requirement maybe content', async ({
+    test('Checks level 6 F&R (all but L6) awarded on September 2014 sees additional requirement will content', async ({
                                                                                                                            page,
                                                                                                                            context
                                                                                                                        }) => {
@@ -766,11 +766,11 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-109');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
-    test('Checks level 7 F&R (all but L6) awarded on September 2014 sees additional requirement maybe content', async ({
+    test('Checks level 7 F&R (all but L6) awarded on September 2014 sees additional requirement will content', async ({
                                                                                                                            page,
                                                                                                                            context
                                                                                                                        }) => {
@@ -790,11 +790,11 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-111');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
-    test('Checks level 6 F&R (all but L6) awarded after September 2014 sees additional requirement maybe content', async ({
+    test('Checks level 6 F&R (all but L6) awarded after September 2014 sees additional requirement will content', async ({
                                                                                                                               page,
                                                                                                                               context
                                                                                                                           }) => {
@@ -814,11 +814,11 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-109');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
-    test('Checks level 7 F&R (all but L6) awarded after September 2014 sees additional requirement maybe content', async ({
+    test('Checks level 7 F&R (all but L6) awarded after September 2014 sees additional requirement will content', async ({
                                                                                                                               page,
                                                                                                                               context
                                                                                                                           }) => {
@@ -838,7 +838,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-111');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -849,7 +849,7 @@ test.describe("A spec used to test the qualification details page", () => {
         [9, 2019],
         [1, 2020],
     ].forEach((startDate) => {
-        test(`(${startDate}) Checks level 3 not F&R started  before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+        test(`(${startDate}) Checks level 3 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
                                                                                                                                                                         page,
                                                                                                                                                                         context
                                                                                                                                                                     }) => {
@@ -874,7 +874,7 @@ test.describe("A spec used to test the qualification details page", () => {
             await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
         });
 
-        test(`(${startDate}) Checks level 4 not F&R started  before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+        test(`(${startDate}) Checks level 4 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
                                                                                                                                                                         page,
                                                                                                                                                                         context
                                                                                                                                                                     }) => {
@@ -897,7 +897,7 @@ test.describe("A spec used to test the qualification details page", () => {
             await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
         });
 
-        test(`(${startDate}) Checks level 5 not F&R started  before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+        test(`(${startDate}) Checks level 5 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
                                                                                                                                                                         page,
                                                                                                                                                                         context
                                                                                                                                                                     }) => {
@@ -920,7 +920,7 @@ test.describe("A spec used to test the qualification details page", () => {
             await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
         });
 
-        test(`(${startDate}) Checks level 6 not F&R started  before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+        test(`(${startDate}) Checks level 6 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
                                                                                                                                                                         page,
                                                                                                                                                                         context
                                                                                                                                                                     }) => {
@@ -943,7 +943,7 @@ test.describe("A spec used to test the qualification details page", () => {
             await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
         });
 
-        test(`(${startDate}) Checks level 7 not F&R started  before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+        test(`(${startDate}) Checks level 7 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
                                                                                                                                                                         page,
                                                                                                                                                                         context
                                                                                                                                                                     }) => {
