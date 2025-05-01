@@ -85,7 +85,7 @@
 
         @foreach (var qualification in Model.Qualifications)
         {
-            var containsMultipleQualificationNames = Model.Qualifications.Count(x => x.QualificationName == qualification.QualificationName) > 1;
+            var containsMultipleQualificationNames = Model.Qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1;
             var awardingOrganisationDisplayType = containsMultipleQualificationNames ? "inline-block" : "none";
             var linkDisplayType = containsMultipleQualificationNames ? "inline-block" : "block";
             <div class="govuk-grid-row">
