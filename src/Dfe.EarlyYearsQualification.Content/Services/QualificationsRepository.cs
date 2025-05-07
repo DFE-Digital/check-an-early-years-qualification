@@ -26,7 +26,7 @@ public class QualificationsRepository(
             return null;
         }
 
-        return qualifications.FirstOrDefault(x => x.QualificationId.ToUpper() == qualificationId.ToUpper());
+        return qualifications.FirstOrDefault(x => string.Equals(x.QualificationId, qualificationId, StringComparison.CurrentCultureIgnoreCase));
     }
 
     public async Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear, string? awardingOrganisation, string? qualificationName)
@@ -54,12 +54,13 @@ public class QualificationsRepository(
 
     private async Task<List<Qualification>> GetAllQualifications()
     {
-        // TODO: Should limit be increased???
-        var queryBuilder = QueryBuilder<Qualification>.New.ContentTypeIs(ContentTypes.Qualification).Include(2).Limit(500);
+        var queryBuilder = QueryBuilder<Qualification>.New.ContentTypeIs(ContentTypes.Qualification).Include(2).Limit(1000);
         try
         {
             var qualifications = await ContentfulClient.GetEntries(queryBuilder);
-            return qualifications.ToList();
+            // In the test environments, a qualificationId can be null when a new Qualification is in the progress of being created.
+            // When the list of qualifications is being iterated on, it can cause an error hence the filter below.
+            return qualifications.Where(x => !string.IsNullOrEmpty(x.QualificationId)).ToList();
         }
         catch (Exception e)
         {

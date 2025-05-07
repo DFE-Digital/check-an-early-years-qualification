@@ -76,6 +76,35 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         result.Should().NotBeNull();
         result.Should().Be(qualification);
     }
+    
+    [TestMethod]
+    public async Task GetQualificationById_QualificationsContainEmptyQualificationId_Exists_Returns()
+    {
+        var qualification = new Qualification("SomeId",
+                                              "Test qualification name",
+                                              "Test awarding org",
+                                              123)
+                            {
+                                FromWhichYear = "Test from which year",
+                                ToWhichYear = "Test to which year",
+                                QualificationNumber = "Test qualification number",
+                                AdditionalRequirements = "Test additional requirements"
+                            };
+
+        ClientMock.Setup(client =>
+                             client.GetEntries(
+                                               It.IsAny<QueryBuilder<Qualification>>(),
+                                               It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<Qualification>
+                                { Items = [new Qualification(string.Empty, "Test name", "Test AO", 3), qualification] });
+
+        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
+
+        var result = await service.GetById("SomeId");
+
+        result.Should().NotBeNull();
+        result.Should().Be(qualification);
+    }
 
     [TestMethod]
     public async Task GetQualifications_ReturnsQualifications()
