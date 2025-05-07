@@ -28,7 +28,7 @@ body {
     position: relative;
 }
 
-.chevron-card__link {
+.chevron-card-link__wrapper {
     width: 95%;
     margin-bottom: 40px;
 }
