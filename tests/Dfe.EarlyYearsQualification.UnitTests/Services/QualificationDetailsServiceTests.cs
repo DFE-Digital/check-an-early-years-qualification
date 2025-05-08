@@ -1101,13 +1101,13 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task SetRatiosText_IsFullAndRelevantAndL2InJune2016_ShowsMayNeedRequirements()
     {
-        const string mayNeedPfaText = "May need PFA";
-        var mayNeedPfaDoc = new Document { NodeType = mayNeedPfaText };
-        _mockContentParser.Setup(o => o.ToHtml(mayNeedPfaDoc)).ReturnsAsync(mayNeedPfaText);
+        const string mayNeedRequirementsText = "May need Requirements";
+        var mayNeedRequirementsDoc = new Document { NodeType = mayNeedRequirementsText };
+        _mockContentParser.Setup(o => o.ToHtml(mayNeedRequirementsDoc)).ReturnsAsync(mayNeedRequirementsText);
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextMaybePfa = mayNeedPfaDoc
+                                     RatiosTextMaybeRequirements = mayNeedRequirementsDoc
                                  };
 
         var model = new QualificationDetailsModel
@@ -1127,19 +1127,19 @@ public class QualificationDetailsServiceTests
         await sut.SetRatioText(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(mayNeedPfaText);
+        model.Content.RatiosText.Should().Be(mayNeedRequirementsText);
     }
 
     [TestMethod]
     public async Task SetRatiosText_IsFullAndRelevantAndL2AfterJune2016_ShowsWillNeedRequirements()
     {
-        const string willNeedPfaText = "Will need PFA";
-        var willNeedPfaDoc = new Document { NodeType = willNeedPfaText };
-        _mockContentParser.Setup(o => o.ToHtml(willNeedPfaDoc)).ReturnsAsync(willNeedPfaText);
+        const string willNeedRequirementsText = "Will need requirements";
+        var willNeedRequirementsDoc = new Document { NodeType = willNeedRequirementsText };
+        _mockContentParser.Setup(o => o.ToHtml(willNeedRequirementsDoc)).ReturnsAsync(willNeedRequirementsText);
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextPfa = willNeedPfaDoc
+                                     RatiosTextRequirements = willNeedRequirementsDoc
                                  };
 
         var model = new QualificationDetailsModel
@@ -1159,7 +1159,7 @@ public class QualificationDetailsServiceTests
         await sut.SetRatioText(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(willNeedPfaText);
+        model.Content.RatiosText.Should().Be(willNeedRequirementsText);
     }
 
     [TestMethod]
@@ -1198,13 +1198,13 @@ public class QualificationDetailsServiceTests
     [DataRow(5)]
     public async Task SetRatiosText_IsFullAndRelevantAwardedOnOrAfterSept2014_ShowsWillNeedRequirements(int level)
     {
-        const string needPfaText = "Need PFA";
-        var needPfaDoc = new Document { NodeType = needPfaText };
-        _mockContentParser.Setup(o => o.ToHtml(needPfaDoc)).ReturnsAsync(needPfaText);
+        const string needRequirementsText = "Need requirements";
+        var needRequirementsDoc = new Document { NodeType = needRequirementsText };
+        _mockContentParser.Setup(o => o.ToHtml(needRequirementsDoc)).ReturnsAsync(needRequirementsText);
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextPfa = needPfaDoc
+                                     RatiosTextRequirements = needRequirementsDoc
                                  };
         var model = new QualificationDetailsModel
                     {
@@ -1225,7 +1225,7 @@ public class QualificationDetailsServiceTests
         await sut.SetRatioText(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(needPfaText);
+        model.Content.RatiosText.Should().Be(needRequirementsText);
     }
 
     [TestMethod]
@@ -1292,13 +1292,13 @@ public class QualificationDetailsServiceTests
     [DataRow(7)]
     public async Task SetRatiosText_IsFullAndRelevantForAllLevelsButL6AwardedOnOrAfterSeptember2014_ShowsNeedRequirements(int level)
     {
-        const string needPfaText = "Need PFA";
-        var needPfaDoc = new Document { NodeType = needPfaText };
-        _mockContentParser.Setup(o => o.ToHtml(needPfaDoc)).ReturnsAsync(needPfaText);
+        const string needRequirementsText = "Need requirements";
+        var needRequirementsDoc = new Document { NodeType = needRequirementsText };
+        _mockContentParser.Setup(o => o.ToHtml(needRequirementsDoc)).ReturnsAsync(needRequirementsText);
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextPfa = needPfaDoc
+                                     RatiosTextRequirements = needRequirementsDoc
                                  };
         var model = new QualificationDetailsModel
                     {
@@ -1321,7 +1321,7 @@ public class QualificationDetailsServiceTests
         await sut.SetRatioText(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(needPfaText);
+        model.Content.RatiosText.Should().Be(needRequirementsText);
     }
 
     [TestMethod]

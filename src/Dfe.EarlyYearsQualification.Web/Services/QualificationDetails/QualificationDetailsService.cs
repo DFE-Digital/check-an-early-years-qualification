@@ -367,13 +367,13 @@ public class QualificationDetailsService(
                 break;
 
             case 2 when wasAwardedInJune2016:
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextMaybePfa);
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextMaybeRequirements);
                 break;
 
             case 2 when wasAwardedAfterJune2016:
             case 3 or 4 or 5 when wasAwardedOnOrAfterSeptember2014:
             case 6 or 7 when approvedAllLevelsButL6 && wasAwardedOnOrAfterSeptember2014:
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextPfa);
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextRequirements);
                 break;
 
             default:

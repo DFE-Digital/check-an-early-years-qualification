@@ -114,11 +114,10 @@ public class MockContentfulService : IContentService
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-        var checkAnotherQualificationText = ContentfulContentHelper.Paragraph("Test Check Another Qualification Text");
         var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
-        var ratioTextMaybePfa = ContentfulContentHelper.Paragraph("This is the ratio text maybe PFA");
-        var ratioTextPfa = ContentfulContentHelper.Paragraph("This is the ratio text PFA");
+        var ratioTextMaybeRequirements = ContentfulContentHelper.Paragraph("This is the ratio text maybe requirements");
+        var ratioTextRequirements = ContentfulContentHelper.Paragraph("This is the ratio text requirements");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
             ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
         var ratioTextL3Ebr = ContentfulContentHelper.Paragraph("This is the ratio text L3 EBR");
@@ -145,8 +144,8 @@ public class MockContentfulService : IContentService
                                                                 },
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
-                                         RatiosTextMaybePfa = ratioTextMaybePfa,
-                                         RatiosTextPfa = ratioTextPfa,
+                                         RatiosTextMaybeRequirements = ratioTextMaybeRequirements,
+                                         RatiosTextRequirements = ratioTextRequirements,
                                          RatiosTextL3Ebr = ratioTextL3Ebr,
                                          RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
                                          RatiosTextL3PlusNotFrBetweenSep14Aug19 =
