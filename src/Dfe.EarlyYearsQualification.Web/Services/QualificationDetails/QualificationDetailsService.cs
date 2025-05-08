@@ -184,6 +184,23 @@ public class QualificationDetailsService(
         }
     }
 
+    public Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model, Qualification qualification)
+    {
+        bool ebrEligible = true;
+
+        ebrEligible = (!model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel == 2) ||
+                      (model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel is >= 3 and <= 5);
+        if (ebrEligible)
+        {
+            model.RatioRequirements.ApprovedForLevel3 = QualificationApprovalStatus.PossibleRouteAvailable;
+
+            model.RatioRequirements.RequirementsForLevel3 = "EBR CONTENT";
+            model.RatioRequirements.ShowRequirementsForLevel3ByDefault = true;
+        }
+
+        return Task.CompletedTask;
+    }
+
     public NavigationLink? CalculateBackButton(DetailsPage content, string qualificationId)
     {
         if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions())
@@ -309,7 +326,7 @@ public class QualificationDetailsService(
             var dateOnly = new DateOnly(awardedYear.Value, awardedMonth.Value, 1);
             dateAwarded = dateOnly.ToString("MMMM yyyy");
         }
-        
+
         var requirementsText = await contentParser.ToHtml(content.RequirementsText);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner);
         var improveServiceBodyHtml = content.UpDownFeedback is not null
