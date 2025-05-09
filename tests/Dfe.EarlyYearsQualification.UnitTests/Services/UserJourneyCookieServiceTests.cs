@@ -1095,7 +1095,7 @@ public class UserJourneyCookieServiceTests
 
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
-        var action = () => service.WasStartedBeforeSeptember2014();
+        var action = () => service.WasAwardedBeforeJune2016();
 
         action.Should().Throw<InvalidOperationException>();
     }
@@ -1362,12 +1362,11 @@ public class UserJourneyCookieServiceTests
     }
 
     [TestMethod]
-    [DataRow("6/2016")]
-    public void WasAwardedInJune2016_CookieHasValidValueInJune2016_ReturnsTrue(string awardedDate)
+    public void WasAwardedInJune2016_CookieHasValidValueInJune2016_ReturnsTrue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
-                                WhenWasQualificationAwarded = awardedDate
+                                WhenWasQualificationAwarded = "6/2016"
                             };
 
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);

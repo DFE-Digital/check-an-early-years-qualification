@@ -19,8 +19,8 @@ public class DetailsPage
     public string RatiosHeading { get; init; } = string.Empty;
 
     public Document? RatiosText { get; init; }
-    public Document? RatiosTextMaybePfa { get; init; }
-    public Document? RatiosTextPfa { get; init; }
+    public Document? RatiosTextMaybeRequirements { get; init; }
+    public Document? RatiosTextRequirements { get; init; }
 
     public string RequirementsHeading { get; init; } = string.Empty;
 

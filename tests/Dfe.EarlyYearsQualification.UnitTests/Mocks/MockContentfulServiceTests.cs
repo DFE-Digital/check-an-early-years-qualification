@@ -197,10 +197,10 @@ public class MockContentfulServiceTests
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text");
         result.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
-        result.RatiosTextMaybePfa!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text maybe PFA");
-        result.RatiosTextPfa!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text PFA");
+        result.RatiosTextMaybeRequirements!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text maybe requirements");
+        result.RatiosTextRequirements!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text requirements");
         result.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text L3 EBR");
         result.QualificationResultHeading.Should().Be("Qualification result heading");

@@ -38,7 +38,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, "#additional-requirement-1-value", "No");
         await checkText(page, "#date-of-check-label", "Test Date Of Check Label");
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await checkText(page, "#requirements-heading", "Test requirements heading");
         await checkText(page, "#requirements-heading + p[class='govuk-body']", "This is the requirements text");
         await checkText(page, "#check-another-qualification-link", "Check another qualification");
@@ -477,7 +477,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto("/qualifications/qualification-details/eyq-241");
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -501,7 +501,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto("/qualifications/qualification-details/eyq-241");
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -597,7 +597,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -621,7 +621,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-105');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -645,7 +645,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-107');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -766,7 +766,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-109');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -790,7 +790,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-111');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -814,7 +814,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-109');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
@@ -838,7 +838,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await page.goto('/qualifications/qualification-details/eyq-111');
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text PFA");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await doesNotExist(page, "#ratio-additional-info");
     });
 
