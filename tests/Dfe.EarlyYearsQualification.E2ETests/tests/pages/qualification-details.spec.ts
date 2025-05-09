@@ -1,5 +1,15 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName, hasClass, hasCount} from '../shared/playwrightWrapper';
+import {
+    startJourney,
+    checkText,
+    setCookie,
+    journeyCookieName,
+    hasClass,
+    hasCount,
+    checkJourneyCookieValue,
+    setJourneyState,
+    doesNotExist
+} from '../shared/playwrightWrapper';
 
 test.describe("A spec used to test the qualification details page", () => {
     test.beforeEach(async ({page, context}) => {
@@ -28,7 +38,7 @@ test.describe("A spec used to test the qualification details page", () => {
         await checkText(page, "#additional-requirement-1-value", "No");
         await checkText(page, "#date-of-check-label", "Test Date Of Check Label");
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await checkText(page, "#requirements-heading", "Test requirements heading");
         await checkText(page, "#requirements-heading + p[class='govuk-body']", "This is the requirements text");
         await checkText(page, "#check-another-qualification-link", "Check another qualification");
@@ -44,10 +54,10 @@ test.describe("A spec used to test the qualification details page", () => {
                                                                                                                               page,
                                                                                                                               context
                                                                                                                           }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22yes%22%7D%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-108");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 6", 0);
         await checkText(page, ".ratio-heading", "Level 3", 1);
         await checkText(page, ".ratio-heading", "Level 2", 2);
@@ -66,10 +76,10 @@ test.describe("A spec used to test the qualification details page", () => {
                                                                                                                                                                page,
                                                                                                                                                                context
                                                                                                                                                            }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22no%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22no%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-108");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 3", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Unqualified", 2);
@@ -88,10 +98,10 @@ test.describe("A spec used to test the qualification details page", () => {
                                                                                                                                                     page,
                                                                                                                                                     context
                                                                                                                                                 }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 3", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Unqualified", 2);
@@ -110,10 +120,10 @@ test.describe("A spec used to test the qualification details page", () => {
                                                                                                                                                           page,
                                                                                                                                                           context
                                                                                                                                                       }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-241");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Unqualified", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Level 3", 2);
@@ -132,7 +142,7 @@ test.describe("A spec used to test the qualification details page", () => {
                                                                                                                                                     page,
                                                                                                                                                     context
                                                                                                                                                 }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
@@ -143,29 +153,29 @@ test.describe("A spec used to test the qualification details page", () => {
                                                                                                                                           page,
                                                                                                                                           context
                                                                                                                                       }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#ratio-heading", "Test ratio heading");
         await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
     });
 
-    test("When the user selects a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is not full and relevant with no questions, they see the level 2 qualification markes as 'Further action required'", async ({
+    test("When the user selects a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is not full and relevant with no questions, they see the level 2 qualification marked as 'Further action required'", async ({
                                                                                                                                                                                                                                                      page,
                                                                                                                                                                                                                                                      context
                                                                                                                                                                                                                                                  }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2016%22%2C%22LevelOfQualification%22%3A%225%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2016%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%225%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-114");
 
         await checkText(page, "#ratio-Level2-tag", "Further action required");
         await checkText(page, "#ratio-Level2-additional-info", "Level 2 further action required text");
     });
 
-    test("When the user selects a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is not full and relevant due to their answers, they see the level 2 qualification markes as 'Further action required'", async ({
+    test("When the user selects a qualification that is above a level 2, started between Sept 2014 and Aug 2019, and is not full and relevant due to their answers, they see the level 2 qualification marked as 'Further action required'", async ({
                                                                                                                                                                                                                                                         page,
                                                                                                                                                                                                                                                         context
                                                                                                                                                                                                                                                     }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2212%2F2016%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Atrue%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22no%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2212%2F2016%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Atrue%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22no%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#ratio-Level2-tag", "Further action required");
@@ -176,7 +186,7 @@ test.describe("A spec used to test the qualification details page", () => {
                                                                             page,
                                                                             context
                                                                         }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await page.evaluate('(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()');
@@ -185,10 +195,10 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started between Sep14 & Aug19", async ({
-                                                                                                                                                    page,
-                                                                                                                                                    context
-                                                                                                                                                }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
+                                                                                                                                                              page,
+                                                                                                                                                              context
+                                                                                                                                                          }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#qualification-result-heading", "Qualification result heading");
@@ -197,10 +207,10 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started after Sep19", async ({
-                                                                                                                                          page,
-                                                                                                                                          context
-                                                                                                                                      }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
+                                                                                                                                                    page,
+                                                                                                                                                    context
+                                                                                                                                                }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#qualification-result-heading", "Qualification result heading");
@@ -209,14 +219,875 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test("Checks the qualification result inset shows correctly when full and relevant", async ({
-                                                                                           page,
-                                                                                           context
-                                                                                        }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
+                                                                                                    page,
+                                                                                                    context
+                                                                                                }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
         await checkText(page, "#qualification-result-heading", "Qualification result heading");
         await checkText(page, "#qualification-result-message-heading", "Full and relevant");
         await checkText(page, "#qualification-result-message-body", "Full and relevant body");
+    });
+
+
+    test("Checks default cookie", async ({
+                                             page,
+                                             context
+                                         }) => {
+
+        await page.goto("/");
+
+        await checkJourneyCookieValue(context, '%7B%22WhereWasQualificationAwarded%22%3A%22%22%2C%22WhenWasQualificationStarted%22%3A%22%22%2C%22WhenWasQualificationAwarded%22%3A%22%22%2C%22LevelOfQualification%22%3A%22%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A0%7D');
+
+
+        await setJourneyState({
+            context: context,
+            location: null,
+            startDate: null,
+            awardDate: null,
+            level: null,
+            organisation: null,
+            organisationNotOnList: null,
+            searchCriteria: null,
+            additionalQuestions: null,
+            selectedFromList: null
+        });
+
+        await checkJourneyCookieValue(context, '%7B%22WhereWasQualificationAwarded%22%3A%22%22%2C%22WhenWasQualificationStarted%22%3A%22%22%2C%22WhenWasQualificationAwarded%22%3A%22%22%2C%22LevelOfQualification%22%3A%22%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A0%7D');
+    });
+
+
+    test("Checks the qualification result inset shows correctly when full and relevant level 2", async ({
+                                                                                                            page,
+                                                                                                            context
+                                                                                                        }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Full and relevant");
+        await checkText(page, "#qualification-result-message-body", "Full and relevant body");
+    });
+
+
+    test("Checks the qualification result inset shows correctly when not full and relevant level 2", async ({
+                                                                                                                page,
+                                                                                                                context
+                                                                                                            }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant body");
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 qual started sept 2014 -> aug 2019 (level 3)', async ({
+                                                                                                                                                 page,
+                                                                                                                                                 context
+                                                                                                                                             }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 3,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-240');
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 body");
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 qual started sept 2014 -> aug 2019 (level 4)', async ({
+                                                                                                                                                 page,
+                                                                                                                                                 context
+                                                                                                                                             }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 4,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-105');
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 body");
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 qual started sept 2014 -> aug 2019 (level 5)', async ({
+                                                                                                                                                 page,
+                                                                                                                                                 context
+                                                                                                                                             }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 5,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-107');
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 body");
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 or level 6 qual started sept 2014 -> aug 2019 (level 6)', async ({
+                                                                                                                                                            page,
+                                                                                                                                                            context
+                                                                                                                                                        }) => {
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-108");
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3 or L6");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 or L6 body");
+    });
+
+    test('Checks level 2 not F&R sees not full and relevant ratio detail', async ({
+                                                                                 page,
+                                                                                 context
+                                                                             }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [6, 2016],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 2 F&R awarded before June 2016 sees no content under ratio header', async ({
+                                                                                                      page,
+                                                                                                      context
+                                                                                                  }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [5, 2016],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 2 F&R awarded in June 2016 sees additional requirement maybe content', async ({
+                                                                                                         page,
+                                                                                                         context
+                                                                                                     }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [6, 2016],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 2 F&R awarded after June 2016 sees additional requirement will content', async ({
+                                                                                                           page,
+                                                                                                           context
+                                                                                                       }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [7, 2016],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 3 F&R awarded before September 2014 sees no content under ratio header', async ({
+                                                                                                           page,
+                                                                                                           context
+                                                                                                       }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 3,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-240");
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 4 F&R awarded before September 2014 sees no content under ratio header', async ({
+                                                                                                           page,
+                                                                                                           context
+                                                                                                       }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 4,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-105');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 5 F&R awarded before September 2014 sees no content under ratio header', async ({
+                                                                                                           page,
+                                                                                                           context
+                                                                                                       }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 5,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-107');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 3 F&R awarded on or after September 2014 sees additional requirement will content', async ({
+                                                                                                                       page,
+                                                                                                                       context
+                                                                                                                   }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [9, 2014],
+            level: 3,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-240");
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 4 F&R awarded on or after September 2014 sees additional requirement will content', async ({
+                                                                                                                  page,
+                                                                                                                  context
+                                                                                                              }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [9, 2014],
+            level: 4,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-105');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 5 F&R awarded on or after September 2014 sees additional requirement will content', async ({
+                                                                                                                  page,
+                                                                                                                  context
+                                                                                                              }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [9, 2014],
+            level: 5,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-107');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+
+    test('Checks level 6 F&R (all levels) sees no content under ratio header', async ({
+                                                                                          page,
+                                                                                          context
+                                                                                      }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-109');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 7 F&R (all levels) sees no content under ratio header', async ({
+                                                                                          page,
+                                                                                          context
+                                                                                      }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 7,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-111');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 6 F&R (all but L6) awarded before September 2014 sees no content under ratio header', async ({
+                                                                                                                        page,
+                                                                                                                        context
+                                                                                                                    }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-109');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 7 F&R (all but L6) awarded before September 2014 sees no content under ratio header', async ({
+                                                                                                                        page,
+                                                                                                                        context
+                                                                                                                    }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-111');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 6 F&R (all but L6) awarded on September 2014 sees additional requirement will content', async ({
+                                                                                                                           page,
+                                                                                                                           context
+                                                                                                                       }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [9, 2014],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-109');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 7 F&R (all but L6) awarded on September 2014 sees additional requirement will content', async ({
+                                                                                                                           page,
+                                                                                                                           context
+                                                                                                                       }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [9, 2014],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-111');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 6 F&R (all but L6) awarded after September 2014 sees additional requirement will content', async ({
+                                                                                                                              page,
+                                                                                                                              context
+                                                                                                                          }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [10, 2014],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-109');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 7 F&R (all but L6) awarded after September 2014 sees additional requirement will content', async ({
+                                                                                                                              page,
+                                                                                                                              context
+                                                                                                                          }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [10, 2014],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-111');
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    [
+        [1, 2013],
+        [1, 2014],
+        [8, 2014],
+        [9, 2019],
+        [1, 2020],
+    ].forEach((startDate) => {
+        test(`(${startDate}) Checks level 3 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+                                                                                                                                                                        page,
+                                                                                                                                                                        context
+                                                                                                                                                                    }) => {
+
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 3,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-240');
+
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+
+        test(`(${startDate}) Checks level 4 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+                                                                                                                                                                        page,
+                                                                                                                                                                        context
+                                                                                                                                                                    }) => {
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 4,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-105');
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+
+        test(`(${startDate}) Checks level 5 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+                                                                                                                                                                        page,
+                                                                                                                                                                        context
+                                                                                                                                                                    }) => {
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 5,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-107');
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+
+        test(`(${startDate}) Checks level 6 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+                                                                                                                                                                        page,
+                                                                                                                                                                        context
+                                                                                                                                                                    }) => {
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 6,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-109');
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+
+        test(`(${startDate}) Checks level 7 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+                                                                                                                                                                        page,
+                                                                                                                                                                        context
+                                                                                                                                                                    }) => {
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 7,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-111');
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+    });
+
+
+    [
+        [9, 2014],
+        [1, 2018],
+        [8, 2019]
+    ].forEach((startDate) => {
+        test(`(${startDate}) Checks level 3 not F&R started between September 2014 and August 2019 sees correct content`, async ({
+                                                                                                                                     page,
+                                                                                                                                     context
+                                                                                                                                 }) => {
+
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 3,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-240');
+
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R for L3 between Sep14 & Aug19");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+
+        test(`(${startDate}) Checks level 4 not F&R started between September 2014 and August 2019 sees correct content`, async ({
+                                                                                                                                     page,
+                                                                                                                                     context
+                                                                                                                                 }) => {
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 4,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-105');
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R for L3 between Sep14 & Aug19");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+
+        test(`(${startDate}) Checks level 5 not F&R started between September 2014 and August 2019 sees correct content`, async ({
+                                                                                                                                     page,
+                                                                                                                                     context
+                                                                                                                                 }) => {
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 5,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-107');
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R for L3 between Sep14 & Aug19");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+
+        test(`(${startDate}) Checks level 6 not F&R started between September 2014 and August 2019 sees correct content`, async ({
+                                                                                                                                     page,
+                                                                                                                                     context
+                                                                                                                                 }) => {
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 6,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-109');
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R for L3 between Sep14 & Aug19");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
+
+        test(`(${startDate}) Checks level 7 not F&R started between September 2014 and August 2019 sees correct content`, async ({
+                                                                                                                                     page,
+                                                                                                                                     context
+                                                                                                                                 }) => {
+            await setJourneyState({
+                context: context,
+                location: "england",
+                startDate: startDate,
+                awardDate: [12, 2020],
+                level: 7,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            });
+
+            await page.goto('/qualifications/qualification-details/eyq-111');
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R for L3 between Sep14 & Aug19");
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+        });
     });
 });
