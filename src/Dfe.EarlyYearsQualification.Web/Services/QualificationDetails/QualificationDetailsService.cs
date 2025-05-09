@@ -1,6 +1,7 @@
 ﻿using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RatioRequirements;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers;
@@ -219,9 +220,8 @@ public class QualificationDetailsService(
 
         const string additionalRequirementHeading = "RequirementHeading";
 
-        var approvedForLevel2 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck,
-                                                       RatioRequirements.Level2RatioRequirementName,
-                                                       qualification);
+        var approvedForLevel2 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
+                                                                new Level2RatioRequirements());
 
         model.RatioRequirements.ApprovedForLevel2 = approvedForLevel2
                                                         ? QualificationApprovalStatus.Approved
@@ -236,9 +236,8 @@ public class QualificationDetailsService(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level2RatioRequirementName,
                                      qualification);
 
-        var approvedForLevel3 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck,
-                                                       RatioRequirements.Level3RatioRequirementName,
-                                                       qualification);
+        var approvedForLevel3 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
+                                                                new Level3RatioRequirements());
 
         model.RatioRequirements.ApprovedForLevel3 = approvedForLevel3
                                                         ? QualificationApprovalStatus.Approved
@@ -253,9 +252,8 @@ public class QualificationDetailsService(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level3RatioRequirementName,
                                      qualification);
 
-        var approvedForLevel6 = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck,
-                                                       RatioRequirements.Level6RatioRequirementName,
-                                                       qualification);
+        var approvedForLevel6 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
+                                                                new Level6RatioRequirements());
 
         model.RatioRequirements.ApprovedForLevel6 = approvedForLevel6
                                                         ? QualificationApprovalStatus.Approved
@@ -270,9 +268,8 @@ public class QualificationDetailsService(
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level6RatioRequirementName,
                                      qualification);
 
-        var approvedForUnqualified = GetRatioProperty<bool>(fullAndRelevantPropertyToCheck,
-                                                            RatioRequirements.UnqualifiedRatioRequirementName,
-                                                            qualification);
+        var approvedForUnqualified = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
+                                                                     new UnqualifiedRatioRequirements());
 
         model.RatioRequirements.ApprovedForUnqualified = approvedForUnqualified
                                                              ? QualificationApprovalStatus.Approved
@@ -309,7 +306,7 @@ public class QualificationDetailsService(
             var dateOnly = new DateOnly(awardedYear.Value, awardedMonth.Value, 1);
             dateAwarded = dateOnly.ToString("MMMM yyyy");
         }
-        
+
         var requirementsText = await contentParser.ToHtml(content.RequirementsText);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner);
         var improveServiceBodyHtml = content.UpDownFeedback is not null
@@ -376,6 +373,21 @@ public class QualificationDetailsService(
             logger.LogError(ex,
                             "Could not find property: {PropertyToCheck} within {RatioName} for qualification: {QualificationId}",
                             propertyToCheck, ratioName, qualification.QualificationId);
+            throw;
+        }
+    }
+
+    private bool GetFullAndRelevantRatioProperty(string propertyToCheck, BaseRatioRequirement ratioRequirement)
+    {
+        try
+        {
+            return (bool)ratioRequirement.GetType().GetProperty(propertyToCheck)!.GetValue(ratioRequirement, null)!;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex,
+                            "Could not find property: {PropertyToCheck} for ratio requirement with name {name}",
+                            propertyToCheck, nameof(ratioRequirement));
             throw;
         }
     }
