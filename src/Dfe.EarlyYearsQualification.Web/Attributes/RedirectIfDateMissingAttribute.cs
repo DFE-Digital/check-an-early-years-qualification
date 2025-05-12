@@ -20,8 +20,7 @@ public class RedirectIfDateMissingAttribute() : TypeFilterAttribute(typeof(Redir
                 return;
             }
 
-            userJourneyCookieService.SetWhereWasQualificationAwarded("england");
-            context.Result = new RedirectResult("/questions/when-was-the-qualification-started-and-awarded");
+            context.Result = new RedirectResult("/questions/start-new");
         }
     }
 }

@@ -93,6 +93,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQualification("EYQ-111", "City & Guilds", 7, startDate, endDate),
                 CreateQualification("EYQ-112", AwardingOrganisations.Pearson, 8, startDate, endDate),
                 CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate),
+                CreateQualification("EYQ-114", "BA (Hons) Childhood Studies", AwardingOrganisations.Edexcel, 6),
+                CreateQualification("EYQ-115", "BA (Hons) Childhood Studies", AwardingOrganisations.Ncfe, 6),
                 CreateQualificationWithAdditionalRequirements("EYQ-909", AwardingOrganisations.Ncfe, 3, startDate,
                                                               endDate)
             };
