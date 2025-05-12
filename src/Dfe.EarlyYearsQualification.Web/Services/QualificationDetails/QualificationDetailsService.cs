@@ -184,21 +184,19 @@ public class QualificationDetailsService(
         }
     }
 
-    public Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model, Qualification qualification)
+    public async Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model, Qualification qualification)
     {
-        bool ebrEligible = true;
-
-        ebrEligible = (!model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel == 2) ||
-                      (model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel is >= 3 and <= 5);
+        bool ebrEligible = (!model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel == 2) ||
+                           (model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel >= 3);
         if (ebrEligible)
         {
             model.RatioRequirements.ApprovedForLevel3 = QualificationApprovalStatus.PossibleRouteAvailable;
-
-            model.RatioRequirements.RequirementsForLevel3 = "EBR CONTENT";
+            var requirementsForLevel3 = GetRatioProperty<Document>("Level3EbrRouteAvailable",
+                                                                   RatioRequirements.Level3RatioRequirementName,
+                                                                   qualification);
+            model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(requirementsForLevel3);
             model.RatioRequirements.ShowRequirementsForLevel3ByDefault = true;
         }
-
-        return Task.CompletedTask;
     }
 
     public NavigationLink? CalculateBackButton(DetailsPage content, string qualificationId)

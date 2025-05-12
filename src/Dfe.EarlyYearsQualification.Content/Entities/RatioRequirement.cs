@@ -65,4 +65,6 @@ public class RatioRequirement
     public Document? RequirementForLevel7After2014 { get; set; }
 
     public Document? RequirementForLevel2BetweenSept14AndAug19 { get; init; }
+
+    public Document? Level3EbrRouteAvailable { get; init; }
 }

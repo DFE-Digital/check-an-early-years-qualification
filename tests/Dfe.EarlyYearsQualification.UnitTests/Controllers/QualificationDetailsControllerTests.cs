@@ -369,7 +369,10 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService
             .Verify(o => o.QualificationLevel3OrAboveMightBeRelevantAtLevel2(It.IsAny<QualificationDetailsModel>(), It.IsAny<Qualification>()),
                     Times.Once);
-
+        _mockQualificationDetailsService
+            .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(), It.IsAny<Qualification>()),
+                    Times.Once);
+        
         result.Should().NotBeNull();
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
@@ -513,5 +516,51 @@ public class QualificationDetailsControllerTests
                 .Verify(o => o.SetQualificationResultSuccessDetails(It.IsAny<QualificationDetailsModel>(), It.IsAny<DetailsPage>()),
                         Times.Once);
         }
+    }
+    
+    [TestMethod]
+    public async Task Index_ValidateAdditionalQuestions_Valid_Calls_QualificationMayBeEligibleForEbr()
+    {
+        const string qualificationId = "qualificationId";
+        _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
+        _mockQualificationDetailsService.Setup(o => o.GetDetailsPage()).ReturnsAsync(DummyDetailsPage);
+        _mockQualificationDetailsService.Setup(o => o.GetQualification(qualificationId))
+                                        .ReturnsAsync(DummyQualification);
+        _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(), It.IsAny<DetailsPage>()))
+                                        .ReturnsAsync(DummyDetails);
+
+        var sut = GetSut();
+        _ = await sut.Index(qualificationId);
+
+        _mockQualificationDetailsService
+            .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(), It.IsAny<Qualification>()),
+                    Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task Index_ValidateAdditionalQuestions_InValid_Calls_QualificationMayBeEligibleForEbr()
+    {
+        const string qualificationId = "qualificationId";
+        var details = new QualificationDetailsModel
+                      {
+                          AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()],
+                          Content = new DetailsPageModel()
+                      };
+        _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
+        _mockQualificationDetailsService.Setup(o => o.GetDetailsPage()).ReturnsAsync(DummyDetailsPage);
+        _mockQualificationDetailsService.Setup(o => o.GetQualification(qualificationId))
+                                        .ReturnsAsync(DummyQualification);
+        _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(), It.IsAny<DetailsPage>()))
+                                        .ReturnsAsync(details);
+        _mockQualificationDetailsService
+            .Setup(o => o.AnswersIndicateNotFullAndRelevant(It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Returns(true);
+
+        var sut = GetSut();
+        _ = await sut.Index(qualificationId);
+
+        _mockQualificationDetailsService
+            .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(), It.IsAny<Qualification>()),
+                    Times.Once);
     }
 }

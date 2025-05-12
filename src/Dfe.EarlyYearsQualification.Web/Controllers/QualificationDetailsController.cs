@@ -47,6 +47,7 @@ public class QualificationDetailsController(
         {
             await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
             qualificationDetailsService.SetQualificationResultFailureDetails(model, detailsPageContent);
+            await qualificationDetailsService.QualificationMayBeEligibleForEbr(model, qualification);
             await qualificationDetailsService.SetRatioText(model, detailsPageContent);
             return validateAdditionalRequirementQuestions.actionResult!;
         }

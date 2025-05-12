@@ -8,6 +8,8 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockQualificationsRepository : IQualificationsRepository
 {
+    private const string Level3Ebr = "Level 3 EBR";
+
     public async Task<Qualification?> GetById(string qualificationId)
     {
         return qualificationId.ToLower() switch
@@ -29,8 +31,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                    "eyq-115" => await Task.FromResult(CreateQualification("EYQ-115", "NCFE",
                                                                           AwardingOrganisations.Various, 3, false)),
                    "eyq-114" => await Task.FromResult(CreateLevel2FurtherActionRequiredQualification("EYQ-114",
-                                                           "Level 2 Further Action Qualification",
-                                                           AwardingOrganisations.Ncfe, 3)),
+                                                                                                     "Level 2 Further Action Qualification",
+                                                                                                     AwardingOrganisations.Ncfe, 3)),
 
                    "eyq-241" => await Task.FromResult(CreateQualification("EYQ-241", "BTEC",
                                                                           AwardingOrganisations.Various, 2)),
@@ -256,7 +258,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForLevel4Before2014 = true,
                            FullAndRelevantForLevel4After2014 = true,
                            FullAndRelevantForLevel5Before2014 = true,
-                           FullAndRelevantForLevel5After2014 = true
+                           FullAndRelevantForLevel5After2014 = true,
+                           Level3EbrRouteAvailable = ContentfulContentHelper.Paragraph(Level3Ebr)
                        },
 
                        new RatioRequirement
@@ -342,7 +345,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForLevel6Before2014 = true,
                            FullAndRelevantForLevel6After2014 = true,
                            FullAndRelevantForLevel7Before2014 = true,
-                           FullAndRelevantForLevel7After2014 = true
+                           FullAndRelevantForLevel7After2014 = true,
+                           Level3EbrRouteAvailable = ContentfulContentHelper.Paragraph(Level3Ebr)
                        },
 
                        new RatioRequirement
@@ -355,7 +359,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForLevel6Before2014 = true,
                            FullAndRelevantForLevel6After2014 = true,
                            FullAndRelevantForLevel7Before2014 = true,
-                           FullAndRelevantForLevel7After2014 = true
+                           FullAndRelevantForLevel7After2014 = true,
+                           Level3EbrRouteAvailable = ContentfulContentHelper.Paragraph(Level3Ebr)
                        },
 
                        new RatioRequirement
@@ -456,7 +461,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForLevel4After2014 = false,
                            FullAndRelevantForLevel5After2014 = false,
                            FullAndRelevantForLevel6After2014 = false,
-                           FullAndRelevantForLevel7After2014 = false
+                           FullAndRelevantForLevel7After2014 = false,
+                           Level3EbrRouteAvailable = ContentfulContentHelper.Paragraph(Level3Ebr)
                        },
 
                        new RatioRequirement
