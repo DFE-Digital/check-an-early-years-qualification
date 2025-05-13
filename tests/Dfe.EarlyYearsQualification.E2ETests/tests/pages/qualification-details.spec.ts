@@ -1497,15 +1497,15 @@ test.describe("A spec used to test the qualification details page", () => {
             location: "england",
             startDate: [1, 2013],
             awardDate: [8, 2015],
-            level: 5,
+            level: 6,
             organisation: "NCFE",
             organisationNotOnList: false,
             searchCriteria: '',
-            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
             selectedFromList: true
         });
 
-        await page.goto('/qualifications/qualification-details/eyq-107');
+        await page.goto("/qualifications/qualification-details/eyq-108");
 
 
         await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
@@ -1535,7 +1535,7 @@ test.describe("A spec used to test the qualification details page", () => {
             location: "england",
             startDate: [1, 2013],
             awardDate: [1, 2014],
-            level: 6,
+            level: 7,
             organisation: "NCFE",
             organisationNotOnList: false,
             searchCriteria: '',
@@ -1543,7 +1543,7 @@ test.describe("A spec used to test the qualification details page", () => {
             selectedFromList: true
         });
 
-        await page.goto("/qualifications/qualification-details/eyq-108");
+        await page.goto('/qualifications/qualification-details/eyq-111');
 
 
         await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
