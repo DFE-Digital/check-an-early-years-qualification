@@ -245,7 +245,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            FullAndRelevantForLevel7Before2014 = true,
                            FullAndRelevantForLevel7After2014 = true,
                            RequirementForLevel2BetweenSept14AndAug19 =
-                               ContentfulContentHelper.Paragraph("Level 2 further action required text")
+                               ContentfulContentHelper.Paragraph("Level 2 further action required text"),
+                           RequirementHeading = "Level 2 Requirements"
                        },
 
                        new RatioRequirement
