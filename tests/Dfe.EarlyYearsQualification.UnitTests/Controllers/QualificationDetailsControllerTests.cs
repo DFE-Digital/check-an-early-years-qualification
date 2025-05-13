@@ -563,4 +563,25 @@ public class QualificationDetailsControllerTests
             .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(), It.IsAny<Qualification>()),
                     Times.Once);
     }
+
+    [TestMethod]
+    public void QualificationResultModelSetsCorrectly()
+    {
+        const string heading = "heading";
+        const string messageHeading = "messageHeading";
+        const string messageBody= "messageBody";
+        const bool isFullAndRelevant = true;
+        var model = new QualificationResultModel
+                    {
+                        Heading = heading,
+                        MessageHeading = messageHeading,
+                        MessageBody = messageBody,
+                        IsFullAndRelevant = isFullAndRelevant
+                    };
+
+        model.Heading.Should().Be(heading);
+        model.MessageHeading.Should().Be(messageHeading);
+        model.MessageBody.Should().Be(messageBody);
+        model.IsFullAndRelevant.Should().Be(isFullAndRelevant);
+    }
 }
