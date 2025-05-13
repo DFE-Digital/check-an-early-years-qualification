@@ -47,6 +47,7 @@ public class QualificationDetailsController(
         {
             await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
             qualificationDetailsService.SetQualificationResultFailureDetails(model, detailsPageContent);
+            await qualificationDetailsService.QualificationMayBeEligibleForEbr(model, qualification);
             await qualificationDetailsService.SetRatioText(model, detailsPageContent);
             return validateAdditionalRequirementQuestions.actionResult!;
         }
@@ -62,6 +63,7 @@ public class QualificationDetailsController(
         }
 
         await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
+        await qualificationDetailsService.QualificationMayBeEligibleForEbr(model, qualification);
         await qualificationDetailsService.SetRatioText(model, detailsPageContent);
 
         return View(model);
@@ -109,7 +111,7 @@ public class QualificationDetailsController(
                                                                          .QtsQuestion);
 
         if (qualificationDetailsService.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification,
-                 details.AdditionalRequirementAnswers))
+                                                                                              details.AdditionalRequirementAnswers))
         {
             // Remove the additional requirements that they didn't answer following the bypass.
             details.AdditionalRequirementAnswers!.RemoveAll(x => x.Question != qtsQuestion.Question);

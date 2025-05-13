@@ -410,9 +410,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test('Checks level 2 not F&R sees not full and relevant ratio detail', async ({
-                                                                                 page,
-                                                                                 context
-                                                                             }) => {
+                                                                                      page,
+                                                                                      context
+                                                                                  }) => {
         await setJourneyState({
             context: context,
             location: "england",
@@ -578,9 +578,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test('Checks level 3 F&R awarded on or after September 2014 sees additional requirement will content', async ({
-                                                                                                                       page,
-                                                                                                                       context
-                                                                                                                   }) => {
+                                                                                                                      page,
+                                                                                                                      context
+                                                                                                                  }) => {
         await setJourneyState({
             context: context,
             location: "england",
@@ -602,9 +602,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test('Checks level 4 F&R awarded on or after September 2014 sees additional requirement will content', async ({
-                                                                                                                  page,
-                                                                                                                  context
-                                                                                                              }) => {
+                                                                                                                      page,
+                                                                                                                      context
+                                                                                                                  }) => {
         await setJourneyState({
             context: context,
             location: "england",
@@ -626,9 +626,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test('Checks level 5 F&R awarded on or after September 2014 sees additional requirement will content', async ({
-                                                                                                                  page,
-                                                                                                                  context
-                                                                                                              }) => {
+                                                                                                                      page,
+                                                                                                                      context
+                                                                                                                  }) => {
         await setJourneyState({
             context: context,
             location: "england",
@@ -747,9 +747,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test('Checks level 6 F&R (all but L6) awarded on September 2014 sees additional requirement will content', async ({
-                                                                                                                           page,
-                                                                                                                           context
-                                                                                                                       }) => {
+                                                                                                                          page,
+                                                                                                                          context
+                                                                                                                      }) => {
         await setJourneyState({
             context: context,
             location: "england",
@@ -771,9 +771,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test('Checks level 7 F&R (all but L6) awarded on September 2014 sees additional requirement will content', async ({
-                                                                                                                           page,
-                                                                                                                           context
-                                                                                                                       }) => {
+                                                                                                                          page,
+                                                                                                                          context
+                                                                                                                      }) => {
         await setJourneyState({
             context: context,
             location: "england",
@@ -795,9 +795,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test('Checks level 6 F&R (all but L6) awarded after September 2014 sees additional requirement will content', async ({
-                                                                                                                              page,
-                                                                                                                              context
-                                                                                                                          }) => {
+                                                                                                                             page,
+                                                                                                                             context
+                                                                                                                         }) => {
         await setJourneyState({
             context: context,
             location: "england",
@@ -819,9 +819,9 @@ test.describe("A spec used to test the qualification details page", () => {
     });
 
     test('Checks level 7 F&R (all but L6) awarded after September 2014 sees additional requirement will content', async ({
-                                                                                                                              page,
-                                                                                                                              context
-                                                                                                                          }) => {
+                                                                                                                             page,
+                                                                                                                             context
+                                                                                                                         }) => {
         await setJourneyState({
             context: context,
             location: "england",
@@ -850,9 +850,9 @@ test.describe("A spec used to test the qualification details page", () => {
         [1, 2020],
     ].forEach((startDate) => {
         test(`(${startDate}) Checks level 3 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
-                                                                                                                                                                        page,
-                                                                                                                                                                        context
-                                                                                                                                                                    }) => {
+                                                                                                                                                                       page,
+                                                                                                                                                                       context
+                                                                                                                                                                   }) => {
 
             await setJourneyState({
                 context: context,
@@ -875,9 +875,9 @@ test.describe("A spec used to test the qualification details page", () => {
         });
 
         test(`(${startDate}) Checks level 4 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
-                                                                                                                                                                        page,
-                                                                                                                                                                        context
-                                                                                                                                                                    }) => {
+                                                                                                                                                                       page,
+                                                                                                                                                                       context
+                                                                                                                                                                   }) => {
             await setJourneyState({
                 context: context,
                 location: "england",
@@ -898,9 +898,9 @@ test.describe("A spec used to test the qualification details page", () => {
         });
 
         test(`(${startDate}) Checks level 5 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
-                                                                                                                                                                        page,
-                                                                                                                                                                        context
-                                                                                                                                                                    }) => {
+                                                                                                                                                                       page,
+                                                                                                                                                                       context
+                                                                                                                                                                   }) => {
             await setJourneyState({
                 context: context,
                 location: "england",
@@ -921,9 +921,9 @@ test.describe("A spec used to test the qualification details page", () => {
         });
 
         test(`(${startDate}) Checks level 6 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
-                                                                                                                                                                        page,
-                                                                                                                                                                        context
-                                                                                                                                                                    }) => {
+                                                                                                                                                                       page,
+                                                                                                                                                                       context
+                                                                                                                                                                   }) => {
             await setJourneyState({
                 context: context,
                 location: "england",
@@ -944,9 +944,9 @@ test.describe("A spec used to test the qualification details page", () => {
         });
 
         test(`(${startDate}) Checks level 7 not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
-                                                                                                                                                                        page,
-                                                                                                                                                                        context
-                                                                                                                                                                    }) => {
+                                                                                                                                                                       page,
+                                                                                                                                                                       context
+                                                                                                                                                                   }) => {
             await setJourneyState({
                 context: context,
                 location: "england",
@@ -1089,5 +1089,478 @@ test.describe("A spec used to test the qualification details page", () => {
             await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R for L3 between Sep14 & Aug19");
             await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
         });
+    });
+
+    test('Checks that level 2 F&R sees EBR ratio details (no paragraph)', async ({
+                                                                                     page,
+                                                                                     context
+                                                                                 }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkText(page, ".ratio-heading", "Level 2", 0);
+        await checkText(page, ".ratio-heading", "Unqualified", 1);
+        await checkText(page, ".ratio-heading", "Level 3", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Approved", 2);
+        await checkText(page, ".govuk-tag", "Possible route available", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--blue/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await checkText(page, "#ratio-Level3-additional-info", "Level 3 EBR");
+    });
+
+    test('Checks that level 2 not F&R sees no EBR ratio details', async ({
+                                                                             page,
+                                                                             context
+                                                                         }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-241");
+
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkText(page, ".ratio-heading", "Unqualified", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Level 3", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Not approved", 2);
+        await checkText(page, ".govuk-tag", "Not approved", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await doesNotExist(page, "#ratio-Level3-additional-info");
+    });
+
+
+    test('Checks that level 3 F&R sees no EBR ratio details', async ({
+                                                                         page,
+                                                                         context
+                                                                     }) => {
+
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2014],
+            awardDate: [1, 2015],
+            level: 3,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-240');
+
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkText(page, ".ratio-heading", "Level 3", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Unqualified", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Approved", 2);
+        await checkText(page, ".govuk-tag", "Approved", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await doesNotExist(page, "#ratio-Level3-additional-info");
+    });
+
+    test('Checks that level 4 F&R sees no EBR ratio details', async ({
+                                                                         page,
+                                                                         context
+                                                                     }) => {
+
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2015],
+            level: 4,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-105');
+
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkText(page, ".ratio-heading", "Level 3", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Unqualified", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Approved", 2);
+        await checkText(page, ".govuk-tag", "Approved", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await doesNotExist(page, "#ratio-Level3-additional-info");
+    });
+
+    test('Checks that level 5 F&R sees no EBR ratio details', async ({
+                                                                         page,
+                                                                         context
+                                                                     }) => {
+
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2015],
+            level: 5,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-107');
+
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkText(page, ".ratio-heading", "Level 3", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Unqualified", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Approved", 2);
+        await checkText(page, ".govuk-tag", "Approved", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await doesNotExist(page, "#ratio-Level3-additional-info");
+    });
+
+
+    //here
+
+    test('Checks that level 6 F&R sees no EBR ratio details', async ({
+                                                                         page,
+                                                                         context
+                                                                     }) => {
+
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-109');
+
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkText(page, ".ratio-heading", "Level 6", 0);
+        await checkText(page, ".ratio-heading", "Level 3", 1);
+        await checkText(page, ".ratio-heading", "Level 2", 2);
+        await checkText(page, ".ratio-heading", "Unqualified", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Approved", 2);
+        await checkText(page, ".govuk-tag", "Approved", 3);
+        await checkText(page, ".govuk-tag", "Approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 4);
+
+        await doesNotExist(page, "#ratio-Level3-additional-info");
+    });
+
+
+    test('Checks that level 7 F&R sees no EBR ratio details', async ({
+                                                                         page,
+                                                                         context
+                                                                     }) => {
+
+
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2014],
+            level: 7,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "yes"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-111');
+
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkText(page, ".ratio-heading", "Level 6", 0);
+        await checkText(page, ".ratio-heading", "Level 3", 1);
+        await checkText(page, ".ratio-heading", "Level 2", 2);
+        await checkText(page, ".ratio-heading", "Unqualified", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Approved", 2);
+        await checkText(page, ".govuk-tag", "Approved", 3);
+        await checkText(page, ".govuk-tag", "Approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 4);
+
+        await doesNotExist(page, "#ratio-Level3-additional-info");
+    });
+
+
+    test('Checks that level 3 not F&R sees EBR ratio details (has paragraph)', async ({
+                                                                                          page,
+                                                                                          context
+                                                                                      }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2014],
+            awardDate: [1, 2015],
+            level: 3,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-240');
+
+
+        await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+
+        await checkText(page, ".ratio-heading", "Unqualified", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Level 3", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Not approved", 2);
+        await checkText(page, ".govuk-tag", "Possible route available", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--blue/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await checkText(page, "#ratio-Level3-additional-info", "Level 3 EBR");
+    });
+
+
+    test('Checks that level 4 not F&R sees EBR ratio details (has paragraph)', async ({
+                                                                                          page,
+                                                                                          context
+                                                                                      }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2015],
+            level: 4,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-105');
+
+
+        await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+
+        await checkText(page, ".ratio-heading", "Unqualified", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Level 3", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Not approved", 2);
+        await checkText(page, ".govuk-tag", "Possible route available", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--blue/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await checkText(page, "#ratio-Level3-additional-info", "Level 3 EBR");
+    });
+
+    test('Checks that level 5 not F&R sees EBR ratio details (has paragraph)', async ({
+                                                                                          page,
+                                                                                          context
+                                                                                      }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2015],
+            level: 5,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-107');
+
+
+        await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+
+        await checkText(page, ".ratio-heading", "Unqualified", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Level 3", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Not approved", 2);
+        await checkText(page, ".govuk-tag", "Possible route available", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--blue/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await checkText(page, "#ratio-Level3-additional-info", "Level 3 EBR");
+    });
+
+    test('Checks that level 6 not F&R sees EBR ratio details (has paragraph)', async ({
+                                                                                          page,
+                                                                                          context
+                                                                                      }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [8, 2015],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto("/qualifications/qualification-details/eyq-108");
+
+
+        await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+
+        await checkText(page, ".ratio-heading", "Unqualified", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Level 3", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Not approved", 2);
+        await checkText(page, ".govuk-tag", "Possible route available", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--blue/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await checkText(page, "#ratio-Level3-additional-info", "Level 3 EBR");
+    });
+
+    test('Checks that level 7 not F&R sees EBR ratio details (has paragraph)', async ({
+                                                                                          page,
+                                                                                          context
+                                                                                      }) => {
+        await setJourneyState({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [1, 2014],
+            level: 7,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        });
+
+        await page.goto('/qualifications/qualification-details/eyq-111');
+
+
+        await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+
+        await checkText(page, ".ratio-heading", "Unqualified", 0);
+        await checkText(page, ".ratio-heading", "Level 2", 1);
+        await checkText(page, ".ratio-heading", "Level 3", 2);
+        await checkText(page, ".ratio-heading", "Level 6", 3);
+        await checkText(page, ".govuk-tag", "Approved", 1);
+        await checkText(page, ".govuk-tag", "Not approved", 2);
+        await checkText(page, ".govuk-tag", "Possible route available", 3);
+        await checkText(page, ".govuk-tag", "Not approved", 4);
+        await hasClass(page, ".govuk-tag", /govuk-tag--green/, 1);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 2);
+        await hasClass(page, ".govuk-tag", /govuk-tag--blue/, 3);
+        await hasClass(page, ".govuk-tag", /govuk-tag--red/, 4);
+
+        await checkText(page, "#ratio-Level3-additional-info", "Level 3 EBR");
     });
 });

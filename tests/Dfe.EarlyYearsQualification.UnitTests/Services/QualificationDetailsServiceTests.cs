@@ -654,7 +654,7 @@ public class QualificationDetailsServiceTests
                               FeedbackBanner = feedbackBanner,
                               BackButton = backButton
                           };
-        
+
         _mockContentParser.Setup(o => o.ToHtml(requirementsText)).ReturnsAsync(requirements);
         _mockContentParser.Setup(o => o.ToHtml(feedbackText)).ReturnsAsync(feedback);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
@@ -662,7 +662,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
         var result = await sut.MapDetails(qualification, detailsPage);
-        
+
         _mockContentParser.Verify(o => o.ToHtml(requirementsText), Times.Once);
         _mockContentParser.Verify(o => o.ToHtml(feedbackText), Times.Once);
 
@@ -1051,7 +1051,7 @@ public class QualificationDetailsServiceTests
                                  {
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                  };
-        
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = 2,
@@ -1370,7 +1370,7 @@ public class QualificationDetailsServiceTests
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
         model.Content.RatiosAdditionalInfoText.Should().Be(l3Ebr);
     }
-    
+
     [TestMethod]
     [DataRow(3)]
     [DataRow(4)]
@@ -1417,7 +1417,7 @@ public class QualificationDetailsServiceTests
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
         model.Content.RatiosAdditionalInfoText.Should().Be(l3Ebr);
     }
-    
+
     [TestMethod]
     [DataRow(3)]
     [DataRow(4)]
@@ -1462,5 +1462,163 @@ public class QualificationDetailsServiceTests
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevantBetweenDates);
         model.Content.RatiosAdditionalInfoText.Should().Be(l3Ebr);
+    }
+
+    [TestMethod]
+    public async Task QualificationMayBeEligibleForEbr_Level2_FullAndRelevant_SetsLevel3Requirements()
+    {
+        var details = new QualificationDetailsModel
+                      {
+                          RatioRequirements = new RatioRequirementModel
+                                              {
+                                                  ApprovedForLevel2 = QualificationApprovalStatus.Approved,
+                                                  ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
+                                              }
+                      };
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 2)
+            {
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName
+                    }
+                ]
+            };
+
+        const string requirementsForLevel3 = "requirementsForLevel3";
+
+        _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>())).ReturnsAsync(requirementsForLevel3);
+
+        var sut = GetSut();
+
+        await sut.QualificationMayBeEligibleForEbr(details, qualification);
+
+        details.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.PossibleRouteAvailable);
+        details.RatioRequirements.RequirementsForLevel3.Should().Be(requirementsForLevel3);
+        details.RatioRequirements.ShowRequirementsForLevel3ByDefault.Should().BeTrue();
+    }
+    
+    [TestMethod]
+    public async Task QualificationMayBeEligibleForEbr_Level2_NotFullAndRelevant_SetsNoLevel3Requirements()
+    {
+        var details = new QualificationDetailsModel
+                      {
+                          RatioRequirements = new RatioRequirementModel
+                                              {
+                                                  ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
+                                              }
+                      };
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 2)
+            {
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName
+                    }
+                ]
+            };
+
+        const string requirementsForLevel3 = "requirementsForLevel3";
+
+        _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>())).ReturnsAsync(requirementsForLevel3);
+
+        var sut = GetSut();
+
+        await sut.QualificationMayBeEligibleForEbr(details, qualification);
+
+        details.RatioRequirements.ApprovedForLevel3.Should().NotBe(QualificationApprovalStatus.PossibleRouteAvailable);
+        details.RatioRequirements.RequirementsForLevel3.Should().NotBe(requirementsForLevel3);
+        details.RatioRequirements.ShowRequirementsForLevel3ByDefault.Should().BeFalse();
+    }
+    
+    [DataRow(3)]
+    [DataRow(4)]
+    [DataRow(5)]
+    [DataRow(6)]
+    [DataRow(7)]
+    [TestMethod]
+    public async Task QualificationMayBeEligibleForEbr_Level3Plus_NotFullAndRelevant_SetsLevel3Requirements(int level)
+    {
+        var details = new QualificationDetailsModel
+                      {
+                          RatioRequirements = new RatioRequirementModel
+                                              {
+                                                  ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
+                                              }
+                      };
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), level)
+            {
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName
+                    }
+                ]
+            };
+
+        const string requirementsForLevel3 = "requirementsForLevel3";
+
+        _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>())).ReturnsAsync(requirementsForLevel3);
+
+        var sut = GetSut();
+
+        await sut.QualificationMayBeEligibleForEbr(details, qualification);
+
+        details.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.PossibleRouteAvailable);
+        details.RatioRequirements.RequirementsForLevel3.Should().Be(requirementsForLevel3);
+        details.RatioRequirements.ShowRequirementsForLevel3ByDefault.Should().BeTrue();
+    }
+    
+    [DataRow(3)]
+    [DataRow(4)]
+    [DataRow(5)]
+    [DataRow(6)]
+    [DataRow(7)]
+    [TestMethod]
+    public async Task QualificationMayBeEligibleForEbr_Level3Plus_FullAndRelevant_SetsNoLevel3Requirements(int level)
+    {
+        var details = new QualificationDetailsModel
+                      {
+                          RatioRequirements = new RatioRequirementModel
+                                              {
+                                                  ApprovedForLevel2 = QualificationApprovalStatus.Approved,
+                                                  ApprovedForLevel3 = QualificationApprovalStatus.Approved,
+                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
+                                              }
+                      };
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), level)
+            {
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName
+                    }
+                ]
+            };
+
+        const string requirementsForLevel3 = "requirementsForLevel3";
+
+        _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>())).ReturnsAsync(requirementsForLevel3);
+
+        var sut = GetSut();
+
+        await sut.QualificationMayBeEligibleForEbr(details, qualification);
+
+        details.RatioRequirements.ApprovedForLevel3.Should().NotBe(QualificationApprovalStatus.PossibleRouteAvailable);
+        details.RatioRequirements.RequirementsForLevel3.Should().NotBe(requirementsForLevel3);
+        details.RatioRequirements.ShowRequirementsForLevel3ByDefault.Should().BeFalse();
     }
 }

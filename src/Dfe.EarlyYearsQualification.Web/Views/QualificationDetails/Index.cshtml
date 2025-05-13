@@ -182,6 +182,7 @@
                 if (Model.RatioRequirements.ApprovedForLevel2 == QualificationApprovalStatus.NotApproved
                     || Model.RatioRequirements.ApprovedForLevel2 == QualificationApprovalStatus.FurtherActionRequired
                     || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.NotApproved
+                    || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.PossibleRouteAvailable
                     || Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.NotApproved
                     || Model.RatioRequirements.ApprovedForUnqualified == QualificationApprovalStatus.NotApproved)
                 {
@@ -214,7 +215,7 @@
                                                                            });
                     }
 
-                    if (Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.NotApproved)
+                    if (Model.RatioRequirements.ApprovedForLevel3 is QualificationApprovalStatus.NotApproved or QualificationApprovalStatus.PossibleRouteAvailable)
                     {
                         await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                            {
@@ -223,7 +224,8 @@
                                                                                AdditionalInformation = new AdditionalInformationModel
                                                                                                        {
                                                                                                            AdditionalInformationHeader = Model.RatioRequirements.RequirementsHeadingForLevel3,
-                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel3
+                                                                                                           AdditionalInformationBody = Model.RatioRequirements.RequirementsForLevel3,
+                                                                                                           ShowAdditionalInformationBodyByDefault = Model.RatioRequirements.ShowRequirementsForLevel3ByDefault
                                                                                                        }
                                                                            });
                     }

@@ -20,7 +20,8 @@ public interface IQualificationDetailsService
 
     Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
                                                            Qualification qualification);
-
+    Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model,
+                                          Qualification qualification);
     Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model);
 
     (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(

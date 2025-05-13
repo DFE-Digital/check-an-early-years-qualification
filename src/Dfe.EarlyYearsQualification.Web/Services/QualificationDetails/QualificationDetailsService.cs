@@ -184,6 +184,21 @@ public class QualificationDetailsService(
         }
     }
 
+    public async Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model, Qualification qualification)
+    {
+        bool ebrEligible = (!model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel == 2) ||
+                           (model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel >= 3);
+        if (ebrEligible)
+        {
+            model.RatioRequirements.ApprovedForLevel3 = QualificationApprovalStatus.PossibleRouteAvailable;
+            var requirementsForLevel3 = GetRatioProperty<Document>("Level3EbrRouteAvailable",
+                                                                   RatioRequirements.Level3RatioRequirementName,
+                                                                   qualification);
+            model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(requirementsForLevel3);
+            model.RatioRequirements.ShowRequirementsForLevel3ByDefault = true;
+        }
+    }
+
     public NavigationLink? CalculateBackButton(DetailsPage content, string qualificationId)
     {
         if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions())
@@ -309,7 +324,7 @@ public class QualificationDetailsService(
             var dateOnly = new DateOnly(awardedYear.Value, awardedMonth.Value, 1);
             dateAwarded = dateOnly.ToString("MMMM yyyy");
         }
-        
+
         var requirementsText = await contentParser.ToHtml(content.RequirementsText);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner);
         var improveServiceBodyHtml = content.UpDownFeedback is not null
