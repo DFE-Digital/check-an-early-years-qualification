@@ -42,4 +42,6 @@ public interface IQualificationDetailsService
     void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPage content);
 
     void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPage content);
+    
+    Task ProcessNewRequirements(Qualification qualification, QualificationDetailsModel model);
 }

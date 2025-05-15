@@ -756,6 +756,8 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel2BetweenSept14AndAug19.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
     }
 
     [TestMethod]

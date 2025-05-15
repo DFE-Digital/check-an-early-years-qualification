@@ -67,4 +67,7 @@ public class RatioRequirement
     public Document? RequirementForLevel2BetweenSept14AndAug19 { get; init; }
 
     public Document? Level3EbrRouteAvailable { get; init; }
+    public Document? RequirementForInJune2016 { get; init; }
+    public Document? RequirementForAfterJune2016 { get; init; }
+    public Document? RequirementForLevel3PlusBetweenSeptember2014AndMay2016 { get; init; }//(THIS IS TOO LONG FOR CONTENTFUL)
 }

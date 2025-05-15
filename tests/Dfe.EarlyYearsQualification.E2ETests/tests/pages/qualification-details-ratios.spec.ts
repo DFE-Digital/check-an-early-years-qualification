@@ -11,26 +11,26 @@ import {
 } from '../shared/playwrightWrapper';
 
 const threeFourFive = [3,
-   // 4, 5
+    // 4, 5
 ];
 const sixSeven = [6,
-    //7
+    //  7
 ];
 const onOrAfterSeptember2014 = [
     [9, 2014],
-    //[10, 2014]
+    // [10, 2014]
 ];
 const beforeSeptember2014OrOnOrAfterSeptember2019 = [
     [1, 2013],
-   // [1, 2014],
-   // [8, 2014],
-   // [9, 2019],
-   // [1, 2020],
+    //  [1, 2014],
+    //  [8, 2014],
+    //  [9, 2019],
+    //  [1, 2020],
 ];
 const betweenSeptember2014AndAugust2019 = [
     [9, 2014],
-    //[1, 2018],
-    //[8, 2019]
+    //  [1, 2018],
+    //  [8, 2019]
 ];
 const betweenSeptember2014AndMay2016 = [
     [9, 2014],
@@ -39,14 +39,14 @@ const betweenSeptember2014AndMay2016 = [
 ];
 const level2RequirementsHeading = "Level 2 Requirements";
 const level3RequirementsHeading = "Level 3 Requirements";
-const l2ContactDfe = "L2 contact DFE"; //EXISTS - Requirement For Level 2 Between Sept 14 And Aug 19
-const l2MaybePFA = "L2 maybe PFA"; //NEW CONTENT
-const l2MustPFA = "L2 must PFA"; //NEW CONTENT
+const l2ContactDfe = "Level 2 further action required text";
+const l2MaybePFA = "Level 2 maybe PFA";
+const l2MustPFA = "Level 2 must PFA";
 const l3Ebr = "Level 3 EBR";
-const l3MustEnglish = "L3 must English";
-const l3MustEnglishMaybePFA = "L3 must English maybe PFA";
-const l3MustEnglishMustPFA = "L3 must English must PFA";
-const l6MustQTS = "L6 must QTS"; //EXISTS -  Requirement for Level 6/7 Before/After 2014
+const l3MustEnglish = "Level 3 must English";
+const l3MustEnglishMaybePFA = "Level 3 must English maybe PFA";
+const l3MustEnglishMustPFA = "Level 3 must English must PFA";
+const l6MustQTS = "Level 6 must QTS";
 
 
 test.describe("A spec used to test the qualification details page ratios", () => {
@@ -644,10 +644,10 @@ test.describe("A spec used to test the qualification details page ratios", () =>
         await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
     });
 
-    test("Checks that level 2 F&R qualification awarded in June 2016 sees Level 2 maybe PFA and Level 3 EBR", async ({
-                                                                                                                         page,
-                                                                                                                         context
-                                                                                                                     }) => {
+    test("Checks that level 2 F&R qualification awarded in June 2016 sees l2MaybePFA and l3Ebr", async ({
+                                                                                                            page,
+                                                                                                            context
+                                                                                                        }) => {
         await goToDetailsPageOfQualification({
             context: context,
             location: "england",
@@ -748,6 +748,7 @@ test.describe("A spec used to test the qualification details page ratios", () =>
             await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
             await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
         });
+
         betweenSeptember2014AndMay2016.forEach((awardDate) => {
             test(`Checks level ${level} F&R awarded between September 2014 and May 2016 sees l3MustEnglish (${awardDate})`, async ({
                                                                                                                                        page,
@@ -774,66 +775,67 @@ test.describe("A spec used to test the qualification details page ratios", () =>
                 await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
             });
-            test(`Checks level ${level} F&R awarded in June 2016 sees l2MaybePFA and l3MustEnglishMaybePFA (${awardDate})`, async ({
-                                                                                                                        page,
-                                                                                                                        context
-                                                                                                                    }) => {
-                await goToDetailsPageOfQualification({
-                    context: context,
-                    location: "england",
-                    startDate: [1, 2013],
-                    awardDate: [8, 2014],
-                    level: level,
-                    organisation: "NCFE",
-                    organisationNotOnList: false,
-                    searchCriteria: '',
-                    additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
-                    selectedFromList: true
-                }, page);
+        });
 
-                await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-                    summaryText: level3RequirementsHeading,
-                    detailText: l3MustEnglishMaybePFA
-                });
-                await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-                    summaryText: level2RequirementsHeading,
-                    detailText: l2MaybePFA
-                });
-                await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+        test(`Checks level ${level} F&R awarded in June 2016 sees l2MaybePFA and l3MustEnglishMaybePFA`, async ({
+                                                                                                                    page,
+                                                                                                                    context
+                                                                                                                }) => {
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2013],
+                awardDate: [6, 2016],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            }, page);
+
+            await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
+                summaryText: level3RequirementsHeading,
+                detailText: l3MustEnglishMaybePFA
             });
-
-            test(`Checks level ${level} F&R awarded after June 2016 sees l2MustPFA and l3MustEnglishMustPFA (${awardDate})`, async ({
-                                                                                                                         page,
-                                                                                                                         context
-                                                                                                                     }) => {
-                await goToDetailsPageOfQualification({
-                    context: context,
-                    location: "england",
-                    startDate: [1, 2013],
-                    awardDate: [8, 2014],
-                    level: level,
-                    organisation: "NCFE",
-                    organisationNotOnList: false,
-                    searchCriteria: '',
-                    additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
-                    selectedFromList: true
-                }, page);
-
-                await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-                    summaryText: level3RequirementsHeading,
-                    detailText: l3MustEnglishMustPFA
-                });
-                await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-                    summaryText: level2RequirementsHeading,
-                    detailText: l2MustPFA
-                });
-                await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
+                summaryText: level2RequirementsHeading,
+                detailText: l2MaybePFA
             });
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+        });
+
+        test(`Checks level ${level} F&R awarded after June 2016 sees l2MustPFA and l3MustEnglishMustPFA`, async ({
+                                                                                                                     page,
+                                                                                                                     context
+                                                                                                                 }) => {
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2013],
+                awardDate: [7, 2016],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            }, page);
+
+            await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
+                summaryText: level3RequirementsHeading,
+                detailText: l3MustEnglishMustPFA
+            });
+            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
+                summaryText: level2RequirementsHeading,
+                detailText: l2MustPFA
+            });
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
         });
     });
-
+    //HERE
     beforeSeptember2014OrOnOrAfterSeptember2019.forEach((startDate) => {
         threeFourFive.forEach((level) => {
             test(`Checks level ${level} not F&R started before September 2014 or on or after September 2019 see no additional info under levels except l3Ebr (${startDate})`, async ({
@@ -843,7 +845,7 @@ test.describe("A spec used to test the qualification details page ratios", () =>
                 await goToDetailsPageOfQualification({
                     context: context,
                     location: "england",
-                    startDate: [1, 2013],
+                    startDate: startDate,
                     awardDate: [1, 2020],
                     level: level,
                     organisation: "NCFE",
@@ -881,7 +883,7 @@ test.describe("A spec used to test the qualification details page ratios", () =>
                 await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
                 await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.NotApproved, {});
                 await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
             });
         });
     });
@@ -895,7 +897,7 @@ test.describe("A spec used to test the qualification details page ratios", () =>
                 await goToDetailsPageOfQualification({
                     context: context,
                     location: "england",
-                    startDate: [1, 2013],
+                    startDate: startDate,
                     awardDate: [1, 2020],
                     level: level,
                     organisation: "NCFE",
@@ -913,10 +915,10 @@ test.describe("A spec used to test the qualification details page ratios", () =>
         });
 
         sixSeven.forEach((level) => {
-            test(`Checks level ${level} not F&R started before September 2014 or on or after September 2019 sees l2ContactDfe and l3Ebr (${startDate})`, async ({
-                                                                                                                                                                    page,
-                                                                                                                                                                    context
-                                                                                                                                                                }) => {
+            test(`Checks level ${level} not F&R started between September 2014 and August 2019 sees l2ContactDfe and l3Ebr (${startDate})`, async ({
+                                                                                                                                                       page,
+                                                                                                                                                       context
+                                                                                                                                                   }) => {
                 await goToDetailsPageOfQualification({
                     context: context,
                     location: "england",
@@ -933,7 +935,7 @@ test.describe("A spec used to test the qualification details page ratios", () =>
                 await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
                 await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.FurtherActionRequired, {detailText: l2ContactDfe});
                 await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
             });
         });
     });
@@ -1013,7 +1015,7 @@ test.describe("A spec used to test the qualification details page ratios", () =>
             });
         });
 
-        test(`Checks level ${level} F&R (not QTS) awarded in June 2016 sees l3MustEnglishMaybePFA and l2MaybePFA and l6MustQTS`, async ({
+        test(`Checks level ${level} F&R (not QTS) awarded in June 2016 sees l2MaybePFA and l3MustEnglishMaybePFA and l6MustQTS`, async ({
                                                                                                                                             page,
                                                                                                                                             context
                                                                                                                                         }) => {
