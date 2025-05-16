@@ -402,6 +402,20 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         return date >= new DateOnly(2014, 09, 01);
     }
 
+    public bool WasAwardedBetweenSeptember2014AndMay2016()
+    {
+        var (awardDateMonth, awardDateYear) = GetWhenWasQualificationAwarded();
+
+        if (awardDateMonth is null || awardDateYear is null)
+        {
+            throw new
+                InvalidOperationException("Unable to determine whether qualification was awarded between 09-2014 and 05-2016");
+        }
+
+        var date = new DateOnly(awardDateYear.Value, awardDateMonth.Value, 1);
+        return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2016, 05, 31);
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)

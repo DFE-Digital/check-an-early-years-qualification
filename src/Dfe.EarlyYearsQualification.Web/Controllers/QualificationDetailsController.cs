@@ -53,6 +53,8 @@ public class QualificationDetailsController(
         }
 
         await qualificationDetailsService.CheckRatioRequirements(qualification, model);
+        await qualificationDetailsService.ProcessNewRequirements(qualification, model);
+
         if (model.RatioRequirements.IsNotFullAndRelevant)
         {
             qualificationDetailsService.SetQualificationResultFailureDetails(model, detailsPageContent);

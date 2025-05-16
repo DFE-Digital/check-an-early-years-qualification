@@ -31,4 +31,5 @@ public interface IUserJourneyCookieService
     bool WasAwardedAfterJune2016();
     bool WasAwardedBeforeSeptember2014();
     bool WasAwardedOnOrAfterSeptember2014();
+    bool WasAwardedBetweenSeptember2014AndMay2016();
 }
