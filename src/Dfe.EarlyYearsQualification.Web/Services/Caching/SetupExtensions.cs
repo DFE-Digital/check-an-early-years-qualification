@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Azure.Identity;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
@@ -9,6 +10,7 @@ using StackExchange.Redis;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.Caching;
 
+[ExcludeFromCodeCoverage]
 public static class SetupExtensions
 {
     public static void UseDistributedCache(this WebApplicationBuilder builder,

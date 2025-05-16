@@ -4,9 +4,11 @@ using Contentful.Core.Configuration;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -65,6 +67,8 @@ public static class ServiceCollectionExtensions
     /// <param name="serviceCollection"></param>
     public static void SetupContentfulServices(this IServiceCollection serviceCollection)
     {
+        serviceCollection.AddScoped<IDateValidator, DateValidator>();
+        serviceCollection.AddScoped<IQualificationListFilter, QualificationListFilter>();
         serviceCollection.AddScoped<IContentService, ContentfulContentService>();
         serviceCollection.AddScoped<IQualificationsRepository, QualificationsRepository>();
     }
