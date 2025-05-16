@@ -345,3 +345,24 @@ export async function checkLevelRatioDetails(page: Page, nth: number, ratioHeadi
         throw new Error("Cannot determine additional info checks");
     }
 }
+
+export async function checkDetailsInset(page: Page, heading: string, messageHeading: string, messageBody: string) {
+    await checkText(page, "#qualification-result-heading", heading);
+    await checkText(page, "#qualification-result-message-heading", messageHeading);
+    await checkText(page, "#qualification-result-message-body", messageBody);
+}
+
+export async function checkRatiosHeading(page: Page, heading: string, body?: string, additional?: string) {
+    await checkText(page, "#ratio-heading", heading);
+    if (body == null) {
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+    } else {
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", body);
+    }
+
+    if (additional == null) {
+        await doesNotExist(page, "#ratio-additional-info");
+    } else {
+        await checkText(page, "#ratio-additional-info", additional);
+    }
+}
