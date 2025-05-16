@@ -8,12 +8,24 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockQualificationsRepository : IQualificationsRepository
 {
+    private const string Level3Ebr = "Level 3 EBR";
+
     public async Task<Qualification?> GetById(string qualificationId)
     {
         return qualificationId.ToLower() switch
                {
                    "eyq-250" => await Task.FromResult(CreateQualification("EYQ-250", "BTEC",
                                                                           AwardingOrganisations.Various, 3)),
+                   "eyq-105" => await Task.FromResult(CreateQualification("EYQ-105", "BTEC",
+                                                                          AwardingOrganisations.Various, 4)),
+                   "eyq-107" => await Task.FromResult(CreateQualification("EYQ-107", "BTEC",
+                                                                          AwardingOrganisations.Various, 5)),
+                   "eyq-109" => await Task.FromResult(CreateQtsQualification("EYQ-109", "BTEC",
+                                                                             AwardingOrganisations.Various, 6)),
+                   "eyq-110" => await Task.FromResult(CreateQualification("EYQ-110", "BTEC",
+                                                                          AwardingOrganisations.Various, 6)),
+                   "eyq-111" => await Task.FromResult(CreateQtsQualification("EYQ-111", "BTEC",
+                                                                             AwardingOrganisations.Various, 7)),
                    "eyq-108" => await Task.FromResult(CreateQtsQualification("EYQ-108", "BTEC",
                                                                              AwardingOrganisations.Various, 6)),
                    "eyq-115" => await Task.FromResult(CreateQualification("EYQ-115", "NCFE",
@@ -82,6 +94,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQualification("EYQ-100", AwardingOrganisations.Cache, 2, null, endDate),
                 CreateQualification("EYQ-101", AwardingOrganisations.Ncfe, 2, startDate, endDate),
                 CreateQualification("EYQ-240", AwardingOrganisations.Pearson, 3, startDate, endDate),
+                CreateQualification("EYQ-241", AwardingOrganisations.Pearson, 2, startDate, endDate),
                 CreateQualification("EYQ-103", AwardingOrganisations.Ncfe, 3, startDate, endDate),
                 CreateQualification("EYQ-104", "City & Guilds", 4, startDate, endDate),
                 CreateQualification("EYQ-105", "Montessori Centre International", 4, startDate, endDate),
@@ -225,7 +238,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .Level3RatioRequirementName
+                                   .Level3RatioRequirementName,
+                           Level3EbrRouteAvailable = ContentfulContentHelper.Paragraph(Level3Ebr)
                        },
 
                        new RatioRequirement
@@ -297,14 +311,16 @@ public class MockQualificationsRepository : IQualificationsRepository
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .Level2RatioRequirementName
+                                   .Level2RatioRequirementName,
+                           Level3EbrRouteAvailable = ContentfulContentHelper.Paragraph(Level3Ebr)
                        },
 
                        new RatioRequirement
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .Level3RatioRequirementName
+                                   .Level3RatioRequirementName,
+                           Level3EbrRouteAvailable = ContentfulContentHelper.Paragraph(Level3Ebr)
                        },
 
                        new RatioRequirement

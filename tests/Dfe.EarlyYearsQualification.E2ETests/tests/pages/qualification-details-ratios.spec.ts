@@ -1,0 +1,593 @@
+﻿import {test} from '@playwright/test';
+import {
+    startJourney,
+    checkText,
+    setCookie,
+    journeyCookieName,
+    goToDetailsPageOfQualification,
+    doesNotExist,
+    checkLevelRatioDetails,
+    RatioStatus
+} from '../shared/playwrightWrapper';
+
+const threeFourFive = [3, 4, 5];
+const sixSeven = [6, 7];
+
+test.describe("A spec used to test the qualification details page ratios", () => {
+    test.beforeEach(async ({page, context}) => {
+        await startJourney(page, context);
+        await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);
+    });
+
+
+    test("Checks the qualification result inset shows correctly when full and relevant level 2", async ({
+                                                                                                            page,
+                                                                                                            context
+                                                                                                        }) => {
+
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        }, page);
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Full and relevant");
+        await checkText(page, "#qualification-result-message-body", "Full and relevant body");
+    });
+
+
+    test("Checks the qualification result inset shows correctly when not full and relevant level 2", async ({
+                                                                                                                page,
+                                                                                                                context
+                                                                                                            }) => {
+
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "yes"]],
+            selectedFromList: true
+        }, page);
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant body");
+    });
+    threeFourFive.forEach((level) => {
+        test(`Checks the qualification result inset shows not full and relevant at level 3 qual started sept 2014 -> aug 2019 (level ${level})`, async ({
+                                                                                                                                                            page,
+                                                                                                                                                            context
+                                                                                                                                                        }) => {
+
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2018],
+                awardDate: [1, 2020],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                selectedFromList: true
+            }, page);
+
+            await checkText(page, "#qualification-result-heading", "Qualification result heading");
+            await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3");
+            await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 body");
+        });
+    });
+
+    test('Checks the qualification result inset shows not full and relevant at level 3 or level 6 qual started sept 2014 -> aug 2019 (level 6)', async ({
+                                                                                                                                                            page,
+                                                                                                                                                            context
+                                                                                                                                                        }) => {
+
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [1, 2018],
+            awardDate: [1, 2020],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        }, page);
+
+        await checkText(page, "#qualification-result-heading", "Qualification result heading");
+        await checkText(page, "#qualification-result-message-heading", "Not full and relevant L3 or L6");
+        await checkText(page, "#qualification-result-message-body", "Not full and relevant L3 or L6 body");
+    });
+
+    test('Checks level 2 not F&R sees not full and relevant ratio detail', async ({
+                                                                                      page,
+                                                                                      context
+                                                                                  }) => {
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [6, 2016],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        }, page);
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 2 F&R awarded before June 2016 sees no content under ratio header', async ({
+                                                                                                      page,
+                                                                                                      context
+                                                                                                  }) => {
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [5, 2016],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        }, page);
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 2 F&R awarded in June 2016 sees additional requirement maybe content', async ({
+                                                                                                         page,
+                                                                                                         context
+                                                                                                     }) => {
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [6, 2016],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        }, page);
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text maybe requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+
+    test('Checks level 2 F&R awarded after June 2016 sees additional requirement will content', async ({
+                                                                                                           page,
+                                                                                                           context
+                                                                                                       }) => {
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [1, 2013],
+            awardDate: [7, 2016],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        }, page);
+
+        await checkText(page, "#ratio-heading", "Test ratio heading");
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+        await doesNotExist(page, "#ratio-additional-info");
+    });
+    [3, 4, 5].forEach((level) => {
+        test(`Checks level ${level} F&R awarded before September 2014 sees no content under ratio header`, async ({
+                                                                                                                      page,
+                                                                                                                      context
+                                                                                                                  }) => {
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2013],
+                awardDate: [8, 2014],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            }, page);
+
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+            await doesNotExist(page, "#ratio-additional-info");
+        });
+
+        test(`Checks level ${level} F&R awarded on or after September 2014 sees additional requirement will content`, async ({
+                                                                                                                                 page,
+                                                                                                                                 context
+                                                                                                                             }) => {
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2013],
+                awardDate: [9, 2014],
+                level: level,
+                organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            }, page);
+
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+            await doesNotExist(page, "#ratio-additional-info");
+        });
+    });
+
+    sixSeven.forEach((level) => {
+        test(`Checks level ${level} F&R (all levels) sees no content under ratio header`, async ({
+                                                                                                     page,
+                                                                                                     context
+                                                                                                 }) => {
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2013],
+                awardDate: [8, 2014],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["This%20is%20the%20Qts%20question", "yes"]],
+                selectedFromList: true
+            }, page);
+
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+            await doesNotExist(page, "#ratio-additional-info");
+        });
+
+
+        test(`Checks level ${level} F&R (all but L6) awarded before September 2014 sees no content under ratio header`, async ({
+                                                                                                                                   page,
+                                                                                                                                   context
+                                                                                                                               }) => {
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2013],
+                awardDate: [8, 2014],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+                selectedFromList: true
+            }, page);
+
+            await checkText(page, "#ratio-heading", "Test ratio heading");
+            await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+            await doesNotExist(page, "#ratio-additional-info");
+        });
+
+        [[9, 2014], [10, 2014]].forEach((awardDate) => {
+            test(`Checks level ${level} F&R (all but L6) awarded on or after September 2014 sees additional requirement will content (${awardDate})}`, async ({
+                                                                                                                                                                  page,
+                                                                                                                                                                  context
+                                                                                                                                                              }) => {
+                await goToDetailsPageOfQualification({
+                    context: context,
+                    location: "england",
+                    startDate: [1, 2013],
+                    awardDate: awardDate,
+                    level: level,
+                    organisation: "NCFE",
+                    organisationNotOnList: false,
+                    searchCriteria: '',
+                    additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+                    selectedFromList: true
+                }, page);
+
+                await checkText(page, "#ratio-heading", "Test ratio heading");
+                await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
+                await doesNotExist(page, "#ratio-additional-info");
+            });
+        });
+    });
+
+    [
+        [1, 2013],
+        [1, 2014],
+        [8, 2014],
+        [9, 2019],
+        [1, 2020],
+    ].forEach((startDate) => {
+        threeFourFive.forEach((level) => {
+            test(`(${startDate}) Checks level ${level} not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+                                                                                                                                                                                  page,
+                                                                                                                                                                                  context
+                                                                                                                                                                              }) => {
+
+                await goToDetailsPageOfQualification({
+                    context: context,
+                    location: "england",
+                    startDate: startDate,
+                    awardDate: [12, 2020],
+                    level: level,
+                    organisation: "NCFE",
+                    organisationNotOnList: false,
+                    searchCriteria: '',
+                    additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                    selectedFromList: true
+                }, page);
+
+                await checkText(page, "#ratio-heading", "Test ratio heading");
+                await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+                await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+            });
+        });
+        sixSeven.forEach((level) => {
+            test(`(${startDate}) Checks level ${level} not F&R started before September 2014 or on or after September 2019 sees not F&R ratios text with L3 EBR text`, async ({
+                                                                                                                                                                                  page,
+                                                                                                                                                                                  context
+                                                                                                                                                                              }) => {
+                await goToDetailsPageOfQualification({
+                    context: context,
+                    location: "england",
+                    startDate: startDate,
+                    awardDate: [12, 2020],
+                    level: level,
+                    organisation: "NCFE",
+                    organisationNotOnList: false,
+                    searchCriteria: '',
+                    additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+                    selectedFromList: true
+                }, page);
+
+                await checkText(page, "#ratio-heading", "Test ratio heading");
+                await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R");
+                await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+            });
+        });
+    });
+
+    [
+        [9, 2014],
+        [1, 2018],
+        [8, 2019]
+    ].forEach((startDate) => {
+        threeFourFive.forEach((level) => {
+            test(`(${startDate}) Checks level ${level} not F&R started between September 2014 and August 2019 sees correct content`, async ({
+                                                                                                                                                page,
+                                                                                                                                                context
+                                                                                                                                            }) => {
+
+                await goToDetailsPageOfQualification({
+                    context: context,
+                    location: "england",
+                    startDate: startDate,
+                    awardDate: [12, 2020],
+                    level: level,
+                    organisation: "NCFE",
+                    organisationNotOnList: false,
+                    searchCriteria: '',
+                    additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "yes"]],
+                    selectedFromList: true
+                }, page);
+
+                await checkText(page, "#ratio-heading", "Test ratio heading");
+                await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R for L3 between Sep14 & Aug19");
+                await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+            });
+        });
+
+        sixSeven.forEach((level) => {
+            test(`(${startDate}) Checks level ${level} not F&R started between September 2014 and August 2019 sees correct content`, async ({
+                                                                                                                                                page,
+                                                                                                                                                context
+                                                                                                                                            }) => {
+                await goToDetailsPageOfQualification({
+                    context: context,
+                    location: "england",
+                    startDate: startDate,
+                    awardDate: [12, 2020],
+                    level: level,
+                    organisation: "NCFE",
+                    organisationNotOnList: false,
+                    searchCriteria: '',
+                    additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+                    selectedFromList: true
+                }, page);
+
+                await checkText(page, "#ratio-heading", "Test ratio heading");
+                await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is not F&R for L3 between Sep14 & Aug19");
+                await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+            });
+        });
+    });
+
+    test('Checks that level 2 F&R sees EBR ratio details (no paragraph)', async ({
+                                                                                     page,
+                                                                                     context
+                                                                                 }) => {
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        }, page);
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: "Level 3 EBR"});
+        await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+    });
+
+    test('Checks that level 2 not F&R sees no EBR ratio details', async ({
+                                                                             page,
+                                                                             context
+                                                                         }) => {
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [10, 2019],
+            awardDate: [1, 2025],
+            level: 2,
+            organisation: "CACHE%20Council%20for%20Awards%20in%20Care%20Health%20and%20Education",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+            selectedFromList: true
+        }, page);
+
+        await doesNotExist(page, "#ratio-additional-info");
+
+        await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.NotApproved, {});
+        await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.NotApproved, {});
+        await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+    });
+
+    threeFourFive.forEach((level) => {
+        test(`Checks that level ${level} F&R sees no EBR ratio details`, async ({
+                                                                                    page,
+                                                                                    context
+                                                                                }) => {
+
+
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2014],
+                awardDate: [1, 2015],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "yes"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            }, page);
+
+            await doesNotExist(page, "#ratio-additional-info");
+
+            await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+        });
+    });
+    sixSeven.forEach((level) => {
+        test(`Checks that level ${level} F&R sees no EBR ratio details`, async ({
+                                                                                    page,
+                                                                                    context
+                                                                                }) => {
+
+
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2013],
+                awardDate: [8, 2014],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["This%20is%20the%20Qts%20question", "yes"]],
+                selectedFromList: true
+            }, page);
+
+            await doesNotExist(page, "#ratio-additional-info");
+
+            await checkLevelRatioDetails(page, 0, "Level 6", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 1, "Level 3", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 2, "Level 2", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 3, "Unqualified", RatioStatus.Approved, {});
+        });
+    });
+
+    threeFourFive.forEach((level) => {
+        test(`Checks that level ${level} not F&R sees EBR ratio details (has paragraph)`, async ({
+                                                                                                     page,
+                                                                                                     context
+                                                                                                 }) => {
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2014],
+                awardDate: [1, 2015],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            }, page);
+
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+
+            await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.NotApproved, {});
+            await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: "Level 3 EBR"});
+            await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+        });
+    });
+
+    sixSeven.forEach((level) => {
+        test(`Checks that level ${level} not F&R sees EBR ratio details (has paragraph)`, async ({
+                                                                                                     page,
+                                                                                                     context
+                                                                                                 }) => {
+            await goToDetailsPageOfQualification({
+                context: context,
+                location: "england",
+                startDate: [1, 2013],
+                awardDate: [8, 2015],
+                level: level,
+                organisation: "NCFE",
+                organisationNotOnList: false,
+                searchCriteria: '',
+                additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
+                selectedFromList: true
+            }, page);
+
+
+            await checkText(page, "#ratio-additional-info", "This is the ratio text L3 EBR");
+
+            await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.NotApproved, {});
+            await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: "Level 3 EBR"});
+            await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: ""});
+        });
+    });
+});
