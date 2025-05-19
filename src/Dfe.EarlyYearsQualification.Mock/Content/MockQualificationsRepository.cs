@@ -31,10 +31,6 @@ public class MockQualificationsRepository : IQualificationsRepository
                                                                              AwardingOrganisations.Various, 6)),
                    "eyq-115" => await Task.FromResult(CreateQualification("EYQ-115", "NCFE",
                                                                           AwardingOrganisations.Various, 3, false)),
-                   "eyq-114" => await Task.FromResult(CreateLevel2FurtherActionRequiredQualification("EYQ-114",
-                                                                                                     "Level 2 Further Action Qualification",
-                                                                                                     AwardingOrganisations.Ncfe, 3)),
-
                    "eyq-241" => await Task.FromResult(CreateQualification("EYQ-241", "BTEC",
                                                                           AwardingOrganisations.Various, 2)),
                    _ => await Task.FromResult(CreateQualification("EYQ-240",
@@ -47,16 +43,16 @@ public class MockQualificationsRepository : IQualificationsRepository
     {
         return Task.FromResult(new List<Qualification>
                                {
-                                   new("1", "TEST",
-                                       "A awarding organisation", 123),
-                                   new("2", "TEST",
-                                       "B awarding organisation", 123),
-                                   new("3", "TEST",
-                                       "C awarding organisation", 123),
-                                   new("4", "TEST",
-                                       "D awarding organisation", 123),
-                                   new("5", "TEST with additional requirements",
-                                       "E awarding organisation", 123)
+                                   new Qualification("1", "TEST",
+                                                     "A awarding organisation", 123),
+                                   new Qualification("2", "TEST",
+                                                     "B awarding organisation", 123),
+                                   new Qualification("3", "TEST",
+                                                     "C awarding organisation", 123),
+                                   new Qualification("4", "TEST",
+                                                     "D awarding organisation", 123),
+                                   new Qualification("5", "TEST with additional requirements",
+                                                     "E awarding organisation", 123)
                                    {
                                        AdditionalRequirements = "Additional requirements",
                                        AdditionalRequirementQuestions =
@@ -111,6 +107,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQualification("EYQ-111", "City & Guilds", 7, startDate, endDate),
                 CreateQualification("EYQ-112", AwardingOrganisations.Pearson, 8, startDate, endDate),
                 CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate),
+                CreateQualification("EYQ-114", "BA (Hons) Childhood Studies", AwardingOrganisations.Edexcel, 6),
+                CreateQualification("EYQ-115", "BA (Hons) Childhood Studies", AwardingOrganisations.Ncfe, 6),
                 CreateQualificationWithAdditionalRequirements("EYQ-909", AwardingOrganisations.Ncfe, 3, startDate,
                                                               endDate)
             };
@@ -183,7 +181,7 @@ public class MockQualificationsRepository : IQualificationsRepository
         var additionalRequirementQuestions = includeAdditionalRequirementQuestions
                                                  ? new List<AdditionalRequirementQuestion>
                                                    {
-                                                       new()
+                                                       new AdditionalRequirementQuestion
                                                        {
                                                            Question = "Test question",
                                                            HintText =
@@ -233,18 +231,6 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level2RatioRequirementName,
-                           FullAndRelevantForLevel2Before2014 = true,
-                           FullAndRelevantForLevel2After2014 = true,
-                           FullAndRelevantForLevel3Before2014 = true,
-                           FullAndRelevantForLevel3After2014 = true,
-                           FullAndRelevantForLevel4Before2014 = true,
-                           FullAndRelevantForLevel4After2014 = true,
-                           FullAndRelevantForLevel5Before2014 = true,
-                           FullAndRelevantForLevel5After2014 = true,
-                           FullAndRelevantForLevel6Before2014 = true,
-                           FullAndRelevantForLevel6After2014 = true,
-                           FullAndRelevantForLevel7Before2014 = true,
-                           FullAndRelevantForLevel7After2014 = true,
                            RequirementForLevel2BetweenSept14AndAug19 =
                                ContentfulContentHelper.Paragraph("Level 2 further action required text"),
                            RequirementForInJune2016 =
@@ -259,12 +245,6 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level3RatioRequirementName,
-                           FullAndRelevantForLevel3Before2014 = true,
-                           FullAndRelevantForLevel3After2014 = true,
-                           FullAndRelevantForLevel4Before2014 = true,
-                           FullAndRelevantForLevel4After2014 = true,
-                           FullAndRelevantForLevel5Before2014 = true,
-                           FullAndRelevantForLevel5After2014 = true,
                            Level3EbrRouteAvailable = Level3Ebr,
                            RequirementForInJune2016 =
                                ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
@@ -286,15 +266,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .UnqualifiedRatioRequirementName,
-                           FullAndRelevantForLevel2Before2014 = true,
-                           FullAndRelevantForLevel2After2014 = true,
-                           FullAndRelevantForLevel3Before2014 = true,
-                           FullAndRelevantForLevel3After2014 = true,
-                           FullAndRelevantForLevel4Before2014 = true,
-                           FullAndRelevantForLevel4After2014 = true,
-                           FullAndRelevantForLevel5Before2014 = true,
-                           FullAndRelevantForLevel5After2014 = true
+                                   .UnqualifiedRatioRequirementName
                        }
                    ]
                };
@@ -354,12 +326,6 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level2RatioRequirementName,
-                           FullAndRelevantForQtsEtcBefore2014 = true,
-                           FullAndRelevantForQtsEtcAfter2014 = true,
-                           FullAndRelevantForLevel6Before2014 = true,
-                           FullAndRelevantForLevel6After2014 = true,
-                           FullAndRelevantForLevel7Before2014 = true,
-                           FullAndRelevantForLevel7After2014 = true,
                            RequirementForLevel2BetweenSept14AndAug19 =
                                ContentfulContentHelper.Paragraph("Level 2 further action required text"),
                            Level3EbrRouteAvailable = Level3Ebr,
@@ -375,13 +341,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName =
                                RatioRequirements
                                    .Level3RatioRequirementName,
-                           FullAndRelevantForQtsEtcBefore2014 = true,
-                           FullAndRelevantForQtsEtcAfter2014 = true,
-                           FullAndRelevantForLevel6Before2014 = true,
-                           FullAndRelevantForLevel6After2014 = true,
-                           FullAndRelevantForLevel7Before2014 = true,
-                           FullAndRelevantForLevel7After2014 = true,
-                           Level3EbrRouteAvailable =Level3Ebr,
+                           Level3EbrRouteAvailable = Level3Ebr,
                            RequirementForInJune2016 =
                                ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
                            RequirementForAfterJune2016 =
@@ -394,12 +354,9 @@ public class MockQualificationsRepository : IQualificationsRepository
                        {
                            RatioRequirementName = RatioRequirements
                                .Level6RatioRequirementName,
-                           FullAndRelevantForQtsEtcAfter2014 = true,
-                           FullAndRelevantForQtsEtcBefore2014 = true,
-                           FullAndRelevantForLevel6After2014 = false,
                            RequirementHeading = "Level 6 Requirements",
-                           RequirementForLevel6Before2014 =Level6MustQts,
-                           RequirementForLevel6After2014 =Level6MustQts,
+                           RequirementForLevel6Before2014 = Level6MustQts,
+                           RequirementForLevel6After2014 = Level6MustQts,
                            RequirementForLevel7Before2014 = Level6MustQts,
                            RequirementForLevel7After2014 = Level6MustQts
                        },
@@ -408,13 +365,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .UnqualifiedRatioRequirementName,
-                           FullAndRelevantForLevel6Before2014 = true,
-                           FullAndRelevantForQtsEtcBefore2014 = true,
-                           FullAndRelevantForQtsEtcAfter2014 = true,
-                           FullAndRelevantForLevel6After2014 = true,
-                           FullAndRelevantForLevel7Before2014 = true,
-                           FullAndRelevantForLevel7After2014 = true
+                                   .UnqualifiedRatioRequirementName
                        }
                    ],
                    IsAutomaticallyApprovedAtLevel6 = false
@@ -451,91 +402,6 @@ public class MockQualificationsRepository : IQualificationsRepository
                    ConfirmationStatement =
                        "This is the confirmation statement 2",
                    AnswerToBeFullAndRelevant = answerToBeFullAndRelevant
-               };
-    }
-
-    private static Qualification CreateLevel2FurtherActionRequiredQualification(
-        string qualificationId, string qualificationName,
-        string awardingOrganisation, int qualificationLevel)
-    {
-        return new Qualification(qualificationId,
-                                 qualificationName,
-                                 awardingOrganisation,
-                                 qualificationLevel)
-               {
-                   FromWhichYear = "2014",
-                   ToWhichYear = "2019",
-                   QualificationNumber = "603/5829/5",
-                   RatioRequirements =
-                   [
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .Level2RatioRequirementName,
-                           FullAndRelevantForLevel2After2014 = false,
-                           FullAndRelevantForLevel3After2014 = false,
-                           FullAndRelevantForLevel4After2014 = false,
-                           FullAndRelevantForLevel5After2014 = false,
-                           FullAndRelevantForLevel6After2014 = false,
-                           FullAndRelevantForLevel7After2014 = false,
-                           RequirementForLevel2BetweenSept14AndAug19 =
-                               ContentfulContentHelper.Paragraph("Level 2 further action required text"),
-                           RequirementForInJune2016 =
-                               ContentfulContentHelper.Paragraph("Level 2 maybe PFA"),
-                           RequirementForAfterJune2016 =
-                               ContentfulContentHelper.Paragraph("Level 2 must PFA"),
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .Level3RatioRequirementName,
-                           FullAndRelevantForLevel2After2014 = false,
-                           FullAndRelevantForLevel3After2014 = false,
-                           FullAndRelevantForLevel4After2014 = false,
-                           FullAndRelevantForLevel5After2014 = false,
-                           FullAndRelevantForLevel6After2014 = false,
-                           FullAndRelevantForLevel7After2014 = false,
-                           Level3EbrRouteAvailable =Level3Ebr,
-                           RequirementForInJune2016 =
-                               ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
-                           RequirementForAfterJune2016 =
-                               ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
-                           RequirementForLevel3PlusBetweenSeptember2014AndMay2016 = ContentfulContentHelper.Paragraph("Level 3 must English")
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName = RatioRequirements
-                               .Level6RatioRequirementName,
-                           FullAndRelevantForLevel2After2014 = false,
-                           FullAndRelevantForLevel3After2014 = false,
-                           FullAndRelevantForLevel4After2014 = false,
-                           FullAndRelevantForLevel5After2014 = false,
-                           FullAndRelevantForLevel6After2014 = false,
-                           FullAndRelevantForLevel7After2014 = false,
-                           RequirementForLevel6Before2014 =Level6MustQts,
-                           RequirementForLevel6After2014 =Level6MustQts,
-                           RequirementForLevel7Before2014 = Level6MustQts,
-                           RequirementForLevel7After2014 = Level6MustQts
-                       },
-
-                       new RatioRequirement
-                       {
-                           RatioRequirementName =
-                               RatioRequirements
-                                   .UnqualifiedRatioRequirementName,
-                           FullAndRelevantForLevel2After2014 = true,
-                           FullAndRelevantForLevel3After2014 = true,
-                           FullAndRelevantForLevel4After2014 = true,
-                           FullAndRelevantForLevel5After2014 = true,
-                           FullAndRelevantForLevel6After2014 = true,
-                           FullAndRelevantForLevel7After2014 = true
-                       }
-                   ],
-                   IsAutomaticallyApprovedAtLevel6 = false
                };
     }
 }
