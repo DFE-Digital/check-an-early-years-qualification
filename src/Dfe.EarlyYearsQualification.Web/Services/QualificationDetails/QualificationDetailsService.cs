@@ -167,8 +167,8 @@ public class QualificationDetailsService(
     }
 
     private static bool IsQts(Qualification qualification,
-                       List<AdditionalRequirementAnswerModel>?
-                           additionalRequirementAnswerModels)
+                              List<AdditionalRequirementAnswerModel>?
+                                  additionalRequirementAnswerModels)
     {
         if (additionalRequirementAnswerModels is null || qualification.AdditionalRequirementQuestions is null)
         {
@@ -316,6 +316,8 @@ public class QualificationDetailsService(
         model.RatioRequirements.RequirementsHeadingForUnqualified =
             GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName,
                                      qualification);
+
+        await ProcessNewRequirements(qualification, model);
     }
 
     public async Task ProcessNewRequirements(Qualification qualification, QualificationDetailsModel model)
@@ -333,15 +335,6 @@ public class QualificationDetailsService(
         var l2MustPfa = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForAfterJune2016),
                                                    RatioRequirements.Level2RatioRequirementName,
                                                    qualification);
-        var l3MustEnglish = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForLevel3PlusBetweenSeptember2014AndMay2016),
-                                                       RatioRequirements.Level3RatioRequirementName,
-                                                       qualification);
-        var l3MustEnglishMaybePfa = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForInJune2016),
-                                                               RatioRequirements.Level3RatioRequirementName,
-                                                               qualification);
-        var l3MustEnglishMustPfa = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForAfterJune2016),
-                                                              RatioRequirements.Level3RatioRequirementName,
-                                                              qualification);
 
         switch (qualification.QualificationLevel)
         {
@@ -353,15 +346,24 @@ public class QualificationDetailsService(
                 break;
             case >= 3 and <= 5 when wasAwardedBetweenSeptember2014AndMay2016:
             case >= 6 when wasAwardedBetweenSeptember2014AndMay2016 && !qts:
+                var l3MustEnglish = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForLevel3PlusBetweenSeptember2014AndMay2016),
+                                                               RatioRequirements.Level3RatioRequirementName,
+                                                               qualification);
                 model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(l3MustEnglish);
                 break;
             case >= 3 and <= 5 when wasAwardedInJune2016:
             case >= 6 when wasAwardedInJune2016 && !qts:
+                var l3MustEnglishMaybePfa = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForInJune2016),
+                                                                       RatioRequirements.Level3RatioRequirementName,
+                                                                       qualification);
                 model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(l3MustEnglishMaybePfa);
                 model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(l2MaybePfa);
                 break;
             case >= 3 and <= 5 when wasAwardedAfterJune2016:
             case >= 6 when wasAwardedAfterJune2016 && !qts:
+                var l3MustEnglishMustPfa = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForAfterJune2016),
+                                                                      RatioRequirements.Level3RatioRequirementName,
+                                                                      qualification);
                 model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(l3MustEnglishMustPfa);
                 model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(l2MustPfa);
                 break;
