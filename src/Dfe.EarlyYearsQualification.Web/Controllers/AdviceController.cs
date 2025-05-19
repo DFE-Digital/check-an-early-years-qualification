@@ -64,6 +64,7 @@ public class AdviceController(
     }
 
     [HttpGet("qualification-not-on-the-list")]
+    [RedirectIfDateMissing]
     public async Task<IActionResult> QualificationNotOnTheList()
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
