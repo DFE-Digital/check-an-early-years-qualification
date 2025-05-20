@@ -1624,7 +1624,7 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public async Task CheckRatioRequirements_Level2_FullAndRelevant_AwardedInJune2016SeesMaybePFA()
+    public async Task SetRequirementOverrides_Level2_FullAndRelevant_AwardedInJune2016SeesMaybePFA()
     {
         const string l2MaybePfa = "l2 maybe PFA";
         var l2MaybePfaDoc = ContentfulContentHelper.Paragraph(l2MaybePfa);
@@ -1658,7 +1658,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(qualification, model);
+        await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel2.Should().Be(l2MaybePfa);
@@ -1666,7 +1666,7 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public async Task CheckRatioRequirements_Level2_FullAndRelevant_AwardedAfterJune2016SeesExpected()
+    public async Task SetRequirementOverrides_Level2_FullAndRelevant_AwardedAfterJune2016SeesExpected()
     {
         const string l2MustPfa = "l2 must PFA";
         var l2MustPfaDoc = ContentfulContentHelper.Paragraph(l2MustPfa);
@@ -1700,7 +1700,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(qualification, model);
+        await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel2.Should().Be(l2MustPfa);
@@ -1711,9 +1711,9 @@ public class QualificationDetailsServiceTests
     [DataRow(3)]
     [DataRow(4)]
     [DataRow(5)]
-    public async Task ProcessNewRequirements_Level345_FullAndRelevant_AwardedBetweenSeptember2014AndMay2016_SeesExpected(int level)
+    public async Task SetRequirementOverrides_Level345_FullAndRelevant_AwardedBetweenSeptember2014AndMay2016_SeesExpected(int level)
     {
-        const string l3MustEnglish = "l2 must english";
+        const string l3MustEnglish = "l3 must english";
         var l3MustEnglishDoc = ContentfulContentHelper.Paragraph(l3MustEnglish);
 
         var model = new QualificationDetailsModel
@@ -1749,7 +1749,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(qualification, model);
+        await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel3.Should().Be(l3MustEnglish);
@@ -1759,7 +1759,7 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     [DataRow(6)]
     [DataRow(7)]
-    public async Task ProcessNewRequirements_Level67_FullAndRelevant_AwardedBetweenSeptember2014AndMay2016_NotQts_SeesExpected(int level)
+    public async Task SetRequirementOverrides_Level67_FullAndRelevant_AwardedBetweenSeptember2014AndMay2016_NotQts_SeesExpected(int level)
     {
         const string l3MustEnglish = "l3 must english";
         var l3MustEnglishDoc = ContentfulContentHelper.Paragraph(l3MustEnglish);
@@ -1813,7 +1813,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(qualification, model);
+        await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel3.Should().Be(l3MustEnglish);
@@ -1824,7 +1824,7 @@ public class QualificationDetailsServiceTests
     [DataRow(3)]
     [DataRow(4)]
     [DataRow(5)]
-    public async Task ProcessNewRequirements_Level345_FullAndRelevant_AwardedInJune2016_SeesExpected(int level)
+    public async Task SetRequirementOverrides_Level345_FullAndRelevant_AwardedInJune2016_SeesExpected(int level)
     {
         const string l2MaybePfa = "l2 maybe pfa";
         const string l3MustEnglishMaybePfa = "l3 Must English Maybe Pfa";
@@ -1866,7 +1866,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(qualification, model);
+        await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel3.Should().Be(l3MustEnglishMaybePfa);
@@ -1879,7 +1879,7 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     [DataRow(6)]
     [DataRow(7)]
-    public async Task ProcessNewRequirements_Level67_FullAndRelevant_AwardedInJune2016_SeesExpected(int level)
+    public async Task SetRequirementOverrides_Level67_FullAndRelevant_AwardedInJune2016_SeesExpected(int level)
     {
         const string l2MaybePfa = "l2 maybe pfa";
         const string l3MustEnglishMaybePfa = "l3 Must English Maybe Pfa";
@@ -1937,7 +1937,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(qualification, model);
+        await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel3.Should().Be(l3MustEnglishMaybePfa);
@@ -1951,7 +1951,7 @@ public class QualificationDetailsServiceTests
     [DataRow(3)]
     [DataRow(4)]
     [DataRow(5)]
-    public async Task ProcessNewRequirements_Level345_FullAndRelevant_AwardedAfterJune2016_SeesExpected(int level)
+    public async Task SetRequirementOverrides_Level345_FullAndRelevant_AwardedAfterJune2016_SeesExpected(int level)
     {
         const string l2MustPfa = "l2 must pfa";
         const string l3MustEnglishMustPfa = "l3 Must English must Pfa";
@@ -1993,7 +1993,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(qualification, model);
+        await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel3.Should().Be(l3MustEnglishMustPfa);
@@ -2006,7 +2006,7 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     [DataRow(6)]
     [DataRow(7)]
-    public async Task ProcessNewRequirements_Level67_FullAndRelevant_AwardedAfterJune2016_SeesExpected(int level)
+    public async Task SetRequirementOverrides_Level67_FullAndRelevant_AwardedAfterJune2016_SeesExpected(int level)
     {
         const string l2MustPfa = "l2 must pfa";
         const string l3MustEnglishMustPfa = "l3 Must English must Pfa";
@@ -2064,7 +2064,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(qualification, model);
+        await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel3.Should().Be(l3MustEnglishMustPfa);
@@ -2075,7 +2075,7 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public async Task ProcessNewRequirements_NotFullAndRelevant_Returns()
+    public async Task SetRequirementOverrides_NotFullAndRelevant_Returns()
     {
         var model = new QualificationDetailsModel
                     {
@@ -2089,7 +2089,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.ProcessNewRequirements(It.IsAny<Qualification>(), model);
+        await sut.SetRequirementOverrides(It.IsAny<Qualification>(), model);
 
         model.RatioRequirements.ApprovedForLevel6.Should().Be(QualificationApprovalStatus.NotApproved);
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.NotApproved);
