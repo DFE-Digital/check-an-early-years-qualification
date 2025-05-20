@@ -455,7 +455,7 @@ public class QualificationDetailsService(
             case 2 when wasAwardedAfterJune2016:
             case 3 or 4 or 5 when wasAwardedOnOrAfterSeptember2014:
             case 6 or 7 when approvedAllLevelsButL6 && wasAwardedOnOrAfterSeptember2014:
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextRequirements);
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextWillRequirements);
                 break;
 
             default:

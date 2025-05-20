@@ -145,7 +145,7 @@ public class MockContentfulService : IContentService
                                          RatiosHeading = "Test ratio heading",
                                          RatiosText = ratioText,
                                          RatiosTextMaybeRequirements = ratioTextMaybeRequirements,
-                                         RatiosTextRequirements = ratioTextRequirements,
+                                         RatiosTextWillRequirements = ratioTextRequirements,
                                          RatiosTextL3Ebr = ratioTextL3Ebr,
                                          RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
                                          RatiosTextL3PlusNotFrBetweenSep14Aug19 =

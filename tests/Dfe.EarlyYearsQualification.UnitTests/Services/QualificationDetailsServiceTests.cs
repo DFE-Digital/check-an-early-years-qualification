@@ -1140,7 +1140,7 @@ public class QualificationDetailsServiceTests
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextRequirements = willNeedRequirementsDoc
+                                     RatiosTextWillRequirements = willNeedRequirementsDoc
                                  };
 
         var model = new QualificationDetailsModel
@@ -1205,7 +1205,7 @@ public class QualificationDetailsServiceTests
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextRequirements = needRequirementsDoc
+                                     RatiosTextWillRequirements = needRequirementsDoc
                                  };
         var model = new QualificationDetailsModel
                     {
@@ -1299,7 +1299,7 @@ public class QualificationDetailsServiceTests
 
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosTextRequirements = needRequirementsDoc
+                                     RatiosTextWillRequirements = needRequirementsDoc
                                  };
         var model = new QualificationDetailsModel
                     {

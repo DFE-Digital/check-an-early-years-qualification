@@ -199,7 +199,7 @@ public class MockContentfulServiceTests
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
         result.RatiosTextMaybeRequirements!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text maybe requirements");
-        result.RatiosTextRequirements!.Content[0].Should().BeAssignableTo<Paragraph>()
+        result.RatiosTextWillRequirements!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text requirements");
         result.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text L3 EBR");
