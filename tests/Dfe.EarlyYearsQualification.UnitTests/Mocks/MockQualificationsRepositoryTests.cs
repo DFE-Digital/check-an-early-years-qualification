@@ -119,6 +119,10 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().BeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
     [TestMethod]
@@ -178,6 +182,10 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
     [TestMethod]
@@ -215,6 +223,10 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().BeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
         [TestMethod]
@@ -275,6 +287,10 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().BeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
     
@@ -336,6 +352,10 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().BeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
     [TestMethod]
@@ -396,6 +416,10 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().BeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
 
@@ -457,6 +481,10 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
     
@@ -518,6 +546,10 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
     
     [TestMethod]
