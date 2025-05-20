@@ -346,7 +346,7 @@ public class QualificationDetailsService(
                 break;
             case >= 3 and <= 5 when wasAwardedBetweenSeptember2014AndMay2016:
             case >= 6 when wasAwardedBetweenSeptember2014AndMay2016 && !qts:
-                var l3MustEnglish = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForLevel3PlusBetweenSeptember2014AndMay2016),
+                var l3MustEnglish = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForL3PlusBetweenSept14AndMay16),
                                                                RatioRequirements.Level3RatioRequirementName,
                                                                qualification);
                 model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(l3MustEnglish);

@@ -1738,7 +1738,7 @@ public class QualificationDetailsServiceTests
                     new RatioRequirement
                     {
                         RatioRequirementName = RatioRequirements.Level3RatioRequirementName,
-                        RequirementForLevel3PlusBetweenSeptember2014AndMay2016 = l3MustEnglishDoc
+                        RequirementForL3PlusBetweenSept14AndMay16 = l3MustEnglishDoc
                     }
                 ]
             };
@@ -1801,7 +1801,7 @@ public class QualificationDetailsServiceTests
                     new RatioRequirement
                     {
                         RatioRequirementName = RatioRequirements.Level3RatioRequirementName,
-                        RequirementForLevel3PlusBetweenSeptember2014AndMay2016 = l3MustEnglishDoc
+                        RequirementForL3PlusBetweenSept14AndMay16 = l3MustEnglishDoc
                     }
                 ],
                 AdditionalRequirementQuestions = [qtsQuestion]

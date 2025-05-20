@@ -250,7 +250,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
                            RequirementForAfterJune2016 =
                                ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
-                           RequirementForLevel3PlusBetweenSeptember2014AndMay2016 = ContentfulContentHelper.Paragraph("Level 3 must English"),
+                           RequirementForL3PlusBetweenSept14AndMay16 = ContentfulContentHelper.Paragraph("Level 3 must English"),
                            RequirementHeading = "Level 3 Requirements"
                        },
 
@@ -346,7 +346,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
                            RequirementForAfterJune2016 =
                                ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
-                           RequirementForLevel3PlusBetweenSeptember2014AndMay2016 = ContentfulContentHelper.Paragraph("Level 3 must English"),
+                           RequirementForL3PlusBetweenSept14AndMay16 = ContentfulContentHelper.Paragraph("Level 3 must English"),
                            RequirementHeading = "Level 3 Requirements"
                        },
 
