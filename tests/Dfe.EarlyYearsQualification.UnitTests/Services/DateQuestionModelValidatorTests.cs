@@ -306,4 +306,79 @@ public class DateQuestionModelValidatorTests
 
         validator.DisplayAwardedDateBeforeStartDateError(startedDate, awardedDate).Should().Be(expectedResult);
     }
+
+    [TestMethod]
+    public void DatesQuestionModel_IsValid_StartedQuestionIsNull_ThrowsException()
+    {
+        var awardedDate = new DateQuestionModel
+                          {
+                              SelectedMonth = 11,
+                              SelectedYear = 2012
+                          };
+
+        var model = new DatesQuestionModel { StartedQuestion = null, AwardedQuestion = awardedDate };
+        var page = new DatesQuestionPage();
+        
+        var validator = new DateQuestionModelValidator(new Mock<IDateTimeAdapter>().Object);
+
+        Action action = () => { validator.IsValid(model, page); };
+
+        action.Should().Throw<ArgumentException>();
+    }
+    
+    [TestMethod]
+    public void DatesQuestionModel_IsValid_AwardedQuestionIsNull_ThrowsException()
+    {
+        var startedDate = new DateQuestionModel
+                          {
+                              SelectedMonth = 11,
+                              SelectedYear = 2012
+                          };
+
+        var model = new DatesQuestionModel { StartedQuestion = startedDate, AwardedQuestion = null };
+        var page = new DatesQuestionPage();
+        
+        var validator = new DateQuestionModelValidator(new Mock<IDateTimeAdapter>().Object);
+
+        Action action = () => { validator.IsValid(model, page); };
+
+        action.Should().Throw<ArgumentException>();
+    }
+    
+    [TestMethod]
+    public void DatesQuestionModel_IsValid_AwardedDateBeforeStartDate_ReturnsExpectedResult()
+    {
+        var startedDate = new DateQuestionModel
+                          {
+                              SelectedMonth = 11,
+                              SelectedYear = 2012
+                          };
+        
+        var awardedDate = new DateQuestionModel
+                          {
+                              SelectedMonth = 11,
+                              SelectedYear = 2011
+                          };
+
+        const string message = "Awarded date is before start date";
+        var model = new DatesQuestionModel { StartedQuestion = startedDate, AwardedQuestion = awardedDate };
+        var page = new DatesQuestionPage { AwardedDateIsAfterStartedDateErrorText = message};
+        
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(2025, 5, 1, 0, 0, 1, DateTimeKind.Local));
+        
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var result = validator.IsValid(model, page);
+
+        result.StartedValidationResult!.MonthValid.Should().BeTrue();
+        result.StartedValidationResult.MonthValid.Should().BeTrue();
+        result.AwardedValidationResult!.MonthValid.Should().BeFalse();
+        result.AwardedValidationResult.MonthValid.Should().BeFalse();
+        result.AwardedValidationResult.ErrorMessages.Count.Should().Be(1);
+        result.AwardedValidationResult.ErrorMessages[0].Should().Match(message);
+        result.AwardedValidationResult.BannerErrorMessages.Count.Should().Be(1);
+        result.AwardedValidationResult.BannerErrorMessages[0].Message.Should().Match(message);
+    }
 }
