@@ -3,13 +3,15 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Validators;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentService(
     ILogger<ContentfulContentService> logger,
-    IContentfulClient contentfulClient)
+    IContentfulClient contentfulClient,
+    IDateValidator dateValidator)
     : ContentfulContentServiceBase(logger, contentfulClient), IContentService
 {
     public async Task<StartPage?> GetStartPage()
@@ -295,13 +297,13 @@ public class ContentfulContentService(
         List<CannotFindQualificationPage> cannotFindQualificationPages)
     {
         var results = new List<CannotFindQualificationPage>();
-        var enteredStartDate = new DateOnly(startDateYear, startDateMonth, Day);
+        var enteredStartDate = new DateOnly(startDateYear, startDateMonth, dateValidator.GetDay());
         foreach (var page in cannotFindQualificationPages)
         {
-            var pageStartDate = GetDate(page.FromWhichYear);
-            var pageEndDate = GetDate(page.ToWhichYear);
+            var pageStartDate = dateValidator.GetDate(page.FromWhichYear);
+            var pageEndDate = dateValidator.GetDate(page.ToWhichYear);
 
-            var result = ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, page);
+            var result = dateValidator.ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, page);
             if (result is not null)
             {
                 results.Add(result);
