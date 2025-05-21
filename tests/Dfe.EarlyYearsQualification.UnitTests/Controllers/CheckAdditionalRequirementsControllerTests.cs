@@ -321,6 +321,35 @@ public class CheckAdditionalRequirementsControllerTests
         mockUserJourneyCookieService
             .Verify(x => x.SetAdditionalQuestionsAnswers(It.IsAny<Dictionary<string, string>>()), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task Post_ModelStateIsValid_NoAdditionalRequirements_RedirectsToConfirmAnswers()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(CreateQualification(null));
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.Post("Test-123", 1,
+                                           new CheckAdditionalRequirementsPageModel { QualificationId = "Test-123" });
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("ConfirmAnswers");
+        resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
+        resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
+    }
 
     [TestMethod]
     public async Task Post_QuestionIsQtsQuestionAndAnswerMatchesAnswerToBeFullAndRelevant_RedirectsToConfirmAnswers()
@@ -481,7 +510,7 @@ public class CheckAdditionalRequirementsControllerTests
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("QualificationDetails");
     }
-
+    
     [TestMethod]
     public async Task Post_PageContentIsNull_RedirectsToErrorPage()
     {
