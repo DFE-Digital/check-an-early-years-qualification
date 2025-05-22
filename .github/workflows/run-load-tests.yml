@@ -1,0 +1,27 @@
+name: Run Load Tests
+description: Runs k6 load tests against the staging (test) environment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: "Set up k6"
+        uses: grafana/setup-k6-action@v1
+
+      - name: "Run local k6 load tests"
+        uses: grafana/run-k6-action@v1
+        env:
+          CHALLENGE_PASSWORD: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          CUSTOM_DOMAIN: staging.check-an-early-years-qualification.service.gov.uk/
+          OPTIONS_SET: quick # change to "load" when we have it working
+        with:
+          path: |
+            ./tests/Dfe.EarlyYearsQualification.LoadTests/run-tests.js
+          cloud-run-locally: false
+
