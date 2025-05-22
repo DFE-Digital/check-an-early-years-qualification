@@ -3,6 +3,15 @@ description: Runs k6 load tests against the staging (test) environment
 
 on:
   workflow_dispatch:
+  schedule: # only runs off main branch
+    - cron: "40 3 * * 0-4" # at 3.40 am, every Sunday through Thursday
+  push: # remove this before completing the PR
+    branches:
+      - "feature/eyqb-1076-k6-in-pipeline"
+  pull_request: # remove this before completing the PR
+    branches:
+      - "feature/eyqb-1076-k6-in-pipeline"
+  issue_comment: # remove this before completing the PR
 
 jobs:
   run-tests:
@@ -19,7 +28,7 @@ jobs:
         env:
           CHALLENGE_PASSWORD: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           CUSTOM_DOMAIN: staging.check-an-early-years-qualification.service.gov.uk/
-          OPTIONS_SET: quick # change to "load" when we have it working
+          OPTIONS_SET: quick # change to "load" before completing the PR
         with:
           path: |
             ./tests/Dfe.EarlyYearsQualification.LoadTests/run-tests.js
