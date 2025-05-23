@@ -22,6 +22,9 @@ public interface IQualificationDetailsService
                                                            Qualification qualification);
     Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model,
                                           Qualification qualification);
+    // ReSharper disable once IdentifierTypo
+    Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model,
+                                            Qualification qualification);
     Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model);
 
     (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(

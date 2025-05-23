@@ -99,7 +99,8 @@ interface JourneyStateParams {
     organisationNotOnList: boolean,
     searchCriteria: string,
     additionalQuestions: string[][],
-    selectedFromList: boolean
+    selectedFromList: boolean,
+    qualificationId?: string
 };
 
 function getQualificationId(level: number) {
@@ -130,8 +131,9 @@ export async function goToDetailsPageOfQualification({
                                                          additionalQuestions,
                                                          selectedFromList,
                                                          location = '',
+                                                         qualificationId
                                                      }: JourneyStateParams, page: Page) {
-    var qualificationId = getQualificationId(level);
+    var selectedQualificationId = qualificationId ?? getQualificationId(level);
 
     var additionQuestionsValue = "";
     if (additionalQuestions != null) {
@@ -161,7 +163,7 @@ export async function goToDetailsPageOfQualification({
     var cookie = `%7B%22WhereWasQualificationAwarded%22%3A%22${location ?? ''}%22%2C%22WhenWasQualificationStarted%22%3A%22${startValue}%22%2C%22WhenWasQualificationAwarded%22%3A%22${awardValue}%22%2C%22LevelOfQualification%22%3A%22${level ?? ''}%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22${organisation ?? ''}%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3A${organisationNotOnList ?? false}%2C%22SearchCriteria%22%3A%22${searchCriteria ?? ''}%22%2C%22AdditionalQuestionsAnswers%22%3A%7B${additionQuestionsValue}%7D%2C%22QualificationWasSelectedFromList%22%3A${(selectedFromList ?? false) ? 1 : 0}%7D`;
     await setCookie(context, cookie, journeyCookieName);
 
-    await page.goto(`/qualifications/qualification-details/${qualificationId}`);
+    await page.goto(`/qualifications/qualification-details/${selectedQualificationId}`);
 }
 
 export function checkHeaderValue(response: APIResponse, headerName: string, headerValue: string) {

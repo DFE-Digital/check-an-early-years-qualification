@@ -42,4 +42,7 @@ public class RatioRequirement
     public Document? RequirementForInJune2016 { get; init; }
     public Document? RequirementForAfterJune2016 { get; init; }
     public Document? RequirementForL3PlusBetweenSept14AndMay16 { get; init; }
+    
+    // ReSharper disable once IdentifierTypo
+    public Document? EyittRouteAvailable { get; init; }
 }

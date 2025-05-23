@@ -1622,6 +1622,44 @@ public class QualificationDetailsServiceTests
         details.RatioRequirements.RequirementsForLevel3.Should().NotBe(requirementsForLevel3);
         details.RatioRequirements.ShowRequirementsForLevel3ByDefault.Should().BeFalse();
     }
+    
+    [TestMethod]
+    public async Task QualificationMayBeEligibleForEyitt_Level6_NotFullAndRelevant_IsADegree_SetsLevel6Requirements()
+    {
+        var details = new QualificationDetailsModel
+                      {
+                          RatioRequirements = new RatioRequirementModel
+                                              {
+                                                  ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
+                                                  ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
+                                              }
+                      };
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 6)
+            {
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName
+                    }
+                ],
+                IsTheQualificationADegree = true
+            };
+
+        const string requirementsForLevel6 = "requirementsForLevel6";
+
+        _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>())).ReturnsAsync(requirementsForLevel6);
+
+        var sut = GetSut();
+
+        await sut.QualificationMayBeEligibleForEyitt(details, qualification);
+
+        details.RatioRequirements.ApprovedForLevel6.Should().Be(QualificationApprovalStatus.PossibleRouteAvailable);
+        details.RatioRequirements.RequirementsForLevel6.Should().Be(requirementsForLevel6);
+        details.RatioRequirements.ShowRequirementsForLevel6ByDefault.Should().BeTrue();
+    }
 
     [TestMethod]
     public async Task SetRequirementOverrides_Level2_FullAndRelevant_AwardedInJune2016SeesMaybePFA()

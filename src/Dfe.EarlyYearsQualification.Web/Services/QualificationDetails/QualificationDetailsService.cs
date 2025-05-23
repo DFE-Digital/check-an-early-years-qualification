@@ -218,6 +218,19 @@ public class QualificationDetailsService(
         }
     }
 
+    public async Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model, Qualification qualification)
+    {
+        if (model.RatioRequirements.ApprovedForLevel6 != QualificationApprovalStatus.Approved && qualification is { QualificationLevel: 6, IsTheQualificationADegree: true })
+        {
+            model.RatioRequirements.ApprovedForLevel6 = QualificationApprovalStatus.PossibleRouteAvailable;
+            var requirementsForLevel6 = GetRatioProperty<Document>(nameof(RatioRequirement.EyittRouteAvailable),
+                                                                   RatioRequirements.Level6RatioRequirementName,
+                                                                   qualification);
+            model.RatioRequirements.RequirementsForLevel6 = await contentParser.ToHtml(requirementsForLevel6);
+            model.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
+        }
+    }
+
     public NavigationLink? CalculateBackButton(DetailsPage content, string qualificationId)
     {
         if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions())

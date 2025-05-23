@@ -184,6 +184,7 @@
                     || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.NotApproved
                     || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.PossibleRouteAvailable
                     || Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.NotApproved
+                    || Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.PossibleRouteAvailable                                                                         
                     || Model.RatioRequirements.ApprovedForUnqualified == QualificationApprovalStatus.NotApproved)
                 {
                     if (Model.RatioRequirements.ApprovedForUnqualified == QualificationApprovalStatus.NotApproved)
@@ -230,7 +231,7 @@
                                                                            });
                     }
 
-                    if (Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.NotApproved)
+                    if (Model.RatioRequirements.ApprovedForLevel6 is QualificationApprovalStatus.NotApproved or QualificationApprovalStatus.PossibleRouteAvailable)
                     {
                         await Html.RenderPartialAsync("Partials/RatioRow", new RatioRowModel
                                                                            {
