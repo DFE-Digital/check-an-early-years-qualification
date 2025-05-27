@@ -24,8 +24,6 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
       await page.locator("#PasswordValue").type(ENVIRONMENT.password);
 
-      console.log(ENVIRONMENT.password.length);
-
       submitButton = page.locator("#question-submit");
 
       await Promise.all([page.waitForNavigation(), submitButton.click()]);
