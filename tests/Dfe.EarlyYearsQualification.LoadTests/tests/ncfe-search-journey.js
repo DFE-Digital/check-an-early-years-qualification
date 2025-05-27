@@ -22,6 +22,8 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
     if (page.url().search(/challenge/i) >= 0) {
 
+      console.log("In challenge page");
+
       await page.locator("#PasswordValue").type(ENVIRONMENT.password);
 
       submitButton = page.locator("#question-submit");
