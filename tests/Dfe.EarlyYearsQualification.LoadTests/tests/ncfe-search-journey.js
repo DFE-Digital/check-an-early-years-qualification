@@ -86,9 +86,14 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
     await Promise.all([page.waitForNavigation(), submitButton.click()]);
 
+  } catch {
+
+    await page.screenshot({ path: 'screenshots/screenshot.png', fullPage: true });
+
   } finally {
 
     await page.close();
+
   }
 
   sleep(1)
