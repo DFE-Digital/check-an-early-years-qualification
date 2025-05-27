@@ -88,6 +88,7 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
   } catch {
 
+    console.log(page.url());
     await page.screenshot({ path: 'screenshots/screenshot.png', fullPage: true });
 
   } finally {
