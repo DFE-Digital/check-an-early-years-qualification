@@ -101,7 +101,7 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
   } catch (error) {
 
     console.error("Page URL: ", page.url());
-    console.error("Error: ", error.message);
+    console.error("Error: ", error);
 
     await page.screenshot({ path: 'screenshots/screenshot.png', fullPage: true });
 
