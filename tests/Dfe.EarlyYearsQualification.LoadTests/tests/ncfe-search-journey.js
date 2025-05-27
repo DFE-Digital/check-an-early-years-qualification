@@ -14,30 +14,42 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
   const page = await browser.newPage();
 
-  const context = page.context();
-
-  // set up password from environment
-  await context.addCookies([
-    { name: "auth-secret", value: ENVIRONMENT.password, sameSite: "Strict", domain: ENVIRONMENT.customDomain, path: "/", httpOnly: true, secure: true },
-  ]);
-
-  check(await context.cookies(), {
-    "auth cookie is set to expected value": (cookies) => cookies.length > 0 && cookies[0].value == ENVIRONMENT.password
-  });
-
   try {
 
     await page.goto(address, { waitUntil: "networkidle" });
 
-    let submitButton = page.locator(".govuk-button--start");
+    let submitButton;
+
+    if (page.url().match(/challenge/i)) {
+
+      await page.locator("#PasswordValue").type(ENVIRONMENT.password);
+
+      submitButton = page.locator("#question-submit");
+
+      await Promise.all([page.waitForNavigation(), submitButton.click()]);
+    }
+
+    check(page.url(), {
+      "is start page": (url) => url == address
+    });
+
+    submitButton = page.locator(".govuk-button--start");
 
     await Promise.all([page.waitForNavigation(), submitButton.click()]);
+
+    check(page.url(), {
+      "is 'where' question page": (url) => url.match(/\/questions\/where/)
+    });
 
     await page.locator("input[value='england']").check();
 
     submitButton = page.locator("button[id='question-submit']");
 
     await Promise.all([page.waitForNavigation(), submitButton.click()]);
+
+    check(page.url(), {
+      "is 'when' question page": (url) => url.match(/\/questions\/when/)
+    });
 
     await page.locator("input[name='StartedQuestion.SelectedMonth']").type("9");
     await page.locator("input[name='StartedQuestion.SelectedYear']").type("2016");
