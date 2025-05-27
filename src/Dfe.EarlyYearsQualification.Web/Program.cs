@@ -16,6 +16,7 @@ using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using Dfe.EarlyYearsQualification.Web.Services.Environments;
+using Dfe.EarlyYearsQualification.Web.Services.HeadHandling;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
@@ -174,6 +175,8 @@ var cacheConfiguration = builder.Configuration.GetSection("Cache");
 builder.UseDistributedCache(cacheConfiguration, isProductionEnvironment);
 
 var app = builder.Build();
+
+app.UseMiddleware<HeadHandlingMiddleware>();
 
 app.UseSecureHeadersMiddleware(
                                SecureHeaderConfiguration.CustomConfiguration()
