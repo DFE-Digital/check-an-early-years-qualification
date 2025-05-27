@@ -14,26 +14,22 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
   const page = await browser.newPage();
 
+  const context = page.context();
+
+  // set up password from environment
+  await context.addCookies([
+    { name: "auth-secret", value: ENVIRONMENT.password, sameSite: "Strict", domain: ENVIRONMENT.customDomain, path: "/", httpOnly: true, secure: true },
+  ]);
+
+  check(await context.cookies(), {
+    "auth cookie is set to expected value": (cookies) => cookies.length > 0 && cookies[0].value == ENVIRONMENT.password
+  });
+
   try {
 
     await page.goto(address, { waitUntil: "networkidle" });
 
-    let submitButton;
-
-    if (page.url().search(/challenge/i) >= 0) {
-
-      await page.locator("#PasswordValue").type(ENVIRONMENT.password);
-
-      submitButton = page.locator("#question-submit");
-
-      await Promise.all([page.waitForNavigation(), submitButton.click()]);
-
-      check(page.url(), {
-        "is start page": (url) => url == address
-      });
-    }
-
-    submitButton = page.locator(".govuk-button--start");
+    let submitButton = page.locator(".govuk-button--start");
 
     await Promise.all([page.waitForNavigation(), submitButton.click()]);
 
