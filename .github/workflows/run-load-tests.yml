@@ -30,7 +30,7 @@ jobs:
         uses: grafana/run-k6-action@v1
         id: run_tests
         env:
-          CHALLENGE_PASSWORD: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          CHALLENGE_PASSWORD: ${{ secrets.WEBAPP_TEAM_ACCESS_KEY }}
           CUSTOM_DOMAIN: staging.check-an-early-years-qualification.service.gov.uk/
           OPTIONS_SET: quick # change to "load" before completing the PR
         with:
