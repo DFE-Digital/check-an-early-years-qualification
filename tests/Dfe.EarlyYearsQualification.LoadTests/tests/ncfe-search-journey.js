@@ -20,7 +20,7 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
     let submitButton;
 
-    if (page.url().match(/challenge/i)) {
+    if (page.url().search(/challenge/i) >= 0) {
 
       await page.locator("#PasswordValue").type(ENVIRONMENT.password);
 
@@ -38,7 +38,7 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
     await Promise.all([page.waitForNavigation(), submitButton.click()]);
 
     check(page.url(), {
-      "is 'where' question page": (url) => url.match(/\/questions\/where/)
+      "is 'where' question page": (url) => url.search(/\/questions\/where/i) >= 0
     });
 
     await page.locator("input[value='england']").check();
@@ -48,7 +48,7 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
     await Promise.all([page.waitForNavigation(), submitButton.click()]);
 
     check(page.url(), {
-      "is 'when' question page": (url) => url.match(/\/questions\/when/)
+      "is 'when' question page": (url) => url.search(/\/questions\/when/i) >= 0
     });
 
     await page.locator("input[name='StartedQuestion.SelectedMonth']").type("9");
@@ -98,9 +98,11 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
     await Promise.all([page.waitForNavigation(), submitButton.click()]);
 
-  } catch {
+  } catch (error) {
 
-    console.log(page.url());
+    console.error("Page URL: ", page.url());
+    console.error("Error: ", error.message);
+
     await page.screenshot({ path: 'screenshots/screenshot.png', fullPage: true });
 
   } finally {
