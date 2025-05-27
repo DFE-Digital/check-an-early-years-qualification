@@ -11,6 +11,8 @@ const ENVIRONMENT = {
   jsonResult: __ENV.JSON_RESULT
 };
 
+console.log("OptionsSet: " + ENVIRONMENT.optionsSet);
+
 if (!ENVIRONMENT.optionsSet) {
   ENVIRONMENT.optionsSet = 'quick';
 }

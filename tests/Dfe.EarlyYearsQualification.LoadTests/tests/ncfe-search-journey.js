@@ -1,5 +1,7 @@
 import { sleep } from 'k6';
 
+import { check } from 'https://jslib.k6.io/k6-utils/1.5.0/index.js'; // This check supports async operations
+
 import { browser } from 'k6/browser';
 
 export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
@@ -18,6 +20,10 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
   await context.addCookies([
     { name: "auth-secret", value: ENVIRONMENT.password, sameSite: "Strict", domain: ENVIRONMENT.customDomain, path: "/", httpOnly: true, secure: true },
   ]);
+
+  check(await context.cookies(), {
+    "auth cookie is set to expected value": (cookies) => cookies.length > 0 && cookies[0].value == ENVIRONMENT.password
+  });
 
   try {
 
