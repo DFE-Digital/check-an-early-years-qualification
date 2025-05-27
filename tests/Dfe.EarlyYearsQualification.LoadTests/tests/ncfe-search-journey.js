@@ -22,18 +22,18 @@ export default async function ncfeSearchJourney(ENVIRONMENT, DATA) {
 
     if (page.url().search(/challenge/i) >= 0) {
 
-      console.log("In challenge page");
-
       await page.locator("#PasswordValue").type(ENVIRONMENT.password);
+
+      console.log(ENVIRONMENT.password.length);
 
       submitButton = page.locator("#question-submit");
 
       await Promise.all([page.waitForNavigation(), submitButton.click()]);
-    }
 
-    check(page.url(), {
-      "is start page": (url) => url == address
-    });
+      check(page.url(), {
+        "is start page": (url) => url == address
+      });
+    }
 
     submitButton = page.locator(".govuk-button--start");
 
