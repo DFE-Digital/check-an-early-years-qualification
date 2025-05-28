@@ -25,7 +25,6 @@ jobs:
         uses: grafana/setup-k6-action@v1
         with:
           k6-version: '1.0.0'
-          browser: true
 
       - name: "Run local k6 load tests"
         uses: grafana/run-k6-action@v1
@@ -36,5 +35,5 @@ jobs:
           OPTIONS_SET: quick # change to "load" before completing the PR
         with:
           path: |
-            ./tests/Dfe.EarlyYearsQualification.LoadTests/browser-journey.js
+            ./tests/Dfe.EarlyYearsQualification.LoadTests/run-tests.js
           cloud-run-locally: false
