@@ -2,7 +2,7 @@
 import {pages} from "../shared/urls-to-check";
 import {authorise, checkText, checkCookieValue, isVisible, doesNotExist, setCookie, journeyCookieName} from './playwrightWrapper';
 
-test.describe('A spec that tests that the cookies banner shows on all pages', () => {
+test.describe('A spec that tests that the cookies banner shows on all pages', {tag: "@e2e"}, () => {
 
     test.beforeEach(async ({context}) => {
         await authorise(context);

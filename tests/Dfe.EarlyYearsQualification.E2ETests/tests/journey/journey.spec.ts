@@ -20,7 +20,7 @@ import {
     isVisible
 } from '../shared/playwrightWrapper';
 
-test.describe('A spec used to test the various routes through the journey', () => {
+test.describe('A spec used to test the various routes through the journey', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
     });

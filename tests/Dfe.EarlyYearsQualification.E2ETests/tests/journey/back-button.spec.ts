@@ -15,7 +15,7 @@ import {
     checkDetailsPage
 } from '../shared/playwrightWrapper';
 
-test.describe("A spec used to test the main back button route through the journey", () => {
+test.describe("A spec used to test the main back button route through the journey", {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
     });
@@ -53,7 +53,7 @@ test.describe("A spec used to test the main back button route through the journe
         await checkUrl(page, process.env.WEBAPP_URL + "/");
     });
 
-    test.describe("back buttons should all navigate to the appropriate pages in the main journey", async () => {
+    test.describe("back buttons should all navigate to the appropriate pages in the main journey", {tag: "@e2e"}, async () => {
         test("the back button on the accessibility statement page navigates back to the home page", async ({page}) => {
             await page.goto("/accessibility-statement");
             await clickBackButton(page);

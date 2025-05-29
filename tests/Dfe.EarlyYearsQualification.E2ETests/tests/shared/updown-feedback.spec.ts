@@ -11,7 +11,7 @@ import {
     checkUrl
 } from './playwrightWrapper';
 
-test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies enabled | Javascript enabled', () => {
+test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies enabled | Javascript enabled', {tag: "@e2e"}, () => {
     test.beforeEach(async ({context}) => {
         await authorise(context);
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2212%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Atrue%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D', journeyCookieName);
@@ -88,7 +88,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
         });
     });
 });
-test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies disabled | Javascript enabled', () => {
+test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies disabled | Javascript enabled', {tag: "@e2e"}, () => {
     test.beforeEach(async ({context}) => {
         await authorise(context);
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2212%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Atrue%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D', journeyCookieName);
@@ -112,7 +112,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
         });
     });
 });
-test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies enabled | Javascript disabled', () => {
+test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies enabled | Javascript disabled', {tag: "@e2e"}, () => {
     test.use({javaScriptEnabled: false});
     test.beforeEach(async ({context}) => {
         await authorise(context);
@@ -139,7 +139,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
     });
 });
 
-test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies disabled | Javascript disabled', () => {
+test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies disabled | Javascript disabled', {tag: "@e2e"}, () => {
     test.use({javaScriptEnabled: false});
     test.beforeEach(async ({context}) => {
         await authorise(context);

@@ -1,7 +1,7 @@
 ﻿import {test} from '@playwright/test';
 import {startJourney, checkText, checkError, doesNotExist, exists, isVisible, isNotVisible} from '../shared/playwrightWrapper';
 
-test.describe("A spec that tests the cookies page", () => {
+test.describe("A spec that tests the cookies page", {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
         await page.goto("/cookies");
@@ -21,7 +21,7 @@ test.describe("A spec that tests the cookies page", () => {
         await checkText(page, 'button[id="cookies-button"]', "Test Cookies Button");
     });
 
-    test.describe("Check the functionality of the page", () => {
+    test.describe("Check the functionality of the page", {tag: "@e2e"}, () => {
         test("Checks that the radio button validation is working", async ({page}) => {
 
             await page.click('#cookies-button');

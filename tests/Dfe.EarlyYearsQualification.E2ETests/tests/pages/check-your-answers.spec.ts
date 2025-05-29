@@ -7,7 +7,7 @@ import {
     checkUrl
 } from '../shared/playwrightWrapper';
 
-test.describe('A spec used to test the check your answers page', () => {
+test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
         /* {"WhereWasQualificationAwarded":"england","WhenWasQualificationStarted":"7/2015","WhenWasQualificationAwarded":"9/2017","LevelOfQualification":"3","WhatIsTheAwardingOrganisation":"NCFE","SelectedAwardingOrganisationNotOnTheList":false} */

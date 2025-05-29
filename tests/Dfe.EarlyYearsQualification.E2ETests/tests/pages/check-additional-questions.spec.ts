@@ -10,7 +10,7 @@ import {
     attributeContains
 } from '../shared/playwrightWrapper';
 
-test.describe('A spec that tests the check additional questions page', () => {
+test.describe('A spec that tests the check additional questions page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
         await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);

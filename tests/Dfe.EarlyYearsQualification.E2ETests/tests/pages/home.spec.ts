@@ -1,7 +1,7 @@
 ﻿import {test} from '@playwright/test';
 import {startJourney, checkText} from '../shared/playwrightWrapper';
 
-test.describe('A spec used to test the home page', () => {
+test.describe('A spec used to test the home page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
     });

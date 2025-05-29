@@ -23,7 +23,7 @@ async function checkFeedbackBanners(page: Page) {
     await checkText(page, ".govuk-notification-banner__content > .govuk-body", "This is the body text", 1);
 }
 
-test.describe('A spec that tests advice pages', () => {
+test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
     });
