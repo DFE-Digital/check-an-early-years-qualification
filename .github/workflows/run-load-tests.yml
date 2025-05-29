@@ -5,13 +5,6 @@ on:
   workflow_dispatch:
   schedule: # only runs off main branch
     - cron: "40 3 * * TUE" # at 3.40 am, every Tuesday
-  push: # remove this before completing the PR
-    branches:
-      - "feature/eyqb-1076-k6-in-pipeline"
-  pull_request: # remove this before completing the PR
-    branches:
-      - "feature/eyqb-1076-k6-in-pipeline"
-  issue_comment: # remove this before completing the PR
 
 jobs:
   run-tests:
