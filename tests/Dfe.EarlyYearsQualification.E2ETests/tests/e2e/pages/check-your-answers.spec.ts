@@ -5,7 +5,7 @@ import {
     setCookie,
     journeyCookieName,
     checkUrl
-} from '../shared/playwrightWrapper';
+} from '../../shared/playwrightWrapper';
 
 test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

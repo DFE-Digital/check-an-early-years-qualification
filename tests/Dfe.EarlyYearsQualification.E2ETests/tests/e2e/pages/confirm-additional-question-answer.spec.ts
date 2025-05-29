@@ -8,7 +8,7 @@ import {
     clickBackButton,
     checkDisclaimer,
     exists
-} from '../shared/playwrightWrapper';
+} from '../../shared/playwrightWrapper';
 
 test.describe('A spec used to test the check additional requirements answer page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

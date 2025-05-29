@@ -14,7 +14,7 @@ import {
     hasAttribute,
     doesNotHaveAttribute,
     whenWasQualificationStarted
-} from '../shared/playwrightWrapper';
+} from '../../shared/playwrightWrapper';
 
 test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

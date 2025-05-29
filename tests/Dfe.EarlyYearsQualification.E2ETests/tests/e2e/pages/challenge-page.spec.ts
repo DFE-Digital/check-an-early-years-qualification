@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, checkError, doesNotExist, exists, hasAttribute} from '../shared/playwrightWrapper';
+import {startJourney, checkText, checkError, doesNotExist, exists, hasAttribute} from '../../shared/playwrightWrapper';
 
 test.describe('A spec that tests the challenge page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

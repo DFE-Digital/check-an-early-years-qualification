@@ -1,6 +1,6 @@
 import {test} from '@playwright/test';
-import {pagesThatRedirectIfDateMissing} from "../shared/urls-to-check";
-import {startJourney, checkUrl} from '../shared/playwrightWrapper';
+import {pagesThatRedirectIfDateMissing} from "../../shared/urls-to-check";
+import {startJourney, checkUrl} from '../../shared/playwrightWrapper';
 
 test.describe('A spec used to check that if the user skips entering the date of the qual, then they are redirected back to the date selection page', {tag: "@e2e"}, () => {
 

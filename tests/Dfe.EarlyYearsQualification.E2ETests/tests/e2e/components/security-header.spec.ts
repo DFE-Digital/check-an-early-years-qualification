@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {pagesWithForms, pagesWithoutFormsOrRedirects, pagesWithoutFormsWithRedirects} from "./urls-to-check";
+import {pagesWithForms, pagesWithoutFormsOrRedirects, pagesWithoutFormsWithRedirects} from "../../shared/urls-to-check";
 import {
     cookiePreferencesCookieName,
     journeyCookieName,
@@ -7,7 +7,7 @@ import {
     setCookie,
     checkHeaderValue,
     checkHeaderExists
-} from "./playwrightWrapper";
+} from '../../shared/playwrightWrapper';
 
 var expectedContentSecurityPolicyHeader = "script-src 'self' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://www.clarity.ms/ https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect;block-all-mixed-content;upgrade-insecure-requests;"
 test.describe('A spec that checks for security headers in the response', {tag: "@e2e"}, () => {

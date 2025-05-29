@@ -18,7 +18,7 @@ import {
     checkEmptyValue,
     inputText,
     isVisible
-} from '../shared/playwrightWrapper';
+} from '../../shared/playwrightWrapper';
 
 test.describe('A spec used to test the various routes through the journey', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

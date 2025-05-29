@@ -13,7 +13,7 @@ import {
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
     checkDetailsPage
-} from '../shared/playwrightWrapper';
+} from '../../shared/playwrightWrapper';
 
 test.describe("A spec used to test the main back button route through the journey", {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
