@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {pagesWithUpDownFeedback} from "../../shared/urls-to-check";
+import {pagesWithUpDownFeedback} from "../../_shared/urls-to-check";
 
 import {
     authorise,
@@ -9,7 +9,7 @@ import {
     setCookie,
     journeyCookieName,
     checkUrl
-} from '../../shared/playwrightWrapper';
+} from '../../_shared/playwrightWrapper';
 
 test.describe('A spec that tests that the updown-feedback shows on all pages. Cookies enabled | Javascript enabled', {tag: "@e2e"}, () => {
     test.beforeEach(async ({context}) => {

@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName, hasClass, hasCount} from '../../shared/playwrightWrapper';
+import {startJourney, checkText, setCookie, journeyCookieName, hasClass, hasCount} from '../../_shared/playwrightWrapper';
 
 test.describe("A spec used to test the qualification details page", {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

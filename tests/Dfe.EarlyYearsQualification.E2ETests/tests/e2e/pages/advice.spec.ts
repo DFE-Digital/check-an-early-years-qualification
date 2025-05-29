@@ -11,7 +11,7 @@ import {
     checkUrl,
     isVisible,
     checkTextContains
-} from '../../shared/playwrightWrapper';
+} from '../../_shared/playwrightWrapper';
 
 async function checkFeedbackBanners(page: Page) {
     await checkText(page, ".govuk-notification-banner__title", "Test banner title", 0);

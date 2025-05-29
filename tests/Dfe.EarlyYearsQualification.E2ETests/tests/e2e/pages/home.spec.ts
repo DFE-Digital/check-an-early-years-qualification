@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText} from '../../shared/playwrightWrapper';
+import {startJourney, checkText} from '../../_shared/playwrightWrapper';
 
 test.describe('A spec used to test the home page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

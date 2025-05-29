@@ -1,6 +1,6 @@
 ﻿import {test} from '@playwright/test';
-import {pages} from "../../shared/urls-to-check";
-import {authorise, checkText, isVisible} from '../../shared/playwrightWrapper';
+import {pages} from "../../_shared/urls-to-check";
+import {authorise, checkText, isVisible} from '../../_shared/playwrightWrapper';
 
 test.describe('A spec that tests the phase banner is showing on all pages', {tag: "@e2e"}, () => {
 

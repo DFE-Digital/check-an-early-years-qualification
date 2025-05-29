@@ -8,7 +8,7 @@ import {
     isVisible,
     hasAttribute,
     attributeContains
-} from '../../shared/playwrightWrapper';
+} from '../../_shared/playwrightWrapper';
 
 test.describe('A spec that tests the check additional questions page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {checkUrl, authorise} from '../../shared/playwrightWrapper';
+import {checkUrl, authorise} from '../../_shared/playwrightWrapper';
 
 const expectedUrl = "https://vdp.security.education.gov.uk/.well-known/security.txt";
 

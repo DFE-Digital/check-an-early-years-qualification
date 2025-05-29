@@ -1,5 +1,5 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, checkError, doesNotExist, exists, isVisible, isNotVisible} from '../../shared/playwrightWrapper';
+import {startJourney, checkText, checkError, doesNotExist, exists, isVisible, isNotVisible} from '../../_shared/playwrightWrapper';
 
 test.describe("A spec that tests the cookies page", {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {

@@ -9,7 +9,7 @@ import {
     doesNotExist,
     exists,
     isVisible
-} from '../../shared/playwrightWrapper';
+} from '../../_shared/playwrightWrapper';
 
 test.describe('A spec that tests the confirm qualification page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
