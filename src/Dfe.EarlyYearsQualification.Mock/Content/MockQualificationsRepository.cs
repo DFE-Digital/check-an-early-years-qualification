@@ -13,6 +13,10 @@ public class MockQualificationsRepository : IQualificationsRepository
 
     public async Task<Qualification?> GetById(string qualificationId)
     {
+        var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE", 
+                                                         AwardingOrganisations.Various, 6);
+        degreeQualification.IsTheQualificationADegree = true;
+
         return qualificationId.ToLower() switch
                {
                    "eyq-250" => await Task.FromResult(CreateQualification("EYQ-250", "BTEC",
@@ -33,6 +37,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                                                           AwardingOrganisations.Various, 3, false)),
                    "eyq-241" => await Task.FromResult(CreateQualification("EYQ-241", "BTEC",
                                                                           AwardingOrganisations.Various, 2)),
+                   "eyq-321" => await Task.FromResult(degreeQualification),
                    _ => await Task.FromResult(CreateQualification("EYQ-240",
                                                                   "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
                                                                   AwardingOrganisations.Ncfe, 3))
@@ -358,7 +363,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RequirementForLevel6Before2014 = Level6MustQts,
                            RequirementForLevel6After2014 = Level6MustQts,
                            RequirementForLevel7Before2014 = Level6MustQts,
-                           RequirementForLevel7After2014 = Level6MustQts
+                           RequirementForLevel7After2014 = Level6MustQts,
+                           EyittRouteAvailable = ContentfulContentHelper.Paragraph("This is the EYITT content")
                        },
 
                        new RatioRequirement

@@ -539,4 +539,37 @@ test.describe("A spec used to test the qualification details page ratios", () =>
             });
         });
     });
+
+    test('Checks level 6 degree not approved shows EYITT content', async ({
+                                                                         page,
+                                                                         context
+                                                                     }) => {
+        await goToDetailsPageOfQualification({
+            context: context,
+            location: "england",
+            startDate: [1, 2012],
+            awardDate: [7, 2016],
+            level: 6,
+            organisation: "NCFE",
+            organisationNotOnList: false,
+            searchCriteria: '',
+            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
+            selectedFromList: true,
+            qualificationId: 'eyq-321'
+        }, page);
+
+        await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
+        await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text");
+
+        await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
+            summaryText: level3RequirementsHeading,
+            detailText: l3MustEnglishMustPFA
+        });
+        await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
+            summaryText: level2RequirementsHeading,
+            detailText: l2MustPFA
+        });
+        await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.PossibleRouteAvailable, { detailText: 'This is the EYITT content' });
+    });
 });
