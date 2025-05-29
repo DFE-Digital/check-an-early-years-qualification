@@ -9,7 +9,16 @@ export async function authorise(context: BrowserContext) {
 
 export async function startJourney(page: Page, context: BrowserContext) {
     await authorise(context);
+
     await page.goto("/", {waitUntil: 'domcontentloaded'});
+
+    //if we end up navigated to the challenge page, then fill in the password and continue
+    if (page.url().includes("challenge")) {
+        await page.locator("#PasswordValue").fill(process.env.AUTH_SECRET);
+        await page.locator("#question-submit").click();
+        await page.waitForURL("/");
+    }
+    
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
@@ -167,6 +176,19 @@ export async function whatIsTheAwardingOrganisation(page: Page, dropdownIndex: n
     await page.locator("#question-submit").click();
 }
 
+export async function whatIsTheAwardingOrganisationValue(page: Page, value: string) {
+    // what-is-the-awarding-organisation page - valid awarding organisation moves us on
+    await checkUrl(page, "/questions/what-is-the-awarding-organisation");
+    await page.locator("#awarding-organisation-select").selectOption({value: value});
+    await page.locator("#question-submit").click();
+}
+
+export async function selectNotOnTheListAsTheAwardingOrganisation(page: Page) {
+    await checkUrl(page, "/questions/what-is-the-awarding-organisation");
+    await page.locator("#awarding-organisation-not-in-list").click();
+    await page.locator("#question-submit").click();
+}
+
 export async function checkYourAnswersPage(page: Page) {
     await checkUrl(page, "/questions/check-your-answers");
     await page.locator("#cta-button").click();
@@ -177,6 +199,12 @@ export async function selectQualification(page: Page, qualificationId: string) {
     await checkUrl(page, "/select-a-qualification-to-check");
     await page.locator("a[href=\"/confirm-qualification/" + qualificationId + "\"]").click();
     await checkUrl(page, "/confirm-qualification/" + qualificationId);
+}
+
+export async function checkNumberOfMatchingQualifications(page: Page, numberOfExpectedQualifications: number) {
+    // qualifications page - click a qualification in the list to move us on
+    await checkUrl(page, "/select-a-qualification-to-check");
+    await checkText(page, "#found-heading", `We found ${numberOfExpectedQualifications} matching qualifications`);
 }
 
 export async function confirmQualificiation(page: Page, answer: string) {
