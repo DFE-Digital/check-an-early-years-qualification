@@ -13,8 +13,8 @@ public class MockQualificationsRepository : IQualificationsRepository
 
     public async Task<Qualification?> GetById(string qualificationId)
     {
-        var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
-                                                                          AwardingOrganisations.Various, 6);
+        var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE", 
+                                                         AwardingOrganisations.Various, 6);
         degreeQualification.IsTheQualificationADegree = true;
 
         return qualificationId.ToLower() switch

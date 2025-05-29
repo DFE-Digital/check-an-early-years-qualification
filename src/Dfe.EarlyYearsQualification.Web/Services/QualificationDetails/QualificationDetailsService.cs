@@ -218,6 +218,12 @@ public class QualificationDetailsService(
         }
     }
 
+    /// <summary>
+    /// Checks if a qualification is eligible for Early Years Initial Teacher Training, upon completion of which will
+    /// allow the holder to gain Early Years Teacher Status (EYTS)
+    /// </summary>
+    /// <param name="model">The mapped qualification details</param>
+    /// <param name="qualification">The qualification data from Contentful</param>
     public async Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model, Qualification qualification)
     {
         if (model.RatioRequirements.ApprovedForLevel6 != QualificationApprovalStatus.Approved && qualification is { QualificationLevel: 6, IsTheQualificationADegree: true })
