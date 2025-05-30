@@ -126,6 +126,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await refineQualificationSearch(page, 'test');
         await checkUrl(page, "/select-a-qualification-to-check");
         await clickBackButton(page);
+        await clickBackButton(page);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
         await checkUrl(page, "/select-a-qualification-to-check");

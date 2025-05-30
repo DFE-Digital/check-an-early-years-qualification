@@ -18,7 +18,7 @@ export async function startJourney(page: Page, context: BrowserContext) {
         await page.locator("#question-submit").click();
         await page.waitForURL("/");
     }
-    
+
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
@@ -155,6 +155,7 @@ export async function whereWasTheQualificationAwarded(page: Page, location: stri
 
 export async function whenWasQualificationStarted(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
     await checkUrl(page, '/questions/when-was-the-qualification-started-and-awarded');
+    await attributeContains(page, "#back-button", 'href', '/questions/where-was-the-qualification-awarded');
     await page.locator("#StartedQuestion\\.SelectedMonth").fill(startedMonth);
     await page.locator("#StartedQuestion\\.SelectedYear").fill(startedYear);
     await page.locator("#AwardedQuestion\\.SelectedMonth").fill(awardedMonth);
@@ -165,6 +166,7 @@ export async function whenWasQualificationStarted(page: Page, startedMonth: stri
 export async function whatLevelIsTheQualification(page: Page, level: number) {
     // what-level-is-the-qualification page - valid level moves us on
     await checkUrl(page, "/questions/what-level-is-the-qualification");
+    await attributeContains(page, "#back-button", 'href', '/questions/when-was-the-qualification-started-and-awarded');
     await page.locator('input[id="' + level + '"]').click();
     await page.locator("#question-submit").click();
 }
@@ -172,6 +174,8 @@ export async function whatLevelIsTheQualification(page: Page, level: number) {
 export async function whatIsTheAwardingOrganisation(page: Page, dropdownIndex: number) {
     // what-is-the-awarding-organisation page - valid awarding organisation moves us on
     await checkUrl(page, "/questions/what-is-the-awarding-organisation");
+    await attributeContains(page, "#back-button", 'href', '/questions/what-level-is-the-qualification');
+
     await page.locator("#awarding-organisation-select").selectOption({index: dropdownIndex});
     await page.locator("#question-submit").click();
 }
@@ -179,24 +183,29 @@ export async function whatIsTheAwardingOrganisation(page: Page, dropdownIndex: n
 export async function whatIsTheAwardingOrganisationValue(page: Page, value: string) {
     // what-is-the-awarding-organisation page - valid awarding organisation moves us on
     await checkUrl(page, "/questions/what-is-the-awarding-organisation");
+    await attributeContains(page, "#back-button", 'href', '/questions/what-level-is-the-qualification');
     await page.locator("#awarding-organisation-select").selectOption({value: value});
     await page.locator("#question-submit").click();
 }
 
 export async function selectNotOnTheListAsTheAwardingOrganisation(page: Page) {
     await checkUrl(page, "/questions/what-is-the-awarding-organisation");
+    await attributeContains(page, "#back-button", 'href', '/questions/what-level-is-the-qualification');
     await page.locator("#awarding-organisation-not-in-list").click();
     await page.locator("#question-submit").click();
 }
 
 export async function checkYourAnswersPage(page: Page) {
     await checkUrl(page, "/questions/check-your-answers");
+    await attributeContains(page, "#back-button", 'href', '/questions/what-is-the-awarding-organisation');
     await page.locator("#cta-button").click();
 }
 
-export async function selectQualification(page: Page, qualificationId: string) {
+export async function selectQualification(page: Page, qualificationId?: string) {
     // qualifications page - click a qualification in the list to move us on
     await checkUrl(page, "/select-a-qualification-to-check");
+    await attributeContains(page, "#back-button", 'href', '/questions/check-your-answers');
+    if (qualificationId == null) return;
     await page.locator("a[href=\"/confirm-qualification/" + qualificationId + "\"]").click();
     await checkUrl(page, "/confirm-qualification/" + qualificationId);
 }
