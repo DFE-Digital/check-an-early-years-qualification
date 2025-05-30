@@ -1,4 +1,4 @@
-﻿import {BrowserContext, Page, expect, APIResponse} from "@playwright/test";
+﻿import { BrowserContext, Page, expect } from "@playwright/test";
 
 export const cookiePreferencesCookieName = "cookies_preferences_set";
 export const journeyCookieName = 'user_journey';
@@ -10,7 +10,7 @@ export async function authorise(context: BrowserContext) {
 export async function startJourney(page: Page, context: BrowserContext) {
     await authorise(context);
 
-    await page.goto("/", {waitUntil: 'domcontentloaded'});
+    await page.goto("/", { waitUntil: 'domcontentloaded' });
 
     //if we end up navigated to the challenge page, then fill in the password and continue
     if (page.url().includes("challenge")) {
@@ -18,7 +18,7 @@ export async function startJourney(page: Page, context: BrowserContext) {
         await page.locator("#question-submit").click();
         await page.waitForURL("/");
     }
-    
+
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
@@ -31,7 +31,7 @@ export async function checkUrl(page: Page, expectedUrl: string) {
 
 export async function checkText(page: Page, locator: string, expectedText: string, nth: number = null) {
     await page.waitForLoadState("domcontentloaded");
-    var element = page.locator(locator);
+    let element = page.locator(locator);
     if (nth != null) {
         element = element.nth(nth);
     }
@@ -74,7 +74,7 @@ export async function whatLevelIsTheQualification(page: Page, level: number) {
 export async function whatIsTheAwardingOrganisation(page: Page, value: string) {
     // what-is-the-awarding-organisation page - valid awarding organisation moves us on
     await checkUrl(page, "/questions/what-is-the-awarding-organisation");
-    await page.locator("#awarding-organisation-select").selectOption({value: value});
+    await page.locator("#awarding-organisation-select").selectOption({ value: value });
     await page.locator("#question-submit").click();
 }
 
