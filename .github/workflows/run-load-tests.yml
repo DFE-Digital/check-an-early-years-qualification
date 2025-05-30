@@ -9,7 +9,7 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: staging # do not run against production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,7 +24,7 @@ jobs:
         id: run_tests
         env:
           CHALLENGE_PASSWORD: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-          CUSTOM_DOMAIN: staging.check-an-early-years-qualification.service.gov.uk/
+          CUSTOM_DOMAIN: ${{ vars.SERVICE_GOV_UK_CUSTOM_DOMAIN_NAME }}/
           OPTIONS_SET: load
         with:
           path: |
