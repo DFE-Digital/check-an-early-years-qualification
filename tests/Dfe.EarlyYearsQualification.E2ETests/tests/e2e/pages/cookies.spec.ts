@@ -21,7 +21,7 @@ test.describe("A spec that tests the cookies page", {tag: "@e2e"}, () => {
         await checkText(page, 'button[id="cookies-button"]', "Test Cookies Button");
     });
 
-    test.describe("Check the functionality of the page", {tag: "@e2e"}, () => {
+    test.describe("Check the functionality of the page", () => {
         test("Checks that the radio button validation is working", async ({page}) => {
 
             await page.click('#cookies-button');

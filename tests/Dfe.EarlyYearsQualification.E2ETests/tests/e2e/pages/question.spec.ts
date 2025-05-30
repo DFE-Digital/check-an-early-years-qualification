@@ -326,7 +326,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await hasClass(page, "#AwardedQuestion\\.SelectedYear", /govuk-input--error/);
     });
 
-    test.describe("When the started month selected on the when-was-the-qualification-started-and-awarded page", {tag: "@e2e"}, () => {
+    test.describe("When the started month selected on the when-was-the-qualification-started-and-awarded page", () => {
         ['0', '-1', '13', '99'].forEach((value) => {
             test(`is ${value} then it shows the month out of bounds error message`, async ({page}) => {
                 await page.goto("/questions/when-was-the-qualification-started-and-awarded");
@@ -350,7 +350,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         });
     });
 
-    test.describe("When the started year selected on the when-was-the-qualification-started-and-awarded page", {tag: "@e2e"}, () => {
+    test.describe("When the started year selected on the when-was-the-qualification-started-and-awarded page", () => {
         ['0', '1899', '3000'].forEach((value) => {
             test(`is ${value} then it shows the incorrect year format error message`, async ({page}) => {
                 await page.goto("/questions/when-was-the-qualification-started-and-awarded");
@@ -374,7 +374,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         });
     });
 
-    test.describe("When the awarded month selected on the when-was-the-qualification-started-and-awarded page", {tag: "@e2e"}, () => {
+    test.describe("When the awarded month selected on the when-was-the-qualification-started-and-awarded page", () => {
         ['0', '-1', '13', '99'].forEach((value) => {
             test(`is ${value} then it shows the month out of bounds error message`, async ({page}) => {
                 await page.goto("/questions/when-was-the-qualification-started-and-awarded");
@@ -398,7 +398,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         });
     });
 
-    test.describe("When the awarded year selected on the when-was-the-qualification-started-and-awarded page", {tag: "@e2e"}, () => {
+    test.describe("When the awarded year selected on the when-was-the-qualification-started-and-awarded page", () => {
         ['0', '1899', '3000'].forEach((value) => {
             test(`is ${value} then it shows the incorrect year format error message`, async ({page}) => {
                 await page.goto("/questions/when-was-the-qualification-started-and-awarded");
