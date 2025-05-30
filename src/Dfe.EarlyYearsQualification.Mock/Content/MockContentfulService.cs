@@ -114,7 +114,6 @@ public class MockContentfulService : IContentService
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-        var checkAnotherQualificationText = ContentfulContentHelper.Paragraph("Test Check Another Qualification Text");
         var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
@@ -251,7 +250,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "TEST",
-                                                          Href = "/questions/what-is-the-awarding-organisation",
+                                                          Href = "/questions/check-your-answers",
                                                           OpenInNewTab = false
                                                       },
                                          QualificationFoundPrefix = "We found",
@@ -452,7 +451,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "TEST",
-                                                          Href = WhereWasTheQualificationAwardedPath,
+                                                          Href = "/questions/what-is-the-awarding-organisation",
                                                           OpenInNewTab = false
                                                       },
                                          CtaButtonText = "Continue",
