@@ -3,6 +3,7 @@
 These tests are ran using [Playwright](https://playwright.dev/).
 
 To run the tests, run the following commands:
+
 - Navigate to the correct folder:
     - `cd tests/Dfe.EarlyYearsQualification.E2ETests`
 - Tell Node Version Manager that you want the latest version with: `nvm use node --lts`
@@ -16,6 +17,7 @@ To run the tests, run the following commands:
 |---------------|--------------|
 | `@e2e`        | Mock         |
 | `@validation` | Live         |
+| `@smoke`      | Live         |
 
 If a test using mock content fails, check that the mock content contains the required content.
 

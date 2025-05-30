@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
 
-test.describe("A spec used to smoke test the environment once a deployment has happened", () => {
+test.describe("A spec used to smoke test the environment once a deployment has happened", {tag: "@smoke"}, () => {
     test("should return search results", async ({page, context}) => {
 
         // attempt to set cookie and navigate to start page
@@ -17,7 +17,7 @@ test.describe("A spec used to smoke test the environment once a deployment has h
             await page.waitForURL("/");
         }
 
-        // home page
+        // home page 
         await expect(page.locator("#start-now-button")).toBeVisible();
         await page.locator("#start-now-button").click();
 
