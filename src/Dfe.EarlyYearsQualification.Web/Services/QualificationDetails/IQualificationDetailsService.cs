@@ -20,7 +20,11 @@ public interface IQualificationDetailsService
 
     Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
                                                            Qualification qualification);
-
+    Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model,
+                                          Qualification qualification);
+    // ReSharper disable once IdentifierTypo
+    Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model,
+                                            Qualification qualification);
     Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model);
 
     (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(
@@ -41,4 +45,6 @@ public interface IQualificationDetailsService
     void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPage content);
 
     void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPage content);
+    
+    Task SetRequirementOverrides(Qualification qualification, QualificationDetailsModel model);
 }
