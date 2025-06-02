@@ -154,7 +154,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -213,10 +213,10 @@ export default function level3Journey(ENVIRONMENT, DATA) {
   )
 
   group(
-    `page_2 - ${address}/questions/start-new`,
+    `page_2 - ${address}/questions/where-was-the-qualification-awarded`,
     function () {
       response = http.get(
-        `${address}/questions/start-new`,
+        `${address}/questions/where-was-the-qualification-awarded`,
         {
           headers: {
             'upgrade-insecure-requests': '1',
@@ -353,7 +353,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -433,7 +433,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       check(response, {
-        'post status 200': (r) => r.status == 200,
+        'post status (where) 200': (r) => r.status == 200,
         'post request not challenged': (r) => !r.url.includes('challenge')
       });
 
@@ -571,7 +571,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -603,8 +603,10 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       response = http.post(
         `${address}/questions/when-was-the-qualification-started-and-awarded`,
         {
-          SelectedMonth: '9',
-          SelectedYear: '2014',
+          "StartedQuestion.SelectedMonth": '9',
+          "StartedQuestion.SelectedYear": '2014',
+          "AwardedQuestion.SelectedMonth": '6',
+          "AwardedQuestion.SelectedYear": '2016',
           __RequestVerificationToken: requestVerificationToken,
         },
         {
@@ -622,7 +624,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       check(response, {
-        'post status 200': (r) => r.status == 200,
+        'post status (when) 200': (r) => r.status == 200,
         'post request not challenged': (r) => !r.url.includes('challenge')
       });
 
@@ -760,7 +762,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -810,7 +812,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       check(response, {
-        'post status 200': (r) => r.status == 200,
+        'post status (level) 200': (r) => r.status == 200,
         'post request not challenged': (r) => !r.url.includes('challenge')
       });
 
@@ -948,7 +950,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -999,7 +1001,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       check(response, {
-        'post status 200': (r) => r.status == 200,
+        'post status (org) 200': (r) => r.status == 200,
         'post request not challenged': (r) => !r.url.includes('challenge')
       });
 
@@ -1137,7 +1139,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -1165,6 +1167,23 @@ export default function level3Journey(ENVIRONMENT, DATA) {
           },
         }
       )
+
+      response = http.get(
+        `${address}/questions/check-your-answers`,
+        {
+          headers: {
+            origin: address,
+            referer: '',
+            'user-agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+            'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+          },
+        }
+      )
+
+      requestVerificationToken = getRequestVerificationTokenValue(response);
     }
   )
 
@@ -1205,6 +1224,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
           },
         }
       )
+
       response = http.get(
         `${address}/govuk/all.min.css`,
         {
@@ -1315,7 +1335,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -1370,7 +1390,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       check(response, {
-        'post status 200': (r) => r.status == 200,
+        'post status (confirm) 200': (r) => r.status == 200,
         'post request not challenged': (r) => !r.url.includes('challenge')
       });
 
@@ -1508,7 +1528,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -1561,7 +1581,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       check(response, {
-        'post status 200': (r) => r.status == 200,
+        'post status (question) 200': (r) => r.status == 200,
         'post request not challenged': (r) => !r.url.includes('challenge')
       });
 
@@ -1699,7 +1719,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
       )
 
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -1727,6 +1747,21 @@ export default function level3Journey(ENVIRONMENT, DATA) {
           },
         }
       )
+
+      response = http.get(
+        `${address}/qualifications/check-additional-questions/EYQ-224/confirm-answers`, {
+        headers: {
+          'upgrade-insecure-requests': '1',
+          'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+          'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Windows"',
+        },
+      }
+      )
+
+      requestVerificationToken = getRequestVerificationTokenValue(response);
     }
   )
 
@@ -1746,6 +1781,10 @@ export default function level3Journey(ENVIRONMENT, DATA) {
           },
         }
       )
+
+      check(response, {
+        'get status 200': (r) => r.status == 200,
+      })
 
       requestVerificationToken = getRequestVerificationTokenValue(response);
 
@@ -1899,7 +1938,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
         }
       )
       response = http.get(
-        `${address}/assets/images/govuk-crest.png`,
+        `${address}/assets/images/favicon.svg`,
         {
           headers: {
             referer:
@@ -1915,5 +1954,5 @@ export default function level3Journey(ENVIRONMENT, DATA) {
     }
   )
 
-  sleep(1)
+  sleep(2)
 }
