@@ -1,0 +1,19 @@
+name: Restart App Service
+description: Restarts the app service in Azure
+  
+inputs:
+  resource_name_prefix:
+    description: "The resource name prefix"
+    required: true
+  webapp_name:
+    description: "The name of the app service to restart"
+    required: true
+
+runs:
+  using: composite
+
+  steps:
+    - name: Restart Service
+      shell: bash
+      run: |
+        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }}

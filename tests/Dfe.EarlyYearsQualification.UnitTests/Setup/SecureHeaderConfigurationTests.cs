@@ -1,6 +1,4 @@
 using Dfe.EarlyYearsQualification.Web.Security;
-using FluentAssertions;
-using OwaspHeaders.Core.Enums;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Setup;
 
@@ -23,11 +21,16 @@ public class SecureHeaderConfigurationTests
         config.UseReferrerPolicy.Should().BeTrue();
         config.UseExpectCt.Should().BeFalse();
         config.UseCacheControl.Should().BeTrue();
-        config.RemoveXPoweredByHeader.Should().BeTrue();
         config.UseCrossOriginResourcePolicy.Should().BeTrue();
-        config.HstsConfiguration.IncludeSubDomains.Should().BeTrue();
-        config.HstsConfiguration.MaxAge.Should().Be(63072000);
-        config.XFrameOptionsConfiguration.OptionValue.Should().Be(XFrameOptions.Deny);
+        config.HstsConfiguration.Should().NotBeNull();
+        var hstsHeaderValue = config.HstsConfiguration.BuildHeaderValue();
+        hstsHeaderValue.Should().NotBeNull();
+        hstsHeaderValue.Should().Contain("max-age=31536000");
+        hstsHeaderValue.Should().Contain("includeSubDomains");
+        config.XFrameOptionsConfiguration.Should().NotBeNull();
+        var xFrameOptionHeaderValue = config.XFrameOptionsConfiguration.BuildHeaderValue();
+        xFrameOptionHeaderValue.Should().NotBeNull();
+        xFrameOptionHeaderValue.Should().Contain("deny");
         config.XFrameOptionsConfiguration.AllowFromDomain.Should().BeNull();
         config.ContentSecurityPolicyConfiguration.BaseUri.Should().BeEmpty();
         config.ContentSecurityPolicyConfiguration.DefaultSrc.Should().BeEmpty();

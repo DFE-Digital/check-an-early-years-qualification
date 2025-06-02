@@ -37,18 +37,48 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
       selector                = var.webapp_cookie_preference_name
       selector_match_operator = "Equals"
     }
+
+    exclusion {
+      match_variable          = "RequestCookieNames"
+      selector                = var.webapp_cookie_auth_secret_name
+      selector_match_operator = "Equals"
+    }
+
+    exclusion {
+      match_variable          = "RequestCookieNames"
+      selector                = var.webapp_cookie_user_journey_name
+      selector_match_operator = "Equals"
+    }
+
+    /* The two exclusions below allow the anti-forgery to bypass the SQLi 942440 rule */
+    exclusion {
+      match_variable          = "RequestCookieNames"
+      selector                = ".AspNetCore.Antiforgery"
+      selector_match_operator = "Equals"
+    }
+
+    exclusion {
+      match_variable          = "RequestArgNames"
+      selector                = "__RequestVerificationToken"
+      selector_match_operator = "StartsWith"
+    }
   }
 
   policy_settings {
-    enabled                     = true
-    file_upload_limit_in_mb     = 100
-    max_request_body_size_in_kb = 128
-    mode                        = "Prevention"
-    request_body_check          = true
+    enabled                                   = true
+    file_upload_limit_in_mb                   = 100
+    max_request_body_size_in_kb               = 128
+    mode                                      = "Prevention"
+    request_body_check                        = true
+    js_challenge_cookie_expiration_in_minutes = 30
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 }
 
@@ -95,7 +125,7 @@ resource "azurerm_application_gateway" "agw" {
 
   ssl_certificate {
     name                = local.ssl_certificate_name
-    key_vault_secret_id = var.kv_cert_secret_id
+    key_vault_secret_id = var.kv_service_gov_uk_cert_secret_id
   }
 
   ssl_policy {
@@ -104,7 +134,7 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   probe {
-    host                = var.webapp_custom_domain_name
+    host                = var.webapp_service_gov_uk_custom_domain_name
     name                = local.health_probe_name
     interval            = 30
     path                = "/health"
@@ -166,7 +196,11 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 
   #checkov:skip=CKV_AZURE_218:Secure transit protocols used
@@ -179,7 +213,7 @@ resource "azurerm_monitor_diagnostic_setting" "agw_logs_monitor" {
 
   name                       = "${var.resource_name_prefix}-agw-mon"
   target_resource_id         = azurerm_application_gateway.agw[0].id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
+  log_analytics_workspace_id = var.logs_id
 
   enabled_log {
     category = "ApplicationGatewayFirewallLog"

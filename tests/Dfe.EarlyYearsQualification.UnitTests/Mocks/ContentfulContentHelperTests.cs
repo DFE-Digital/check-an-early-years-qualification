@@ -1,6 +1,5 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
-using FluentAssertions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 

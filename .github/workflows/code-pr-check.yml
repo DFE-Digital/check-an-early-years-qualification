@@ -1,13 +1,14 @@
 name: Code PR Check 
 
 on:
+  workflow_dispatch: 
   push:
     branches: ["main"]
     paths:
       - 'src/**'
       - 'tests/**'
   pull_request:
-    branches: ["main"]
+    branches: ["main", "release/**", "fix/**"]
     paths:
       - 'src/**'
       - 'tests/**'
@@ -23,44 +24,65 @@ concurrency:
 env:
   DOTNET_VERSION: 8
   SOLUTION_NAME: 'Dfe.EarlyYearsQualification.sln'
-  URL: http://127.0.0.1:5000
+  URL: 'http://127.0.0.1:5000'
   
 jobs:
 
   build-app:  
     name: Build, check and run tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-      
+
       - name: Build web app  
         uses: ./.github/actions/build-dotnet-app
         with:
           dotnet_version: ${{ env.DOTNET_VERSION }}  
           solution_filename: ${{ env.SOLUTION_NAME }}
-          
-      - name: Run CodeQL and dependency checks
-        uses: ./.github/actions/codeql-and-dependency-checks
-        if: github.event_name == 'pull_request'
 
       - name: Run unit tests
         uses: ./.github/actions/run-unit-tests
         with:
           solution_filename: ${{ env.SOLUTION_NAME }}
-        
+
       - name: Run app for testing
         uses: ./.github/actions/run-app-for-testing
         with:
           url: ${{ env.URL }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
-      - name: Run e2e tests
-        uses: ./.github/actions/run-e2e-tests
-        with:
-          url: ${{ env.URL }}
+      - name: Run Playwright e2e tests
+        uses: ./.github/actions/run-playwright-e2e-tests
 
       - name: Run Accessibility tests
         uses: ./.github/actions/run-accessibility-tests
         with:
           url: ${{ env.URL }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+
+  security-checks-local:
+    name: Run baseline security checks locally
+    runs-on: ubuntu-22.04
+    needs: build-app
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run .Net Project
+        shell: bash
+        run: |
+          dotnet run --urls "http://localhost:5000" --project="src/Dfe.EarlyYearsQualification.Web" \
+          --UseMockContentful=true \
+          --ServiceAccess:IsPublic="true" &
+
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
+          target: http://localhost:5000
+          allow_issue_writing: false
+          artifact_name: local_scan_dev

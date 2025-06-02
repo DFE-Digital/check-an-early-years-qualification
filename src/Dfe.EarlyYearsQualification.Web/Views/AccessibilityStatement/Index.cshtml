@@ -4,7 +4,12 @@
     ViewData["Title"] = "Accessibility Statement";
 }
 
-<a href="javascript:window.history.back()" class="govuk-back-link">Back</a>
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <h1 id="accessibility-statement-heading" class="govuk-heading-xl">@Model.Heading</h1>

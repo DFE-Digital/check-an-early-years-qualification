@@ -1,0 +1,84 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.DropdownQuestionModel
+
+@{
+    ViewData["Title"] = Model.Question;
+}
+
+
+@section Scripts
+{
+    <script src="~/js/pages/question-dropdown-page.js" asp-append-version="true"></script>
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (Model.HasErrors)
+        {
+            await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
+                                                                   {
+                                                                       ErrorBannerHeading = Model.ErrorBannerHeading,
+                                                                       ErrorSummaryLinks =
+                                                                       [
+                                                                           new ErrorSummaryLink
+                                                                           {
+                                                                               ErrorBannerLinkText = Model.ErrorBannerLinkText,
+                                                                               ElementLinkId = Model.DropdownId
+                                                                           }
+                                                                       ]
+                                                                   });
+        }
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "dropdown-question-form" }))
+        {
+            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-heading-xl mb-1" id="question">
+                            @Model.Question
+                        </h1>
+                    </legend>
+
+                    @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
+                    {
+                        await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
+                                                                                        {
+                                                                                            AdditionalInformationHeader = Model.AdditionalInformationHeader,
+                                                                                            AdditionalInformationBody = Model.AdditionalInformationBody
+                                                                                        });
+                    }
+
+                    <h1 class="govuk-label-wrapper">
+                        @Html.Label(Model.DropdownId, Model.DropdownHeading, new { @class = "govuk-label govuk-fieldset__legend--m" })
+                    </h1>
+
+                    @if (Model.HasErrors)
+                    {
+                        <p id="dropdown-error" class="govuk-error-message"><span
+                                class="govuk-visually-hidden">Error:</span>@Model.ErrorMessage</p>
+                    }
+
+                    <div class="govuk-form-group">
+                        @Html.DropDownListFor(x => x.SelectedValue, Model.Values, new { @class = Model.HasErrors ? "govuk-select govuk-select--error" : "govuk-select", id = Model.DropdownId })
+                    </div>
+
+                    <div class="govuk-checkboxes__item">
+                        @Html.CheckBoxFor(x => x.NotInTheList, new { @class = "govuk-checkboxes__input", id = Model.CheckboxId, name = "awarding-organisation" })
+                        @Html.Label(Model.CheckboxId, Model.NotInListText, new { @class = "govuk-label govuk-checkboxes__label" })
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="govuk-form-group">
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        }
+
+    </div>
+</div>

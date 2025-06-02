@@ -10,7 +10,7 @@ Where can we store sensitive application configuration data such as secrets so t
 
 * Within DfE’s Technical Guidance
 * Compatible with selected hosting platform
-* Adequare security to protect sensitive data
+* Adequate security to protect sensitive data
 
 ## Considered Options
 

@@ -1,19 +1,20 @@
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
-public class QualificationDetailsModel
+public class QualificationDetailsModel : BasicQualificationModel
 {
-    public string QualificationId { get; init; } = string.Empty;
-    public string QualificationName { get; init; } = string.Empty;
-    public string AwardingOrganisationTitle { get; init; } = string.Empty;
-    public int QualificationLevel { get; init; }
-
     public string? FromWhichYear { get; init; }
-    public string? ToWhichYear { get; init; }
-    public string? QualificationNumber { get; init; }
-    public string? Notes { get; init; }
-    public string? AdditionalRequirements { get; init; }
 
-    public string BookmarkUrl { get; init; } = string.Empty;
+    public string? QualificationNumber { get; init; }
+
+    public NavigationLinkModel? BackButton { get; init; }
 
     public DetailsPageModel? Content { get; init; }
+
+    public List<AdditionalRequirementAnswerModel>? AdditionalRequirementAnswers { get; init; }
+
+    public RatioRequirementModel RatioRequirements { get; set; } = new();
+
+    public UpDownFeedbackModel? UpDownFeedback { get; init; }
+    public string DateStarted { get; init; } = string.Empty;
+    public string DateAwarded { get; init; } = string.Empty;
 }

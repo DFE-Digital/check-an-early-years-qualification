@@ -1,0 +1,74 @@
+name: Development build & deploy 
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  
+  set-env:
+    runs-on: ubuntu-22.04
+    name: Set Environment Values
+    outputs:
+      branch: ${{ steps.var.outputs.branch }}
+      checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - id: var
+        run: |
+          GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
+          CHECKED_OUT_SHA="$(git log -1 '--format=format:%H')"
+          echo "branch=$GIT_BRANCH" >> $GITHUB_OUTPUT
+          echo "checked-out-sha=${CHECKED_OUT_SHA}" >> $GITHUB_OUTPUT
+
+  create-and-publish-image:
+    needs: set-env
+    name: Create & Publish Image
+    uses: ./.github/workflows/build-image.yml
+    secrets: inherit
+    with:
+      branch: ${{ needs.set-env.outputs.branch }}
+      checked-out-sha: ${{ needs.set-env.outputs.checked-out-sha }}
+
+  deploy-to-dev:
+    runs-on: ubuntu-22.04
+    needs: create-and-publish-image
+    name: Deploy to development
+    environment: development
+    # Permissions for OIDC authentication
+    permissions:
+      id-token: write
+      contents: write
+      issues: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Login to Azure using OIDC
+      - name: Login to Azure CLI
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Deploy Web Application
+      - name: Deploy to Azure App Services
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.WEBAPP_NAME }}
+          images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+
+      # Make a request to the health check endpoint
+      - name: Make request to health check endpoint
+        uses: ./.github/actions/health-check
+        with:
+          webapp_url: ${{ vars.WEBAPP_NAME }}
+          
+      - name: Run Playwright smoke tests
+        uses: ./.github/actions/run-playwright-smoke-tests
+        with:
+          webapp_url: ${{ vars.WEBAPP_NAME }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}

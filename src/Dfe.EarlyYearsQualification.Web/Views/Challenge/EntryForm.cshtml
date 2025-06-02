@@ -1,0 +1,44 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.ChallengePageModel
+
+@{
+    ViewData["Title"] = Model.MainHeading;
+}
+
+@section Scripts
+{
+    <script src="~/js/pages/challenge-page.js" asp-append-version="true"></script>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        @if (Model.ErrorSummaryModel != null)
+        {
+            await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel!);
+        }
+        
+        <h1 id="challenge-page-heading" class="govuk-heading-xl">@Model.MainHeading</h1>
+        <div id="challenge-page-body" class="govuk-body">
+            <div class="govuk-!-margin-bottom-6">
+                @Html.Raw(Model.MainContent)
+            </div>
+            @using (Html.BeginForm("Post", "Challenge", FormMethod.Post, new { id = "challenge-form" }))
+            {
+                <input type="hidden" id="redirectAddress" name="redirectAddress" value="@Model.RedirectAddress"/>
+                
+                <div class="govuk-form-group @(Model.ErrorSummaryModel != null ? "govuk-form-group--error" : "")">
+                    @if (Model.ErrorSummaryModel != null)
+                    {
+                        <p id="error-message" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span>@Model.ErrorSummaryModel.ErrorSummaryLinks.First().ErrorBannerLinkText</p>
+                    }
+                    <label class="govuk-label" for="PasswordValue">@Model.InputHeading</label>
+                    <input class="govuk-input" id="PasswordValue" name="PasswordValue" aria-label="Password challenge input" type="password" style="width: 85%"/>
+                    <button id="togglePassword" type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" style="width: 14%; display: inline-block;">@Model.ShowPasswordButtonText</button>
+                </div>
+                
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">@Model.SubmitButtonText</button>
+            }
+            @Html.Raw(Model.FooterContent)
+        </div>
+    </div>
+</div>

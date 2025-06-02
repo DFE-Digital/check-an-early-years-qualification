@@ -14,42 +14,70 @@ public static class SecureHeaderConfiguration
                             .UseHsts()
                             .UseXFrameOptions()
                             .UseContentTypeOptions()
-                            .UseContentDefaultSecurityPolicy()
+                            .UseDefaultContentSecurityPolicy()
                             .UsePermittedCrossDomainPolicies()
                             .UseReferrerPolicy()
                             .UseCacheControl()
-                            .RemovePoweredByHeader()
                             .UseXssProtection()
                             .UseCrossOriginResourcePolicy()
+                            .SetUrlsToIgnore(["/favicon.ico"])
                             .Build();
 
-        // This is to extend the ScriptSrc to allow the javascript inline code for the back button on the journey pages.
-        var backButtonShaCspElement = new ContentSecurityPolicyElement
+        var govukFrontendSupportedElement = new ContentSecurityPolicyElement
+                                            {
+                                                CommandType = CspCommandType.Directive,
+                                                DirectiveOrUri = "sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw="
+                                            };
+
+        var govukAllMinifiedElement = new ContentSecurityPolicyElement
                                       {
                                           CommandType = CspCommandType.Directive,
-                                          DirectiveOrUri = "sha256-2eCA8tPChvVMeSRvRNqlmBco1wRmAKXWVzJ8Vpb9S6Y="
+                                          DirectiveOrUri = "sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo="
                                       };
-        var cookiesPageShaCspElement = new ContentSecurityPolicyElement
-                                       {
-                                           CommandType = CspCommandType.Directive,
-                                           DirectiveOrUri = "sha256-ibd3+9XjZn7Vg7zojLQbgAN/fA220kK9gifwVI944SI="
-                                       };
-
-        var windowLocationShaCspElement = new ContentSecurityPolicyElement
-                                          {
-                                              CommandType = CspCommandType.Directive,
-                                              DirectiveOrUri = "sha256-Om9RNNoMrdmIZzT4Oo7KaozVNUg6zYxVQuq3CPld2Ms="
-                                          };
 
         var unsafeHashesElement = new ContentSecurityPolicyElement
                                   { CommandType = CspCommandType.Directive, DirectiveOrUri = "unsafe-hashes" };
+
         var contentfulCspElement = new ContentSecurityPolicyElement
                                    { CommandType = CspCommandType.Uri, DirectiveOrUri = "https://app.contentful.com" };
-        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(backButtonShaCspElement);
-        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(cookiesPageShaCspElement);
-        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(windowLocationShaCspElement);
+
+        var gtmCspElement = new ContentSecurityPolicyElement
+                            {
+                                CommandType = CspCommandType.Uri,
+                                DirectiveOrUri = "https://www.googletagmanager.com/gtm.js"
+                            };
+
+        var gtmInjectedScriptCspElement = new ContentSecurityPolicyElement
+                                          {
+                                              CommandType = CspCommandType.Uri,
+                                              DirectiveOrUri = "https://www.googletagmanager.com/gtag/js"
+                                          };
+
+        var ga4CspElement = new ContentSecurityPolicyElement
+                            { CommandType = CspCommandType.Uri, DirectiveOrUri = "*.google-analytics.com" };
+
+        var clarityCspElement = new ContentSecurityPolicyElement
+                                {
+                                    CommandType = CspCommandType.Uri,
+                                    DirectiveOrUri = "https://www.clarity.ms/ https://c.bing.com"
+                                };
+
+        var clarityConnectSourceCspElement = new ContentSecurityPolicyElement
+                                             {
+                                                 CommandType = CspCommandType.Uri,
+                                                 DirectiveOrUri = "https://*.clarity.ms/collect"
+                                             };
+
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(unsafeHashesElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukFrontendSupportedElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukAllMinifiedElement);
         configuration.ContentSecurityPolicyConfiguration.FrameAncestors.Add(contentfulCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(gtmInjectedScriptCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
+        configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(clarityCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(clarityConnectSourceCspElement);
+
         return configuration;
     }
 }

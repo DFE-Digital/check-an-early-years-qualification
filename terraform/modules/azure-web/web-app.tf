@@ -1,26 +1,3 @@
-# Create Log Analytics
-resource "azurerm_log_analytics_workspace" "webapp_logs" {
-  name                = "${var.resource_name_prefix}-log"
-  location            = var.location
-  resource_group_name = var.resource_group
-  sku                 = "PerGB2018"
-  retention_in_days   = 30
-  daily_quota_gb      = 1
-
-  lifecycle {
-    ignore_changes = [tags]
-  }
-}
-
-resource "azurerm_application_insights" "web" {
-  name                = "${var.resource_name_prefix}-appinsights"
-  resource_group_name = var.resource_group
-  location            = var.location
-  application_type    = "web"
-  workspace_id        = azurerm_log_analytics_workspace.webapp_logs.id
-  tags                = var.tags
-}
-
 # Create App Service Plan
 resource "azurerm_service_plan" "asp" {
   name                = "${var.resource_name_prefix}-asp"
@@ -31,7 +8,11 @@ resource "azurerm_service_plan" "asp" {
   worker_count        = var.webapp_worker_count
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
   }
 
   #checkov:skip=CKV_AZURE_212:Argument not available
@@ -47,9 +28,11 @@ resource "azurerm_linux_web_app" "webapp" {
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
   app_settings = merge({
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+    "Cache__Instance"                            = var.redis_cache_name
+    "Cache__AuthSecret"                          = var.cache_endpoint_secret
   }, var.webapp_app_settings)
 
   identity {
@@ -62,6 +45,8 @@ resource "azurerm_linux_web_app" "webapp" {
     health_check_eviction_time_in_min = var.webapp_health_check_eviction_time_in_min
     http2_enabled                     = true
     vnet_route_all_enabled            = true
+    ip_restriction_default_action     = "Allow"
+    scm_ip_restriction_default_action = "Allow"
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
@@ -92,7 +77,7 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   sticky_settings {
-    app_setting_names = keys(var.webapp_app_settings)
+    app_setting_names = concat(keys(var.webapp_app_settings), ["Cache__Instance"])
   }
 
   logs {
@@ -112,7 +97,15 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   lifecycle {
-    ignore_changes = [site_config.0.application_stack]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"],
+      tags["hidden-link: /app-insights-conn-string"],
+      tags["hidden-link: /app-insights-instrumentation-key"],
+      tags["hidden-link: /app-insights-resource-id"],
+      site_config.0.application_stack
+    ]
   }
 
   tags = var.tags
@@ -128,14 +121,19 @@ resource "azurerm_linux_web_app" "webapp" {
 
 # Create Web Application Deployment Slot
 resource "azurerm_linux_web_app_slot" "webapp_slot" {
-  name                      = "green"
+
+  count = var.environment != "development" ? 1 : 0
+
+  name                      = var.webapp_slot_name
   app_service_id            = azurerm_linux_web_app.webapp.id
   https_only                = true
   virtual_network_subnet_id = var.webapp_subnet_id
   app_settings = merge({
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.web.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.web.connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+    "Cache__Instance"                            = var.redis_cache_name
+    "Cache__AuthSecret"                          = var.cache_endpoint_secret
   }, var.webapp_slot_app_settings)
 
   site_config {
@@ -144,6 +142,8 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     health_check_eviction_time_in_min = var.webapp_health_check_eviction_time_in_min
     http2_enabled                     = true
     vnet_route_all_enabled            = true
+    ip_restriction_default_action     = "Allow"
+    scm_ip_restriction_default_action = "Allow"
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
@@ -167,15 +167,28 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     }
   }
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   lifecycle {
-    ignore_changes = [tags, site_config.0.application_stack]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"],
+      tags["hidden-link: /app-insights-conn-string"],
+      tags["hidden-link: /app-insights-instrumentation-key"],
+      tags["hidden-link: /app-insights-resource-id"],
+      site_config.0.application_stack
+    ]
   }
 }
 
 resource "azurerm_monitor_diagnostic_setting" "webapp_logs_monitor" {
+
   name                       = "${var.resource_name_prefix}-webapp-mon"
   target_resource_id         = azurerm_linux_web_app.webapp.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
+  log_analytics_workspace_id = var.logs_id
 
   enabled_log {
     category = "AppServiceConsoleLogs"
@@ -195,9 +208,12 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_logs_monitor" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "webapp_slot_logs_monitor" {
-  name                       = "${var.resource_name_prefix}-webapp-green-mon"
-  target_resource_id         = azurerm_linux_web_app_slot.webapp_slot.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.webapp_logs.id
+
+  count = var.environment != "development" ? 1 : 0
+
+  name                       = "${var.resource_name_prefix}-webapp-${var.webapp_slot_name}-mon"
+  target_resource_id         = azurerm_linux_web_app_slot.webapp_slot.0.id
+  log_analytics_workspace_id = var.logs_id
 
   enabled_log {
     category = "AppServiceConsoleLogs"
@@ -322,24 +338,26 @@ resource "azurerm_monitor_autoscale_setting" "asp_as" {
 
   notification {
     email {
-      send_to_subscription_administrator    = true
-      send_to_subscription_co_administrator = true
-      custom_emails                         = [var.webapp_admin_email_address]
+      custom_emails = [var.webapp_admin_email_address]
     }
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"],
+      target_resource_id
+    ]
   }
 }
 
-# Create Custom Domain Name
-resource "azurerm_app_service_custom_hostname_binding" "webapp_custom_domain" {
+resource "azurerm_app_service_custom_hostname_binding" "webapp_service_gov_uk_custom_domain" {
   # Custom hostname only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
   resource_group_name = var.resource_group
-  hostname            = var.webapp_custom_domain_name
+  hostname            = var.webapp_service_gov_uk_custom_domain_name
   app_service_name    = azurerm_linux_web_app.webapp.name
 
   lifecycle {
@@ -348,15 +366,6 @@ resource "azurerm_app_service_custom_hostname_binding" "webapp_custom_domain" {
 }
 
 data "azurerm_client_config" "az_config" {}
-
-resource "azurerm_key_vault_access_policy" "webapp_kv_ap" {
-  key_vault_id = var.kv_id
-  tenant_id    = data.azurerm_client_config.az_config.tenant_id
-  # Can be retrieved using 'az ad sp show --id abfa0a7c-a6b6-4736-8310-5855508787cd --query id'
-  object_id               = var.as_service_principal_object_id
-  secret_permissions      = ["Get", "List"]
-  certificate_permissions = ["Get"]
-}
 
 # References the web app to be used in KV access policy as it already existed when changes needed to be made
 data "azurerm_linux_web_app" "ref" {
@@ -372,23 +381,65 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
   key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
   secret_permissions      = ["Get", "List"]
   certificate_permissions = ["Get"]
+
+  lifecycle {
+    ignore_changes = [object_id, tenant_id]
+  }
 }
 
-resource "azurerm_app_service_certificate" "webapp_custom_domain_cert" {
+# Grants permissions to key vault for the managed identity of the App Service slot
+resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
+
+  count = var.environment != "development" ? 1 : 0
+
+  key_vault_id            = var.kv_id
+  tenant_id               = data.azurerm_client_config.az_config.tenant_id
+  object_id               = azurerm_linux_web_app_slot.webapp_slot.0.identity.0.principal_id
+  key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
+  secret_permissions      = ["Get", "List"]
+  certificate_permissions = ["Get"]
+
+  lifecycle {
+    ignore_changes = [object_id, tenant_id]
+  }
+}
+
+resource "azurerm_app_service_certificate" "webapp_service_gov_uk_custom_domain_cert" {
   # Custom hostname only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
-  name                = var.webapp_custom_domain_cert_secret_label
+  name                = var.webapp_service_gov_uk_custom_domain_cert_secret_label
   resource_group_name = var.resource_group
   location            = var.location
-  key_vault_secret_id = var.kv_cert_secret_id
+  key_vault_secret_id = var.kv_service_gov_uk_cert_secret_id
 }
 
-resource "azurerm_app_service_certificate_binding" "webapp_custom_domain_cert_bind" {
+resource "azurerm_app_service_certificate_binding" "webapp_service_gov_uk_custom_domain_cert_bind" {
   # Custom hostname only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
 
-  hostname_binding_id = azurerm_app_service_custom_hostname_binding.webapp_custom_domain[0].id
-  certificate_id      = azurerm_app_service_certificate.webapp_custom_domain_cert[0].id
+  hostname_binding_id = azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain[0].id
+  certificate_id      = azurerm_app_service_certificate.webapp_service_gov_uk_custom_domain_cert[0].id
   ssl_state           = "SniEnabled"
+}
+
+resource "azurerm_redis_cache_access_policy_assignment" "web_app_contrib" {
+  name           = "web-app-redis-contributor"
+  redis_cache_id = var.redis_cache_id
+  # Grant Data Owner, as the endpoint to clear the cache requires access to a `dangerous` function
+  access_policy_name = "Data Owner"
+  object_id          = azurerm_linux_web_app.webapp.identity[0].principal_id
+  object_id_alias    = "ServicePrincipal"
+}
+
+resource "azurerm_redis_cache_access_policy_assignment" "web_app_slot_contrib" {
+
+  count = var.environment != "development" ? 1 : 0
+
+  name           = "web-app-slot-redis-contributor"
+  redis_cache_id = var.redis_cache_id
+  # Grant Data Owner, as the endpoint to clear the cache requires access to a `dangerous` function
+  access_policy_name = "Data Owner"
+  object_id          = azurerm_linux_web_app_slot.webapp_slot[0].identity[0].principal_id
+  object_id_alias    = "SlotServicePrincipal"
 }

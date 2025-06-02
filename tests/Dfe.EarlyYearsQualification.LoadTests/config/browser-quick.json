@@ -1,0 +1,15 @@
+{
+  "scenarios": {
+    "quick": {
+      "executor": "constant-vus",
+      "vus": 1,
+      "duration": "2s",
+      "gracefulStop": "600s",
+      "options": {
+        "browser": {
+          "type": "chromium"
+        }
+      }
+    }
+  }
+}

@@ -1,15 +1,15 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 
 public class CookiesBannerViewComponent(
-    IContentService contentService,
     ILogger<CookiesBannerViewComponent> logger,
-    IHtmlRenderer renderer)
+    IContentService contentService,
+    IGovUkContentParser contentParser)
     : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
@@ -35,12 +35,12 @@ public class CookiesBannerViewComponent(
         return new CookiesBannerModel
                {
                    AcceptButtonText = content.AcceptButtonText,
-                   AcceptedCookiesContent = await renderer.ToHtml(content.AcceptedCookiesContent),
-                   CookiesBannerContent = await renderer.ToHtml(content.CookiesBannerContent),
+                   AcceptedCookiesContent = await contentParser.ToHtml(content.AcceptedCookiesContent),
+                   CookiesBannerContent = await contentParser.ToHtml(content.CookiesBannerContent),
                    CookiesBannerTitle = content.CookiesBannerTitle,
                    CookiesBannerLinkText = content.CookiesBannerLinkText,
                    HideCookieBannerButtonText = content.HideCookieBannerButtonText,
-                   RejectedCookiesContent = await renderer.ToHtml(content.RejectedCookiesContent),
+                   RejectedCookiesContent = await contentParser.ToHtml(content.RejectedCookiesContent),
                    RejectButtonText = content.RejectButtonText,
                    Show = true
                };

@@ -1,0 +1,89 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.CheckAdditionalRequirementsPageModel
+
+@{
+    ViewData["Title"] = "Check additional requirements";
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        @if (Model.HasErrors)
+        {
+            var elementLinkId = Model.AdditionalRequirementQuestion.Options.First();
+            await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
+                                                                   {
+                                                                       ErrorBannerHeading = Model.ErrorSummaryHeading,
+                                                                       ErrorSummaryLinks =
+                                                                       [
+                                                                           new ErrorSummaryLink
+                                                                           {
+                                                                               ErrorBannerLinkText = Model.ErrorMessage,
+                                                                               ElementLinkId = elementLinkId.Value
+                                                                           }
+                                                                       ]
+                                                                   });
+        }
+
+        <form id="check-additional-requirements" asp-controller="CheckAdditionalRequirements" asp-action="Post"
+              method="post" asp-route-qualificationId="@Model.QualificationId"
+              asp-route-questionIndex="@Model.QuestionIndex">
+            <input type="hidden" name="qualificationId" value="@Model.QualificationId">
+            <input type="hidden" name="questionIndex" value="@Model.QuestionIndex">
+            <input type="hidden" name="question" value="@Model.AdditionalRequirementQuestion.Question">
+            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-heading-xl mb-1" id="question">
+                            @Model.AdditionalRequirementQuestion.Question
+                        </h1>
+                    </legend>
+
+                    <div id="hint" class="govuk-hint">@Model.AdditionalRequirementQuestion.HintText</div>
+
+                    @if (!string.IsNullOrEmpty(Model.AdditionalRequirementQuestion.DetailsHeading) && !string.IsNullOrEmpty(Model.AdditionalRequirementQuestion.DetailsContent))
+                    {
+                        await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
+                                                                                        {
+                                                                                            AdditionalInformationHeader = Model.AdditionalRequirementQuestion.DetailsHeading,
+                                                                                            AdditionalInformationBody = Model.AdditionalRequirementQuestion.DetailsContent
+                                                                                        });
+                    }
+
+                    @if (Model.HasErrors)
+                    {
+                        <p id="option-error" class="govuk-error-message"><span
+                                class="govuk-visually-hidden">Error:</span>@Model.ErrorMessage</p>
+                    }
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @foreach (var option in Model.AdditionalRequirementQuestion.Options)
+                        {
+                            <div class="govuk-radios__item">
+                                @Html.RadioButtonFor(x => x.Answer, option.Value, new { @class = "govuk-radios__input", id = option.Value })
+                                <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                    @option.Label
+                                </label>
+                                @if (!string.IsNullOrEmpty(option.Hint))
+                                {
+                                    var hintId = $"{option.Value}_hint";
+                                    <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                        @option.Hint
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+            <div class="govuk-form-group">
+                <button id="additional-requirement-button" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

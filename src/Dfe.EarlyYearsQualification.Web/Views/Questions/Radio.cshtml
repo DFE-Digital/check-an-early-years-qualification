@@ -1,0 +1,96 @@
+@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.RadioQuestionModel
+
+@{
+    ViewData["Title"] = Model.Question;
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (Model.HasErrors)
+        {
+            var elementLinkId = Model.OptionsItems.First(x => x.GetType() == typeof(OptionModel)) as OptionModel;
+            await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
+                                                                   {
+                                                                       ErrorBannerHeading = Model.ErrorBannerHeading,
+                                                                       ErrorSummaryLinks =
+                                                                       [
+                                                                           new ErrorSummaryLink
+                                                                           {
+                                                                               ErrorBannerLinkText = Model.ErrorBannerLinkText,
+                                                                               ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
+                                                                           }
+                                                                       ]
+                                                                   });
+        }
+        @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "radio-question-form" }))
+        {
+            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-heading-xl mb-1" id="question">
+                            @Model.Question
+                        </h1>
+                    </legend>
+
+
+                    @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
+                    {
+                        await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
+                                                                                        {
+                                                                                            AdditionalInformationHeader = Model.AdditionalInformationHeader,
+                                                                                            AdditionalInformationBody = Model.AdditionalInformationBody
+                                                                                        });
+                    }
+
+                    @if (Model.HasErrors)
+                    {
+                        <p id="option-error" class="govuk-error-message"><span
+                                class="govuk-visually-hidden">Error:</span>@Model.ErrorMessage</p>
+                    }
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @foreach (var option in Model.OptionsItems)
+                        {
+                            if (option.GetType() == typeof(OptionModel))
+                            {
+                                var optionModel = option as OptionModel;
+                                var @checked = optionModel!.Value == Model.Option ? "checked" : "";
+                                <div class="govuk-radios__item">
+
+                                    @Html.RadioButtonFor(x => x.Option, optionModel.Value, new { @class = "govuk-radios__input", id = optionModel.Value, @checked })
+                                    <label class="govuk-label govuk-radios__label" for="@optionModel.Value">
+                                        @optionModel.Label
+                                    </label>
+                                    @if (!string.IsNullOrEmpty(optionModel.Hint))
+                                    {
+                                        var hintId = $"{optionModel.Value}_hint";
+                                        <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                            @optionModel.Hint
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else if (option.GetType() == typeof(DividerModel))
+                            {
+                                var optionModel = option as DividerModel;
+                                <div class="govuk-radios__divider">@optionModel!.Text</div>
+                            }
+                        }
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="govuk-form-group">
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        }
+    </div>
+</div>

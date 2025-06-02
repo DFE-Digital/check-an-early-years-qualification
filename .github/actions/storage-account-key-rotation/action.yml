@@ -1,0 +1,57 @@
+name: Storage account key rotation
+description: Used to rotate the keys of the storage account
+
+inputs:
+  webapp_storage_account_name:
+    required: true
+    description: The storage account name for the webapp
+  resource_name_prefix:
+    required: true
+    description: The resource name prefix
+  webapp_name:
+    required: true
+    description: The name of the webapp
+  restart_slot:
+    required: true
+    description: A flag indicating whether to restart the slot or not
+  slot_name:
+    required: true
+    description: The name of the slot
+    default: 'production'
+  secret_name:
+    required: false
+    description: The name of the KeyVault secret
+    default: 'Storage--ConnectionString'
+
+runs:
+  using: composite
+  steps:
+    # Get the key2 connection, update KV and restart web app
+    - name: Get the key2 connection string and update KeyVault secret
+      shell: bash
+      run: |
+        connectionString=$(az storage account show-connection-string --name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key2 --output tsv)
+        az keyvault secret set --name ${{ inputs.secret_name }} --vault-name ${{ inputs.resource_name_prefix }}-kv --value "$connectionString"
+        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }}
+
+    # Update the key1 access key, update KV and restart
+    - name: Update the key1 access key and update KeyVault secret
+      shell: bash
+      run: |
+        az storage account keys renew --account-name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key1
+        connectionString=$(az storage account show-connection-string --name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key1 --output tsv)
+        az keyvault secret set --name ${{ inputs.secret_name }} --vault-name ${{ inputs.resource_name_prefix }}-kv --value "$connectionString"
+        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }}
+
+    # Update the key2 access key
+    - name: Update the key2 access key
+      shell: bash
+      run: |
+        az storage account keys renew --account-name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key2
+
+    # Restart the slot
+    - name: Restart the slot
+      if: ${{ inputs.restart_slot }}
+      shell: bash
+      run: |
+        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }} --slot ${{ inputs.slot_name }}

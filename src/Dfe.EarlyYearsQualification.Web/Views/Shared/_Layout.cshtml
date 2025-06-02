@@ -1,24 +1,101 @@
-﻿<!DOCTYPE html>
+﻿@using Dfe.EarlyYearsQualification.Web.Helpers
+@using GovUk.Frontend.AspNetCore
+@inject TrackingConfiguration TrackingConfiguration
+@inject OpenGraphDataHelper OpenGraphDataHelper
+
+<!DOCTYPE html>
 <html class="govuk-template" lang="en">
+
+@{
+    var gtmTag = TrackingConfiguration.GtmTag;
+    var clarityTag = TrackingConfiguration.ClarityTag;
+
+    var title = string.Empty;
+    var description = string.Empty;
+    var domain = string.Empty;
+    var url = string.Empty;
+    var imageUrl = string.Empty;
+    var openGraphData = await OpenGraphDataHelper.GetOpenGraphData();
+    if (openGraphData != null)
+    {
+        title = openGraphData.Title;
+        description = openGraphData.Description;
+        domain = openGraphData.Domain;
+        url = $"https://{domain}";
+        imageUrl = openGraphData.Image?.File.Url;
+    }
+}
 
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="noindex, nofollow"/>
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:url" content="@url">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@title">
+    <meta property="og:site_name" content="@title">
+    <meta property="og:description" content="@description">
+    <meta property="og:image" content="@imageUrl">
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="@domain">
+    <meta property="twitter:url" content="@url">
+    <meta name="twitter:title" content="@title">
+    <meta name="twitter:description" content="@description">
+    <meta name="twitter:image" content="@imageUrl">
+
     <title>@ViewData["Title"] - Check an Early Years qualification</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/css/application.css" asp-append-version="true"/>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.svg"/>
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.png"/>
+    @Html.GovUkFrontendStyleImports()
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    @{
+        if (TrackingConfiguration.UseCookies)
+        {
+            if (!string.IsNullOrEmpty(gtmTag))
+            {
+                <script src="~/js/gtm/head-script.js" asp-append-version="true" id="ga-script"
+                        data-ga-tag=@gtmTag></script>
+            }
+
+            if (!string.IsNullOrEmpty(clarityTag))
+            {
+                <script src="~/js/clarity/head-script.js" asp-append-version="true" id="clarity-script"
+                        data-clarity-tag=@clarityTag></script>
+            }
+        }
+    }
 </head>
 
 <body>
-
+@{
+    if (TrackingConfiguration.UseCookies && !string.IsNullOrEmpty(gtmTag))
+    {
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src=`https://www.googletagmanager.com/ns.html?id=@gtmTag`
+                    title="Javascript for analytics data"
+                    height="0" width="0" style="display:none;visibility:hidden">
+            </iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    }
+}
+<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+@Html.GovUkFrontendJsEnabledScript()
 @{
     await Html.RenderPartialAsync("_Header");
 }
 
 <div class="govuk-width-container">
-    <main class="govuk-main-wrapper" role="main" class="pb-3">
+    @await RenderSectionAsync("BeforeMainContent", false)
+    <main class="govuk-main-wrapper" role="main" class="pb-3" id="main-content">
         @RenderBody()
     </main>
 </div>
@@ -31,6 +108,15 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", false)
+@{
+    if (TrackingConfiguration.UseCookies && !string.IsNullOrEmpty(gtmTag))
+    {
+        <script src="~/js/gtm/form-handler.js" asp-append-version="true"></script>
+    }
+}
+@Html.GovUkFrontendScriptImports()
+
+@await Component.InvokeAsync("OptionsIndicator")
 </body>
 
 </html>
