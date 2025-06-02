@@ -498,5 +498,12 @@ junit.xml
 
 build/
 
-# Cypress
-tests/Dfe.EarlyYearsQualification.E2ETests/cypress/screenshots/
+# Playwright
+tests/Dfe.EarlyYearsQualification.E2ETests/playwright-report/
+
+
+# Sonar
+.sonarqube/
+
+# k6 browser tests screenshots
+screenshots/

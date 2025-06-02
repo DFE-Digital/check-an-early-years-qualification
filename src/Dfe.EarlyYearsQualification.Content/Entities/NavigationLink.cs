@@ -1,7 +1,14 @@
+using Contentful.Core.Models;
+
 namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class NavigationLink
 {
+    /// <summary>
+    ///     Contentful system properties
+    /// </summary>
+    public SystemProperties Sys { get; } = new();
+
     /// <summary>
     ///     Display text (i.e. <a>{DisplayText}</a>)
     /// </summary>
@@ -10,7 +17,7 @@ public class NavigationLink
     /// <summary>
     ///     Href value (i.e. <a href="{Href}"></a>)
     /// </summary>
-    public string Href { get; init; } = null!;
+    public string Href { get; set; } = null!;
 
     /// <summary>
     ///     Should this link open in a new tab?

@@ -1,0 +1,10 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QualificationResultModel
+
+<div class="qualification-result-container">
+    <h2 class="govuk-heading-l" id="qualification-result-heading">@Model.Heading</h2>
+    <div
+        class="govuk-inset-text @(Model.IsFullAndRelevant ? "qualification-result-success" : "qualification-result-failure")">
+        <h3 class="govuk-heading-m" id="qualification-result-message-heading">@Model.MessageHeading</h3>
+        <p class="govuk-body" id="qualification-result-message-body">@Model.MessageBody</p>
+    </div>
+</div>

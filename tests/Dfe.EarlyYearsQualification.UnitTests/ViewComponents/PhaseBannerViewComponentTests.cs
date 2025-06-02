@@ -1,16 +1,11 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
-using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
-using Microsoft.Extensions.Logging;
-using Moq;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
 
@@ -24,9 +19,9 @@ public class PhaseBannerViewComponentTests
         contentMock.Setup(x => x.GetPhaseBannerContent()).ReturnsAsync((PhaseBanner?)null);
 
         var logger = new Mock<ILogger<PhaseBannerViewComponent>>();
-        var rendererMock = new Mock<IPhaseBannerRenderer>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
 
-        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, rendererMock.Object);
+        var component = new PhaseBannerViewComponent(logger.Object, contentMock.Object, mockContentParser.Object);
 
         await component.InvokeAsync();
 
@@ -50,11 +45,11 @@ public class PhaseBannerViewComponentTests
                    .ReturnsAsync(phaseBanner);
 
         var logger = new Mock<ILogger<PhaseBannerViewComponent>>();
-        var rendererMock = new Mock<IPhaseBannerRenderer>();
-        rendererMock.Setup(x => x.ToHtml(It.IsAny<Document>()))
-                    .ReturnsAsync(expectedHtml);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>()))
+                         .ReturnsAsync(expectedHtml);
 
-        var component = new PhaseBannerViewComponent(contentMock.Object, logger.Object, rendererMock.Object);
+        var component = new PhaseBannerViewComponent(logger.Object, contentMock.Object, mockContentParser.Object);
 
         var result = await component.InvokeAsync();
 

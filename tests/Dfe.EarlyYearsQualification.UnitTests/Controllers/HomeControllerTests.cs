@@ -1,14 +1,10 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
-using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
-using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Moq;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 
@@ -19,13 +15,14 @@ public class HomeControllerTests
     public async Task Index_ContentServiceReturnsNoContent_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<HomeController>>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
-        var mockSideRenderer = new Mock<ISideContentRenderer>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
-        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
-                                            mockSideRenderer.Object);
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
-        mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage?)default);
+        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                            mockUserJourneyCookieService.Object);
+
+        mockContentService.Setup(x => x.GetStartPage()).ReturnsAsync((StartPage?)null);
 
         var result = await controller.Index();
 
@@ -33,7 +30,8 @@ public class HomeControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Error");
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyCritical("Start page content not found");
     }
@@ -42,11 +40,12 @@ public class HomeControllerTests
     public async Task Index_ContentServiceReturnsContent_ReturnsStartPageModel()
     {
         var mockLogger = new Mock<ILogger<HomeController>>();
-        var mockHtmlRenderer = new Mock<IHtmlRenderer>();
-        var mockSideRenderer = new Mock<ISideContentRenderer>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockContentService = new Mock<IContentService>();
-        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockHtmlRenderer.Object,
-                                            mockSideRenderer.Object);
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var controller = new HomeController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                            mockUserJourneyCookieService.Object);
 
         const string postCtaContentText = "This is the post cta content";
         const string preCtaContentText = "This is the pre cta content";
@@ -56,9 +55,9 @@ public class HomeControllerTests
         var preCtaButtonContent = ContentfulContentHelper.Text(preCtaContentText);
         var rightHandSideContent = ContentfulContentHelper.Text(sideContentText);
 
-        mockHtmlRenderer.Setup(x => x.ToHtml(postCtaButtonContent)).ReturnsAsync(postCtaContentText);
-        mockHtmlRenderer.Setup(x => x.ToHtml(preCtaButtonContent)).ReturnsAsync(preCtaContentText);
-        mockSideRenderer.Setup(x => x.ToHtml(rightHandSideContent)).ReturnsAsync(sideContentText);
+        mockContentParser.Setup(x => x.ToHtml(postCtaButtonContent)).ReturnsAsync(postCtaContentText);
+        mockContentParser.Setup(x => x.ToHtml(preCtaButtonContent)).ReturnsAsync(preCtaContentText);
+        mockContentParser.Setup(x => x.ToHtml(rightHandSideContent)).ReturnsAsync(sideContentText);
 
         var startPageResult = new StartPage
                               {
@@ -86,5 +85,7 @@ public class HomeControllerTests
         model.PreCtaButtonContent.Should().Be(preCtaContentText);
         model.RightHandSideContent.Should().Be(sideContentText);
         model.RightHandSideContentHeader.Should().Be(startPageResult.RightHandSideContentHeader);
+
+        mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
     }
 }

@@ -1,7 +1,7 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Renderers.Entities;
-using Dfe.EarlyYearsQualification.Content.Services;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -10,8 +10,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class AccessibilityStatementController(
     ILogger<AccessibilityStatementController> logger,
     IContentService contentService,
-    IHtmlRenderer renderer)
-    : Controller
+    IGovUkContentParser contentParser)
+    : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -21,20 +21,12 @@ public class AccessibilityStatementController(
         if (content is null)
         {
             logger.LogError("No content for the accessibility statement page");
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Error");
         }
 
-        var model = await Map(content);
+        var bodyHtml = await contentParser.ToHtml(content.Body);
+        var model = AccessibilityStatementMapper.Map(content, bodyHtml);
 
         return View(model);
-    }
-
-    private async Task<AccessibilityStatementPageModel> Map(AccessibilityStatementPage content)
-    {
-        return new AccessibilityStatementPageModel
-               {
-                   Heading = content.Heading,
-                   BodyContent = await renderer.ToHtml(content.Body)
-               };
     }
 }

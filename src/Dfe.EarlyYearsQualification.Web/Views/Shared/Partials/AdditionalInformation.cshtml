@@ -1,0 +1,21 @@
+@model AdditionalInformationModel
+
+@if (Model.ShowAdditionalInformationBodyByDefault)
+{
+    <div class="govuk-body">
+        @Html.Raw(Model.AdditionalInformationBody)
+    </div>
+}
+else
+{
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+                @Model.AdditionalInformationHeader
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            @Html.Raw(Model.AdditionalInformationBody)
+        </div>
+    </details>
+}

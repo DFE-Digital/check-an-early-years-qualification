@@ -58,12 +58,32 @@ variable "kv_certificate_authority_admin_phone_no" {
   type        = string
 }
 
-variable "kv_certificate_label" {
-  description = "Label for the Certificate"
+variable "kv_service_gov_uk_certificate_label" {
+  description = "Label for the service.gov.uk certificate"
   type        = string
 }
 
-variable "kv_certificate_subject" {
-  description = "Subject of the Certificate"
+variable "kv_service_gov_uk_certificate_subject" {
+  description = "Subject of the service.gov.uk certificate"
+  type        = string
+}
+
+variable "contentful_delivery_api_key" {
+  description = "Contentful delivery API key"
+  type        = string
+}
+
+variable "contentful_preview_api_key" {
+  description = "Contentful preview API key"
+  type        = string
+}
+
+variable "contentful_space_id" {
+  description = "Contentful space ID"
+  type        = string
+}
+
+variable "govuk_notify_api_key" {
+  description = "GovUK Notify API Key"
   type        = string
 }

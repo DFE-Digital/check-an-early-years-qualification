@@ -1,0 +1,44 @@
+@model RatioRowModel
+
+<div class="govuk-grid-row ratio-row">
+    <div class="govuk-!-width-one-half">
+        <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
+            <h3 class="govuk-body govuk-!-text-align-left ratio-heading" id="@{@Model.LevelText}_heading">
+                <strong>@Model.LevelText</strong></h3>
+        </div>
+    </div>
+    <div class="govuk-!-width-one-half tag-padding-right">
+        <div id="ratio-@Model.RatioId-tag" class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
+            @{
+                switch (Model.ApprovalStatus)
+                {
+                    case QualificationApprovalStatus.Approved:
+                        <strong class="govuk-tag govuk-tag--green tag-align-right">
+                            Approved
+                        </strong>
+                        break;
+                    case QualificationApprovalStatus.NotApproved:
+                        <strong class="govuk-tag govuk-tag--red tag-align-right">
+                            Not approved
+                        </strong>
+                        break;
+                    case QualificationApprovalStatus.FurtherActionRequired:
+                        <strong class="govuk-tag govuk-tag--grey tag-align-right">
+                            Further action required
+                        </strong>
+                        break;
+                }
+            }
+        </div>
+    </div>
+</div>
+@if ((!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody) && !string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationHeader))
+     || Model.AdditionalInformation.ShowAdditionalInformationBodyByDefault)
+{
+    <div id="ratio-@Model.RatioId-additional-info" class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            @{ await Html.RenderPartialAsync("Partials/AdditionalInformation", Model.AdditionalInformation); }
+        </div>
+    </div>
+}
+<hr class="mb-0 mt-0"/>

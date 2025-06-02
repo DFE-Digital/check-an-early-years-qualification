@@ -1,8 +1,3 @@
-using Dfe.EarlyYearsQualification.UnitTests.Extensions;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Moq;
-
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 
 [TestClass]

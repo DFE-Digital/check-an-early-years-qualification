@@ -18,12 +18,6 @@ variable "resource_name_prefix" {
   type        = string
 }
 
-variable "as_service_principal_object_id" {
-  description = "Object ID of the service principal for App Service"
-  type        = string
-  sensitive   = true
-}
-
 variable "asp_sku" {
   description = "SKU name for the App Service Plan"
   type        = string
@@ -42,6 +36,11 @@ variable "webapp_worker_count" {
 
 variable "webapp_name" {
   description = "Name for the Web Application"
+  type        = string
+}
+
+variable "webapp_slot_name" {
+  description = "Name for the slot for the Web Application"
   type        = string
 }
 
@@ -80,6 +79,21 @@ variable "webapp_session_cookie_name" {
   type        = string
 }
 
+variable "webapp_cookie_preference_name" {
+  description = "Name of the user's cookie preference cookie"
+  type        = string
+}
+
+variable "webapp_cookie_auth_secret_name" {
+  description = "Name of the cookie holding the auth secret"
+  type        = string
+}
+
+variable "webapp_cookie_user_journey_name" {
+  description = "Name of the cookie holding the user's filter selections"
+  type        = string
+}
+
 variable "webapp_health_check_path" {
   default     = null
   description = "Path to health check endpoint"
@@ -92,13 +106,13 @@ variable "webapp_health_check_eviction_time_in_min" {
   type        = number
 }
 
-variable "webapp_custom_domain_name" {
-  description = "Custom domain hostname"
+variable "webapp_service_gov_uk_custom_domain_name" {
+  description = "service.gov.uk custom domain hostname"
   type        = string
 }
 
-variable "webapp_custom_domain_cert_secret_label" {
-  description = "Label for the Certificate"
+variable "webapp_service_gov_uk_custom_domain_cert_secret_label" {
+  description = "Label for the service.gov.uk certificate"
   type        = string
 }
 
@@ -123,13 +137,43 @@ variable "kv_id" {
   type        = string
 }
 
-variable "kv_cert_secret_id" {
-  description = "SSL certificate Secret ID"
+variable "kv_service_gov_uk_cert_secret_id" {
+  description = "service.gov.uk SSL certificate Secret ID"
   type        = string
 }
 
 variable "kv_mi_id" {
   description = "ID of the Managed Identity for the Key Vault"
+  type        = string
+}
+
+variable "redis_cache_id" {
+  description = "ID of the Redis cache"
+  type        = string
+}
+
+variable "redis_cache_name" {
+  description = "Name of the Redis cache"
+  type        = string
+}
+
+variable "logs_id" {
+  description = "Log Analytics workspace ID"
+  type        = string
+}
+
+variable "instrumentation_key" {
+  description = "App Insights instrumentation key"
+  type        = string
+}
+
+variable "insights_connection_string" {
+  description = "App Insights connection string"
+  type        = string
+}
+
+variable "cache_endpoint_secret" {
+  description = "Secret value to be supplied when calling Cache endpoint"
   type        = string
 }
 
