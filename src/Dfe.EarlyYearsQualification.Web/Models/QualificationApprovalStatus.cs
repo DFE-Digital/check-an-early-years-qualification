@@ -4,5 +4,6 @@ public enum QualificationApprovalStatus
 {
     Approved,
     NotApproved,
-    FurtherActionRequired
+    FurtherActionRequired,
+    PossibleRouteAvailable
 }

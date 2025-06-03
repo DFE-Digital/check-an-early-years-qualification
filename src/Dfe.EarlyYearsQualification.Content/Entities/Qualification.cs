@@ -20,4 +20,5 @@ public class Qualification(
     public List<AdditionalRequirementQuestion>? AdditionalRequirementQuestions { get; init; }
     public List<RatioRequirement>? RatioRequirements { get; init; }
     public bool IsAutomaticallyApprovedAtLevel6 { get; init; }
+    public bool IsTheQualificationADegree { get; set; }
 }

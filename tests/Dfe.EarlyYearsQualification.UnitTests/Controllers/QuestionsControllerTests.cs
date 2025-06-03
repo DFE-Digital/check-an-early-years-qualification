@@ -898,6 +898,8 @@ public class QuestionsControllerTests
         model.Values[0].Text.Should().Be(questionPage.DefaultText);
         model.Values[0].Value.Should().BeEmpty();
         model.NotInListText.Should().Be(questionPage.NotInListText);
+        model.DropdownId.Should().Be("awarding-organisation-select");
+        model.CheckboxId.Should().Be("awarding-organisation-not-in-list");
     }
 
     [TestMethod]
