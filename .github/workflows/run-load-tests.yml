@@ -1,13 +1,13 @@
 name: Run Load Tests
-description: Runs k6 load tests against the staging (test) environment
 
 on:
   workflow_dispatch:
   schedule: # only runs off main branch
-    - cron: "40 3 * * TUE" # at 3.40 am, every Tuesday
+    - cron: '40 3 * * 2,4' # at 3.40 am, every Tuesday and Thursday
 
 jobs:
   run-tests:
+    name: Run load tests against staging
     runs-on: ubuntu-latest
     environment: staging # do not run against production
     steps:
