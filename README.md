@@ -26,7 +26,6 @@ check-an-early-years-qualification/
 ├─ tests/
 |   ├─ Dfe.EarlyYearsQualification.AccessibilityTests - a JS Project used to run accessibility tests
 |   ├─ Dfe.EarlyYearsQualification.E2ETests - a Playwright Project used to run E2E tests across multiple browsers
-|   ├─ Dfe.EarlyYearsQualification.SmokeTests - a Playwright Project used to run smoke tests tests across multiple browsers
 |   ├─ Dfe.EarlyYearsQualification.UnitTests - a .NET MSTests project used to build and run unit tests.
 ├─ terraform/ - Terraform project used to implement all the Azure infrastructure as code.
 ```
@@ -71,10 +70,9 @@ End to end tests are ran using [Playwright](https://playwright.dev/).
 To run the tests, run the following commands:
 - Navigate to the correct folder, be it:
   - ``cd tests/Dfe.EarlyYearsQualification.E2ETests`` for the E2E tests.
-  - ``cd tests/Dfe.EarlyYearsQualification.SmokeTests`` for the smoke tests.
 - Tell Node Version Manager that you want the latest version with: ``nvm use node --lts``
 - Run the tests with: ``npx playwright install`` (install all playwright browsers)
-- Run the tests with: ``npx playwright test`` (add --ui to run the tests in playwrights UI)
+- Run the tests with: ``npx playwright test`` (add --ui to run the tests in playwrights UI, add `--grep "@tag"` to run all test with a certain tag. Tags include `@e2e` `@validation` and `@smoke`)
 
 ### Problems with Safari?
 If you notice you are having issues with running Safari tests locally and them failing then there is a fix.
