@@ -1,5 +1,12 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, setCookie, journeyCookieName, hasClass, hasCount} from '../../_shared/playwrightWrapper';
+import {
+    startJourney,
+    checkText,
+    setCookie,
+    journeyCookieName,
+    hasClass,
+    hasCount
+} from '../../_shared/playwrightWrapper';
 
 test.describe("A spec used to test the qualification details page", {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
@@ -47,7 +54,7 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-108");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 6", 0);
         await checkText(page, ".ratio-heading", "Level 3", 1);
         await checkText(page, ".ratio-heading", "Level 2", 2);
@@ -69,7 +76,7 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22This%20is%20the%20Qts%20question%22%3A%22no%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-108");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 3", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Unqualified", 2);
@@ -91,7 +98,7 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Level 3", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Unqualified", 2);
@@ -113,7 +120,7 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-241");
 
-        await hasCount(page,".ratio-row", 4);
+        await hasCount(page, ".ratio-row", 4);
         await checkText(page, ".ratio-heading", "Unqualified", 0);
         await checkText(page, ".ratio-heading", "Level 2", 1);
         await checkText(page, ".ratio-heading", "Level 3", 2);
@@ -161,22 +168,25 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
         await checkText(page, "#ratio-Level2-additional-info", "Level 2 further action required text");
     });
 
-    test("Clicking the print button brings up the print dialog", async ({
-                                                                            page,
-                                                                            context
-                                                                        }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
-        await page.goto("/qualifications/qualification-details/eyq-240");
 
-        await page.evaluate('(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()');
-        await page.click('#print-button');
-        await page.waitForFunction('window.waitForPrintDialog');
+    ["top", "bottom"].forEach((location) => {
+        test(`Clicking the ${location} print button brings up the print dialog`, async ({
+                                                                                            page,
+                                                                                            context
+                                                                                        }) => {
+            await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
+            await page.goto("/qualifications/qualification-details/eyq-240");
+
+            await hasCount(page, '.print-button', 2);
+            await page.evaluate('(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()');
+            await page.click(`#print-button-${location}`);
+            await page.waitForFunction('window.waitForPrintDialog');
+        });
     });
-
     test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started between Sep14 & Aug19", async ({
-                                                                                                                                                    page,
-                                                                                                                                                    context
-                                                                                                                                                }) => {
+                                                                                                                                                              page,
+                                                                                                                                                              context
+                                                                                                                                                          }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
@@ -186,9 +196,9 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
     });
 
     test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started after Sep19", async ({
-                                                                                                                                          page,
-                                                                                                                                          context
-                                                                                                                                      }) => {
+                                                                                                                                                    page,
+                                                                                                                                                    context
+                                                                                                                                                }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2210%2F2019%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 
@@ -198,9 +208,9 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
     });
 
     test("Checks the qualification result inset shows correctly when full and relevant", async ({
-                                                                                           page,
-                                                                                           context
-                                                                                        }) => {
+                                                                                                    page,
+                                                                                                    context
+                                                                                                }) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
         await page.goto("/qualifications/qualification-details/eyq-240");
 

@@ -25,6 +25,10 @@
 <div class="govuk-grid-row">
     <div id="qualification-details-summary" class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <h1 class="govuk-heading-xl" id="page-header">@Model.Content!.MainHeader</h1>
+        <div class="govuk-!-static-margin-bottom-7">
+            <button id="print-button-top" class="govuk-link govuk-body-s print-button"
+                    aria-label="Print page button">@Model.Content!.PrintButtonText</button>
+        </div>
         <h2 class="govuk-heading-l"
             id="qualification-details-header">@Model.Content.QualificationDetailsSummaryHeader</h2>
         <dl class="govuk-summary-list">
@@ -241,7 +245,7 @@
             @Html.Raw(Model.Content!.RequirementsText)
 
             <div class="govuk-!-static-margin-top-6">
-                <button id="print-button" class="govuk-link govuk-body-s print-button"
+                <button id="print-button-bottom" class="govuk-link govuk-body-s print-button"
                         aria-label="Print page button">@Model.Content!.PrintButtonText</button>
             </div>
 
@@ -256,7 +260,7 @@
             }
         </div>
     </div>
-    
+
     @if (Model.UpDownFeedback is not null)
     {
         await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);
