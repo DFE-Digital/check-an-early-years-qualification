@@ -1,0 +1,3 @@
+{
+  "note": "k6 browser functionality does not seem to be geared up for performance testing, as too resource-hungry to scale much above 5 concurrent users"
+}

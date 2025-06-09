@@ -258,7 +258,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "TEST",
-                                                          Href = "/questions/what-is-the-awarding-organisation",
+                                                          Href = "/questions/check-your-answers",
                                                           OpenInNewTab = false
                                                       },
                                          QualificationFoundPrefix = "We found",
@@ -459,7 +459,7 @@ public class MockContentfulService : IContentService
                                          BackButton = new NavigationLink
                                                       {
                                                           DisplayText = "TEST",
-                                                          Href = WhereWasTheQualificationAwardedPath,
+                                                          Href = "/questions/what-is-the-awarding-organisation",
                                                           OpenInNewTab = false
                                                       },
                                          CtaButtonText = "Continue",

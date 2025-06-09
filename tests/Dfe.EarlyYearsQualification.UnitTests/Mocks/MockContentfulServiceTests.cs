@@ -419,7 +419,7 @@ public class MockContentfulServiceTests
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
                                                   {
                                                       DisplayText = "TEST",
-                                                      Href = "/questions/what-is-the-awarding-organisation",
+                                                      Href = "/questions/check-your-answers",
                                                       OpenInNewTab = false
                                                   });
     }
@@ -650,7 +650,7 @@ public class MockContentfulServiceTests
                                                   {
                                                       DisplayText = "TEST",
                                                       OpenInNewTab = false,
-                                                      Href = "/questions/where-was-the-qualification-awarded"
+                                                      Href = "/questions/what-is-the-awarding-organisation"
                                                   });
         result.CtaButtonText.Should().Be("Continue");
         result.ChangeAnswerText.Should().Be("Change");
