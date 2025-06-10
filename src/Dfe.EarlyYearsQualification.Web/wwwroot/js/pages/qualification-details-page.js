@@ -1,4 +1,4 @@
-$("#print-button").on('click', function() {
+$(".print-button").on('click', function() {
     $('.govuk-details').attr('open', 'open');
     window.print();
 });
