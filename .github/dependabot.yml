@@ -24,6 +24,10 @@ updates:
     labels:
       - nuget
       - dependabot
+    ignore:
+      - dependency-name: FluentAssertions
+        # Ignore versions of FluentAssertions that are equal to or greater than 8.0.0
+        versions: [">=8.0.0"]
 
   - package-ecosystem: npm
     directory: /src/Dfe.EarlyYearsQualification.Node
