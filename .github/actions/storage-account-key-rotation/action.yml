@@ -52,7 +52,7 @@ runs:
 
     # Restart the slot
     - name: Restart the slot
-      if: ${{ inputs.restart_slot }}
+      if: ${{ inputs.restart_slot == 'true' }}
       shell: bash
       run: |
         az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }} --slot ${{ inputs.slot_name }}
