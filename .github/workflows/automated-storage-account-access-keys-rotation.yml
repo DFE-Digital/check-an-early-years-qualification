@@ -34,7 +34,7 @@ jobs:
           webapp_storage_account_name: ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }}
           resource_name_prefix: ${{ vars.RESOURCE_NAME_PREFIX }}
           webapp_name: ${{ vars.WEBAPP_NAME }}
-          restart_slot: ${{ matrix.target != 'development' }}
+          restart_slot: ${{ (matrix.target == 'staging' || matrix.target == 'production') }}
           slot_name: ${{ vars.WEBAPP_SLOT_NAME }}
           
   auto-approve:

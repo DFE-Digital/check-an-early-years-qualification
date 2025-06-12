@@ -12,8 +12,9 @@ inputs:
     required: true
     description: The name of the webapp
   restart_slot:
-    required: true
+    required: false
     description: A flag indicating whether to restart the slot or not
+    default: 'false'
   slot_name:
     required: true
     description: The name of the slot
