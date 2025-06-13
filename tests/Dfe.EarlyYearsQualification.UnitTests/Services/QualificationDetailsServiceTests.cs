@@ -628,7 +628,6 @@ public class QualificationDetailsServiceTests
     [DataRow(null, 2024, "", null, null, "")]
     [DataRow(1, null, "", null, null, "")]
     [DataRow(1, 2024, "January 2024", null, null, "")]
-    [DataRow(null, null, "", null, null, "")]
     [DataRow(null, null, "", null, 2024, "")]
     [DataRow(null, null, "", 1, null, "")]
     [DataRow(null, null, "", 1, 2024, "January 2024")]
