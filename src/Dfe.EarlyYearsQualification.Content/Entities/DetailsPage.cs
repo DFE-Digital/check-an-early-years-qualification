@@ -19,6 +19,11 @@ public class DetailsPage
     public string RatiosHeading { get; init; } = string.Empty;
 
     public Document? RatiosText { get; init; }
+    public Document? RatiosTextMaybeRequirements { get; init; }
+    public Document? RatiosTextWillRequirements { get; init; }
+    public Document? RatiosTextNotFullAndRelevant { get; init; }
+    public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
+    public Document? RatiosTextL3Ebr { get; init; }
 
     public string RequirementsHeading { get; init; } = string.Empty;
 
@@ -34,10 +39,6 @@ public class DetailsPage
 
     public string QualificationStartDateLabel { get; init; } = string.Empty;
     public string QualificationAwardedDateLabel { get; init; } = string.Empty;
-
-    public Document? RatiosTextNotFullAndRelevant { get; init; }
-
-    public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
 
     public FeedbackBanner? FeedbackBanner { get; init; }
     public UpDownFeedback? UpDownFeedback { get; init; }
@@ -55,4 +56,8 @@ public class DetailsPage
     public string QualificationResultNotFrL3MessageHeading { get; init; } = string.Empty;
 
     public string QualificationResultNotFrL3MessageBody { get; init; } = string.Empty;
+
+    public string QualificationResultNotFrL3OrL6MessageHeading { get; init; } = string.Empty;
+
+    public string QualificationResultNotFrL3OrL6MessageBody { get; init; } = string.Empty;
 }
