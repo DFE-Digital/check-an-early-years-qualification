@@ -1289,9 +1289,11 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    [DataRow(6)]
-    [DataRow(7)]
-    public async Task SetRatiosText_IsFullAndRelevantForAllLevelsButL6AwardedOnOrAfterSeptember2014_ShowsNeedRequirements(int level)
+    [DataRow(6, QualificationApprovalStatus.NotApproved)]
+    [DataRow(6, QualificationApprovalStatus.PossibleRouteAvailable)]
+    [DataRow(7, QualificationApprovalStatus.NotApproved)]
+    [DataRow(7, QualificationApprovalStatus.PossibleRouteAvailable)]
+    public async Task SetRatiosText_IsFullAndRelevantForAllLevelsButL6AwardedOnOrAfterSeptember2014_ShowsNeedRequirements(int level, QualificationApprovalStatus level6Status)
     {
         const string needRequirementsText = "Need requirements";
         var needRequirementsDoc = new Document { NodeType = needRequirementsText };
@@ -1306,7 +1308,7 @@ public class QualificationDetailsServiceTests
                         QualificationLevel = level,
                         RatioRequirements = new RatioRequirementModel
                                             {
-                                                ApprovedForLevel6 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForLevel6 = level6Status,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForUnqualified = QualificationApprovalStatus.Approved
