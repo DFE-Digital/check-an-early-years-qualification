@@ -456,7 +456,7 @@ public class QualificationDetailsService(
                                          ApprovedForUnqualified: QualificationApprovalStatus.Approved,
                                          ApprovedForLevel2: QualificationApprovalStatus.Approved,
                                          ApprovedForLevel3: QualificationApprovalStatus.Approved,
-                                         ApprovedForLevel6: QualificationApprovalStatus.NotApproved
+                                         ApprovedForLevel6: QualificationApprovalStatus.NotApproved or QualificationApprovalStatus.PossibleRouteAvailable
                                      };
         switch (model.QualificationLevel)
         {
