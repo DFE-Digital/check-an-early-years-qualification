@@ -1,5 +1,7 @@
 ﻿using Dfe.EarlyYearsQualification.Web.Services.HeadHandling;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -19,14 +21,26 @@ public class HeadHandlingMiddlewareTests
     [TestMethod]
     public async Task Invoke_WhenHeadRequest_SwitchesToGetAndBack()
     {
-        var context = new DefaultHttpContext
-                      {
-                          Request =
-                          {
-                              Method = HttpMethods.Head
-                          }
-                      };
+        var mockRequestTelemetry = new RequestTelemetry();
+        var mockHttpRequest = new Mock<HttpRequest>();
+        mockHttpRequest.SetupAllProperties();
+        var mockHttpResponse = new Mock<HttpResponse>();
+        mockHttpResponse.SetupAllProperties();
+        var mockHttpContext = new Mock<HttpContext>();
+        var mockFeatureCollection = new Mock<IFeatureCollection>();
         
+        mockFeatureCollection.Setup(x => x.Get<RequestTelemetry>()).Returns(mockRequestTelemetry);
+        mockHttpContext.Setup(x => x.Features).Returns(mockFeatureCollection.Object);
+
+        var httpRequest = mockHttpRequest.Object;
+        httpRequest.Method = HttpMethods.Head;
+
+        var httpResponse = mockHttpResponse.Object;
+        httpResponse.Body = Stream.Synchronized(new MemoryStream());
+        
+        mockHttpContext.SetupGet(c => c.Request).Returns(httpRequest);
+        mockHttpContext.SetupGet(c => c.Response).Returns(httpResponse);
+
         var nextCalled = false;
         var middleware = new HeadHandlingMiddleware(ctx =>
                                                     {
@@ -35,11 +49,15 @@ public class HeadHandlingMiddlewareTests
                                                         return Task.CompletedTask;
                                                     });
 
-        await middleware.Invoke(context);
+        await middleware.Invoke(mockHttpContext.Object);
 
         nextCalled.Should().BeTrue();
-        context.Request.Method.Should().Be(HttpMethods.Head);
-        context.Response.Body.Should().BeSameAs(Stream.Null);
+        httpRequest.Method.Should().Be(HttpMethods.Head);
+        mockHttpContext.Object.Response.Body.Should().BeSameAs(Stream.Null);
+        
+        mockRequestTelemetry.Properties.Count.Should().Be(1);
+        mockRequestTelemetry.Properties.Keys.Should().Contain("WasHEADRequest");
+        mockRequestTelemetry.Properties.Values.First().Should().Be("true");
     }
 
     [TestMethod]

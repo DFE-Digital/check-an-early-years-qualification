@@ -1,4 +1,6 @@
-﻿namespace Dfe.EarlyYearsQualification.Web.Services.HeadHandling;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+
+namespace Dfe.EarlyYearsQualification.Web.Services.HeadHandling;
 
 public class HeadHandlingMiddleware(RequestDelegate next)
 {
@@ -20,6 +22,8 @@ public class HeadHandlingMiddleware(RequestDelegate next)
 
         if (methodSwitched)
         {
+            var requestTelemetry = context.Features.Get<RequestTelemetry>();
+            requestTelemetry?.Properties.Add("WasHEADRequest", "true");
             context.Request.Method = HttpMethods.Head;
         }
     }
