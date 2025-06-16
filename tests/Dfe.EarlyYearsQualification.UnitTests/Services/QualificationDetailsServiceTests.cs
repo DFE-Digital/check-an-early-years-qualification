@@ -2113,6 +2113,61 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.RequirementsForLevel2.Should().Be(l2MustPfa);
         model.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeFalse();
     }
+    
+    [TestMethod]
+    public async Task SetRequirementOverrides_QualificationIsAutomaticallyApprovedAtL6_SeesExpected()
+    {
+
+        var model = new QualificationDetailsModel
+                    {
+                        RatioRequirements = new RatioRequirementModel
+                                            {
+                                                ApprovedForLevel2 = QualificationApprovalStatus.Approved,
+                                                ApprovedForLevel3 = QualificationApprovalStatus.Approved,
+                                                ApprovedForLevel6 = QualificationApprovalStatus.Approved
+                                            },
+                    };
+
+        const string l2MustPfa = "l2 must pfa";
+        const string l3MustEnglishMustPfa = "l3 Must English must Pfa";
+        var l2MaybePfaDoc = ContentfulContentHelper.Paragraph(l2MustPfa);
+        var l3MustEnglishMustPfaDoc = ContentfulContentHelper.Paragraph(l3MustEnglishMustPfa);
+        
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 6)
+            {
+                IsAutomaticallyApprovedAtLevel6 = true,
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
+                        RequirementForAfterJune2016 = l2MaybePfaDoc
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName,
+                        RequirementForAfterJune2016 = l3MustEnglishMustPfaDoc
+                    }
+                ],
+            };
+
+        _mockUserJourneyCookieService.Setup(x => x.WasAwardedAfterJune2016()).Returns(true);
+
+        var sut = GetSut();
+
+        await sut.SetRequirementOverrides(qualification, model);
+
+        model.RatioRequirements.ApprovedForLevel6.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForLevel6.Should().BeNullOrEmpty();
+        model.RatioRequirements.ShowRequirementsForLevel6ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForLevel3.Should().BeNullOrEmpty();
+        model.RatioRequirements.ShowRequirementsForLevel3ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForLevel2.Should().BeNullOrEmpty();
+        model.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeFalse();
+    }
 
     [TestMethod]
     public async Task SetRequirementOverrides_NotFullAndRelevant_Returns()
