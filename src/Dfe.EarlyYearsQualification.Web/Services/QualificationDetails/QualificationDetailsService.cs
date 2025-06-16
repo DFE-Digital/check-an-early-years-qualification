@@ -170,6 +170,11 @@ public class QualificationDetailsService(
                               List<AdditionalRequirementAnswerModel>?
                                   additionalRequirementAnswerModels)
     {
+        if (qualification.IsAutomaticallyApprovedAtLevel6)
+        {
+            return true;
+        }
+        
         if (additionalRequirementAnswerModels is null || qualification.AdditionalRequirementQuestions is null)
         {
             return false;
