@@ -648,6 +648,40 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
+    public async Task WhatLevelIsTheQualification_LevelIsNull_HasEmptyStringAsOption()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+
+        mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns((int?)null);
+
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
+                          .ReturnsAsync(new RadioQuestionPage());
+
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+
+        var result = await controller.WhatLevelIsTheQualification();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType!.Model as RadioQuestionModel;
+        model.Should().NotBeNull();
+        model!.Option.Should().BeEmpty();
+    }
+
+    [TestMethod]
     public async Task Post_WhatLevelIsTheQualification_InvalidModel_ReturnsQuestionPage()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
