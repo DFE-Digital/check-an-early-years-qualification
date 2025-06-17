@@ -59,12 +59,11 @@ public partial class QuestionsController
         return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
     }
 
-    private DateQuestionModel? MapDateModel(DateQuestionModel model, DateQuestion? question,
+    private DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question,
                                             DateValidationResult? validationResult,
                                             int? selectedMonth,
                                             int? selectedYear)
     {
-        if (question is null) return null;
         var bannerErrors = validationResult is { BannerErrorMessages.Count: > 0 } ? validationResult.BannerErrorMessages : null;
 
         var errorMessageText = validationResult is { ErrorMessages.Count: > 0 }
@@ -94,11 +93,11 @@ public partial class QuestionsController
                                              string controllerName, DatesValidationResult? validationResult)
     {
         var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        var startedModel = MapDateModel(new DateQuestionModel(), question.StartedQuestion,
+        var startedModel = MapDateModel(new DateQuestionModel(), question.StartedQuestion!,
                                         validationResult?.StartedValidationResult, startMonth, startYear);
 
         var (awardedMonth, awardedYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        var awardedModel = MapDateModel(new DateQuestionModel(), question.AwardedQuestion,
+        var awardedModel = MapDateModel(new DateQuestionModel(), question.AwardedQuestion!,
                                         validationResult?.AwardedValidationResult, awardedMonth, awardedYear);
 
         return DatesQuestionMapper.Map(model, question, actionName, controllerName, startedModel, awardedModel);
