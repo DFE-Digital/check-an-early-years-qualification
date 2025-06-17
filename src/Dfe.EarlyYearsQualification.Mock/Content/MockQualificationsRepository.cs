@@ -8,18 +8,36 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockQualificationsRepository : IQualificationsRepository
 {
+    private static Document Level3Ebr => ContentfulContentHelper.Paragraph("Level 3 EBR");
+    private static Document Level6MustQts => ContentfulContentHelper.Paragraph("Level 6 must QTS");
+
     public async Task<Qualification?> GetById(string qualificationId)
     {
+        var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE", 
+                                                         AwardingOrganisations.Various, 6);
+        degreeQualification.IsTheQualificationADegree = true;
+
         return qualificationId.ToLower() switch
                {
                    "eyq-250" => await Task.FromResult(CreateQualification("EYQ-250", "BTEC",
                                                                           AwardingOrganisations.Various, 3)),
+                   "eyq-105" => await Task.FromResult(CreateQualification("EYQ-105", "BTEC",
+                                                                          AwardingOrganisations.Various, 4)),
+                   "eyq-107" => await Task.FromResult(CreateQualification("EYQ-107", "BTEC",
+                                                                          AwardingOrganisations.Various, 5)),
+                   "eyq-109" => await Task.FromResult(CreateQtsQualification("EYQ-109", "BTEC",
+                                                                             AwardingOrganisations.Various, 6)),
+                   "eyq-110" => await Task.FromResult(CreateQualification("EYQ-110", "BTEC",
+                                                                          AwardingOrganisations.Various, 6)),
+                   "eyq-111" => await Task.FromResult(CreateQtsQualification("EYQ-111", "BTEC",
+                                                                             AwardingOrganisations.Various, 7)),
                    "eyq-108" => await Task.FromResult(CreateQtsQualification("EYQ-108", "BTEC",
                                                                              AwardingOrganisations.Various, 6)),
                    "eyq-115" => await Task.FromResult(CreateQualification("EYQ-115", "NCFE",
                                                                           AwardingOrganisations.Various, 3, false)),
                    "eyq-241" => await Task.FromResult(CreateQualification("EYQ-241", "BTEC",
                                                                           AwardingOrganisations.Various, 2)),
+                   "eyq-321" => await Task.FromResult(degreeQualification),
                    _ => await Task.FromResult(CreateQualification("EYQ-240",
                                                                   "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
                                                                   AwardingOrganisations.Ncfe, 3))
@@ -82,6 +100,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQualification("EYQ-100", AwardingOrganisations.Cache, 2, null, endDate),
                 CreateQualification("EYQ-101", AwardingOrganisations.Ncfe, 2, startDate, endDate),
                 CreateQualification("EYQ-240", AwardingOrganisations.Pearson, 3, startDate, endDate),
+                CreateQualification("EYQ-241", AwardingOrganisations.Pearson, 2, startDate, endDate),
                 CreateQualification("EYQ-103", AwardingOrganisations.Ncfe, 3, startDate, endDate),
                 CreateQualification("EYQ-104", "City & Guilds", 4, startDate, endDate),
                 CreateQualification("EYQ-105", "Montessori Centre International", 4, startDate, endDate),
@@ -218,20 +237,34 @@ public class MockQualificationsRepository : IQualificationsRepository
                                RatioRequirements
                                    .Level2RatioRequirementName,
                            RequirementForLevel2BetweenSept14AndAug19 =
-                               ContentfulContentHelper.Paragraph("Level 2 further action required text")
+                               ContentfulContentHelper.Paragraph("Level 2 further action required text"),
+                           RequirementForInJune2016 =
+                               ContentfulContentHelper.Paragraph("Level 2 maybe PFA"),
+                           RequirementForAfterJune2016 =
+                               ContentfulContentHelper.Paragraph("Level 2 must PFA"),
+                           RequirementHeading = "Level 2 Requirements"
                        },
 
                        new RatioRequirement
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .Level3RatioRequirementName
+                                   .Level3RatioRequirementName,
+                           Level3EbrRouteAvailable = Level3Ebr,
+                           RequirementForInJune2016 =
+                               ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
+                           RequirementForAfterJune2016 =
+                               ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
+                           RequirementForL3PlusBetweenSept14AndMay16 = ContentfulContentHelper.Paragraph("Level 3 must English"),
+                           RequirementHeading = "Level 3 Requirements"
                        },
 
                        new RatioRequirement
                        {
-                           RatioRequirementName = RatioRequirements
-                               .Level6RatioRequirementName
+                           RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
+                           RequirementHeading = "Level 6 Requirements",
+                           RequirementForLevel6Before2014 = ContentfulContentHelper.Paragraph("Level 6 must QTS"),
+                           RequirementForLevel6After2014 = ContentfulContentHelper.Paragraph("Level 6 must QTS")
                        },
 
                        new RatioRequirement
@@ -297,20 +330,41 @@ public class MockQualificationsRepository : IQualificationsRepository
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .Level2RatioRequirementName
+                                   .Level2RatioRequirementName,
+                           RequirementForLevel2BetweenSept14AndAug19 =
+                               ContentfulContentHelper.Paragraph("Level 2 further action required text"),
+                           Level3EbrRouteAvailable = Level3Ebr,
+                           RequirementForInJune2016 =
+                               ContentfulContentHelper.Paragraph("Level 2 maybe PFA"),
+                           RequirementForAfterJune2016 =
+                               ContentfulContentHelper.Paragraph("Level 2 must PFA"),
+                           RequirementHeading = "Level 2 Requirements"
                        },
 
                        new RatioRequirement
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .Level3RatioRequirementName
+                                   .Level3RatioRequirementName,
+                           Level3EbrRouteAvailable = Level3Ebr,
+                           RequirementForInJune2016 =
+                               ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
+                           RequirementForAfterJune2016 =
+                               ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
+                           RequirementForL3PlusBetweenSept14AndMay16 = ContentfulContentHelper.Paragraph("Level 3 must English"),
+                           RequirementHeading = "Level 3 Requirements"
                        },
 
                        new RatioRequirement
                        {
                            RatioRequirementName = RatioRequirements
-                               .Level6RatioRequirementName
+                               .Level6RatioRequirementName,
+                           RequirementHeading = "Level 6 Requirements",
+                           RequirementForLevel6Before2014 = Level6MustQts,
+                           RequirementForLevel6After2014 = Level6MustQts,
+                           RequirementForLevel7Before2014 = Level6MustQts,
+                           RequirementForLevel7After2014 = Level6MustQts,
+                           EyittRouteAvailable = ContentfulContentHelper.Paragraph("This is the EYITT content")
                        },
 
                        new RatioRequirement

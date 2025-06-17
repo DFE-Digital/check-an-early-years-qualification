@@ -80,6 +80,13 @@ export async function checkCookieValue(context: BrowserContext, value: string) {
     expect(cookie.value).toBe(value);
 }
 
+export async function checkJourneyCookieValue(context: BrowserContext, value: string) {
+    var cookies = await context.cookies();
+    var cookie = cookies.find((c) => c.name === journeyCookieName);
+
+    expect(cookie.value).toBe(value);
+}
+
 export async function setCookie(context: BrowserContext, value: string, cookieName: string) {
     await context.addCookies([
         {
@@ -89,6 +96,83 @@ export async function setCookie(context: BrowserContext, value: string, cookieNa
             domain: process.env.DOMAIN
         }
     ]);
+}
+
+interface JourneyStateParams {
+    context: BrowserContext,
+    location: string,
+    startDate: number[],
+    awardDate: number[],
+    level: number,
+    organisation: string,
+    organisationNotOnList: boolean,
+    searchCriteria: string,
+    additionalQuestions: string[][],
+    selectedFromList: boolean,
+    qualificationId?: string
+};
+
+function getQualificationId(level: number) {
+    switch (level) {
+        case 2:
+            return 'eyq-241';
+        case 3:
+            return 'eyq-240';
+        case 4:
+            return 'eyq-105';
+        case 5:
+            return 'eyq-107';
+        case 6:
+            return 'eyq-108';
+        case 7:
+            return 'eyq-111';
+    }
+}
+
+export async function goToDetailsPageOfQualification({
+                                                         context,
+                                                         startDate,
+                                                         awardDate,
+                                                         level,
+                                                         organisation,
+                                                         organisationNotOnList,
+                                                         searchCriteria,
+                                                         additionalQuestions,
+                                                         selectedFromList,
+                                                         location = '',
+                                                         qualificationId
+                                                     }: JourneyStateParams, page: Page) {
+    var selectedQualificationId = qualificationId ?? getQualificationId(level);
+
+    var additionQuestionsValue = "";
+    if (additionalQuestions != null) {
+        for (let i = 0; i < additionalQuestions.length; i++) {
+            var additionalQuestion = additionalQuestions[i];
+            additionQuestionsValue = additionQuestionsValue + additionalQuestion[0] + '%22%3A%22' + additionalQuestion[1];
+            if (i != additionalQuestions.length - 1) {
+                additionQuestionsValue += '%22%2C%22';
+            }
+        }
+    }
+    var startValue = startDate == null ? '' : `${startDate[0] ?? ''}%2F${startDate[1] ?? ''}`;
+    var awardValue = awardDate == null ? '' : `${awardDate[0] ?? ''}%2F${awardDate[1] ?? ''}`;
+
+    var additionQuestionsValue = '';
+    if (additionalQuestions != null) {
+        for (let i = 0; i < additionalQuestions.length; i++) {
+            var additionalQuestion = additionalQuestions[i];
+            additionQuestionsValue = additionQuestionsValue + additionalQuestion[0] + '%22%3A%22' + additionalQuestion[1];
+            if (i != additionalQuestions.length - 1) {
+                additionQuestionsValue += '%22%2C%22';
+            }
+        }
+        additionQuestionsValue = `%22${additionQuestionsValue}%22`;
+    }
+
+    var cookie = `%7B%22WhereWasQualificationAwarded%22%3A%22${location ?? ''}%22%2C%22WhenWasQualificationStarted%22%3A%22${startValue}%22%2C%22WhenWasQualificationAwarded%22%3A%22${awardValue}%22%2C%22LevelOfQualification%22%3A%22${level ?? ''}%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22${organisation ?? ''}%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3A${organisationNotOnList ?? false}%2C%22SearchCriteria%22%3A%22${searchCriteria ?? ''}%22%2C%22AdditionalQuestionsAnswers%22%3A%7B${additionQuestionsValue}%7D%2C%22QualificationWasSelectedFromList%22%3A${(selectedFromList ?? false) ? 1 : 0}%7D`;
+    await setCookie(context, cookie, journeyCookieName);
+
+    await page.goto(`/qualifications/qualification-details/${selectedQualificationId}`);
 }
 
 export function checkHeaderValue(response: APIResponse, headerName: string, headerValue: string) {
@@ -244,4 +328,80 @@ export async function refineQualificationSearch(page: Page, searchTerm: string) 
     await page.locator("#refineSearch").fill(searchTerm);
     await checkValue(page, "#refineSearch", searchTerm);
     await page.locator("#refineSearchButton").click();
+}
+
+export enum RatioStatus {
+    Approved,
+    NotApproved,
+    FurtherActionRequired,
+    PossibleRouteAvailable
+}
+
+function getStatusValues(status: RatioStatus) {
+    switch (status) {
+        case RatioStatus.Approved:
+            return {
+                Text: "Approved",
+                Colour: /govuk-tag--green/
+            };
+        case RatioStatus.NotApproved:
+            return {
+                Text: "Not approved",
+                Colour: /govuk-tag--red/
+            };
+        case RatioStatus.FurtherActionRequired:
+            return {
+                Text: "Further action required",
+                Colour: /govuk-tag--grey/
+            };
+        case RatioStatus.PossibleRouteAvailable:
+            return {
+                Text: "Possible route available",
+                Colour: /govuk-tag--blue/
+            };
+    }
+}
+
+export async function checkLevelRatioDetails(page: Page, nth: number, ratioHeading: string, status: RatioStatus, {
+    summaryText = null,
+    detailText = null
+}: { summaryText?: string, detailText?: string }) {
+    var statusValues = getStatusValues(status);
+
+    await checkText(page, ".ratio-heading", ratioHeading, nth);
+    await checkText(page, ".ratio-status-tag", statusValues.Text, nth);
+    await hasClass(page, ".ratio-status-tag", statusValues.Colour, nth);
+
+    var ratioId = ratioHeading.replace(/\s/g, "");
+    if (summaryText == null && detailText == null) {
+        await doesNotExist(page, `#ratio-${ratioId}-additional-info`);
+    } else if (summaryText == null && detailText != null) {
+        await checkText(page, `#ratio-${ratioId}-additional-info`, detailText);
+    } else if (summaryText != null && detailText != null) {
+        await checkText(page, `#ratio-${ratioId}-additional-info .govuk-details__summary-text`, summaryText);
+        await checkText(page, `#ratio-${ratioId}-additional-info .govuk-details__text`, detailText);
+    } else {
+        throw new Error("Cannot determine additional info checks");
+    }
+}
+
+export async function checkDetailsInset(page: Page, heading: string, messageHeading: string, messageBody: string) {
+    await checkText(page, "#qualification-result-heading", heading);
+    await checkText(page, "#qualification-result-message-heading", messageHeading);
+    await checkText(page, "#qualification-result-message-body", messageBody);
+}
+
+export async function checkRatiosHeading(page: Page, heading: string, body?: string, additional?: string) {
+    await checkText(page, "#ratio-heading", heading);
+    if (body == null) {
+        await doesNotExist(page, "#ratio-heading + p[class='govuk-body']");
+    } else {
+        await checkText(page, "#ratio-heading + p[class='govuk-body']", body);
+    }
+
+    if (additional == null) {
+        await doesNotExist(page, "#ratio-additional-info");
+    } else {
+        await checkText(page, "#ratio-additional-info", additional);
+    }
 }
