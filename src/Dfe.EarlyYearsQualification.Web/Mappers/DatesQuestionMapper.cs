@@ -1,7 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
-using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
@@ -12,58 +11,20 @@ public static class DatesQuestionMapper
                                          string controllerName, DateQuestionModel startedQuestion,
                                          DateQuestionModel awardedQuestion)
     {
+        var errorLinks = new List<ErrorSummaryLink>();
         model.Question = question.Question;
         model.CtaButtonText = question.CtaButtonText;
         model.ActionName = actionName;
         model.ControllerName = controllerName;
         model.BackButton = NavigationLinkMapper.Map(question.BackButton);
 
-        model.StartedQuestion = startedQuestion;
-        model.StartedQuestion.Prefix = "started";
-        model.StartedQuestion.QuestionId = "date-started";
-        model.StartedQuestion.MonthId = "StartedQuestion.SelectedMonth";
-        model.StartedQuestion.YearId = "StartedQuestion.SelectedYear";
+        var (startedQuestionMapped, startedQuestionErrors) = MapDate(startedQuestion, "started", nameof(model.StartedQuestion));
+        model.StartedQuestion = startedQuestionMapped;
+        errorLinks.AddRange(startedQuestionErrors);
 
-        foreach (var errorSummaryLink in model.StartedQuestion.ErrorSummaryLinks)
-        {
-            errorSummaryLink.ElementLinkId = errorSummaryLink.ElementLinkId switch
-                                             {
-                                                 nameof(FieldId.Month) => model.StartedQuestion.MonthId,
-                                                 nameof(FieldId.Year) => model.StartedQuestion.YearId,
-                                                 _ => errorSummaryLink.ElementLinkId
-                                             };
-        }
-
-        model.AwardedQuestion = awardedQuestion;
-        model.AwardedQuestion.Prefix = "awarded";
-        model.AwardedQuestion.QuestionId = "date-awarded";
-        model.AwardedQuestion.MonthId = "AwardedQuestion.SelectedMonth";
-        model.AwardedQuestion.YearId = "AwardedQuestion.SelectedYear";
-        foreach (var errorSummaryLink in model.AwardedQuestion.ErrorSummaryLinks)
-        {
-            errorSummaryLink.ElementLinkId = errorSummaryLink.ElementLinkId switch
-                                             {
-                                                 nameof(FieldId.Month) => model.AwardedQuestion.MonthId,
-                                                 nameof(FieldId.Year) => model.AwardedQuestion.YearId,
-                                                 _ => errorSummaryLink.ElementLinkId
-                                             };
-        }
-
-        var errorLinks = new List<ErrorSummaryLink>();
-
-        if (model.StartedQuestion is not null &&
-            (model.StartedQuestion.MonthError || model.StartedQuestion.YearError) &&
-            model.StartedQuestion.ErrorSummaryLinks is not null)
-        {
-            errorLinks.AddRange(model.StartedQuestion.ErrorSummaryLinks);
-        }
-
-        if (model.AwardedQuestion is not null &&
-            (model.AwardedQuestion.MonthError || model.AwardedQuestion.YearError) &&
-            model.AwardedQuestion.ErrorSummaryLinks is not null)
-        {
-            errorLinks.AddRange(model.AwardedQuestion.ErrorSummaryLinks);
-        }
+        var (awardedQuestionMapped, awardedQuestionErrors) = MapDate(awardedQuestion, "awarded", nameof(model.AwardedQuestion));
+        model.AwardedQuestion = awardedQuestionMapped;
+        errorLinks.AddRange(awardedQuestionErrors);
 
         model.Errors = new ErrorSummaryModel
                        {
@@ -72,5 +33,33 @@ public static class DatesQuestionMapper
                        };
 
         return model;
+    }
+
+    private static (DateQuestionModel, List<ErrorSummaryLink>) MapDate(DateQuestionModel dateQuestion, string prefix, string fieldName)
+    {
+        var errorLinks = new List<ErrorSummaryLink>();
+        dateQuestion.Prefix = prefix;
+        dateQuestion.QuestionId = $"date-{prefix}";
+        dateQuestion.MonthId = $"{fieldName}.SelectedMonth";
+        dateQuestion.YearId = $"{fieldName}.SelectedYear";
+
+        foreach (var errorSummaryLink in dateQuestion.ErrorSummaryLinks)
+        {
+            errorSummaryLink.ElementLinkId = errorSummaryLink.ElementLinkId switch
+                                             {
+                                                 nameof(FieldId.Month) => dateQuestion.MonthId,
+                                                 nameof(FieldId.Year) => dateQuestion.YearId,
+                                                 _ => errorSummaryLink.ElementLinkId
+                                             };
+        }
+
+        if (dateQuestion is not null &&
+            (dateQuestion.MonthError || dateQuestion.YearError) &&
+            dateQuestion.ErrorSummaryLinks is not null)
+        {
+            errorLinks.AddRange(dateQuestion.ErrorSummaryLinks);
+        }
+
+        return (dateQuestion!, errorLinks);
     }
 }
