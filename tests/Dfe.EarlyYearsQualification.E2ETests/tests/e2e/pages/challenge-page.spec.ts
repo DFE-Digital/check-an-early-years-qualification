@@ -1,5 +1,13 @@
 ﻿import {test} from '@playwright/test';
-import {startJourney, checkText, checkError, doesNotExist, exists, hasAttribute} from '../../_shared/playwrightWrapper';
+import {
+    startJourney,
+    checkText,
+    checkError,
+    doesNotExist,
+    exists,
+    hasAttribute,
+    clickSubmit
+} from '../../_shared/playwrightWrapper';
 
 test.describe('A spec that tests the challenge page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
@@ -11,7 +19,7 @@ test.describe('A spec that tests the challenge page', {tag: "@e2e"}, () => {
         await doesNotExist(page, "#error-banner");
         await doesNotExist(page, "#error-message");
 
-        await page.locator("#question-submit").click();
+        await clickSubmit(page);
 
         await exists(page, "#error-banner");
         await checkText(page, '#error-banner-link', "Test Missing Password Text");
@@ -23,7 +31,7 @@ test.describe('A spec that tests the challenge page', {tag: "@e2e"}, () => {
         await doesNotExist(page, "#error-message");
 
         await page.locator("#PasswordValue").fill("Some incorrect password");
-        await page.locator("#question-submit").click();
+        await clickSubmit(page);
 
         await exists(page, "#error-banner");
         await checkText(page, '#error-banner-link', "Test Incorrect Password Text");
