@@ -292,6 +292,21 @@ public class ContentfulContentService(
         return helpConfirmationPage.First();
     }
 
+    public async Task<PreCheckPage?> GetPreCheckPage()
+    {
+        ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
+        var preCheckPage = await GetEntriesByType<PreCheckPage>();
+
+        // ReSharper disable once InvertIf
+        if (preCheckPage is null || !preCheckPage.Any())
+        {
+            Logger.LogWarning("No 'Pre Check Page' returned");
+            return null;
+        }
+
+        return preCheckPage.First();
+    }
+
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(
         int startDateMonth, int startDateYear,
         List<CannotFindQualificationPage> cannotFindQualificationPages)

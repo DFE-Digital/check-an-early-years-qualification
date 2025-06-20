@@ -36,7 +36,8 @@ public abstract class ContentfulContentServiceBase
               { typeof(OpenGraphData), ContentTypes.OpenGraphData },
               { typeof(CheckYourAnswersPage), ContentTypes.CheckYourAnswersPage },
               { typeof(HelpPage), ContentTypes.HelpPage },
-              { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage }
+              { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage },
+              { typeof(PreCheckPage), ContentTypes.PreCheckPage }
           };
 
     protected readonly ILogger Logger;

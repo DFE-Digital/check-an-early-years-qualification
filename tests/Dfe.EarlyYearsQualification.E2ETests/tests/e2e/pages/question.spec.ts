@@ -1,6 +1,7 @@
 ﻿import {test} from '@playwright/test';
 import {
     startJourney,
+    checkDisclaimer,
     checkText,
     checkError,
     checkUrl,
@@ -629,5 +630,33 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await exists(page, "#dropdown-error");
         await checkError(page, '#dropdown-error', "Test Error Message");
         await hasClass(page, "#awarding-organisation-select", /govuk-select--error/);
+    });
+
+    test("Checks the content on pre-check page", async ({page}) => {
+        await page.goto("/questions/pre-check");
+
+        await checkText(page, '#header', "Get ready to start the qualification check");
+        await checkText(page, '#post-header-content', "This is the post header content");
+        await checkText(page, '#question', "Do you have all the information you need to complete the check?");
+        await exists(page, 'input[id="yes"]');
+        await exists(page, 'input[id="no"]');
+        await checkDisclaimer(page, "You need all the information listed above to get a result. If you do not have it, you will not be able to complete this check.");
+        await checkText(page, '#pre-check-submit', "Continue");
+    });
+
+    test("Checks the error message content on pre-check page when a user doesn't select an option", async ({page}) => {
+        await page.goto("/questions/pre-check");
+
+        await doesNotExist(page, "#error-banner");
+        await doesNotExist(page, "#error-banner-link");
+        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 1);
+        await page.click("#pre-check-submit");
+        await checkUrl(page, "/questions/pre-check");
+        await isVisible(page, ".govuk-error-summary");
+        await checkText(page, ".govuk-error-summary__title", "There is a problem");
+        const errorMessage = "Confirm if you have all the information you need to complete the check";
+        await checkText(page, "#error-banner-link", errorMessage);
+        await checkError(page, '#option-error', errorMessage);
+        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 1);
     });
 });

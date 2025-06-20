@@ -714,4 +714,34 @@ public class MockContentfulServiceTests
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the body");
     }
+    
+    [TestMethod]
+    public async Task GetPreCheckPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetPreCheckPage();
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<PreCheckPage>();
+        result!.Header.Should().Be("Get ready to start the qualification check");
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "Back",
+                                                      OpenInNewTab = false,
+                                                      Href = "/"
+                                                  });
+        result.PostHeaderContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post header content");
+        result.Question.Should().Be("Do you have all the information you need to complete the check?");
+        result.Options.Should().NotBeNullOrEmpty();
+        result.Options.Count.Should().Be(2);
+        (result.Options[0] as Option)!.Label.Should().Be("Yes");
+        (result.Options[0] as Option)!.Value.Should().Be("yes");
+        (result.Options[1] as Option)!.Label.Should().Be("No");
+        (result.Options[1] as Option)!.Value.Should().Be("no");
+        result.InformationMessage.Should().Be("You need all the information listed above to get a result. If you do not have it, you will not be able to complete this check.");
+        result.CtaButtonText.Should().Be("Continue");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.ErrorMessage.Should().Be("Confirm if you have all the information you need to complete the check");
+    }
 }
