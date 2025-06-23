@@ -27,9 +27,13 @@ export async function startJourney(page: Page, context: BrowserContext) {
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
 
+   await precheckPage(page, "#yes");
+}
+
+export async function precheckPage(page:Page, option: string){
     // Set pre-check question
     await page.waitForURL("/questions/pre-check");
-    await page.locator("#yes").click();
+    await page.locator(option).click();
     await page.locator("#pre-check-submit").click();
 }
 
