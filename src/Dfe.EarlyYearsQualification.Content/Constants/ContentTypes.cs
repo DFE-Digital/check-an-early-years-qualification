@@ -24,4 +24,5 @@ public static class ContentTypes
     public const string CheckYourAnswersPage = "checkYourAnswersPage";
     public const string HelpPage = "helpPage";
     public const string HelpConfirmationPage = "helpConfirmationPage";
+    public const string PreCheckPage = "preCheckPage";
 }

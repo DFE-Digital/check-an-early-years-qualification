@@ -26,6 +26,11 @@ export async function startJourney(page: Page, context: BrowserContext) {
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
+
+    // Set pre-check question
+    await page.waitForURL("/questions/pre-check");
+    await page.locator("#yes").click();
+    await page.locator("#pre-check-submit").click();
 }
 
 export async function checkUrl(page: Page, expectedUrl: string) {
