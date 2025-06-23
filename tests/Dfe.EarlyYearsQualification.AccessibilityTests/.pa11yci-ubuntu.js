@@ -7,7 +7,7 @@ const config = {
         headers: {
             Cookie: 'auth-secret=${AUTH_SECRET},user_journey=%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A0%7D'
         },
-        hideElements: 'svg[aria-role=presentation]'
+        hideElements: 'svg[role=presentation]'
     },
     urls: [
         "http://localhost:5000/",
