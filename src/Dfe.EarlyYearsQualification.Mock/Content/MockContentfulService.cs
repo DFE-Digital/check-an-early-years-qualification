@@ -519,6 +519,41 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public async Task<PreCheckPage?> GetPreCheckPage()
+    {
+        return await Task.FromResult(new PreCheckPage
+                                     {
+                                         Header = "Get ready to start the qualification check",
+                                         BackButton = new NavigationLink
+                                                      {
+                                                          DisplayText = "Back",
+                                                          Href = "/",
+                                                          OpenInNewTab = false
+                                                      },
+                                         PostHeaderContent =
+                                             ContentfulContentHelper.Paragraph("This is the post header content"),
+                                         Question = "Do you have all the information you need to complete the check?",
+                                         Options =
+                                         [
+                                             new Option
+                                             {
+                                                 Label = "Yes",
+                                                 Value = "yes"
+                                             },
+
+                                             new Option
+                                             {
+                                                 Label = "No",
+                                                 Value = "no"
+                                             }
+                                         ],
+                                         InformationMessage = "You need all the information listed above to get a result. If you do not have it, you will not be able to complete this check.",
+                                         CtaButtonText = "Continue",
+                                         ErrorBannerHeading = "There is a problem",
+                                         ErrorMessage = "Confirm if you have all the information you need to complete the check"
+                                     });
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =

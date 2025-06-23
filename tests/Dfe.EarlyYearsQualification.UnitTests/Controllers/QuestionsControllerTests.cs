@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Constants;
+using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models;
@@ -1236,5 +1237,154 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task PreCheck_UnableToGetContent_ReturnsErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+
+        mockContentService.Setup(x => x.GetPreCheckPage())
+                          .ReturnsAsync((PreCheckPage?)null).Verifiable();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+
+        var result = await controller.PreCheck();
+
+        mockContentService.VerifyAll();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        result.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the pre-check page");
+    }
+    
+    [TestMethod]
+    public async Task PreCheck_FindsContent_ReturnsPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+
+        mockContentService.Setup(x => x.GetPreCheckPage())
+                          .ReturnsAsync(new PreCheckPage()).Verifiable();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+
+        var result = await controller.PreCheck();
+
+        mockContentService.VerifyAll();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ViewName.Should().Be("PreCheck");
+        resultType.Model.Should().NotBeNull();
+        resultType.Model.Should().BeAssignableTo<PreCheckPageModel>();
+    }
+    
+    [TestMethod]
+    public async Task Post_PreCheck_ModelStateInvalid_ReturnsPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+
+        mockContentService.Setup(x => x.GetPreCheckPage())
+                          .ReturnsAsync(new PreCheckPage()).Verifiable();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+        controller.ModelState.AddModelError("option", "test error");
+
+        var result = await controller.PreCheck(new PreCheckPageModel());
+
+        mockContentService.VerifyAll();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ViewName.Should().Be("PreCheck");
+        resultType.Model.Should().NotBeNull();
+        resultType.Model.Should().BeAssignableTo<PreCheckPageModel>();
+    }
+    
+    [TestMethod]
+    public async Task Post_PreCheck_UserChoosesYesOption_RedirectsToNextQuestion()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+
+        var result = await controller.PreCheck(new PreCheckPageModel { Option = Options.Yes });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be(nameof(QuestionsController.StartNew));
+    }
+    
+    [TestMethod]
+    public async Task Post_PreCheck_UserChoosesNoOption_RedirectsToHomePage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+
+        var result = await controller.PreCheck(new PreCheckPageModel { Option = Options.No });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be(nameof(HomeController.Index));
+        resultType.ControllerName.Should().Be("Home");
     }
 }
