@@ -23,7 +23,7 @@ runs:
     - name: Install Playwright Browsers
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: npx playwright install --with-deps
+      run: npx playwright install chromium firefox --with-deps
     - name: Run Playwright tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
