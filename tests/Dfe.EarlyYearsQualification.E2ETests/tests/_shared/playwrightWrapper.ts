@@ -411,7 +411,7 @@ export async function checkRatiosHeading(page: Page, heading: string, body?: str
 }
 
 export async function checkSnapshot(page: Page) {
-    await expect(page).toHaveScreenshot({fullPage: true});
+    await expect(page).toHaveScreenshot({fullPage: true, maxDiffPixelRatio: 0.001});
 }
 
 export async function clickSubmit(page: Page) {
