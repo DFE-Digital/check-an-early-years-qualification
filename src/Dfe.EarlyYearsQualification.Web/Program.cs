@@ -105,7 +105,7 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services
        .AddContentful(builder.Configuration)
-       .AddGovUkFrontend();
+       .AddGovUkFrontend(options => options.Rebrand = true);
 
 if (useMockContentful)
 {
