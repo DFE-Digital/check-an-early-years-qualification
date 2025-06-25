@@ -176,6 +176,8 @@ builder.UseDistributedCache(cacheConfiguration, isProductionEnvironment);
 
 var app = builder.Build();
 
+app.UseGovUkFrontend();
+
 app.UseMiddleware<HeadHandlingMiddleware>();
 
 app.UseSecureHeadersMiddleware(
