@@ -27,10 +27,10 @@ export async function startJourney(page: Page, context: BrowserContext) {
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
 
-   await precheckPage(page, "#yes");
+    await precheckPage(page, "#yes");
 }
 
-export async function precheckPage(page:Page, option: string){
+export async function precheckPage(page: Page, option: string) {
     // Set pre-check question
     await page.waitForURL("/questions/pre-check");
     await page.locator(option).click();
@@ -420,8 +420,9 @@ export async function checkRatiosHeading(page: Page, heading: string, body?: str
 }
 
 export async function checkSnapshot(page: Page) {
-    await page.setViewportSize({ width: 2000, height: 2000 });
-    await expect(page).toHaveScreenshot({fullPage: true, maxDiffPixelRatio: 0.005});
+   // await page.setViewportSize({width: 2000, height: 2000});
+    await expect(page).toHaveScreenshot({fullPage: true});
+    //, maxDiffPixelRatio: 0.005
 }
 
 export async function clickSubmit(page: Page) {
