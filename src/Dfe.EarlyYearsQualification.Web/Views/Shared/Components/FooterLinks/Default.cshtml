@@ -1,13 +1,12 @@
 @model IEnumerable<Dfe.EarlyYearsQualification.Web.Models.Content.NavigationLinkModel>
 
-<ul class="govuk-footer__inline-list">
-    @{
-        foreach (var link in Model)
-        {
-            <li class="govuk-footer__inline-list-item">
-                <a href=@link.Href class="govuk-footer__link"
-                   target=@(link.OpenInNewTab ? "_blank" : "")>@link.DisplayText</a>
-            </li>
-        }
-    }
-</ul>
+<govuk-footer>
+    <govuk-footer-meta>
+        <govuk-footer-meta-items>
+            @foreach (var link in Model)
+            {
+                <govuk-footer-meta-item href="@link.Href" target=@(link.OpenInNewTab ? "_blank" : "")>@link.DisplayText</govuk-footer-meta-item>
+            }
+        </govuk-footer-meta-items>
+    </govuk-footer-meta> 
+</govuk-footer>
