@@ -9,6 +9,16 @@ $("#radio-question-form").on("submit", function(){
     });
 });
 
+$("#pre-check-question-form").on("submit", function() {
+    let question = $("#question").text();
+    let answer = $("input[name='Option']:checked").val();
+    window.dataLayer.push({
+        'event': 'preCheckQuestionFormSubmission',
+        'question': question,
+        'answer': answer
+    });
+})
+
 $("#date-question-form").on("submit", function () {
     let question = $("#question").text();
     let startedMonth = $('#StartedQuestion\\.SelectedMonth').val();
