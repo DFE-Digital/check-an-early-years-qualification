@@ -1,0 +1,18 @@
+name: Install playwright
+description: Install all dependencies ready for playwright tests
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18.x
+    - name: Install dependencies
+      shell: bash
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
+      run: npm ci
+    - name: Install Playwright Browsers
+      shell: bash
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
+      run: npx playwright install chromium firefox --with-deps --no-shell
