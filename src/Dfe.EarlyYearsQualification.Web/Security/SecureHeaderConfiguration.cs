@@ -32,7 +32,7 @@ public static class SecureHeaderConfiguration
         var govukAllMinifiedElement = new ContentSecurityPolicyElement
                                       {
                                           CommandType = CspCommandType.Directive,
-                                          DirectiveOrUri = "sha256-aMgq5Q5sEYaSdJk9gw7JQyB59y1Aq30/Yb/E2Y6BAKQ="
+                                          DirectiveOrUri = "sha256-zTEAu/w+kkzTiqRXNf5AZFsp4nVfPy6Bjnwnrg8uhpE="
                                       };
 
         var unsafeHashesElement = new ContentSecurityPolicyElement
