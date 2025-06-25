@@ -12,57 +12,33 @@
 {
     <form method="post">
         <input type="hidden" id="returnUrl" name="returnUrl"/>
-        @* SonarLint says turn this div into a section -- but this construct is mandated by Gov UK guidelines *@
-        <div id="choose-cookies-preference" class="govuk-cookie-banner" data-nosnippet role="region"
-             aria-label="@Model.CookiesBannerTitle">
-            <div class="govuk-cookie-banner__message govuk-width-container">
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
-                            @Model.CookiesBannerTitle
-                        </h2>
-                        <div id="cookies-banner-choose-pref-content" class="govuk-cookie-banner__content">
-                            @Html.Raw(Model.CookiesBannerContent)
-                        </div>
-                    </div>
-                </div>
-                <div class="govuk-button-group">
-                    <button id="accept-cookies-button" type="submit" name="cookies" class="govuk-button"
-                            data-module="govuk-button" asp-controller="CookiesPreference" asp-action="Accept">
-                        @Model.AcceptButtonText
-                    </button>
-                    <button id="reject-cookies-button" type="submit" name="cookies" class="govuk-button"
-                            data-module="govuk-button" asp-controller="CookiesPreference" asp-action="Reject">
-                        @Model.RejectButtonText
-                    </button>
-                    <a class="govuk-link" href="/cookies">@Model.CookiesBannerLinkText</a>
-                </div>
-            </div>
-        </div>
+        <govuk-cookie-banner id="choose-cookies-preference" aria-label="@Model.CookiesBannerTitle">
+            <govuk-cookie-banner-message>
+                <govuk-cookie-banner-message-heading>@Model.CookiesBannerTitle</govuk-cookie-banner-message-heading>
+                <govuk-cookie-banner-message-content id="cookies-banner-choose-pref-content">@Html.Raw(Model.CookiesBannerContent)</govuk-cookie-banner-message-content>
+                <govuk-cookie-banner-message-actions>
+                    <govuk-cookie-banner-message-action text="@Model.AcceptButtonText" type="submit" id="accept-cookies-button" formaction="/cookies/accept" />
+                    <govuk-cookie-banner-message-action text="@Model.RejectButtonText" type="submit" id="reject-cookies-button" formaction="/cookies/reject" />
+                    <govuk-cookie-banner-message-action-link text="@Model.CookiesBannerLinkText" href="/cookies" />
+                </govuk-cookie-banner-message-actions>
+            </govuk-cookie-banner-message>
+        </govuk-cookie-banner>
     </form>
 }
 else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
 {
     <form method="post" asp-controller="CookiesPreference" asp-action="HideBanner">
         <input type="hidden" id="returnUrlHideBanner" name="returnUrl"/>
-        @* SonarLint says turn this div into a section -- but this construct is mandated by Gov UK guidelines *@
-        <div id="cookies-preference-chosen" class="govuk-cookie-banner" data-nosnippet role="region"
-             aria-label="Cookies on Check an Early Years Qualification service">
-            <div class="govuk-cookie-banner__message govuk-width-container">
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <div id="cookies-banner-pref-chosen-content" class="govuk-cookie-banner__content">
-                            @(cookie.HasApproved ? Html.Raw(Model.AcceptedCookiesContent) : Html.Raw(Model.RejectedCookiesContent))
-                        </div>
-                    </div>
-                </div>
-                <div class="govuk-button-group">
-                    <button id="hide-cookie-banner-button" value="yes" type="submit" name="cookies" class="govuk-button"
-                            data-module="govuk-button">
-                        @Model.HideCookieBannerButtonText
-                    </button>
-                </div>
-            </div>
-        </div>
+        <govuk-cookie-banner id="cookies-preference-chosen" aria-label="@Model.CookiesBannerTitle">
+            <govuk-cookie-banner-message>
+                <govuk-cookie-banner-message-heading>@Model.CookiesBannerTitle</govuk-cookie-banner-message-heading>
+                <govuk-cookie-banner-message-content id="cookies-banner-pref-chosen-content">
+                    @(cookie.HasApproved ? Html.Raw(Model.AcceptedCookiesContent) : Html.Raw(Model.RejectedCookiesContent))
+                </govuk-cookie-banner-message-content>
+                <govuk-cookie-banner-message-actions>
+                    <govuk-cookie-banner-message-action text="@Model.HideCookieBannerButtonText" type="submit" id="hide-cookie-banner-button" value="yes" />
+                </govuk-cookie-banner-message-actions>
+            </govuk-cookie-banner-message>
+        </govuk-cookie-banner>
     </form>
 }
