@@ -1,5 +1,12 @@
 ﻿import { test } from '@playwright/test';
-import { startJourney, checkText, checkUrl, attributeContains } from '../../_shared/playwrightWrapper';
+import {
+    startJourney,
+    checkText,
+    checkUrl,
+    attributeContains,
+    hasCount,
+    isVisible, doesNotExist
+} from '../../_shared/playwrightWrapper';
 
 test.describe('A spec used to test the not found page', {tag: "@e2e"}, () => {
     test.beforeEach(async ({ page, context }) => {
@@ -10,9 +17,13 @@ test.describe('A spec used to test the not found page', {tag: "@e2e"}, () => {
         await page.goto("/error/404");
 
         await checkText(page, "#page-not-found-heading", "Page not found");
-        await checkText(page, "#page-not-found-statement-body", "If you typed out the web address, check it is correct. If you pasted the web address, check you copied the entire address. If the web address is correct, or you selected a link or button, contact the check an early years qualification team by emailing techsupport.EARLY-YEARS-QUALS@education.gov.uk to report a fault with the service.");
+        await checkText(page, "#page-not-found-statement-body", "If you typed out the web address, check it is correct. If you pasted the web address, check you copied the entire address. If the web address is correct, or you selected a link or button, contact the check an early years qualification team by emailing general.EARLY-YEARS-QUALS@education.gov.uk to report a fault with the service.");
 
-        await attributeContains(page, "#page-not-found-link", "href", "mailto:techsupport.EARLY-YEARS-QUALS@education.gov.uk");
+        await attributeContains(page, "#page-not-found-link", "href", "mailto:general.EARLY-YEARS-QUALS@education.gov.uk");
+        await hasCount(page, "govuk-footer__inline-list", 0);
+        await isVisible(page, ".govuk-phase-banner");
+        await checkText(page, ".govuk-phase-banner__content__tag", "Beta");
+        await checkText(page, ".govuk-phase-banner__text", "");
     });
 
     test("Check that visiting a URL that doesn't exist shows this page without altering the URL", async ({ page }) => {

@@ -157,4 +157,14 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await confirmAdditonalRequirementsAnswers(page, "EYQ-240");
         await checkSnapshot(page);
     });
+
+    test("Something went wrong page", async ({page}) => {
+        await page.goto("/error");
+        await checkSnapshot(page);
+    });
+
+    test("Page not found page", async ({page}) => {
+        await page.goto("/error/404");
+        await checkSnapshot(page);
+    });
 });

@@ -1,0 +1,81 @@
+﻿@using Dfe.EarlyYearsQualification.Web.Helpers
+@inject TrackingConfiguration TrackingConfiguration
+
+<!DOCTYPE html>
+<html class="govuk-template--rebranded" lang="en">
+
+@{
+    var gtmTag = TrackingConfiguration.GtmTag;
+    var clarityTag = TrackingConfiguration.ClarityTag;
+}
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="noindex, nofollow"/>
+
+    <title>@ViewData["Title"] - Check an Early Years qualification</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon_new.ico"/>
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.png"/>
+    @Html.GovUkFrontendStyleImports()
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    @{
+        if (TrackingConfiguration.UseCookies)
+        {
+            if (!string.IsNullOrEmpty(gtmTag))
+            {
+                <script src="~/js/gtm/head-script.js" asp-append-version="true" id="ga-script"
+                        data-ga-tag=@gtmTag></script>
+            }
+
+            if (!string.IsNullOrEmpty(clarityTag))
+            {
+                <script src="~/js/clarity/head-script.js" asp-append-version="true" id="clarity-script"
+                        data-clarity-tag=@clarityTag></script>
+            }
+        }
+    }
+</head>
+
+<body>
+@{
+    if (TrackingConfiguration.UseCookies && !string.IsNullOrEmpty(gtmTag))
+    {
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src=`https://www.googletagmanager.com/ns.html?id=@gtmTag`
+                    title="Javascript for analytics data"
+                    height="0" width="0" style="display:none;visibility:hidden">
+            </iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    }
+}
+<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+@Html.GovUkFrontendJsEnabledScript()
+<govuk-header home-page-url="/"/>
+<govuk-service-navigation service-name="Check an early years qualification" service-url="/"/>
+<div class="govuk-width-container app-width-container">
+    <govuk-phase-banner>
+        <govuk-phase-banner-tag>Beta</govuk-phase-banner-tag>
+    </govuk-phase-banner>
+</div>
+
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper" role="main" class="pb-3" id="main-content">
+        @RenderBody()
+    </main>
+</div>
+
+<govuk-footer/>
+
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@Html.GovUkFrontendScriptImports()
+
+</body>
+
+</html>
