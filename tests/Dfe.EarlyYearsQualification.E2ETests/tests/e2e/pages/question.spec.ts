@@ -14,7 +14,8 @@ import {
     isVisible,
     hasAttribute,
     doesNotHaveAttribute,
-    whenWasQualificationStarted
+    whenWasQualificationStarted,
+    clickSubmit
 } from '../../_shared/playwrightWrapper';
 
 test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
@@ -49,7 +50,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, ".govuk-error-summary");
         await doesNotExist(page, "#option-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/where-was-the-qualification-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -130,7 +131,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#started-error");
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -154,7 +155,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#started-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#StartedQuestion\\.SelectedYear', '2024');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -173,7 +174,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#started-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#StartedQuestion\\.SelectedMonth', '10');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -192,7 +193,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#AwardedQuestion\\.SelectedYear', '2024');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -211,7 +212,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#AwardedQuestion\\.SelectedMonth', '10');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -337,7 +338,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
                 await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
                 await page.fill('#StartedQuestion\\.SelectedMonth', value);
                 await page.fill('#StartedQuestion\\.SelectedYear', '2024');
-                await page.click("#question-submit");
+                await clickSubmit(page);
                 await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
                 await isVisible(page, ".govuk-error-summary");
                 await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -361,7 +362,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
                 await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
                 await page.fill('#StartedQuestion\\.SelectedMonth', '1');
                 await page.fill('#StartedQuestion\\.SelectedYear', value);
-                await page.click("#question-submit");
+                await clickSubmit(page);
                 await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
                 await isVisible(page, ".govuk-error-summary");
                 await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -385,7 +386,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
                 await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
                 await page.fill('#AwardedQuestion\\.SelectedMonth', value);
                 await page.fill('#AwardedQuestion\\.SelectedYear', '2024');
-                await page.click("#question-submit");
+                await clickSubmit(page);
                 await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
                 await isVisible(page, ".govuk-error-summary");
                 await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -409,7 +410,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
                 await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
                 await page.fill('#AwardedQuestion\\.SelectedMonth', '1');
                 await page.fill('#AwardedQuestion\\.SelectedYear', value);
-                await page.click("#question-submit");
+                await clickSubmit(page);
                 await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
                 await isVisible(page, ".govuk-error-summary");
                 await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -431,7 +432,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#StartedQuestion\\.SelectedMonth', '0');
         await page.fill('#StartedQuestion\\.SelectedYear', '20');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -451,7 +452,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#started-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#StartedQuestion\\.SelectedMonth', '0');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -471,7 +472,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#started-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#StartedQuestion\\.SelectedYear', '20');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -492,7 +493,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#AwardedQuestion\\.SelectedMonth', '0');
         await page.fill('#AwardedQuestion\\.SelectedYear', '20');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -512,7 +513,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#AwardedQuestion\\.SelectedMonth', '0');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -532,7 +533,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
         await page.fill('#AwardedQuestion\\.SelectedYear', '20');
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -580,7 +581,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, ".govuk-error-summary");
         await doesNotExist(page, "#option-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/what-level-is-the-qualification");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -622,7 +623,7 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await doesNotExist(page, ".govuk-error-summary");
         await doesNotExist(page, "#dropdown-error");
         await doesNotHaveClass(page, "#awarding-organisation-select", /govuk-select--error/);
-        await page.click("#question-submit");
+        await clickSubmit(page);
         await checkUrl(page, "/questions/what-is-the-awarding-organisation");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
