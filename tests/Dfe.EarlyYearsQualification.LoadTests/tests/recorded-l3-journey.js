@@ -70,6 +70,37 @@ export default function level3Journey(ENVIRONMENT, DATA) {
     group(
         `page_2 - ${address}/questions/where-was-the-qualification-awarded`,
         function () {
+            response = pageGET(`${address}/questions/pre-check`);
+
+            requestVerificationToken = getRequestVerificationTokenValue(response);
+
+            check(response, {
+                'request-verification token has value': (r) => requestVerificationToken && requestVerificationToken.length > 0,
+                'get status 200': (r) => r.status == 200,
+                'get request not challenged': (r) => !r.url.includes('challenge')
+            })
+
+            response = getBootstrap(address);
+            response = getGovukMinCss(address);
+            response = getSiteCss(address);
+            response = getJqueryMinJs(address);
+            response = getBootstrapBundleMinJs(address);
+            response = getSiteJs(address);
+            response = getGovukMinJs(address);
+            response = getLightFont(address);
+            response = getFavIcon(address);
+            response = getBoldFont(address);
+            response = getGovukMinJs(address);
+            response = getFavIcon(address);
+
+            response = pagePOST(
+                `${address}/questions/pre-check`,
+                {
+                    Option: 'yes',
+                    __RequestVerificationToken: requestVerificationToken,
+                }
+            );
+            
             response = pageGET(`${address}/questions/where-was-the-qualification-awarded`);
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
