@@ -12,18 +12,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      shell: bash
-      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: npm ci
-    - name: Install Playwright Browsers
-      shell: bash
-      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: npx playwright install --with-deps
     - name: Run Playwright tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests

@@ -67,6 +67,9 @@ jobs:
         with:
           webapp_url: ${{ vars.WEBAPP_NAME }}
           
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+        
       - name: Run Playwright smoke tests
         uses: ./.github/actions/run-playwright-smoke-tests
         with:

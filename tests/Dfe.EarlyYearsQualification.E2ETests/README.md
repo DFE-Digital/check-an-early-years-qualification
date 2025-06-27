@@ -12,12 +12,14 @@ To run the tests, run the following commands:
     - Optional arguments:
     - `--ui` will run the tests in the playwright UI
     - `--grep "@TAG"` will run only tests with the provided tag
+    - `--project PROJECT` will run the tests only for the selected browser profile
 
-| TestTag       | Content Type |
-|---------------|--------------|
-| `@e2e`        | Mock         |
-| `@validation` | Live         |
-| `@smoke`      | Live         |
+| TestTag       | Content Type | Additional Params                                                            | Notes                                                                           |
+|---------------|--------------|------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| `@e2e`        | Mock         |                                                                              |                                                                                 |
+| `@validation` | Live         |                                                                              |                                                                                 |
+| `@smoke`      | Live         |                                                                              |                                                                                 |
+| `@snapshot`   | Mock         | `--update-snapshots`: if a snapshot test fails, it will replace the snapshot | Use chromium browser using `--project chromium`. Firefox is unstable with links |
 
 If a test using mock content fails, check that the mock content contains the required content.
 

@@ -67,7 +67,10 @@ jobs:
         uses: ./.github/actions/health-check
         with:
           webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
-          
+      
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+              
       # Run smoke test
       - name: Run Playwright smoke tests against slot
         uses: ./.github/actions/run-playwright-smoke-tests
@@ -115,7 +118,10 @@ jobs:
         uses: ./.github/actions/health-check
         with:
           webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
-          
+                    
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright         
+        
       # Run smoke test          
       - name: Run Playwright smoke tests against slot
         uses: ./.github/actions/run-playwright-smoke-tests

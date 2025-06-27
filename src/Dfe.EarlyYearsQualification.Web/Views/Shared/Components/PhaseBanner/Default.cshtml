@@ -2,14 +2,8 @@
 
 @if (Model.Show)
 {
-    <div class="govuk-phase-banner">
-        <p class="govuk-phase-banner__content">
-            <strong class="govuk-tag govuk-phase-banner__content__tag">
-                @Model.PhaseName
-            </strong>
-            <span class="govuk-phase-banner__text">
-                @Html.Raw(Model.Content)
-            </span>
-        </p>
-    </div>
+    <govuk-phase-banner>
+        <govuk-phase-banner-tag>@Model.PhaseName</govuk-phase-banner-tag>
+        @Html.Raw(Model.Content)
+    </govuk-phase-banner>
 }
