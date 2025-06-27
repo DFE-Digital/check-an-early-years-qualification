@@ -1,10 +1,10 @@
 // Adapted from recordings created by Grafana k6 Browser Recorder 1.0.4
 // A recorded level-3 qualification journey, end-to-end, where the qualification is found
 
-import {sleep, group, check} from 'k6';
+import { sleep, group, check } from 'k6';
 import http from 'k6/http';
 
-import {getRequestVerificationTokenValue} from './support/requestVerificationToken.js';
+import { getRequestVerificationTokenValue } from './support/requestVerificationToken.js';
 import {
     getBootstrap,
     getGovukMinCss,
@@ -100,7 +100,7 @@ export default function level3Journey(ENVIRONMENT, DATA) {
                     __RequestVerificationToken: requestVerificationToken,
                 }
             );
-            
+
             response = pageGET(`${address}/questions/where-was-the-qualification-awarded`);
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
