@@ -6,7 +6,8 @@ import {
     whatLevelIsTheQualification,
     selectNotOnTheListAsTheAwardingOrganisation,
     checkYourAnswersPage,
-    selectQualification
+    selectQualification,
+    checkText
 } from '../_shared/playwrightWrapper';
 
 test.describe("A spec used to smoke test the environment once a deployment has happened", {tag: "@smoke"}, () => {
@@ -20,5 +21,7 @@ test.describe("A spec used to smoke test the environment once a deployment has h
         await checkYourAnswersPage(page);
         await selectQualification(page);
         await expect(page.locator("#no-result-content")).not.toBeVisible();
+        await page.goto("/does-not-exist");
+        await checkText(page, "#page-not-found-heading", "Page not found");
     });
 });

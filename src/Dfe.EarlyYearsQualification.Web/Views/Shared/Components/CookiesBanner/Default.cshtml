@@ -5,40 +5,42 @@
 @{
     var cookie = CookieService.GetCookie();
 }
-
-<script src="~/js/pages/components/cookie-banner-component.js" asp-append-version="true"></script>
-
-@if (cookie is { HasApproved: false, IsRejected: false })
+@if (Model.Show)
 {
-    <form method="post">
-        <input type="hidden" id="returnUrl" name="returnUrl"/>
-        <govuk-cookie-banner id="choose-cookies-preference" aria-label="@Model.CookiesBannerTitle">
-            <govuk-cookie-banner-message>
-                <govuk-cookie-banner-message-heading>@Model.CookiesBannerTitle</govuk-cookie-banner-message-heading>
-                <govuk-cookie-banner-message-content id="cookies-banner-choose-pref-content">@Html.Raw(Model.CookiesBannerContent)</govuk-cookie-banner-message-content>
-                <govuk-cookie-banner-message-actions>
-                    <govuk-cookie-banner-message-action text="@Model.AcceptButtonText" type="submit" id="accept-cookies-button" formaction="/cookies/accept" />
-                    <govuk-cookie-banner-message-action text="@Model.RejectButtonText" type="submit" id="reject-cookies-button" formaction="/cookies/reject" />
-                    <govuk-cookie-banner-message-action-link text="@Model.CookiesBannerLinkText" href="/cookies" />
-                </govuk-cookie-banner-message-actions>
-            </govuk-cookie-banner-message>
-        </govuk-cookie-banner>
-    </form>
-}
-else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
-{
-    <form method="post" asp-controller="CookiesPreference" asp-action="HideBanner">
-        <input type="hidden" id="returnUrlHideBanner" name="returnUrl"/>
-        <govuk-cookie-banner id="cookies-preference-chosen" aria-label="@Model.CookiesBannerTitle">
-            <govuk-cookie-banner-message>
-                <govuk-cookie-banner-message-heading>@Model.CookiesBannerTitle</govuk-cookie-banner-message-heading>
-                <govuk-cookie-banner-message-content id="cookies-banner-pref-chosen-content">
-                    @(cookie.HasApproved ? Html.Raw(Model.AcceptedCookiesContent) : Html.Raw(Model.RejectedCookiesContent))
-                </govuk-cookie-banner-message-content>
-                <govuk-cookie-banner-message-actions>
-                    <govuk-cookie-banner-message-action text="@Model.HideCookieBannerButtonText" type="submit" id="hide-cookie-banner-button" value="yes" />
-                </govuk-cookie-banner-message-actions>
-            </govuk-cookie-banner-message>
-        </govuk-cookie-banner>
-    </form>
+    <script src="~/js/pages/components/cookie-banner-component.js" asp-append-version="true"></script>
+
+    @if (cookie is { HasApproved: false, IsRejected: false })
+    {
+        <form method="post">
+            <input type="hidden" id="returnUrl" name="returnUrl"/>
+            <govuk-cookie-banner id="choose-cookies-preference" aria-label="@Model.CookiesBannerTitle">
+                <govuk-cookie-banner-message>
+                    <govuk-cookie-banner-message-heading>@Model.CookiesBannerTitle</govuk-cookie-banner-message-heading>
+                    <govuk-cookie-banner-message-content id="cookies-banner-choose-pref-content">@Html.Raw(Model.CookiesBannerContent)</govuk-cookie-banner-message-content>
+                    <govuk-cookie-banner-message-actions>
+                        <govuk-cookie-banner-message-action text="@Model.AcceptButtonText" type="submit" id="accept-cookies-button" formaction="/cookies/accept"/>
+                        <govuk-cookie-banner-message-action text="@Model.RejectButtonText" type="submit" id="reject-cookies-button" formaction="/cookies/reject"/>
+                        <govuk-cookie-banner-message-action-link text="@Model.CookiesBannerLinkText" href="/cookies"/>
+                    </govuk-cookie-banner-message-actions>
+                </govuk-cookie-banner-message>
+            </govuk-cookie-banner>
+        </form>
+    }
+    else if ((cookie.HasApproved || cookie.IsRejected) && cookie.IsVisible)
+    {
+        <form method="post" asp-controller="CookiesPreference" asp-action="HideBanner">
+            <input type="hidden" id="returnUrlHideBanner" name="returnUrl"/>
+            <govuk-cookie-banner id="cookies-preference-chosen" aria-label="@Model.CookiesBannerTitle">
+                <govuk-cookie-banner-message>
+                    <govuk-cookie-banner-message-heading>@Model.CookiesBannerTitle</govuk-cookie-banner-message-heading>
+                    <govuk-cookie-banner-message-content id="cookies-banner-pref-chosen-content">
+                        @(cookie.HasApproved ? Html.Raw(Model.AcceptedCookiesContent) : Html.Raw(Model.RejectedCookiesContent))
+                    </govuk-cookie-banner-message-content>
+                    <govuk-cookie-banner-message-actions>
+                        <govuk-cookie-banner-message-action text="@Model.HideCookieBannerButtonText" type="submit" id="hide-cookie-banner-button" value="yes"/>
+                    </govuk-cookie-banner-message-actions>
+                </govuk-cookie-banner-message>
+            </govuk-cookie-banner>
+        </form>
+    }
 }
