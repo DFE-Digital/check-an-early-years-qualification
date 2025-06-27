@@ -46,6 +46,7 @@ const yesAtQuestionTwo: AdditionalRequirement = {index: 2, answer: '#yes'};
 const approved = "Approved";
 const notApproved = "Not approved";
 const furtherActionRequired = "Further action required";
+const possibleRouteAvailable = "Possible route available";
 
 test.describe('A spec used to validate changes to the journey against actual data', {tag: "@validation"}, () => {
     test.beforeEach(async ({page, context}) => {
@@ -65,7 +66,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             qualificationToSelect: 'EYQ-212',
             ratioForUnqualified: approved,
             ratioForLevel2: approved,
-            ratioForLevel3: notApproved,
+            ratioForLevel3: possibleRouteAvailable,
             ratioForLevel6: notApproved
         } as Scenario,
         {
@@ -142,7 +143,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             qualificationToSelect: 'EYQ-221',
             ratioForUnqualified: approved,
             ratioForLevel2: approved,
-            ratioForLevel3: notApproved,
+            ratioForLevel3: possibleRouteAvailable,
             ratioForLevel6: notApproved
         } as Scenario,
         {
@@ -252,7 +253,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             ratioForUnqualified: approved,
             ratioForLevel2: approved,
             ratioForLevel3: approved,
-            ratioForLevel6: notApproved,
+            ratioForLevel6: possibleRouteAvailable,
             additionalRequirements: [noAtQuestionOne]
         } as Scenario,
         {
@@ -281,7 +282,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             qualificationToSelect: 'EYQ-211',
             ratioForUnqualified: approved,
             ratioForLevel2: notApproved,
-            ratioForLevel3: notApproved,
+            ratioForLevel3: possibleRouteAvailable,
             ratioForLevel6: notApproved,
             additionalRequirements: [noAtQuestionOne, noAtQuestionTwo]
         } as Scenario,
@@ -312,7 +313,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             ratioForUnqualified: approved,
             ratioForLevel2: approved,
             ratioForLevel3: approved,
-            ratioForLevel6: notApproved,
+            ratioForLevel6: possibleRouteAvailable,
             additionalRequirements: [noAtQuestionOne]
         } as Scenario,
     ].forEach((scenario) => {
@@ -383,7 +384,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             qualificationToSelect: 'EYQ-311',
             ratioForUnqualified: approved,
             ratioForLevel2: approved,
-            ratioForLevel3: notApproved,
+            ratioForLevel3: possibleRouteAvailable,
             ratioForLevel6: notApproved,
             additionalRequirements: [yesAtQuestionOne]
         } as Scenario,
@@ -415,7 +416,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             qualificationToSelect: 'EYQ-216',
             ratioForUnqualified: approved,
             ratioForLevel2: approved,
-            ratioForLevel3: notApproved,
+            ratioForLevel3: possibleRouteAvailable,
             ratioForLevel6: notApproved,
             additionalRequirements: [noAtQuestionOne]
         } as Scenario,
@@ -431,7 +432,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             qualificationToSelect: 'EYQ-224',
             ratioForUnqualified: approved,
             ratioForLevel2: furtherActionRequired,
-            ratioForLevel3: notApproved,
+            ratioForLevel3: possibleRouteAvailable,
             ratioForLevel6: notApproved,
             additionalRequirements: [noAtQuestionOne]
         } as Scenario
