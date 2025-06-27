@@ -21,9 +21,6 @@ test.describe('A spec used to test the not found page', {tag: "@e2e"}, () => {
         await hasAttribute(page, "#problem-with-service-link", "href", "https://www.gov.uk/government/publications/early-years-qualifications-achieved-in-england");
 
         await hasCount(page, "govuk-footer__inline-list", 0);
-        await isVisible(page, ".govuk-phase-banner");
-        await checkText(page, ".govuk-phase-banner__content__tag", "Beta");
-        await checkText(page, ".govuk-phase-banner__text", "");
-
+        await doesNotExist(page, ".govuk-phase-banner");
     });
 });

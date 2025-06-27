@@ -21,9 +21,7 @@ test.describe('A spec used to test the not found page', {tag: "@e2e"}, () => {
 
         await attributeContains(page, "#page-not-found-link", "href", "mailto:general.EARLY-YEARS-QUALS@education.gov.uk");
         await hasCount(page, "govuk-footer__inline-list", 0);
-        await isVisible(page, ".govuk-phase-banner");
-        await checkText(page, ".govuk-phase-banner__content__tag", "Beta");
-        await checkText(page, ".govuk-phase-banner__text", "");
+        await doesNotExist(page, ".govuk-phase-banner");
     });
 
     test("Check that visiting a URL that doesn't exist shows this page without altering the URL", async ({ page }) => {
