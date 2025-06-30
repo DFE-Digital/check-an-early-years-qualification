@@ -1,0 +1,23 @@
+name: Run Playwright validation tests
+description: Run validation tests using Playwright
+
+inputs:
+  webapp_url:
+    required: true
+    description: 'The webapp url to run against'
+  auth_secret:
+    required: true
+    description: 'The auth secret to use when running the test'
+runs:
+  using: composite
+  steps:
+    - name: Run Playwright tests
+      shell: bash
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
+      run: WEBAPP_URL=https://${{ inputs.webapp_url }} DOMAIN=https://${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} npx playwright test --grep "@validation"
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
