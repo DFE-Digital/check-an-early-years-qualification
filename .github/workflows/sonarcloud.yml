@@ -1,7 +1,5 @@
 name: Static code analysis
 on:
-  push:
-    branches: ["main", "release/**", "feature/**", "fix/**"]
   pull_request:
     types: [opened, synchronize, reopened]
     branches: ["main", "release/**", "feature/**", "fix/**"]

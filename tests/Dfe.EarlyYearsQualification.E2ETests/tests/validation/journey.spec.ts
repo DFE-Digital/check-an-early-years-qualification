@@ -10,7 +10,7 @@ import {
     checkYourAnswersPage,
     checkNumberOfMatchingQualifications,
     selectQualification,
-    confirmQualificiation,
+    confirmQualification,
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
     checkDetailsPage
@@ -120,7 +120,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             await checkYourAnswersPage(page);
             await checkNumberOfMatchingQualifications(page, scenario.noOfMatchingQualifications);
             await selectQualification(page, scenario.qualificationToSelect);
-            await confirmQualificiation(page, "#yes");
+            await confirmQualification(page, "#yes");
             await checkDetailsPage(page, scenario.qualificationToSelect);
             await checkText(page, '#ratio-Unqualified-tag > .govuk-tag', scenario.ratioForUnqualified);
             await checkText(page, '#ratio-Level2-tag > .govuk-tag', scenario.ratioForLevel2);
@@ -230,7 +230,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             await checkYourAnswersPage(page);
             await checkNumberOfMatchingQualifications(page, scenario.noOfMatchingQualifications);
             await selectQualification(page, scenario.qualificationToSelect);
-            await confirmQualificiation(page, "#yes");
+            await confirmQualification(page, "#yes");
             await checkDetailsPage(page, scenario.qualificationToSelect);
             await checkText(page, '#ratio-Unqualified-tag > .govuk-tag', scenario.ratioForUnqualified);
             await checkText(page, '#ratio-Level2-tag > .govuk-tag', scenario.ratioForLevel2);
@@ -325,7 +325,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             await checkYourAnswersPage(page);
             await checkNumberOfMatchingQualifications(page, scenario.noOfMatchingQualifications);
             await selectQualification(page, scenario.qualificationToSelect);
-            await confirmQualificiation(page, "#yes");
+            await confirmQualification(page, "#yes");
             for (const x of scenario.additionalRequirements) {
                 await processAdditionalRequirement(page, scenario.qualificationToSelect, x.index, x.answer);
             }
@@ -448,7 +448,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             await checkYourAnswersPage(page);
             await checkNumberOfMatchingQualifications(page, scenario.noOfMatchingQualifications);
             await selectQualification(page, scenario.qualificationToSelect);
-            await confirmQualificiation(page, "#yes");
+            await confirmQualification(page, "#yes");
             for (const x of scenario.additionalRequirements) {
                 await processAdditionalRequirement(page, scenario.qualificationToSelect, x.index, x.answer);
             }

@@ -7,7 +7,7 @@ export async function authorise(context: BrowserContext) {
     await setCookie(context, process.env.AUTH_SECRET, 'auth-secret');
 }
 
-export async function startJourney(page: Page, context: BrowserContext) {
+export async function goToStartPage(page: Page, context: BrowserContext) {
     await authorise(context);
 
     await page.goto("/", {waitUntil: 'domcontentloaded'});
@@ -15,17 +15,25 @@ export async function startJourney(page: Page, context: BrowserContext) {
     //if we end up navigated to the challenge page, then fill in the password and continue
     if (page.url().includes("challenge")) {
         await page.locator("#PasswordValue").fill(process.env.AUTH_SECRET);
-        await page.locator("#question-submit").click();
+        await clickSubmit(page);
         await page.waitForURL("/");
     }
+}
+
+export async function startJourney(page: Page, context: BrowserContext) {
+    await goToStartPage(page, context);
 
     await page.waitForFunction(() => document.title === "Start - Check an Early Years qualification")
     await expect(page.locator("#start-now-button")).toBeVisible();
     await page.locator("#start-now-button").click();
 
+    await precheckPage(page, "#yes");
+}
+
+export async function precheckPage(page: Page, option: string) {
     // Set pre-check question
     await page.waitForURL("/questions/pre-check");
-    await page.locator("#yes").click();
+    await page.locator(option).click();
     await page.locator("#pre-check-submit").click();
 }
 
@@ -239,7 +247,7 @@ export async function doesNotHaveClass(page: Page, locator: string, expectedClas
 export async function whereWasTheQualificationAwarded(page: Page, location: string) {
     await checkUrl(page, "/questions/where-was-the-qualification-awarded");
     await page.locator(location).click();
-    await page.locator("#question-submit").click();
+    await clickSubmit(page);
 }
 
 export async function whenWasQualificationStarted(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
@@ -249,7 +257,7 @@ export async function whenWasQualificationStarted(page: Page, startedMonth: stri
     await page.locator("#StartedQuestion\\.SelectedYear").fill(startedYear);
     await page.locator("#AwardedQuestion\\.SelectedMonth").fill(awardedMonth);
     await page.locator("#AwardedQuestion\\.SelectedYear").fill(awardedYear);
-    await page.locator("#question-submit").click();
+    await clickSubmit(page);
 }
 
 export async function whatLevelIsTheQualification(page: Page, level: number) {
@@ -257,7 +265,7 @@ export async function whatLevelIsTheQualification(page: Page, level: number) {
     await checkUrl(page, "/questions/what-level-is-the-qualification");
     await attributeContains(page, "#back-button", 'href', '/questions/when-was-the-qualification-started-and-awarded');
     await page.locator('input[id="' + level + '"]').click();
-    await page.locator("#question-submit").click();
+    await clickSubmit(page);
 }
 
 export async function whatIsTheAwardingOrganisation(page: Page, dropdownIndex: number) {
@@ -266,7 +274,7 @@ export async function whatIsTheAwardingOrganisation(page: Page, dropdownIndex: n
     await attributeContains(page, "#back-button", 'href', '/questions/what-level-is-the-qualification');
 
     await page.locator("#awarding-organisation-select").selectOption({index: dropdownIndex});
-    await page.locator("#question-submit").click();
+    await clickSubmit(page);
 }
 
 export async function whatIsTheAwardingOrganisationValue(page: Page, value: string) {
@@ -274,14 +282,14 @@ export async function whatIsTheAwardingOrganisationValue(page: Page, value: stri
     await checkUrl(page, "/questions/what-is-the-awarding-organisation");
     await attributeContains(page, "#back-button", 'href', '/questions/what-level-is-the-qualification');
     await page.locator("#awarding-organisation-select").selectOption({value: value});
-    await page.locator("#question-submit").click();
+    await clickSubmit(page);
 }
 
 export async function selectNotOnTheListAsTheAwardingOrganisation(page: Page) {
     await checkUrl(page, "/questions/what-is-the-awarding-organisation");
     await attributeContains(page, "#back-button", 'href', '/questions/what-level-is-the-qualification');
     await page.locator("#awarding-organisation-not-in-list").click();
-    await page.locator("#question-submit").click();
+    await clickSubmit(page);
 }
 
 export async function checkYourAnswersPage(page: Page) {
@@ -305,7 +313,7 @@ export async function checkNumberOfMatchingQualifications(page: Page, numberOfEx
     await checkText(page, "#found-heading", `We found ${numberOfExpectedQualifications} matching qualifications`);
 }
 
-export async function confirmQualificiation(page: Page, answer: string) {
+export async function confirmQualification(page: Page, answer: string) {
     // confirm qualification page
     await page.locator(answer).click();
     await page.locator('#confirm-qualification-button').click();
@@ -409,4 +417,18 @@ export async function checkRatiosHeading(page: Page, heading: string, body?: str
     } else {
         await checkText(page, "#ratio-additional-info", additional);
     }
+}
+
+export async function checkSnapshot(page: Page) {
+    await page.setViewportSize({width: 2000, height: 2000});
+    await expect(page).toHaveScreenshot({fullPage: true, maxDiffPixelRatio: 0.005});
+}
+
+export async function clickSubmit(page: Page) {
+    await page.click("#question-submit");
+}
+
+export async function clickSubmitAndCheckSnapshot(page: Page) {
+    await clickSubmit(page);
+    await checkSnapshot(page);
 }

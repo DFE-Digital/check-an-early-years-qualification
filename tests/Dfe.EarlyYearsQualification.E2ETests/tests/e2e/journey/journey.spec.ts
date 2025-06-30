@@ -11,7 +11,7 @@ import {
     whatIsTheAwardingOrganisation,
     checkYourAnswersPage,
     selectQualification,
-    confirmQualificiation,
+    confirmQualification,
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
     checkDetailsPage,
@@ -65,7 +65,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
         await selectQualification(page, "EYQ-240");
-        await confirmQualificiation(page, "#yes");
+        await confirmQualification(page, "#yes");
         await processAdditionalRequirement(page, "EYQ-240", 1, "#yes");
         await processAdditionalRequirement(page, "EYQ-240", 2, "#yes");
         await confirmAdditonalRequirementsAnswers(page, "EYQ-240");
@@ -155,7 +155,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
         await selectQualification(page, "EYQ-108");
-        await confirmQualificiation(page, "#yes");
+        await confirmQualification(page, "#yes");
         await processAdditionalRequirement(page, "EYQ-108", 1, "#yes");
         await confirmAdditonalRequirementsAnswers(page, "EYQ-108");
         await checkDetailsPage(page, "EYQ-108");
@@ -168,7 +168,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
         await selectQualification(page, "EYQ-108");
-        await confirmQualificiation(page, "#yes");
+        await confirmQualification(page, "#yes");
         await processAdditionalRequirement(page, "EYQ-108", 1, "#no");
         await processAdditionalRequirement(page, "EYQ-108", 2, "#yes");
         await confirmAdditonalRequirementsAnswers(page, "EYQ-108");
