@@ -8,13 +8,16 @@ inputs:
   auth_secret:
     required: true
     description: 'The auth secret to use when running the test'
+  test_type:
+    required: true
+    description: 'The type of test to run: smoke or validation'
 runs:
   using: composite
   steps:
     - name: Run Playwright tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=https://${{ inputs.webapp_url }} DOMAIN=https://${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} npx playwright test --grep "@validation"
+      run: WEBAPP_URL=https://${{ inputs.webapp_url }} DOMAIN=https://${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} npx playwright test --grep "@${{ inputs.test_type }}"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

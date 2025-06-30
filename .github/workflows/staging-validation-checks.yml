@@ -16,7 +16,8 @@ jobs:
       - name: Install Playwright
         uses: ./.github/actions/install-playwright
       - name: Run Playwright validation tests
-        uses: ./.github/actions/run-playwright-validation-tests
+        uses: ./.github/actions/run-playwright-tests
         with:
           webapp_url: "${{ vars.SERVICE_GOV_UK_CUSTOM_DOMAIN_NAME }}"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          test_type: "validation"
