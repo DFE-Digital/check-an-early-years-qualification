@@ -1,0 +1,23 @@
+name: Validation Checks - Staging
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Runs daily at 2am, Monday through Friday
+    - cron: "0 2 * * 1-5"
+
+jobs:
+
+  validation-checks-staging:
+    name: Run validation checks against staging
+    runs-on: ubuntu-24.04
+    environment: staging
+    steps:
+      - name: Install Playwright
+        uses: ./.github/actions/install-playwright
+      - name: Run Playwright validation tests
+        uses: ./.github/actions/run-playwright-tests
+        with:
+          webapp_url: "${{ vars.SERVICE_GOV_UK_CUSTOM_DOMAIN_NAME }}"
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          test_type: "validation"
