@@ -793,8 +793,17 @@ public class MockContentfulService : IContentService
                    HelpButtonText = "Get help with this page",
                    HelpButtonLink = "/advice/help",
                    CancelButtonText = "Cancel",
-                   UsefulResponse = "Thank you for your feedback",
-                   ImproveServiceContent = ContentfulContentHelper.Paragraph("This is the improve service content")
+                   FeedbackComponent = GetFeedbackComponent()
+               };
+    }
+
+    private static FeedbackComponent GetFeedbackComponent()
+    {
+        return new FeedbackComponent
+               {
+                   Header = "Give feedback",
+                   Body =
+                       ContentfulContentHelper.Paragraph("Your feedback matters and will help us improve the service.")
                };
     }
 }

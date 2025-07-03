@@ -31,7 +31,13 @@ public class AdvicePageMapperTests
                                               },
                              UpDownFeedback = new UpDownFeedback
                                               {
-                                                  ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
+                                                  FeedbackComponent = new FeedbackComponent
+                                                                      {
+                                                                          Header = "Feedback header",
+                                                                          Body =
+                                                                              ContentfulContentHelper
+                                                                                  .Paragraph(improveServiceBody)
+                                                                      }
                                               }
                          };
 
@@ -44,7 +50,10 @@ public class AdvicePageMapperTests
         result.FeedbackBanner.Should()
               .BeEquivalentTo(advicePage.FeedbackBanner, options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(advicePage.UpDownFeedback,
-                                                      options => options.Excluding(x => x!.ImproveServiceContent));
+                                                      options => options.Excluding(x => x.FeedbackComponent));
+        result.UpDownFeedback.FeedbackBody.Should().Be(improveServiceBody);
+        result.UpDownFeedback.FeedbackHeader.Should()
+              .BeSameAs(advicePage.UpDownFeedback.FeedbackComponent!.Header);
     }
 
     [TestMethod]
@@ -73,7 +82,13 @@ public class AdvicePageMapperTests
                                                                },
                                               UpDownFeedback = new UpDownFeedback
                                                                {
-                                                                   ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
+                                                                   FeedbackComponent = new FeedbackComponent
+                                                                       {
+                                                                           Header = "Feedback header",
+                                                                           Body =
+                                                                               ContentfulContentHelper
+                                                                                   .Paragraph(improveServiceBody)
+                                                                       }
                                                                }
                                           };
 
@@ -87,6 +102,9 @@ public class AdvicePageMapperTests
         result.FeedbackBanner.Should().BeEquivalentTo(cannotFindQualificationPage.FeedbackBanner,
                                                       options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(cannotFindQualificationPage.UpDownFeedback,
-                                                      options => options.Excluding(x => x!.ImproveServiceContent));
+                                                      options => options.Excluding(x => x.FeedbackComponent));
+        result.UpDownFeedback.FeedbackBody.Should().Be(improveServiceBody);
+        result.UpDownFeedback.FeedbackHeader.Should()
+              .BeSameAs(cannotFindQualificationPage.UpDownFeedback.FeedbackComponent!.Header);
     }
 }

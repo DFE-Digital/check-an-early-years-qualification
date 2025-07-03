@@ -58,7 +58,7 @@ public abstract class ContentfulContentServiceBase
             string contentType = ContentTypeLookup[typeof(T)];
 
             var queryBuilder = new QueryBuilder<T>().ContentTypeIs(contentType)
-                                                    .Include(2)
+                                                    .Include(3)
                                                     .FieldEquals("sys.id", entryId);
 
             var entries = await ContentfulClient.GetEntriesByType(contentType, queryBuilder);

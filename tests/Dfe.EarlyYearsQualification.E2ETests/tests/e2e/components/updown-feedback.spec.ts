@@ -4,6 +4,7 @@ import {pagesWithUpDownFeedback} from "../../_shared/urls-to-check";
 import {
     authorise,
     checkText,
+    checkTextContains,
     isVisible,
     isNotVisible,
     setCookie,
@@ -19,6 +20,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
     pagesWithUpDownFeedback.forEach((url) => {
         test(`Checks that the updown-feedback is present at the URL: ${url}`, async ({page}) => {
             await page.goto(url);
+            await checkUrl(page, url);
             await page.locator("#accept-cookies-button").click();
             await isVisible(page, "#ud-feedback");
             await isVisible(page, "#ud-prompt");
@@ -39,18 +41,22 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await page.locator("#accept-cookies-button").click();
             await page.locator("#ud-page-is-useful").click();
             await isVisible(page, "#ud-feedback");
-            await isVisible(page, "#ud-prompt");
+            await isNotVisible(page, "#ud-prompt");
             await isNotVisible(page, "#ud-page-is-useful");
             await isNotVisible(page, "#ud-page-is-not-useful");
             await isNotVisible(page, "#ud-get-help");
-            await isVisible(page, "#ud-prompt-success");
-            await isNotVisible(page, "#ud-improve-service");
-            await isNotVisible(page, "#ud-cancel");
-            await checkText(page, "#ud-prompt-success", "Thank you for your feedback");
+            await isNotVisible(page, "#ud-prompt-success");
+            await isVisible(page, "#ud-improve-service");
+            await isVisible(page, "#ud-improve-service-body");
+            await isVisible(page, "#ud-cancel");
+
+            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
+            await checkText(page, "#ud-cancel", "Cancel");
         });
 
         test(`Checks that the is-not-useful displays improve-service and goes back correctly at the URL: ${url}`, async ({page}) => {
             await page.goto(url);
+            await checkUrl(page, url);
             await page.locator("#accept-cookies-button").click();
             await page.locator("#ud-page-is-not-useful").click();
             await isVisible(page, "#ud-feedback");
@@ -63,7 +69,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isVisible(page, "#ud-improve-service-body");
             await isVisible(page, "#ud-cancel");
 
-            await checkText(page, "#ud-improve-service-body", "This is the improve service content");
+            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
             await checkText(page, "#ud-cancel", "Cancel");
 
             await page.locator("#ud-cancel").click();
@@ -108,7 +114,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isVisible(page, "#ud-improve-service-body");
             await isNotVisible(page, "#ud-cancel");
 
-            await checkText(page, "#ud-improve-service-body", "This is the improve service content");
+            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
         });
     });
 });
@@ -134,7 +140,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isVisible(page, "#ud-improve-service-body");
             await isNotVisible(page, "#ud-cancel");
 
-            await checkText(page, "#ud-improve-service-body", "This is the improve service content");
+            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
         });
     });
 });
@@ -161,7 +167,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isVisible(page, "#ud-improve-service-body");
             await isNotVisible(page, "#ud-cancel");
 
-            await checkText(page, "#ud-improve-service-body", "This is the improve service content");
+            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
         });
     });
 });
