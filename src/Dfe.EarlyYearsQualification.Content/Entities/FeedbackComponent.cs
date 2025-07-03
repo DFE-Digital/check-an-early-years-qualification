@@ -4,7 +4,7 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class FeedbackComponent
 {
-    public string Header { get; set; } = string.Empty;
+    public string Header { get; init; } = string.Empty;
 
-    public Document? Body { get; set; }
+    public Document? Body { get; init; }
 }
