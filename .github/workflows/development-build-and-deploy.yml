@@ -71,7 +71,8 @@ jobs:
         uses: ./.github/actions/install-playwright
         
       - name: Run Playwright smoke tests
-        uses: ./.github/actions/run-playwright-smoke-tests
+        uses: ./.github/actions/run-playwright-tests
         with:
-          webapp_url: ${{ vars.WEBAPP_NAME }}
+          webapp_url: "${{ vars.WEBAPP_NAME }}.azurewebsites.net"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          test_type: 'smoke'

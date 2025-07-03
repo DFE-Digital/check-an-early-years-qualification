@@ -48,7 +48,11 @@ public class QualificationDetailsMapperTests
                                                },
                               UpDownFeedback = new UpDownFeedback
                                                {
-                                                   ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
+                                                   FeedbackComponent = new FeedbackComponent
+                                                                       {
+                                                                           Header = "Feedback header",
+                                                                           Body = ContentfulContentHelper.Paragraph(improveServiceBody)
+                                                                       }
                                                }
                           };
 
@@ -61,7 +65,7 @@ public class QualificationDetailsMapperTests
 
         var additionalRequirementAnswers = new List<AdditionalRequirementAnswerModel>
                                            {
-                                               new()
+                                               new AdditionalRequirementAnswerModel
                                                {
                                                    Question = "Question", Answer = "Answer",
                                                    AnswerToBeFullAndRelevant = true,
@@ -113,7 +117,10 @@ public class QualificationDetailsMapperTests
               .BeSameAs(detailsPage.QualificationDetailsSummaryHeader);
         result.Content.FeedbackBanner.Should()
               .BeEquivalentTo(detailsPage.FeedbackBanner, options => options.Excluding(x => x.Body));
-        result.UpDownFeedback.Should()
-              .BeEquivalentTo(detailsPage.UpDownFeedback, options => options.Excluding(x => x.ImproveServiceContent));
+        result.UpDownFeedback.Should().BeEquivalentTo(detailsPage.UpDownFeedback,
+                                                      options => options.Excluding(x => x.FeedbackComponent));
+        result.UpDownFeedback.FeedbackBody.Should().Be(improveServiceBody);
+        result.UpDownFeedback.FeedbackHeader.Should()
+              .BeSameAs(detailsPage.UpDownFeedback.FeedbackComponent!.Header);
     }
 }
