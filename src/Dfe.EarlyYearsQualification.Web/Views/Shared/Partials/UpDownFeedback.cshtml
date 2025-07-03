@@ -2,9 +2,6 @@
 @model Dfe.EarlyYearsQualification.Web.Models.Content.UpDownFeedbackModel
 @inject TrackingConfiguration TrackingConfiguration
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/js/pages/components/up-down-feedback-component.js" asp-append-version="true"></script>
-
 <div id="ud-feedback" class="govuk-!-display-none-print">
     @if (TrackingConfiguration.UseCookies)
     {
@@ -30,10 +27,6 @@
                         </ul>
                     </div>
                 </div>
-                <div id="ud-prompt-success" class="ud-feedback__prompt-questions ud-feedback__prompt-success"
-                     role="alert">
-                    @Model.UsefulResponse
-                </div>
                 <div
                     class="ud-feedback__prompt-questions ud-feedback__prompt-questions--get-help feedback-buttons">
                     <a href="@Model.HelpButtonLink" id="ud-get-help"
@@ -46,7 +39,10 @@
     <div id="ud-improve-service"
          class="ud-feedback__form ud-feedback__form--email ud-feedback__js-show">
         <div id="ud-improve-service-body">
-            @Html.Raw(Model.ImproveServiceBody)
+            <h2 class="govuk-heading-m" id="feedback-header-improve">
+                @Model.FeedbackHeader
+            </h2>
+            @Html.Raw(Model.FeedbackBody)
         </div>
         @if (TrackingConfiguration.UseCookies)
         {

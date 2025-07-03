@@ -419,7 +419,7 @@ public class QualificationDetailsService(
         var requirementsText = await contentParser.ToHtml(content.RequirementsText);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner);
         var improveServiceBodyHtml = content.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(content.UpDownFeedback.ImproveServiceContent)
+                                         ? await contentParser.ToHtml(content.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
         return QualificationDetailsMapper.Map(qualification, content, backNavLink,
                                               MapAdditionalRequirementAnswers(qualification

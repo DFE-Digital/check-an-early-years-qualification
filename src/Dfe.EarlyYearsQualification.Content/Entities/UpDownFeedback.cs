@@ -12,6 +12,6 @@ public class UpDownFeedback
     public string HelpButtonText { get; init; } = string.Empty;
     public string HelpButtonLink { get; init; } = string.Empty;
     public string CancelButtonText { get; init; } = string.Empty;
-    public Document? ImproveServiceContent { get; init; }
-    public string UsefulResponse { get; init; } = string.Empty;
+
+    public FeedbackComponent? FeedbackComponent { get; set; }
 }

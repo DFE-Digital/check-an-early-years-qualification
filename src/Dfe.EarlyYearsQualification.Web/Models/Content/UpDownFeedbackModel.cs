@@ -10,6 +10,6 @@ public class UpDownFeedbackModel
     public string HelpButtonText { get; init; } = string.Empty;
     public string HelpButtonLink { get; init; } = string.Empty;
     public string CancelButtonText { get; init; } = string.Empty;
-    public string UsefulResponse { get; init; } = string.Empty;
-    public string ImproveServiceBody { get; init; } = string.Empty;
+    public string FeedbackHeader { get; set; } = string.Empty;
+    public string FeedbackBody { get; set; } = string.Empty;
 }

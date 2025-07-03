@@ -186,7 +186,7 @@ public class AdviceController(
         var bodyHtml = await contentParser.ToHtml(advicePage.Body);
         var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(advicePage.FeedbackBanner, contentParser);
         var improveServiceBodyHtml = advicePage.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(advicePage.UpDownFeedback.ImproveServiceContent)
+                                         ? await contentParser.ToHtml(advicePage.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
         return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml);
     }
@@ -197,7 +197,7 @@ public class AdviceController(
         var feedbackBodyHtml =
             await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
         var improveServiceBodyHtml = cannotFindQualificationPage.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(cannotFindQualificationPage.UpDownFeedback.ImproveServiceContent)
+                                         ? await contentParser.ToHtml(cannotFindQualificationPage.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
         return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml);
     }

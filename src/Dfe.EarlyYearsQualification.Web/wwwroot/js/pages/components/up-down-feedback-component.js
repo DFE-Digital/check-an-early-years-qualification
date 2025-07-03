@@ -4,25 +4,20 @@
     const cancelButton = $("#ud-cancel");
     const pageIsUsefulButton = $("#ud-page-is-useful");
     const pageIsNotUsefulButton = $("#ud-page-is-not-useful");
-    const feedbackButtons = $(".feedback-buttons");
-    const promptSuccessMessage = $("#ud-prompt-success");
-
+    
+    // If the prompt is showing set the initial state
     if (prompt.length !== 0) {
-
-        setHidden(prompt, false);
-        setHidden(promptSuccessMessage, true);
-        setHidden(improveServiceBody, true);
-        for (const promptQuestion of feedbackButtons) setHidden($(promptQuestion), false);
-        setHidden(cancelButton, false);
-
-        function revealInitialPrompt() {
+        
+        function showInitialPrompt() {
             setHidden(prompt, false);
-            prompt.focus();
+            setHidden(improveServiceBody, true);
+            setHidden(cancelButton, false);
         }
-
-        function toggleForm() {
-            setHidden(improveServiceBody, !improveServiceBody.is(":hidden"));
-            setHidden(prompt, !prompt.is(":hidden"));
+        
+        function showImproveServiceBody(){
+            setHidden(prompt, true);
+            setHidden(improveServiceBody, false);
+            setHidden(cancelButton, false);
         }
 
         function setHidden(element, hidden) {
@@ -33,25 +28,21 @@
             }
         }
 
+        showInitialPrompt();
 
         pageIsUsefulButton.on('click', function (e) {
             e.preventDefault();
-            for (const element of feedbackButtons) setHidden($(element), true);
-            setHidden(promptSuccessMessage, false);
-            promptSuccessMessage.focus();
-            revealInitialPrompt();
+            showImproveServiceBody();
         });
 
         pageIsNotUsefulButton.on('click', function (e) {
             e.preventDefault();
-            toggleForm();
+            showImproveServiceBody();
         });
 
         cancelButton.on('click', function (e) {
             e.preventDefault();
-            toggleForm();
-            revealInitialPrompt();
-            pageIsNotUsefulButton.focus();
+            showInitialPrompt();
         });
     }
 });
