@@ -47,10 +47,10 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
-            await isVisible(page, "#ud-improve-service-body");
+            await isVisible(page, "#feedback-component");
             await isVisible(page, "#ud-cancel");
 
-            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
+            await checkTextContains(page, "#feedback-component", "Your feedback matters and will help us improve the service.");
             await checkText(page, "#ud-cancel", "Cancel");
         });
 
@@ -66,10 +66,10 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
-            await isVisible(page, "#ud-improve-service-body");
+            await isVisible(page, "#feedback-component");
             await isVisible(page, "#ud-cancel");
 
-            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
+            await checkTextContains(page, "#feedback-component", "Your feedback matters and will help us improve the service.");
             await checkText(page, "#ud-cancel", "Cancel");
 
             await page.locator("#ud-cancel").click();
@@ -111,10 +111,10 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
-            await isVisible(page, "#ud-improve-service-body");
+            await isVisible(page, "#feedback-component");
             await isNotVisible(page, "#ud-cancel");
 
-            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
+            await checkTextContains(page, "#feedback-component", "Your feedback matters and will help us improve the service.");
         });
     });
 });
@@ -137,10 +137,10 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
-            await isVisible(page, "#ud-improve-service-body");
+            await isVisible(page, "#feedback-component");
             await isNotVisible(page, "#ud-cancel");
 
-            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
+            await checkTextContains(page, "#feedback-component", "Your feedback matters and will help us improve the service.");
         });
     });
 });
@@ -164,10 +164,10 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
-            await isVisible(page, "#ud-improve-service-body");
+            await isVisible(page, "#feedback-component");
             await isNotVisible(page, "#ud-cancel");
 
-            await checkTextContains(page, "#ud-improve-service-body", "Your feedback matters and will help us improve the service.");
+            await checkTextContains(page, "#feedback-component", "Your feedback matters and will help us improve the service.");
         });
     });
 });

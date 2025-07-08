@@ -515,7 +515,13 @@ public class MockContentfulService : IContentService
                                      {
                                          SuccessMessage = "This is the success message",
                                          BodyHeading = "Body heading",
-                                         Body = ContentfulContentHelper.Paragraph("This is the body")
+                                         Body = ContentfulContentHelper.Paragraph("This is the body"),
+                                         FeedbackComponent = GetFeedbackComponent(),
+                                         ReturnToHomepageLink = new NavigationLink
+                                                                {
+                                                                    DisplayText = "Return to the homepage",
+                                                                    Href = "/"
+                                                                }
                                      });
     }
 

@@ -211,11 +211,7 @@ public class AdviceController(
     private async Task<HelpConfirmationPageModel> Map(HelpConfirmationPage helpConfirmationPage)
     {
         var bodyHtml = await contentParser.ToHtml(helpConfirmationPage.Body);
-        return new HelpConfirmationPageModel
-               {
-                   SuccessMessage = helpConfirmationPage.SuccessMessage,
-                   BodyHeading = helpConfirmationPage.BodyHeading,
-                   Body = bodyHtml
-               };
+        var feedbackBodyHtml = await contentParser.ToHtml(helpConfirmationPage.FeedbackComponent!.Body);
+        return HelpConfirmationPageModelMapper.Map(helpConfirmationPage, bodyHtml, feedbackBodyHtml);
     }
 }

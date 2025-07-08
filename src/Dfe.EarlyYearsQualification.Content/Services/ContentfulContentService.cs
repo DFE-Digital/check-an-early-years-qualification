@@ -280,7 +280,10 @@ public class ContentfulContentService(
 
     public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
     {
-        var helpConfirmationPage = await GetEntriesByType<HelpConfirmationPage>();
+        var helpConfirmationPageType = ContentTypeLookup[typeof(HelpConfirmationPage)]; 
+        var queryBuilder = new QueryBuilder<HelpConfirmationPage>().ContentTypeIs(helpConfirmationPageType)
+                                                                   .Include(2);
+        var helpConfirmationPage = await GetEntriesByType(queryBuilder);
 
         // ReSharper disable once InvertIf
         if (helpConfirmationPage is null || !helpConfirmationPage.Any())
