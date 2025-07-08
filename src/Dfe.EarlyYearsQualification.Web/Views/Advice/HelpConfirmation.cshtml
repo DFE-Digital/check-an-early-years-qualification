@@ -17,7 +17,7 @@
             await Html.RenderPartialAsync("Partials/FeedbackComponent", Model.FeedbackComponent);
             var link = Model.ReturnToTheHomepageLink;
             <div class="govuk-body">
-                <a id="back-button" href="@link!.Href" class="govuk-link"
+                <a id="return-button" href="@link!.Href" class="govuk-link"
                    target=@(link.OpenInNewTab ? "_blank" : "")>@link.DisplayText</a>
             </div>
         }
