@@ -33,7 +33,8 @@ const config = {
         "http://localhost:5000/advice/level-6-qualification-post-2014",
         "http://localhost:5000/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019",
         "http://localhost:5000/advice/level-7-qualification-after-aug-2019",
-        "http://localhost:5000/advice/help"
+        "http://localhost:5000/advice/help",
+        "http://localhost:5000/advice/help/confirmation"
     ]
 };
 

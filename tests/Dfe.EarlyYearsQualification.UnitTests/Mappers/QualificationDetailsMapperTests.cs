@@ -119,8 +119,8 @@ public class QualificationDetailsMapperTests
               .BeEquivalentTo(detailsPage.FeedbackBanner, options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(detailsPage.UpDownFeedback,
                                                       options => options.Excluding(x => x.FeedbackComponent));
-        result.UpDownFeedback.FeedbackBody.Should().Be(improveServiceBody);
-        result.UpDownFeedback.FeedbackHeader.Should()
+        result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
+        result.UpDownFeedback.FeedbackComponent.Header.Should()
               .BeSameAs(detailsPage.UpDownFeedback.FeedbackComponent!.Header);
     }
 }

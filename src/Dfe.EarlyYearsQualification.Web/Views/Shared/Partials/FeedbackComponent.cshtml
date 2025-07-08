@@ -1,0 +1,8 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.FeedbackComponentModel
+
+<div id="feedback-component">
+    <h2 class="govuk-heading-m" id="feedback-header">
+        @Model.Header
+    </h2>
+    @Html.Raw(Model.Body)
+</div>

@@ -40,7 +40,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
@@ -73,10 +73,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
@@ -107,7 +107,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
@@ -141,10 +141,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
@@ -175,7 +175,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
@@ -208,10 +208,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
@@ -242,7 +242,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
@@ -275,10 +275,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
@@ -309,7 +309,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
@@ -342,10 +342,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
@@ -384,10 +384,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
         mockContentService.Verify(x => x.GetCannotFindQualificationPage(2, 2, 2015), Times.Once);
@@ -425,10 +425,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(cannotFindQualificationPage.Heading);
+        model.Heading.Should().Be(cannotFindQualificationPage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
         mockContentService.Verify(x => x.GetAdvicePage(AdvicePages.QualificationNotOnTheList), Times.Never);
@@ -458,7 +458,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
@@ -488,10 +488,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
@@ -520,7 +520,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
@@ -557,10 +557,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be(renderedHtmlBody);
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
@@ -588,7 +588,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the advice page");
@@ -621,15 +621,15 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as AdvicePageModel;
+        var model = resultType.Model as AdvicePageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(advicePage.Heading);
+        model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be(renderedHtmlBody);
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task Help_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {
@@ -654,7 +654,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the help page");
@@ -684,10 +684,10 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as HelpPageModel;
+        var model = resultType.Model as HelpPageModel;
         model.Should().NotBeNull();
 
-        model!.Heading.Should().Be(helpPage.Heading);
+        model.Heading.Should().Be(helpPage.Heading);
         model.PostHeadingContent.Should().Be("Test html body");
 
         mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
@@ -720,11 +720,11 @@ public class AdviceControllerTests
         var resultType = result as RedirectToActionResult;
 
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("HelpConfirmation");
+        resultType.ActionName.Should().Be("HelpConfirmation");
 
         mockNotificationService.Verify(x => x.SendFeedbackNotification(It.IsAny<FeedbackNotification>()), Times.Once());
     }
-    
+
     [TestMethod]
     public async Task Get_Post_InvalidModelState_ReturnsView()
     {
@@ -740,7 +740,7 @@ public class AdviceControllerTests
                           .ReturnsAsync(helpPage);
 
         mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
-        
+
         controller.ModelState.AddModelError(nameof(HelpPageModel.EmailAddress), "Invalid");
         controller.ModelState.AddModelError(nameof(HelpPageModel.SelectedOption), "Invalid");
         controller.ModelState.AddModelError(nameof(HelpPageModel.AdditionalInformationMessage), "Invalid");
@@ -752,17 +752,17 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
 
         resultType.Should().NotBeNull();
-        resultType!.ViewName.Should().Be("Help");
+        resultType.ViewName.Should().Be("Help");
 
         var model = resultType.Model as HelpPageModel;
         model.Should().NotBeNull();
-        model!.HasErrors.Should().BeTrue();
+        model.HasErrors.Should().BeTrue();
         model.HasEmailAddressError.Should().BeTrue();
         model.HasFurtherInformationError.Should().BeTrue();
         model.HasNoEnquiryOptionSelectedError.Should().BeTrue();
     }
-    
-        [TestMethod]
+
+    [TestMethod]
     public async Task HelpConfirmation_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
@@ -786,7 +786,7 @@ public class AdviceControllerTests
 
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No content for the help confirmation page");
@@ -803,7 +803,11 @@ public class AdviceControllerTests
         var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
                                               UserJourneyMockNoOp.Object, mockNotificationService.Object);
 
-        var helpConfirmationPage = new HelpConfirmationPage { SuccessMessage = "Success", BodyHeading = "Body heading"};
+        var helpConfirmationPage = new HelpConfirmationPage
+                                   {
+                                       SuccessMessage = "Success", BodyHeading = "Body heading",
+                                       FeedbackComponent = new FeedbackComponent()
+                                   };
         mockContentService.Setup(x => x.GetHelpConfirmationPage())
                           .ReturnsAsync(helpConfirmationPage);
 
@@ -816,14 +820,14 @@ public class AdviceControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as HelpConfirmationPageModel;
+        var model = resultType.Model as HelpConfirmationPageModel;
         model.Should().NotBeNull();
 
-        model!.SuccessMessage.Should().Be(helpConfirmationPage.SuccessMessage);
+        model.SuccessMessage.Should().Be(helpConfirmationPage.SuccessMessage);
         model.BodyHeading.Should().Be(helpConfirmationPage.BodyHeading);
         model.Body.Should().Be("Test html body");
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Exactly(2));
     }
 
     [TestMethod]

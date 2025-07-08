@@ -36,14 +36,8 @@
         </div>
     }
 
-    <div id="ud-improve-service"
-         class="ud-feedback__form ud-feedback__form--email ud-feedback__js-show">
-        <div id="ud-improve-service-body">
-            <h2 class="govuk-heading-m" id="feedback-header-improve">
-                @Model.FeedbackHeader
-            </h2>
-            @Html.Raw(Model.FeedbackBody)
-        </div>
+    <div id="ud-improve-service" class="ud-feedback__form ud-feedback__form--email ud-feedback__js-show">
+        @{ await Html.RenderPartialAsync("Partials/FeedbackComponent", Model.FeedbackComponent); }
         @if (TrackingConfiguration.UseCookies)
         {
             <button id="ud-cancel" class="govuk-button govuk-button--secondary" aria-expanded="true" hidden>

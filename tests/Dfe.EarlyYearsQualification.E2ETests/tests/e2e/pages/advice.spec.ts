@@ -154,9 +154,13 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await isVisible(page, "#success-message");
         await isVisible(page, "#help-confirmation-body-heading");
         await isVisible(page, "#help-confirmation-body");
+        await isVisible(page, "#feedback-component");
+        await isVisible(page, "#return-button");
         
         await checkText(page, "#success-message" ,"This is the success message");
         await checkText(page, "#help-confirmation-body-heading" ,"Body heading");
         await checkText(page, "#help-confirmation-body" ,"This is the body");
+        await checkTextContains(page, "#feedback-component", "Your feedback matters and will help us improve the service.");
+        await checkText(page, "#return-button", "Return to the homepage");
     });
 });
