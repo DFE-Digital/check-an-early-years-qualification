@@ -13,7 +13,7 @@ public static class HelpConfirmationPageModelMapper
                    SuccessMessage = helpConfirmationPage.SuccessMessage,
                    BodyHeading = helpConfirmationPage.BodyHeading,
                    Body = bodyHtml,
-                   FeedbackComponent = FeedbackComponentMapper.Map(helpConfirmationPage.FeedbackComponent!.Header, feedbackBodyHtml),
+                   FeedbackComponent = FeedbackComponentModelMapper.Map(helpConfirmationPage.FeedbackComponent!.Header, feedbackBodyHtml),
                    ReturnToTheHomepageLink = NavigationLinkMapper.Map(helpConfirmationPage.ReturnToHomepageLink)
                };
     }

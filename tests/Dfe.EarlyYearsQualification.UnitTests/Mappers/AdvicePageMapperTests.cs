@@ -51,8 +51,8 @@ public class AdvicePageMapperTests
               .BeEquivalentTo(advicePage.FeedbackBanner, options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(advicePage.UpDownFeedback,
                                                       options => options.Excluding(x => x.FeedbackComponent));
-        result.UpDownFeedback.FeedbackComponent!.FeedbackBody.Should().Be(improveServiceBody);
-        result.UpDownFeedback.FeedbackComponent.FeedbackHeader.Should()
+        result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
+        result.UpDownFeedback.FeedbackComponent.Header.Should()
               .BeSameAs(advicePage.UpDownFeedback.FeedbackComponent!.Header);
     }
 
@@ -103,8 +103,8 @@ public class AdvicePageMapperTests
                                                       options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(cannotFindQualificationPage.UpDownFeedback,
                                                       options => options.Excluding(x => x.FeedbackComponent));
-        result.UpDownFeedback.FeedbackComponent!.FeedbackBody.Should().Be(improveServiceBody);
-        result.UpDownFeedback.FeedbackComponent!.FeedbackHeader.Should()
+        result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
+        result.UpDownFeedback.FeedbackComponent!.Header.Should()
               .BeSameAs(cannotFindQualificationPage.UpDownFeedback.FeedbackComponent!.Header);
     }
 }

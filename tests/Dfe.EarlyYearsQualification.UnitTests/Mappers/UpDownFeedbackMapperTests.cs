@@ -55,7 +55,7 @@ public class UpDownFeedbackMapperTests
         result.HelpButtonText.Should().Be(upDownFeedback.HelpButtonText);
         result.HelpButtonLink.Should().Be(upDownFeedback.HelpButtonLink);
         result.CancelButtonText.Should().Be(upDownFeedback.CancelButtonText);
-        result.FeedbackComponent!.FeedbackBody.Should().Be(improveServiceContent);
-        result.FeedbackComponent.FeedbackHeader.Should().BeSameAs(upDownFeedback.FeedbackComponent!.Header);
+        result.FeedbackComponent!.Body.Should().Be(improveServiceContent);
+        result.FeedbackComponent.Header.Should().BeSameAs(upDownFeedback.FeedbackComponent!.Header);
     }
 }
