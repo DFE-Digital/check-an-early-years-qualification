@@ -1,0 +1,36 @@
+@using Dfe.EarlyYearsQualification.Web.Models.Content
+@model Dfe.EarlyYearsQualification.Web.Models.Content.AdvicePageModel
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        @if (Model.FeedbackBanner is not null)
+        {
+            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
+        }
+
+        <h1 class="govuk-heading-xl" id="advice-page-heading">@Model.Heading</h1>
+        @if (Model.RightHandSideContent != null)
+        {
+            await Html.RenderPartialAsync("Partials/FeedbackComponentContainer", new FeedbackComponentContainerModel { FeedbackComponent = Model.RightHandSideContent, IsMobile = true });
+        }
+
+        <div class="govuk-body govuk-!-margin-bottom-9" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
+
+        @if (Model.FeedbackBanner is not null)
+        {
+            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
+        }
+    </div>
+    @if (Model.RightHandSideContent != null)
+    {
+        <div class="govuk-grid-column-one-third-from-desktop">
+            @{ await Html.RenderPartialAsync("Partials/FeedbackComponentContainer", new FeedbackComponentContainerModel { FeedbackComponent = Model.RightHandSideContent }); }
+        </div>
+    }
+</div>
+<div class="govuk-grid-row">
+    @if (Model.UpDownFeedback is not null)
+    {
+        await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);
+    }
+</div>
