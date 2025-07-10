@@ -3,12 +3,16 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h1 class="govuk-heading-xl" id="advice-page-heading">@Model.Heading</h1>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
         @if (Model.FeedbackBanner is not null)
         {
             await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
         }
 
-        <h1 class="govuk-heading-xl" id="advice-page-heading">@Model.Heading</h1>
         @if (Model.RightHandSideContent != null)
         {
             await Html.RenderPartialAsync("Partials/FeedbackComponentContainer", new FeedbackComponentContainerModel { FeedbackComponent = Model.RightHandSideContent, IsMobile = true });

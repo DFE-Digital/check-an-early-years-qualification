@@ -495,10 +495,11 @@ body {
 
 .feedback-container > p {
     margin-bottom: 0!important;
+    font-size: 16px;
 }
 
 .feedback-container.mobile-only {
-    display: block;
+    display: inline-block;
     margin-bottom: 50px;
 }
 

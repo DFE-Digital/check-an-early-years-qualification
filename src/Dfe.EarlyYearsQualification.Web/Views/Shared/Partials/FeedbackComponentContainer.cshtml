@@ -1,6 +1,6 @@
 @model Dfe.EarlyYearsQualification.Web.Models.Content.FeedbackComponentContainerModel
 
 <div class="feedback-container @(Model.IsMobile ? "mobile-only" : "desktop-only")">
-    <h2 class="govuk-heading-m">@Model.FeedbackComponent.Header</h2>
+    <h2 class="govuk-heading-s">@Model.FeedbackComponent.Header</h2>
     @Html.Raw(Model.FeedbackComponent.Body)
 </div>
