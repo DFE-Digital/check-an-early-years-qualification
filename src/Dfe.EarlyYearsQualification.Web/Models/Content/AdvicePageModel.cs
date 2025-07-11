@@ -10,4 +10,6 @@ public class AdvicePageModel
 
     public FeedbackBannerModel? FeedbackBanner { get; init; }
     public UpDownFeedbackModel? UpDownFeedback { get; init; }
+    
+    public FeedbackComponentModel? RightHandSideContent { get; init; }
 }

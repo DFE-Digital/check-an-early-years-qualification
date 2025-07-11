@@ -402,7 +402,8 @@ public class MockContentfulService : IContentService
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
                                              FeedbackBanner = feedbackBanner,
-                                             UpDownFeedback = upDownFeedback
+                                             UpDownFeedback = upDownFeedback,
+                                             RightHandSideContent = GetFeedbackComponent()
                                          }),
                     4 => Task.FromResult(new CannotFindQualificationPage
                                          {
@@ -412,7 +413,8 @@ public class MockContentfulService : IContentService
                                              ToWhichYear = string.Empty,
                                              BackButton = backButton,
                                              FeedbackBanner = feedbackBanner,
-                                             UpDownFeedback = upDownFeedback
+                                             UpDownFeedback = upDownFeedback,
+                                             RightHandSideContent = GetFeedbackComponent()
                                          }),
                     _ => Task.FromResult<CannotFindQualificationPage>(null!)
                 })!;
@@ -783,6 +785,7 @@ public class MockContentfulService : IContentService
                                         Body = ContentfulContentHelper.Paragraph("This is the body text"),
                                         BannerTitle = "Test banner title"
                                     },
+                   RightHandSideContent = GetFeedbackComponent(),
                    UpDownFeedback = hasUpDownFeedback ? GetUpDownFeedback() : null
                };
     }

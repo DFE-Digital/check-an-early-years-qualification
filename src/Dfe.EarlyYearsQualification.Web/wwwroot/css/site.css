@@ -208,7 +208,6 @@ body {
 #ud-feedback {
     background: #fff;
     margin-top: 30px;
-    padding-top: 40px;
 }
 
 @media (min-width: 48.0625em) {
@@ -222,9 +221,9 @@ body {
 }
 
 .ud-feedback__prompt {
-    background-color: #f3f2f1;
+    background-color: #f4f8fb;
     color: #0b0c0c;
-    border-top: 1px solid #b1b4b6;
+    border-top: 1px solid #8eb8dc;
     outline: 0
 }
 
@@ -485,4 +484,42 @@ body {
     margin: 30px;
     top: 0;
     right: 0;
+}
+
+/* Feedback container */
+.feedback-container {
+    border-top: 2px solid #1d70b8;
+    border-bottom: 2px solid #1d70b8;
+    padding: 10px 0;
+}
+
+.feedback-container > p {
+    margin-bottom: 0!important;
+    font-size: 16px;
+}
+
+.feedback-container.mobile-only {
+    display: inline-block;
+    margin-bottom: 50px;
+}
+
+.feedback-container.desktop-only {
+    display: none;
+}
+
+@media (min-width: 999px) {
+    .feedback-container.mobile-only {
+        display: none;
+    }
+
+    .feedback-container.desktop-only {
+        display: block;
+    }
+}
+
+/* The govuk-inset-text has additional margin that makes the gap between the heading and main content too big in the 
+   cannot find a qualification page. As this content is inserted from the CMS, we can't change the styling on the element
+   itself. This aims to target the first div that is a govuk inset text element */
+#advice-page-body > :first-child:is(div.govuk-inset-text) {
+    margin-top: 0;
 }

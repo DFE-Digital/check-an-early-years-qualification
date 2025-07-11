@@ -11,5 +11,7 @@ public class AdvicePage
     public NavigationLink? BackButton { get; init; }
 
     public FeedbackBanner? FeedbackBanner { get; init; }
+
+    public FeedbackComponent? RightHandSideContent { get; init; }
     public UpDownFeedback? UpDownFeedback { get; init; }
 }
