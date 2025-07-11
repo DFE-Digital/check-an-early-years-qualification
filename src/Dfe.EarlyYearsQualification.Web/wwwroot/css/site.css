@@ -516,3 +516,10 @@ body {
         display: block;
     }
 }
+
+/* The govuk-inset-text has additional margin that makes the gap between the heading and main content too big in the 
+   cannot find a qualification page. As this content is inserted from the CMS, we can't change the styling on the element
+   itself. This aims to target the first div that is a govuk inset text element */
+#advice-page-body > :first-child:is(div.govuk-inset-text) {
+    margin-top: 0;
+}
