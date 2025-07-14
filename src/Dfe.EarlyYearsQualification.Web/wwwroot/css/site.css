@@ -523,3 +523,16 @@ body {
 #advice-page-body > :first-child:is(div.govuk-inset-text) {
     margin-top: 0;
 }
+
+.govuk-section-break__overrides {
+    border-color: #8eb8dc;
+    border-bottom: #8eb8dc;
+    background-color: #8eb8dc;
+    opacity: 1;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+.govuk-footer__section > .govuk-footer__list > .govuk-footer__list-item > p {
+    margin-bottom: 0!important;
+}
