@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 
-public class ExternalNavigationLinkRenderer : IContentRenderer
+public class NavigationLinkRenderer : IContentRenderer
 {
     public int Order { get; set; }
 
@@ -23,7 +23,8 @@ public class ExternalNavigationLinkRenderer : IContentRenderer
         try
         {
             var navigationLinkModel = (model.JObject as JObject)!.ToObject<NavigationLink>();
-            return navigationLinkModel!.Sys.ContentType.SystemProperties.Id == "externalNavigationLink";
+            return navigationLinkModel!.Sys.ContentType.SystemProperties.Id == "externalNavigationLink" ||
+                   navigationLinkModel.Sys.ContentType.SystemProperties.Id == "internalNavigationLink";
         }
         catch
         {

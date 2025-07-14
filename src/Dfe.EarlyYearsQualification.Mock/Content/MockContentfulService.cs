@@ -562,6 +562,40 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public async Task<Footer?> GetFooter()
+    {
+        return await Task.FromResult(new Footer
+                                     {
+                                         LeftHandSideFooterSection = new FooterSection
+                                                                         {
+                                                                             Body =
+                                                                                 ContentfulContentHelper
+                                                                                     .Paragraph("This is the left hand side footer content"),
+                                                                             Heading = "Left section"
+                                                                         },
+                                         RightHandSideFooterSection = new FooterSection
+                                                                          {
+                                                                              Body =
+                                                                                  ContentfulContentHelper
+                                                                                      .Paragraph("This is the right hand side footer content"),
+                                                                              Heading = "Right section"
+                                                                          },
+                                         NavigationLinks =
+                                         [
+                                             new NavigationLink
+                                             {
+                                                 DisplayText = "Privacy notice",
+                                                 Href = "/link-to-privacy-notice"
+                                             },
+                                             new NavigationLink
+                                             {
+                                                 DisplayText = "Accessibility statement",
+                                                 Href = "/link-to-accessibility-statement"
+                                             }
+                                         ]
+                                     });
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =

@@ -83,9 +83,9 @@ public static class NestedContentHelper
 
                 case EntryStructure cn:
 
-                    if (new ExternalNavigationLinkRenderer().SupportsContent(cn))
+                    if (new NavigationLinkRenderer().SupportsContent(cn))
                     {
-                        var renderer = new ExternalNavigationLinkRenderer();
+                        var renderer = new NavigationLinkRenderer();
                         var text = await renderer.RenderAsync(cn);
                         sb.Append(text);
                     }

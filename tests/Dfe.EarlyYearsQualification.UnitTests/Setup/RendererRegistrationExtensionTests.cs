@@ -26,7 +26,7 @@ public class RendererRegistrationExtensionTests
 
         VerifyService<IContentRenderer, ParagraphRenderer>(services, ServiceLifetime.Singleton);
 
-        VerifyService<IContentRenderer, ExternalNavigationLinkRenderer>(services, ServiceLifetime.Singleton);
+        VerifyService<IContentRenderer, NavigationLinkRenderer>(services, ServiceLifetime.Singleton);
 
         VerifyService<IContentRenderer, Heading1Renderer>(services, ServiceLifetime.Singleton);
 

@@ -47,4 +47,6 @@ public interface IContentService
     Task<HelpConfirmationPage?> GetHelpConfirmationPage();
 
     Task<PreCheckPage?> GetPreCheckPage();
+
+    Task<Footer?> GetFooter();
 }

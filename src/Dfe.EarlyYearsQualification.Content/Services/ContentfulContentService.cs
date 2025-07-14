@@ -310,6 +310,23 @@ public class ContentfulContentService(
         return preCheckPage.First();
     }
 
+    public async Task<Footer?> GetFooter()
+    {
+        var footerType = ContentTypeLookup[typeof(Footer)]; 
+        var queryBuilder = new QueryBuilder<Footer>().ContentTypeIs(footerType)
+                                                                   .Include(2);
+        var footer = await GetEntriesByType(queryBuilder);
+
+        // ReSharper disable once InvertIf
+        if (footer is null || !footer.Any())
+        {
+            Logger.LogWarning("No 'Footer' returned");
+            return null;
+        }
+
+        return footer.First();
+    }
+
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(
         int startDateMonth, int startDateYear,
         List<CannotFindQualificationPage> cannotFindQualificationPages)

@@ -754,4 +754,26 @@ public class MockContentfulServiceTests
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.ErrorMessage.Should().Be("Confirm if you have all the information you need to complete the check");
     }
+
+    [TestMethod]
+    public async Task GetFooter_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetFooter();
+
+        result.Should().NotBeNull();
+        result.NavigationLinks.Should().NotBeNull();
+        result.NavigationLinks.Count.Should().Be(2);
+        result.NavigationLinks[0].DisplayText.Should().Be("Privacy notice");
+        result.NavigationLinks[1].DisplayText.Should().Be("Accessibility statement");
+        result.LeftHandSideFooterSection.Should().NotBeNull();
+        result.LeftHandSideFooterSection.Heading.Should().Be("Left section");
+        result.LeftHandSideFooterSection.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the left hand side footer content");
+        result.RightHandSideFooterSection.Should().NotBeNull();
+        result.RightHandSideFooterSection.Heading.Should().Be("Right section");
+        result.RightHandSideFooterSection.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the right hand side footer content");
+    }
 }
