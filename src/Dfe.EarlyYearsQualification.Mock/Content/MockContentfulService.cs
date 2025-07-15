@@ -14,6 +14,7 @@ public class MockContentfulService : IContentService
     private const string QualificationsPath = "/select-a-qualification-to-check";
     private const string HomePath = "/";
     private const string ThereIsAProblem = "There is a problem";
+    private const string CtaButtonText = "Continue";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -187,12 +188,12 @@ public class MockContentfulService : IContentService
     {
         return await Task.FromResult(new List<NavigationLink>
                                      {
-                                         new()
+                                         new NavigationLink
                                          {
                                              DisplayText = "Privacy notice",
                                              Href = "/link-to-privacy-notice"
                                          },
-                                         new()
+                                         new NavigationLink
                                          {
                                              DisplayText = "Accessibility statement",
                                              Href = "/link-to-accessibility-statement"
@@ -465,7 +466,7 @@ public class MockContentfulService : IContentService
                                                           Href = "/questions/what-is-the-awarding-organisation",
                                                           OpenInNewTab = false
                                                       },
-                                         CtaButtonText = "Continue",
+                                         CtaButtonText = CtaButtonText,
                                          ChangeAnswerText = "Change",
                                          QualificationAwardedText = "Awarded in",
                                          QualificationStartedText = "Started in",
@@ -556,9 +557,43 @@ public class MockContentfulService : IContentService
                                              }
                                          ],
                                          InformationMessage = "You need all the information listed above to get a result. If you do not have it, you will not be able to complete this check.",
-                                         CtaButtonText = "Continue",
+                                         CtaButtonText = CtaButtonText,
                                          ErrorBannerHeading = "There is a problem",
                                          ErrorMessage = "Confirm if you have all the information you need to complete the check"
+                                     });
+    }
+
+    public async Task<Footer?> GetFooter()
+    {
+        return await Task.FromResult(new Footer
+                                     {
+                                         LeftHandSideFooterSection = new FooterSection
+                                                                         {
+                                                                             Body =
+                                                                                 ContentfulContentHelper
+                                                                                     .Paragraph("This is the left hand side footer content"),
+                                                                             Heading = "Left section"
+                                                                         },
+                                         RightHandSideFooterSection = new FooterSection
+                                                                          {
+                                                                              Body =
+                                                                                  ContentfulContentHelper
+                                                                                      .Paragraph("This is the right hand side footer content"),
+                                                                              Heading = "Right section"
+                                                                          },
+                                         NavigationLinks =
+                                         [
+                                             new NavigationLink
+                                             {
+                                                 DisplayText = "Privacy notice",
+                                                 Href = "/link-to-privacy-notice"
+                                             },
+                                             new NavigationLink
+                                             {
+                                                 DisplayText = "Accessibility statement",
+                                                 Href = "/link-to-accessibility-statement"
+                                             }
+                                         ]
                                      });
     }
 
@@ -685,7 +720,7 @@ public class MockContentfulService : IContentService
                {
                    Question = question,
                    Options = options,
-                   CtaButtonText = "Continue",
+                   CtaButtonText = CtaButtonText,
                    ErrorMessage = "Test error message",
                    BackButton = new NavigationLink
                                 {
@@ -712,7 +747,7 @@ public class MockContentfulService : IContentService
                                     Href = WhereWasTheQualificationAwardedPath,
                                     OpenInNewTab = false
                                 },
-                   CtaButtonText = "Continue",
+                   CtaButtonText = CtaButtonText,
                    ErrorBannerHeading = ThereIsAProblem,
                    AwardedDateIsAfterStartedDateErrorText = "Error- AwardedDateIsAfterStartedDateErrorText",
                    StartedQuestion = CreateDatesQuestionPage("started- "),

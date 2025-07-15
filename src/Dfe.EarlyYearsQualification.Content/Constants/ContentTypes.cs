@@ -25,4 +25,5 @@ public static class ContentTypes
     public const string HelpPage = "helpPage";
     public const string HelpConfirmationPage = "helpConfirmationPage";
     public const string PreCheckPage = "preCheckPage";
+    public const string Footer = "footer";
 }

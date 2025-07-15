@@ -6,13 +6,13 @@ using Newtonsoft.Json.Linq;
 namespace Dfe.EarlyYearsQualification.UnitTests.RichTextParsing.Renderers;
 
 [TestClass]
-public class ExternalNavigationLinkRendererTests
+public class NavigationLinkRendererTests
 {
     [TestMethod]
     public void SupportsContent_IsNotEntryStructure_ReturnsFalse()
     {
         var content = new Paragraph();
-        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new NavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
 
     [TestMethod]
@@ -20,7 +20,7 @@ public class ExternalNavigationLinkRendererTests
     {
         var content = new EntryStructure { Data = new EntryStructureData { Target = null } };
 
-        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new NavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
 
     [TestMethod]
@@ -28,7 +28,7 @@ public class ExternalNavigationLinkRendererTests
     {
         var content = new EntryStructure { Data = new EntryStructureData { Target = new Text() } };
 
-        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new NavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
 
     [TestMethod]
@@ -42,7 +42,7 @@ public class ExternalNavigationLinkRendererTests
                                  }
                       };
 
-        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new NavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
 
     [TestMethod]
@@ -77,7 +77,7 @@ public class ExternalNavigationLinkRendererTests
                                  }
                       };
 
-        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
+        new NavigationLinkRenderer().SupportsContent(content).Should().BeFalse();
     }
 
     [TestMethod]
@@ -112,7 +112,7 @@ public class ExternalNavigationLinkRendererTests
                                  }
                       };
 
-        new ExternalNavigationLinkRenderer().SupportsContent(content).Should().BeTrue();
+        new NavigationLinkRenderer().SupportsContent(content).Should().BeTrue();
     }
 
     [TestMethod]
@@ -150,7 +150,7 @@ public class ExternalNavigationLinkRendererTests
                                  }
                       };
 
-        var renderer = new ExternalNavigationLinkRenderer();
+        var renderer = new NavigationLinkRenderer();
         var result = await renderer.RenderAsync(content);
 
         result.Should().Be("<a href='/' target='_blank' class='govuk-link'>Display text</a>");
@@ -191,7 +191,7 @@ public class ExternalNavigationLinkRendererTests
                                  }
                       };
 
-        var renderer = new ExternalNavigationLinkRenderer();
+        var renderer = new NavigationLinkRenderer();
         var result = await renderer.RenderAsync(content);
 
         result.Should().Be("<a href='/' class='govuk-link'>Display text</a>");

@@ -657,7 +657,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().NotBeNull();
 
-        result!.PhaseName.Should().Be(phaseBanner.PhaseName);
+        result.PhaseName.Should().Be(phaseBanner.PhaseName);
         result.Content.Should().NotBeNull();
         result.Content!.Content.Should().ContainSingle(x => ((Paragraph)x).NodeType == "PhaseBanner");
 
@@ -734,7 +734,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().NotBeNull();
 
-        result!.AcceptButtonText.Should().Be(cookiesBanner.AcceptButtonText);
+        result.AcceptButtonText.Should().Be(cookiesBanner.AcceptButtonText);
 
         result.AcceptedCookiesContent.Should().Be(cookiesBanner.AcceptedCookiesContent);
         result.AcceptedCookiesContent!.Content.Should().ContainSingle(x => x is Paragraph);
@@ -946,14 +946,14 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         mockDateValidator.Setup(x => x.GetDate("Sep-15")).Returns(pageStartDate);
         mockDateValidator.Setup(x => x.GetDate("Aug-19")).Returns(pageEndDate);
         mockDateValidator
-            .Setup(x => x.ValidateDateEntry<CannotFindQualificationPage>(pageStartDate, pageEndDate, enteredStartDate, It.IsAny<CannotFindQualificationPage>()))
+            .Setup(x => x.ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, It.IsAny<CannotFindQualificationPage>()))
             .Returns(expectedResult);
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
 
         var result = await service.GetCannotFindQualificationPage(2, 2, 2016);
 
         result.Should().NotBeNull();
-        result!.Heading.Should().Be("Test heading sep 15 to aug 19");
+        result.Heading.Should().Be("Test heading sep 15 to aug 19");
     }
 
     [TestMethod]
@@ -1153,6 +1153,40 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
         var result = await service.GetPreCheckPage();
+
+        result.Should().BeNull();
+    }
+    
+    [TestMethod]
+    public async Task Footer_ReturnsData()
+    {
+        var data = new Footer { NavigationLinks = new List<NavigationLink>() };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<Footer>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<Footer> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetFooter();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task Footer_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<Footer>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<Footer> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetFooter();
 
         result.Should().BeNull();
     }

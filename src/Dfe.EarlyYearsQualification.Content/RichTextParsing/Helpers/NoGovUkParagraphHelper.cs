@@ -12,7 +12,7 @@ public static class NoGovUkParagraphHelper
 
         var sb = new StringBuilder();
 
-        var externalLinkRenderer = new ExternalNavigationLinkRenderer();
+        var externalLinkRenderer = new NavigationLinkRenderer();
 
         foreach (var item in paragraph!.Content)
         {
