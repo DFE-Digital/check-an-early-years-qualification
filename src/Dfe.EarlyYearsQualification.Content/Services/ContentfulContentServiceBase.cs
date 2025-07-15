@@ -37,7 +37,8 @@ public abstract class ContentfulContentServiceBase
               { typeof(CheckYourAnswersPage), ContentTypes.CheckYourAnswersPage },
               { typeof(HelpPage), ContentTypes.HelpPage },
               { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage },
-              { typeof(PreCheckPage), ContentTypes.PreCheckPage }
+              { typeof(PreCheckPage), ContentTypes.PreCheckPage },
+              { typeof(Footer), ContentTypes.Footer }
           };
 
     protected readonly ILogger Logger;
@@ -58,7 +59,7 @@ public abstract class ContentfulContentServiceBase
             string contentType = ContentTypeLookup[typeof(T)];
 
             var queryBuilder = new QueryBuilder<T>().ContentTypeIs(contentType)
-                                                    .Include(2)
+                                                    .Include(3)
                                                     .FieldEquals("sys.id", entryId);
 
             var entries = await ContentfulClient.GetEntriesByType(contentType, queryBuilder);

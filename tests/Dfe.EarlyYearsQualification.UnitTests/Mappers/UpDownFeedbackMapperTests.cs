@@ -37,15 +37,17 @@ public class UpDownFeedbackMapperTests
                                  HelpButtonText = "HelpButtonText",
                                  HelpButtonLink = "HelpButtonLink",
                                  CancelButtonText = "CancelButtonText",
-                                 ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceContent),
-                                 UsefulResponse = "UsefulResponse"
+                                 FeedbackComponent = new FeedbackComponent
+                                                     {
+                                                         Header = "Feedback header",
+                                                         Body = ContentfulContentHelper.Paragraph(improveServiceContent)
+                                                     }
                              };
 
         var result = UpDownFeedbackMapper.Map(upDownFeedback, improveServiceContent);
-
-        upDownFeedback.ImproveServiceContent.Should().NotBeNull();
+        
         result.Should().NotBeNull();
-        result!.Question.Should().Be(upDownFeedback.Question);
+        result.Question.Should().Be(upDownFeedback.Question);
         result.YesButtonText.Should().Be(upDownFeedback.YesButtonText);
         result.YesButtonSubText.Should().Be(upDownFeedback.YesButtonSubText);
         result.NoButtonText.Should().Be(upDownFeedback.NoButtonText);
@@ -53,7 +55,7 @@ public class UpDownFeedbackMapperTests
         result.HelpButtonText.Should().Be(upDownFeedback.HelpButtonText);
         result.HelpButtonLink.Should().Be(upDownFeedback.HelpButtonLink);
         result.CancelButtonText.Should().Be(upDownFeedback.CancelButtonText);
-        result.ImproveServiceBody.Should().Be(improveServiceContent);
-        result.UsefulResponse.Should().Be(upDownFeedback.UsefulResponse);
+        result.FeedbackComponent!.Body.Should().Be(improveServiceContent);
+        result.FeedbackComponent.Header.Should().BeSameAs(upDownFeedback.FeedbackComponent!.Header);
     }
 }

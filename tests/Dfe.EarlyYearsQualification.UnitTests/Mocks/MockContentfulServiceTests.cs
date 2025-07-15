@@ -16,7 +16,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAccessibilityStatementPage();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AccessibilityStatementPage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
     }
 
     [TestMethod]
@@ -27,10 +27,11 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().NotBeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -41,10 +42,11 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().BeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -55,10 +57,11 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInScotland);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().Be("Qualifications achieved in Scotland");
+        result.Heading.Should().Be("Qualifications achieved in Scotland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().NotBeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -69,10 +72,11 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInWales);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().Be("Qualifications achieved in Wales");
+        result.Heading.Should().Be("Qualifications achieved in Wales");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().NotBeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -83,10 +87,11 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInNorthernIreland);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().Be("Qualifications achieved in Northern Ireland");
+        result.Heading.Should().Be("Qualifications achieved in Northern Ireland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().NotBeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -97,10 +102,11 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationNotOnTheList);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().Be("Qualification not on the list");
+        result.Heading.Should().Be("Qualification not on the list");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().NotBeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -112,10 +118,11 @@ public class MockContentfulServiceTests
             await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().BeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -126,10 +133,11 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationAfterAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().BeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -140,11 +148,12 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetAdvicePage(AdvicePages.Help);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<AdvicePage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
         result.Heading.Should().Be("Help");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
         result.UpDownFeedback.Should().BeNull();
+        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -165,7 +174,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetCookiesPage();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CookiesPage>();
-        result!.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Cookies Page Body");
         result.ButtonText.Should().NotBeNullOrEmpty();
@@ -185,7 +194,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetDetailsPage();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<DetailsPage>();
-        result!.AwardingOrgLabel.Should().NotBeNullOrEmpty();
+        result.AwardingOrgLabel.Should().NotBeNullOrEmpty();
         result.DateOfCheckLabel.Should().NotBeNullOrEmpty();
         result.LevelLabel.Should().NotBeNullOrEmpty();
         result.MainHeader.Should().NotBeNullOrEmpty();
@@ -233,7 +242,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<RadioQuestionPage>();
-        result!.Question.Should().NotBeNullOrEmpty();
+        result.Question.Should().NotBeNullOrEmpty();
         result.CtaButtonText.Should().NotBeNullOrEmpty();
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorBannerHeading.Should().NotBeNull();
@@ -261,7 +270,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<RadioQuestionPage>();
-        result!.Question.Should().NotBeNullOrEmpty();
+        result.Question.Should().NotBeNullOrEmpty();
         result.CtaButtonText.Should().NotBeNullOrEmpty();
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorBannerHeading.Should().NotBeNull();
@@ -350,7 +359,7 @@ public class MockContentfulServiceTests
             await contentfulService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
 
         result.Should().NotBeNull();
-        result!.Question.Should().Be("Test Dates Questions");
+        result.Question.Should().Be("Test Dates Questions");
         result.CtaButtonText.Should().Be("Continue");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.AwardedDateIsAfterStartedDateErrorText.Should().Be("Error- AwardedDateIsAfterStartedDateErrorText");
@@ -383,7 +392,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
 
         result.Should().NotBeNull();
-        result!.CtaButtonText.Should().Be("Test Button Text");
+        result.CtaButtonText.Should().Be("Test Button Text");
         result.ErrorMessage.Should().Be("Test Error Message");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.ErrorBannerLinkText.Should().Be("Test error banner link text");
@@ -415,7 +424,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetQualificationListPage();
 
         result.Should().NotBeNull();
-        result!.Header.Should().Be("Test Header");
+        result.Header.Should().Be("Test Header");
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
                                                   {
                                                       DisplayText = "TEST",
@@ -432,18 +441,18 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetConfirmQualificationPage();
 
         result.Should().NotBeNull();
-        result!.Options.Should().BeEquivalentTo([
-                                                    new Option
-                                                    {
-                                                        Label = "yes",
-                                                        Value = "yes"
-                                                    },
-                                                    new Option
-                                                    {
-                                                        Label = "no",
-                                                        Value = "no"
-                                                    }
-                                                ]);
+        result.Options.Should().BeEquivalentTo([
+                                                   new Option
+                                                   {
+                                                       Label = "yes",
+                                                       Value = "yes"
+                                                   },
+                                                   new Option
+                                                   {
+                                                       Label = "no",
+                                                       Value = "no"
+                                                   }
+                                               ]);
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
                                                   {
                                                       DisplayText = "Test back button",
@@ -477,7 +486,7 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CheckAdditionalRequirementsAnswerPage>();
 
-        result!.BackButton!.Href.Should().Be("/qualifications/check-additional-questions");
+        result.BackButton!.Href.Should().Be("/qualifications/check-additional-questions");
         result.BackButton.OpenInNewTab.Should().BeFalse();
         result.BackButton.DisplayText.Should().Be("Test display text");
         result.ButtonText.Should().Be("Test button text");
@@ -495,7 +504,7 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StartPage>();
-        result!.CtaButtonText.Should().NotBeNullOrEmpty();
+        result.CtaButtonText.Should().NotBeNullOrEmpty();
         result.Header.Should().NotBeNullOrEmpty();
 
         result.PostCtaButtonContent!.Content[0].Should().BeAssignableTo<Paragraph>()
@@ -518,7 +527,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetPhaseBannerContent();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<PhaseBanner>();
-        result!.Content.Should().NotBeNull();
+        result.Content.Should().NotBeNull();
         result.PhaseName.Should().NotBeNullOrEmpty();
         result.Show.Should().BeTrue();
     }
@@ -531,7 +540,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetCookiesBannerContent();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CookiesBanner>();
-        result!.AcceptButtonText.Should().NotBeNull();
+        result.AcceptButtonText.Should().NotBeNull();
         result.AcceptedCookiesContent.Should().NotBeNull();
         result.CookiesBannerContent.Should().NotBeNull();
         result.CookiesBannerTitle.Should().NotBeNullOrEmpty();
@@ -549,12 +558,12 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CheckAdditionalRequirementsPage>();
-        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
-                                                   {
-                                                       DisplayText = "Back",
-                                                       OpenInNewTab = false,
-                                                       Href = "/select-a-qualification-to-check"
-                                                   });
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "Back",
+                                                      OpenInNewTab = false,
+                                                      Href = "/select-a-qualification-to-check"
+                                                  });
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorSummaryHeading.Should().NotBeNullOrEmpty();
         result.Heading.Should().NotBeNullOrEmpty();
@@ -574,12 +583,12 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CannotFindQualificationPage>();
-        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
-                                                   {
-                                                       DisplayText = "TEST",
-                                                       OpenInNewTab = false,
-                                                       Href = "/select-a-qualification-to-check"
-                                                   });
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "TEST",
+                                                      OpenInNewTab = false,
+                                                      Href = "/select-a-qualification-to-check"
+                                                  });
 
         result.Heading.Should().Be("This is the level 3 page");
         result.Body.Should().NotBeNull();
@@ -596,12 +605,12 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CannotFindQualificationPage>();
-        result!.BackButton.Should().BeEquivalentTo(new NavigationLink
-                                                   {
-                                                       DisplayText = "TEST",
-                                                       OpenInNewTab = false,
-                                                       Href = "/select-a-qualification-to-check"
-                                                   });
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "TEST",
+                                                      OpenInNewTab = false,
+                                                      Href = "/select-a-qualification-to-check"
+                                                  });
 
         result.Heading.Should().Be("This is the level 4 page");
         result.Body.Should().NotBeNull();
@@ -628,7 +637,7 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<OpenGraphData>();
-        result!.Title.Should().Be("OG Title");
+        result.Title.Should().Be("OG Title");
         result.Description.Should().Be("OG Description");
         result.Domain.Should().Be("OG Domain");
         result.Image.Should().NotBeNull();
@@ -645,7 +654,7 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CheckYourAnswersPage>();
-        result!.PageHeading.Should().Be("Check your answers");
+        result.PageHeading.Should().Be("Check your answers");
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
                                                   {
                                                       DisplayText = "TEST",
@@ -669,7 +678,7 @@ public class MockContentfulServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpPage>();
-        result!.Heading.Should().Be("Help Page Heading");
+        result.Heading.Should().Be("Help Page Heading");
         result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post heading text");
         result.EmailAddressHeading.Should().Be("Enter your email address (optional)");
@@ -709,8 +718,9 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetHelpConfirmationPage();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpConfirmationPage>();
-        result!.SuccessMessage.Should().Be("This is the success message");
+        result.SuccessMessage.Should().Be("This is the success message");
         result.BodyHeading.Should().Be("Body heading");
+        result.Body.Should().NotBeNull();
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the body");
     }
@@ -723,7 +733,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetPreCheckPage();
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<PreCheckPage>();
-        result!.Header.Should().Be("Get ready to start the qualification check");
+        result.Header.Should().Be("Get ready to start the qualification check");
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
                                                   {
                                                       DisplayText = "Back",
@@ -743,5 +753,27 @@ public class MockContentfulServiceTests
         result.CtaButtonText.Should().Be("Continue");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.ErrorMessage.Should().Be("Confirm if you have all the information you need to complete the check");
+    }
+
+    [TestMethod]
+    public async Task GetFooter_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetFooter();
+
+        result.Should().NotBeNull();
+        result.NavigationLinks.Should().NotBeNull();
+        result.NavigationLinks.Count.Should().Be(2);
+        result.NavigationLinks[0].DisplayText.Should().Be("Privacy notice");
+        result.NavigationLinks[1].DisplayText.Should().Be("Accessibility statement");
+        result.LeftHandSideFooterSection.Should().NotBeNull();
+        result.LeftHandSideFooterSection.Heading.Should().Be("Left section");
+        result.LeftHandSideFooterSection.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the left hand side footer content");
+        result.RightHandSideFooterSection.Should().NotBeNull();
+        result.RightHandSideFooterSection.Heading.Should().Be("Right section");
+        result.RightHandSideFooterSection.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the right hand side footer content");
     }
 }

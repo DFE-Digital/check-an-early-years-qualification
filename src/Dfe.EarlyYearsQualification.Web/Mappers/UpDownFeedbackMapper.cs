@@ -18,8 +18,7 @@ public static class UpDownFeedbackMapper
                    HelpButtonText = feedback.HelpButtonText,
                    HelpButtonLink = feedback.HelpButtonLink,
                    CancelButtonText = feedback.CancelButtonText,
-                   UsefulResponse = feedback.UsefulResponse,
-                   ImproveServiceBody = improveServiceBodyHtml
+                   FeedbackComponent = FeedbackComponentModelMapper.Map(feedback.FeedbackComponent!.Header, improveServiceBodyHtml)
                };
     }
 }

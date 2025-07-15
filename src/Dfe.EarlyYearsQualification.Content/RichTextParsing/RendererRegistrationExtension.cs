@@ -19,7 +19,7 @@ public static class RendererRegistrationExtension
                 .AddSingleton<IContentRenderer>(new SuccessBannerRenderer { Order = 2 })
                 .AddSingleton<IContentRenderer>(new EmbeddedParagraphRenderer { Order = 3 })
                 .AddSingleton<IContentRenderer>(new ParagraphRenderer { Order = 4 })
-                .AddSingleton<IContentRenderer>(new ExternalNavigationLinkRenderer { Order = 5 })
+                .AddSingleton<IContentRenderer>(new NavigationLinkRenderer { Order = 5 })
                 .AddSingleton<IContentRenderer>(new Heading1Renderer { Order = 6 })
                 .AddSingleton<IContentRenderer>(new Heading2Renderer { Order = 7 })
                 .AddSingleton<IContentRenderer>(new Heading3Renderer { Order = 8 })

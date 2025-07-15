@@ -8,5 +8,9 @@ public class HelpConfirmationPage
     
     public string BodyHeading { get; init; } = string.Empty;
 
-    public Document Body { get; init; } = new();
+    public Document? Body { get; init; }
+
+    public FeedbackComponent? FeedbackComponent { get; init; }
+
+    public NavigationLink? ReturnToHomepageLink { get; init; }
 }

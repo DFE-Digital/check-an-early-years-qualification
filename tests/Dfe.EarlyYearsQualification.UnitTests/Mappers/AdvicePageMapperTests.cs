@@ -13,6 +13,7 @@ public class AdvicePageMapperTests
         const string body = "This is the body";
         const string feedbackBannerBody = "This is the feedback banner body";
         const string improveServiceBody = "This is the improve service body";
+        const string rightHandSideContentBody = "This is the right hand side body content";
         var advicePage = new AdvicePage
                          {
                              Heading = "This is the heading",
@@ -31,11 +32,22 @@ public class AdvicePageMapperTests
                                               },
                              UpDownFeedback = new UpDownFeedback
                                               {
-                                                  ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
-                                              }
+                                                  FeedbackComponent = new FeedbackComponent
+                                                                      {
+                                                                          Header = "Feedback header",
+                                                                          Body =
+                                                                              ContentfulContentHelper
+                                                                                  .Paragraph(improveServiceBody)
+                                                                      }
+                                              },
+                             RightHandSideContent = new FeedbackComponent
+                                                    {
+                                                        Header = "Right hand side content header",
+                                                        Body = ContentfulContentHelper.Paragraph(rightHandSideContentBody)
+                                                    }
                          };
 
-        var result = AdvicePageMapper.Map(advicePage, body, feedbackBannerBody, improveServiceBody);
+        var result = AdvicePageMapper.Map(advicePage, body, feedbackBannerBody, improveServiceBody, rightHandSideContentBody);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(advicePage.Heading);
@@ -44,7 +56,15 @@ public class AdvicePageMapperTests
         result.FeedbackBanner.Should()
               .BeEquivalentTo(advicePage.FeedbackBanner, options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(advicePage.UpDownFeedback,
-                                                      options => options.Excluding(x => x!.ImproveServiceContent));
+                                                      options => options.Excluding(x => x.FeedbackComponent));
+        result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
+        result.UpDownFeedback.FeedbackComponent.Header.Should()
+              .BeSameAs(advicePage.UpDownFeedback.FeedbackComponent!.Header);
+        result.RightHandSideContent.Should().BeEquivalentTo(advicePage.RightHandSideContent,
+                                                            options => options.Excluding(x => x.Body));
+        result.RightHandSideContent.Body.Should().Be(rightHandSideContentBody);
+        result.RightHandSideContent.Header.Should()
+              .BeSameAs(advicePage.RightHandSideContent.Header);
     }
 
     [TestMethod]
@@ -53,6 +73,7 @@ public class AdvicePageMapperTests
         const string body = "This is the body";
         const string feedbackBannerBody = "This is the feedback banner body";
         const string improveServiceBody = "This is the improve service body";
+        const string rightHandSideContentBody = "This is the right hand side body content";
         var cannotFindQualificationPage = new CannotFindQualificationPage
                                           {
                                               Heading = "This is the heading",
@@ -73,11 +94,22 @@ public class AdvicePageMapperTests
                                                                },
                                               UpDownFeedback = new UpDownFeedback
                                                                {
-                                                                   ImproveServiceContent = ContentfulContentHelper.Paragraph(improveServiceBody)
-                                                               }
+                                                                   FeedbackComponent = new FeedbackComponent
+                                                                       {
+                                                                           Header = "Feedback header",
+                                                                           Body =
+                                                                               ContentfulContentHelper
+                                                                                   .Paragraph(improveServiceBody)
+                                                                       }
+                                                               },
+                                              RightHandSideContent = new FeedbackComponent
+                                                                     {
+                                                                         Header = "Right hand side content header",
+                                                                         Body = ContentfulContentHelper.Paragraph(rightHandSideContentBody)
+                                                                     }
                                           };
 
-        var result = AdvicePageMapper.Map(cannotFindQualificationPage, body, feedbackBannerBody, improveServiceBody);
+        var result = AdvicePageMapper.Map(cannotFindQualificationPage, body, feedbackBannerBody, improveServiceBody, rightHandSideContentBody);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(cannotFindQualificationPage.Heading);
@@ -87,6 +119,14 @@ public class AdvicePageMapperTests
         result.FeedbackBanner.Should().BeEquivalentTo(cannotFindQualificationPage.FeedbackBanner,
                                                       options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(cannotFindQualificationPage.UpDownFeedback,
-                                                      options => options.Excluding(x => x!.ImproveServiceContent));
+                                                      options => options.Excluding(x => x.FeedbackComponent));
+        result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
+        result.UpDownFeedback.FeedbackComponent!.Header.Should()
+              .BeSameAs(cannotFindQualificationPage.UpDownFeedback.FeedbackComponent!.Header);
+        result.RightHandSideContent.Should().BeEquivalentTo(cannotFindQualificationPage.RightHandSideContent,
+                                                            options => options.Excluding(x => x.Body));
+        result.RightHandSideContent.Body.Should().Be(rightHandSideContentBody);
+        result.RightHandSideContent.Header.Should()
+              .BeSameAs(cannotFindQualificationPage.RightHandSideContent.Header);
     }
 }
