@@ -67,6 +67,12 @@ public static class SecureHeaderConfiguration
                                                  CommandType = CspCommandType.Uri,
                                                  DirectiveOrUri = "https://*.clarity.ms/collect"
                                              };
+        
+        var pdfConnectSourceCspElement = new ContentSecurityPolicyElement
+                                             {
+                                                 CommandType = CspCommandType.Uri,
+                                                 DirectiveOrUri = "http://localhost:5025/pdf/generate"
+                                             };
 
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(unsafeHashesElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukFrontendSupportedElement);
@@ -77,6 +83,7 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(clarityCspElement);
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(clarityConnectSourceCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(pdfConnectSourceCspElement);
 
         return configuration;
     }

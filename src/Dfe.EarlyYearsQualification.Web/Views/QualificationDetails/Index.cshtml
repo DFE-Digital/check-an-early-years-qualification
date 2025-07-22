@@ -8,6 +8,9 @@
 
 @section Scripts
 {
+    <script src="~/js/html2canvas.js"></script>
+    <script src="~/js/jspdf.umd.min.js"></script>
+    <script src="~/js/FileSaver.min.js"></script>
     <script src="~/js/pages/qualification-details-page.js" asp-append-version="true"></script>
 }
 
@@ -23,15 +26,19 @@
 }
 
 <div class="govuk-grid-row">
-    <div id="qualification-details-summary" class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+    <div id="qualification-details-summary" class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop ">
         <h1 class="govuk-heading-xl" id="page-header">@Model.Content!.MainHeader</h1>
-        <div class="govuk-!-static-margin-bottom-7">
+        <div class="govuk-!-static-margin-bottom-7 govuk-!-display-none-print">
             <button id="print-button-top" class="govuk-link govuk-body-s print-button"
                     aria-label="Print page button">@Model.Content!.PrintButtonText</button>
+
+            <button id="download-button-top" class="govuk-link govuk-body-s download-button"
+                    aria-label="Download page button">DOWNLOAD
+            </button>
         </div>
         <h2 class="govuk-heading-l"
             id="qualification-details-header">@Model.Content.QualificationDetailsSummaryHeader</h2>
-        <dl class="govuk-summary-list">
+        <dl class="govuk-summary-list" id="qualification-summary-list">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key" id="qualification-name-label">
                     @Model.Content.QualificationNameLabel
@@ -97,6 +104,8 @@
             </div>
         </dl>
     </div>
+</div>
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-!-static-margin-top-6 dont-float">
         <div id="qualification-result" class="govuk-grid-column-two-thirds-from-desktop dont-float">
             @{ await Html.RenderPartialAsync("Partials/QualificationResult", new QualificationResultModel
@@ -110,7 +119,9 @@
             <h2 class="govuk-heading-l" id="ratio-heading">@Model.Content.RatiosHeading</h2>
             @if (!string.IsNullOrEmpty(Model.Content.RatiosText))
             {
-                @Html.Raw(Model.Content.RatiosText)
+                <div id="ratios-text">
+                    @Html.Raw(Model.Content.RatiosText)
+                </div>
             }
 
             @if (!string.IsNullOrEmpty(Model.Content.RatiosAdditionalInfoText))
@@ -188,7 +199,7 @@
                     || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.NotApproved
                     || Model.RatioRequirements.ApprovedForLevel3 == QualificationApprovalStatus.PossibleRouteAvailable
                     || Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.NotApproved
-                    || Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.PossibleRouteAvailable                                                                         
+                    || Model.RatioRequirements.ApprovedForLevel6 == QualificationApprovalStatus.PossibleRouteAvailable
                     || Model.RatioRequirements.ApprovedForUnqualified == QualificationApprovalStatus.NotApproved)
                 {
                     if (Model.RatioRequirements.ApprovedForUnqualified == QualificationApprovalStatus.NotApproved)
@@ -252,17 +263,19 @@
                 }
             }
 
-            <h2 class="govuk-heading-l govuk-!-static-margin-top-9"
-                id="requirements-heading">@Model.Content!.RequirementsHeading</h2>
+            <div id="requirements-container">
+                <h2 class="govuk-heading-l govuk-!-static-margin-top-9"
+                    id="requirements-heading">@Model.Content!.RequirementsHeading</h2>
 
-            @Html.Raw(Model.Content!.RequirementsText)
+                @Html.Raw(Model.Content!.RequirementsText)
+            </div>
 
-            <div class="govuk-!-static-margin-top-6">
+            <div class="govuk-!-static-margin-top-6 govuk-!-display-none-print">
                 <button id="print-button-bottom" class="govuk-link govuk-body-s print-button"
                         aria-label="Print page button">@Model.Content!.PrintButtonText</button>
             </div>
 
-            <p class="govuk-body govuk-!-static-margin-top-6 govuk-!-margin-bottom-9">
+            <p class="govuk-body govuk-!-static-margin-top-6 govuk-!-margin-bottom-9 govuk-!-display-none-print">
                 <a id="check-another-qualification-link" href="@Model.Content.CheckAnotherQualificationLink?.Href"
                    class="govuk-button govuk-button--secondary">@Model.Content.CheckAnotherQualificationLink?.DisplayText</a>
             </p>
@@ -273,9 +286,9 @@
             }
         </div>
     </div>
-
-    @if (Model.UpDownFeedback is not null)
-    {
-        await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);
-    }
 </div>
+@if (Model.UpDownFeedback is not null)
+{
+    await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);
+}
+
