@@ -208,6 +208,14 @@ app.MapControllerRoute(
                        "default",
                        "{controller=Home}/{action=Index}/{id?}");
 
+// Install Playwright browsers for Pdf Generation
+var exitCode = Microsoft.Playwright.Program.Main(["install", "chromium"]);
+if (exitCode != 0)
+{
+    Console.WriteLine("Failed to install playwright browsers");
+    Environment.Exit(exitCode);
+}
+
 await app.RunAsync();
 
 [ExcludeFromCodeCoverage]
