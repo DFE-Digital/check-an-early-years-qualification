@@ -16,9 +16,11 @@ public class RatioRequirementModel
     {
         get
         {
-            return (ApprovedForLevel2 != QualificationApprovalStatus.Approved
+            if (OverrideToBeNotFullAndRelevant) return true;
+            
+            return ApprovedForLevel2 != QualificationApprovalStatus.Approved
                    && ApprovedForLevel3 != QualificationApprovalStatus.Approved
-                   && ApprovedForLevel6 != QualificationApprovalStatus.Approved) || OverrideToBeNotFullAndRelevant;
+                   && ApprovedForLevel6 != QualificationApprovalStatus.Approved;
         }
     }
 
