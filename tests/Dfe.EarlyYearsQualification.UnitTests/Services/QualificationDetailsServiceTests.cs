@@ -411,12 +411,9 @@ public class QualificationDetailsServiceTests
         await sut.QualificationLevel3OrAboveMightBeRelevantAtLevel2(details, qualification);
 
         details.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
-        _mockContentParser.Verify(o => o.ToHtml(It.IsAny<Document>()), Times.Exactly(2));
+        _mockContentParser.Verify(o => o.ToHtml(It.IsAny<Document>()), Times.Once());
         details.RatioRequirements.RequirementsForLevel2.Should().Be(requirementsForLevelContent);
         details.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeTrue();
-        details.RatioRequirements.RequirementsForLevel6.Should().Be(requirementsForLevelContent);
-        details.RatioRequirements.ShowRequirementsForLevel6ByDefault.Should().BeTrue();
-        details.RatioRequirements.OverrideToBeNotFullAndRelevant.Should().BeTrue();
     }
 
     [TestMethod]

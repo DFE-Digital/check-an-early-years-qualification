@@ -208,14 +208,6 @@ public class QualificationDetailsService(
                                                                    qualification);
             model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(requirementsForLevel2);
             model.RatioRequirements.ShowRequirementsForLevel2ByDefault = true;
-            
-            // In this scenario we also need to change the content for L6 to provide additional information
-            model.RatioRequirements.ApprovedForLevel6 = QualificationApprovalStatus.NotApproved;
-            var requirementsForLevel6 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForLevel6BetweenSept14AndAug19),
-                                                                   RatioRequirements.Level6RatioRequirementName,
-                                                                   qualification);
-            model.RatioRequirements.RequirementsForLevel6 = await contentParser.ToHtml(requirementsForLevel6);
-            model.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
         }
     }
 

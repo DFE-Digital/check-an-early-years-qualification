@@ -35,7 +35,6 @@ const l3MustEnglish = "Level 3 must English";
 const l3MustEnglishMaybePFA = "Level 3 must English maybe PFA";
 const l3MustEnglishMustPFA = "Level 3 must English must PFA";
 const l6MustQTS = "Level 6 must QTS";
-const l6BetweenSept14AndAug19 = "Level 6 between Sept 14 and Aug 19";
 
 test.describe("A spec used to test the qualification details page ratios", {tag: "@e2e"}, () => {
     test.beforeEach(async ({context}) => {
@@ -331,7 +330,7 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {detailText: l2ContactDfe});
                 await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
                 await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6BetweenSept14AndAug19});
+                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
             });
         });
     });
@@ -536,7 +535,7 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {detailText: l2ContactDfe});
                 await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
                 await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6BetweenSept14AndAug19});
+                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
             });
         });
     });
