@@ -35,6 +35,7 @@ const l3MustEnglish = "Level 3 must English";
 const l3MustEnglishMaybePFA = "Level 3 must English maybe PFA";
 const l3MustEnglishMustPFA = "Level 3 must English must PFA";
 const l6MustQTS = "Level 6 must QTS";
+const l6BetweenSept14AndAug19 = "Level 6 between Sept 14 and Aug 19";
 
 test.describe("A spec used to test the qualification details page ratios", {tag: "@e2e"}, () => {
     test.beforeEach(async ({context}) => {
@@ -327,10 +328,10 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkDetailsInset(page, "Qualification result heading", "Not full and relevant L3", "Not full and relevant L3 body");
                 await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19", "This is the ratio text L3 EBR");
 
-                await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
-                await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.FurtherActionRequired, {detailText: l2ContactDfe});
+                await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {detailText: l2ContactDfe});
+                await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
                 await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
+                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6BetweenSept14AndAug19});
             });
         });
     });
@@ -532,10 +533,10 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkDetailsInset(page, "Qualification result heading", "Not full and relevant L3 or L6", "Not full and relevant L3 or L6 body");
                 await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19", "This is the ratio text L3 EBR");
 
-                await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
-                await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.FurtherActionRequired, {detailText: l2ContactDfe});
+                await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {detailText: l2ContactDfe});
+                await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
                 await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
+                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6BetweenSept14AndAug19});
             });
         });
     });

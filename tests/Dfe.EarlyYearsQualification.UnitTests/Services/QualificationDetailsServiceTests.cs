@@ -387,6 +387,7 @@ public class QualificationDetailsServiceTests
                                                   ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
                                               }
                       };
+        
         var qualification = new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 3)
                             {
                                 RatioRequirements =
@@ -394,21 +395,28 @@ public class QualificationDetailsServiceTests
                                     new RatioRequirement
                                     {
                                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName
+                                    },
+                                    new RatioRequirement
+                                    {
+                                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName
                                     }
                                 ]
                             };
-        const string requirementsForLevel2 = "requirementsForLevel2";
+        const string requirementsForLevelContent = "Requirements for level content";
 
-        _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>())).ReturnsAsync(requirementsForLevel2);
+        _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>())).ReturnsAsync(requirementsForLevelContent);
         _mockUserJourneyCookieService.Setup(o => o.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
         var sut = GetSut();
 
         await sut.QualificationLevel3OrAboveMightBeRelevantAtLevel2(details, qualification);
 
-        details.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.FurtherActionRequired);
-        _mockContentParser.Verify(o => o.ToHtml(It.IsAny<Document>()), Times.Once);
-        details.RatioRequirements.RequirementsForLevel2.Should().Be(requirementsForLevel2);
+        details.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
+        _mockContentParser.Verify(o => o.ToHtml(It.IsAny<Document>()), Times.Exactly(2));
+        details.RatioRequirements.RequirementsForLevel2.Should().Be(requirementsForLevelContent);
         details.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeTrue();
+        details.RatioRequirements.RequirementsForLevel6.Should().Be(requirementsForLevelContent);
+        details.RatioRequirements.ShowRequirementsForLevel6ByDefault.Should().BeTrue();
+        details.RatioRequirements.OverrideToBeNotFullAndRelevant.Should().BeTrue();
     }
 
     [TestMethod]

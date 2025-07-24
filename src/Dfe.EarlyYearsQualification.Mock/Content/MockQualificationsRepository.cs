@@ -264,7 +264,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
                            RequirementHeading = "Level 6 Requirements",
                            RequirementForLevel6Before2014 = ContentfulContentHelper.Paragraph("Level 6 must QTS"),
-                           RequirementForLevel6After2014 = ContentfulContentHelper.Paragraph("Level 6 must QTS")
+                           RequirementForLevel6After2014 = ContentfulContentHelper.Paragraph("Level 6 must QTS"),
+                           RequirementForLevel6BetweenSept14AndAug19 = ContentfulContentHelper.Paragraph("Level 6 between Sept 14 and Aug 19")
                        },
 
                        new RatioRequirement
@@ -364,7 +365,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RequirementForLevel6After2014 = Level6MustQts,
                            RequirementForLevel7Before2014 = Level6MustQts,
                            RequirementForLevel7After2014 = Level6MustQts,
-                           EyittRouteAvailable = ContentfulContentHelper.Paragraph("This is the EYITT content")
+                           EyittRouteAvailable = ContentfulContentHelper.Paragraph("This is the EYITT content"),
+                           RequirementForLevel6BetweenSept14AndAug19 = ContentfulContentHelper.Paragraph("Level 6 between Sept 14 and Aug 19")
                        },
 
                        new RatioRequirement
