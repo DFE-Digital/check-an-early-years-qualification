@@ -61,5 +61,9 @@ public class FooterViewComponent(
                              OpenInNewTab = false
                          };
         }
+        else
+        {
+            logger.LogInformation("No Options link in Footer");
+        }
     }
 }
