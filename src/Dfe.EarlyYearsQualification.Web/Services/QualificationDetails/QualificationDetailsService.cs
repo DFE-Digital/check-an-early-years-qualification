@@ -197,9 +197,12 @@ public class QualificationDetailsService(
             userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() &&
             qualification.QualificationLevel > 2)
         {
+            // This is needed to preserve the Not Full and Relevant messaging as changing the L2 status below makes it F&R 
+            model.RatioRequirements.OverrideToBeNotFullAndRelevant = true;
+            
             // If the qualification is above a level 2 qualification, is not full and relevant and is started between Sept 2014 and Aug 2019
-            // then it will have special requirements for level 2.
-            model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.FurtherActionRequired;
+            // then policy have confirmed it can be automatically approved at L2
+            model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.Approved;
             var requirementsForLevel2 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForLevel2BetweenSept14AndAug19),
                                                                    RatioRequirements.Level2RatioRequirementName,
                                                                    qualification);

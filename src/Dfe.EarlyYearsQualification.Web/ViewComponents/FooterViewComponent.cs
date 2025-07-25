@@ -53,6 +53,7 @@ public class FooterViewComponent(
     {
         if (!environmentService.IsProduction())
         {
+            logger.LogInformation("Showing Options link in Footer");
             yield return new NavigationLink
                          {
                              DisplayText = "Options",

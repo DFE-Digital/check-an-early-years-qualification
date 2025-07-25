@@ -10,10 +10,14 @@ public class RatioRequirementModel
 
     public QualificationApprovalStatus ApprovedForUnqualified { get; set; }
 
+    public bool OverrideToBeNotFullAndRelevant { get; set; }
+
     public bool IsNotFullAndRelevant
     {
         get
         {
+            if (OverrideToBeNotFullAndRelevant) return true;
+            
             return ApprovedForLevel2 != QualificationApprovalStatus.Approved
                    && ApprovedForLevel3 != QualificationApprovalStatus.Approved
                    && ApprovedForLevel6 != QualificationApprovalStatus.Approved;
