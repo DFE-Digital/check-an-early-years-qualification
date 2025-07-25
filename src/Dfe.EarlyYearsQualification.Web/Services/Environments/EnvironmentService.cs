@@ -4,7 +4,7 @@ public class EnvironmentService(IConfiguration? config) : IEnvironmentService
 {
     public bool IsProduction()
     {
-        if (config?["UseMockContentful"] == "true") return false;
+        if (config?["UseMockContentful"] == "True") return false;
         
         string environment = config?["ENVIRONMENT"] ?? "production";
         // ...safest to assume production if environment not configured
