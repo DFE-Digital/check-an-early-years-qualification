@@ -57,4 +57,18 @@ public class EnvironmentServiceTests
 
         sut.IsProduction().Should().BeFalse();
     }
+    
+    [TestMethod]
+    public void WhenUsingMockContentful_IsProduction_ShouldReturnFalse()
+    {
+        var config = new Mock<IConfiguration>();
+        config.Setup(c => c["UseMockContentful"]).Returns("TRUE");
+        config.Setup(c => c["ENVIRONMENT"]).Returns("production");
+
+        var sut = new EnvironmentService(config.Object);
+
+        sut.IsProduction().Should().BeFalse();
+        config.Verify(c => c["UseMockContentful"], Times.Once);
+        config.Verify(c => c["ENVIRONMENT"], Times.Never);
+    }
 }
