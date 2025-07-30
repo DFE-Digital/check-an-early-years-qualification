@@ -10,11 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="[7.2.0,8)"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
-        <PackageReference Include="moq" Version="4.20.72"/>
-        <PackageReference Include="MSTest.TestAdapter" Version="3.9.3" />
-        <PackageReference Include="MSTest.TestFramework" Version="3.9.3" />
+        <PackageReference Include="FluentAssertions" Version="[7.2.0,8)" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+        <PackageReference Include="moq" Version="4.20.72" />
+        <PackageReference Include="MSTest.TestAdapter" Version="3.10.0" />
+        <PackageReference Include="MSTest.TestFramework" Version="3.10.0" />
         <PackageReference Include="coverlet.collector" Version="6.0.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,8 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj"/>
-        <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Web\Dfe.EarlyYearsQualification.Web.csproj"/>
+        <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Content\Dfe.EarlyYearsQualification.Content.csproj" />
+        <ProjectReference Include="..\..\src\Dfe.EarlyYearsQualification.Web\Dfe.EarlyYearsQualification.Web.csproj" />
     </ItemGroup>
 
 </Project>
