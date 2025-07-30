@@ -59,7 +59,7 @@ public class EnvironmentServiceTests
     }
     
     [TestMethod]
-    public void WhenUseMockContentful_IsTrue_ShouldReturnFalse()
+    public void WhenUsingMockContentful_IsProduction_ShouldReturnFalse()
     {
         var config = new Mock<IConfiguration>();
         config.Setup(c => c["UseMockContentful"]).Returns("TRUE");
