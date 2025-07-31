@@ -499,10 +499,13 @@ public class QualificationDetailsService(
 
         switch (model.QualificationLevel)
         {
+            case >= 3 when wasStartedBetweenSeptember2014AndAugust2019 && model.RatioRequirements.OverrideToBeNotFullAndRelevant:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
+                model.Content!.RatiosAdditionalInfoText = string.Empty;
+                break;
             case >= 3 when wasStartedBetweenSeptember2014AndAugust2019:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
-                model.Content!.RatiosAdditionalInfoText = model.RatioRequirements.OverrideToBeNotFullAndRelevant ? 
-                                                              string.Empty : await contentParser.ToHtml(content.RatiosTextL3Ebr);
+                model.Content!.RatiosAdditionalInfoText = await contentParser.ToHtml(content.RatiosTextL3Ebr);
                 break;
             case >= 3 when wasStartedBeforeSeptember2014 || wasStartedOnOrAfterSeptember2019:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextNotFullAndRelevant);
