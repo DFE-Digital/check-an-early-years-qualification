@@ -325,7 +325,7 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 }, page);
 
                 await checkDetailsInset(page, "Qualification result heading", "Not full and relevant L3", "Not full and relevant L3 body");
-                await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19", "This is the ratio text L3 EBR");
+                await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19");
 
                 await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {detailText: l2ContactDfe});
                 await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
@@ -530,7 +530,7 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 }, page);
 
                 await checkDetailsInset(page, "Qualification result heading", "Not full and relevant L3 or L6", "Not full and relevant L3 or L6 body");
-                await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19", "This is the ratio text L3 EBR");
+                await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19");
 
                 await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {detailText: l2ContactDfe});
                 await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});

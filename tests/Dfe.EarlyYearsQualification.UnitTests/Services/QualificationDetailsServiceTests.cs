@@ -824,20 +824,24 @@ public class QualificationDetailsServiceTests
         const string ratiosText = "Approved ratio text";
         const string ratiosTextNotFullAndRelevant = "Not approved";
         const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
+        const string ratioTextL3Ebr = "L3 Ebr ratio text";
         var ratiosTextDoc = new Document { NodeType = ratiosText };
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
+        var ratioTextL3EbrDoc = new Document { NodeType = ratioTextL3Ebr };
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
                           .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+        _mockContentParser.Setup(o => o.ToHtml(ratioTextL3EbrDoc)).ReturnsAsync(ratioTextL3Ebr);
         var detailsPageContent = new DetailsPage
                                  {
                                      RatiosText = ratiosTextDoc,
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
-                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
+                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc,
+                                     RatiosTextL3Ebr = ratioTextL3EbrDoc
                                  };
 
         var model = new QualificationDetailsModel
@@ -848,7 +852,8 @@ public class QualificationDetailsServiceTests
                                                 ApprovedForLevel6 = QualificationApprovalStatus.NotApproved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.NotApproved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
-                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
+                                                OverrideToBeNotFullAndRelevant = true
                                             },
                         Content = new DetailsPageModel()
                     };
@@ -861,6 +866,7 @@ public class QualificationDetailsServiceTests
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextL3PlusNotFrBetweenSep14Aug19);
+        model.Content.RatiosAdditionalInfoText.Should().BeNullOrEmpty();
     }
 
     [TestMethod]
