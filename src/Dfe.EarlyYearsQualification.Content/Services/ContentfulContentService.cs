@@ -327,6 +327,25 @@ public class ContentfulContentService(
         return footer.First();
     }
 
+    public async Task<FeedbackFormPage?> GetFeedbackFormPage()
+    {
+        ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
+        ContentfulClient.SerializerSettings.Converters.Add(new FeedbackFormQuestionConverter());
+        var feedbackFormPageType = ContentTypeLookup[typeof(FeedbackFormPage)]; 
+        var queryBuilder = new QueryBuilder<FeedbackFormPage>().ContentTypeIs(feedbackFormPageType)
+                                                               .Include(3);
+        var feedbackFormPages = await GetEntriesByType(queryBuilder);
+
+        // ReSharper disable once InvertIf
+        if (feedbackFormPages is null || !feedbackFormPages.Any())
+        {
+            Logger.LogWarning("No 'Feedback Form Page' returned");
+            return null;
+        }
+
+        return feedbackFormPages.First();
+    }
+
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(
         int startDateMonth, int startDateYear,
         List<CannotFindQualificationPage> cannotFindQualificationPages)

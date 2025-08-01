@@ -49,4 +49,6 @@ public interface IContentService
     Task<PreCheckPage?> GetPreCheckPage();
 
     Task<Footer?> GetFooter();
+    
+    Task<FeedbackFormPage?> GetFeedbackFormPage();
 }

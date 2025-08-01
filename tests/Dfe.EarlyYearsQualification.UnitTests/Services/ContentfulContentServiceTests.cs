@@ -1190,6 +1190,40 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
+    
+    [TestMethod]
+    public async Task GetFeedbackFormPage_ReturnsData()
+    {
+        var data = new FeedbackFormPage { Heading = "Heading", BackButton = new NavigationLink(), CtaButtonText = "Submit", ErrorBannerHeading = "There is an error" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<FeedbackFormPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<FeedbackFormPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetFeedbackFormPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetFeedbackFormPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<FeedbackFormPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<FeedbackFormPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetFeedbackFormPage();
+
+        result.Should().BeNull();
+    }
 }
 
 public class ContentfulContentServiceTestsBase<T>

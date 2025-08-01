@@ -38,7 +38,8 @@ public abstract class ContentfulContentServiceBase
               { typeof(HelpPage), ContentTypes.HelpPage },
               { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage },
               { typeof(PreCheckPage), ContentTypes.PreCheckPage },
-              { typeof(Footer), ContentTypes.Footer }
+              { typeof(Footer), ContentTypes.Footer },
+              { typeof(FeedbackFormPage), ContentTypes.FeedbackFormPage }
           };
 
     protected readonly ILogger Logger;
