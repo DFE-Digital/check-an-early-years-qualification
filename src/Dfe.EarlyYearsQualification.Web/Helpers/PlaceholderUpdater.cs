@@ -6,7 +6,7 @@ namespace Dfe.EarlyYearsQualification.Web.Helpers;
 public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCookieService userJourneyCookieService) : IPlaceholderUpdater
 {
     private const string ActualYearPlaceholder = "$[actual-year]$";
-    private const string LevelForSept14ToAug19Placeholder = "$[level-for-Aug14-to-Sept19]$";
+    private const string LevelForSept14ToAug19Placeholder = "$[level-for-Sept14-to-Aug19]$";
 
     public string Replace(string text)
     {
