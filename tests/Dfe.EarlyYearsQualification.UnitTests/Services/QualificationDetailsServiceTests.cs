@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
@@ -19,6 +20,7 @@ public class QualificationDetailsServiceTests
     private Mock<ILogger<QualificationDetailsService>> _mockLogger = new();
     private Mock<IQualificationsRepository> _mockRepository = new();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
+    private Mock<IPlaceholderUpdater> _mockPlaceholderUpdater = new();
 
     private QualificationDetailsService GetSut()
     {
@@ -27,7 +29,8 @@ public class QualificationDetailsServiceTests
                                                _mockRepository.Object,
                                                _mockContentService.Object,
                                                _mockContentParser.Object,
-                                               _mockUserJourneyCookieService.Object
+                                               _mockUserJourneyCookieService.Object,
+                                               _mockPlaceholderUpdater.Object
                                               );
     }
 
@@ -39,6 +42,7 @@ public class QualificationDetailsServiceTests
         _mockContentService = new Mock<IContentService>();
         _mockContentParser = new Mock<IGovUkContentParser>();
         _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        _mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
     }
 
     [TestMethod]
@@ -406,6 +410,7 @@ public class QualificationDetailsServiceTests
 
         _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>())).ReturnsAsync(requirementsForLevelContent);
         _mockUserJourneyCookieService.Setup(o => o.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
+        _mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns(requirementsForLevelContent);
         var sut = GetSut();
 
         await sut.QualificationLevel3OrAboveMightBeRelevantAtLevel2(details, qualification);

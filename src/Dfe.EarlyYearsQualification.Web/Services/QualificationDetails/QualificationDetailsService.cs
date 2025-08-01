@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RatioRequirements;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -16,7 +17,8 @@ public class QualificationDetailsService(
     IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IGovUkContentParser contentParser,
-    IUserJourneyCookieService userJourneyCookieService
+    IUserJourneyCookieService userJourneyCookieService,
+    IPlaceholderUpdater placeholderUpdater
 ) : IQualificationDetailsService
 {
     public async Task<Qualification?> GetQualification(string qualificationId)
@@ -206,7 +208,8 @@ public class QualificationDetailsService(
             var requirementsForLevel2 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForLevel2BetweenSept14AndAug19),
                                                                    RatioRequirements.Level2RatioRequirementName,
                                                                    qualification);
-            model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(requirementsForLevel2);
+            var parsedContent = await contentParser.ToHtml(requirementsForLevel2);
+            model.RatioRequirements.RequirementsForLevel2 = placeholderUpdater.Replace(parsedContent);
             model.RatioRequirements.ShowRequirementsForLevel2ByDefault = true;
         }
     }
