@@ -80,7 +80,7 @@ public class PlaceholderUpdaterTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
-        var result = placeholderUpdater.Replace("This should be $[level-for-Aug14-to-Sept19]$");
+        var result = placeholderUpdater.Replace("This should be $[level-for-Sept14-to-Aug19]$");
         result.Should().Be("This should be level 3");
     }
     
@@ -93,7 +93,7 @@ public class PlaceholderUpdaterTests
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
-        var result = placeholderUpdater.Replace("This should be $[level-for-Aug14-to-Sept19]$");
+        var result = placeholderUpdater.Replace("This should be $[level-for-Sept14-to-Aug19]$");
         result.Should().Be("This should be level 3 or level 6");
     }
 }
