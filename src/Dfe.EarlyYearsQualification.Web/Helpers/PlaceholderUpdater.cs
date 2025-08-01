@@ -6,7 +6,7 @@ namespace Dfe.EarlyYearsQualification.Web.Helpers;
 public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCookieService userJourneyCookieService) : IPlaceholderUpdater
 {
     private const string ActualYearPlaceholder = "$[actual-year]$";
-    private const string LevelForSept14ToAug19 = "$[level-for-Aug14-to-Sept19]$";
+    private const string LevelForSept14ToAug19Placeholder = "$[level-for-Aug14-to-Sept19]$";
 
     public string Replace(string text)
     {
@@ -18,12 +18,12 @@ public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCo
             result = result.Replace(ActualYearPlaceholder, dateTimeAdapter.Now().Year.ToString());
         }
 
-        if (text.Contains(LevelForSept14ToAug19))
+        if (text.Contains(LevelForSept14ToAug19Placeholder))
         {
             var levelBeingChecked = userJourneyCookieService.GetLevelOfQualification();
             if (levelBeingChecked != null)
             {
-                result = result.Replace(LevelForSept14ToAug19, levelBeingChecked <= 5 ? "level 3" : "level 3 or level 6");
+                result = result.Replace(LevelForSept14ToAug19Placeholder, levelBeingChecked <= 5 ? "level 3" : "level 3 or level 6");
             }
         }
 
