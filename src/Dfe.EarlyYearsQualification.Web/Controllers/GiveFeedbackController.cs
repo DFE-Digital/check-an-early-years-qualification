@@ -11,7 +11,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/give-feedback")]
 public class GiveFeedbackController(
-    ILogger<AdviceController> logger,
+    ILogger<GiveFeedbackController> logger,
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
@@ -25,7 +25,7 @@ public class GiveFeedbackController(
         if (feedbackFormPage is null) RedirectToAction("Index", "Error");
 
         var model = FeedbackFormPageMapper.Map(feedbackFormPage!, await contentParser.ToHtml(feedbackFormPage!.PostHeadingContent));
-        model.RadioAnswers = new string[model.Questions.Count(x => x.GetType() == typeof(FeedbackFormQuestionRadioModel))];
+        model.Answers = new string[model.Questions.Count];
         return View(model);
     }
 }

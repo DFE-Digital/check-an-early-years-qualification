@@ -1,6 +1,6 @@
 @using Dfe.EarlyYearsQualification.Web.Models.Content
 @using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
-@model Dfe.EarlyYearsQualification.Web.Models.Content.GiveFeedbackPageModel
+@model Dfe.EarlyYearsQualification.Web.Models.Content.FeedbackFormPageModel
 
 @{
     ViewData["Title"] = Model.Heading;
@@ -8,7 +8,7 @@
 
 @section Scripts
 {
-    @* <script src="~/js/pages/challenge-page.js" asp-append-version="true"></script> *@
+    <script src="~/js/pages/feedback-form-page.js" asp-append-version="true"></script>
 }
 
 @section BeforeMainContent {
@@ -31,8 +31,9 @@
             </div>
             @using (Html.BeginForm("Post", "GiveFeedback", FormMethod.Post, new { id = "feedback-form" }))
             {
-                @foreach (var question in Model.Questions)
+                @for(var i = 0; i < Model.Questions.Count; i++)
                 {
+                    var question = Model.Questions[i];
                     <div class="govuk-!-margin-bottom-6">
                         @if (question.GetType() == typeof(FeedbackFormQuestionRadioModel))
                         {
@@ -42,10 +43,10 @@
                                 @foreach (var option in questionData.OptionsItems)
                                 {
                                     var optionModel = option as OptionModel;
-                                    //var @checked = optionModel!.Value == Model.Option ? "checked" : "";
+                                    var @checked = optionModel!.Value == Model.Answers[i] ? "checked" : "";
                                     <div class="govuk-radios__item">
 
-                                        @Html.RadioButtonFor(x => x.RadioAnswers[0], optionModel!.Value, new { @class = "govuk-radios__input", id = optionModel.Value })
+                                        @Html.RadioButtonFor(x => x.Answers[i], optionModel.Value, new { @class = "govuk-radios__input", id = optionModel.Value, @checked })
                                         <label class="govuk-label govuk-radios__label" for="@optionModel.Value">
                                             @optionModel.Label
                                         </label>
@@ -56,6 +57,67 @@
                                                 @optionModel.Hint
                                             </div>
                                         }
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else if (question.GetType() == typeof(FeedbackFormQuestionTextAreaModel))
+                        {
+                            var questionData = question as FeedbackFormQuestionTextAreaModel;
+                            <h2 class="govuk-heading-m">@questionData!.Question</h2>
+                            if (!string.IsNullOrEmpty(questionData.HintText))
+                            {
+                                var hintId = $"textarea_{i}_hint";
+                                <div class="govuk-hint" id="@hintId">
+                                    @questionData.HintText
+                                </div>
+                            }
+                            @Html.TextAreaFor(x=> x.Answers[i], 5, 1, new {@class="govuk-textarea"})
+                        }
+                        else if (question.GetType() == typeof(FeedbackFormQuestionRadioAndInputModel))
+                        {
+                            var questionData = question as FeedbackFormQuestionRadioAndInputModel;
+                            <h2 class="govuk-heading-m">@questionData!.Question</h2>
+                            <div class="govuk-radios" data-module="govuk-radios">
+                                @for (var q = 0; q < questionData.OptionsItems.Count; q++)
+                                {
+                                    var optionModel = questionData.OptionsItems[q] as OptionModel;
+                                    var @checked = optionModel!.Value == Model.Answers[i] ? "checked" : "";
+                                    <div class="govuk-radios__item">
+
+                                        @Html.RadioButtonFor(x => x.Answers[i], optionModel.Value, new { @class = "govuk-radios__input", id = optionModel.Value, @checked })
+                                        <label class="govuk-label govuk-radios__label" for="@optionModel.Value">
+                                            @optionModel.Label
+                                        </label>
+                                        @if (!string.IsNullOrEmpty(optionModel.Hint))
+                                        {
+                                            var hintId = $"{optionModel.Value}_hint";
+                                            <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                                @optionModel.Hint
+                                            </div>
+                                        }
+                                        @if (q == 0)
+                                        {
+                                            <div class="govuk-radios__conditional" id="conditional-input-container">
+                                                <div class="govuk-form-group">
+                                                    <label class="govuk-label" for="conditional-input">
+                                                        @questionData.InputHeading
+                                                    </label>
+                                                    @if (!string.IsNullOrEmpty(questionData.InputHeadingHintText))
+                                                    {
+                                                        var hintId = $"{questionData.InputHeading}_hint";
+                                                        <div id="@hintId" class="govuk-hint">
+                                                            @questionData.InputHeadingHintText
+                                                        </div>
+                                                    }
+                                                    <p id="conditional-input-error" class="govuk-error-message">
+                                                        <span class="govuk-visually-hidden">Error:</span> @questionData.ErrorMessageForInput
+                                                    </p>
+                                                    @Html.TextBoxFor(x => x.Answers[0], "", new { @class="govuk-input govuk-!-width-one-half" })
+                                                </div>
+                                            </div>
+                                        }
+                                        
                                     </div>
                                 }
                             </div>

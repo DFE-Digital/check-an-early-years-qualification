@@ -5,9 +5,9 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
 public static class FeedbackFormPageMapper
 {
-    public static GiveFeedbackPageModel Map(FeedbackFormPage feedbackFormPage, string postHeadingContent)
+    public static FeedbackFormPageModel Map(FeedbackFormPage feedbackFormPage, string postHeadingContent)
     {
-        return new GiveFeedbackPageModel
+        return new FeedbackFormPageModel
                {
                    Heading = feedbackFormPage.Heading,
                    BackButton = NavigationLinkMapper.Map(feedbackFormPage.BackButton),
@@ -30,12 +30,12 @@ public static class FeedbackFormPageMapper
             }
             if (question.GetType() == typeof(FeedbackFormQuestionRadioAndInput))
             {
-                //results.Add(MapRadioAndInputQuestion(question as FeedbackFormQuestionRadioAndInput));
+                results.Add(MapRadioAndInputQuestion(question as FeedbackFormQuestionRadioAndInput));
                 continue;
             }
             if (question.GetType() == typeof(FeedbackFormQuestionTextArea))
             {
-                //results.Add(MapTextAreaQuestion(question as FeedbackFormQuestionTextArea));
+                results.Add(MapTextAreaQuestion(question as FeedbackFormQuestionTextArea));
             }
         }
         return results;
@@ -43,12 +43,22 @@ public static class FeedbackFormPageMapper
 
     private static IFeedbackFormQuestionModel MapTextAreaQuestion(FeedbackFormQuestionTextArea? question)
     {
-        throw new NotImplementedException();
+        return new FeedbackFormQuestionTextAreaModel
+               {
+                   Question = question!.Question,
+                   HintText = question.HintText
+               };
     }
 
     private static IFeedbackFormQuestionModel MapRadioAndInputQuestion(FeedbackFormQuestionRadioAndInput? question)
     {
-        throw new NotImplementedException();
+        return new FeedbackFormQuestionRadioAndInputModel
+               {
+                   Question = question!.Question,
+                   OptionsItems = OptionItemMapper.Map(question.Options),
+                   InputHeading = question.InputHeading,
+                   InputHeadingHintText = question.InputHeadingHintText
+               };
     }
 
     private static IFeedbackFormQuestionModel MapRadioQuestion(FeedbackFormQuestionRadio? question)
@@ -56,7 +66,6 @@ public static class FeedbackFormPageMapper
         return new FeedbackFormQuestionRadioModel
                {
                    Question = question!.Question,
-                   IsTheQuestionMandatory = question.IsTheQuestionMandatory,
                    ErrorMessage = question.ErrorMessage,
                    OptionsItems = OptionItemMapper.Map(question.Options)
                };

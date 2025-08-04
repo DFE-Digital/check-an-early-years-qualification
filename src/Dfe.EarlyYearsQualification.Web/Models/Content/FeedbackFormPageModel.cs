@@ -1,6 +1,6 @@
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
-public class GiveFeedbackPageModel
+public class FeedbackFormPageModel
 {
     public required string Heading { get; init; }
 
@@ -14,5 +14,5 @@ public class GiveFeedbackPageModel
 
     public required string ErrorBannerHeading { get; init; }
 
-    public string[] RadioAnswers { get; set; } = [];
+    public string[] Answers { get; set; } = [];
 }
