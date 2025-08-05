@@ -26,6 +26,7 @@ public class GiveFeedbackController(
 
         var model = FeedbackFormPageMapper.Map(feedbackFormPage!, await contentParser.ToHtml(feedbackFormPage!.PostHeadingContent));
         model.Answers = new string[model.Questions.Count];
+        model.ConditionalInputAnswers = new string[model.Questions.Count(x => x.GetType() == typeof(FeedbackFormQuestionRadioAndInputModel))];
         return View(model);
     }
 }

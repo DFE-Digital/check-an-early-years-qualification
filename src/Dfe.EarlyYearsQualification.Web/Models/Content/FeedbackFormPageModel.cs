@@ -15,4 +15,6 @@ public class FeedbackFormPageModel
     public required string ErrorBannerHeading { get; init; }
 
     public string[] Answers { get; set; } = [];
+    
+    public string[] ConditionalInputAnswers { get; set; } = [];
 }
