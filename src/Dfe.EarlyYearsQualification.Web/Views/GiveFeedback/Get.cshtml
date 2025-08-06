@@ -107,7 +107,7 @@
                             <input type="hidden" name="QuestionList[@questionIndex].Question"
                                    value="@questionData!.Question"/>
                             <div
-                                class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
+                                class="govuk-form-group @(Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ErrorBannerLinkText == Model.QuestionList[questionIndex].ErrorMessage && !x.ElementLinkId.Contains("additionalInfo")) ? "govuk-form-group--error" : "")">
                                 <h2 class="govuk-heading-m">@questionData.Question</h2>
                                 <div class="govuk-radios" data-module="govuk-radios">
                                     @for (var optionIndex = 0; optionIndex < questionData.OptionsItems.Count; optionIndex++)
@@ -139,8 +139,10 @@
                                             @*We associate the input with the first option*@
                                             @if (optionIndex == 0)
                                             {
+                                                var additionalInfoId = $"{questionIndex}_additionalInfo";
+                                                var additionalInfoHasError = Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == additionalInfoId);
                                                 <div class="govuk-radios__conditional">
-                                                    <div class="govuk-form-group">
+                                                    <div class="govuk-form-group @(additionalInfoHasError ? "govuk-form-group--error" : "")">
                                                         <label class="govuk-label">
                                                             @questionData.InputHeading
                                                         </label>
@@ -151,15 +153,17 @@
                                                                 @questionData.InputHeadingHintText
                                                             </div>
                                                         }
-                                                        @{ var additionalInfoId = $"{questionIndex}_additionalInfo"; }
-                                                        @if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == additionalInfoId))
+                                                        @if (additionalInfoHasError)
                                                         {
                                                             <p class="govuk-error-message additional-info-error">
                                                                 <span
                                                                     class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
                                                             </p>
                                                         }
-                                                        @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", new { @class = "govuk-input govuk-!-width-one-half", id = additionalInfoId })
+                                                        @{
+                                                            var additionalInfoCss = additionalInfoHasError? "govuk-input govuk-!-width-one-half govuk-input--error" : "govuk-input govuk-!-width-one-half";
+                                                        }
+                                                        @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", new { @class=additionalInfoCss, id = additionalInfoId })
                                                     </div>
                                                 </div>
                                             }

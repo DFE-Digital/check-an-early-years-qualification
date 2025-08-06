@@ -5,7 +5,6 @@ $(document).ready(function () {
         $(".govuk-radios__conditional").hide();
     }
     
-
     $(".has__conditional__element").on('click', function () {
         $(this).siblings(".govuk-radios__conditional").show();
     });
