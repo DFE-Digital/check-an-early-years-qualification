@@ -8,5 +8,9 @@ public class FeedbackFormQuestionRadioAndInput : BaseFeedbackFormQuestion
 
     public string InputHeadingHintText { get; set; } = string.Empty;
 
+    public bool ValidateInputAsAnEmailAddress { get; set; }
+
     public string ErrorMessageForInput { get; set; } = string.Empty;
+
+    public string ErrorMessageForInvalidEmailFormat { get; set; } = string.Empty;
 }

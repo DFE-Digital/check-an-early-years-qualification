@@ -4,5 +4,5 @@ public class ErrorSummaryModel
 {
     public string ErrorBannerHeading { get; init; } = string.Empty;
 
-    public required IEnumerable<ErrorSummaryLink> ErrorSummaryLinks { get; init; }
+    public required List<ErrorSummaryLink> ErrorSummaryLinks { get; set; }
 }

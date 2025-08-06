@@ -7,7 +7,7 @@ public static class FeedbackFormPageMapper
 {
     public static FeedbackFormPageModel Map(FeedbackFormPage feedbackFormPage, string postHeadingContent)
     {
-        return new FeedbackFormPageModel
+        var model = new FeedbackFormPageModel
                {
                    Heading = feedbackFormPage.Heading,
                    BackButton = NavigationLinkMapper.Map(feedbackFormPage.BackButton),
@@ -16,6 +16,13 @@ public static class FeedbackFormPageMapper
                    PostHeadingContent = postHeadingContent,
                    Questions = MapQuestions(feedbackFormPage.Questions)
                };
+        
+        for (int i = 0; i < model.Questions.Count; i++)
+        {
+            model.QuestionList.Add(new FeedbackFormQuestionListModel());
+        }
+
+        return model;
     }
 
     private static List<IFeedbackFormQuestionModel> MapQuestions(List<IFeedbackFormQuestion> questions)

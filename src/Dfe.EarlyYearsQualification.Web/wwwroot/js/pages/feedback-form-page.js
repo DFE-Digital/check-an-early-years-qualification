@@ -1,5 +1,10 @@
 $(document).ready(function () {
-    $(".govuk-radios__conditional").hide();
+    
+    if (!$('.additional-info-error').is(":visible")) {
+        // If there isn't any errors then hide the conditionals
+        $(".govuk-radios__conditional").hide();
+    }
+    
 
     $(".has__conditional__element").on('click', function () {
         $(this).siblings(".govuk-radios__conditional").show();
