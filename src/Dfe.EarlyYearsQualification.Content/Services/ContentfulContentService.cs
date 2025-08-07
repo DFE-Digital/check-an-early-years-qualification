@@ -346,6 +346,20 @@ public class ContentfulContentService(
         return feedbackFormPages.First();
     }
 
+    public async Task<FeedbackFormConfirmationPage?> GetFeedbackFormConfirmationPage()
+    {
+        var feedbackFormConfirmationPage = await GetEntriesByType<FeedbackFormConfirmationPage>();
+
+        // ReSharper disable once InvertIf
+        if (feedbackFormConfirmationPage is null || !feedbackFormConfirmationPage.Any())
+        {
+            Logger.LogWarning("No 'Feedback form confirmation page' returned");
+            return null;
+        }
+
+        return feedbackFormConfirmationPage.First();
+    }
+
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(
         int startDateMonth, int startDateYear,
         List<CannotFindQualificationPage> cannotFindQualificationPages)

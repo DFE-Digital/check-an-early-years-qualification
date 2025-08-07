@@ -1224,6 +1224,40 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
+    
+    [TestMethod]
+    public async Task GetFeedbackFormConfirmationPage_ReturnsData()
+    {
+        var data = new FeedbackFormConfirmationPage { SuccessMessage = "Test message" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<FeedbackFormConfirmationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<FeedbackFormConfirmationPage> { Items = [data] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetFeedbackFormConfirmationPage();
+
+        result.Should().Be(data);
+    }
+
+    [TestMethod]
+    public async Task GetFeedbackFormConfirmationPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<FeedbackFormConfirmationPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<FeedbackFormConfirmationPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetFeedbackFormConfirmationPage();
+
+        result.Should().BeNull();
+    }
 }
 
 public class ContentfulContentServiceTestsBase<T>

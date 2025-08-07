@@ -51,4 +51,6 @@ public interface IContentService
     Task<Footer?> GetFooter();
     
     Task<FeedbackFormPage?> GetFeedbackFormPage();
+    
+    Task<FeedbackFormConfirmationPage?> GetFeedbackFormConfirmationPage();
 }
