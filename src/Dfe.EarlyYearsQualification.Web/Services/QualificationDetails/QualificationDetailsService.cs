@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RatioRequirements;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -16,7 +17,8 @@ public class QualificationDetailsService(
     IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IGovUkContentParser contentParser,
-    IUserJourneyCookieService userJourneyCookieService
+    IUserJourneyCookieService userJourneyCookieService,
+    IPlaceholderUpdater placeholderUpdater
 ) : IQualificationDetailsService
 {
     public async Task<Qualification?> GetQualification(string qualificationId)
@@ -197,13 +199,17 @@ public class QualificationDetailsService(
             userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() &&
             qualification.QualificationLevel > 2)
         {
+            // This is needed to preserve the Not Full and Relevant messaging as changing the L2 status below makes it F&R 
+            model.RatioRequirements.OverrideToBeNotFullAndRelevant = true;
+            
             // If the qualification is above a level 2 qualification, is not full and relevant and is started between Sept 2014 and Aug 2019
-            // then it will have special requirements for level 2.
-            model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.FurtherActionRequired;
+            // then policy have confirmed it can be automatically approved at L2
+            model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.Approved;
             var requirementsForLevel2 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForLevel2BetweenSept14AndAug19),
                                                                    RatioRequirements.Level2RatioRequirementName,
                                                                    qualification);
-            model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(requirementsForLevel2);
+            var parsedContent = await contentParser.ToHtml(requirementsForLevel2);
+            model.RatioRequirements.RequirementsForLevel2 = placeholderUpdater.Replace(parsedContent);
             model.RatioRequirements.ShowRequirementsForLevel2ByDefault = true;
         }
     }
@@ -496,6 +502,10 @@ public class QualificationDetailsService(
 
         switch (model.QualificationLevel)
         {
+            case >= 3 when wasStartedBetweenSeptember2014AndAugust2019 && model.RatioRequirements.OverrideToBeNotFullAndRelevant:
+                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
+                model.Content!.RatiosAdditionalInfoText = string.Empty;
+                break;
             case >= 3 when wasStartedBetweenSeptember2014AndAugust2019:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
                 model.Content!.RatiosAdditionalInfoText = await contentParser.ToHtml(content.RatiosTextL3Ebr);
