@@ -33,7 +33,7 @@ public class ContentfulContentService(
         var detailsPageType = ContentTypeLookup[typeof(DetailsPage)];
 
         var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(detailsPageType)
-                                                          .Include(2);
+                                                          .Include(3);
 
         var detailsPageEntries = await GetEntriesByType(queryBuilder);
         if (detailsPageEntries is null || !detailsPageEntries.Any())

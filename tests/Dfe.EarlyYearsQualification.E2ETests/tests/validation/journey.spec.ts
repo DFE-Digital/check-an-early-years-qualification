@@ -45,7 +45,6 @@ const yesAtQuestionTwo: AdditionalRequirement = {index: 2, answer: '#yes'};
 
 const approved = "Approved";
 const notApproved = "Not approved";
-const furtherActionRequired = "Further action required";
 const possibleRouteAvailable = "Possible route available";
 
 test.describe('A spec used to validate changes to the journey against actual data', {tag: "@validation"}, () => {
@@ -431,7 +430,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             noOfMatchingQualifications: 8,
             qualificationToSelect: 'EYQ-224',
             ratioForUnqualified: approved,
-            ratioForLevel2: furtherActionRequired,
+            ratioForLevel2: approved,
             ratioForLevel3: possibleRouteAvailable,
             ratioForLevel6: notApproved,
             additionalRequirements: [noAtQuestionOne]
