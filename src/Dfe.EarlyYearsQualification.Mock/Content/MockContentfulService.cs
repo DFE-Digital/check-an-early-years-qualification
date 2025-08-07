@@ -597,6 +597,16 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+    public Task<FeedbackFormPage?> GetFeedbackFormPage()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<FeedbackFormConfirmationPage?> GetFeedbackFormConfirmationPage()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<StartPage?> GetStartPage()
     {
         var preCtaButtonContent =

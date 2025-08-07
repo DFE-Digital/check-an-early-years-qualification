@@ -16,6 +16,7 @@ using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using Dfe.EarlyYearsQualification.Web.Services.Environments;
+using Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
 using Dfe.EarlyYearsQualification.Web.Services.HeadHandling;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
@@ -116,6 +117,7 @@ else
     builder.Services.SetupContentfulServices();
 }
 
+builder.Services.AddTransient<IFeedbackFormService, FeedbackFormService>();
 builder.Services.AddTransient<IQualificationDetailsService, QualificationDetailsService>();
 builder.Services.AddTransient<IQualificationSearchService, QualificationSearchService>();
 builder.Services.AddModelRenderers();
