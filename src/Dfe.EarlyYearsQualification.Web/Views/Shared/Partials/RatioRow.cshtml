@@ -2,10 +2,10 @@
 
 <div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h3 class="govuk-summary-card__title govuk-!-width-one-half govuk-!-margin-0 govuk-!-padding-0 ratio-heading" id="@{@Model.LevelText}_heading">
+        <h3 class="govuk-summary-card__title govuk-!-width-one-third govuk-!-margin-0 govuk-!-padding-0 ratio-heading" id="@{@Model.LevelText}_heading">
             @Model.LevelText
         </h3>
-        <div class="govuk-!-width-one-half govuk-!-margin-0 govuk-!-padding-0 text-align-right" id="ratio-@Model.RatioId-tag">
+        <div class="govuk-!-width-two-third govuk-!-margin-0 govuk-!-padding-0 text-align-right" id="ratio-@Model.RatioId-tag">
             @switch (Model.ApprovalStatus)
             {
                 case QualificationApprovalStatus.Approved:

@@ -82,6 +82,18 @@ body {
     display: inline-block;
 }
 
+.govuk-\!-width-one-third {
+    width: 29% !important;
+    padding: 0 15px;
+    display: inline-block;
+}
+
+.govuk-\!-width-two-third {
+    width: 69% !important;
+    padding: 0 15px;
+    display: inline-block;
+}
+
 .tag-padding-right {
     padding-right: 10px;
 }
