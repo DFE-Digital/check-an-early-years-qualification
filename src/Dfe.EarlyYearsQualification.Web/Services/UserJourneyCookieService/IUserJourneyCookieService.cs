@@ -32,4 +32,6 @@ public interface IUserJourneyCookieService
     bool WasAwardedBeforeSeptember2014();
     bool WasAwardedOnOrAfterSeptember2014();
     bool WasAwardedBetweenSeptember2014AndMay2016();
+    void SetHasSubmittedEmailAddressInFeedbackFormQuestion(bool hasSubmittedEmailAddress);
+    bool GetHasSubmittedEmailAddressInFeedbackFormQuestion();
 }

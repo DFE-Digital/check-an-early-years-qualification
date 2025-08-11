@@ -12,7 +12,6 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/give-feedback")]
 public class GiveFeedbackController(
-    ILogger<GiveFeedbackController> logger,
     IContentService contentService,
     IGovUkContentParser contentParser,
     IFeedbackFormService feedbackFormService,
@@ -67,8 +66,7 @@ public class GiveFeedbackController(
                                                await contentParser.ToHtml(feedbackFormConfirmationPage!.Body),
                                                await contentParser.ToHtml(feedbackFormConfirmationPage.OptionalEmailBody));
         
-        // TODO: need to get this value to be set based on whether or not they submitted an email?
-        model.ShowOptionalSection = true;
+        model.ShowOptionalSection = userJourneyCookieService.GetHasSubmittedEmailAddressInFeedbackFormQuestion();
         return View(model);
     }
 }

@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
 
-public class FeedbackFormService : IFeedbackFormService
+public class FeedbackFormService(IUserJourneyCookieService userJourneyCookieService) : IFeedbackFormService
 {
     public ErrorSummaryModel ValidateQuestions(FeedbackFormPage feedbackFormPage, FeedbackFormPageModel model)
     {
@@ -90,7 +92,7 @@ public class FeedbackFormService : IFeedbackFormService
         }
     }
 
-    private static void ValidateRadioAndInputQuestion(FeedbackFormQuestionRadioAndInput? question,
+    private void ValidateRadioAndInputQuestion(FeedbackFormQuestionRadioAndInput? question,
                                                       ErrorSummaryModel errorSummaryModel,
                                                       FeedbackFormQuestionListModel answeredQuestion,
                                                       int answeredQuestionIndex)
@@ -119,6 +121,17 @@ public class FeedbackFormService : IFeedbackFormService
                 SetErrorOnAnsweredQuestion(answeredQuestion, question.ErrorMessageForInvalidEmailFormat);
                 AddErrorMessageToModel(errorSummaryModel, question.ErrorMessageForInvalidEmailFormat,
                                        $"{answeredQuestionIndex}_additionalInfo");
+            }
+
+            if (question.Sys.Id == FeedbackFormQuestions.WouldYouLikeToBeContactedAboutResearch 
+                && answeredQuestion.Answer == firstRadioOption.Value
+                && !string.IsNullOrEmpty(answeredQuestion.AdditionalInfo))
+            {
+                userJourneyCookieService.SetHasSubmittedEmailAddressInFeedbackFormQuestion(true);
+            }
+            else
+            {
+                userJourneyCookieService.SetHasSubmittedEmailAddressInFeedbackFormQuestion(false);
             }
         }
     }
