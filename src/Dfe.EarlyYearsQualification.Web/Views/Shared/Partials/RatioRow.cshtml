@@ -31,12 +31,12 @@
             }
         </div>
     </div>
-    @if (!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody))
+    @if (!string.IsNullOrEmpty(Model.SummaryCardBody))
     {
         <div class="govuk-summary-card__content" id="ratio-@Model.RatioId-additional-info">
             <div class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
-                    @Html.Raw(Model.AdditionalInformation.AdditionalInformationBody)
+                    @Html.Raw(Model.SummaryCardBody)
                 </div>
             </div>
         </div>
