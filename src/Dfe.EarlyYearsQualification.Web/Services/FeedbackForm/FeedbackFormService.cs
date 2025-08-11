@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -12,7 +13,7 @@ public class FeedbackFormService : IFeedbackFormService
         var errorSummaryModel = new ErrorSummaryModel
                                 {
                                     ErrorBannerHeading = feedbackFormPage.ErrorBannerHeading,
-                                    ErrorSummaryLinks = new List<ErrorSummaryLink>()
+                                    ErrorSummaryLinks = []
                                 };
 
         var mandatoryQuestions =
@@ -45,6 +46,27 @@ public class FeedbackFormService : IFeedbackFormService
         }
 
         return errorSummaryModel;
+    }
+
+    public string ConvertQuestionListToString(FeedbackFormPageModel model)
+    {
+        var sb = new StringBuilder();
+
+        foreach (var question in model.QuestionList)
+        {
+            // Uses markdown to create a heading
+            sb.AppendLine($"## {question.Question}");
+            sb.AppendLine(question.Answer);
+            if (!string.IsNullOrWhiteSpace(question.AdditionalInfo))
+            {
+                sb.AppendLine(question.AdditionalInfo);
+            }
+            // Creates a horizontal rule between questions
+            sb.AppendLine();
+            sb.AppendLine("---");
+        }
+
+        return sb.ToString();
     }
 
     private static void ValidateTextAreaQuestion(FeedbackFormQuestionTextArea? question, ErrorSummaryModel errorSummaryModel,

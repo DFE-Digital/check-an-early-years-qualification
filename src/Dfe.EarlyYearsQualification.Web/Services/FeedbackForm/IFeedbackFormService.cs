@@ -7,4 +7,6 @@ namespace Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
 public interface IFeedbackFormService
 {
     ErrorSummaryModel ValidateQuestions(FeedbackFormPage feedbackFormPage, FeedbackFormPageModel model);
+    
+    string ConvertQuestionListToString(FeedbackFormPageModel model);
 }

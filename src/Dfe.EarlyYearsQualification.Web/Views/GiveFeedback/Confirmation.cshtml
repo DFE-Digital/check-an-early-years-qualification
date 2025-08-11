@@ -15,7 +15,7 @@
         @if (Model.ShowOptionalSection)
         {
             <h2 class="govuk-heading-m govuk-!-margin-top-4" id="optional-body-heading">@Model.OptionalEmailHeading</h2>
-            <div class="govuk-body" id="optional-confirmation-body">@Html.Raw(Model.Body)</div>
+            <div class="govuk-body" id="optional-confirmation-body">@Html.Raw(Model.OptionalEmailBody)</div>
         }
         @{
             var link = Model.ReturnToHomepageLink;

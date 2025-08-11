@@ -10,22 +10,42 @@ public class GovUkNotifyService(
     IOptions<NotificationOptions> notificationOptions, 
     INotificationClient client) : INotificationService
 {
-    public void SendFeedbackNotification(FeedbackNotification feedbackNotification)
+    public void SendHelpPageNotification(HelpPageNotification helpPageNotification)
     {
         try
         {
             var options = notificationOptions.Value;
             var subjectPrefix = options.IsTestEnvironment ? "TEST - " : string.Empty;
-            var emailAddress = feedbackNotification.EmailAddress ?? "Not supplied";
+            var emailAddress = helpPageNotification.EmailAddress ?? "Not supplied";
             var personalisation = new Dictionary<string, dynamic>
                                   {
-                                      { "subject", $"{subjectPrefix}{feedbackNotification.Subject}" },
-                                      { "selected_option", feedbackNotification.Subject },
+                                      { "subject", $"{subjectPrefix}{helpPageNotification.Subject}" },
+                                      { "selected_option", helpPageNotification.Subject },
                                       { "email_address", emailAddress },
-                                      { "message", feedbackNotification.Message }
+                                      { "message", helpPageNotification.Message }
                                   };
         
-            client.SendEmail(options.Feedback.EmailAddress, options.Feedback.TemplateId, personalisation);
+            client.SendEmail(options.HelpPageForm.EmailAddress, options.HelpPageForm.TemplateId, personalisation);
+        }
+        catch (NotifyClientException exception)
+        {
+            logger.LogError("Error thrown from GovUKNotifyService: {Message}", exception.Message);
+        }
+    }
+
+    public void SendEmbeddedFeedbackFormNotification(EmbeddedFeedbackFormNotification embeddedFeedbackFormNotification)
+    {
+        try
+        {
+            var options = notificationOptions.Value;
+            var subjectPrefix = options.IsTestEnvironment ? "TEST - " : string.Empty;
+            var personalisation = new Dictionary<string, dynamic>
+                                  {
+                                      { "subject", $"{subjectPrefix}Feedback form submission" },
+                                      { "message", embeddedFeedbackFormNotification.Message }
+                                  };
+        
+            client.SendEmail(options.EmbeddedFeedbackForm.EmailAddress, options.EmbeddedFeedbackForm.TemplateId, personalisation);
         }
         catch (NotifyClientException exception)
         {

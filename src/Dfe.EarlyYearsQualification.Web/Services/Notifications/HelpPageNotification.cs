@@ -1,6 +1,6 @@
 namespace Dfe.EarlyYearsQualification.Web.Services.Notifications;
 
-public class FeedbackNotification
+public class HelpPageNotification
 {
     public string Subject { get; init; } = string.Empty;
 

@@ -6,5 +6,7 @@ public class NotificationOptions
     
     public bool IsTestEnvironment { get; init; }
 
-    public Feedback Feedback { get; init; } = new();
+    public NotificationData HelpPageForm { get; init; } = new NotificationData();
+    
+    public NotificationData EmbeddedFeedbackForm { get; init; } = new NotificationData();
 }

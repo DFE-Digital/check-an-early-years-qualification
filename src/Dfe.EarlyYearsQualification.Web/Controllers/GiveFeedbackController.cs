@@ -1,10 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers;
-using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
@@ -53,8 +50,9 @@ public class GiveFeedbackController(
             mappedModel.QuestionList = model.QuestionList; 
             return View("Get", mappedModel);
         }
-
-        // TODO: send email through Notify
+        
+        var message = feedbackFormService.ConvertQuestionListToString(model);
+        notificationService.SendEmbeddedFeedbackFormNotification(new EmbeddedFeedbackFormNotification{ Message = message });
 
         return RedirectToAction("Confirmation");
     }
