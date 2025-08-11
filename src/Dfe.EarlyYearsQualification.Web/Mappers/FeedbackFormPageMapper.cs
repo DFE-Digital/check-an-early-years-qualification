@@ -53,7 +53,8 @@ public static class FeedbackFormPageMapper
         return new FeedbackFormQuestionTextAreaModel
                {
                    Question = question!.Question,
-                   HintText = question.HintText
+                   HintText = question.HintText,
+                   ErrorMessage = question.ErrorMessage
                };
     }
 
@@ -63,6 +64,8 @@ public static class FeedbackFormPageMapper
                {
                    Question = question!.Question,
                    OptionsItems = OptionItemMapper.Map(question.Options),
+                   ErrorMessage = question.ErrorMessage,
+                   ErrorMessageForInput = question.ErrorMessageForInput,
                    InputHeading = question.InputHeading,
                    InputHeadingHintText = question.InputHeadingHintText
                };
