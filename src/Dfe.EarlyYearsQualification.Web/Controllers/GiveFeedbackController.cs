@@ -23,10 +23,10 @@ public class GiveFeedbackController(
     public async Task<IActionResult> Get()
     {
         var feedbackFormPage = await contentService.GetFeedbackFormPage();
-        if (feedbackFormPage is null) RedirectToAction("Index", "Error");
+        if (feedbackFormPage == null) return RedirectToAction("Index", "Error");
 
-        var model = FeedbackFormPageMapper.Map(feedbackFormPage!,
-                                               await contentParser.ToHtml(feedbackFormPage!.PostHeadingContent));
+        var model = FeedbackFormPageMapper.Map(feedbackFormPage,
+                                               await contentParser.ToHtml(feedbackFormPage.PostHeadingContent));
         return View(model);
     }
 
@@ -35,15 +35,15 @@ public class GiveFeedbackController(
     {
         // Get the page content
         var feedbackFormPage = await contentService.GetFeedbackFormPage();
-        if (feedbackFormPage is null) RedirectToAction("Index", "Error");
+        if (feedbackFormPage == null) return RedirectToAction("Index", "Error");
 
         // Ensure that mandatory questions have been answered
-        var errorSummaryModel = feedbackFormService.ValidateQuestions(feedbackFormPage!, model);
+        var errorSummaryModel = feedbackFormService.ValidateQuestions(feedbackFormPage, model);
 
         if (errorSummaryModel.ErrorSummaryLinks.Count != 0)
         {
-            var mappedModel = FeedbackFormPageMapper.Map(feedbackFormPage!,
-                                                         await contentParser.ToHtml(feedbackFormPage!.PostHeadingContent));
+            var mappedModel = FeedbackFormPageMapper.Map(feedbackFormPage,
+                                                         await contentParser.ToHtml(feedbackFormPage.PostHeadingContent));
             mappedModel.HasError = true;
             mappedModel.ErrorSummaryModel = errorSummaryModel;
             mappedModel.QuestionList = model.QuestionList; 
@@ -60,10 +60,10 @@ public class GiveFeedbackController(
     public async Task<IActionResult> Confirmation()
     {
         var feedbackFormConfirmationPage = await contentService.GetFeedbackFormConfirmationPage();
-        if (feedbackFormConfirmationPage is null) RedirectToAction("Index", "Error");
+        if (feedbackFormConfirmationPage == null) return RedirectToAction("Index", "Error");
 
-        var model = FeedbackFormConfirmationPageMapper.Map(feedbackFormConfirmationPage!,
-                                               await contentParser.ToHtml(feedbackFormConfirmationPage!.Body),
+        var model = FeedbackFormConfirmationPageMapper.Map(feedbackFormConfirmationPage,
+                                               await contentParser.ToHtml(feedbackFormConfirmationPage.Body),
                                                await contentParser.ToHtml(feedbackFormConfirmationPage.OptionalEmailBody));
         
         model.ShowOptionalSection = userJourneyCookieService.GetHasSubmittedEmailAddressInFeedbackFormQuestion();
