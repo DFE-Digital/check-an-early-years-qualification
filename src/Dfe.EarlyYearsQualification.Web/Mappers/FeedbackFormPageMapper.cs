@@ -17,10 +17,7 @@ public static class FeedbackFormPageMapper
                    Questions = MapQuestions(feedbackFormPage.Questions)
                };
         
-        for (int i = 0; i < model.Questions.Count; i++)
-        {
-            model.QuestionList.Add(new FeedbackFormQuestionListModel());
-        }
+        model.Questions.ForEach(_ => model.QuestionList.Add(new FeedbackFormQuestionListModel()));
 
         return model;
     }
@@ -48,7 +45,7 @@ public static class FeedbackFormPageMapper
         return results;
     }
 
-    private static IFeedbackFormQuestionModel MapTextAreaQuestion(FeedbackFormQuestionTextArea? question)
+    private static FeedbackFormQuestionTextAreaModel MapTextAreaQuestion(FeedbackFormQuestionTextArea? question)
     {
         return new FeedbackFormQuestionTextAreaModel
                {
@@ -58,7 +55,7 @@ public static class FeedbackFormPageMapper
                };
     }
 
-    private static IFeedbackFormQuestionModel MapRadioAndInputQuestion(FeedbackFormQuestionRadioAndInput? question)
+    private static FeedbackFormQuestionRadioAndInputModel MapRadioAndInputQuestion(FeedbackFormQuestionRadioAndInput? question)
     {
         return new FeedbackFormQuestionRadioAndInputModel
                {
@@ -71,7 +68,7 @@ public static class FeedbackFormPageMapper
                };
     }
 
-    private static IFeedbackFormQuestionModel MapRadioQuestion(FeedbackFormQuestionRadio? question)
+    private static FeedbackFormQuestionRadioModel MapRadioQuestion(FeedbackFormQuestionRadio? question)
     {
         return new FeedbackFormQuestionRadioModel
                {

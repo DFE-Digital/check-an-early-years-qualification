@@ -54,6 +54,8 @@ public class FeedbackFormPageMapperTests
         question2.InputHeading.Should().Match((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.InputHeading);
         question2.InputHeadingHintText.Should().Match((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.InputHeadingHintText);
         question2.OptionsItems.Count.Should().Be((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.Options.Count);
+        
+        result.QuestionList.Should().HaveCount(3);
     }
 
     private static List<IFeedbackFormQuestion> AddQuestions()
