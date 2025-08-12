@@ -7,9 +7,9 @@ public class RatioRequirementModel
     public QualificationApprovalStatus ApprovedForLevel3 { get; set; }
 
     public QualificationApprovalStatus ApprovedForLevel6 { get; set; }
-
+    
     public QualificationApprovalStatus ApprovedForUnqualified { get; set; }
-
+    
     public bool OverrideToBeNotFullAndRelevant { get; set; }
 
     public bool IsNotFullAndRelevant
@@ -33,6 +33,7 @@ public class RatioRequirementModel
     public string RequirementsForLevel3 { get; set; } = string.Empty;
 
     public bool ShowRequirementsForLevel3ByDefault { get; set; }
+    
     public string RequirementsHeadingForLevel6 { get; set; } = string.Empty;
 
     public string RequirementsForLevel6 { get; set; } = string.Empty;

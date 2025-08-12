@@ -47,4 +47,6 @@ public interface IQualificationDetailsService
     void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPage content);
     
     Task SetRequirementOverrides(Qualification qualification, QualificationDetailsModel model);
+    
+    Task SetDefaultCardContentForApprovedQualifications(Qualification qualification, QualificationDetailsModel model);
 }

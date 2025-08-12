@@ -35,7 +35,6 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
         await checkText(page, "#additional-requirement-1-value", "No");
         await checkText(page, "#date-of-check-label", "Test Date Of Check Label");
         await checkText(page, "#ratio-heading", "Test ratio heading");
-        await checkText(page, "#ratio-heading + p[class='govuk-body']", "This is the ratio text requirements");
         await checkText(page, "#requirements-heading", "Test requirements heading");
         await checkText(page, "#requirements-heading + p[class='govuk-body']", "This is the requirements text");
         await checkText(page, "#check-another-qualification-link", "Check another qualification");
