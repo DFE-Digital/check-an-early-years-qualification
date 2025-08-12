@@ -1492,34 +1492,7 @@ public class UserJourneyCookieServiceTests
 
         service.WasAwardedOnOrAfterSeptember2014().Should().BeTrue();
     }
-
-    private static (Mock<ICookieManager> cookieManager, Dictionary<string, string> cookies)
-        SetCookieManagerWithExistingCookie(
-            UserJourneyCookieService.UserJourneyModel? model)
-    {
-        var serializedModel = JsonSerializer.Serialize(model);
-
-        var mockManager = new Mock<ICookieManager>();
-
-        var cookiesReceived = new Dictionary<string, string>();
-
-        if (model != null)
-        {
-            cookiesReceived.Add(CookieKeyNames.UserJourneyKey, serializedModel);
-        }
-
-        mockManager.Setup(m => m.ReadInboundCookies())
-                   .Returns(cookiesReceived);
-
-        var cookiesReturned = new Dictionary<string, string>();
-
-        mockManager.Setup(m => m.SetOutboundCookie(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CookieOptions>()))
-                   .Callback((string key, string value, CookieOptions _) => cookiesReturned[key] = value)
-                   .Verifiable();
-
-        return (mockManager, cookiesReturned);
-    }
-
+    
     [TestMethod]
     [DataRow("")]
     [DataRow("4")]
@@ -1579,6 +1552,42 @@ public class UserJourneyCookieServiceTests
         service.WasAwardedBetweenSeptember2014AndMay2016().Should().BeTrue();
     }
 
+    [TestMethod]
+    public void SetHasSubmittedEmailAddressInFeedbackFormQuestion_SetsValue()
+    {
+        var modelInCookie = new UserJourneyCookieService.UserJourneyModel();
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.SetHasSubmittedEmailAddressInFeedbackFormQuestion(true);
+
+        var model = new UserJourneyCookieService.UserJourneyModel
+                    {
+                        HasSubmittedEmailAddressInFeedbackFormQuestion = true
+                    };
+
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
+    }
+
+    [TestMethod]
+    public void SetHasSubmittedEmailAddressInFeedbackFormQuestion_ModelValueIsTrue()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                HasSubmittedEmailAddressInFeedbackFormQuestion = true
+                            };
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var modelValue = service.GetHasSubmittedEmailAddressInFeedbackFormQuestion();
+
+        modelValue.Should().BeTrue();
+    }
+
     private static void CheckSerializedModelWasSet(
         (Mock<ICookieManager> mockContext, Dictionary<string, string> cookies) cookies,
         UserJourneyCookieService.UserJourneyModel expectedModel)
@@ -1602,5 +1611,32 @@ public class UserJourneyCookieServiceTests
                                                                         && options.Expires < in30Minutes)
                                               ),
                        Times.Once);
+    }
+    
+    private static (Mock<ICookieManager> cookieManager, Dictionary<string, string> cookies)
+        SetCookieManagerWithExistingCookie(
+            UserJourneyCookieService.UserJourneyModel? model)
+    {
+        var serializedModel = JsonSerializer.Serialize(model);
+
+        var mockManager = new Mock<ICookieManager>();
+
+        var cookiesReceived = new Dictionary<string, string>();
+
+        if (model != null)
+        {
+            cookiesReceived.Add(CookieKeyNames.UserJourneyKey, serializedModel);
+        }
+
+        mockManager.Setup(m => m.ReadInboundCookies())
+                   .Returns(cookiesReceived);
+
+        var cookiesReturned = new Dictionary<string, string>();
+
+        mockManager.Setup(m => m.SetOutboundCookie(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CookieOptions>()))
+                   .Callback((string key, string value, CookieOptions _) => cookiesReturned[key] = value)
+                   .Verifiable();
+
+        return (mockManager, cookiesReturned);
     }
 }
