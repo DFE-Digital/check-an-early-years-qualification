@@ -12,40 +12,34 @@ public class GovUkNotifyService(
 {
     public void SendHelpPageNotification(HelpPageNotification helpPageNotification)
     {
-        try
-        {
-            var options = notificationOptions.Value;
-            var subjectPrefix = options.IsTestEnvironment ? "TEST - " : string.Empty;
-            var emailAddress = helpPageNotification.EmailAddress ?? "Not supplied";
-            var personalisation = new Dictionary<string, dynamic>
-                                  {
-                                      { "subject", $"{subjectPrefix}{helpPageNotification.Subject}" },
-                                      { "selected_option", helpPageNotification.Subject },
-                                      { "email_address", emailAddress },
-                                      { "message", helpPageNotification.Message }
-                                  };
-        
-            client.SendEmail(options.HelpPageForm.EmailAddress, options.HelpPageForm.TemplateId, personalisation);
-        }
-        catch (NotifyClientException exception)
-        {
-            logger.LogError("Error thrown from GovUKNotifyService: {Message}", exception.Message);
-        }
+        var emailAddress = helpPageNotification.EmailAddress ?? "Not supplied";
+        var personalisation = new Dictionary<string, dynamic>
+                              {
+                                  { "selected_option", helpPageNotification.Subject },
+                                  { "email_address", emailAddress },
+                                  { "message", helpPageNotification.Message }
+                              };
+        SendEmail(notificationOptions.Value.HelpPageForm, personalisation, helpPageNotification.Subject);
     }
 
     public void SendEmbeddedFeedbackFormNotification(EmbeddedFeedbackFormNotification embeddedFeedbackFormNotification)
+    {
+        var personalisation = new Dictionary<string, dynamic>
+        {
+            { "message", embeddedFeedbackFormNotification.Message }
+        };
+        SendEmail(notificationOptions.Value.EmbeddedFeedbackForm, personalisation, "Feedback form submission");
+    }
+
+    private void SendEmail(NotificationData notificationData, Dictionary<string, dynamic> personalisation, string subject)
     {
         try
         {
             var options = notificationOptions.Value;
             var subjectPrefix = options.IsTestEnvironment ? "TEST - " : string.Empty;
-            var personalisation = new Dictionary<string, dynamic>
-                                  {
-                                      { "subject", $"{subjectPrefix}Feedback form submission" },
-                                      { "message", embeddedFeedbackFormNotification.Message }
-                                  };
+            personalisation.Add("subject", $"{subjectPrefix}{subject}");
         
-            client.SendEmail(options.EmbeddedFeedbackForm.EmailAddress, options.EmbeddedFeedbackForm.TemplateId, personalisation);
+            client.SendEmail(notificationData.EmailAddress, notificationData.TemplateId, personalisation);
         }
         catch (NotifyClientException exception)
         {
