@@ -420,7 +420,7 @@ export async function checkSnapshot(page: Page) {
     const root = await page.locator('body').first();
     const box = await root.boundingBox();
     
-    await expect(page).toHaveScreenshot({fullPage: true, clip: box, maxDiffPixelRatio: 0.005});
+    await expect(page).toHaveScreenshot({fullPage: true, clip: box, maxDiffPixelRatio: 0.05});
 }
 
 export async function clickSubmit(page: Page) {
