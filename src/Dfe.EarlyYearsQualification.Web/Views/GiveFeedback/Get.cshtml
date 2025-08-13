@@ -26,7 +26,7 @@
 
         <h1 id="feedback-page-heading" class="govuk-heading-xl">@Model.Heading</h1>
         <div id="feedback-page-body" class="govuk-body">
-            <div class="govuk-!-margin-bottom-6">
+            <div class="govuk-!-margin-bottom-6" id="post-heading-content">
                 @Html.Raw(Model.PostHeadingContent)
             </div>
             @using (Html.BeginForm("Post", "GiveFeedback", FormMethod.Post, new { id = "feedback-form" }))
@@ -34,6 +34,7 @@
                 @for (var questionIndex = 0; questionIndex < Model.Questions.Count; questionIndex++)
                 {
                     var question = Model.Questions[questionIndex];
+                    var questionId = $"{questionIndex}_question";
                     <div class="govuk-!-margin-bottom-6">
                         @if (question.GetType() == typeof(FeedbackFormQuestionRadioModel))
                         {
@@ -42,7 +43,7 @@
                                    value="@questionData!.Question"/>
                             <div
                                 class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m">@questionData.Question</h2>
+                                <h2 class="govuk-heading-m" id="@questionId">@questionData.Question</h2>
                                 <div class="govuk-radios" data-module="govuk-radios">
                                     @foreach (var option in questionData.OptionsItems)
                                     {
@@ -51,7 +52,8 @@
                                         var radioButtonId = $"{questionIndex}_{optionModel.Value}";
                                         if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == radioButtonId))
                                         {
-                                            <p class="govuk-error-message">
+                                            var errorId = $"{questionId}_error-message";
+                                            <p class="govuk-error-message" id="@errorId">
                                                 <span
                                                     class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
                                             </p>
@@ -81,7 +83,7 @@
                                    value="@questionData!.Question"/>
                             <div
                                 class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m">@questionData.Question</h2>
+                                <h2 class="govuk-heading-m" id="@questionId">@questionData.Question</h2>
                                 @if (!string.IsNullOrEmpty(questionData.HintText))
                                 {
                                     var hintId = $"textarea_{questionIndex}_hint";
@@ -93,7 +95,8 @@
                                 @{ var textAreaId = $"{questionIndex}_textArea"; }
                                 @if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == textAreaId))
                                 {
-                                    <p class="govuk-error-message">
+                                    var errorId = $"{questionId}_error-message";
+                                    <p class="govuk-error-message" id="@errorId">
                                         <span
                                             class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
                                     </p>
@@ -108,7 +111,7 @@
                                    value="@questionData!.Question"/>
                             <div
                                 class="govuk-form-group @(Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ErrorBannerLinkText == Model.QuestionList[questionIndex].ErrorMessage && !x.ElementLinkId.Contains("additionalInfo")) ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m">@questionData.Question</h2>
+                                <h2 class="govuk-heading-m" id="@questionId">@questionData.Question</h2>
                                 <div class="govuk-radios" data-module="govuk-radios">
                                     @for (var optionIndex = 0; optionIndex < questionData.OptionsItems.Count; optionIndex++)
                                     {
@@ -118,7 +121,8 @@
                                         var conditionalElementClass = optionIndex == 0 ? "has__conditional__element" : "has__no__conditional__element";
                                         if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == radioButtonId))
                                         {
-                                            <p class="govuk-error-message">
+                                            var errorId = $"{questionId}_error-message";
+                                            <p class="govuk-error-message" id="@errorId">
                                                 <span
                                                     class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
                                             </p>
@@ -155,7 +159,8 @@
                                                         }
                                                         @if (additionalInfoHasError)
                                                         {
-                                                            <p class="govuk-error-message additional-info-error">
+                                                            var errorId = $"{questionId}_error-message-additional-info";
+                                                            <p class="govuk-error-message additional-info-error" id="@errorId">
                                                                 <span
                                                                     class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
                                                             </p>

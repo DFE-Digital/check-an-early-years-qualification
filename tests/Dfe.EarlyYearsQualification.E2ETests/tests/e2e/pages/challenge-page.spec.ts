@@ -22,7 +22,7 @@ test.describe('A spec that tests the challenge page', {tag: "@e2e"}, () => {
         await clickSubmit(page);
 
         await exists(page, "#error-banner");
-        await checkText(page, '#error-banner-link', "Test Missing Password Text");
+        await checkText(page, '#error-banner-link-PasswordValue', "Test Missing Password Text");
         await checkError(page, '#error-message', "Test Missing Password Text");
     });
 
@@ -34,7 +34,7 @@ test.describe('A spec that tests the challenge page', {tag: "@e2e"}, () => {
         await clickSubmit(page);
 
         await exists(page, "#error-banner");
-        await checkText(page, '#error-banner-link', "Test Incorrect Password Text");
+        await checkText(page, '#error-banner-link-PasswordValue', "Test Incorrect Password Text");
         await checkError(page, '#error-message', "Test Incorrect Password Text");
     });
 
