@@ -414,13 +414,8 @@ export async function checkRatiosHeading(page: Page, heading: string, body?: str
 }
 
 export async function checkSnapshot(page: Page) {
-    await page.setViewportSize({width: 2000, height: 3531});
-
-    // Get body element and clip it
-    const root = await page.locator('body').first();
-    const box = await root.boundingBox();
-    
-    await expect(page).toHaveScreenshot({fullPage: false, clip: box, maxDiffPixelRatio: 0.05});
+    await page.setViewportSize({width: 2000, height: 2000});
+    await expect(page).toHaveScreenshot({fullPage: true, maxDiffPixelRatio: 0.05});
 }
 
 export async function clickSubmit(page: Page) {
