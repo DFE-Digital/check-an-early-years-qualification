@@ -59,7 +59,7 @@ public static class SecureHeaderConfiguration
         var clarityCspElement = new ContentSecurityPolicyElement
                                 {
                                     CommandType = CspCommandType.Uri,
-                                    DirectiveOrUri = "https://www.clarity.ms/ https://c.bing.com"
+                                    DirectiveOrUri = "https://*.clarity.ms https://c.bing.com"
                                 };
 
         var clarityConnectSourceCspElement = new ContentSecurityPolicyElement
