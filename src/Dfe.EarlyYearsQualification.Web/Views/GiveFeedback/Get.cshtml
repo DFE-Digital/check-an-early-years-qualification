@@ -26,7 +26,7 @@
 
         <h1 id="feedback-page-heading" class="govuk-heading-xl">@Model.Heading</h1>
         <div id="feedback-page-body" class="govuk-body">
-            <div class="govuk-!-margin-bottom-6" id="post-heading-content">
+            <div class="govuk-!-margin-bottom-7" id="post-heading-content">
                 @Html.Raw(Model.PostHeadingContent)
             </div>
             @using (Html.BeginForm("Post", "GiveFeedback", FormMethod.Post, new { id = "feedback-form" }))
@@ -35,7 +35,7 @@
                 {
                     var question = Model.Questions[questionIndex];
                     var questionId = $"{questionIndex}_question";
-                    <div class="govuk-!-margin-bottom-6">
+                    <div class="govuk-!-margin-bottom-7">
                         @if (question.GetType() == typeof(FeedbackFormQuestionRadioModel))
                         {
                             var questionData = question as FeedbackFormQuestionRadioModel;
