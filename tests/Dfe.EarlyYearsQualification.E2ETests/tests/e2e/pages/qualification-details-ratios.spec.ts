@@ -35,6 +35,7 @@ const l3MustEnglish = "Level 3 must English";
 const l3MustEnglishMaybePFA = "Level 3 must English maybe PFA";
 const l3MustEnglishMustPFA = "Level 3 must English must PFA";
 const l6MustQTS = "Level 6 must QTS";
+const defaultRatioSummaryContent = "Summary card default content";
 
 test.describe("A spec used to test the qualification details page ratios", {tag: "@e2e"}, () => {
     test.beforeEach(async ({context}) => {
@@ -61,8 +62,8 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
         await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
         await checkRatiosHeading(page, "Test ratio heading");
 
-        await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {});
-        await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+        await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
         await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
         await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
     });
@@ -86,13 +87,12 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
         }, page);
 
         await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-        await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text maybe requirements");
+        await checkRatiosHeading(page, "Test ratio heading");
 
         await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {
-            summaryText: level2RequirementsHeading,
             detailText: l2MaybePFA
         });
-        await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
         await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
         await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
     });
@@ -115,13 +115,12 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
         }, page);
 
         await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-        await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text requirements");
+        await checkRatiosHeading(page, "Test ratio heading");
 
         await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {
-            summaryText: level2RequirementsHeading,
             detailText: l2MustPFA
         });
-        await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
         await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
         await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
     });
@@ -146,7 +145,7 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
         await checkDetailsInset(page, "Qualification result heading", "Not full and relevant", "Not full and relevant body");
         await checkRatiosHeading(page, "Test ratio heading", "This is not F&R");
 
-        await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
         await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.NotApproved, {});
         await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.NotApproved, {});
         await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
@@ -174,9 +173,9 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
             await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
             await checkRatiosHeading(page, "Test ratio heading");
 
-            await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {});
-            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {});
-            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
             await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
         });
 
@@ -200,14 +199,13 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 }, page);
 
                 await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-                await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text requirements");
+                await checkRatiosHeading(page, "Test ratio heading");
 
                 await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-                    summaryText: level3RequirementsHeading,
                     detailText: l3MustEnglish
                 });
-                await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {});
-                await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+                await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+                await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
             });
         });
@@ -230,17 +228,15 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
             }, page);
 
             await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-            await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text requirements");
+            await checkRatiosHeading(page, "Test ratio heading");
 
             await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-                summaryText: level3RequirementsHeading,
                 detailText: l3MustEnglishMaybePFA
             });
             await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-                summaryText: level2RequirementsHeading,
                 detailText: l2MaybePFA
             });
-            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
             await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
         });
 
@@ -263,17 +259,15 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
             }, page);
 
             await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-            await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text requirements");
+            await checkRatiosHeading(page, "Test ratio heading");
 
             await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-                summaryText: level3RequirementsHeading,
                 detailText: l3MustEnglishMustPFA
             });
             await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-                summaryText: level2RequirementsHeading,
                 detailText: l2MustPFA
             });
-            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
             await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
         });
 
@@ -298,7 +292,7 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkDetailsInset(page, "Qualification result heading", "Not full and relevant", "Not full and relevant body");
                 await checkRatiosHeading(page, "Test ratio heading", "This is not F&R", "This is the ratio text L3 EBR");
 
-                await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
+                await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
                 await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.NotApproved, {});
                 await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
@@ -327,9 +321,9 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkDetailsInset(page, "Qualification result heading", "Not full and relevant L3", "Not full and relevant L3 body");
                 await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19");
 
-                await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {detailText: l2ContactDfe});
-                await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
-                await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
+                await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, { detailText: l2ContactDfe });
+                await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+                await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, { detailText: l3Ebr });
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {});
             });
         });
@@ -356,10 +350,10 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
             await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
             await checkRatiosHeading(page, "Test ratio heading");
 
-            await checkLevelRatioDetails(page, 0, "Level 6", RatioStatus.Approved, {});
-            await checkLevelRatioDetails(page, 1, "Level 3", RatioStatus.Approved, {});
-            await checkLevelRatioDetails(page, 2, "Level 2", RatioStatus.Approved, {});
-            await checkLevelRatioDetails(page, 3, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 0, "Level 6", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+            await checkLevelRatioDetails(page, 1, "Level 3", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+            await checkLevelRatioDetails(page, 2, "Level 2", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+            await checkLevelRatioDetails(page, 3, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
         });
 
         test(`Checks level ${level} F&R (not QTS) awarded before September 2014 sees expected result`, async ({
@@ -382,9 +376,9 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
             await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
             await checkRatiosHeading(page, "Test ratio heading");
 
-            await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {});
-            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {});
-            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+            await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
             await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
         });
 
@@ -407,14 +401,13 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 }, page);
 
                 await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-                await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text requirements");
+                await checkRatiosHeading(page, "Test ratio heading");
 
                 await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-                    summaryText: level3RequirementsHeading,
                     detailText: l3MustEnglish
                 });
-                await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {});
-                await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+                await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+                await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
             });
         });
@@ -437,17 +430,15 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
             }, page);
 
             await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-            await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text requirements");
+            await checkRatiosHeading(page, "Test ratio heading");
 
             await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-                summaryText: level3RequirementsHeading,
                 detailText: l3MustEnglishMaybePFA
             });
             await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-                summaryText: level2RequirementsHeading,
                 detailText: l2MaybePFA
             });
-            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
             await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
         });
 
@@ -469,17 +460,15 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
             }, page);
 
             await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-            await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text requirements");
+            await checkRatiosHeading(page, "Test ratio heading");
 
             await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-                summaryText: level3RequirementsHeading,
                 detailText: l3MustEnglishMustPFA
             });
             await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-                summaryText: level2RequirementsHeading,
                 detailText: l2MustPFA
             });
-            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+            await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
             await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
         });
 
@@ -504,7 +493,7 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkDetailsInset(page, "Qualification result heading", "Not full and relevant", "Not full and relevant body");
                 await checkRatiosHeading(page, "Test ratio heading", "This is not F&R", "This is the ratio text L3 EBR");
 
-                await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, {});
+                await checkLevelRatioDetails(page, 0, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
                 await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.NotApproved, {});
                 await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
@@ -532,10 +521,10 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkDetailsInset(page, "Qualification result heading", "Not full and relevant L3 or L6", "Not full and relevant L3 or L6 body");
                 await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19");
 
-                await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, {detailText: l2ContactDfe});
-                await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, {});
-                await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, {detailText: l3Ebr});
-                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6MustQTS});
+                await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, { detailText: l2ContactDfe });
+                await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent });
+                await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, { detailText: l3Ebr });
+                await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, { detailText: l6MustQTS });
             });
         });
     });
@@ -559,17 +548,15 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
         }, page);
 
         await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-        await checkRatiosHeading(page, "Test ratio heading", "This is the ratio text requirements");
+        await checkRatiosHeading(page, "Test ratio heading");
 
         await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-            summaryText: level3RequirementsHeading,
             detailText: l3MustEnglishMustPFA
         });
         await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-            summaryText: level2RequirementsHeading,
             detailText: l2MustPFA
         });
-        await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, {});
+        await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent  });
         await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.PossibleRouteAvailable, { detailText: 'This is the EYITT content' });
     });
 });
