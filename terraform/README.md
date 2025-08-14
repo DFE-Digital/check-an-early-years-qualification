@@ -50,7 +50,6 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_contentful_preview_api_key"></a> [contentful\_preview\_api\_key](#input\_contentful\_preview\_api\_key) | Contentful preview API key | `string` | n/a | yes |
 | <a name="input_contentful_space_id"></a> [contentful\_space\_id](#input\_contentful\_space\_id) | Contentful space ID | `string` | n/a | yes |
 | <a name="input_contentful_use_preview_api"></a> [contentful\_use\_preview\_api](#input\_contentful\_use\_preview\_api) | Boolean used to set whether content is preview or published | `bool` | n/a | yes |
-| <a name="input_custom_domain_name"></a> [custom\_domain\_name](#input\_custom\_domain\_name) | Custom domain hostname for the education.gov.uk domain | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | `"development"` | no |
 | <a name="input_govuk_notify_api_key"></a> [govuk\_notify\_api\_key](#input\_govuk\_notify\_api\_key) | GovUK Notify API Key | `string` | n/a | yes |
 | <a name="input_gtm_tag"></a> [gtm\_tag](#input\_gtm\_tag) | The Google Analytics tag | `string` | `""` | no |
@@ -61,8 +60,10 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_kv_certificate_authority_username"></a> [kv\_certificate\_authority\_username](#input\_kv\_certificate\_authority\_username) | Username for the Certificate provider | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_label"></a> [kv\_service\_gov\_uk\_certificate\_label](#input\_kv\_service\_gov\_uk\_certificate\_label) | Label for the service.gov.uk certificate | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_certificate_subject"></a> [kv\_service\_gov\_uk\_certificate\_subject](#input\_kv\_service\_gov\_uk\_certificate\_subject) | Subject of the service.gov.uk certificate | `string` | n/a | yes |
-| <a name="input_notifications_feedback_email_address"></a> [notifications\_feedback\_email\_address](#input\_notifications\_feedback\_email\_address) | GovUK Notify Feedback Email Address | `string` | n/a | yes |
-| <a name="input_notifications_feedback_template_id"></a> [notifications\_feedback\_template\_id](#input\_notifications\_feedback\_template\_id) | GovUK Notify Feedback Email Template Id | `string` | n/a | yes |
+| <a name="input_notifications_embedded_feedback_form_email_address"></a> [notifications\_embedded\_feedback\_form\_email\_address](#input\_notifications\_embedded\_feedback\_form\_email\_address) | GovUK Notify Embedded Feedback Email Address | `string` | n/a | yes |
+| <a name="input_notifications_embedded_feedback_form_template_id"></a> [notifications\_embedded\_feedback\_form\_template\_id](#input\_notifications\_embedded\_feedback\_form\_template\_id) | GovUK Notify Embedded Feedback Email Template Id | `string` | n/a | yes |
+| <a name="input_notifications_help_page_form_email_address"></a> [notifications\_help\_page\_form\_email\_address](#input\_notifications\_help\_page\_form\_email\_address) | GovUK Notify Help Page Email Address | `string` | n/a | yes |
+| <a name="input_notifications_help_page_form_template_id"></a> [notifications\_help\_page\_form\_template\_id](#input\_notifications\_help\_page\_form\_template\_id) | GovUK Notify Help Page Email Template Id | `string` | n/a | yes |
 | <a name="input_notifications_is_test_environment"></a> [notifications\_is\_test\_environment](#input\_notifications\_is\_test\_environment) | Flag to indicate if the notification comes from a test environment | `bool` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
 | <a name="input_service_gov_uk_custom_domain_name"></a> [service\_gov\_uk\_custom\_domain\_name](#input\_service\_gov\_uk\_custom\_domain\_name) | Custom domain hostname for the service.gov.uk domain | `string` | n/a | yes |
