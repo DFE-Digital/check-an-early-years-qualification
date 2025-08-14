@@ -9,4 +9,5 @@ public interface IFeedbackFormService
     ErrorSummaryModel ValidateQuestions(FeedbackFormPage feedbackFormPage, FeedbackFormPageModel model);
     
     string ConvertQuestionListToString(FeedbackFormPageModel model);
+    void SetDefaultAnswers(FeedbackFormPage feedbackFormPage, FeedbackFormPageModel model);
 }

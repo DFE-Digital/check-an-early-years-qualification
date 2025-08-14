@@ -66,6 +66,8 @@ public class GiveFeedbackControllerTests
         var modelData = resultType.Model as FeedbackFormPageModel;
         modelData.Should().NotBeNull();
         modelData.Heading.Should().Match(feedbackFormPage.Heading);
+        
+        mockFeedbackFormService.Verify(x => x.SetDefaultAnswers(It.IsAny<FeedbackFormPage>(), It.IsAny<FeedbackFormPageModel>()), Times.Once);
     }
 
     [TestMethod]
@@ -213,7 +215,7 @@ public class GiveFeedbackControllerTests
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
                                                     mockNotificationService.Object);
 
-        var pageData = new FeedbackFormConfirmationPage()
+        var pageData = new FeedbackFormConfirmationPage
                        {
                            SuccessMessage = "Success"
                        };
@@ -232,6 +234,42 @@ public class GiveFeedbackControllerTests
         model.Should().NotBeNull();
         model.SuccessMessage.Should().Be(pageData.SuccessMessage);
         model.ShowOptionalSection.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void HasUserGotWhatTheyNeededToday_PassInTrue_CallsCookieServiceWithCorrectValue()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockFeedbackFormService = new Mock<IFeedbackFormService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockNotificationService = new Mock<INotificationService>();
+        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+                                                    mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
+                                                    mockNotificationService.Object);
+
+        var result = controller.HasUserGotWhatTheyNeededToday(true);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<OkResult>();
+        mockUserJourneyCookieService.Verify(x => x.SetHasUserGotEverythingTheyNeededToday("yes"), Times.Once());
+    }
+    
+    [TestMethod]
+    public void HasUserGotWhatTheyNeededToday_PassInFalse_CallsCookieServiceWithCorrectValue()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockFeedbackFormService = new Mock<IFeedbackFormService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockNotificationService = new Mock<INotificationService>();
+        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+                                                    mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
+                                                    mockNotificationService.Object);
+
+        var result = controller.HasUserGotWhatTheyNeededToday(false);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<OkResult>();
+        mockUserJourneyCookieService.Verify(x => x.SetHasUserGotEverythingTheyNeededToday("no"), Times.Once());
     }
 
     private static FeedbackFormPage GetFeedbackFormPage()

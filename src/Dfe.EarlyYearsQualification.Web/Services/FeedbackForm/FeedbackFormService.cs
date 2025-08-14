@@ -71,6 +71,17 @@ public class FeedbackFormService(IUserJourneyCookieService userJourneyCookieServ
         return sb.ToString();
     }
 
+    public void SetDefaultAnswers(FeedbackFormPage feedbackFormPage, FeedbackFormPageModel model)
+    {
+        var hasUserGotEverythingTheyNeededToday = userJourneyCookieService.GetHasUserGotEverythingTheyNeededToday();
+        if (string.IsNullOrEmpty(hasUserGotEverythingTheyNeededToday)) return;
+        var question = feedbackFormPage.Questions.FirstOrDefault(x => (x as BaseFeedbackFormQuestion)!.Sys.Id == FeedbackFormQuestions.DidYouGetEverythingYouNeededToday);
+        if (question is BaseFeedbackFormQuestion baseQuestion && model.QuestionList.Any(x => x.Question == baseQuestion.Question))
+        {
+            model.QuestionList.FirstOrDefault(x => x.Question == baseQuestion.Question)!.Answer = hasUserGotEverythingTheyNeededToday;
+        }
+    }
+
     private static void ValidateTextAreaQuestion(FeedbackFormQuestionTextArea? question, ErrorSummaryModel errorSummaryModel,
                                                  FeedbackFormQuestionListModel answeredQuestion, int answeredQuestionIndex)
     {

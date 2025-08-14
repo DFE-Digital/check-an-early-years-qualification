@@ -438,6 +438,28 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public void SetHasUserGotEverythingTheyNeededToday(string hasGotEverythingTheyNeededToday)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.HasUserGotEverythingTheyNeededToday = hasGotEverythingTheyNeededToday;
+
+            SetJourneyCookie();
+        }
+    }
+
+    public string GetHasUserGotEverythingTheyNeededToday()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.HasUserGotEverythingTheyNeededToday;
+        }
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)
@@ -523,5 +545,6 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         public YesOrNo QualificationWasSelectedFromList { get; set; }
 
         public bool HasSubmittedEmailAddressInFeedbackFormQuestion { get; set; }
+        public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
     }
 }

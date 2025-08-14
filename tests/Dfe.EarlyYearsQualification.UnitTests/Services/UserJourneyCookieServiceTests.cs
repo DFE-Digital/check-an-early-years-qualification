@@ -1572,7 +1572,7 @@ public class UserJourneyCookieServiceTests
     }
 
     [TestMethod]
-    public void SetHasSubmittedEmailAddressInFeedbackFormQuestion_ModelValueIsTrue()
+    public void GetHasSubmittedEmailAddressInFeedbackFormQuestion_ModelValueIsTrue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -1586,6 +1586,43 @@ public class UserJourneyCookieServiceTests
         var modelValue = service.GetHasSubmittedEmailAddressInFeedbackFormQuestion();
 
         modelValue.Should().BeTrue();
+    }
+    
+    [TestMethod]
+    public void SetHasUserGotEverythingTheyNeededToday_SetsValue()
+    {
+        var modelInCookie = new UserJourneyCookieService.UserJourneyModel();
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.SetHasUserGotEverythingTheyNeededToday("yes");
+
+        var model = new UserJourneyCookieService.UserJourneyModel
+                    {
+                        HasUserGotEverythingTheyNeededToday = "yes"
+                    };
+
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
+    }
+
+    [TestMethod]
+    public void GetHasUserGotEverythingTheyNeededToday_ModelValueIsReturned()
+    {
+        const string result = "yes"; 
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                HasUserGotEverythingTheyNeededToday = result
+                            };
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var modelValue = service.GetHasUserGotEverythingTheyNeededToday();
+
+        modelValue.Should().Be(result);
     }
 
     private static void CheckSerializedModelWasSet(

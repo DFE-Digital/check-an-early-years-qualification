@@ -27,6 +27,7 @@ public class GiveFeedbackController(
 
         var model = FeedbackFormPageMapper.Map(feedbackFormPage,
                                                await contentParser.ToHtml(feedbackFormPage.PostHeadingContent));
+        feedbackFormService.SetDefaultAnswers(feedbackFormPage, model);
         return View(model);
     }
 
@@ -46,7 +47,7 @@ public class GiveFeedbackController(
                                                          await contentParser.ToHtml(feedbackFormPage.PostHeadingContent));
             mappedModel.HasError = true;
             mappedModel.ErrorSummaryModel = errorSummaryModel;
-            mappedModel.QuestionList = model.QuestionList; 
+            mappedModel.QuestionList = model.QuestionList;
             return View("Get", mappedModel);
         }
         
@@ -68,5 +69,13 @@ public class GiveFeedbackController(
         
         model.ShowOptionalSection = userJourneyCookieService.GetHasSubmittedEmailAddressInFeedbackFormQuestion();
         return View(model);
+    }
+    
+    [HttpPost("/api/setHasUserGotWhatTheyNeededToday")]
+    [IgnoreAntiforgeryToken]
+    public IActionResult HasUserGotWhatTheyNeededToday([FromForm] bool hasUserGotWhatTheyNeededToday)
+    {
+        userJourneyCookieService.SetHasUserGotEverythingTheyNeededToday(hasUserGotWhatTheyNeededToday ? "yes" : "no");
+        return Ok();
     }
 }

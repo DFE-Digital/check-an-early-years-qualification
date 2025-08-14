@@ -17,7 +17,7 @@ public static class FeedbackFormPageMapper
                    Questions = MapQuestions(feedbackFormPage.Questions)
                };
         
-        model.Questions.ForEach(_ => model.QuestionList.Add(new FeedbackFormQuestionListModel()));
+        model.Questions.ForEach(x => model.QuestionList.Add(new FeedbackFormQuestionListModel { Question = (x as BaseFeedbackFormQuestionModel)!.Question}));
 
         return model;
     }

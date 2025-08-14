@@ -266,6 +266,76 @@ public class FeedbackFormServiceTests
         result.Should().Match(expectedResult);
     }
 
+    [TestMethod]
+    public void SetDefaultAnswers_CookieValueIsNull_AnswerNotSet()
+    {
+        var feedbackFormPage = CreateFeedbackFormPageModel(true);
+        var questionList = new List<FeedbackFormQuestionListModel>
+                           {
+                               new FeedbackFormQuestionListModel
+                               {
+                                   Question = (feedbackFormPage.Questions[0] as BaseFeedbackFormQuestion)!.Question
+                               }
+                           };
+        var model = CreateFeedbackFormPageModel(questionList);
+        
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        mockUserJourneyCookieService.Setup(x => x.GetHasUserGotEverythingTheyNeededToday()).Returns(string.Empty);
+        
+        var service = new FeedbackFormService(mockUserJourneyCookieService.Object);
+        
+        service.SetDefaultAnswers(feedbackFormPage, model);
+        
+        model.QuestionList.First().Answer.Should().BeNullOrEmpty();
+    }
+    
+    [TestMethod]
+    public void SetDefaultAnswers_CookieValueIsSet_QuestionsListDoesntIncludeQuestion_AnswerNotSet()
+    {
+        var feedbackFormPage = CreateFeedbackFormPageModel(true);
+        var questionList = new List<FeedbackFormQuestionListModel>
+                           {
+                               new FeedbackFormQuestionListModel
+                               {
+                                   Question = "Test question doesn't match the required question"
+                               }
+                           };
+        var model = CreateFeedbackFormPageModel(questionList);
+        
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        mockUserJourneyCookieService.Setup(x => x.GetHasUserGotEverythingTheyNeededToday()).Returns("yes");
+        
+        var service = new FeedbackFormService(mockUserJourneyCookieService.Object);
+        
+        service.SetDefaultAnswers(feedbackFormPage, model);
+        
+        model.QuestionList.First().Answer.Should().BeNullOrEmpty();
+    }
+    
+    [TestMethod]
+    public void SetDefaultAnswers_CookieValueIsSet_QuestionsListContainsQuestion_ModelValueChanged()
+    {
+        const string response = "yes";
+        var feedbackFormPage = CreateFeedbackFormPageModel(true);
+        var questionList = new List<FeedbackFormQuestionListModel>
+                           {
+                               new FeedbackFormQuestionListModel
+                               {
+                                   Question = (feedbackFormPage.Questions[0] as BaseFeedbackFormQuestion)!.Question
+                               }
+                           };
+        var model = CreateFeedbackFormPageModel(questionList);
+        
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        mockUserJourneyCookieService.Setup(x => x.GetHasUserGotEverythingTheyNeededToday()).Returns(response);
+        
+        var service = new FeedbackFormService(mockUserJourneyCookieService.Object);
+        
+        service.SetDefaultAnswers(feedbackFormPage, model);
+        
+        model.QuestionList.First().Answer.Should().Be(response);
+    }
+
     private static FeedbackFormPage CreateFeedbackFormPageModel(bool setSystemId)
     {
         return new FeedbackFormPage
@@ -278,6 +348,10 @@ public class FeedbackFormServiceTests
                    [
                        new FeedbackFormQuestionRadio
                        {
+                           Sys = new SystemProperties
+                                 {
+                                     Id = FeedbackFormQuestions.DidYouGetEverythingYouNeededToday
+                                 },
                            IsTheQuestionMandatory = true,
                            Question = "Radio Question",
                            ErrorMessage = "Radio question error message",
