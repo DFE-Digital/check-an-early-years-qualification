@@ -6,8 +6,8 @@
         @(await Component.InvokeAsync("CookiesBanner"))
     }
 }
-<govuk-header home-page-url="/" />
-<govuk-service-navigation service-name="Check an early years qualification" service-url="/" />
-<div class="govuk-width-container app-width-container">
+<govuk-header home-page-url="/" class="govuk-!-display-none-print" />
+<govuk-service-navigation service-name="Check an early years qualification" service-url="/" class="govuk-!-display-none-print" />
+<div class="govuk-width-container app-width-container govuk-!-display-none-print">
     @await Component.InvokeAsync("PhaseBanner")
 </div>
