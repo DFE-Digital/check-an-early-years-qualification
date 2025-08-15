@@ -12,7 +12,7 @@ jobs:
     environment: staging # do not run against production
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "Set up k6"
         uses: grafana/setup-k6-action@v1
