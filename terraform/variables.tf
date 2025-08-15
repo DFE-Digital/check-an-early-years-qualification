@@ -177,6 +177,16 @@ variable "cache_endpoint_secret" {
   type        = string
 }
 
+variable "notifications_feedback_template_id" {
+  description = "GovUK Notify Feedback Email Template Id"
+  type        = string
+}
+
+variable "notifications_feedback_email_address" {
+  description = "GovUK Notify Feedback Email Address"
+  type        = string
+}
+
 variable "notifications_help_page_form_template_id" {
   description = "GovUK Notify Help Page Email Template Id"
   type        = string

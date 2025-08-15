@@ -29,6 +29,8 @@ locals {
     "ServiceAccess__Keys__3"                            = var.webapp_access_key_2
     "GTM__Tag"                                          = var.gtm_tag
     "Clarity__Tag"                                      = var.clarity_tag
+    "Notifications__Feedback__TemplateId"               = var.notifications_feedback_template_id
+    "Notifications__Feedback__EmailAddress"             = var.notifications_feedback_email_address
     "Notifications__HelpPageForm__TemplateId"           = var.notifications_help_page_form_template_id
     "Notifications__HelpPageForm__EmailAddress"         = var.notifications_help_page_form_email_address
     "Notifications__EmbeddedFeedbackForm__TemplateId"   = var.notifications_embedded_feedback_form_template_id
