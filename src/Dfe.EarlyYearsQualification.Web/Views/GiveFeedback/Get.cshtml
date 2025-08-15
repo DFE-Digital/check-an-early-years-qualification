@@ -166,7 +166,7 @@
                                                             </p>
                                                         }
                                                         @{
-                                                            var additionalInfoCss = additionalInfoHasError? "govuk-input govuk-!-width-one-half govuk-input--error" : "govuk-input govuk-!-width-one-half";
+                                                            var additionalInfoCss = additionalInfoHasError? "govuk-input govuk-input--error" : "govuk-input";
                                                         }
                                                         @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", new { @class=additionalInfoCss, id = additionalInfoId })
                                                     </div>

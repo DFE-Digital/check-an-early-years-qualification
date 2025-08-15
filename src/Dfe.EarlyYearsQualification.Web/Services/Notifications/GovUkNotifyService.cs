@@ -38,8 +38,12 @@ public class GovUkNotifyService(
             var options = notificationOptions.Value;
             var subjectPrefix = options.IsTestEnvironment ? "TEST - " : string.Empty;
             personalisation.Add("subject", $"{subjectPrefix}{subject}");
-        
-            client.SendEmail(notificationData.EmailAddress, notificationData.TemplateId, personalisation);
+
+            var emailAddresses = notificationData.EmailAddress.Split(";");
+            foreach (var emailAddress in emailAddresses)
+            {
+                client.SendEmail(emailAddress, notificationData.TemplateId, personalisation);
+            }
         }
         catch (NotifyClientException exception)
         {
