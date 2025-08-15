@@ -4,6 +4,7 @@
     const cancelButton = $("#ud-cancel");
     const pageIsUsefulButton = $("#ud-page-is-useful");
     const pageIsNotUsefulButton = $("#ud-page-is-not-useful");
+    const hasUserGotWhatTheyNeededTodayEndpoint = "/api/setHasUserGotWhatTheyNeededToday";
     
     // If the prompt is showing set the initial state
     if (prompt.length !== 0) {
@@ -33,11 +34,13 @@
         pageIsUsefulButton.on('click', function (e) {
             e.preventDefault();
             showImproveServiceBody();
+            $.post(hasUserGotWhatTheyNeededTodayEndpoint, { hasUserGotWhatTheyNeededToday: true });
         });
 
         pageIsNotUsefulButton.on('click', function (e) {
             e.preventDefault();
             showImproveServiceBody();
+            $.post(hasUserGotWhatTheyNeededTodayEndpoint, { hasUserGotWhatTheyNeededToday: false });
         });
 
         cancelButton.on('click', function (e) {

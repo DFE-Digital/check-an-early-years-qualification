@@ -1,6 +1,6 @@
 namespace Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 
-public class Feedback
+public class NotificationData
 {
     public string TemplateId { get; init; } = string.Empty;
 

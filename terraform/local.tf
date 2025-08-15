@@ -16,23 +16,27 @@ locals {
 
   # Web Application Configuration
   webapp_app_settings = {
-    "ENVIRONMENT"                           = var.environment
-    "WEBSITES_ENABLE_APP_SERVICE_STORAGE"   = "false"
-    "WEBSITES_CONTAINER_START_TIME_LIMIT"   = 720
-    "KeyVault__Endpoint"                    = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
-    "ContentfulOptions__UsePreviewApi"      = var.contentful_use_preview_api
-    "WEBSITES_PORT"                         = "8080"
-    "ServiceAccess__IsPublic"               = var.webapp_access_is_public
-    "ServiceAccess__Keys__0"                = var.webapp_e2e_access_key
-    "ServiceAccess__Keys__1"                = var.webapp_team_access_key
-    "ServiceAccess__Keys__2"                = var.webapp_access_key_1
-    "ServiceAccess__Keys__3"                = var.webapp_access_key_2
-    "GTM__Tag"                              = var.gtm_tag
-    "Clarity__Tag"                          = var.clarity_tag
-    "Notifications__Feedback__TemplateId"   = var.notifications_feedback_template_id
-    "Notifications__Feedback__EmailAddress" = var.notifications_feedback_email_address
-    "Notifications__IsTestEnvironment"      = var.notifications_is_test_environment
-    "Cache__Type"                           = var.cache_type
+    "ENVIRONMENT"                                       = var.environment
+    "WEBSITES_ENABLE_APP_SERVICE_STORAGE"               = "false"
+    "WEBSITES_CONTAINER_START_TIME_LIMIT"               = 720
+    "KeyVault__Endpoint"                                = "https://${var.resource_name_prefix}-kv.vault.azure.net/"
+    "ContentfulOptions__UsePreviewApi"                  = var.contentful_use_preview_api
+    "WEBSITES_PORT"                                     = "8080"
+    "ServiceAccess__IsPublic"                           = var.webapp_access_is_public
+    "ServiceAccess__Keys__0"                            = var.webapp_e2e_access_key
+    "ServiceAccess__Keys__1"                            = var.webapp_team_access_key
+    "ServiceAccess__Keys__2"                            = var.webapp_access_key_1
+    "ServiceAccess__Keys__3"                            = var.webapp_access_key_2
+    "GTM__Tag"                                          = var.gtm_tag
+    "Clarity__Tag"                                      = var.clarity_tag
+    "Notifications__Feedback__TemplateId"               = var.notifications_feedback_template_id
+    "Notifications__Feedback__EmailAddress"             = var.notifications_feedback_email_address
+    "Notifications__HelpPageForm__TemplateId"           = var.notifications_help_page_form_template_id
+    "Notifications__HelpPageForm__EmailAddress"         = var.notifications_help_page_form_email_address
+    "Notifications__EmbeddedFeedbackForm__TemplateId"   = var.notifications_embedded_feedback_form_template_id
+    "Notifications__EmbeddedFeedbackForm__EmailAddress" = var.notifications_embedded_feedback_form_email_address
+    "Notifications__IsTestEnvironment"                  = var.notifications_is_test_environment
+    "Cache__Type"                                       = var.cache_type
   }
 
   webapp_slot_app_settings = {

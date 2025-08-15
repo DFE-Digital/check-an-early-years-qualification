@@ -53,7 +53,7 @@ test.describe('A spec that tests the check additional questions page', {tag: "@e
 
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There was a problem");
-        await checkText(page, "#error-banner-link", "This is a test error message");
+        await checkText(page, "#error-banner-link-yes", "This is a test error message");
         await isVisible(page, "#option-error");
         await checkError(page, "#option-error", "This is a test error message");
         await isVisible(page, ".govuk-form-group--error");

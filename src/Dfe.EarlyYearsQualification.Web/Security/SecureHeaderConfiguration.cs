@@ -68,6 +68,12 @@ public static class SecureHeaderConfiguration
                                                  DirectiveOrUri = "https://*.clarity.ms/collect"
                                              };
 
+        var internalApiConnectSourceCspElement = new ContentSecurityPolicyElement
+                                                 {
+                                                     CommandType = CspCommandType.Uri,
+                                                     DirectiveOrUri = "'self'"
+                                                 };
+
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(unsafeHashesElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukFrontendSupportedElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(govukAllMinifiedElement);
@@ -77,6 +83,7 @@ public static class SecureHeaderConfiguration
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(ga4CspElement);
         configuration.ContentSecurityPolicyConfiguration.ScriptSrc.Add(clarityCspElement);
         configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(clarityConnectSourceCspElement);
+        configuration.ContentSecurityPolicyConfiguration.ConnectSrc.Add(internalApiConnectSourceCspElement);
 
         return configuration;
     }
