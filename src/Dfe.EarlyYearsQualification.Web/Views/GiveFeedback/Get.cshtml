@@ -43,7 +43,7 @@
                                    value="@questionData!.Question"/>
                             <div
                                 class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m" id="@questionId">@questionData.Question</h2>
+                                <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">@questionData.Question</h2>
                                 <div class="govuk-radios" data-module="govuk-radios">
                                     @foreach (var option in questionData.OptionsItems)
                                     {
@@ -83,7 +83,7 @@
                                    value="@questionData!.Question"/>
                             <div
                                 class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m" id="@questionId">@questionData.Question</h2>
+                                <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">@questionData.Question</h2>
                                 @if (!string.IsNullOrEmpty(questionData.HintText))
                                 {
                                     var hintId = $"textarea_{questionIndex}_hint";
@@ -111,7 +111,7 @@
                                    value="@questionData!.Question"/>
                             <div
                                 class="govuk-form-group @(Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ErrorBannerLinkText == Model.QuestionList[questionIndex].ErrorMessage && !x.ElementLinkId.Contains("additionalInfo")) ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m" id="@questionId">@questionData.Question</h2>
+                                <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">@questionData.Question</h2>
                                 <div class="govuk-radios" data-module="govuk-radios">
                                     @for (var optionIndex = 0; optionIndex < questionData.OptionsItems.Count; optionIndex++)
                                     {
