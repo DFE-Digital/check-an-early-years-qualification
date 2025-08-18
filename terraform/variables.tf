@@ -187,6 +187,26 @@ variable "notifications_feedback_email_address" {
   type        = string
 }
 
+variable "notifications_help_page_form_template_id" {
+  description = "GovUK Notify Help Page Email Template Id"
+  type        = string
+}
+
+variable "notifications_help_page_form_email_address" {
+  description = "GovUK Notify Help Page Email Address"
+  type        = string
+}
+
+variable "notifications_embedded_feedback_form_template_id" {
+  description = "GovUK Notify Embedded Feedback Email Template Id"
+  type        = string
+}
+
+variable "notifications_embedded_feedback_form_email_address" {
+  description = "GovUK Notify Embedded Feedback Email Address"
+  type        = string
+}
+
 variable "notifications_is_test_environment" {
   description = "Flag to indicate if the notification comes from a test environment"
   type        = bool

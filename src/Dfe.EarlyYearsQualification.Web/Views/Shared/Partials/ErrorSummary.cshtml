@@ -10,7 +10,7 @@
                 @foreach (var link in Model.ErrorSummaryLinks)
                 {
                     <li>
-                        <a id="error-banner-link" href="#@{@link.ElementLinkId}">@Html.Raw(link.ErrorBannerLinkText)</a>
+                        <a id="error-banner-link-@{@link.ElementLinkId}" href="#@{@link.ElementLinkId}">@Html.Raw(link.ErrorBannerLinkText)</a>
                     </li>
                 }
             </ul>

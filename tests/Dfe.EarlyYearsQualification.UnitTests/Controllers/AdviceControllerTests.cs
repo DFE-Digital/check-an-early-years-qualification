@@ -722,7 +722,7 @@ public class AdviceControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be("HelpConfirmation");
 
-        mockNotificationService.Verify(x => x.SendFeedbackNotification(It.IsAny<FeedbackNotification>()), Times.Once());
+        mockNotificationService.Verify(x => x.SendHelpPageNotification(It.IsAny<HelpPageNotification>()), Times.Once());
     }
 
     [TestMethod]
