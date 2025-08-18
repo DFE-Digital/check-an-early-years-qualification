@@ -174,6 +174,10 @@ public class GiveFeedbackControllerTests
         mockNotificationService
             .Verify(x => x.SendEmbeddedFeedbackFormNotification(It.IsAny<EmbeddedFeedbackFormNotification>()),
                     Times.Once());
+        
+        mockUserJourneyCookieService
+            .Verify(x => x.SetHasUserGotEverythingTheyNeededToday(string.Empty),
+                    Times.Once());
     }
 
     [TestMethod]
