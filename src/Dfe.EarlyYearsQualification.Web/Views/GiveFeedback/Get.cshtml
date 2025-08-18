@@ -29,7 +29,7 @@
             <div class="govuk-!-margin-bottom-7" id="post-heading-content">
                 @Html.Raw(Model.PostHeadingContent)
             </div>
-            @using (Html.BeginForm("Post", "GiveFeedback", FormMethod.Post, new { id = "feedback-form" }))
+            @using (Html.BeginForm("Post", "GiveFeedback", FormMethod.Post, new { id = "give-feedback-form" }))
             {
                 @for (var questionIndex = 0; questionIndex < Model.Questions.Count; questionIndex++)
                 {
