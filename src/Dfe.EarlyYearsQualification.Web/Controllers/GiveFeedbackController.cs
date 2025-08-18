@@ -53,6 +53,7 @@ public class GiveFeedbackController(
         
         var message = feedbackFormService.ConvertQuestionListToString(model);
         notificationService.SendEmbeddedFeedbackFormNotification(new EmbeddedFeedbackFormNotification{ Message = message });
+        userJourneyCookieService.SetHasUserGotEverythingTheyNeededToday(string.Empty);
 
         return RedirectToAction("Confirmation");
     }
