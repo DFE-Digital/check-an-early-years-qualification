@@ -26,4 +26,6 @@ public static class ContentTypes
     public const string HelpConfirmationPage = "helpConfirmationPage";
     public const string PreCheckPage = "preCheckPage";
     public const string Footer = "footer";
+    public const string FeedbackFormPage = "feedbackPage";
+    public const string FeedbackFormConfirmationPage = "feedbackFormConfirmationPage";
 }
