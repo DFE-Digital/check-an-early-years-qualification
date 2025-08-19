@@ -10,22 +10,40 @@ public class GovUkNotifyService(
     IOptions<NotificationOptions> notificationOptions, 
     INotificationClient client) : INotificationService
 {
-    public void SendFeedbackNotification(FeedbackNotification feedbackNotification)
+    public void SendHelpPageNotification(HelpPageNotification helpPageNotification)
+    {
+        var emailAddress = helpPageNotification.EmailAddress ?? "Not supplied";
+        var personalisation = new Dictionary<string, dynamic>
+                              {
+                                  { "selected_option", helpPageNotification.Subject },
+                                  { "email_address", emailAddress },
+                                  { "message", helpPageNotification.Message }
+                              };
+        SendEmail(notificationOptions.Value.HelpPageForm, personalisation, helpPageNotification.Subject);
+    }
+
+    public void SendEmbeddedFeedbackFormNotification(EmbeddedFeedbackFormNotification embeddedFeedbackFormNotification)
+    {
+        var personalisation = new Dictionary<string, dynamic>
+        {
+            { "message", embeddedFeedbackFormNotification.Message }
+        };
+        SendEmail(notificationOptions.Value.EmbeddedFeedbackForm, personalisation, "Feedback form submission");
+    }
+
+    private void SendEmail(NotificationData notificationData, Dictionary<string, dynamic> personalisation, string subject)
     {
         try
         {
             var options = notificationOptions.Value;
             var subjectPrefix = options.IsTestEnvironment ? "TEST - " : string.Empty;
-            var emailAddress = feedbackNotification.EmailAddress ?? "Not supplied";
-            var personalisation = new Dictionary<string, dynamic>
-                                  {
-                                      { "subject", $"{subjectPrefix}{feedbackNotification.Subject}" },
-                                      { "selected_option", feedbackNotification.Subject },
-                                      { "email_address", emailAddress },
-                                      { "message", feedbackNotification.Message }
-                                  };
-        
-            client.SendEmail(options.Feedback.EmailAddress, options.Feedback.TemplateId, personalisation);
+            personalisation.Add("subject", $"{subjectPrefix}{subject}");
+
+            var emailAddresses = notificationData.EmailAddress.Split(";");
+            foreach (var emailAddress in emailAddresses)
+            {
+                client.SendEmail(emailAddress, notificationData.TemplateId, personalisation);
+            }
         }
         catch (NotifyClientException exception)
         {

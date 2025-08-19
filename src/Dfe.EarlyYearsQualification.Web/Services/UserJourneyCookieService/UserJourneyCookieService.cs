@@ -416,6 +416,50 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         return date >= new DateOnly(2014, 09, 01) && date <= new DateOnly(2016, 05, 31);
     }
 
+    public void SetHasSubmittedEmailAddressInFeedbackFormQuestion(bool hasSubmittedEmailAddress)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.HasSubmittedEmailAddressInFeedbackFormQuestion = hasSubmittedEmailAddress;
+
+            SetJourneyCookie();
+        }
+    }
+
+    public bool GetHasSubmittedEmailAddressInFeedbackFormQuestion()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.HasSubmittedEmailAddressInFeedbackFormQuestion;
+        }
+    }
+
+    public void SetHasUserGotEverythingTheyNeededToday(string hasGotEverythingTheyNeededToday)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.HasUserGotEverythingTheyNeededToday = hasGotEverythingTheyNeededToday;
+
+            SetJourneyCookie();
+        }
+    }
+
+    public string GetHasUserGotEverythingTheyNeededToday()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.HasUserGotEverythingTheyNeededToday;
+        }
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)
@@ -499,5 +543,8 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
 
         public Dictionary<string, string> AdditionalQuestionsAnswers { get; init; } = new();
         public YesOrNo QualificationWasSelectedFromList { get; set; }
+
+        public bool HasSubmittedEmailAddressInFeedbackFormQuestion { get; set; }
+        public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
     }
 }

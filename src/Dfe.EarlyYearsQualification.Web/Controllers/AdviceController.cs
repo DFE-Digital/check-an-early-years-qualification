@@ -122,7 +122,7 @@ public class AdviceController(
     {
         if (ModelState.IsValid)
         {
-            notificationService.SendFeedbackNotification(new FeedbackNotification
+            notificationService.SendHelpPageNotification(new HelpPageNotification
                                                          {
                                                              EmailAddress = model.EmailAddress,
                                                              Subject = model.SelectedOption,
