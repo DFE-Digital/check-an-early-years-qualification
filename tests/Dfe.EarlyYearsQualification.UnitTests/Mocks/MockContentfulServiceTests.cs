@@ -770,4 +770,90 @@ public class MockContentfulServiceTests
         result.RightHandSideFooterSection.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the right hand side footer content");
     }
+    
+    [TestMethod]
+    public async Task GetFeedbackFormPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+        
+        var result = await contentfulService.GetFeedbackFormPage();
+        
+        result.Should().NotBeNull();
+        result.Heading.Should().Be("Give feedback");
+        result.PostHeadingContent.Should().NotBeNull();
+        result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post heading content");
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "Home",
+                                                      OpenInNewTab = false,
+                                                      Href = "/"
+                                                  });
+        result.CtaButtonText.Should().Be("Submit feedback");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.Questions.Should().NotBeNullOrEmpty();
+        result.Questions.Count.Should().Be(3);
+        result.Questions[0].Should().BeAssignableTo<FeedbackFormQuestionRadio>();
+        
+        var question0 = (FeedbackFormQuestionRadio)result.Questions[0];
+        question0.Should().NotBeNull();
+        question0.Sys.Should().NotBeNull();
+        question0.Sys.Id.Should().Be(FeedbackFormQuestions.WouldYouLikeToBeContactedAboutResearch);
+        question0.Question.Should().Be("Did you get everything you needed today?");
+        question0.Options.Should().NotBeNullOrEmpty();
+        question0.Options.Count.Should().Be(2);
+        (question0.Options[0] as Option)!.Label.Should().Be("Yes");
+        (question0.Options[0] as Option)!.Value.Should().Be("yes");
+        (question0.Options[1] as Option)!.Label.Should().Be("No");
+        (question0.Options[1] as Option)!.Value.Should().Be("no");
+        question0.IsTheQuestionMandatory.Should().BeTrue();
+        question0.ErrorMessage.Should().Be("Select whether you got everything you needed today");
+        
+        var question1 = (FeedbackFormQuestionTextArea)result.Questions[1];
+        question1.Should().NotBeNull();
+        question1.Question.Should().Be("Tell us about your experience (optional)");
+        question1.HintText.Should().Be("Do not include personal information, for example the name of the qualification holder");
+        
+        var question2 = (FeedbackFormQuestionRadioAndInput)result.Questions[2];
+        question2.Should().NotBeNull();
+        question2.Question.Should().Be("Would you like us to contact you about future user research?");
+        question2.Options.Should().NotBeNullOrEmpty();
+        question2.Options.Count.Should().Be(2);
+        (question2.Options[0] as Option)!.Label.Should().Be("Yes");
+        (question2.Options[0] as Option)!.Value.Should().Be("yes");
+        (question2.Options[1] as Option)!.Label.Should().Be("No");
+        (question2.Options[1] as Option)!.Value.Should().Be("no");
+        question2.IsTheQuestionMandatory.Should().BeTrue();
+        question2.InputHeading.Should().Be("Your email address");
+        question2.InputHeadingHintText.Should().Be("Input heading hint text");
+        question2.ValidateInputAsAnEmailAddress.Should().BeTrue();
+        question2.ErrorMessage.Should().Be("Select whether you want to be contacted about future research");
+        question2.ErrorMessageForInput.Should().Be("Enter your email address");
+        question2.ErrorMessageForInvalidEmailFormat.Should()
+                 .Be("Enter an email address in the correct format, like name@example.com");
+    }
+
+    [TestMethod]
+    public async Task GetFeedbackFormConfirmationPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+        
+        var result = await contentfulService.GetFeedbackFormConfirmationPage();
+        
+        result.Should().NotBeNull();
+        result.SuccessMessage.Should().Be("Your feedback has been successfully submitted");
+        result.Body.Should().NotBeNull();
+        result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Thank you for your feedback. We look at every piece of feedback and will use your comments to make the service better for everyone.");
+        result.OptionalEmailHeading.Should().Be("What happens next");
+        result.OptionalEmailBody.Should().NotBeNull();
+        result.OptionalEmailBody.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "As you agreed to be contacted about future research, someone from our research team may contact you by email.");
+        result.ReturnToHomepageLink.Should().BeEquivalentTo(new NavigationLink
+                                                            {
+                                                                DisplayText = "Home",
+                                                                OpenInNewTab = false,
+                                                                Href = "/"
+                                                            });
+    }
 }

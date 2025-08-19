@@ -105,3 +105,21 @@ $("#clear-search-form").on("submit", function(){
         'event': 'clearSearchFormSubmission'
     });
 });
+
+$("#give-feedback-form").on("submit", function () {
+    // get first radio question container
+    let firstRadioQuestionParent = $("div[class='govuk-radios']").first().parent();
+    let question = $(firstRadioQuestionParent).children("h2:first").text();
+    let inputName = $(firstRadioQuestionParent).children(".govuk-radios")
+        .children(".govuk-radios__item")
+        .children("input:first")
+        .attr("name");
+    let inputSelector = "input[name='" + inputName + "']";
+    let answer = $(inputSelector).val();
+
+    window.dataLayer.push({
+        'event': 'giveFeedbackFormSubmission',
+        'question': question,
+        'answer': answer
+    });
+});
