@@ -584,4 +584,51 @@ public class QualificationDetailsControllerTests
         model.MessageBody.Should().Be(messageBody);
         model.IsFullAndRelevant.Should().Be(isFullAndRelevant);
     }
+    
+    [TestMethod]
+    public void SortRatioRows_OrderByQualificationApprovedStatus_ReturnsExpectedOrder()
+    {
+        var model = new QualificationDetailsModel
+                    {
+                        RatioRequirements = new RatioRequirementModel
+                                            {
+                                                ApprovedForLevel3 = QualificationApprovalStatus.Approved,
+                                                ApprovedForLevel2 = QualificationApprovalStatus.Approved,
+                                                ApprovedForLevel6 = QualificationApprovalStatus.Approved,
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
+                                            }
+                    };
+        
+        var orderedRows = model.OrderRatioRows();
+            
+        orderedRows.Where(x => x.ApprovalStatus == QualificationApprovalStatus.Approved).Should().BeInDescendingOrder(x => x.Level);
+    }
+    
+    [TestMethod]
+    public void SortRatioRows_OrderByQualificationMixedtatus_ReturnsExpectedOrder()
+    {
+        var model = new QualificationDetailsModel
+                    {
+                        RatioRequirements = new RatioRequirementModel
+                                            {
+                                                ApprovedForLevel3 = QualificationApprovalStatus.PossibleRouteAvailable,
+                                                ApprovedForLevel2 = QualificationApprovalStatus.FurtherActionRequired,
+                                                ApprovedForLevel6 = QualificationApprovalStatus.NotApproved,
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
+                                            }
+                    };
+        
+        var orderedRows = model.OrderRatioRows();
+      
+        orderedRows.Where(x => x.ApprovalStatus == QualificationApprovalStatus.Approved)
+                   .Should().BeInDescendingOrder(x => x.Level);
+        
+        orderedRows.Where(x => x.ApprovalStatus != QualificationApprovalStatus.Approved)
+                   .Should().BeInAscendingOrder(x => x.Level);
+
+        orderedRows.ElementAt(0).ApprovalStatus.Should().Be(QualificationApprovalStatus.Approved);
+        orderedRows.ElementAt(1).ApprovalStatus.Should().Be(QualificationApprovalStatus.FurtherActionRequired);
+        orderedRows.ElementAt(2).ApprovalStatus.Should().Be(QualificationApprovalStatus.PossibleRouteAvailable);
+        orderedRows.ElementAt(3).ApprovalStatus.Should().Be(QualificationApprovalStatus.NotApproved);
+    }
 }
