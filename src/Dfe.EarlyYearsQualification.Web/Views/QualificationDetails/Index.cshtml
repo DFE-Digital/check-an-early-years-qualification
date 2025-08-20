@@ -123,7 +123,7 @@
 
             @Html.Raw(Model.Content!.RequirementsText)
 
-            <div class="govuk-!-static-margin-top-6 print-button-container">
+            <div class="govuk-!-static-margin-top-7 print-button-container">
                 @if (!string.IsNullOrEmpty(Model.Content.PrintInformationHeading) && !string.IsNullOrEmpty(Model.Content.PrintInformationBody))
                 {
                     await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
