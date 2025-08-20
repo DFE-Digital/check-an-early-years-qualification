@@ -427,11 +427,12 @@ public class QualificationDetailsService(
         var improveServiceBodyHtml = content.UpDownFeedback is not null
                                          ? await contentParser.ToHtml(content.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
+        var printInformationBody = await contentParser.ToHtml(content.PrintInformationBody);
         return QualificationDetailsMapper.Map(qualification, content, backNavLink,
                                               MapAdditionalRequirementAnswers(qualification
                                                                                   .AdditionalRequirementQuestions),
                                               dateStarted, dateAwarded,
-                                              requirementsText, feedbackBodyHtml, improveServiceBodyHtml);
+                                              requirementsText, feedbackBodyHtml, improveServiceBodyHtml, printInformationBody);
     }
 
     public async Task SetRatioText(QualificationDetailsModel model, DetailsPage content)
