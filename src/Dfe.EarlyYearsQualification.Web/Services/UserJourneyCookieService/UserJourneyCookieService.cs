@@ -460,6 +460,28 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public HelpFormEnquiry GetReasonForEnquiringHelpForm()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.HelpFormEnquiry;
+        }
+    }
+
+    public void SetReasonForEnquiringHelpForm(HelpFormEnquiry formEnquiry)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.HelpFormEnquiry = formEnquiry;
+
+            SetJourneyCookie();
+        }
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)
@@ -546,5 +568,23 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
 
         public bool HasSubmittedEmailAddressInFeedbackFormQuestion { get; set; }
         public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
+
+        public HelpFormEnquiry HelpFormEnquiry { get; set; }
+    }
+
+
+    public class HelpFormEnquiry
+    {
+        public string ReasonForEnquiring { get; set; }
+
+        public string? QualificationName { get; set; }
+
+        public string? QualificationStartDate { get; set; } // MM/YYYY
+
+        public string? QualificationAwardedDate { get; set; } // MM/YYYY
+
+        public string? AwardingOrganisation { get; set; }
+
+        public string AdditionalInformation { get; set; }
     }
 }
