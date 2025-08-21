@@ -2,7 +2,7 @@
 
 @if (Model.Show)
 {
-    <govuk-phase-banner>
+    <govuk-phase-banner class="govuk-!-display-none-print">
         <govuk-phase-banner-tag>@Model.PhaseName</govuk-phase-banner-tag>
         @Html.Raw(Model.Content)
     </govuk-phase-banner>

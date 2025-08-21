@@ -2,6 +2,8 @@ namespace Dfe.EarlyYearsQualification.Web.Models;
 
 public class RatioRowModel
 {
+    public int Level { get; init; }
+    
     public string LevelText { get; init; } = string.Empty;
 
     public string RatioId
