@@ -23,6 +23,10 @@ public class DetailsPageModel
 
     public string PrintButtonText { get; init; } = string.Empty;
 
+    public string PrintInformationHeading { get; init; } = string.Empty;
+
+    public string PrintInformationBody { get; init; } = string.Empty;
+
     public string QualificationDetailsSummaryHeader { get; init; } = string.Empty;
 
     public string QualificationNameLabel { get; init; } = string.Empty;

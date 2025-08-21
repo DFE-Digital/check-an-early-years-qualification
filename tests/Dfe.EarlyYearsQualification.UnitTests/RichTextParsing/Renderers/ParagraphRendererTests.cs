@@ -39,4 +39,17 @@ public class ParagraphRendererTests
 
         result.Should().Be("<p class=\"govuk-body\">Some text.</p>");
     }
+    
+    [TestMethod]
+    public void GovUkParagraphRenderer_ParagraphContentIsEmptyString_ReturnsEmptyString()
+    {
+        var text = new Text { Value = "" };
+
+        var para = new Paragraph { Content = [text] };
+
+        var renderer = new ParagraphRenderer();
+        var result = renderer.RenderAsync(para).Result;
+
+        result.Should().BeEmpty();
+    }
 }

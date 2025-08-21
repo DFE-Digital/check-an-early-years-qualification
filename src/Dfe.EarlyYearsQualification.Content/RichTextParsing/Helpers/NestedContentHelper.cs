@@ -63,10 +63,16 @@ public static class NestedContentHelper
                     sb.Append(hyperlinkText);
                     continue;
 
-                case List l:
+                case List { NodeType: "unordered-list" } l:
                     var unorderedListRenderer = new UnorderedListRenderer();
                     var unorderedListText = await unorderedListRenderer.RenderAsync(l);
                     sb.Append(unorderedListText);
+                    continue;
+                
+                case List { NodeType: "ordered-list" } l:
+                    var orderedListRenderer = new OrderedListRenderer();
+                    var orderedListText = await orderedListRenderer.RenderAsync(l);
+                    sb.Append(orderedListText);
                     continue;
 
                 case Text t:

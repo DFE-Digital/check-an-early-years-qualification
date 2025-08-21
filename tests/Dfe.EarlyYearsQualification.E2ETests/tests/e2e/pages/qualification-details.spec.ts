@@ -5,7 +5,10 @@ import {
     setCookie,
     journeyCookieName,
     hasClass,
-    hasCount
+    hasCount,
+    isVisible,
+    isNotVisible,
+    checkTextContains
 } from '../../_shared/playwrightWrapper';
 
 test.describe("A spec used to test the qualification details page", {tag: "@e2e"}, () => {
@@ -183,6 +186,19 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
             await page.waitForFunction('window.waitForPrintDialog');
         });
     });
+    
+    test("Checks the print content shows on the page", async ({page, context}) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%227%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22no%22%7D%7D', journeyCookieName);
+        await page.goto("/qualifications/qualification-details/eyq-240");
+        
+        await isVisible(page, '.print-button-container');
+        await isVisible(page, '.print-button-container .govuk-details__summary-text');
+        await checkText(page, '.print-button-container .govuk-details__summary-text', 'Print information heading');
+        await isNotVisible(page, '.print-button-container .govuk-details__text');
+        await page.click('.print-button-container .govuk-details__summary-text');
+        await isVisible(page, '.print-button-container .govuk-details__text');
+        await checkTextContains(page, '.print-button-container .govuk-details__text', 'Print information body');
+    })
 
     test("Checks the qualification result inset shows correctly when not full and relevant for a L3+ qualification started between Sep14 & Aug19", async ({
                                                                                                                                                               page,
