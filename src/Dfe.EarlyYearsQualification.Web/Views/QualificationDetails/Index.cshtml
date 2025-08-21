@@ -25,7 +25,7 @@
     <div id="qualification-details-summary" class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop govuk-!-static-margin-bottom-8">
         <h1 class="govuk-heading-xl" id="page-header">@Model.Content!.MainHeader</h1>
         <div class="govuk-!-static-margin-bottom-7">
-            <button id="print-button-top" class="govuk-link govuk-body-s print-button"
+            <button id="print-button-top" class="govuk-link govuk-body-s print-button govuk-!-display-none-print"
                     aria-label="Print page button">@Model.Content!.PrintButtonText</button>
         </div>
         <h2 class="govuk-heading-l"
@@ -125,7 +125,7 @@
 
             @Html.Raw(Model.Content!.RequirementsText)
 
-            <div class="govuk-!-static-margin-top-7 print-button-container">
+            <div class="govuk-!-static-margin-top-7 print-button-container govuk-!-display-none-print">
                 @if (!string.IsNullOrEmpty(Model.Content.PrintInformationHeading) && !string.IsNullOrEmpty(Model.Content.PrintInformationBody))
                 {
                     await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
@@ -138,7 +138,7 @@
                         aria-label="Print page button">@Model.Content!.PrintButtonText</button>
             </div>
 
-            <p class="govuk-body govuk-!-static-margin-top-6 govuk-!-margin-bottom-2">
+            <p class="govuk-body govuk-!-static-margin-top-6 govuk-!-margin-bottom-2 govuk-!-display-none-print">
                 <a id="check-another-qualification-link" href="@Model.Content.CheckAnotherQualificationLink?.Href"
                    class="govuk-button govuk-button--secondary">@Model.Content.CheckAnotherQualificationLink?.DisplayText</a>
             </p>
