@@ -32,6 +32,10 @@ public class DetailsPage
 
     public string PrintButtonText { get; init; } = string.Empty;
 
+    public string PrintInformationHeading { get; init; } = string.Empty;
+
+    public Document? PrintInformationBody { get; init; }
+
     public string QualificationDetailsSummaryHeader { get; init; } = string.Empty;
 
     public string QualificationNameLabel { get; init; } = string.Empty;

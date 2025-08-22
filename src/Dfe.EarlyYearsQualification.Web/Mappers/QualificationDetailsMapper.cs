@@ -14,7 +14,8 @@ public static class QualificationDetailsMapper
         string dateAwarded,
         string requirementsTextHtml,
         string? feedbackBodyHtml,
-        string? improveServiceBodyHtml)
+        string? improveServiceBodyHtml,
+        string printInformationBody)
     {
         return new QualificationDetailsModel
                {
@@ -40,6 +41,8 @@ public static class QualificationDetailsMapper
                                  CheckAnotherQualificationLink =
                                      NavigationLinkMapper.Map(content.CheckAnotherQualificationLink),
                                  PrintButtonText = content.PrintButtonText,
+                                 PrintInformationHeading = content.PrintInformationHeading,
+                                 PrintInformationBody = printInformationBody,
                                  QualificationNameLabel = content.QualificationNameLabel,
                                  QualificationStartDateLabel = content.QualificationStartDateLabel,
                                  QualificationAwardedDateLabel = content.QualificationAwardedDateLabel,
