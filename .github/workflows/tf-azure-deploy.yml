@@ -134,7 +134,7 @@ jobs:
       - name: Generate Terraform Variables
         shell: bash
         env:
-          WEB_SECRETS: ${{ toJSON(steps.terraform_secrets.outputs) }}
+          WEB_SECRETS: ${{ toJSON(steps.terraform_secrets.outputs.*) }}
           WEB_VARS: ${{ toJSON(vars) }}
         run: |
           printf '%s\n' "$WEB_SECRETS" > tmp-secrets.json
