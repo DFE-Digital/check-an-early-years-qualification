@@ -92,12 +92,19 @@ jobs:
           -backend-config="storage_account_name=$TERRAFORM_STATE_STORAGE_ACCOUNT_NAME"
           -backend-config="container_name=$TERRAFORM_STATE_STORAGE_CONTAINER_NAME"
           -backend-config="key=$TERRAFORM_STATE_KEY"
+          
+      - name: Generate Terraform Secrets
+        id: terraform_secrets
+        env:
+          TESTING: ${{ secrets.TERRAFORM_STATE_RESOURCE_GROUP }}
+        run: |
+          echo 'testing=$TESTING >> $GITHUB_OUTPUT'
 
       # Generates Terraform input variables
       - name: Generate Terraform Variables
         shell: bash
         env:
-          WEB_SECRETS: ${{ toJSON(secrets) }}
+          WEB_SECRETS: ${{ toJSON(steps.terraform_secrets.outputs) }}
           WEB_VARS: ${{ toJSON(vars) }}
         run: |
           printf '%s\n' "$WEB_SECRETS" > tmp-secrets.json
