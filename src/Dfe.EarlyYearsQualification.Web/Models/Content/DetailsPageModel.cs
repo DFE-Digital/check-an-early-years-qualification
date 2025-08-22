@@ -13,6 +13,7 @@ public class DetailsPageModel
     public string RatiosHeading { get; init; } = string.Empty;
 
     public string RatiosText { get; set; } = string.Empty;
+    
     public string RatiosAdditionalInfoText { get; set; } = string.Empty;
 
     public string RequirementsHeading { get; init; } = string.Empty;
@@ -32,6 +33,7 @@ public class DetailsPageModel
     public string QualificationNameLabel { get; init; } = string.Empty;
 
     public string QualificationStartDateLabel { get; init; } = string.Empty;
+    
     public string QualificationAwardedDateLabel { get; init; } = string.Empty;
 
     public FeedbackBannerModel? FeedbackBanner { get; init; }

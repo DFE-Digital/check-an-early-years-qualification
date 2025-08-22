@@ -38,13 +38,15 @@ public class QualificationDetailsController(
         }
 
         var model = await qualificationDetailsService.MapDetails(qualification, detailsPageContent);
-
+        
         var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
 
         model.Content!.QualificationResultHeading = detailsPageContent.QualificationResultHeading;
 
         if (!validateAdditionalRequirementQuestions.isValid)
         {
+            await qualificationDetailsService.SetDefaultCardContentForApprovedQualifications(qualification, model);
+            
             await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
             qualificationDetailsService.SetQualificationResultFailureDetails(model, detailsPageContent);
             await qualificationDetailsService.QualificationMayBeEligibleForEbr(model, qualification);

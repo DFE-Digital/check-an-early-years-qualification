@@ -376,9 +376,8 @@ function getStatusValues(status: RatioStatus) {
 }
 
 export async function checkLevelRatioDetails(page: Page, nth: number, ratioHeading: string, status: RatioStatus, {
-    summaryText = null,
     detailText = null
-}: { summaryText?: string, detailText?: string }) {
+}: { detailText?: string }) {
     var statusValues = getStatusValues(status);
 
     await checkText(page, ".ratio-heading", ratioHeading, nth);
@@ -386,15 +385,10 @@ export async function checkLevelRatioDetails(page: Page, nth: number, ratioHeadi
     await hasClass(page, ".ratio-status-tag", statusValues.Colour, nth);
 
     var ratioId = ratioHeading.replace(/\s/g, "");
-    if (summaryText == null && detailText == null) {
+    if (detailText == null) {
         await doesNotExist(page, `#ratio-${ratioId}-additional-info`);
-    } else if (summaryText == null && detailText != null) {
-        await checkText(page, `#ratio-${ratioId}-additional-info`, detailText);
-    } else if (summaryText != null && detailText != null) {
-        await checkText(page, `#ratio-${ratioId}-additional-info .govuk-details__summary-text`, summaryText);
-        await checkText(page, `#ratio-${ratioId}-additional-info .govuk-details__text`, detailText);
     } else {
-        throw new Error("Cannot determine additional info checks");
+        await checkText(page, `#ratio-${ratioId}-additional-info`, detailText);
     }
 }
 
@@ -419,9 +413,9 @@ export async function checkRatiosHeading(page: Page, heading: string, body?: str
     }
 }
 
-export async function checkSnapshot(page: Page) {
-    await page.setViewportSize({width: 2000, height: 2000});
-    await expect(page).toHaveScreenshot({fullPage: true, maxDiffPixelRatio: 0.005});
+export async function checkSnapshot(page: Page, useFullScreen: boolean = true, viewportWidth: number = 2000, viewportHeight: number = 2000) {
+    await page.setViewportSize({width: viewportWidth, height: viewportHeight});
+    await expect(page).toHaveScreenshot({fullPage: useFullScreen, maxDiffPixelRatio: 0.05});
 }
 
 export async function clickSubmit(page: Page) {

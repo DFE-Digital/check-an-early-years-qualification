@@ -13,5 +13,5 @@ public class RatioRowModel
 
     public QualificationApprovalStatus ApprovalStatus { get; init; }
 
-    public AdditionalInformationModel AdditionalInformation { get; init; } = new();
+    public string SummaryCardBody { get; init; } = string.Empty;
 }

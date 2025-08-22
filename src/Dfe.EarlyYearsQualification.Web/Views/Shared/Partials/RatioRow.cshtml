@@ -1,49 +1,44 @@
 @model RatioRowModel
 
-<div class="govuk-grid-row ratio-row">
-    <div class="govuk-!-width-one-half">
-        <div class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
-            <h3 class="govuk-body govuk-!-text-align-left ratio-heading" id="@{@Model.LevelText}_heading">
-                <strong>@Model.LevelText</strong></h3>
-        </div>
-    </div>
-    <div class="govuk-!-width-one-half tag-padding-right">
-        <div id="ratio-@Model.RatioId-tag" class="govuk-!-static-margin-top-6 govuk-!-static-margin-bottom-6">
-            @{
-                switch (Model.ApprovalStatus)
-                {
-                    case QualificationApprovalStatus.Approved:
-                        <strong class="govuk-tag govuk-tag--green tag-align-right ratio-status-tag">
-                            Approved
-                        </strong>
-                        break;
-                    case QualificationApprovalStatus.NotApproved:
-                        <strong class="govuk-tag govuk-tag--red tag-align-right ratio-status-tag">
-                            Not approved
-                        </strong>
-                        break;
-                    case QualificationApprovalStatus.FurtherActionRequired:
-                        <strong class="govuk-tag govuk-tag--grey tag-align-right ratio-status-tag">
-                            Further action required
-                        </strong>
-                        break;
-                    case QualificationApprovalStatus.PossibleRouteAvailable:
-                        <strong class="govuk-tag govuk-tag--blue tag-align-right ratio-status-tag">
-                            Possible route available
-                        </strong>
-                        break;
-                }
+<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h3 class="govuk-summary-card__title govuk-!-width-one-third govuk-!-margin-0 govuk-!-padding-0 ratio-heading" id="@{@Model.LevelText}_heading">
+            @Model.LevelText
+        </h3>
+        <div class="govuk-!-width-two-third govuk-!-margin-0 govuk-!-padding-0 text-align-right" id="ratio-@Model.RatioId-tag">
+            @switch (Model.ApprovalStatus)
+            {
+                case QualificationApprovalStatus.Approved:
+                    <strong class="govuk-tag govuk-tag--green ratio-status-tag">
+                        Approved
+                    </strong>
+                    break;
+                case QualificationApprovalStatus.NotApproved:
+                    <strong class="govuk-tag govuk-tag--red ratio-status-tag">
+                        Not approved
+                    </strong>
+                    break;
+                case QualificationApprovalStatus.FurtherActionRequired:
+                    <strong class="govuk-tag govuk-tag--grey ratio-status-tag">
+                        Further action required
+                    </strong>
+                    break;
+                case QualificationApprovalStatus.PossibleRouteAvailable:
+                    <strong class="govuk-tag govuk-tag--blue ratio-status-tag">
+                        Possible route available
+                    </strong>
+                    break;
             }
         </div>
     </div>
-</div>
-@if ((!string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationBody) && !string.IsNullOrEmpty(Model.AdditionalInformation.AdditionalInformationHeader))
-     || Model.AdditionalInformation.ShowAdditionalInformationBodyByDefault)
-{
-    <div id="ratio-@Model.RatioId-additional-info" class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            @{ await Html.RenderPartialAsync("Partials/AdditionalInformation", Model.AdditionalInformation); }
+    @if (!string.IsNullOrEmpty(Model.SummaryCardBody))
+    {
+        <div class="govuk-summary-card__content" id="ratio-@Model.RatioId-additional-info">
+            <div class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    @Html.Raw(Model.SummaryCardBody)
+                </div>
+            </div>
         </div>
-    </div>
-}
-<hr class="mb-0 mt-0"/>
+    }
+</div>

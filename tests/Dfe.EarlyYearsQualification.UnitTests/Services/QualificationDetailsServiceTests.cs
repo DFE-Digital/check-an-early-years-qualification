@@ -785,21 +785,17 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task SetRatiosText_IsFullAndRelevant_ShowsApprovedText()
     {
-        const string ratiosText = "Approved ratio text";
         const string ratiosTextNotFullAndRelevant = "Not approved";
         const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
-        var ratiosTextDoc = new Document { NodeType = ratiosText };
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
                           .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosText = ratiosTextDoc,
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
@@ -820,22 +816,18 @@ public class QualificationDetailsServiceTests
         await sut.SetRatioText(model, detailsPageContent);
 
         model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(ratiosText);
     }
 
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsNotApprovedText()
     {
-        const string ratiosText = "Approved ratio text";
         const string ratiosTextNotFullAndRelevant = "Not approved";
         const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
         const string ratioTextL3Ebr = "L3 Ebr ratio text";
-        var ratiosTextDoc = new Document { NodeType = ratiosText };
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
         var ratioTextL3EbrDoc = new Document { NodeType = ratioTextL3Ebr };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
@@ -843,7 +835,6 @@ public class QualificationDetailsServiceTests
         _mockContentParser.Setup(o => o.ToHtml(ratioTextL3EbrDoc)).ReturnsAsync(ratioTextL3Ebr);
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosText = ratiosTextDoc,
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc,
                                      RatiosTextL3Ebr = ratioTextL3EbrDoc
@@ -877,21 +868,17 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndOutsideOfAug19_ShowsNotApprovedText()
     {
-        const string ratiosText = "Approved ratio text";
         const string ratiosTextNotFullAndRelevant = "Not approved";
         const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
-        var ratiosTextDoc = new Document { NodeType = ratiosText };
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextDoc)).ReturnsAsync(ratiosText);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
                           .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
         var detailsPageContent = new DetailsPage
                                  {
-                                     RatiosText = ratiosTextDoc,
                                      RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
                                      RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
                                  };
@@ -1115,70 +1102,6 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public async Task SetRatiosText_IsFullAndRelevantAndL2InJune2016_ShowsMayNeedRequirements()
-    {
-        const string mayNeedRequirementsText = "May need Requirements";
-        var mayNeedRequirementsDoc = new Document { NodeType = mayNeedRequirementsText };
-        _mockContentParser.Setup(o => o.ToHtml(mayNeedRequirementsDoc)).ReturnsAsync(mayNeedRequirementsText);
-
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextMaybeRequirements = mayNeedRequirementsDoc
-                                 };
-
-        var model = new QualificationDetailsModel
-                    {
-                        QualificationLevel = 2,
-                        RatioRequirements = new RatioRequirementModel
-                                            {
-                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
-                                            },
-                        Content = new DetailsPageModel()
-                    };
-
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedInJune2016()).Returns(true);
-
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent);
-
-        model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(mayNeedRequirementsText);
-    }
-
-    [TestMethod]
-    public async Task SetRatiosText_IsFullAndRelevantAndL2AfterJune2016_ShowsWillNeedRequirements()
-    {
-        const string willNeedRequirementsText = "Will need requirements";
-        var willNeedRequirementsDoc = new Document { NodeType = willNeedRequirementsText };
-        _mockContentParser.Setup(o => o.ToHtml(willNeedRequirementsDoc)).ReturnsAsync(willNeedRequirementsText);
-
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextWillRequirements = willNeedRequirementsDoc
-                                 };
-
-        var model = new QualificationDetailsModel
-                    {
-                        QualificationLevel = 2,
-                        RatioRequirements = new RatioRequirementModel
-                                            {
-                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
-                                            },
-                        Content = new DetailsPageModel()
-                    };
-
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedAfterJune2016()).Returns(true);
-
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent);
-
-        model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(willNeedRequirementsText);
-    }
-
-    [TestMethod]
     [DataRow(3)]
     [DataRow(4)]
     [DataRow(5)]
@@ -1206,42 +1129,6 @@ public class QualificationDetailsServiceTests
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(string.Empty);
-    }
-
-    [TestMethod]
-    [DataRow(3)]
-    [DataRow(4)]
-    [DataRow(5)]
-    public async Task SetRatiosText_IsFullAndRelevantAwardedOnOrAfterSept2014_ShowsWillNeedRequirements(int level)
-    {
-        const string needRequirementsText = "Need requirements";
-        var needRequirementsDoc = new Document { NodeType = needRequirementsText };
-        _mockContentParser.Setup(o => o.ToHtml(needRequirementsDoc)).ReturnsAsync(needRequirementsText);
-
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextWillRequirements = needRequirementsDoc
-                                 };
-        var model = new QualificationDetailsModel
-                    {
-                        QualificationLevel = level,
-                        RatioRequirements = new RatioRequirementModel
-                                            {
-                                                ApprovedForLevel3 = QualificationApprovalStatus.Approved,
-                                                ApprovedForLevel2 = QualificationApprovalStatus.Approved,
-                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
-                                            },
-                        Content = new DetailsPageModel()
-                    };
-
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedOnOrAfterSeptember2014()).Returns(true);
-
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent);
-
-        model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(needRequirementsText);
     }
 
     [TestMethod]
@@ -1301,45 +1188,6 @@ public class QualificationDetailsServiceTests
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(string.Empty);
-    }
-
-    [TestMethod]
-    [DataRow(6, QualificationApprovalStatus.NotApproved)]
-    [DataRow(6, QualificationApprovalStatus.PossibleRouteAvailable)]
-    [DataRow(7, QualificationApprovalStatus.NotApproved)]
-    [DataRow(7, QualificationApprovalStatus.PossibleRouteAvailable)]
-    public async Task SetRatiosText_IsFullAndRelevantForAllLevelsButL6AwardedOnOrAfterSeptember2014_ShowsNeedRequirements(int level, QualificationApprovalStatus level6Status)
-    {
-        const string needRequirementsText = "Need requirements";
-        var needRequirementsDoc = new Document { NodeType = needRequirementsText };
-        _mockContentParser.Setup(o => o.ToHtml(needRequirementsDoc)).ReturnsAsync(needRequirementsText);
-
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextWillRequirements = needRequirementsDoc
-                                 };
-        var model = new QualificationDetailsModel
-                    {
-                        QualificationLevel = level,
-                        RatioRequirements = new RatioRequirementModel
-                                            {
-                                                ApprovedForLevel6 = level6Status,
-                                                ApprovedForLevel3 = QualificationApprovalStatus.Approved,
-                                                ApprovedForLevel2 = QualificationApprovalStatus.Approved,
-                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
-                                            },
-                        Content = new DetailsPageModel()
-                    };
-
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedBeforeSeptember2014()).Returns(false);
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedOnOrAfterSeptember2014()).Returns(true);
-
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent);
-
-        model.Content.Should().NotBeNull();
-        model.Content.RatiosText.Should().Be(needRequirementsText);
     }
 
     [TestMethod]
@@ -1701,6 +1549,10 @@ public class QualificationDetailsServiceTests
                 [
                     new RatioRequirement
                     {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                    },
+                    new RatioRequirement
+                    {
                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
                         RequirementForInJune2016 = l2MaybePfaDoc
                     }
@@ -1724,12 +1576,16 @@ public class QualificationDetailsServiceTests
     public async Task SetRequirementOverrides_Level2_FullAndRelevant_AwardedAfterJune2016SeesExpected()
     {
         const string l2MustPfa = "l2 must PFA";
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
         var l2MustPfaDoc = ContentfulContentHelper.Paragraph(l2MustPfa);
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
 
         var model = new QualificationDetailsModel
                     {
                         RatioRequirements = new RatioRequirementModel
                                             {
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.NotApproved,
                                                 ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
@@ -1743,8 +1599,14 @@ public class QualificationDetailsServiceTests
                 [
                     new RatioRequirement
                     {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
+                    new RatioRequirement
+                    {
                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
-                        RequirementForAfterJune2016 = l2MustPfaDoc
+                        RequirementForAfterJune2016 = l2MustPfaDoc,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
                     }
                 ]
             };
@@ -1752,7 +1614,8 @@ public class QualificationDetailsServiceTests
         _mockUserJourneyCookieService.Setup(x => x.WasAwardedAfterJune2016()).Returns(true);
 
         _mockContentParser.Setup(o => o.ToHtml(l2MustPfaDoc)).ReturnsAsync(l2MustPfa);
-
+        _mockContentParser.Setup(o => o.ToHtml(summaryCardDefaultContent)).ReturnsAsync(defaultQualificationContent);
+        
         var sut = GetSut();
 
         await sut.SetRequirementOverrides(qualification, model);
@@ -1760,6 +1623,8 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel2.Should().Be(l2MustPfa);
         model.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
 
     [TestMethod]
@@ -1769,12 +1634,16 @@ public class QualificationDetailsServiceTests
     public async Task SetRequirementOverrides_Level345_FullAndRelevant_AwardedBetweenSeptember2014AndMay2016_SeesExpected(int level)
     {
         const string l3MustEnglish = "l3 must english";
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
         var l3MustEnglishDoc = ContentfulContentHelper.Paragraph(l3MustEnglish);
-
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
+        
         var model = new QualificationDetailsModel
                     {
                         RatioRequirements = new RatioRequirementModel
                                             {
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
@@ -1786,6 +1655,11 @@ public class QualificationDetailsServiceTests
             {
                 RatioRequirements =
                 [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
                     new RatioRequirement
                     {
                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName
@@ -1817,8 +1691,11 @@ public class QualificationDetailsServiceTests
     public async Task SetRequirementOverrides_Level67_FullAndRelevant_AwardedBetweenSeptember2014AndMay2016_NotQts_SeesExpected(int level)
     {
         const string l3MustEnglish = "l3 must english";
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
         var l3MustEnglishDoc = ContentfulContentHelper.Paragraph(l3MustEnglish);
-
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
+        
         var qtsQuestion = new AdditionalRequirementQuestion
                           {
                               Sys = new SystemProperties { Id = AdditionalRequirementQuestions.QtsQuestion },
@@ -1830,6 +1707,7 @@ public class QualificationDetailsServiceTests
                     {
                         RatioRequirements = new RatioRequirementModel
                                             {
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
@@ -1851,7 +1729,13 @@ public class QualificationDetailsServiceTests
                 [
                     new RatioRequirement
                     {
-                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
                     },
                     new RatioRequirement
                     {
@@ -1865,7 +1749,8 @@ public class QualificationDetailsServiceTests
         _mockUserJourneyCookieService.Setup(x => x.WasAwardedBetweenSeptember2014AndMay2016()).Returns(true);
 
         _mockContentParser.Setup(o => o.ToHtml(l3MustEnglishDoc)).ReturnsAsync(l3MustEnglish);
-
+        _mockContentParser.Setup(o => o.ToHtml(summaryCardDefaultContent)).ReturnsAsync(defaultQualificationContent);
+        
         var sut = GetSut();
 
         await sut.SetRequirementOverrides(qualification, model);
@@ -1873,6 +1758,8 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel3.Should().Be(l3MustEnglish);
         model.RatioRequirements.ShowRequirementsForLevel3ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
 
     [TestMethod]
@@ -1883,13 +1770,17 @@ public class QualificationDetailsServiceTests
     {
         const string l2MaybePfa = "l2 maybe pfa";
         const string l3MustEnglishMaybePfa = "l3 Must English Maybe Pfa";
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
         var l2MaybePfaDoc = ContentfulContentHelper.Paragraph(l2MaybePfa);
         var l3MustEnglishMaybePfaDoc = ContentfulContentHelper.Paragraph(l3MustEnglishMaybePfa);
-
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
+        
         var model = new QualificationDetailsModel
                     {
                         RatioRequirements = new RatioRequirementModel
                                             {
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
@@ -1901,6 +1792,11 @@ public class QualificationDetailsServiceTests
             {
                 RatioRequirements =
                 [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
                     new RatioRequirement
                     {
                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
@@ -1918,7 +1814,8 @@ public class QualificationDetailsServiceTests
 
         _mockContentParser.Setup(o => o.ToHtml(l2MaybePfaDoc)).ReturnsAsync(l2MaybePfa);
         _mockContentParser.Setup(o => o.ToHtml(l3MustEnglishMaybePfaDoc)).ReturnsAsync(l3MustEnglishMaybePfa);
-
+        _mockContentParser.Setup(o => o.ToHtml(summaryCardDefaultContent)).ReturnsAsync(defaultQualificationContent);
+        
         var sut = GetSut();
 
         await sut.SetRequirementOverrides(qualification, model);
@@ -1929,6 +1826,8 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel2.Should().Be(l2MaybePfa);
         model.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
 
     [TestMethod]
@@ -1938,9 +1837,12 @@ public class QualificationDetailsServiceTests
     {
         const string l2MaybePfa = "l2 maybe pfa";
         const string l3MustEnglishMaybePfa = "l3 Must English Maybe Pfa";
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
         var l2MaybePfaDoc = ContentfulContentHelper.Paragraph(l2MaybePfa);
         var l3MustEnglishMaybePfaDoc = ContentfulContentHelper.Paragraph(l3MustEnglishMaybePfa);
-
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
+        
         var qtsQuestion = new AdditionalRequirementQuestion
                           {
                               Sys = new SystemProperties { Id = AdditionalRequirementQuestions.QtsQuestion },
@@ -1952,6 +1854,7 @@ public class QualificationDetailsServiceTests
                     {
                         RatioRequirements = new RatioRequirementModel
                                             {
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
@@ -1973,6 +1876,11 @@ public class QualificationDetailsServiceTests
                 [
                     new RatioRequirement
                     {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
+                    new RatioRequirement
+                    {
                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
                         RequirementForInJune2016 = l2MaybePfaDoc
                     },
@@ -1989,7 +1897,8 @@ public class QualificationDetailsServiceTests
 
         _mockContentParser.Setup(o => o.ToHtml(l2MaybePfaDoc)).ReturnsAsync(l2MaybePfa);
         _mockContentParser.Setup(o => o.ToHtml(l3MustEnglishMaybePfaDoc)).ReturnsAsync(l3MustEnglishMaybePfa);
-
+        _mockContentParser.Setup(o => o.ToHtml(summaryCardDefaultContent)).ReturnsAsync(defaultQualificationContent);
+        
         var sut = GetSut();
 
         await sut.SetRequirementOverrides(qualification, model);
@@ -2000,6 +1909,8 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel2.Should().Be(l2MaybePfa);
         model.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
 
     [TestMethod]
@@ -2010,13 +1921,17 @@ public class QualificationDetailsServiceTests
     {
         const string l2MustPfa = "l2 must pfa";
         const string l3MustEnglishMustPfa = "l3 Must English must Pfa";
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
         var l2MustPfaDoc = ContentfulContentHelper.Paragraph(l2MustPfa);
         var l3MustEnglishMustPfaDoc = ContentfulContentHelper.Paragraph(l3MustEnglishMustPfa);
-
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
+        
         var model = new QualificationDetailsModel
                     {
                         RatioRequirements = new RatioRequirementModel
                                             {
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
@@ -2028,6 +1943,11 @@ public class QualificationDetailsServiceTests
             {
                 RatioRequirements =
                 [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
                     new RatioRequirement
                     {
                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
@@ -2045,7 +1965,8 @@ public class QualificationDetailsServiceTests
 
         _mockContentParser.Setup(o => o.ToHtml(l2MustPfaDoc)).ReturnsAsync(l2MustPfa);
         _mockContentParser.Setup(o => o.ToHtml(l3MustEnglishMustPfaDoc)).ReturnsAsync(l3MustEnglishMustPfa);
-
+        _mockContentParser.Setup(o => o.ToHtml(summaryCardDefaultContent)).ReturnsAsync(defaultQualificationContent);
+        
         var sut = GetSut();
 
         await sut.SetRequirementOverrides(qualification, model);
@@ -2056,6 +1977,8 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel2.Should().Be(l2MustPfa);
         model.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
 
     [TestMethod]
@@ -2065,10 +1988,13 @@ public class QualificationDetailsServiceTests
     {
         const string l2MustPfa = "l2 must pfa";
         const string l3MustEnglishMustPfa = "l3 Must English must Pfa";
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
         var l2MaybePfaDoc = ContentfulContentHelper.Paragraph(l2MustPfa);
         var l3MustEnglishMustPfaDoc = ContentfulContentHelper.Paragraph(l3MustEnglishMustPfa);
-
-        var qtsQuestion = new AdditionalRequirementQuestion
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
+        
+        var qtsQuestion = new AdditionalRequirementQuestion 
                           {
                               Sys = new SystemProperties { Id = AdditionalRequirementQuestions.QtsQuestion },
                               Question = "qts question",
@@ -2079,6 +2005,7 @@ public class QualificationDetailsServiceTests
                     {
                         RatioRequirements = new RatioRequirementModel
                                             {
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
@@ -2098,6 +2025,11 @@ public class QualificationDetailsServiceTests
             {
                 RatioRequirements =
                 [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
                     new RatioRequirement
                     {
                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
@@ -2116,7 +2048,8 @@ public class QualificationDetailsServiceTests
 
         _mockContentParser.Setup(o => o.ToHtml(l2MaybePfaDoc)).ReturnsAsync(l2MustPfa);
         _mockContentParser.Setup(o => o.ToHtml(l3MustEnglishMustPfaDoc)).ReturnsAsync(l3MustEnglishMustPfa);
-
+        _mockContentParser.Setup(o => o.ToHtml(summaryCardDefaultContent)).ReturnsAsync(defaultQualificationContent);
+        
         var sut = GetSut();
 
         await sut.SetRequirementOverrides(qualification, model);
@@ -2127,26 +2060,33 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForLevel2.Should().Be(l2MustPfa);
         model.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
     
     [TestMethod]
     public async Task SetRequirementOverrides_QualificationIsAutomaticallyApprovedAtL6_SeesExpected()
     {
-
+        const string l2MustPfa = "l2 must pfa";
+        const string l3MustEnglishMustPfa = "l3 Must English must Pfa";
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
+        var l2MaybePfaDoc = ContentfulContentHelper.Paragraph(l2MustPfa);
+        var l3MustEnglishMustPfaDoc = ContentfulContentHelper.Paragraph(l3MustEnglishMustPfa);
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
+        
         var model = new QualificationDetailsModel
                     {
                         RatioRequirements = new RatioRequirementModel
                                             {
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel2 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel3 = QualificationApprovalStatus.Approved,
                                                 ApprovedForLevel6 = QualificationApprovalStatus.Approved
-                                            },
+                                                
+                                            }
+                        
                     };
-
-        const string l2MustPfa = "l2 must pfa";
-        const string l3MustEnglishMustPfa = "l3 Must English must Pfa";
-        var l2MaybePfaDoc = ContentfulContentHelper.Paragraph(l2MustPfa);
-        var l3MustEnglishMustPfaDoc = ContentfulContentHelper.Paragraph(l3MustEnglishMustPfa);
         
         var qualification =
             new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 6)
@@ -2156,32 +2096,48 @@ public class QualificationDetailsServiceTests
                 [
                     new RatioRequirement
                     {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
+                    new RatioRequirement
+                    {
                         RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
-                        RequirementForAfterJune2016 = l2MaybePfaDoc
+                        RequirementForAfterJune2016 = l2MaybePfaDoc,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
                     },
                     new RatioRequirement
                     {
                         RatioRequirementName = RatioRequirements.Level3RatioRequirementName,
-                        RequirementForAfterJune2016 = l3MustEnglishMustPfaDoc
+                        RequirementForAfterJune2016 = l3MustEnglishMustPfaDoc,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
                     }
                 ],
             };
 
         _mockUserJourneyCookieService.Setup(x => x.WasAwardedAfterJune2016()).Returns(true);
 
+        _mockContentParser.Setup(o => o.ToHtml(summaryCardDefaultContent)).ReturnsAsync(defaultQualificationContent);
+        
         var sut = GetSut();
 
         await sut.SetRequirementOverrides(qualification, model);
 
         model.RatioRequirements.ApprovedForLevel6.Should().Be(QualificationApprovalStatus.Approved);
-        model.RatioRequirements.RequirementsForLevel6.Should().BeNullOrEmpty();
+        model.RatioRequirements.RequirementsForLevel6.Should().Be(defaultQualificationContent);
         model.RatioRequirements.ShowRequirementsForLevel6ByDefault.Should().BeFalse();
         model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
-        model.RatioRequirements.RequirementsForLevel3.Should().BeNullOrEmpty();
+        model.RatioRequirements.RequirementsForLevel3.Should().Be(defaultQualificationContent);
         model.RatioRequirements.ShowRequirementsForLevel3ByDefault.Should().BeFalse();
         model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
-        model.RatioRequirements.RequirementsForLevel2.Should().BeNullOrEmpty();
+        model.RatioRequirements.RequirementsForLevel2.Should().Be(defaultQualificationContent);
         model.RatioRequirements.ShowRequirementsForLevel2ByDefault.Should().BeFalse();
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
 
     [TestMethod]
@@ -2212,5 +2168,74 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.RequirementsForLevel3.Should().BeNullOrEmpty();
         model.RatioRequirements.RequirementsForLevel2.Should().BeNullOrEmpty();
         model.RatioRequirements.RequirementsForUnqualified.Should().BeNullOrEmpty();
+    }
+    
+    [TestMethod]
+    public async Task SetRequirementOverrides_AllLevelQualificationsApproved_DisplaysDefaultRatioText()
+    {
+        // Arrange
+        const string defaultQualificationContent = "This is the summary card default content if qualification approved";
+        
+        var summaryCardDefaultContent = ContentfulContentHelper.Paragraph(defaultQualificationContent);
+        
+        var model = new QualificationDetailsModel
+                    {
+                        QualificationLevel = 6,
+                        RatioRequirements = new RatioRequirementModel
+                                            {
+                                                ApprovedForLevel6 = QualificationApprovalStatus.Approved,
+                                                ApprovedForLevel3 = QualificationApprovalStatus.Approved,
+                                                ApprovedForLevel2 = QualificationApprovalStatus.Approved,
+                                                ApprovedForUnqualified = QualificationApprovalStatus.Approved
+                                            },
+                    };
+        
+        var qualification =
+            new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 6)
+            {
+                RatioRequirements =
+                [
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.UnqualifiedRatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level2RatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level3RatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    },
+                    new RatioRequirement
+                    {
+                        RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
+                        SummaryCardDefaultContent = summaryCardDefaultContent
+                    }
+                ],
+            };
+        
+        _mockContentParser.Setup(o => o.ToHtml(summaryCardDefaultContent)).ReturnsAsync(defaultQualificationContent);
+        
+        var sut = GetSut();
+
+        // Act
+        await sut.SetRequirementOverrides(qualification, model);
+
+        // Assert 
+        model.RatioRequirements.ApprovedForLevel6.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForLevel6.Should().Be(defaultQualificationContent);
+        
+        model.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForLevel3.Should().Be(defaultQualificationContent);
+        
+        model.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForLevel2.Should().Be(defaultQualificationContent);
+        
+        model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
+        model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
 }

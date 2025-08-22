@@ -202,14 +202,8 @@ public class MockContentfulServiceTests
         result.QualificationNameLabel.Should().NotBeNullOrEmpty();
         result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
         result.QualificationAwardedDateLabel.Should().NotBeNullOrEmpty();
-        result.RatiosText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text");
         result.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
-        result.RatiosTextMaybeRequirements!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text maybe requirements");
-        result.RatiosTextWillRequirements!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text requirements");
         result.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text L3 EBR");
         result.QualificationResultHeading.Should().Be("Qualification result heading");
