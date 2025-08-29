@@ -29,70 +29,28 @@ public class QualificationDetailsModel : BasicQualificationModel
                                      Level = 6,
                                      LevelText = "Level 6",
                                      ApprovalStatus = RatioRequirements.ApprovedForLevel6,
-                                     AdditionalInformation = new AdditionalInformationModel
-                                                             {
-                                                                 AdditionalInformationHeader =
-                                                                     RatioRequirements.RequirementsHeadingForLevel6,
-                                                                 AdditionalInformationBody =
-                                                                     RatioRequirements.RequirementsForLevel6,
-                                                                 ShowAdditionalInformationBodyByDefault =
-                                                                     RatioRequirements.ApprovedForLevel6
-                                                                         is QualificationApprovalStatus.NotApproved
-                                                                            or QualificationApprovalStatus
-                                                                                .PossibleRouteAvailable
-                                                                     && RatioRequirements
-                                                                         .ShowRequirementsForLevel6ByDefault
-                                                             }
+                                     SummaryCardBody = RatioRequirements.RequirementsForLevel6
                                  },
                                  new RatioRowModel
                                  {
                                      Level = 3,
                                      LevelText = "Level 3",
                                      ApprovalStatus = RatioRequirements.ApprovedForLevel3,
-                                     AdditionalInformation = new AdditionalInformationModel
-                                                             {
-                                                                 AdditionalInformationHeader =
-                                                                     RatioRequirements.RequirementsHeadingForLevel3,
-                                                                 AdditionalInformationBody =
-                                                                     RatioRequirements.RequirementsForLevel3,
-                                                                 ShowAdditionalInformationBodyByDefault =
-                                                                     RatioRequirements.ApprovedForLevel3
-                                                                         is QualificationApprovalStatus.NotApproved
-                                                                            or QualificationApprovalStatus
-                                                                                .PossibleRouteAvailable
-                                                                     && RatioRequirements
-                                                                         .ShowRequirementsForLevel3ByDefault
-                                                             }
+                                     SummaryCardBody = RatioRequirements.RequirementsForLevel3
                                  },
                                  new RatioRowModel
                                  {
                                      Level = 2,
                                      LevelText = "Level 2",
                                      ApprovalStatus = RatioRequirements.ApprovedForLevel2,
-                                     AdditionalInformation = new AdditionalInformationModel
-                                                             {
-                                                                 AdditionalInformationHeader =
-                                                                     RatioRequirements.RequirementsHeadingForLevel2,
-                                                                 AdditionalInformationBody =
-                                                                     RatioRequirements.RequirementsForLevel2,
-                                                                 ShowAdditionalInformationBodyByDefault =
-                                                                     RatioRequirements
-                                                                         .ShowRequirementsForLevel2ByDefault
-                                                             }
+                                     SummaryCardBody = RatioRequirements.RequirementsForLevel2
                                  },
                                  new RatioRowModel
                                  {
                                      Level = 0,
                                      LevelText = "Unqualified",
                                      ApprovalStatus = RatioRequirements.ApprovedForUnqualified,
-                                     AdditionalInformation = new AdditionalInformationModel
-                                                             {
-                                                                 AdditionalInformationHeader =
-                                                                     RatioRequirements
-                                                                         .RequirementsHeadingForUnqualified,
-                                                                 AdditionalInformationBody =
-                                                                     RatioRequirements.RequirementsForUnqualified
-                                                             }
+                                     SummaryCardBody = RatioRequirements.RequirementsForUnqualified
                                  }
                              };
 
