@@ -1,22 +1,23 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels
-@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
-@model ConfirmationViewModel
+@model ConfirmationPageViewModel
 
 @{
-    ViewData["Title"] = Model.Heading;
+    ViewData["Title"] = Model.BodyHeading;
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <div class="govuk-panel govuk-panel--confirmation">
             <h1 class="govuk-panel__title" id="success-message">
-                @Model.BannerSuccessMessage
+                @Model.SuccessMessage
             </h1>
         </div>
 
-        <div class="govuk-body" id="additional-success-text">@Html.Raw(Model.AdditionalSuccessText)</div>
+        <p class="govuk-body govuk-!-margin-bottom-4">
+            @Model.SuccessMessageFollowingText
+        </p>
 
-        <h2 class="govuk-heading-m " id="help-confirmation-body-heading">@Model.BodyHeading</h2>
+        <h2 class="govuk-heading-m" id="help-confirmation-body-heading">@Model.BodyHeading</h2>
         <div class="govuk-body" id="help-confirmation-body">@Html.Raw(Model.Body)</div>
         @{
             await Html.RenderPartialAsync("Partials/FeedbackComponent", Model.FeedbackComponent);

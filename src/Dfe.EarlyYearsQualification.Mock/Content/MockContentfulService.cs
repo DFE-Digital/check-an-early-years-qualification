@@ -1,6 +1,7 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using File = Contentful.Core.Models.File;
@@ -511,23 +512,6 @@ public class MockContentfulService : IContentService
                                         FurtherInformationErrorMessage = "Enter further information about your enquiry"
                                      });
     }
-
-    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
-    {
-        return await Task.FromResult(new HelpConfirmationPage
-                                     {
-                                         SuccessMessage = "This is the success message",
-                                         BodyHeading = "Body heading",
-                                         Body = ContentfulContentHelper.Paragraph("This is the body"),
-                                         FeedbackComponent = GetFeedbackComponent(),
-                                         ReturnToHomepageLink = new NavigationLink
-                                                                {
-                                                                    DisplayText = "Return to the homepage",
-                                                                    Href = "/"
-                                                                }
-                                     });
-    }
-
     public async Task<PreCheckPage?> GetPreCheckPage()
     {
         return await Task.FromResult(new PreCheckPage
@@ -744,6 +728,50 @@ public class MockContentfulService : IContentService
                                      });
     }
 
+
+    // todo mock this up
+
+    public async Task<GetHelpPage?> GetGetHelpPage()
+    {
+        return await Task.FromResult(new GetHelpPage());
+    }
+
+    // todo mock this up
+    public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()
+    {
+        return await Task.FromResult(new HelpQualificationDetailsPage());
+    }
+
+
+
+    // todo mock this up
+    public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage()
+    {
+        return await Task.FromResult(new HelpProvideDetailsPage());
+    }
+
+    // todo mock this up
+    public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
+    {
+        return await Task.FromResult(new HelpEmailAddressPage());
+    }
+
+    //todo mock this up
+    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
+    {
+        return await Task.FromResult(new HelpConfirmationPage
+        {
+            SuccessMessage = "This is the success message",
+            BodyHeading = "Body heading",
+            Body = ContentfulContentHelper.Paragraph("This is the body"),
+            FeedbackComponent = GetFeedbackComponent(),
+            ReturnToHomepageLink = new NavigationLink
+            {
+                DisplayText = "Return to the homepage",
+                Href = "/"
+            }
+        });
+    }
     private static RadioQuestionPage CreateWhereWasTheQualificationAwardedPage()
     {
         var options = new List<IOptionItem>

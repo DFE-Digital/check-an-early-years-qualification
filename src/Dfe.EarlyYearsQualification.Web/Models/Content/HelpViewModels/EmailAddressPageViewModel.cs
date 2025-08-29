@@ -3,25 +3,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
-public class EmailAddressViewModel
+public class EmailAddressPageViewModel
 {
-    public NavigationLinkModel? BackButton { get; init; } = new()
-    {
-        DisplayText = "Back to get help with the Check an early years qualification service",
-        Href = "./get-help"
-    };
+    // Contentful fields
+    public NavigationLinkModel BackButton { get; set; } = new NavigationLinkModel();
 
-    public string CtaButtonText { get; init; } = "Send a message";
+    public string CtaButtonText { get; set; } = string.Empty;
 
-    // email address input
-    public string EmailAddressHeading { get; init; } = "What is your email address?";
+    public string Heading { get; set; } = string.Empty;
 
-    public string EmailAddressHintText { get; init; } = "We will only use this email address to reply to your message";
+    public string PostHeadingContent { get; set; } = string.Empty;
 
-    public bool HasEmailAddressError { get; set; }
+    public string EmailAddressErrorMessage { get; set; } = string.Empty;
 
-    public string EmailAddressErrorMessage { get; set; } = "Enter an email address";
+    public string ErrorBannerHeading { get; set; } = string.Empty;
 
+    // values to bind
     [EmailAddress]
     [Required]
     [Sensitive]
@@ -29,7 +26,7 @@ public class EmailAddressViewModel
     public string EmailAddress { get; set; } = string.Empty;
 
     // validation handling
-    public string ErrorBannerHeading { get; init; } = "There is a problem";
+    public bool HasEmailAddressError { get; set; }
 
     public bool HasValidationErrors => Errors.Any();
 

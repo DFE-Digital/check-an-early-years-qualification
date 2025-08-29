@@ -5,38 +5,30 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
 public class NewHelpPageViewModel
 {
-    public NavigationLinkModel? BackButton { get; init; } = new()
-    {
-        DisplayText = "Home",
-        Href = "/"
-    };
+    // Contentful fields
+    public NavigationLinkModel BackButton { get; init; } = new NavigationLinkModel();
 
-    public string Heading { get; init; } = "Get help with the Check an early years qualification service";
+    public string Heading { get; init; } = string.Empty;
     
-    // todo this needs splitting into two elements or separated with <p> tags
-    public string PostHeadingContent { get; init; } = "Use this form to ask a question about a qualification or report a problem with the service or the information it provides. We aim to respond to all queries within 5 working days. Complex cases may take longer.";
+    public string PostHeadingContent { get; init; } = string.Empty;
     
-    public string ReasonForEnquiryHeading { get; init; } = "Why are you contacting us?";
+    public string ReasonForEnquiryHeading { get; init; } = string.Empty;
 
-    public string CtaButtonText { get; init; } = "Continue";
+    public string CtaButtonText { get; init; } = string.Empty;
 
-    // Selected enquiry radio buttons
-    public List<EnquiryOptionModel> EnquiryReasons { get; init; } = new List<EnquiryOptionModel>()
-    {
-        new EnquiryOptionModel { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
-        new EnquiryOptionModel { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" },
-    };
+    public List<EnquiryOptionModel> EnquiryReasons { get; init; } = new List<EnquiryOptionModel>();
 
-    public bool HasNoEnquiryOptionSelectedError { get; set; }
+    public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;
 
-    public string NoEnquiryOptionSelectedErrorMessage { get; init; } = "Select an option";
-    
+    public string ErrorBannerHeading { get; init; } = string.Empty;
+
+    // values to bind
     [Required]
     [IncludeInTelemetry]
     public string SelectedOption { get; set; } = string.Empty;
 
     // validation handling
-    public string ErrorBannerHeading { get; init; } = "There is a problem";
+    public bool HasNoEnquiryOptionSelectedError { get; set; }
 
     public bool HasValidationErrors => Errors.Any();
 

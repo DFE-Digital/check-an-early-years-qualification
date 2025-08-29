@@ -1,9 +1,21 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels
 @using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
-@model QualificationDetailsViewModel
+@model QualificationDetailsPageViewModel
 
 @{
     ViewData["Title"] = Model.Heading;
+}
+
+
+
+@{
+    var startDateMonthClass = Model.OptionalQualificationStartDate.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2";
+    var startDateYearClass = Model.OptionalQualificationStartDate.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4";
+}
+
+@{
+    var awardedDateMonthClass = Model.QualificationAwardedDate.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2";
+    var awardedDatelYearClass = Model.QualificationAwardedDate.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4";
 }
 
 @section BeforeMainContent {
@@ -26,7 +38,7 @@
 
         @using (Html.BeginForm("qualification-details", "help", FormMethod.Post, new { id = "qualification-details-form" }))
         {
-            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasQualificationNameError ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasQualificationNameError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="qualification-name-heading">
                     <label class="govuk-label govuk-label--m" for="QualificationName">
                         @Model.QualificationNameHeading
@@ -43,11 +55,68 @@
                 @Html.TextBoxFor(x => x.QualificationName, new { @class = "govuk-input" })
             </div>
 
+
+            <div class="govuk-form-group govuk-!-margin-bottom-6">
+                <div class="govuk-form-group">
+                    <h2 class="govuk-heading-s" id="@Model.OptionalQualificationStartDate.Prefix-header">@Model.OptionalQualificationStartDate.QuestionHeader</h2>
+
+                    <div class="govuk-date-input" id="@Model.OptionalQualificationStartDate.QuestionId">
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label id="@Model.OptionalQualificationStartDate.Prefix-month-label" class="govuk-label govuk-date-input__label"
+                                        for="@Model.OptionalQualificationStartDate.MonthId">@Model.OptionalQualificationStartDate.MonthLabel</label>
+                                @Html.TextBox(Model.OptionalQualificationStartDate.MonthId, Model.StartDateSelectedMonth, new { id = Model.OptionalQualificationStartDate.MonthId, @class = startDateMonthClass, maxlength = 2, name = Model.OptionalQualificationStartDate.MonthId, type = "text", inputmode = "numeric" })
+                            </div>
+                        </div>
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label id="@Model.OptionalQualificationStartDate.Prefix-year-label" class="govuk-label govuk-date-input__label"
+                                        for="@Model.OptionalQualificationStartDate.YearId">@Model.OptionalQualificationStartDate.YearLabel</label>
+                                @Html.TextBox(Model.OptionalQualificationStartDate.YearId, Model.StartDateSelectedYear, new { id = Model.OptionalQualificationStartDate.YearId, @class = startDateYearClass, maxlength = 4, name = Model.OptionalQualificationStartDate.YearId, type = "text", inputmode = "numeric" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="govuk-form-group govuk-!-margin-bottom-6">
+                <div class="govuk-form-group @(Model.HasRequiredAwardedDateMonthError || Model.HasRequiredAwardedDateYearError ? "govuk-form-group--error" : "")">
+                    <h2 class="govuk-heading-s" id="@Model.QualificationAwardedDate.Prefix-header">@Model.QualificationAwardedDate.QuestionHeader</h2>
+                    @if (Model.HasRequiredAwardedDateMonthError || Model.HasRequiredAwardedDateYearError)
+                    {
+                        <p id="@Model.QualificationAwardedDate.Prefix-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span>@Html.Raw(Model.QualificationAwardedDate.ErrorMessage)
+                        </p>
+                    }
+
+                    <div class="govuk-date-input" id="@Model.QualificationAwardedDate.QuestionId">
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label id="@Model.QualificationAwardedDate.Prefix-month-label" class="govuk-label govuk-date-input__label"
+                                        for="@Model.QualificationAwardedDate.MonthId">@Model.QualificationAwardedDate.MonthLabel</label>
+                                @Html.TextBox(Model.QualificationAwardedDate.MonthId, Model.AwardedDateSelectedMonth, new { id = Model.QualificationAwardedDate.MonthId, @class = awardedDateMonthClass, maxlength = 2, name = Model.QualificationAwardedDate.MonthId, type = "text", inputmode = "numeric" })
+                            </div>
+                        </div>
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label id="@Model.QualificationAwardedDate.Prefix-year-label" class="govuk-label govuk-date-input__label"
+                                        for="@Model.QualificationAwardedDate.YearId">@Model.QualificationAwardedDate.YearLabel</label>
+                                @Html.TextBox(Model.QualificationAwardedDate.YearId, Model.AwardedDateSelectedYear, new { id = Model.QualificationAwardedDate.YearId, @class = awardedDatelYearClass, maxlength = 4, name = Model.QualificationAwardedDate.YearId, type = "text", inputmode = "numeric" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            /*
+
             await Html.RenderPartialAsync("Partials/Date", Model.OptionalQualificationStartDate);
 
             await Html.RenderPartialAsync("Partials/Date", Model.QualificationAwardedDate);
-
-            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasAwardingOrganisationError ? "govuk-form-group--error" : "")">
+            */
+            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasAwardingOrganisationError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="awarding-organisation-heading">
                     <label class="govuk-label govuk-label--m" for="AwardingOrganisation">
                         @Model.AwardingOrganisationHeading

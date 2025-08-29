@@ -3,33 +3,31 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
-public class ProvideDetailsViewModel
+public class ProvideDetailsPageViewModel
 {
-    public NavigationLinkModel? BackButton { get; init; } = new()
-    {
-        DisplayText = "Back to get help with the Check an early years qualification service",
-        Href = "./qualification-details"
-    };
+    // Contentful fields
+    public NavigationLinkModel? BackButton { get; init; } = new();
 
-    public string Heading { get; init; } = "How can we help you?";
+    public string Heading { get; init; } = string.Empty;
     
-    public string PostHeadingContent { get; init; } = "Give as much detail as you can. This helps us give you the right support.";
+    public string PostHeadingContent { get; init; } = string.Empty;
     
-    public string CtaButtonText { get; init; } = "Continue";
+    public string CtaButtonText { get; init; } = string.Empty;
 
-    public string AdditionalInformationWarningText { get; init; } = "Do not include any personal information";
+    public string AdditionalInformationWarningText { get; init; } = string.Empty;
+
+    public string ProvideAdditionalInformation { get; set; } = string.Empty;
+
+    public string ErrorBannerHeading { get; init; } = string.Empty;
+
+    public string AdditionalInformationErrorMessage { get; init; } = string.Empty;
 
     // text area input
     [Required]
     [IncludeInTelemetry]
-    public string ProvideAdditionalInformation { get; set; } = string.Empty;
-
     public bool HasAdditionalInformationError { get; set; }
 
-    public string AdditionalInformationErrorMessage { get; init; } = "Provide information about how we can help you";
-
     // validation handling
-    public string ErrorBannerHeading { get; init; } = "There is a problem";
 
     public bool HasValidationErrors => Errors.Any();
 

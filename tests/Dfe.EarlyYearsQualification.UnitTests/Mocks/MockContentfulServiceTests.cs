@@ -1,6 +1,7 @@
 ﻿using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Mock.Content;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;

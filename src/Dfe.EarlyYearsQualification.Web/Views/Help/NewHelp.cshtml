@@ -25,7 +25,7 @@
 
         @using (Html.BeginForm("get-help", "help", FormMethod.Post, new { id = "reason-for-enquiring-form" }))
         {
-            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l mb-0">
                         <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="reason-for-enquiry-heading">

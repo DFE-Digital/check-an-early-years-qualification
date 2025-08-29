@@ -1,6 +1,6 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels
 @using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
-@model ProvideDetailsViewModel
+@model ProvideDetailsPageViewModel
 
 @{
     ViewData["Title"] = Model.Heading;
@@ -21,7 +21,7 @@
 
         @using (Html.BeginForm("provide-details", "help", FormMethod.Post, new { id = "provide-additional-details-form" }))
         {
-            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasAdditionalInformationError ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasAdditionalInformationError ? "govuk-form-group--error" : "")">
                 <h1 class="govuk-heading-xl govuk-label-wrapper govuk-!-margin-bottom-3" id="additional-information-heading">
                     <label for="ProvideAdditionalInformation">
                         @Model.Heading

@@ -1,20 +1,21 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
+using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
 public static class HelpConfirmationPageModelMapper
 {
-    public static HelpConfirmationPageModel Map(HelpConfirmationPage helpConfirmationPage, string bodyHtml,
+    public static ConfirmationPageViewModel Map(HelpConfirmationPage helpConfirmationPage, string bodyHtml,
                                                 string feedbackBodyHtml)
     {
-        return new HelpConfirmationPageModel
-               {
+        return new ConfirmationPageViewModel
+        {
                    SuccessMessage = helpConfirmationPage.SuccessMessage,
                    BodyHeading = helpConfirmationPage.BodyHeading,
                    Body = bodyHtml,
                    FeedbackComponent = FeedbackComponentModelMapper.Map(helpConfirmationPage.FeedbackComponent!.Header, feedbackBodyHtml),
-                   ReturnToTheHomepageLink = NavigationLinkMapper.Map(helpConfirmationPage.ReturnToHomepageLink)
-               };
+                   ReturnToTheHomepageLink = NavigationLinkMapper.Map(helpConfirmationPage.ReturnToHomepageLink),
+                   SuccessMessageFollowingText = helpConfirmationPage.SuccessMessageFollowingText
+        };
     }
 }

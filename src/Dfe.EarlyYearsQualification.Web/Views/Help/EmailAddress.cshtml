@@ -1,9 +1,9 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels
 @using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
-@model EmailAddressViewModel
+@model EmailAddressPageViewModel
 
 @{
-    ViewData["Title"] = "Model.Heading"; // todo
+    ViewData["Title"] = Model.Heading;
 }
 
 @section BeforeMainContent {
@@ -21,14 +21,14 @@
 
         @using (Html.BeginForm("email-address", "help", FormMethod.Post, new { id = "email-address-form" }))
         {
-            <div class="govuk-form-group govuk-!-margin-bottom-7 @(Model.HasEmailAddressError ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasEmailAddressError ? "govuk-form-group--error" : "")">
                 <h1 class="govuk-heading-xl govuk-label-wrapper govuk-!-margin-bottom-3" id="email-address-heading">
                     <label for="EmailAddress">
-                        @Model.EmailAddressHeading
+                        @Model.Heading
                     </label>
                 </h1>
                 <div id="email-address-hint" class="govuk-hint">
-                    @Model.EmailAddressHintText
+                    @Model.PostHeadingContent
                 </div>
                 @if (Model.HasEmailAddressError)
                 {

@@ -85,24 +85,33 @@ public class ConfirmQualificationController(
                                              AdditionalRequirementQuestions.Count: > 0
                                          };
 
-            return model.ConfirmQualificationAnswer switch
-                   {
-                       "yes" when hasAdditionalQuestions => RedirectToAction("Index",
-                                                                             "CheckAdditionalRequirements",
-                                                                             new
-                                                                             {
-                                                                                 qualificationId =
-                                                                                     model.QualificationId,
-                                                                                 questionIndex = 1
-                                                                             }),
+            switch (model.ConfirmQualificationAnswer)
+            {
+                case "yes":
+                    userJourneyCookieService.SetSelectedQualificationName(qualification.QualificationName);
 
-                       "yes" => RedirectToAction("Index",
-                                                 "QualificationDetails",
-                                                 new { qualificationId = model.QualificationId }),
+                    if (hasAdditionalQuestions)
+                    {
+                        return RedirectToAction("Index", "CheckAdditionalRequirements",
+                           new
+                           {
+                               qualificationId =
+                                   model.QualificationId,
+                               questionIndex = 1
+                           }
+                       );
+                    }
 
-                       _ => RedirectToAction("Get", "QualificationSearch")
-                   };
-        }
+                    return RedirectToAction("Index", "QualificationDetails",
+                        new
+                        {
+                            qualificationId = model.QualificationId
+                        }
+                    );
+                default:
+                    return RedirectToAction("Get", "QualificationSearch");
+                }
+            }
 
         var content = await contentService.GetConfirmQualificationPage();
 
