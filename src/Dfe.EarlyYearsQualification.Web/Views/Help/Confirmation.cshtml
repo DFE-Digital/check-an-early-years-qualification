@@ -2,7 +2,7 @@
 @model ConfirmationPageViewModel
 
 @{
-    ViewData["Title"] = "Help Confirmation Page";
+    ViewData["Title"] = Model.BodyHeading;
 }
 
 <div class="govuk-grid-row">
@@ -12,7 +12,12 @@
                 @Model.SuccessMessage
             </h1>
         </div>
-        <h2 class="govuk-heading-m govuk-!-margin-top-8" id="help-confirmation-body-heading">@Model.BodyHeading</h2>
+
+        <p class="govuk-body govuk-!-margin-bottom-4">
+            @Model.SuccessMessageFollowingText
+        </p>
+
+        <h2 class="govuk-heading-m" id="help-confirmation-body-heading">@Model.BodyHeading</h2>
         <div class="govuk-body" id="help-confirmation-body">@Html.Raw(Model.Body)</div>
         @{
             await Html.RenderPartialAsync("Partials/FeedbackComponent", Model.FeedbackComponent);

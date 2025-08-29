@@ -1,0 +1,51 @@
+﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels
+@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
+@model EmailAddressPageViewModel
+
+@{
+    ViewData["Title"] = Model.Heading;
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        @if (Model.HasValidationErrors)
+        {
+            await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel);
+        }
+
+        @using (Html.BeginForm("email-address", "help", FormMethod.Post, new { id = "email-address-form" }))
+        {
+            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasEmailAddressError ? "govuk-form-group--error" : "")">
+                <h1 class="govuk-heading-xl govuk-label-wrapper govuk-!-margin-bottom-3" id="email-address-heading">
+                    <label for="EmailAddress">
+                        @Model.Heading
+                    </label>
+                </h1>
+                <div id="email-address-hint" class="govuk-hint">
+                    @Model.PostHeadingContent
+                </div>
+                @if (Model.HasEmailAddressError)
+                {
+                    <p id="email-address-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">
+                            Error:
+                        </span>@Model.EmailAddressErrorMessage
+                    </p>
+                }
+                @Html.TextBoxFor(x => x.EmailAddress, new { @class = "govuk-input", aria_describedby = "email-address-heading" })
+            </div>
+
+            <div class="govuk-form-group">
+                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
+                    @Model.CtaButtonText
+                </button>
+            </div>
+        }
+    </div>
+</div>

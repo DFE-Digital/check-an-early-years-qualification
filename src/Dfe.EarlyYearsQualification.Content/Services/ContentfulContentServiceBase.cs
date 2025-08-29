@@ -3,6 +3,7 @@ using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Resolvers;
 using Microsoft.Extensions.Logging;
 
@@ -35,12 +36,15 @@ public abstract class ContentfulContentServiceBase
               { typeof(CheckAdditionalRequirementsAnswerPage), ContentTypes.CheckAdditionalRequirementsAnswerPage },
               { typeof(OpenGraphData), ContentTypes.OpenGraphData },
               { typeof(CheckYourAnswersPage), ContentTypes.CheckYourAnswersPage },
-              { typeof(HelpPage), ContentTypes.HelpPage },
-              { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage },
               { typeof(PreCheckPage), ContentTypes.PreCheckPage },
               { typeof(Footer), ContentTypes.Footer },
               { typeof(FeedbackFormPage), ContentTypes.FeedbackFormPage },
-              { typeof(FeedbackFormConfirmationPage), ContentTypes.FeedbackFormConfirmationPage }
+              { typeof(FeedbackFormConfirmationPage), ContentTypes.FeedbackFormConfirmationPage },
+              { typeof(GetHelpPage), ContentTypes.GetHelpPage },
+              { typeof(HelpQualificationDetailsPage), ContentTypes.HelpQualificationDetailsPage },
+              { typeof(HelpProvideDetailsPage), ContentTypes.HelpProvideDetailsPage },
+              { typeof(HelpEmailAddressPage), ContentTypes.HelpEmailAddressPage },
+              { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage }
           };
 
     protected readonly ILogger Logger;

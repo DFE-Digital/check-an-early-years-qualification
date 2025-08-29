@@ -1,11 +1,13 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -214,7 +216,7 @@ public class AdviceController(
         return HelpPageMapper.Map(helpPage, postHeadingContentHtml, emailAddressErrorMessage);
     }
     
-    private async Task<HelpConfirmationPageModel> Map(HelpConfirmationPage helpConfirmationPage)
+    private async Task<ConfirmationPageViewModel> Map(HelpConfirmationPage helpConfirmationPage)
     {
         var bodyHtml = await contentParser.ToHtml(helpConfirmationPage.Body);
         var feedbackBodyHtml = await contentParser.ToHtml(helpConfirmationPage.FeedbackComponent!.Body);

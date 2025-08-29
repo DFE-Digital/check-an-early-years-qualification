@@ -1,4 +1,5 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 
 namespace Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 
@@ -43,8 +44,6 @@ public interface IContentService
     Task<CheckYourAnswersPage?> GetCheckYourAnswersPage();
 
     Task<HelpPage?> GetHelpPage();
-    
-    Task<HelpConfirmationPage?> GetHelpConfirmationPage();
 
     Task<PreCheckPage?> GetPreCheckPage();
 
@@ -53,4 +52,14 @@ public interface IContentService
     Task<FeedbackFormPage?> GetFeedbackFormPage();
     
     Task<FeedbackFormConfirmationPage?> GetFeedbackFormConfirmationPage();
+
+    Task<GetHelpPage?> GetGetHelpPage();
+
+    Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage();
+
+    Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage();
+
+    Task<HelpEmailAddressPage?> GetHelpEmailAddressPage();
+
+    Task<HelpConfirmationPage?> GetHelpConfirmationPage();
 }

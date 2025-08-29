@@ -1,8 +1,11 @@
-namespace Dfe.EarlyYearsQualification.Web.Models.Content;
+namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
-public class HelpConfirmationPageModel
+public class ConfirmationPageViewModel
 {
+    // Contentful fields
     public string SuccessMessage { get; init; } = string.Empty;
+
+    public string SuccessMessageFollowingText { get; init; } = string.Empty;
 
     public string BodyHeading { get; init; } = string.Empty;
 

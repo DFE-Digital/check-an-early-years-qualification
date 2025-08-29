@@ -66,6 +66,18 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public void SetSelectedQualificationName(string qualificationName)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.SelectedQualificationName = qualificationName;
+
+            SetJourneyCookie();
+        }
+    }
+
     public void SetAwardingOrganisation(string awardingOrganisation)
     {
         lock (_lockObject)
@@ -258,6 +270,22 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             }
 
             return level;
+        }
+    }
+
+    public string? GetSelectedQualificationName()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            string? qualificationName = null;
+            if (!string.IsNullOrEmpty(_model!.SelectedQualificationName))
+            {
+                qualificationName = _model.SelectedQualificationName;
+            }
+
+            return qualificationName;
         }
     }
 
@@ -460,6 +488,28 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public HelpFormEnquiry GetReasonForEnquiringHelpForm()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.HelpFormEnquiry;
+        }
+    }
+
+    public void SetReasonForEnquiringHelpForm(HelpFormEnquiry formEnquiry)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.HelpFormEnquiry = formEnquiry;
+
+            SetJourneyCookie();
+        }
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)
@@ -532,19 +582,48 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
     /// </remarks>
     public class UserJourneyModel
     {
+        public string SelectedQualificationName { get; set; } = string.Empty;
+
         public string WhereWasQualificationAwarded { get; set; } = string.Empty;
+
         public string WhenWasQualificationStarted { get; set; } = string.Empty;
+
         public string WhenWasQualificationAwarded { get; set; } = string.Empty;
+
         public string LevelOfQualification { get; set; } = string.Empty;
+
         public string WhatIsTheAwardingOrganisation { get; set; } = string.Empty;
+
         public bool SelectedAwardingOrganisationNotOnTheList { get; set; }
 
         public string SearchCriteria { get; set; } = string.Empty;
 
         public Dictionary<string, string> AdditionalQuestionsAnswers { get; init; } = new();
+
         public YesOrNo QualificationWasSelectedFromList { get; set; }
 
         public bool HasSubmittedEmailAddressInFeedbackFormQuestion { get; set; }
+
         public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
+
+        public HelpFormEnquiry HelpFormEnquiry { get; set; }
+    }
+
+
+    public class HelpFormEnquiry
+    {
+        public string ReasonForEnquiring { get; set; }
+
+        public string? QualificationName { get; set; }
+
+        public string? QualificationStartDate { get; set; }
+
+        public string? QualificationAwardedDate { get; set; }
+
+        public string? AwardingOrganisation { get; set; }
+
+        public string AdditionalInformation { get; set; }
+
+        public string EmailAddress { get; set; }
     }
 }
