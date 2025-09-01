@@ -133,7 +133,7 @@ jobs:
             "WEBAPP_TEAM_ACCESS_KEY"=$WEBAPP_TEAM_ACCESS_KEY
           }';
           
-          echo vars=$vars;
+          echo vars=$VARS;
           
           secrets=secrets >> $GITHUB_OUTPUT
 
