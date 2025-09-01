@@ -155,7 +155,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await processAdditionalRequirement(page, "EYQ-240", 1, "#yes");
         await processAdditionalRequirement(page, "EYQ-240", 2, "#no");
         await confirmAdditonalRequirementsAnswers(page, "EYQ-240");
-        await checkSnapshot(page);
+        await checkSnapshot(page, false, 2000, 3591);
     });
 
     test("Something went wrong page", async ({page}) => {
