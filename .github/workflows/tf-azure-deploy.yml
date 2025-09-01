@@ -113,7 +113,7 @@ jobs:
           WEBAPP_E2E_ACCESS_KEY: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           WEBAPP_TEAM_ACCESS_KEY: ${{ secrets.WEBAPP_TEAM_ACCESS_KEY }}
         run: |
-          echo secrets={
+          echo secrets='{
             "CACHE_ENDPOINT_SECRET": $CACHE_ENDPOINT_SECRET,
             "CONTENTFUL_DELIVERY_API_KEY": $CONTENTFUL_DELIVERY_API_KEY,
             "CONTENTFUL_PREVIEW_API_KEY": $CONTENTFUL_PREVIEW_API_KEY,
@@ -130,14 +130,14 @@ jobs:
             "WEBAPP_ACCESS_KEY_2": $WEBAPP_ACCESS_KEY_2,
             "WEBAPP_E2E_ACCESS_KEY": $WEBAPP_E2E_ACCESS_KEY,
             "WEBAPP_TEAM_ACCESS_KEY": $WEBAPP_TEAM_ACCESS_KEY
-          };
+          }';
           secrets=secrets >> $GITHUB_OUTPUT
 
       # Generates Terraform input variables
       - name: Generate Terraform Variables
         shell: bash
         env:
-          WEB_SECRETS: ${{ steps.terraform_secrets.outputs.secrets }}
+          WEB_SECRETS: ${{ toJSON(steps.terraform_secrets.outputs.secrets) }}
           WEB_VARS: ${{ toJSON(vars) }}
         run: |
           printf '%s\n' "$WEB_SECRETS" > tmp-secrets.json
