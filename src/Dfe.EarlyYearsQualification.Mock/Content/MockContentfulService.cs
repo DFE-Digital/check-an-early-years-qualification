@@ -476,42 +476,6 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<HelpPage?> GetHelpPage()
-    {
-        return await Task.FromResult(new HelpPage
-                                     {
-                                        Heading = "Help Page Heading",
-                                        PostHeadingContent = ContentfulContentHelper.Paragraph("This is the post heading text"),
-                                        EmailAddressHeading = "Enter your email address (optional)",
-                                        EmailAddressHintText = "If you do not enter your email address we will not be able to contact you in relation to your enquiry",
-                                        ReasonForEnquiryHeading = "Choose the reason of your enquiry",
-                                        ReasonForEnquiryHintText = "Select one option",
-                                        EnquiryReasons =
-                                        [
-                                            new EnquiryOption
-                                            { Label = "Option 1", Value = "Option 1" },
-                                            new EnquiryOption
-                                            { Label = "Option 2", Value = "Option 2" },
-                                            new EnquiryOption
-                                            { Label = "Option 3", Value = "Option 3" }
-                                        ],
-                                        AdditionalInformationHeading = "Provide further information about your enquiry",
-                                        AdditionalInformationHintText = "Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.",
-                                        AdditionalInformationWarningText = "Do not include personal information, for example the name of the qualification holder",
-                                        CtaButtonText = "Send message",
-                                        BackButton = new NavigationLink
-                                                     {
-                                                         DisplayText = "Home",
-                                                         Href = HomePath,
-                                                         OpenInNewTab = false
-                                                     },
-                                        ErrorBannerHeading = ThereIsAProblem,
-                                        NoEmailAddressEnteredErrorMessage = "Enter an email address",
-                                        InvalidEmailAddressErrorMessage = "Enter a valid email address",
-                                        NoEnquiryOptionSelectedErrorMessage = "Select one option",
-                                        FurtherInformationErrorMessage = "Enter further information about your enquiry"
-                                     });
-    }
     public async Task<PreCheckPage?> GetPreCheckPage()
     {
         return await Task.FromResult(new PreCheckPage

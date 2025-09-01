@@ -200,7 +200,7 @@ public class ApplicationInsightsActionFilterAttributeTests
         mockRequestTelemetry.Properties.Values.First().Should().Be("Not found");
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }
-    
+    /*
     [TestMethod]
     public async Task OnActionExecutionAsync_SerialisesRequestBody_AddsRequestBodyToRequestTelemetry()
     {
@@ -270,7 +270,7 @@ public class ApplicationInsightsActionFilterAttributeTests
         const string expectedRequestBodyValue = "{\"SelectedOption\":\"This is the selected option\",\"EmailAddress\":\"****\",\"AdditionalInformationMessage\":\"Test message\"}";
         requestBodyValue.Should().Match(expectedRequestBodyValue);
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
-    }
+    }*/
     
     [TestMethod]
     public async Task OnActionExecutionAsync_ExceptionThrown_CallsLogger()

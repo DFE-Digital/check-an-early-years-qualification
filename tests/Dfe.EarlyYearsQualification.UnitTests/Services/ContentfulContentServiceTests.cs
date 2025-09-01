@@ -1056,7 +1056,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         result.Should().BeNull();
     }
     
-    [TestMethod]
+   /* [TestMethod]
     public async Task GetHelpPage_ReturnsData()
     {
         var data = new HelpPage { Heading = "test heading" };
@@ -1088,7 +1088,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var result = await service.GetHelpPage();
 
         result.Should().BeNull();
-    }
+    }*/
     
     [TestMethod]
     public async Task GetHelpConfirmationPage_ReturnsData()

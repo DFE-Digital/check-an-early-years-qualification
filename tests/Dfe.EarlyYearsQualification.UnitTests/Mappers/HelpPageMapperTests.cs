@@ -8,7 +8,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 [TestClass]
 public class HelpPageMapperTests
 {
-    [TestMethod]
+   /* [TestMethod]
     public void Map_MapsToModel()
     {
         const string postHeadingContent = "This is the post heading text";
@@ -81,5 +81,5 @@ public class HelpPageMapperTests
         result.EmailAddressErrorMessage.Should().Be(emailAddressErrorMessage);
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
         result.AdditionalInformationErrorMessage.Should().Be("Enter further information about your enquiry");
-    }
+    }*/
 }

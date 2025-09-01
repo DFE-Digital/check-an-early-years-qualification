@@ -488,7 +488,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
-    public HelpFormEnquiry GetReasonForEnquiringHelpForm()
+    public HelpFormEnquiry GetHelpFormEnquiry()
     {
         lock (_lockObject)
         {
@@ -498,7 +498,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
-    public void SetReasonForEnquiringHelpForm(HelpFormEnquiry formEnquiry)
+    public void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry)
     {
         lock (_lockObject)
         {
@@ -607,23 +607,5 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
 
         public HelpFormEnquiry HelpFormEnquiry { get; set; }
-    }
-
-
-    public class HelpFormEnquiry
-    {
-        public string ReasonForEnquiring { get; set; }
-
-        public string? QualificationName { get; set; }
-
-        public string? QualificationStartDate { get; set; }
-
-        public string? QualificationAwardedDate { get; set; }
-
-        public string? AwardingOrganisation { get; set; }
-
-        public string AdditionalInformation { get; set; }
-
-        public string EmailAddress { get; set; }
     }
 }

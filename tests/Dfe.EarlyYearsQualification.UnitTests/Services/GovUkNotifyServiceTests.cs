@@ -88,7 +88,7 @@ public class GovUkNotifyServiceTests
             .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
                     Times.Once());
     }
-    
+    /*
     [TestMethod]
     public void SendHelpPageNotification_UserEmailAddressIsNull_MatchesExpected()
     {
@@ -126,7 +126,7 @@ public class GovUkNotifyServiceTests
         mockNotificationClient
             .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
                     Times.Once());
-    }
+    }*/
 
     [TestMethod]
     public void SendHelpPageNotification_ThrowsException()

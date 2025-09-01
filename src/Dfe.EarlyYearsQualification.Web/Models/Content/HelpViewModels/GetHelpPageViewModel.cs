@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
-public class NewHelpPageViewModel
+public class GetHelpPageViewModel
 {
     // Contentful fields
     public NavigationLinkModel BackButton { get; init; } = new NavigationLinkModel();

@@ -669,7 +669,7 @@ public class MockContentfulServiceTests
         result.AnyAwardingOrganisationText.Should().Be("Various awarding organisations");
         result.AnyLevelText.Should().Be("Any level");
     }
-
+/*
     [TestMethod]
     public async Task GetHelpPage_ReturnsExpectedDetails()
     {
@@ -709,7 +709,7 @@ public class MockContentfulServiceTests
         result.InvalidEmailAddressErrorMessage.Should().Be("Enter a valid email address");
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
         result.FurtherInformationErrorMessage.Should().Be("Enter further information about your enquiry");
-    }
+    }*/
 
     [TestMethod]
     public async Task GetHelpConfirmationPage_ReturnsExpectedDetails()

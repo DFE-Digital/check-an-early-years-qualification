@@ -40,6 +40,6 @@ public interface IUserJourneyCookieService
     bool GetHasSubmittedEmailAddressInFeedbackFormQuestion();
     void SetHasUserGotEverythingTheyNeededToday(string hasGotEverythingTheyNeededToday);
     string GetHasUserGotEverythingTheyNeededToday();
-    HelpFormEnquiry GetReasonForEnquiringHelpForm();
-    void SetReasonForEnquiringHelpForm(HelpFormEnquiry formEnquiry);
+    HelpFormEnquiry GetHelpFormEnquiry();
+    void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry);
 }

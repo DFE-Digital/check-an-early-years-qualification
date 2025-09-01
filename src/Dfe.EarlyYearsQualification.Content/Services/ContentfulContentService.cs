@@ -265,22 +265,6 @@ public class ContentfulContentService(
         return checkYourAnswersPages.First();
     }
 
-    public async Task<HelpPage?> GetHelpPage()
-    {
-        var helpPage = await GetEntriesByType<HelpPage>();
-
-        // ReSharper disable once InvertIf
-        if (helpPage is null || !helpPage.Any())
-        {
-            Logger.LogWarning("No 'Help Page' returned");
-            return null;
-        }
-
-        return helpPage.First();
-    }
-
-    
-
     public async Task<PreCheckPage?> GetPreCheckPage()
     {
         ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
