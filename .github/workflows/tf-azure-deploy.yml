@@ -132,7 +132,7 @@ jobs:
             "WEBAPP_TEAM_ACCESS_KEY"="${{ env.WEBAPP_TEAM_ACCESS_KEY }}"
           }';
           
-          secrets=$(secrets) >> $GITHUB_OUTPUT
+          echo "secrets=$(secrets)" >> $GITHUB_OUTPUT
 
       # Generates Terraform input variables
       - name: Generate Terraform Variables
