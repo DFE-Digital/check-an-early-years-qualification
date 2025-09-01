@@ -112,7 +112,6 @@ jobs:
           WEBAPP_ACCESS_KEY_2: ${{ secrets.WEBAPP_ACCESS_KEY_2 }}
           WEBAPP_E2E_ACCESS_KEY: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           WEBAPP_TEAM_ACCESS_KEY: ${{ secrets.WEBAPP_TEAM_ACCESS_KEY }}
-          VARS: ${{ vars }}
         run: |
           echo secrets='{
             "CACHE_ENDPOINT_SECRET"="${{ env.CACHE_ENDPOINT_SECRET }}",
