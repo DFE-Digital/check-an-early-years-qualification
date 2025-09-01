@@ -130,9 +130,7 @@ jobs:
             "WEBAPP_ACCESS_KEY_2"="${{ env.WEBAPP_ACCESS_KEY_2 }}",
             "WEBAPP_E2E_ACCESS_KEY"="${{ env.WEBAPP_E2E_ACCESS_KEY }}",
             "WEBAPP_TEAM_ACCESS_KEY"="${{ env.WEBAPP_TEAM_ACCESS_KEY }}"
-          }';
-          
-          echo "secrets=$(echo secrets)" >> $GITHUB_OUTPUT
+          }' >> $GITHUB_OUTPUT;
 
       # Generates Terraform input variables
       - name: Generate Terraform Variables
