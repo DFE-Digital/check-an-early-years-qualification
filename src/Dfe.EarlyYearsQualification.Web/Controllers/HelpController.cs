@@ -3,7 +3,6 @@ using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
-using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -15,7 +14,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("/help")]
 public class HelpController(
-    ILogger<HelpController> logger, // todo check if should log or throw exception
+    ILogger<HelpController> logger,
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
@@ -27,33 +26,38 @@ public class HelpController(
 {
 
     [HttpGet("get-help")]
-    public async Task<IActionResult> GetHelpAsync() 
+    public async Task<IActionResult> GetHelp() 
     {
         var content = await contentService.GetGetHelpPage();
 
         if (content is null)
         {
-            throw new Exception("'Get help page' content could not be found");
+            logger.LogError("'Get help page' content could not be found");
+            return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = await HelpControllerPageMapper.MapGetHelpPageContentToViewModelAsync(content, contentParser, ModelState);
+        var viewModel = await HelpControllerPageMapper.MapGetHelpPageContentToViewModelAsync(content, contentParser);
 
         return View("GetHelp", viewModel);
     } 
 
     [HttpPost("get-help")]
-    public async Task<IActionResult> Help([FromForm] GetHelpPageViewModel model)
+    public async Task<IActionResult> GetHelp([FromForm] GetHelpPageViewModel model)
     {
-        if (!ModelState.IsValid)
+        var content = await contentService.GetGetHelpPage();
+
+        if (content is null)
         {
-            var content = await contentService.GetGetHelpPage();
+            logger.LogError("'Get help page' content could not be found");
+            return RedirectToAction("Index", "Error");
+        }
 
-            if (content is null)
-            {
-                throw new Exception("'Get help page' content could not be found");
-            }
+        var submittedValueIsValid = content.EnquiryReasons.Select(x => x.Value).Contains(model.SelectedOption);
 
-            var viewModel = await HelpControllerPageMapper.MapGetHelpPageContentToViewModelAsync(content, contentParser, ModelState);
+        if (!ModelState.IsValid || !submittedValueIsValid)
+        {
+            var viewModel = await HelpControllerPageMapper.MapGetHelpPageContentToViewModelAsync(content, contentParser);
+            viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
 
             return View("GetHelp", viewModel);
         }
@@ -63,155 +67,130 @@ public class HelpController(
         {
             case "QuestionAboutAQualification":
                 userJourneyCookieService.SetHelpFormEnquiry(
-                    new()
+                    new HelpFormEnquiry()
                     {
                         ReasonForEnquiring = "Question about a qualification",
                     }
                 );
-                return RedirectToAction("QualificationDetails");
+                return RedirectToAction(nameof(QualificationDetails));
             case "IssueWithTheService":
                 userJourneyCookieService.SetHelpFormEnquiry(
-                    new()
+                    new HelpFormEnquiry()
                     {
                         ReasonForEnquiring = "Issue with the service",
                     }
                 );
-                return RedirectToAction("ProvideDetails");
+                return RedirectToAction(nameof(ProvideDetails));
             default:
-                throw new InvalidOperationException("Unexpected enquiry option"); //todo check this should we redirect home if someone tampers with html?
+                logger.LogError("Unexpected enquiry option");
+                return RedirectToAction("Index", "Error");
         }
     }
 
     [HttpGet("qualification-details")]
-    public async Task<IActionResult> QualificationDetailsAsync()
+    public async Task<IActionResult> QualificationDetails()
     {
         var content = await contentService.GetHelpQualificationDetailsPage();
 
         if (content is null)
         {
-            throw new Exception("'Help qualification details page' content could not be found");
+            logger.LogError("'Help qualification details page' content could not be found");
+            return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = HelpControllerPageMapper.MapQualificationDetailsContentToViewModel(content, ModelState, new());
+        var viewModel = new QualificationDetailsPageViewModel();
 
         // set any previously entered qualification details from cookie
         viewModel.AwardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
         viewModel.QualificationName = userJourneyCookieService.GetSelectedQualificationName();
-
         var qualificationStart = userJourneyCookieService.GetWhenWasQualificationStarted();
-        viewModel.StartDateSelectedMonth = qualificationStart.startMonth;
-        viewModel.StartDateSelectedYear = qualificationStart.startYear;
-
         var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
-        viewModel.QualificationAwardedDate.SelectedMonth = qualificationAwarded.startMonth;
-        viewModel.QualificationAwardedDate.SelectedYear = qualificationAwarded.startYear;
+
+        viewModel.QuestionModel.StartedQuestion = new DateQuestionModel()
+        {
+            SelectedMonth = qualificationStart.startMonth,
+            SelectedYear = qualificationStart.startYear
+        };
+        viewModel.QuestionModel.AwardedQuestion = new DateQuestionModel()
+        {
+            SelectedMonth = qualificationAwarded.startMonth,
+            SelectedYear = qualificationAwarded.startYear
+        };
+
+        viewModel = HelpControllerPageMapper.MapQualificationDetailsContentToViewModel(viewModel, content, null, ModelState, placeholderUpdater);
 
         return View("QualificationDetails", viewModel);
     }
 
     [HttpPost("qualification-details")]
-    public async Task<IActionResult> QualificationDetailsAsync([FromForm] QualificationDetailsPageViewModel viewModel)
+    public async Task<IActionResult> QualificationDetails([FromForm] QualificationDetailsPageViewModel model)
     {
-        var datesAreInvalid = false;
-
         var content = await contentService.GetHelpQualificationDetailsPage();
 
         if (content is null)
         {
-            throw new Exception("'Help qualification details page' content could not be found");
+            logger.LogError("'Help qualification details page' content could not be found");
+            return RedirectToAction("Index", "Error");
         }
 
-        // Map details to date question so they can be validated
-        var startedQuestion = new DateQuestionModel()
+        var datesValidationResult = questionModelValidator.IsValid(model.QuestionModel, content);
+
+        if (datesValidationResult.StartedValidationResult is null)
         {
-            SelectedMonth = viewModel.StartDateSelectedMonth,
-            SelectedYear = viewModel.StartDateSelectedYear
-        };
-
-        var awardedQuestion = new DateQuestionModel()
-        {
-            SelectedMonth = viewModel.QualificationAwardedDate.SelectedMonth,
-            SelectedYear = viewModel.QualificationAwardedDate.SelectedYear,
-        };
-
-        viewModel = HelpControllerPageMapper.MapQualificationDetailsContentToViewModel(content, ModelState, viewModel);
-
-        var awardedValidationResult = questionModelValidator.IsValid(awardedQuestion, content.AwardedDateQuestion);
-
-        // Validate optional field if it is not null
-        if (startedQuestion.SelectedMonth is not null || startedQuestion.SelectedYear is not null)
-        {
-            var startedValidationResult = questionModelValidator.IsValid(startedQuestion, content.StartDateQuestion);
-
-            if (awardedValidationResult.YearValid && questionModelValidator.DisplayAwardedDateBeforeStartDateError(startedQuestion, awardedQuestion))
-            {
-                awardedValidationResult.MonthValid = false;
-                awardedValidationResult.YearValid = false;
-                awardedValidationResult.ErrorMessages.Add(content.AwardedDateIsAfterStartedDateErrorText);
-                awardedValidationResult.BannerErrorMessages.Add(new BannerError(content.AwardedDateIsAfterStartedDateErrorText, FieldId.Month));
-            }
-
-            viewModel.QuestionModel.StartedQuestion = HelpControllerPageMapper.MapDateModel(startedQuestion, content, startedValidationResult, startedQuestion.SelectedMonth, startedQuestion.SelectedYear, placeholderUpdater);
-
-            if (viewModel.QuestionModel.StartedQuestion.MonthError || viewModel.QuestionModel.StartedQuestion.YearError)
-            {
-                viewModel.QuestionModel.HasErrors = true;
-            }
+            // optional date fields not provided so remove the required validation
+            ModelState.Remove("QuestionModel.StartedQuestion.SelectedMonth");
+            ModelState.Remove("QuestionModel.StartedQuestion.SelectedYear");
         }
 
-        viewModel.QuestionModel.AwardedQuestion = HelpControllerPageMapper.MapDateModel(awardedQuestion, content, awardedValidationResult, awardedQuestion.SelectedMonth, awardedQuestion.SelectedYear, placeholderUpdater);
+        var hasInvalidDates = !datesValidationResult.AwardedValidationResult.MonthValid || !datesValidationResult.AwardedValidationResult.YearValid ||
+            (datesValidationResult.StartedValidationResult is not null && (!datesValidationResult.StartedValidationResult.MonthValid || !datesValidationResult.StartedValidationResult.YearValid));
 
-        if (viewModel.QuestionModel.AwardedQuestion.MonthError || viewModel.QuestionModel.AwardedQuestion.YearError)
+        if (!ModelState.IsValid || hasInvalidDates)
         {
-            viewModel.QuestionModel.HasErrors = true;
-        }
+            model.HasQualificationNameError = ModelState.Keys.Any(_ => ModelState["QualificationName"]?.Errors.Count > 0);
+            model.HasAwardingOrganisationError = ModelState.Keys.Any(_ => ModelState["AwardingOrganisation"]?.Errors.Count > 0);
 
-        // check form has errors or date validation failed
-        if (!ModelState.IsValid || viewModel.QuestionModel.HasErrors)
-        {
-            if (viewModel.QuestionModel?.StartedQuestion?.ErrorSummaryLinks is not null)
-            {
-                viewModel.Errors.AddRange(viewModel.QuestionModel.StartedQuestion.ErrorSummaryLinks);
-            }
+            model.QuestionModel.HasErrors = hasInvalidDates;
 
-            if (viewModel.QuestionModel?.AwardedQuestion?.ErrorSummaryLinks is not null)
-            {
-                viewModel.Errors.AddRange(viewModel.QuestionModel.AwardedQuestion.ErrorSummaryLinks);
-            }
+            model = HelpControllerPageMapper.MapQualificationDetailsContentToViewModel(model, content, datesValidationResult, ModelState, placeholderUpdater);
 
-            return View("QualificationDetails", viewModel);
+            return View("QualificationDetails", model);
         }
 
         // valid submit 
         var helpCookie = userJourneyCookieService.GetHelpFormEnquiry();
 
-        helpCookie.QualificationName = viewModel.QualificationName;
-        helpCookie.QualificationStartDate = $"{viewModel.StartDateSelectedMonth}/{viewModel.StartDateSelectedYear}";
-        helpCookie.QualificationAwardedDate = $"{viewModel.QualificationAwardedDate.SelectedMonth}/{viewModel.QualificationAwardedDate.SelectedYear}";
-        helpCookie.AwardingOrganisation = viewModel.AwardingOrganisation;
+        helpCookie.QualificationName = model.QualificationName;
+        if(model.QuestionModel.StartedQuestion is not null)
+        {
+            helpCookie.QualificationStartDate = $"{model.QuestionModel.StartedQuestion?.SelectedMonth}/{model.QuestionModel.StartedQuestion?.SelectedYear}";
+        }
+        helpCookie.QualificationAwardedDate = $"{model.QuestionModel.AwardedQuestion.SelectedMonth}/{model.QuestionModel.AwardedQuestion.SelectedYear}";
+        helpCookie.AwardingOrganisation = model.AwardingOrganisation;
 
         userJourneyCookieService.SetHelpFormEnquiry(helpCookie);
 
-        return RedirectToAction("ProvideDetails");
+        return RedirectToAction(nameof(ProvideDetails));
     }
 
     [HttpGet("provide-details")]
-    public async Task<IActionResult> ProvideDetailsAsync()
+    public async Task<IActionResult> ProvideDetails()
     {
         var content = await contentService.GetHelpProvideDetailsPage();
 
         if (content is null)
         {
-            throw new Exception("'Help provide details page' content could not be found");
+            logger.LogError("'Help provide details page' content could not be found");
+            return RedirectToAction("Index", "Error");
         }
-
+  
         var viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, ModelState, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
 
         return View("ProvideDetails", viewModel);
     }
 
     [HttpPost("provide-details")]
-    public async Task<IActionResult> ProvideDetailsAsync([FromForm] ProvideDetailsPageViewModel viewModel)
+    public async Task<IActionResult> ProvideDetails([FromForm] ProvideDetailsPageViewModel viewModel)
     {
         if (!ModelState.IsValid)
         {
@@ -219,7 +198,8 @@ public class HelpController(
 
             if (content is null)
             {
-                throw new Exception("'Help provide details page' content could not be found");
+                logger.LogError("'Help provide details page' content could not be found");
+                return RedirectToAction("Index", "Error");
             }
 
             viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, ModelState, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
@@ -234,17 +214,18 @@ public class HelpController(
 
         userJourneyCookieService.SetHelpFormEnquiry(helpCookie);
 
-        return RedirectToAction("EmailAddress");
+        return RedirectToAction(nameof(EmailAddress));
     }
 
     [HttpGet("email-address")]
-    public async Task<IActionResult> EmailAddressAsync()
+    public async Task<IActionResult> EmailAddress()
     {
         var content = await contentService.GetHelpEmailAddressPage();
 
         if (content is null)
         {
-            throw new Exception("'Help email address page' content could not be found");
+            logger.LogError("'Help email address page' content could not be found");
+            return RedirectToAction("Index", "Error");
         }
 
         var viewModel = HelpControllerPageMapper.MapEmailAddressPageContentToViewModel(content, ModelState);
@@ -261,7 +242,8 @@ public class HelpController(
 
             if (content is null)
             {
-                throw new Exception("'Help email address page' content could not be found");
+                logger.LogError("'Help email address page' content could not be found");
+                return RedirectToAction("Index", "Error");
             }
 
             viewModel = HelpControllerPageMapper.MapEmailAddressPageContentToViewModel(content, ModelState);
@@ -270,27 +252,28 @@ public class HelpController(
         }
 
         // send help form email
-        /*notificationService.SendHelpPageNotification(
+        notificationService.SendHelpPageNotification(
             new HelpPageNotification(viewModel.EmailAddress, userJourneyCookieService.GetHelpFormEnquiry())
         );
-*/
+
         // clear data collected from help form on successful submit
         userJourneyCookieService.SetHelpFormEnquiry(new());
 
-        return RedirectToAction("Confirmation");
+        return RedirectToAction(nameof(Confirmation));
     }
 
     [HttpGet("confirmation")]
-    public async Task<IActionResult> ConfirmationAsync()
+    public async Task<IActionResult> Confirmation()
     {
-        var helpConfirmationPage = await contentService.GetHelpConfirmationPage();
+        var content = await contentService.GetHelpConfirmationPage();
 
-        if (helpConfirmationPage is null)
+        if (content is null)
         {
-            throw new Exception("'Help confirmation page' content could not be found");
+            logger.LogError("'Help confirmation page' content could not be found");
+            return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = await HelpControllerPageMapper.MapConfirmationPageContentToViewModelAsync(helpConfirmationPage, contentParser);
+        var viewModel = await HelpControllerPageMapper.MapConfirmationPageContentToViewModelAsync(content, contentParser);
 
         return View("Confirmation", viewModel);
     }

@@ -5,15 +5,11 @@ namespace Dfe.EarlyYearsQualification.Web.Services.Notifications;
 
 public class HelpPageNotification
 {
-    public string Subject { get; init; } = string.Empty;
+    public string Subject;
 
-    public string EmailAddress { get; init; } = string.Empty;
+    public string EmailAddress;
 
-    public string Message { get; init; } = string.Empty;
-
-    public HelpPageNotification()
-    {
-    }
+    public string Message;
 
     public HelpPageNotification(string emailAddress, HelpFormEnquiry enquiry)
     {

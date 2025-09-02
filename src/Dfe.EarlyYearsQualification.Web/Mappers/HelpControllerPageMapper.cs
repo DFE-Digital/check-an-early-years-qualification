@@ -13,7 +13,7 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
 public class HelpControllerPageMapper
 {
-    public static async Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage helpPageContent, IGovUkContentParser contentParser, ModelStateDictionary modelState)
+    public static async Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage helpPageContent, IGovUkContentParser contentParser)
     {
         var viewModel = new GetHelpPageViewModel()
         {
@@ -30,11 +30,6 @@ public class HelpControllerPageMapper
             ErrorBannerHeading = helpPageContent.ErrorBannerHeading,
             ReasonForEnquiryHeading = helpPageContent.ReasonForEnquiryHeading,
         };
-
-        if (!modelState.IsValid)
-        {
-            viewModel.HasNoEnquiryOptionSelectedError = modelState.Keys.Any(_ => modelState["SelectedOption"]?.Errors.Count > 0);
-        }
 
         return viewModel;
     }
@@ -55,46 +50,38 @@ public class HelpControllerPageMapper
         return results;
     }
 
-    public static QualificationDetailsPageViewModel MapQualificationDetailsContentToViewModel(HelpQualificationDetailsPage helpPageContent, ModelStateDictionary modelState, QualificationDetailsPageViewModel viewModel)
+    public static QualificationDetailsPageViewModel MapQualificationDetailsContentToViewModel(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content, DatesValidationResult? validationResult, ModelStateDictionary modelState, IPlaceholderUpdater placeholderUpdater)
     {
+        var startedModel = MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion!, validationResult?.StartedValidationResult, placeholderUpdater);
+        var awardedModel = MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion!, validationResult?.AwardedValidationResult, placeholderUpdater);
+
+        var errorLinks = new List<ErrorSummaryLink>();
+
+        // map content to page
         viewModel.BackButton = new()
         {
-            DisplayText = helpPageContent.BackButton.DisplayText,
-            Href = helpPageContent.BackButton.Href
+            DisplayText = content.BackButton.DisplayText,
+            Href = content.BackButton.Href
         };
-        viewModel.Heading = helpPageContent.Heading;
-        viewModel.PostHeadingContent = helpPageContent.PostHeadingContent;
-        viewModel.CtaButtonText = helpPageContent.CtaButtonText;
-        viewModel.QualificationNameHeading = helpPageContent.QualificationNameHeading;
-        viewModel.QualificationNameErrorMessage = helpPageContent.QualificationNameErrorMessage;
-        viewModel.AwardingOrganisationHeading = helpPageContent.AwardingOrganisationHeading;
-        viewModel.AwardingOrganisationErrorMessage = helpPageContent.AwardingOrganisationErrorMessage;
-        viewModel.ErrorBannerHeading = helpPageContent.ErrorBannerHeading;
+        viewModel.Heading = content.Heading;
+        viewModel.PostHeadingContent = content.PostHeadingContent;
+        viewModel.CtaButtonText = content.CtaButtonText;
+        viewModel.QualificationNameHeading = content.QualificationNameHeading;
+        viewModel.QualificationNameErrorMessage = content.QualificationNameErrorMessage;
+        viewModel.AwardingOrganisationHeading = content.AwardingOrganisationHeading;
+        viewModel.AwardingOrganisationErrorMessage = content.AwardingOrganisationErrorMessage;
+        viewModel.ErrorBannerHeading = content.ErrorBannerHeading;
 
-        viewModel.OptionalQualificationStartDate.QuestionHeader = helpPageContent.StartDateQuestion.QuestionHeader;
-        viewModel.OptionalQualificationStartDate.MonthLabel = helpPageContent.StartDateQuestion.MonthLabel;
-        viewModel.OptionalQualificationStartDate.YearLabel = helpPageContent.StartDateQuestion.YearLabel;
-        viewModel.OptionalQualificationStartDate.ErrorMessage = helpPageContent.StartDateQuestion.ErrorMessage;
-        viewModel.OptionalQualificationStartDate.QuestionId = "start_question_id";
-        viewModel.OptionalQualificationStartDate.Prefix = "start_date";
-        viewModel.OptionalQualificationStartDate.MonthId = "StartDateSelectedMonth";
-        viewModel.OptionalQualificationStartDate.YearId = "StartDateSelectedYear";
+        var (startedQuestionMapped, startedQuestionErrors) = MapDate(viewModel.QuestionModel.StartedQuestion, "started", "QuestionModel." + nameof(viewModel.QuestionModel.StartedQuestion));
+        viewModel.QuestionModel.StartedQuestion = startedQuestionMapped;
 
-        viewModel.QualificationAwardedDate.QuestionHeader = helpPageContent.AwardedDateQuestion.QuestionHeader;
-        viewModel.QualificationAwardedDate.MonthLabel = helpPageContent.AwardedDateQuestion.MonthLabel;
-        viewModel.QualificationAwardedDate.YearLabel = helpPageContent.AwardedDateQuestion.YearLabel;
-        viewModel.QualificationAwardedDate.ErrorMessage = helpPageContent.AwardedDateQuestion.ErrorMessage;
-        viewModel.QualificationAwardedDate.QuestionId = "awarded_question_id";
-        viewModel.QualificationAwardedDate.Prefix = "awarded_date";
-        viewModel.QualificationAwardedDate.MonthId = "QualificationAwardedDate.SelectedMonth";
-        viewModel.QualificationAwardedDate.YearId = "QualificationAwardedDate.SelectedYear";
+        var (awardedQuestionMapped, awardedQuestionErrors) = MapDate(viewModel.QuestionModel.AwardedQuestion, "awarded", "QuestionModel." + nameof(viewModel.QuestionModel.AwardedQuestion));
+        viewModel.QuestionModel.AwardedQuestion = awardedQuestionMapped;
+
 
         if (!modelState.IsValid)
         {
             viewModel.HasQualificationNameError = modelState.Keys.Any(_ => modelState["QualificationName"]?.Errors.Count > 0);
-
-            viewModel.HasAwardingOrganisationError = modelState.Keys.Any(_ => modelState["AwardingOrganisation"]?.Errors.Count > 0);
-
             if (viewModel.HasQualificationNameError)
             {
                 viewModel.Errors.Add(
@@ -106,6 +93,10 @@ public class HelpControllerPageMapper
                 );
             }
 
+            viewModel.Errors.AddRange(startedQuestionErrors);
+            viewModel.Errors.AddRange(awardedQuestionErrors);
+
+            viewModel.HasAwardingOrganisationError = modelState.Keys.Any(_ => modelState["AwardingOrganisation"]?.Errors.Count > 0);
             if (viewModel.HasAwardingOrganisationError)
             {
                 viewModel.Errors.Add(
@@ -121,10 +112,7 @@ public class HelpControllerPageMapper
         return viewModel;
     }
 
-    public static DateQuestionModel MapDateModel(DateQuestionModel model, HelpQualificationDetailsPage content,
-                                            DateValidationResult? validationResult,
-                                            int? selectedMonth,
-                                            int? selectedYear, IPlaceholderUpdater placeholderUpdater)
+    public static DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question, DateValidationResult? validationResult, IPlaceholderUpdater placeholderUpdater)
     {
         var bannerErrors = validationResult is { BannerErrorMessages.Count: > 0 } ? validationResult.BannerErrorMessages : null;
 
@@ -135,7 +123,7 @@ public class HelpControllerPageMapper
         var errorBannerMessages = new List<BannerError>();
         if (bannerErrors is null)
         {
-            errorBannerMessages.Add(new BannerError(model.ErrorMessage, FieldId.Month));
+            errorBannerMessages.Add(new BannerError(question.ErrorMessage, FieldId.Month));
         }
         else
         {
@@ -145,30 +133,47 @@ public class HelpControllerPageMapper
             }
         }
 
-        var errorMessage = placeholderUpdater.Replace(errorMessageText ?? model.ErrorMessage);
+        var errorMessage = placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage);
 
-
-        model.MonthError = !validationResult?.MonthValid ?? false;
-        model.YearError = !validationResult?.YearValid ?? false;
-        model.ErrorMessage = errorMessage;
-        model.ErrorSummaryLinks = [];
-        foreach (var errorBannerMessage in errorBannerMessages)
-        {
-            model.ErrorSummaryLinks.Add(new ErrorSummaryLink
-            {
-                ErrorBannerLinkText = errorBannerMessage.Message,
-                ElementLinkId = errorBannerMessage.FieldId.ToString()
-            });
-        }
-
-        if (selectedMonth.HasValue && selectedYear.HasValue)
-        {
-            model.SelectedMonth = selectedMonth.Value;
-            model.SelectedYear = selectedYear.Value;
-        }
-
-        return model;
+        return DateQuestionMapper.Map(model, question, errorBannerMessages, errorMessage, validationResult,
+                                      model.SelectedMonth, model.SelectedYear);
     }
+
+    private static (DateQuestionModel, List<ErrorSummaryLink>) MapDate(DateQuestionModel dateQuestion, string prefix, string fieldName)
+    {
+        var errorLinks = new List<ErrorSummaryLink>();
+        dateQuestion.Prefix = prefix;
+        dateQuestion.QuestionId = $"date-{prefix}";
+        dateQuestion.MonthId = $"{fieldName}.SelectedMonth";
+        dateQuestion.YearId = $"{fieldName}.SelectedYear";
+
+        foreach (var errorSummaryLink in dateQuestion.ErrorSummaryLinks)
+        {
+            errorSummaryLink.ElementLinkId = errorSummaryLink.ElementLinkId switch
+            {
+                nameof(FieldId.Month) => dateQuestion.MonthId,
+                nameof(FieldId.Year) => dateQuestion.YearId,
+                _ => errorSummaryLink.ElementLinkId
+            };
+        }
+
+        if (dateQuestion is not null &&
+            (dateQuestion.MonthError || dateQuestion.YearError) &&
+            dateQuestion.ErrorSummaryLinks is not null)
+        {
+            errorLinks.AddRange(dateQuestion.ErrorSummaryLinks);
+        }
+
+        return (dateQuestion!, errorLinks);
+    }
+
+
+
+
+
+
+
+
 
     public static ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage helpPageContent, ModelStateDictionary modelState, string reasonForEnquiring)
     {

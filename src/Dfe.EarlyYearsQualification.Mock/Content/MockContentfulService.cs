@@ -692,43 +692,151 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-
-    // todo mock this up
-
     public async Task<GetHelpPage?> GetGetHelpPage()
     {
-        return await Task.FromResult(new GetHelpPage());
+        return await Task.FromResult(new GetHelpPage()
+        {
+            Heading = "Get help with the Check an early years qualification service",
+            PostHeadingContent = ContentfulContentHelper.Paragraph("Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n"),
+            ReasonForEnquiryHeading = "Why are you contacting us?",
+            CtaButtonText = "Continue",
+            BackButton = new NavigationLink
+            {
+                DisplayText = "Home",
+                Href = HomePath,
+                OpenInNewTab = false
+            },
+            ErrorBannerHeading = ThereIsAProblem,
+            NoEnquiryOptionSelectedErrorMessage = "Select one option",
+            EnquiryReasons =
+            [
+                new EnquiryOption
+                { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
+                new EnquiryOption
+                { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" }
+            ]
+        });
     }
 
-    // todo mock this up
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()
     {
-        return await Task.FromResult(new HelpQualificationDetailsPage());
+        return await Task.FromResult(
+            new HelpQualificationDetailsPage()
+            {
+                Heading = "What are the qualification details?",
+                PostHeadingContent = "We need to know the following qualification details to quickly and accurately respond to any questions you may have.",
+                CtaButtonText = "Continue",
+                BackButton = new NavigationLink
+                {
+                    DisplayText = "Back to get help with the Check an early years qualification service",
+                    Href = "/help/get-help",
+                    OpenInNewTab = false
+                },
+                QualificationNameHeading = "Qualification name",
+                QualificationNameErrorMessage = "Enter the qualification name",
+                AwardingOrganisationHeading = "Awarding organisation",
+                AwardingOrganisationErrorMessage = "Enter the awarding organisation",
+                ErrorBannerHeading = ThereIsAProblem,
+                AwardedDateIsAfterStartedDateErrorText = "The awarded date must be after the started date",
+                StartDateQuestion = new DateQuestion
+                {
+                    MonthLabel = "Month",
+                    YearLabel = "Year",
+                    QuestionHeader = "Start date",
+                    QuestionHint = "Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.",
+                    ErrorBannerLinkText = "Enter the month and year that the qualification was started",
+                    ErrorMessage = "Enter the month and year that the qualification was started",
+                    FutureDateErrorBannerLinkText = "The date the qualification was started must be in the past",
+                    FutureDateErrorMessage = "The date the qualification was started must be in the past",
+                    MissingMonthErrorMessage = "Enter the month that the qualification was started",
+                    MissingYearErrorMessage = "Enter the year that the qualification was started",
+                    MissingMonthBannerLinkText = "Enter the month that the qualification was started",
+                    MissingYearBannerLinkText = "Enter the year that the qualification was started",
+                    MonthOutOfBoundsErrorLinkText = "The month the qualification was started must be between 1 and 12",
+                    MonthOutOfBoundsErrorMessage = "The month the qualification was started must be between 1 and 12",
+                    YearOutOfBoundsErrorLinkText = "The year the qualification was started must be between 1900 and $[actual-year]$",
+                    YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$"
+                },
+                AwardedDateQuestion = new DateQuestion
+                {
+                    MonthLabel = "Month",
+                    YearLabel = "Year",
+                    QuestionHeader = "Award date",
+                    QuestionHint = "Enter the date the qualification was awarded so we can tell you if other requirements apply. For example 6 2015.",
+                    ErrorBannerLinkText = "Enter the month and year that the qualification was awarded",
+                    ErrorMessage = "Enter the date the qualification was awarded",
+                    FutureDateErrorBannerLinkText = "The date the qualification was awarded must be in the past",
+                    FutureDateErrorMessage = "The date the qualification was awarded must be in the past",
+                    MissingMonthErrorMessage = "Enter the month that the qualification was awarded",
+                    MissingYearErrorMessage = "Enter the year that the qualification was awarded",
+                    MissingMonthBannerLinkText = "Enter the month that the qualification was awarded",
+                    MissingYearBannerLinkText = "Enter the year that the qualification was awarded",
+                    MonthOutOfBoundsErrorLinkText = "The month the qualification was awarded must be between 1 and 12",
+                    MonthOutOfBoundsErrorMessage = "The month the qualification was awarded must be between 1 and 12",
+                    YearOutOfBoundsErrorLinkText = "The year the qualification was awarded must be between 1900 and $[actual-year]$",
+                    YearOutOfBoundsErrorMessage = "The year the qualification was awarded must be between 1900 and $[actual-year]$"
+                }
+            }
+        );
     }
 
-
-
-    // todo mock this up
     public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage()
     {
-        return await Task.FromResult(new HelpProvideDetailsPage());
+        return await Task.FromResult(
+            new HelpProvideDetailsPage()
+            {
+                Heading = "How can we help you?",
+                PostHeadingContent = "Give as much detail as you can. This helps us give you the right support.",
+                CtaButtonText = "Continue",
+                BackButtonToGetHelpPage = new NavigationLink
+                {
+                    DisplayText = "Back to get help with the Check an early years qualification service",
+                    Href = "/help/get-help",
+                    OpenInNewTab = false
+                },
+                BackButtonToQualificationDetailsPage = new NavigationLink
+                {
+                    DisplayText = "Back to what are the qualification details",
+                    Href = "/help/qualification-details",
+                    OpenInNewTab = false
+                },
+                AdditionalInformationWarningText = "Do not include any personal information",
+                AdditionalInformationErrorMessage = "Provide information about how we can help you",
+                ErrorBannerHeading = ThereIsAProblem
+            }
+        );
     }
 
-    // todo mock this up
     public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
     {
-        return await Task.FromResult(new HelpEmailAddressPage());
+        return await Task.FromResult(
+            new HelpEmailAddressPage()
+            {
+                Heading = "What is your email address?",
+                InvalidEmailAddressErrorMessage = "Enter an email address in the correct format, for example name@example.com",
+                NoEmailAddressEnteredErrorMessage = "Enter an email address",
+                BackButton = new NavigationLink
+                {
+                    DisplayText = "Back to how can we help you",
+                    Href = "/help/provide-details",
+                    OpenInNewTab = false
+                },
+                CtaButtonText = "Send message",
+                ErrorBannerHeading = ThereIsAProblem,
+                PostHeadingContent = "We will only use this email address to reply to your message"
+            }
+        );
     }
 
-    //todo mock this up
     public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
     {
         return await Task.FromResult(new HelpConfirmationPage
         {
-            SuccessMessage = "This is the success message",
-            BodyHeading = "Body heading",
-            Body = ContentfulContentHelper.Paragraph("This is the body"),
+            SuccessMessage = "Message sent",
+            BodyHeading = "What happens next",
+            Body = ContentfulContentHelper.Paragraph("The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n"),
             FeedbackComponent = GetFeedbackComponent(),
+            SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
             ReturnToHomepageLink = new NavigationLink
             {
                 DisplayText = "Return to the homepage",
@@ -736,6 +844,7 @@ public class MockContentfulService : IContentService
             }
         });
     }
+
     private static RadioQuestionPage CreateWhereWasTheQualificationAwardedPage()
     {
         var options = new List<IOptionItem>
@@ -766,6 +875,7 @@ public class MockContentfulService : IContentService
                               Value = "outside-uk"
                           }
                       };
+
         return CreateRadioQuestionPage("Where was the qualification awarded?", options, "/");
     }
 

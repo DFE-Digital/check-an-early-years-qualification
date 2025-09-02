@@ -16,20 +16,19 @@ public class ProvideDetailsPageViewModel
 
     public string AdditionalInformationWarningText { get; init; } = string.Empty;
 
+    // text area input
+    [Required]
+    [IncludeInTelemetry]
     public string ProvideAdditionalInformation { get; set; } = string.Empty;
+
+    // validation handling
+    public bool HasValidationErrors => Errors.Any();
 
     public string ErrorBannerHeading { get; init; } = string.Empty;
 
     public string AdditionalInformationErrorMessage { get; init; } = string.Empty;
 
-    // text area input
-    [Required]
-    [IncludeInTelemetry]
     public bool HasAdditionalInformationError { get; set; }
-
-    // validation handling
-
-    public bool HasValidationErrors => Errors.Any();
 
     List<ErrorSummaryLink> Errors
     {

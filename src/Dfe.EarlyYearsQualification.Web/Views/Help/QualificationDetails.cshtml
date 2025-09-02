@@ -51,65 +51,15 @@
                 @Html.TextBoxFor(x => x.QualificationName, new { @class = "govuk-input" })
             </div>
 
-            <div class="govuk-form-group govuk-!-margin-bottom-6">
-                <div class="govuk-form-group @(!string.IsNullOrEmpty(Model?.QuestionModel?.StartedQuestion?.ErrorMessage) ? "govuk-form-group--error" : "")">
-                    <h2 class="govuk-heading-s" id="@Model.OptionalQualificationStartDate.Prefix-header">@Model.OptionalQualificationStartDate.QuestionHeader</h2>
+            @if (Model.QuestionModel.StartedQuestion is not null)
+            {
+                await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.StartedQuestion);
+            }
 
-                    @if (!string.IsNullOrEmpty(Model?.QuestionModel?.StartedQuestion?.ErrorMessage))
-                    {
-                        <p id="@Model.OptionalQualificationStartDate.Prefix-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span>@Html.Raw(Model.QuestionModel.StartedQuestion.ErrorMessage)
-                        </p>
-                    }
-
-                    <div class="govuk-date-input" id="@Model.OptionalQualificationStartDate.QuestionId">
-                        <div class="govuk-date-input__item">
-                            <div class="govuk-form-group">
-                                <label id="@Model.OptionalQualificationStartDate.Prefix-month-label" class="govuk-label govuk-date-input__label"
-                                       for="@Model.OptionalQualificationStartDate.MonthId">@Model.OptionalQualificationStartDate.MonthLabel</label>
-                                @Html.TextBox(Model.OptionalQualificationStartDate.MonthId, Model.StartDateSelectedMonth, new { id = Model.OptionalQualificationStartDate.MonthId, @class = Model.OptionalQualificationStartDate.MonthError ? monthErrorClass : monthClass, maxlength = 2, name = Model.OptionalQualificationStartDate.MonthId, type = "text", inputmode = "numeric" })
-                            </div>
-                        </div>
-                        <div class="govuk-date-input__item">
-                            <div class="govuk-form-group">
-                                <label id="@Model.OptionalQualificationStartDate.Prefix-year-label" class="govuk-label govuk-date-input__label"
-                                       for="@Model.OptionalQualificationStartDate.YearId">@Model.OptionalQualificationStartDate.YearLabel</label>
-                                @Html.TextBox(Model.OptionalQualificationStartDate.YearId, Model.StartDateSelectedYear, new { id = Model.OptionalQualificationStartDate.YearId, @class = Model.OptionalQualificationStartDate.YearError ? yearErrorClass : yearClass, maxlength = 4, name = Model.OptionalQualificationStartDate.YearId, type = "text", inputmode = "numeric" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="govuk-form-group govuk-!-margin-bottom-6">
-                <div class="govuk-form-group @(!string.IsNullOrEmpty(Model?.QuestionModel?.AwardedQuestion?.ErrorMessage) ? "govuk-form-group--error" : "")">
-                    <h2 class="govuk-heading-s" id="@Model.QualificationAwardedDate.Prefix-header">@Model.QualificationAwardedDate.QuestionHeader</h2>
-
-                    @if (!string.IsNullOrEmpty(Model?.QuestionModel?.AwardedQuestion?.ErrorMessage))
-                    {
-                        <p id="@Model.QualificationAwardedDate.Prefix-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span>@Html.Raw(Model.QuestionModel.AwardedQuestion.ErrorMessage)
-                        </p>
-                    }
-
-                    <div class="govuk-date-input" id="@Model.QualificationAwardedDate.QuestionId">
-                        <div class="govuk-date-input__item">
-                            <div class="govuk-form-group">
-                                <label id="@Model.QualificationAwardedDate.Prefix-month-label" class="govuk-label govuk-date-input__label"
-                                       for="@Model.QualificationAwardedDate.MonthId">@Model.QualificationAwardedDate.MonthLabel</label>
-                                @Html.TextBox(Model.QualificationAwardedDate.MonthId, Model.QualificationAwardedDate.SelectedMonth, new { id = Model.QualificationAwardedDate.MonthId, @class = Model.QualificationAwardedDate.MonthError ? monthErrorClass : monthClass, maxlength = 2, name = Model.QualificationAwardedDate.MonthId, type = "text", inputmode = "numeric" })
-                            </div>
-                        </div>
-                        <div class="govuk-date-input__item">
-                            <div class="govuk-form-group">
-                                <label id="@Model.QualificationAwardedDate.Prefix-year-label" class="govuk-label govuk-date-input__label"
-                                       for="@Model.QualificationAwardedDate.YearId">@Model.QualificationAwardedDate.YearLabel</label>
-                                @Html.TextBox(Model.QualificationAwardedDate.YearId, Model.QualificationAwardedDate.SelectedYear, new { id = Model.QualificationAwardedDate.YearId, @class = Model.QualificationAwardedDate.YearError ? yearErrorClass : yearClass, maxlength = 4, name = Model.QualificationAwardedDate.YearId, type = "text", inputmode = "numeric" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @if (Model.QuestionModel.AwardedQuestion is not null)
+            {
+                await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.AwardedQuestion);
+            }
 
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasAwardingOrganisationError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="awarding-organisation-heading">

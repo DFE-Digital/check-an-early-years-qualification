@@ -25,23 +25,11 @@ public class QualificationDetailsPageViewModel
 
     public string AwardingOrganisationErrorMessage { get; set; } = string.Empty;
 
-    // text inputs
     [Required]
     [IncludeInTelemetry]
     public string QualificationName { get; set; } = string.Empty;
 
-    // Date inputs
-    public int? StartDateSelectedMonth { get; set; }
-
-    public int? StartDateSelectedYear { get; set; }
-
     public DatesQuestionModel QuestionModel { get; set; } = new DatesQuestionModel();
-
-    public BaseDateQuestionModel OptionalQualificationStartDate { get; set; } = new BaseDateQuestionModel();
-
-    public DateQuestionModel QualificationAwardedDate { get; set; } = new DateQuestionModel();
-
-    // awarding organisation input
 
     [Required]
     [IncludeInTelemetry]
@@ -51,10 +39,6 @@ public class QualificationDetailsPageViewModel
     public bool HasAwardingOrganisationError { get; set; }
 
     public bool HasQualificationNameError { get; set; }
-
-    public bool HasRequiredAwardedDateMonthError { get; set; }
-
-    public bool HasRequiredAwardedDateYearError { get; set; }
 
     public bool HasValidationErrors => Errors.Any();
 

@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.Extensions.Options;
 using Notify.Exceptions;
 using Notify.Interfaces;
@@ -27,12 +28,14 @@ public class GovUkNotifyServiceTests
                                      });
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
-        var feedbackNotification = new HelpPageNotification
-                                   {
-                                       EmailAddress = "user@email.com",
-                                       Message = "Test message",
-                                       Subject = "Test subject"
-                                   };
+
+        var form = new HelpFormEnquiry()
+        {
+            ReasonForEnquiring = "Issue with the service",
+            AdditionalInformation = "Some additional information",
+        };
+
+        var feedbackNotification = new HelpPageNotification("user@email.com", form);
 
         var expectedPersonalisation = new Dictionary<string, dynamic>
                                       {
@@ -67,12 +70,13 @@ public class GovUkNotifyServiceTests
                                      });
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
-        var feedbackNotification = new HelpPageNotification
-                                   {
-                                       EmailAddress = "user@email.com",
-                                       Message = "Test message",
-                                       Subject = "Test subject"
-                                   };
+        var form = new HelpFormEnquiry()
+        {
+            ReasonForEnquiring = "Issue with the service",
+            AdditionalInformation = "Some additional information",
+        };
+
+        var feedbackNotification = new HelpPageNotification("user@email.com", form);
 
         var expectedPersonalisation = new Dictionary<string, dynamic>
                                       {
@@ -140,8 +144,14 @@ public class GovUkNotifyServiceTests
                                     null, null, null)).Throws(new NotifyClientException("Test message"));
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
-        
-        service.SendHelpPageNotification(new HelpPageNotification());
+
+        var form = new HelpFormEnquiry()
+        {
+            ReasonForEnquiring = "Issue with the service",
+            AdditionalInformation = "Some additional information",
+        };
+
+        service.SendHelpPageNotification(new HelpPageNotification("user@email.com", form));
 
         mockLogger.VerifyError("Error thrown from GovUKNotifyService: Test message");
     }
