@@ -52,6 +52,9 @@ public class ConfirmQualificationController(
 
         var model = await Map(content, qualification);
 
+        userJourneyCookieService.SetSelectedQualificationName(qualification.QualificationName);
+        userJourneyCookieService.SetAwardingOrganisation(qualification.AwardingOrganisationTitle);
+
         return View(model);
     }
 
@@ -88,8 +91,6 @@ public class ConfirmQualificationController(
             switch (model.ConfirmQualificationAnswer)
             {
                 case "yes":
-                    userJourneyCookieService.SetSelectedQualificationName(qualification.QualificationName);
-
                     if (hasAdditionalQuestions)
                     {
                         return RedirectToAction("Index", "CheckAdditionalRequirements",

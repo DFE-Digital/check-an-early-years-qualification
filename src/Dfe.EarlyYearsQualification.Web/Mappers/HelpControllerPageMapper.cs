@@ -204,7 +204,7 @@ public class HelpControllerPageMapper
         return viewModel;
     }
 
-    public static EmailAddressPageViewModel MapEmailAddressPageContentToViewModel(HelpEmailAddressPage content, ModelStateDictionary modelState)
+    public static EmailAddressPageViewModel MapEmailAddressPageContentToViewModel(HelpEmailAddressPage content)
     {
         var viewModel = new EmailAddressPageViewModel()
         {
@@ -219,13 +219,7 @@ public class HelpControllerPageMapper
             ErrorBannerHeading = content.ErrorBannerHeading,
         };
 
-        if (!modelState.IsValid)
-        {
-            viewModel.HasEmailAddressError = string.IsNullOrEmpty(viewModel.EmailAddress) || modelState.Keys.Any(_ => modelState["EmailAddress"]?.Errors.Count > 0);
-            viewModel.EmailAddressErrorMessage = string.IsNullOrEmpty(viewModel.EmailAddress)
-                                            ? content.NoEmailAddressEnteredErrorMessage
-                                            : content.InvalidEmailAddressErrorMessage;
-        }
+        
 
         return viewModel;
     }

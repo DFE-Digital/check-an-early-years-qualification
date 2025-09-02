@@ -38,6 +38,15 @@ public class HelpController(
 
         var viewModel = await HelpControllerPageMapper.MapGetHelpPageContentToViewModelAsync(content, contentParser);
 
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        if (enquiry is not null)
+        {
+            viewModel.SelectedOption = 
+                enquiry.ReasonForEnquiring == "Question about a qualification" ? "QuestionAboutAQualification" : 
+                enquiry.ReasonForEnquiring == "Issue with the service" ? "IssueWithTheService" : "";
+        }
+
         return View("GetHelp", viewModel);
     } 
 
@@ -61,25 +70,19 @@ public class HelpController(
 
             return View("GetHelp", viewModel);
         }
+        
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry() ?? new();
 
         // valid submit
         switch (model.SelectedOption)
         {
             case "QuestionAboutAQualification":
-                userJourneyCookieService.SetHelpFormEnquiry(
-                    new HelpFormEnquiry()
-                    {
-                        ReasonForEnquiring = "Question about a qualification",
-                    }
-                );
+                enquiry.ReasonForEnquiring = "Question about a qualification";
+                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(QualificationDetails));
             case "IssueWithTheService":
-                userJourneyCookieService.SetHelpFormEnquiry(
-                    new HelpFormEnquiry()
-                    {
-                        ReasonForEnquiring = "Issue with the service",
-                    }
-                );
+                enquiry.ReasonForEnquiring = "Issue with the service";
+                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(ProvideDetails));
             default:
                 logger.LogError("Unexpected enquiry option");
@@ -100,9 +103,12 @@ public class HelpController(
 
         var viewModel = new QualificationDetailsPageViewModel();
 
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
         // set any previously entered qualification details from cookie
-        viewModel.AwardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
-        viewModel.QualificationName = userJourneyCookieService.GetSelectedQualificationName();
+        viewModel.AwardingOrganisation = enquiry.AwardingOrganisation ?? userJourneyCookieService.GetAwardingOrganisation();
+        viewModel.QualificationName = enquiry.QualificationName ?? userJourneyCookieService.GetSelectedQualificationName();
+
         var qualificationStart = userJourneyCookieService.GetWhenWasQualificationStarted();
         var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
 
@@ -116,6 +122,22 @@ public class HelpController(
             SelectedMonth = qualificationAwarded.startMonth,
             SelectedYear = qualificationAwarded.startYear
         };
+
+        if (enquiry.QualificationStartDate is not null)
+        {
+            var enquiryStart = StringDateHelper.SplitDate(enquiry.QualificationStartDate);
+
+            viewModel.QuestionModel.StartedQuestion.SelectedMonth = enquiryStart.startMonth;
+            viewModel.QuestionModel.StartedQuestion.SelectedYear = enquiryStart.startYear;
+        }
+
+        if (enquiry.QualificationAwardedDate is not null)
+        {
+            var enquiryAwarded = StringDateHelper.SplitDate(enquiry.QualificationAwardedDate);
+
+            viewModel.QuestionModel.AwardedQuestion.SelectedMonth = enquiryAwarded.startMonth;
+            viewModel.QuestionModel.AwardedQuestion.SelectedYear = enquiryAwarded.startYear;
+        }
 
         viewModel = HelpControllerPageMapper.MapQualificationDetailsContentToViewModel(viewModel, content, null, ModelState, placeholderUpdater);
 
@@ -161,7 +183,7 @@ public class HelpController(
         var helpCookie = userJourneyCookieService.GetHelpFormEnquiry();
 
         helpCookie.QualificationName = model.QualificationName;
-        if(model.QuestionModel.StartedQuestion is not null)
+        if (model.QuestionModel.StartedQuestion is not null)
         {
             helpCookie.QualificationStartDate = $"{model.QuestionModel.StartedQuestion?.SelectedMonth}/{model.QuestionModel.StartedQuestion?.SelectedYear}";
         }
@@ -185,6 +207,8 @@ public class HelpController(
         }
   
         var viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, ModelState, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
+
+        viewModel.ProvideAdditionalInformation = userJourneyCookieService.GetHelpFormEnquiry().AdditionalInformation;
 
         return View("ProvideDetails", viewModel);
     }
@@ -228,13 +252,13 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = HelpControllerPageMapper.MapEmailAddressPageContentToViewModel(content, ModelState);
+        var viewModel = HelpControllerPageMapper.MapEmailAddressPageContentToViewModel(content);
 
         return View("EmailAddress", viewModel);
     }
 
     [HttpPost("email-address")]
-    public async Task<IActionResult> EmailAddress([FromForm] EmailAddressPageViewModel viewModel)
+    public async Task<IActionResult> EmailAddress([FromForm] EmailAddressPageViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -246,14 +270,19 @@ public class HelpController(
                 return RedirectToAction("Index", "Error");
             }
 
-            viewModel = HelpControllerPageMapper.MapEmailAddressPageContentToViewModel(content, ModelState);
+            var viewModel = HelpControllerPageMapper.MapEmailAddressPageContentToViewModel(content);
+
+            viewModel.HasEmailAddressError = string.IsNullOrEmpty(model.EmailAddress) || ModelState.Keys.Any(_ => ModelState["EmailAddress"]?.Errors.Count > 0);
+            viewModel.EmailAddressErrorMessage = string.IsNullOrEmpty(model.EmailAddress)
+                                            ? content.NoEmailAddressEnteredErrorMessage
+                                            : content.InvalidEmailAddressErrorMessage;
 
             return View("EmailAddress", viewModel);
         }
 
         // send help form email
         notificationService.SendHelpPageNotification(
-            new HelpPageNotification(viewModel.EmailAddress, userJourneyCookieService.GetHelpFormEnquiry())
+            new HelpPageNotification(model.EmailAddress, userJourneyCookieService.GetHelpFormEnquiry())
         );
 
         // clear data collected from help form on successful submit

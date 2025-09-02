@@ -25,9 +25,6 @@ public class HelpPageNotification
         message.AppendLine();
         message.AppendLine();
 
-        message.AppendLine($"Reason for enquiring: {enquiry.ReasonForEnquiring}");
-        message.AppendLine();
-
         if (!string.IsNullOrEmpty(enquiry.QualificationName))
         {
             message.AppendLine($"Qualification name: {enquiry.QualificationName}");

@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -175,20 +176,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         {
             EnsureModelLoaded();
 
-            int? startDateMonth = null;
-            int? startDateYear = null;
-            string[] qualificationAwardedDateSplit = _model!.WhenWasQualificationStarted.Split('/');
-
-            // ReSharper disable once InvertIf
-            if (qualificationAwardedDateSplit.Length == 2
-                && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
-                && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
-            {
-                startDateMonth = parsedStartMonth;
-                startDateYear = parsedStartYear;
-            }
-
-            return (startDateMonth, startDateYear);
+            return StringDateHelper.SplitDate(_model!.WhenWasQualificationStarted);
         }
     }
 
@@ -198,20 +186,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         {
             EnsureModelLoaded();
 
-            int? awardedDateMonth = null;
-            int? awardedDateYear = null;
-            string[] qualificationAwardedDateSplit = _model!.WhenWasQualificationAwarded.Split('/');
-
-            // ReSharper disable once InvertIf
-            if (qualificationAwardedDateSplit.Length == 2
-                && int.TryParse(qualificationAwardedDateSplit[0], out var parsedAwardedMonth)
-                && int.TryParse(qualificationAwardedDateSplit[1], out var parsedAwardedYear))
-            {
-                awardedDateMonth = parsedAwardedMonth;
-                awardedDateYear = parsedAwardedYear;
-            }
-
-            return (awardedDateMonth, awardedDateYear);
+            return StringDateHelper.SplitDate(_model!.WhenWasQualificationAwarded);
         }
     }
 

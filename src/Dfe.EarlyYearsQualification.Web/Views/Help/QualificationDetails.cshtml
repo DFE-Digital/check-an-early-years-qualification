@@ -20,20 +20,20 @@
     }
 }
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-        @if (Model.HasValidationErrors)
-        {
-            await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel);
-        }
+@using (Html.BeginForm("qualification-details", "help", FormMethod.Post, new { id = "qualification-details-form" }))
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+            @if (Model.HasValidationErrors)
+            {
+                await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel);
+            }
 
-        <h1 class="govuk-heading-xl" id="help-page-heading">@Model.Heading</h1>
-        <div class="govuk-body govuk-!-margin-bottom-7" id="post-heading-content">
-            @Html.Raw(Model.PostHeadingContent)
-        </div>
+            <h1 class="govuk-heading-xl" id="help-page-heading">@Model.Heading</h1>
+            <div class="govuk-body govuk-!-margin-bottom-7" id="post-heading-content">
+                @Html.Raw(Model.PostHeadingContent)
+            </div>
 
-        @using (Html.BeginForm("qualification-details", "help", FormMethod.Post, new { id = "qualification-details-form" }))
-        {
             <div class="govuk-form-group govuk-!-margin-bottom-6  @(Model.HasQualificationNameError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="qualification-name-heading">
                     <label class="govuk-label govuk-label--m" for="QualificationName">
@@ -50,16 +50,21 @@
                 }
                 @Html.TextBoxFor(x => x.QualificationName, new { @class = "govuk-input" })
             </div>
+        </div>
+    </div>
 
-            @if (Model.QuestionModel.StartedQuestion is not null)
-            {
-                await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.StartedQuestion);
-            }
+    @if (Model.QuestionModel.StartedQuestion is not null)
+    {
+        await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.StartedQuestion);
+    }
 
-            @if (Model.QuestionModel.AwardedQuestion is not null)
-            {
-                await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.AwardedQuestion);
-            }
+    @if (Model.QuestionModel.AwardedQuestion is not null)
+    {
+        await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.AwardedQuestion);
+    }
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
 
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasAwardingOrganisationError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="awarding-organisation-heading">
@@ -83,6 +88,6 @@
                     @Model.CtaButtonText
                 </button>
             </div>
-        }
+        </div>
     </div>
-</div>
+}
