@@ -74,14 +74,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IContentService, ContentfulContentService>();
         serviceCollection.AddScoped<IQualificationsRepository, QualificationsRepository>();
     }
-
-    public static void AddMappers(this IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddScoped<IAdvicePageMapper, AdvicePageMapper>();
-        serviceCollection.AddScoped<IHelpPageMapper, HelpPageMapper>();
-        serviceCollection.AddScoped<IHelpConfirmationPageModelMapper, HelpConfirmationPageModelMapper>();
-    }
-
+    
     private static HttpMessageHandler ConfigureHttpMessageHandler(IServiceProvider serviceProvider)
     {
         var options = serviceProvider.GetService<IOptions<ContentfulOptions>>()!.Value;
