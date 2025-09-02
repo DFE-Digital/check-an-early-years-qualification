@@ -1,4 +1,6 @@
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -9,7 +11,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class HelpPageMapperTests
 {
     [TestMethod]
-    public void Map_MapsToModel()
+    public async Task Map_MapsToModel()
     {
         const string postHeadingContent = "This is the post heading text";
         const string emailAddressErrorMessage = "Email address error";
@@ -50,10 +52,14 @@ public class HelpPageMapperTests
                            FurtherInformationErrorMessage = "Enter further information about your enquiry"
                        };
 
-        var result = HelpPageMapper.Map(helpPage, postHeadingContent, emailAddressErrorMessage);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == helpPage.PostHeadingContent)))
+                         .ReturnsAsync(postHeadingContent);
+        var mapper = new HelpPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(helpPage, emailAddressErrorMessage);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpPageModel>();
-        result!.Heading.Should().Be("Help Page Heading");
+        result.Heading.Should().Be("Help Page Heading");
         result.PostHeadingContent.Should().Be(postHeadingContent);
         result.EmailAddressHeading.Should().Be("Enter your email address (optional)");
         result.EmailAddressHintText.Should().Be("If you do not enter your email address we will not be able to contact you in relation to your enquiry");

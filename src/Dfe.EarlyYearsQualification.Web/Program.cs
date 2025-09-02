@@ -140,6 +140,7 @@ builder.Services.AddTransient<TrackingConfiguration>();
 builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddTransient<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
+builder.Services.AddMappers();
 
 if (useMockContentful)
 {

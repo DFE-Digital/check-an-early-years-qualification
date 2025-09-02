@@ -9,6 +9,8 @@ using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Validators;
+using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -71,6 +73,13 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IQualificationListFilter, QualificationListFilter>();
         serviceCollection.AddScoped<IContentService, ContentfulContentService>();
         serviceCollection.AddScoped<IQualificationsRepository, QualificationsRepository>();
+    }
+
+    public static void AddMappers(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IAdvicePageMapper, AdvicePageMapper>();
+        serviceCollection.AddScoped<IHelpPageMapper, HelpPageMapper>();
+        serviceCollection.AddScoped<IHelpConfirmationPageModelMapper, HelpConfirmationPageModelMapper>();
     }
 
     private static HttpMessageHandler ConfigureHttpMessageHandler(IServiceProvider serviceProvider)
