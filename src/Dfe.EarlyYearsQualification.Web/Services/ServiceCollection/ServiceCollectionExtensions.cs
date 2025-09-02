@@ -11,5 +11,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IHelpPageMapper, HelpPageMapper>();
         serviceCollection.AddScoped<IHelpConfirmationPageModelMapper, HelpConfirmationPageModelMapper>();
         serviceCollection.AddScoped<IAccessibilityStatementMapper,  AccessibilityStatementMapper>();
+        serviceCollection.AddScoped<IChallengePageMapper, ChallengePageMapper>();
     }
 }
