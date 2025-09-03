@@ -694,28 +694,30 @@ public class MockContentfulService : IContentService
 
     public async Task<GetHelpPage?> GetGetHelpPage()
     {
-        return await Task.FromResult(new GetHelpPage()
-        {
-            Heading = "Get help with the Check an early years qualification service",
-            PostHeadingContent = ContentfulContentHelper.Paragraph("Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n"),
-            ReasonForEnquiryHeading = "Why are you contacting us?",
-            CtaButtonText = "Continue",
-            BackButton = new NavigationLink
+        return await Task.FromResult(
+            new GetHelpPage()
             {
-                DisplayText = "Home",
-                Href = HomePath,
-                OpenInNewTab = false
-            },
-            ErrorBannerHeading = ThereIsAProblem,
-            NoEnquiryOptionSelectedErrorMessage = "Select one option",
-            EnquiryReasons =
-            [
-                new EnquiryOption
-                { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
-                new EnquiryOption
-                { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" }
-            ]
-        });
+                Heading = "Get help with the Check an early years qualification service",
+                PostHeadingContent = ContentfulContentHelper.Paragraph("Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n"),
+                ReasonForEnquiryHeading = "Why are you contacting us?",
+                CtaButtonText = "Continue",
+                BackButton = new NavigationLink
+                {
+                    DisplayText = "Home",
+                    Href = HomePath,
+                    OpenInNewTab = false
+                },
+                ErrorBannerHeading = ThereIsAProblem,
+                NoEnquiryOptionSelectedErrorMessage = "Select one option",
+                EnquiryReasons =
+                [
+                    new EnquiryOption
+                    { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
+                    new EnquiryOption
+                    { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" }
+                ]
+            }
+        );
     }
 
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()
@@ -830,19 +832,21 @@ public class MockContentfulService : IContentService
 
     public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
     {
-        return await Task.FromResult(new HelpConfirmationPage
-        {
-            SuccessMessage = "Message sent",
-            BodyHeading = "What happens next",
-            Body = ContentfulContentHelper.Paragraph("The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n"),
-            FeedbackComponent = GetFeedbackComponent(),
-            SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
-            ReturnToHomepageLink = new NavigationLink
+        return await Task.FromResult(
+            new HelpConfirmationPage
             {
-                DisplayText = "Return to the homepage",
-                Href = "/"
+                SuccessMessage = "Message sent",
+                BodyHeading = "What happens next",
+                Body = ContentfulContentHelper.Paragraph("The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n"),
+                FeedbackComponent = GetFeedbackComponent(),
+                SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
+                ReturnToHomepageLink = new NavigationLink
+                {
+                    DisplayText = "Return to the homepage",
+                    Href = "/"
+                }
             }
-        });
+        );
     }
 
     private static RadioQuestionPage CreateWhereWasTheQualificationAwardedPage()

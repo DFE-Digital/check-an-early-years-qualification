@@ -581,6 +581,6 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
 
         public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
 
-        public HelpFormEnquiry HelpFormEnquiry { get; set; }
+        public HelpFormEnquiry? HelpFormEnquiry { get; set; }
     }
 }

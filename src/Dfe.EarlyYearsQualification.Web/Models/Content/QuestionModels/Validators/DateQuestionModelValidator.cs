@@ -112,7 +112,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
 
             var awardedValidationResult = IsValid(model.AwardedQuestion, questionPage.AwardedDateQuestion!);
 
-            if (model.StartedQuestion.SelectedMonth is not null || model.StartedQuestion.SelectedYear is not null)
+            if (model.StartedQuestion?.SelectedMonth is not null || model.StartedQuestion?.SelectedYear is not null)
             {
                 var startedValidationResult = IsValid(model.StartedQuestion, questionPage.StartDateQuestion!);
 

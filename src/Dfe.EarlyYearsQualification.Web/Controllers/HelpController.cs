@@ -106,8 +106,8 @@ public class HelpController(
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
         // set any previously entered qualification details from cookie
-        viewModel.AwardingOrganisation = enquiry.AwardingOrganisation ?? userJourneyCookieService.GetAwardingOrganisation();
-        viewModel.QualificationName = enquiry.QualificationName ?? userJourneyCookieService.GetSelectedQualificationName();
+        viewModel.AwardingOrganisation = enquiry.AwardingOrganisation ?? userJourneyCookieService.GetAwardingOrganisation() ?? "";
+        viewModel.QualificationName = enquiry.QualificationName ?? userJourneyCookieService.GetSelectedQualificationName() ?? "";
 
         var qualificationStart = userJourneyCookieService.GetWhenWasQualificationStarted();
         var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
@@ -164,7 +164,7 @@ public class HelpController(
             ModelState.Remove("QuestionModel.StartedQuestion.SelectedYear");
         }
 
-        var hasInvalidDates = !datesValidationResult.AwardedValidationResult.MonthValid || !datesValidationResult.AwardedValidationResult.YearValid ||
+        var hasInvalidDates = !datesValidationResult.AwardedValidationResult!.MonthValid || !datesValidationResult.AwardedValidationResult.YearValid ||
             (datesValidationResult.StartedValidationResult is not null && (!datesValidationResult.StartedValidationResult.MonthValid || !datesValidationResult.StartedValidationResult.YearValid));
 
         if (!ModelState.IsValid || hasInvalidDates)
@@ -187,7 +187,7 @@ public class HelpController(
         {
             helpCookie.QualificationStartDate = $"{model.QuestionModel.StartedQuestion?.SelectedMonth}/{model.QuestionModel.StartedQuestion?.SelectedYear}";
         }
-        helpCookie.QualificationAwardedDate = $"{model.QuestionModel.AwardedQuestion.SelectedMonth}/{model.QuestionModel.AwardedQuestion.SelectedYear}";
+        helpCookie.QualificationAwardedDate = $"{model.QuestionModel.AwardedQuestion?.SelectedMonth}/{model.QuestionModel.AwardedQuestion?.SelectedYear}";
         helpCookie.AwardingOrganisation = model.AwardingOrganisation;
 
         userJourneyCookieService.SetHelpFormEnquiry(helpCookie);
@@ -206,7 +206,7 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
   
-        var viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, ModelState, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
+        var viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
 
         viewModel.ProvideAdditionalInformation = userJourneyCookieService.GetHelpFormEnquiry().AdditionalInformation;
 
@@ -226,7 +226,9 @@ public class HelpController(
                 return RedirectToAction("Index", "Error");
             }
 
-            viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, ModelState, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
+            viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
+
+            viewModel.HasAdditionalInformationError = ModelState.Keys.Any(_ => ModelState["ProvideAdditionalInformation"]?.Errors.Count > 0);
 
             return View("ProvideDetails", viewModel);
         }

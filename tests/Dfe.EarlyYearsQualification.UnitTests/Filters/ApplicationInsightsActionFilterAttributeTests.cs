@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -200,7 +201,7 @@ public class ApplicationInsightsActionFilterAttributeTests
         mockRequestTelemetry.Properties.Values.First().Should().Be("Not found");
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
     }
-    /*
+
     [TestMethod]
     public async Task OnActionExecutionAsync_SerialisesRequestBody_AddsRequestBodyToRequestTelemetry()
     {
@@ -245,10 +246,8 @@ public class ApplicationInsightsActionFilterAttributeTests
                                              );
 
         var actionArguments = new Dictionary<string, object?>
-                              { { FromFormParameterName, new HelpPageModel
+                              { { FromFormParameterName, new GetHelpPageViewModel
                                                          {
-                                                             EmailAddress = "test@test.com",
-                                                             AdditionalInformationMessage = "Test message",
                                                              SelectedOption = "This is the selected option"
                                                          } } };
         
@@ -267,11 +266,11 @@ public class ApplicationInsightsActionFilterAttributeTests
         requestCookieValue.Should().Be(cookieValue);
         mockRequestTelemetry.Properties.Keys.Should().Contain(RequestBodyKey);
         mockRequestTelemetry.Properties.TryGetValue(RequestBodyKey, out var requestBodyValue); 
-        const string expectedRequestBodyValue = "{\"SelectedOption\":\"This is the selected option\",\"EmailAddress\":\"****\",\"AdditionalInformationMessage\":\"Test message\"}";
+        const string expectedRequestBodyValue = "{\"SelectedOption\":\"This is the selected option\"}";
         requestBodyValue.Should().Match(expectedRequestBodyValue);
         mockActionExecutionDelegate.Verify(x => x.Invoke(), Times.Once);
-    }*/
-    
+    }
+
     [TestMethod]
     public async Task OnActionExecutionAsync_ExceptionThrown_CallsLogger()
     {

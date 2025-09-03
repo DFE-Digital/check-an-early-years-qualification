@@ -19,8 +19,6 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class HelpControllerTests
 {
-    private static readonly Mock<IUserJourneyCookieService> UserJourneyMockNoOp = new();
-
     private readonly Mock<IConfiguration> _configurationMock = new();
     private readonly Mock<IConfigurationSection> _configurationSectionMock = new();
     Mock<ILogger<HelpController>> mockLogger = new Mock<ILogger<HelpController>>();
@@ -29,12 +27,14 @@ public class HelpControllerTests
     Mock<INotificationService> mockNotificationService = new Mock<INotificationService>();
     Mock<IDateQuestionModelValidator> mockDateQuestionValidator = new Mock<IDateQuestionModelValidator>();
     Mock<IPlaceholderUpdater> mockPlaceHolderUpdater = new Mock<IPlaceholderUpdater>();
+    Mock<IUserJourneyCookieService> mockUserJourneyService = new Mock<IUserJourneyCookieService>();
+
     private HelpController GetSut()
     {
         return new HelpController(mockLogger.Object,
                                 mockContentService.Object,
                                 mockContentParser.Object,
-                                UserJourneyMockNoOp.Object,
+                                mockUserJourneyService.Object,
                                 mockNotificationService.Object,
                                 mockDateQuestionValidator.Object,
                                 mockPlaceHolderUpdater.Object
@@ -131,6 +131,8 @@ public class HelpControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(pageToRedirectTo);
+
+        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -239,13 +241,13 @@ public class HelpControllerTests
         var startedAt = (1, 2000);
         var awardedAt = (6, 2002);
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
-        UserJourneyMockNoOp.Setup(x => x.GetAwardingOrganisation()).Returns("Awarding organisation");
-        UserJourneyMockNoOp.Setup(x => x.GetSelectedQualificationName()).Returns("Qualification name");
+        mockUserJourneyService.Setup(x => x.GetAwardingOrganisation()).Returns("Awarding organisation");
+        mockUserJourneyService.Setup(x => x.GetSelectedQualificationName()).Returns("Qualification name");
 
-        UserJourneyMockNoOp.Setup(x => x.GetWhenWasQualificationStarted()).Returns(startedAt);
-        UserJourneyMockNoOp.Setup(x => x.GetWhenWasQualificationAwarded()).Returns(awardedAt);
+        mockUserJourneyService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(startedAt);
+        mockUserJourneyService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns(awardedAt);
 
         // Act
         var result = await GetSut().QualificationDetails();
@@ -280,7 +282,7 @@ public class HelpControllerTests
 
         mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = "Question about a qualification",
@@ -325,7 +327,7 @@ public class HelpControllerTests
         // Act
         var result = await GetSut().QualificationDetails(submittedViewModel);
 
-        var enquiry = UserJourneyMockNoOp.Object.GetHelpFormEnquiry();
+        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
@@ -345,6 +347,8 @@ public class HelpControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
+
+        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -358,7 +362,7 @@ public class HelpControllerTests
 
         mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = "Question about a qualification",
@@ -395,7 +399,7 @@ public class HelpControllerTests
         // Act
         var result = await GetSut().QualificationDetails(submittedViewModel);
 
-        var enquiry = UserJourneyMockNoOp.Object.GetHelpFormEnquiry();
+        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
@@ -415,6 +419,8 @@ public class HelpControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
+
+        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -573,7 +579,7 @@ public class HelpControllerTests
             ReasonForEnquiring = selectedOption,
         };
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
         // Act
         var result = await GetSut().ProvideDetails();
@@ -611,7 +617,7 @@ public class HelpControllerTests
             ReasonForEnquiring = "Issue with the service",
         };
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
         var submittedViewModel = new ProvideDetailsPageViewModel()
         {
@@ -621,7 +627,7 @@ public class HelpControllerTests
         // Act
         var result = await GetSut().ProvideDetails(submittedViewModel);
 
-        var enquiry = UserJourneyMockNoOp.Object.GetHelpFormEnquiry();
+        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
@@ -632,13 +638,15 @@ public class HelpControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be("EmailAddress");
+
+        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
     public async Task Post_ProvideDetails_InvalidModelState_ReturnsProvideDetailsPageViewModel()
     {
         // Arrange
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = "Issue with the service",
@@ -710,7 +718,7 @@ public class HelpControllerTests
             AwardingOrganisation = "An awarding organisation",
         };
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
         // Act
         var result = await GetSut().EmailAddress();
@@ -737,7 +745,7 @@ public class HelpControllerTests
             AdditionalInformation = "Some details about the issue",
         };
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
         var submittedViewModel = new EmailAddressPageViewModel()
         {
@@ -748,7 +756,7 @@ public class HelpControllerTests
         var result = await GetSut().EmailAddress(submittedViewModel);
 
 
-        var enquiry = UserJourneyMockNoOp.Object.GetHelpFormEnquiry();
+        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
@@ -763,7 +771,7 @@ public class HelpControllerTests
 
         mockNotificationService.Verify(x => x.SendHelpPageNotification(It.IsAny<HelpPageNotification>()), Times.Once());
 
-        UserJourneyMockNoOp.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -772,7 +780,7 @@ public class HelpControllerTests
         // Arrange
         mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(new HelpEmailAddressPage());
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         var controller = GetSut();
 
@@ -858,7 +866,7 @@ public class HelpControllerTests
         };
         mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        UserJourneyMockNoOp.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = "Question about a qualification",

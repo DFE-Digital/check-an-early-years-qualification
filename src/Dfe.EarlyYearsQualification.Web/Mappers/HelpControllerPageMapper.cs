@@ -52,8 +52,8 @@ public class HelpControllerPageMapper
 
     public static QualificationDetailsPageViewModel MapQualificationDetailsContentToViewModel(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content, DatesValidationResult? validationResult, ModelStateDictionary modelState, IPlaceholderUpdater placeholderUpdater)
     {
-        var startedModel = MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion!, validationResult?.StartedValidationResult, placeholderUpdater);
-        var awardedModel = MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion!, validationResult?.AwardedValidationResult, placeholderUpdater);
+        var startedModel = MapDateModel(viewModel.QuestionModel.StartedQuestion!, content.StartDateQuestion!, validationResult?.StartedValidationResult, placeholderUpdater);
+        var awardedModel = MapDateModel(viewModel.QuestionModel.AwardedQuestion!, content.AwardedDateQuestion!, validationResult?.AwardedValidationResult, placeholderUpdater);
 
         var errorLinks = new List<ErrorSummaryLink>();
 
@@ -167,15 +167,7 @@ public class HelpControllerPageMapper
         return (dateQuestion!, errorLinks);
     }
 
-
-
-
-
-
-
-
-
-    public static ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage helpPageContent, ModelStateDictionary modelState, string reasonForEnquiring)
+    public static ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage helpPageContent, string reasonForEnquiring)
     {
         var backButton = reasonForEnquiring == "Question about a qualification"
                              ? helpPageContent.BackButtonToQualificationDetailsPage
@@ -196,11 +188,6 @@ public class HelpControllerPageMapper
             ErrorBannerHeading = helpPageContent.ErrorBannerHeading,
         };
 
-        if (!modelState.IsValid)
-        {
-            viewModel.HasAdditionalInformationError = modelState.Keys.Any(_ => modelState["ProvideAdditionalInformation"]?.Errors.Count > 0);
-        }
-
         return viewModel;
     }
 
@@ -218,8 +205,6 @@ public class HelpControllerPageMapper
             CtaButtonText = content.CtaButtonText,
             ErrorBannerHeading = content.ErrorBannerHeading,
         };
-
-        
 
         return viewModel;
     }

@@ -28,7 +28,7 @@
                     </label>
                 </h1>
                 <div id="additional-information-hint" class="govuk-hint">
-                    @Html.Raw(Model.PostHeadingContent)
+                    @Model.PostHeadingContent
                 </div>
                 @if (Model.HasAdditionalInformationError)
                 {
@@ -41,7 +41,7 @@
                 @{
                     await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AdditionalInformationWarningText, ReduceMargin = true });
                 }
-                @Html.TextAreaFor(x => x.ProvideAdditionalInformation, 5, 1, new { @class = "govuk-textarea", aria_describedby = "more-detail-hint" })
+                @Html.TextAreaFor(x => x.ProvideAdditionalInformation, 5, 1, new { @class = "govuk-textarea", aria_describedby = "additional-information-hint" })
             </div>
 
             <div class="govuk-form-group">

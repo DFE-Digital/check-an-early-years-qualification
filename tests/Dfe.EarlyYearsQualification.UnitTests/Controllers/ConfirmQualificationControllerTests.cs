@@ -184,6 +184,9 @@ public class ConfirmQualificationControllerTests
         model.ErrorBannerLink.Should().Be(confirmQualificationPageContent.ErrorBannerLink);
         model.QualificationAwardingOrganisation.Should().Be(AwardingOrganisations.Ncfe);
         model.QualificationDateAdded.Should().Be("2014");
+
+        mockUserJourneyService.Verify(x => x.SetAwardingOrganisation(It.IsAny<string>()), Times.Once);
+        mockUserJourneyService.Verify(x => x.SetSelectedQualificationName(It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]
