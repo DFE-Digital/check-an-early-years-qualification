@@ -17,5 +17,8 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IFeedbackFormPageMapper, FeedbackFormPageMapper>();
         serviceCollection.AddScoped<IFeedbackFormConfirmationPageMapper, FeedbackFormConfirmationPageMapper>();
         serviceCollection.AddScoped<IStartPageMapper, StartPageMapper>();
+        serviceCollection.AddScoped<IRadioQuestionMapper, RadioQuestionMapper>();
+        serviceCollection.AddScoped<IDropdownQuestionMapper, DropdownQuestionMapper>();
+        serviceCollection.AddScoped<IPreCheckPageMapper, PreCheckPageMapper>();
     }
 }

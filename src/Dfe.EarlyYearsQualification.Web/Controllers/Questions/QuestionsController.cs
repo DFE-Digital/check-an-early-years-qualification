@@ -1,9 +1,8 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -15,11 +14,13 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 public partial class QuestionsController(
     ILogger<QuestionsController> logger,
     IContentService contentService,
-    IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
     IQualificationsRepository repository,
     IDateQuestionModelValidator questionModelValidator,
-    IPlaceholderUpdater placeholderUpdater)
+    IPlaceholderUpdater placeholderUpdater,
+    IRadioQuestionMapper radioQuestionMapper,
+    IDropdownQuestionMapper dropdownQuestionMapper,
+    IPreCheckPageMapper preCheckPageMapper)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -53,7 +54,6 @@ public partial class QuestionsController(
                                                          string controllerName,
                                                          string? selectedAnswer)
     {
-        return RadioQuestionMapper.Map(model, question, actionName, controllerName, await contentParser.ToHtml(question.AdditionalInformationBody),
-                                       selectedAnswer);
+        return await radioQuestionMapper.Map(model, question, actionName, controllerName, selectedAnswer);
     }
 }
