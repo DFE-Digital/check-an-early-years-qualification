@@ -13,5 +13,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IAccessibilityStatementMapper,  AccessibilityStatementMapper>();
         serviceCollection.AddScoped<IChallengePageMapper, ChallengePageMapper>();
         serviceCollection.AddScoped<IConfirmQualificationPageMapper, ConfirmQualificationPageMapper>();
+        serviceCollection.AddScoped<ICookiesPageMapper, CookiesPageMapper>();
     }
 }
