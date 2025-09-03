@@ -242,7 +242,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                ContentfulContentHelper.Paragraph("Level 2 maybe PFA"),
                            RequirementForAfterJune2016 =
                                ContentfulContentHelper.Paragraph("Level 2 must PFA"),
-                           RequirementHeading = "Level 2 Requirements"
+                           RequirementHeading = "Level 2 Requirements",
+                           SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        },
 
                        new RatioRequirement
@@ -256,7 +257,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RequirementForAfterJune2016 =
                                ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
                            RequirementForL3PlusBetweenSept14AndMay16 = ContentfulContentHelper.Paragraph("Level 3 must English"),
-                           RequirementHeading = "Level 3 Requirements"
+                           RequirementHeading = "Level 3 Requirements",
+                           SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        },
 
                        new RatioRequirement
@@ -264,14 +266,16 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RatioRequirementName = RatioRequirements.Level6RatioRequirementName,
                            RequirementHeading = "Level 6 Requirements",
                            RequirementForLevel6Before2014 = ContentfulContentHelper.Paragraph("Level 6 must QTS"),
-                           RequirementForLevel6After2014 = ContentfulContentHelper.Paragraph("Level 6 must QTS")
+                           RequirementForLevel6After2014 = ContentfulContentHelper.Paragraph("Level 6 must QTS"),
+                           SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        },
 
                        new RatioRequirement
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .UnqualifiedRatioRequirementName
+                                   .UnqualifiedRatioRequirementName,
+                           SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        }
                    ]
                };
@@ -338,7 +342,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                ContentfulContentHelper.Paragraph("Level 2 maybe PFA"),
                            RequirementForAfterJune2016 =
                                ContentfulContentHelper.Paragraph("Level 2 must PFA"),
-                           RequirementHeading = "Level 2 Requirements"
+                           RequirementHeading = "Level 2 Requirements",
+                           SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        },
 
                        new RatioRequirement
@@ -352,7 +357,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RequirementForAfterJune2016 =
                                ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
                            RequirementForL3PlusBetweenSept14AndMay16 = ContentfulContentHelper.Paragraph("Level 3 must English"),
-                           RequirementHeading = "Level 3 Requirements"
+                           RequirementHeading = "Level 3 Requirements",
+                           SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        },
 
                        new RatioRequirement
@@ -364,14 +370,16 @@ public class MockQualificationsRepository : IQualificationsRepository
                            RequirementForLevel6After2014 = Level6MustQts,
                            RequirementForLevel7Before2014 = Level6MustQts,
                            RequirementForLevel7After2014 = Level6MustQts,
-                           EyittRouteAvailable = ContentfulContentHelper.Paragraph("This is the EYITT content")
+                           EyittRouteAvailable = ContentfulContentHelper.Paragraph("This is the EYITT content"),
+                           SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        },
 
                        new RatioRequirement
                        {
                            RatioRequirementName =
                                RatioRequirements
-                                   .UnqualifiedRatioRequirementName
+                                   .UnqualifiedRatioRequirementName,
+                           SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        }
                    ],
                    IsAutomaticallyApprovedAtLevel6 = false

@@ -10,12 +10,17 @@ public class ParagraphRenderer : IContentRenderer
 
     public async Task<string> RenderAsync(IContent content)
     {
-        var paragraph = content as Paragraph;
+        if (content is not Paragraph paragraph
+            || (paragraph.Content.Count == 1 && paragraph.Content[0] is Text &&
+                (paragraph.Content[0] as Text)!.Value == string.Empty))
+        {
+            return string.Empty;
+        }
 
         var sb = new StringBuilder();
         sb.Append("<p class=\"govuk-body\">");
 
-        sb.Append(await NestedContentHelper.Render(paragraph!.Content));
+        sb.Append(await NestedContentHelper.Render(paragraph.Content));
 
         sb.Append("</p>");
         return sb.ToString();

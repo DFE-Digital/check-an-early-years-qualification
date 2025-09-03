@@ -20,6 +20,7 @@ public class QualificationDetailsMapperTests
         const string feedbackBannerBody = "This is the feedback banner body";
         const string improveServiceBody = "This is the improve service body";
         const string requirementsText = "Requirements text";
+        const string printInformationBody = "Printing information body";
         var detailsPage = new DetailsPage
                           {
                               AwardingOrgLabel = "Awarding org label",
@@ -36,6 +37,8 @@ public class QualificationDetailsMapperTests
                               RequirementsText = ContentfulContentHelper.Paragraph(requirementsText),
                               RatiosHeading = "Ratios heading",
                               PrintButtonText = "Print button text",
+                              PrintInformationHeading = "Print information heading",
+                              PrintInformationBody = ContentfulContentHelper.Paragraph(printInformationBody),
                               QualificationNameLabel = "Qualification name label",
                               QualificationStartDateLabel = "Qualifications start date label",
                               QualificationAwardedDateLabel = "Qualifications awarded date label",
@@ -78,7 +81,7 @@ public class QualificationDetailsMapperTests
 
         var result = QualificationDetailsMapper.Map(qualification, detailsPage, backNavLink,
                                                     additionalRequirementAnswers, dateStarted, dateAwarded, requirementsText,
-                                                    feedbackBannerBody, improveServiceBody);
+                                                    feedbackBannerBody, improveServiceBody, printInformationBody);
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);
@@ -110,6 +113,8 @@ public class QualificationDetailsMapperTests
         result.Content.CheckAnotherQualificationLink.Should()
               .BeEquivalentTo(detailsPage.CheckAnotherQualificationLink, options => options.Excluding(x => x.Sys));
         result.Content.PrintButtonText.Should().BeSameAs(detailsPage.PrintButtonText);
+        result.Content.PrintInformationHeading.Should().BeSameAs(detailsPage.PrintInformationHeading);
+        result.Content.PrintInformationBody.Should().BeSameAs(printInformationBody);
         result.Content.QualificationNameLabel.Should().BeSameAs(detailsPage.QualificationNameLabel);
         result.Content.QualificationStartDateLabel.Should().BeSameAs(detailsPage.QualificationStartDateLabel);
         result.Content.QualificationAwardedDateLabel.Should().BeSameAs(detailsPage.QualificationAwardedDateLabel);

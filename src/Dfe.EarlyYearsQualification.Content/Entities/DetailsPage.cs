@@ -18,11 +18,10 @@ public class DetailsPage
 
     public string RatiosHeading { get; init; } = string.Empty;
 
-    public Document? RatiosText { get; init; }
-    public Document? RatiosTextMaybeRequirements { get; init; }
-    public Document? RatiosTextWillRequirements { get; init; }
     public Document? RatiosTextNotFullAndRelevant { get; init; }
+    
     public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
+    
     public Document? RatiosTextL3Ebr { get; init; }
 
     public string RequirementsHeading { get; init; } = string.Empty;
@@ -33,14 +32,20 @@ public class DetailsPage
 
     public string PrintButtonText { get; init; } = string.Empty;
 
+    public string PrintInformationHeading { get; init; } = string.Empty;
+
+    public Document? PrintInformationBody { get; init; }
+
     public string QualificationDetailsSummaryHeader { get; init; } = string.Empty;
 
     public string QualificationNameLabel { get; init; } = string.Empty;
 
     public string QualificationStartDateLabel { get; init; } = string.Empty;
+    
     public string QualificationAwardedDateLabel { get; init; } = string.Empty;
 
     public FeedbackBanner? FeedbackBanner { get; init; }
+    
     public UpDownFeedback? UpDownFeedback { get; init; }
 
     public string QualificationResultHeading { get; init; } = string.Empty;

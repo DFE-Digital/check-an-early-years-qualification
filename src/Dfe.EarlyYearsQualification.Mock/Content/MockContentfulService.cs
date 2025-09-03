@@ -116,10 +116,7 @@ public class MockContentfulService : IContentService
 
     public async Task<DetailsPage?> GetDetailsPage()
     {
-        var ratioText = ContentfulContentHelper.Paragraph("This is the ratio text");
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
-        var ratioTextMaybeRequirements = ContentfulContentHelper.Paragraph("This is the ratio text maybe requirements");
-        var ratioTextRequirements = ContentfulContentHelper.Paragraph("This is the ratio text requirements");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
             ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
         var ratioTextL3Ebr = ContentfulContentHelper.Paragraph("This is the ratio text L3 EBR");
@@ -145,9 +142,6 @@ public class MockContentfulService : IContentService
                                                                     OpenInNewTab = false
                                                                 },
                                          RatiosHeading = "Test ratio heading",
-                                         RatiosText = ratioText,
-                                         RatiosTextMaybeRequirements = ratioTextMaybeRequirements,
-                                         RatiosTextWillRequirements = ratioTextRequirements,
                                          RatiosTextL3Ebr = ratioTextL3Ebr,
                                          RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
                                          RatiosTextL3PlusNotFrBetweenSep14Aug19 =
@@ -181,7 +175,9 @@ public class MockContentfulService : IContentService
                                          QualificationResultNotFrL3OrL6MessageHeading = "Not full and relevant L3 or L6",
                                          QualificationResultNotFrL3OrL6MessageBody = "Not full and relevant L3 or L6 body",
                                          UpDownFeedback = GetUpDownFeedback(),
-                                         PrintButtonText = "Print this page"
+                                         PrintButtonText = "Print this page",
+                                         PrintInformationBody = ContentfulContentHelper.Paragraph("Print information body"),
+                                         PrintInformationHeading = "Print information heading"
                                      });
     }
 

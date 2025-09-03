@@ -57,8 +57,8 @@ body {
     border-color: #4C2C92;
 }
 
-.tag-align-right {
-    float: right;
+.text-align-right {
+    text-align: right;
 }
 
 .govuk-skip-link:focus {
@@ -78,6 +78,18 @@ body {
 
 .govuk-\!-width-one-half {
     width: 49% !important;
+    padding: 0 15px;
+    display: inline-block;
+}
+
+.govuk-\!-width-one-third {
+    width: 29% !important;
+    padding: 0 15px;
+    display: inline-block;
+}
+
+.govuk-\!-width-two-third {
+    width: 69% !important;
     padding: 0 15px;
     display: inline-block;
 }
@@ -199,11 +211,6 @@ body {
 .govuk-inset-text.qualification-result-failure {
     border-left-color: #d4351c;
 }
-
-.qualification-result-container {
-    margin-bottom: 60px;
-}
-
 
 #ud-feedback {
     background: #fff;
@@ -378,6 +385,11 @@ body {
         font-weight: 400;
         font-size: 1rem;
         line-height: 1.25
+    }
+
+    /* Remove bottom margin on the last paragraph tag within card component for larger viewports */
+    .govuk-summary-card__content .govuk-summary-list__row p.govuk-body:last-child {
+        margin-bottom: 0;
     }
 }
 

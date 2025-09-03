@@ -18,7 +18,7 @@
             await Html.RenderPartialAsync("Partials/FeedbackComponentContainer", new FeedbackComponentContainerModel { FeedbackComponent = Model.RightHandSideContent, IsMobile = true });
         }
 
-        <div class="govuk-body govuk-!-margin-bottom-9" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
+        <div class="govuk-body govuk-!-margin-bottom-7" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
 
         @if (Model.FeedbackBanner is not null)
         {
