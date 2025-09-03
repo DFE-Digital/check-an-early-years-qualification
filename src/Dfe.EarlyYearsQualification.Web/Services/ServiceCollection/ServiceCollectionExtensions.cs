@@ -20,5 +20,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IRadioQuestionMapper, RadioQuestionMapper>();
         serviceCollection.AddScoped<IDropdownQuestionMapper, DropdownQuestionMapper>();
         serviceCollection.AddScoped<IPreCheckPageMapper, PreCheckPageMapper>();
+        serviceCollection.AddScoped<IFooterMapper, FooterMapper>();
     }
 }
