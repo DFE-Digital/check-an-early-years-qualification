@@ -21,5 +21,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IDropdownQuestionMapper, DropdownQuestionMapper>();
         serviceCollection.AddScoped<IPreCheckPageMapper, PreCheckPageMapper>();
         serviceCollection.AddScoped<IFooterMapper, FooterMapper>();
+        serviceCollection.AddScoped<IQualificationDetailsMapper, QualificationDetailsMapper>();
     }
 }
