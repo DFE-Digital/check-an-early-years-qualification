@@ -14,5 +14,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IChallengePageMapper, ChallengePageMapper>();
         serviceCollection.AddScoped<IConfirmQualificationPageMapper, ConfirmQualificationPageMapper>();
         serviceCollection.AddScoped<ICookiesPageMapper, CookiesPageMapper>();
+        serviceCollection.AddScoped<IFeedbackFormPageMapper, FeedbackFormPageMapper>();
+        serviceCollection.AddScoped<IFeedbackFormConfirmationPageMapper, FeedbackFormConfirmationPageMapper>();
     }
 }
