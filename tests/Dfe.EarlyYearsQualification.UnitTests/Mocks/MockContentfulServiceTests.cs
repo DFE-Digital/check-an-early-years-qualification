@@ -670,49 +670,6 @@ public class MockContentfulServiceTests
         result.AnyLevelText.Should().Be("Any level");
     }
 
-    /*
-        [TestMethod]
-        public async Task GetHelpPage_ReturnsExpectedDetails()
-        {
-            var contentfulService = new MockContentfulService();
-
-            var result = await contentfulService.GetHelpPage();
-
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<HelpPage>();
-            result.Heading.Should().Be("Help Page Heading");
-            result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
-                  .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post heading text");
-            result.EmailAddressHeading.Should().Be("Enter your email address (optional)");
-            result.EmailAddressHintText.Should().Be("If you do not enter your email address we will not be able to contact you in relation to your enquiry");
-            result.ReasonForEnquiryHeading.Should().Be("Choose the reason of your enquiry");
-            result.ReasonForEnquiryHintText.Should().Be("Select one option");
-            result.EnquiryReasons.Should().NotBeNull();
-            result.EnquiryReasons.Count.Should().Be(3);
-            result.EnquiryReasons[0].Label.Should().Be("Option 1");
-            result.EnquiryReasons[0].Value.Should().Be("Option 1");
-            result.EnquiryReasons[1].Label.Should().Be("Option 2");
-            result.EnquiryReasons[1].Value.Should().Be("Option 2");
-            result.EnquiryReasons[2].Label.Should().Be("Option 3");
-            result.EnquiryReasons[2].Value.Should().Be("Option 3");
-            result.AdditionalInformationHeading.Should().Be("Provide further information about your enquiry");
-            result.AdditionalInformationHintText.Should().Be("Provide details about the qualification you are checking for or the specific issue you are experiencing with the service.");
-            result.AdditionalInformationWarningText.Should().Be("Do not include personal information, for example the name of the qualification holder");
-            result.CtaButtonText.Should().Be("Send message");
-            result.BackButton.Should().BeEquivalentTo(new NavigationLink
-                                                      {
-                                                          DisplayText = "Home",
-                                                          OpenInNewTab = false,
-                                                          Href = "/"
-                                                      });
-            result.ErrorBannerHeading.Should().Be("There is a problem");
-            result.NoEmailAddressEnteredErrorMessage.Should().Be("Enter an email address");
-            result.InvalidEmailAddressErrorMessage.Should().Be("Enter a valid email address");
-            result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
-            result.FurtherInformationErrorMessage.Should().Be("Enter further information about your enquiry");
-        }*/
-
-
 
     [TestMethod]
     public async Task GetGetHelpPage_ReturnsExpectedDetails()
@@ -753,60 +710,129 @@ public class MockContentfulServiceTests
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
     }
 
-
-
-
-
-    // todo
-
-/*
-
     [TestMethod]
-    public async Task GetGetHelpPage_ReturnsExpectedDetails()
+    public async Task GetHelpQualificationDetailsPage_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetGetHelpPage();
-
-        var enquiryReasons = new List<Option>
-                             {
-                                 new() { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
-                                 new() { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" },
-                             };
+        var result = await contentfulService.GetHelpQualificationDetailsPage();
 
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<GetHelpPage>();
-        result.Heading.Should().Be("Get help with the Check an early years qualification service");
-        result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n");
+        result.Should().BeAssignableTo<HelpQualificationDetailsPage>();
 
-        result.ReasonForEnquiryHeading.Should().Be("Why are you contacting us?");
-
-        result.EnquiryReasons.Should().NotBeNull();
-        result.EnquiryReasons.Count.Should().Be(2);
-        result.EnquiryReasons.First().Label.Should().Be(enquiryReasons.First().Label);
-        result.EnquiryReasons.Last().Value.Should().Be(enquiryReasons.Last().Value);
-        result.EnquiryReasons.First().Label.Should().Be(enquiryReasons.First().Label);
-        result.EnquiryReasons.Last().Value.Should().Be(enquiryReasons.Last().Value);
-
+        result.Heading.Should().Be("What are the qualification details?");
+        result.PostHeadingContent.Should().Be("We need to know the following qualification details to quickly and accurately respond to any questions you may have.");
         result.CtaButtonText.Should().Be("Continue");
-        result.BackButton.Should().BeEquivalentTo(new NavigationLink
-        {
-            DisplayText = "Home",
-            OpenInNewTab = false,
-            Href = "/"
-        });
+        result.BackButton.Should().BeEquivalentTo(
+            new NavigationLink
+            {
+                DisplayText = "Back to get help with the Check an early years qualification service",
+                Href = "/help/get-help",
+                OpenInNewTab = false
+            }
+        );
+
+        result.QualificationNameHeading.Should().Be("Qualification name");
+        result.QualificationNameErrorMessage.Should().Be("Enter the qualification name");
+        result.AwardingOrganisationHeading.Should().Be("Awarding organisation");
+        result.AwardingOrganisationErrorMessage.Should().Be("Enter the awarding organisation");
         result.ErrorBannerHeading.Should().Be("There is a problem");
-        result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
+        result.AwardedDateIsAfterStartedDateErrorText.Should().Be("The awarded date must be after the started date");
+
+        result.StartDateQuestion.MonthLabel.Should().Be("Month");
+        result.StartDateQuestion.YearLabel.Should().Be("Year");
+        result.StartDateQuestion.QuestionHeader.Should().Be("Start date");
+        result.StartDateQuestion.QuestionHint.Should().Be("Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.");
+        result.StartDateQuestion.ErrorBannerLinkText.Should().Be("Enter the month and year that the qualification was started");
+        result.StartDateQuestion.ErrorMessage.Should().Be("Enter the month and year that the qualification was started");
+        result.StartDateQuestion.FutureDateErrorBannerLinkText.Should().Be("The date the qualification was started must be in the past");
+        result.StartDateQuestion.FutureDateErrorMessage.Should().Be("The date the qualification was started must be in the past");
+        result.StartDateQuestion.MissingMonthErrorMessage.Should().Be("Enter the month that the qualification was started");
+        result.StartDateQuestion.MissingYearErrorMessage.Should().Be("Enter the year that the qualification was started");
+        result.StartDateQuestion.MissingMonthBannerLinkText.Should().Be("Enter the month that the qualification was started");
+        result.StartDateQuestion.MissingYearBannerLinkText.Should().Be("Enter the year that the qualification was started");
+        result.StartDateQuestion.MonthOutOfBoundsErrorLinkText.Should().Be("The month the qualification was started must be between 1 and 12");
+        result.StartDateQuestion.MonthOutOfBoundsErrorMessage.Should().Be("The month the qualification was started must be between 1 and 12");
+        result.StartDateQuestion.YearOutOfBoundsErrorLinkText.Should().Be("The year the qualification was started must be between 1900 and $[actual-year]$");
+        result.StartDateQuestion.YearOutOfBoundsErrorMessage.Should().Be("The year the qualification was started must be between 1900 and $[actual-year]$");
+
+        result.AwardedDateQuestion.MonthLabel.Should().Be("Month");
+        result.AwardedDateQuestion.YearLabel.Should().Be("Year");
+        result.AwardedDateQuestion.QuestionHeader.Should().Be("Award date");
+        result.AwardedDateQuestion.QuestionHint.Should().Be("Enter the date the qualification was awarded so we can tell you if other requirements apply. For example 6 2015.");
+        result.AwardedDateQuestion.ErrorBannerLinkText.Should().Be("Enter the month and year that the qualification was awarded");
+        result.AwardedDateQuestion.ErrorMessage.Should().Be("Enter the date the qualification was awarded");
+        result.AwardedDateQuestion.FutureDateErrorBannerLinkText.Should().Be("The date the qualification was awarded must be in the past");
+        result.AwardedDateQuestion.FutureDateErrorMessage.Should().Be("The date the qualification was awarded must be in the past");
+        result.AwardedDateQuestion.MissingMonthErrorMessage.Should().Be("Enter the month that the qualification was awarded");
+        result.AwardedDateQuestion.MissingYearErrorMessage.Should().Be("Enter the year that the qualification was awarded");
+        result.AwardedDateQuestion.MissingMonthBannerLinkText.Should().Be("Enter the month that the qualification was awarded");
+        result.AwardedDateQuestion.MissingYearBannerLinkText.Should().Be("Enter the year that the qualification was awarded");
+        result.AwardedDateQuestion.MonthOutOfBoundsErrorLinkText.Should().Be("The month the qualification was awarded must be between 1 and 12");
+        result.AwardedDateQuestion.MonthOutOfBoundsErrorMessage.Should().Be("The month the qualification was awarded must be between 1 and 12");
+        result.AwardedDateQuestion.YearOutOfBoundsErrorLinkText.Should().Be("The year the qualification was awarded must be between 1900 and $[actual-year]$");
+        result.AwardedDateQuestion.YearOutOfBoundsErrorMessage.Should().Be("The year the qualification was awarded must be between 1900 and $[actual-year]$");
     }
-*/
 
+    [TestMethod]
+    public async Task GetHelpProvideDetailsPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
 
+        var result = await contentfulService.GetHelpProvideDetailsPage();
 
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpProvideDetailsPage>();
 
+        result.Heading.Should().Be("How can we help you?");
+        result.PostHeadingContent.Should().Be("Give as much detail as you can. This helps us give you the right support.");
+        result.CtaButtonText.Should().Be("Continue");
+        result.BackButtonToGetHelpPage.Should().BeEquivalentTo(
+            new NavigationLink
+            {
+                DisplayText = "Back to get help with the Check an early years qualification service",
+                Href = "/help/get-help",
+                OpenInNewTab = false
+            }
+        );
+        result.BackButtonToQualificationDetailsPage.Should().BeEquivalentTo(
+            new NavigationLink
+            {
+                DisplayText = "Back to what are the qualification details",
+                Href = "/help/qualification-details",
+                OpenInNewTab = false
+            }
+        );
+        result.AdditionalInformationWarningText.Should().Be("Do not include any personal information");
+        result.AdditionalInformationErrorMessage.Should().Be("Provide information about how we can help you");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+    }
 
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
 
+        var result = await contentfulService.GetHelpEmailAddressPage();
 
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpEmailAddressPage>();
+
+        result.BackButton.Should().BeEquivalentTo(
+            new NavigationLink
+            {
+                DisplayText = "Back to how can we help you",
+                Href = "/help/provide-details",
+                OpenInNewTab = false
+            }
+        );
+        result.Heading.Should().Be("What is your email address?");
+        result.PostHeadingContent.Should().Be("We will only use this email address to reply to your message");
+        result.CtaButtonText.Should().Be("Send message");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.NoEmailAddressEnteredErrorMessage.Should().Be("Enter an email address");
+        result.InvalidEmailAddressErrorMessage.Should().Be("Enter an email address in the correct format, for example name@example.com");
+    }
 
     [TestMethod]
     public async Task GetHelpConfirmationPage_ReturnsExpectedDetails()

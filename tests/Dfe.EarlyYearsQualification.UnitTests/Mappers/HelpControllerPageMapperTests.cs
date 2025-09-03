@@ -15,9 +15,6 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 [TestClass]
 public class HelpControllerPageMapperTests
 {
-
-    //todo
-
     [TestMethod]
     public async Task MapGetHelpPageContentToViewModelAsync_MapsToViewModel()
     {
@@ -89,10 +86,6 @@ public class HelpControllerPageMapperTests
         result.HasNoEnquiryOptionSelectedError.Should().BeFalse();
         result.HasValidationErrors.Should().BeFalse();
     }
-
-
-    // TODO qualification details page
-
 
     [TestMethod]
     public void MapQualificationDetailsContentToViewModel_MapsToViewModel()
