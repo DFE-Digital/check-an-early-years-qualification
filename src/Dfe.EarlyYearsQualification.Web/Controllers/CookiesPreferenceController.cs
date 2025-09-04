@@ -1,9 +1,6 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Mappers;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +10,9 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class CookiesPreferenceController(
     ILogger<CookiesPreferenceController> logger,
     IContentService contentService,
-    IGovUkContentParser contentParser,
     ICookiesPreferenceService cookieService,
-    IUrlHelper urlHelper)
+    IUrlHelper urlHelper,
+    ICookiesPageMapper cookiesPageMapper)
     : ServiceController
 {
     [HttpGet]
@@ -29,7 +26,7 @@ public class CookiesPreferenceController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await Map(content);
+        var model = await cookiesPageMapper.Map(content);
 
         return View(model);
     }
@@ -86,12 +83,5 @@ public class CookiesPreferenceController(
     private string CheckUrl(string? url)
     {
         return urlHelper.IsLocalUrl(url) ? url : "/cookies";
-    }
-
-    private async Task<CookiesPageModel> Map(CookiesPage content)
-    {
-        var bodyContent = await contentParser.ToHtml(content.Body);
-        var successBannerContent = await contentParser.ToHtml(content.SuccessBannerContent);
-        return CookiesPageMapper.Map(content, bodyContent, successBannerContent);
     }
 }

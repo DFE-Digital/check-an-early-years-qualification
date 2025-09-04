@@ -1,4 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
@@ -8,8 +10,9 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class FeedbackFormPageMapperTests
 {
     [TestMethod]
-    public void Map_PassInParameters_ReturnsModel()
+    public async Task Map_PassInParameters_ReturnsModel()
     {
+        const string postHeadingContent = "post heading content";
         var pageData = new FeedbackFormPage
                        {
                            Heading = "Heading",
@@ -19,11 +22,14 @@ public class FeedbackFormPageMapperTests
                                         {
                                             Href = "/"
                                         },
-                           Questions = AddQuestions()
+                           Questions = AddQuestions(),
+                           PostHeadingContent = ContentfulContentHelper.Paragraph(postHeadingContent)
                        };
-        const string postHeadingContent = "post heading content";
-        
-        var result = FeedbackFormPageMapper.Map(pageData, postHeadingContent);
+
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(pageData.PostHeadingContent)).ReturnsAsync(postHeadingContent);
+        var mapper = new FeedbackFormPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(pageData);
         
         result.Should().NotBeNull();
         result.Heading.Should().Be(pageData.Heading);

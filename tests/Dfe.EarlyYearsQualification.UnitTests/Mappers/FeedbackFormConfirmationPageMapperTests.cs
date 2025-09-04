@@ -1,4 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
@@ -7,18 +9,24 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class FeedbackFormConfirmationPageMapperTests
 {
     [TestMethod]
-    public void Map_PassInParameters_ReturnsModel()
+    public async Task Map_PassInParameters_ReturnsModel()
     {
+        const string bodyHtml = "<p>body</p>";
+        const string optionalEmailBodyHtml = "<p>optional email body</p>";
         var pageData = new FeedbackFormConfirmationPage
                        { 
                            SuccessMessage = "Success",
                            OptionalEmailHeading = "Optional heading",
-                           ReturnToHomepageLink = new NavigationLink() { Href = "/" } 
+                           ReturnToHomepageLink = new NavigationLink { Href = "/" },
+                           Body = ContentfulContentHelper.Paragraph(bodyHtml),
+                           OptionalEmailBody = ContentfulContentHelper.Paragraph(optionalEmailBodyHtml)
                        };
-        const string bodyHtml = "<p>body</p>";
-        const string optionalEmailBodyHtml = "<p>optional email body</p>";
-        
-        var result = FeedbackFormConfirmationPageMapper.Map(pageData, bodyHtml, optionalEmailBodyHtml);
+
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(pageData.Body)).ReturnsAsync(bodyHtml);
+        mockContentParser.Setup(x => x.ToHtml(pageData.OptionalEmailBody)).ReturnsAsync(optionalEmailBodyHtml);
+        var mapper = new FeedbackFormConfirmationPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(pageData);
         
         result.Should().NotBeNull();
         result.SuccessMessage.Should().Match(pageData.SuccessMessage);

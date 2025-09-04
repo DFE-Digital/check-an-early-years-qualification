@@ -1,8 +1,8 @@
-using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -15,12 +15,11 @@ public class AccessibilityStatementControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<AccessibilityStatementController>>();
-
-        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockAccessibilityStatementMapper = new Mock<IAccessibilityStatementMapper>();
 
         var controller =
             new AccessibilityStatementController(mockLogger.Object, mockContentService.Object,
-                                                 mockContentParser.Object);
+                                                 mockAccessibilityStatementMapper.Object);
 
         mockContentService.Setup(x => x.GetAccessibilityStatementPage())
                           .ReturnsAsync((AccessibilityStatementPage?)null);
@@ -38,24 +37,24 @@ public class AccessibilityStatementControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<AccessibilityStatementController>>();
+        var mockAccessibilityStatementMapper = new Mock<IAccessibilityStatementMapper>();
 
-        var mockContentParser = new Mock<IGovUkContentParser>();
+        var controller =
+            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object,
+                                                 mockAccessibilityStatementMapper.Object);
 
+        const string heading = "Heading";
+        const string body = "Body";
         var expectedContent = new AccessibilityStatementPage
                               {
-                                  Heading = "Test Heading"
+                                  Heading = heading,
+                                  Body = ContentfulContentHelper.Paragraph(body)
                               };
 
         mockContentService.Setup(x => x.GetAccessibilityStatementPage()).ReturnsAsync(expectedContent);
 
-        const string expectedHtml = "<p>Some HTML.</p>";
-
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>()))
-                         .ReturnsAsync(expectedHtml);
-
-        var controller =
-            new AccessibilityStatementController(mockLogger.Object, mockContentService.Object,
-                                                 mockContentParser.Object);
+        mockAccessibilityStatementMapper.Setup(x => x.Map(It.IsAny<AccessibilityStatementPage>()))
+                                        .ReturnsAsync(new AccessibilityStatementPageModel { BodyContent = body, Heading = heading});
 
         var result = await controller.Index();
 
@@ -67,7 +66,7 @@ public class AccessibilityStatementControllerTests
               .BeEquivalentTo(new AccessibilityStatementPageModel
                               {
                                   Heading = expectedContent.Heading,
-                                  BodyContent = expectedHtml
+                                  BodyContent = body
                               });
     }
 }

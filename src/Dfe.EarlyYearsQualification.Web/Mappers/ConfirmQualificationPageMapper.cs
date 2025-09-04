@@ -1,16 +1,19 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class ConfirmQualificationPageMapper
+public class ConfirmQualificationPageMapper(IGovUkContentParser contentParser) : IConfirmQualificationPageMapper
 {
-    public static ConfirmQualificationPageModel Map(ConfirmQualificationPage content,
-                                                    Qualification qualification,
-                                                    string postHeadingContentHtml,
-                                                    string variousAwardingOrganisationsExplanationHtml)
+    public async Task<ConfirmQualificationPageModel> Map(ConfirmQualificationPage content,
+                                                    Qualification qualification)
     {
+        var postHeadingContent = await contentParser.ToHtml(content.PostHeadingContent);
+        var variousAwardingOrganisationsExplanation =
+            await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation);
         var hasAnyAdditionalRequirementQuestions = qualification.AdditionalRequirementQuestions is { Count: > 0 };
 
         return new ConfirmQualificationPageModel
@@ -35,9 +38,9 @@ public static class ConfirmQualificationPageMapper
                    QualificationAwardingOrganisation = qualification.AwardingOrganisationTitle.Trim(),
                    QualificationDateAdded = qualification.FromWhichYear!,
                    BackButton = NavigationLinkMapper.Map(content.BackButton),
-                   PostHeadingContent = postHeadingContentHtml,
+                   PostHeadingContent = postHeadingContent,
                    VariousAwardingOrganisationsExplanation =
-                       variousAwardingOrganisationsExplanationHtml,
+                       variousAwardingOrganisationsExplanation,
                    ShowAnswerDisclaimerText = !hasAnyAdditionalRequirementQuestions,
                    AnswerDisclaimerText = content.AnswerDisclaimerText
                };

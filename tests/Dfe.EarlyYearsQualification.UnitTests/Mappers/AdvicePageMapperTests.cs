@@ -1,4 +1,6 @@
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
@@ -8,7 +10,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class AdvicePageMapperTests
 {
     [TestMethod]
-    public void Map_PassInAdvicePage_ReturnsModel()
+    public async Task Map_PassInAdvicePage_ReturnsModel()
     {
         const string body = "This is the body";
         const string feedbackBannerBody = "This is the feedback banner body";
@@ -47,7 +49,13 @@ public class AdvicePageMapperTests
                                                     }
                          };
 
-        var result = AdvicePageMapper.Map(advicePage, body, feedbackBannerBody, improveServiceBody, rightHandSideContentBody);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.Body))).ReturnsAsync(body);
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.FeedbackBanner.Body))).ReturnsAsync(feedbackBannerBody);
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.UpDownFeedback.FeedbackComponent.Body))).ReturnsAsync(improveServiceBody);
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.RightHandSideContent.Body))).ReturnsAsync(rightHandSideContentBody);
+        var mapper = new AdvicePageMapper(mockContentParser.Object);
+        var result = await mapper.Map(advicePage);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(advicePage.Heading);
@@ -68,7 +76,7 @@ public class AdvicePageMapperTests
     }
 
     [TestMethod]
-    public void Map_PassInCannotFindQualificationPage_ReturnsModel()
+    public async Task Map_PassInCannotFindQualificationPage_ReturnsModel()
     {
         const string body = "This is the body";
         const string feedbackBannerBody = "This is the feedback banner body";
@@ -109,7 +117,13 @@ public class AdvicePageMapperTests
                                                                      }
                                           };
 
-        var result = AdvicePageMapper.Map(cannotFindQualificationPage, body, feedbackBannerBody, improveServiceBody, rightHandSideContentBody);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.Body))).ReturnsAsync(body);
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.FeedbackBanner.Body))).ReturnsAsync(feedbackBannerBody);
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.UpDownFeedback.FeedbackComponent.Body))).ReturnsAsync(improveServiceBody);
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.RightHandSideContent.Body))).ReturnsAsync(rightHandSideContentBody);
+        var mapper = new AdvicePageMapper(mockContentParser.Object);
+        var result = await mapper.Map(cannotFindQualificationPage);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(cannotFindQualificationPage.Heading);

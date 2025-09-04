@@ -81,18 +81,60 @@ jobs:
 
       # Initialise a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
+        env:
+          TERRAFORM_STATE_RESOURCE_GROUP: ${{ secrets.TERRAFORM_STATE_RESOURCE_GROUP }}
+          TERRAFORM_STATE_STORAGE_ACCOUNT_NAME: ${{ secrets.TERRAFORM_STATE_STORAGE_ACCOUNT_NAME }}
+          TERRAFORM_STATE_STORAGE_CONTAINER_NAME: ${{ secrets.TERRAFORM_STATE_STORAGE_CONTAINER_NAME }}
+          TERRAFORM_STATE_KEY: ${{ secrets.TERRAFORM_STATE_KEY }}
         run: >
           terraform init
-          -backend-config="resource_group_name=${{ secrets.TERRAFORM_STATE_RESOURCE_GROUP }}"
-          -backend-config="storage_account_name=${{ secrets.TERRAFORM_STATE_STORAGE_ACCOUNT_NAME }}"
-          -backend-config="container_name=${{ secrets.TERRAFORM_STATE_STORAGE_CONTAINER_NAME }}"
-          -backend-config="key=${{ secrets.TERRAFORM_STATE_KEY }}"
+          -backend-config="resource_group_name=$TERRAFORM_STATE_RESOURCE_GROUP"
+          -backend-config="storage_account_name=$TERRAFORM_STATE_STORAGE_ACCOUNT_NAME"
+          -backend-config="container_name=$TERRAFORM_STATE_STORAGE_CONTAINER_NAME"
+          -backend-config="key=$TERRAFORM_STATE_KEY"
+          
+      - name: Generate Terraform Secrets
+        id: terraform_secrets
+        env:
+          CACHE_ENDPOINT_SECRET: ${{ secrets.CACHE_ENDPOINT_SECRET }}
+          CONTENTFUL_DELIVERY_API_KEY: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
+          CONTENTFUL_PREVIEW_API_KEY: ${{ secrets.CONTENTFUL_PREVIEW_API_KEY }}
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
+          KV_CERTIFICATE_AUTHORITY_ADMIN_FIRST_NAME: ${{ secrets.KV_CERTIFICATE_AUTHORITY_ADMIN_FIRST_NAME }}
+          KV_CERTIFICATE_AUTHORITY_ADMIN_LAST_NAME: ${{ secrets.KV_CERTIFICATE_AUTHORITY_ADMIN_LAST_NAME }}
+          KV_CERTIFICATE_AUTHORITY_ADMIN_PHONE_NO: ${{ secrets.KV_CERTIFICATE_AUTHORITY_ADMIN_PHONE_NO }}
+          KV_CERTIFICATE_AUTHORITY_PASSWORD: ${{ secrets.KV_CERTIFICATE_AUTHORITY_PASSWORD }}
+          KV_CERTIFICATE_AUTHORITY_USERNAME: ${{ secrets.KV_CERTIFICATE_AUTHORITY_USERNAME }}
+          KV_SERVICE_GOV_UK_CERTIFICATE_LABEL: ${{ secrets.KV_SERVICE_GOV_UK_CERTIFICATE_LABEL }}
+          KV_SERVICE_GOV_UK_CERTIFICATE_SUBJECT: ${{ secrets.KV_SERVICE_GOV_UK_CERTIFICATE_SUBJECT }}
+          WEBAPP_ACCESS_KEY_1: ${{ secrets.WEBAPP_ACCESS_KEY_1 }}
+          WEBAPP_ACCESS_KEY_2: ${{ secrets.WEBAPP_ACCESS_KEY_2 }}
+          WEBAPP_E2E_ACCESS_KEY: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          WEBAPP_TEAM_ACCESS_KEY: ${{ secrets.WEBAPP_TEAM_ACCESS_KEY }}
+        run: |
+          echo "CACHE_ENDPOINT_SECRET"=${{ env.CACHE_ENDPOINT_SECRET }} >> $GITHUB_OUTPUT
+          echo "CONTENTFUL_DELIVERY_API_KEY"=${{ env.CONTENTFUL_DELIVERY_API_KEY }} >> $GITHUB_OUTPUT
+          echo "CONTENTFUL_PREVIEW_API_KEY"=${{ env.CONTENTFUL_PREVIEW_API_KEY }} >> $GITHUB_OUTPUT
+          echo "CONTENTFUL_SPACE_ID"=${{ env.CONTENTFUL_SPACE_ID }} >> $GITHUB_OUTPUT
+          echo "GOVUK_NOTIFY_API_KEY"=${{ env.GOVUK_NOTIFY_API_KEY }} >> $GITHUB_OUTPUT
+          echo "KV_CERTIFICATE_AUTHORITY_ADMIN_FIRST_NAME"=${{ env.KV_CERTIFICATE_AUTHORITY_ADMIN_FIRST_NAME }} >> $GITHUB_OUTPUT
+          echo "KV_CERTIFICATE_AUTHORITY_ADMIN_LAST_NAME"=${{ env.KV_CERTIFICATE_AUTHORITY_ADMIN_LAST_NAME }} >> $GITHUB_OUTPUT
+          echo "KV_CERTIFICATE_AUTHORITY_ADMIN_PHONE_NO"=${{ env.KV_CERTIFICATE_AUTHORITY_ADMIN_PHONE_NO }} >> $GITHUB_OUTPUT
+          echo "KV_CERTIFICATE_AUTHORITY_PASSWORD"=${{ env.KV_CERTIFICATE_AUTHORITY_PASSWORD }} >> $GITHUB_OUTPUT
+          echo "KV_CERTIFICATE_AUTHORITY_USERNAME"=${{ env.KV_CERTIFICATE_AUTHORITY_USERNAME }} >> $GITHUB_OUTPUT
+          echo "KV_SERVICE_GOV_UK_CERTIFICATE_LABEL"=${{ env.KV_SERVICE_GOV_UK_CERTIFICATE_LABEL }} >> $GITHUB_OUTPUT
+          echo "KV_SERVICE_GOV_UK_CERTIFICATE_SUBJECT"=${{ env.KV_SERVICE_GOV_UK_CERTIFICATE_SUBJECT }} >> $GITHUB_OUTPUT
+          echo "WEBAPP_ACCESS_KEY_1"=${{ env.WEBAPP_ACCESS_KEY_1 }} >> $GITHUB_OUTPUT
+          echo "WEBAPP_ACCESS_KEY_2"=${{ env.WEBAPP_ACCESS_KEY_2 }} >> $GITHUB_OUTPUT
+          echo "WEBAPP_E2E_ACCESS_KEY"=${{ env.WEBAPP_E2E_ACCESS_KEY }} >> $GITHUB_OUTPUT
+          echo "WEBAPP_TEAM_ACCESS_KEY"=${{ env.WEBAPP_TEAM_ACCESS_KEY }} >> $GITHUB_OUTPUT
 
       # Generates Terraform input variables
       - name: Generate Terraform Variables
         shell: bash
         env:
-          WEB_SECRETS: ${{ toJSON(secrets) }}
+          WEB_SECRETS: ${{ toJSON(steps.terraform_secrets.outputs) }}
           WEB_VARS: ${{ toJSON(vars) }}
         run: |
           printf '%s\n' "$WEB_SECRETS" > tmp-secrets.json

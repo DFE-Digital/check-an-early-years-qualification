@@ -1,4 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
@@ -8,7 +10,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class PreCheckPageMapperTests
 {
     [TestMethod]
-    public void Map_PassInData_ReturnsExpectedModel()
+    public async Task Map_PassInData_ReturnsExpectedModel()
     {
         const string postHeaderContent = "Post header content";
         var preCheckPage = new PreCheckPage
@@ -23,10 +25,14 @@ public class PreCheckPageMapperTests
                                InformationMessage = "Information message",
                                CtaButtonText = "Continue",
                                ErrorBannerHeading = "Error banner heading",
-                               ErrorMessage = "Error message"
+                               ErrorMessage = "Error message",
+                               PostHeaderContent = ContentfulContentHelper.Paragraph(postHeaderContent)
                            };
 
-        var result = PreCheckPageMapper.Map(preCheckPage, postHeaderContent);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(preCheckPage.PostHeaderContent)).ReturnsAsync(postHeaderContent);
+        var mapper = new PreCheckPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(preCheckPage);
 
         result.Should().NotBeNull();
         result.Header.Should().BeSameAs(preCheckPage.Header);

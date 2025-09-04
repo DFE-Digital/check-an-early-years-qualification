@@ -1,14 +1,18 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class ChallengePageMapper
+public class ChallengePageMapper(IGovUkContentParser contentParser) : IChallengePageMapper
 {
-    public static ChallengePageModel Map(ChallengePageModel model, ChallengePage content,
-                                         string sanitisedReferralAddress, string footerContentHtml,
-                                         string mainContentHtml)
+    public async Task<ChallengePageModel> Map(ChallengePageModel model, ChallengePage content,
+                                         string sanitisedReferralAddress)
     {
+        var footerContentHtml = await contentParser.ToHtml(content.FooterContent);
+        var mainContentHtml = await contentParser.ToHtml(content.MainContent);
+        
         model.RedirectAddress = sanitisedReferralAddress;
         model.FooterContent = footerContentHtml;
         model.InputHeading = content.InputHeading;

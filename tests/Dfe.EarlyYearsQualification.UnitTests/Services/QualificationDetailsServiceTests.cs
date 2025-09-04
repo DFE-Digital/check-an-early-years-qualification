@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
@@ -15,12 +16,13 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class QualificationDetailsServiceTests
 {
-    private Mock<IGovUkContentParser> _mockContentParser = new();
-    private Mock<IContentService> _mockContentService = new();
-    private Mock<ILogger<QualificationDetailsService>> _mockLogger = new();
-    private Mock<IQualificationsRepository> _mockRepository = new();
-    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
-    private Mock<IPlaceholderUpdater> _mockPlaceholderUpdater = new();
+    private Mock<IGovUkContentParser> _mockContentParser = new Mock<IGovUkContentParser>();
+    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
+    private Mock<ILogger<QualificationDetailsService>> _mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+    private Mock<IQualificationsRepository> _mockRepository = new Mock<IQualificationsRepository>();
+    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+    private Mock<IPlaceholderUpdater> _mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+    private Mock<IQualificationDetailsMapper> _mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
 
     private QualificationDetailsService GetSut()
     {
@@ -30,7 +32,8 @@ public class QualificationDetailsServiceTests
                                                _mockContentService.Object,
                                                _mockContentParser.Object,
                                                _mockUserJourneyCookieService.Object,
-                                               _mockPlaceholderUpdater.Object
+                                               _mockPlaceholderUpdater.Object,
+                                               _mockQualificationDetailsMapper.Object
                                               );
     }
 
@@ -43,6 +46,7 @@ public class QualificationDetailsServiceTests
         _mockContentParser = new Mock<IGovUkContentParser>();
         _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         _mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        _mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
     }
 
     [TestMethod]
@@ -100,31 +104,6 @@ public class QualificationDetailsServiceTests
         var result = sut.HasStartDate();
 
         result.Should().BeTrue();
-    }
-
-    [TestMethod]
-    public async Task GetFeedbackBannerToHtml_NullBanner_ReturnsNull()
-    {
-        FeedbackBanner? feedbackBanner = null;
-        var sut = GetSut();
-
-        var result = await sut.GetFeedbackBannerBodyToHtml(feedbackBanner);
-
-        result.Should().BeNull();
-    }
-
-    [TestMethod]
-    public async Task GetFeedbackBannerToHtml_GotBanner_CallsContentParser()
-    {
-        const string expectedContent = "<h1>Feedback banner</h1>";
-        var feedbackBanner = new FeedbackBanner { Body = new Document() };
-        _mockContentParser.Setup(o => o.ToHtml(feedbackBanner.Body)).ReturnsAsync(expectedContent);
-        var sut = GetSut();
-
-        var result = await sut.GetFeedbackBannerBodyToHtml(feedbackBanner);
-
-        _mockContentParser.Verify(o => o.ToHtml(feedbackBanner.Body), Times.Once);
-        result.Should().BeEquivalentTo(expectedContent);
     }
 
     [TestMethod]
@@ -272,7 +251,7 @@ public class QualificationDetailsServiceTests
 
         var result = sut.CalculateBackButton(detailsPage, qualificationId);
         result.Should().NotBeNull();
-        result!.Href.Should().BeEquivalentTo(expectedHref);
+        result.Href.Should().BeEquivalentTo(expectedHref);
     }
 
     [TestMethod]
@@ -291,7 +270,7 @@ public class QualificationDetailsServiceTests
 
         var result = sut.CalculateBackButton(detailsPage, qualificationId);
         result.Should().NotBeNull();
-        result!.Href.Should().BeEquivalentTo(backButton);
+        result.Href.Should().BeEquivalentTo(backButton);
     }
 
     [TestMethod]
@@ -303,7 +282,7 @@ public class QualificationDetailsServiceTests
     {
         var additionalRequirementsAnswers = new List<AdditionalRequirementAnswerModel>
                                             {
-                                                new()
+                                                new AdditionalRequirementAnswerModel
                                                 {
                                                     AnswerToBeFullAndRelevant = fullAndRelevant,
                                                     Answer = answer
@@ -353,7 +332,7 @@ public class QualificationDetailsServiceTests
                 AdditionalRequirementQuestions = [qts]
             };
         var additionalRequirementAnswerModels = new List<AdditionalRequirementAnswerModel>
-                                                { new() { Question = qts.Question, Answer = answer } };
+                                                { new AdditionalRequirementAnswerModel { Question = qts.Question, Answer = answer } };
         var sut = GetSut();
 
         var result =
@@ -491,19 +470,19 @@ public class QualificationDetailsServiceTests
     {
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>
                                              {
-                                                 new()
+                                                 new AdditionalRequirementQuestion
                                                  {
                                                      Question = "Question 1",
                                                      AnswerToBeFullAndRelevant = true,
                                                      ConfirmationStatement = "confirmation statement 1"
                                                  },
-                                                 new()
+                                                 new AdditionalRequirementQuestion
                                                  {
                                                      Question = "Question 2",
                                                      AnswerToBeFullAndRelevant = false,
                                                      ConfirmationStatement = "confirmation statement 2"
                                                  },
-                                                 new()
+                                                 new AdditionalRequirementQuestion
                                                  {
                                                      Question = "Question 3",
                                                      AnswerToBeFullAndRelevant = true,
@@ -520,21 +499,21 @@ public class QualificationDetailsServiceTests
 
         var expected = new List<AdditionalRequirementAnswerModel>
                        {
-                           new()
+                           new AdditionalRequirementAnswerModel
                            {
                                Question = "Question 1",
                                AnswerToBeFullAndRelevant = true,
                                ConfirmationStatement = "confirmation statement 1",
                                Answer = "Answer 1"
                            },
-                           new()
+                           new AdditionalRequirementAnswerModel
                            {
                                Question = "Question 2",
                                AnswerToBeFullAndRelevant = false,
                                ConfirmationStatement = "confirmation statement 2",
                                Answer = "Answer 2"
                            },
-                           new()
+                           new AdditionalRequirementAnswerModel
                            {
                                Question = "Question 3",
                                AnswerToBeFullAndRelevant = true,
@@ -654,7 +633,7 @@ public class QualificationDetailsServiceTests
         var requirementsText = new Document { NodeType = requirements };
         var feedbackText = new Document { NodeType = feedback };
         var feedbackBanner = new FeedbackBanner { Body = feedbackText };
-        var backButton = new NavigationLink { Href = "backbutton" };
+        var backButton = new NavigationLink { Href = "backButton" };
         var qualification =
             new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
             { FromWhichYear = "FromWhichYear" };
@@ -665,30 +644,19 @@ public class QualificationDetailsServiceTests
                               BackButton = backButton
                           };
 
-        _mockContentParser.Setup(o => o.ToHtml(requirementsText)).ReturnsAsync(requirements);
-        _mockContentParser.Setup(o => o.ToHtml(feedbackText)).ReturnsAsync(feedback);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardMonth, awardYear));
+
+        _mockQualificationDetailsMapper
+            .Setup(x => x.Map(qualification, detailsPage, backButton,
+                              It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded))
+            .ReturnsAsync(new QualificationDetailsModel());
 
         var sut = GetSut();
         var result = await sut.MapDetails(qualification, detailsPage);
 
-        _mockContentParser.Verify(o => o.ToHtml(requirementsText), Times.Once);
-        _mockContentParser.Verify(o => o.ToHtml(feedbackText), Times.Once);
-
-        result.QualificationId.Should().Be(qualificationId);
-        result.QualificationLevel.Should().Be(qualificationLevel);
-        result.QualificationName.Should().Be(qualificationName);
-        result.AwardingOrganisationTitle.Should().Be(awardingOrganisationTitle);
-        result.FromWhichYear.Should().Be(qualification.FromWhichYear);
-        result.BackButton!.Href.Should().Be(backButton.Href);
-        result.AdditionalRequirementAnswers.Should().BeNullOrEmpty();
-        result.DateStarted.Should().Be(dateStarted);
-        result.DateAwarded.Should().Be(dateAwarded);
-
-        var content = result.Content!;
-        content.RequirementsText.Should().Be(requirements);
-        content.FeedbackBanner!.Body.Should().Be(feedback);
+        result.Should().NotBeNull();
+        _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton, It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded), Times.Once);
     }
 
     [TestMethod]

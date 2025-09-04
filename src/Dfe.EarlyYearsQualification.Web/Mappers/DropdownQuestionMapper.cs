@@ -1,20 +1,23 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class DropdownQuestionMapper
+public class DropdownQuestionMapper(IGovUkContentParser contentParser) : IDropdownQuestionMapper
 {
-    public static DropdownQuestionModel Map(DropdownQuestionModel model,
+    public async Task<DropdownQuestionModel> Map(DropdownQuestionModel model,
                                             DropdownQuestionPage question,
                                             string actionName,
                                             string controllerName,
                                             IOrderedEnumerable<string> uniqueAwardingOrganisations,
-                                            string additionalInformationBodyHtml,
                                             string? selectedAwardingOrganisation,
                                             bool selectedNotOnTheList)
     {
+        var additionalInformationBodyHtml = await contentParser.ToHtml(question.AdditionalInformationBody);
+        
         model.ActionName = actionName;
         model.ControllerName = controllerName;
         model.CtaButtonText = question.CtaButtonText;

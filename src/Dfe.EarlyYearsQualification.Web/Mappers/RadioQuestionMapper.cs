@@ -1,17 +1,20 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class RadioQuestionMapper
+public class RadioQuestionMapper(IGovUkContentParser contentParser) : IRadioQuestionMapper
 {
-    public static RadioQuestionModel Map(RadioQuestionModel model,
+    public async Task<RadioQuestionModel> Map(RadioQuestionModel model,
                                          RadioQuestionPage question,
                                          string actionName,
                                          string controllerName,
-                                         string additionalInformationBodyHtml,
                                          string? selectedAnswer)
     {
+        var additionalInformationBodyHtml = await contentParser.ToHtml(question.AdditionalInformationBody);
+        
         model.Question = question.Question;
         model.OptionsItems = OptionItemMapper.Map(question.Options);
         model.CtaButtonText = question.CtaButtonText;

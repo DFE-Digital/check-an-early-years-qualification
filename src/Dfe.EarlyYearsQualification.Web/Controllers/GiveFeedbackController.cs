@@ -1,7 +1,6 @@
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
@@ -13,10 +12,11 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [Route("/give-feedback")]
 public class GiveFeedbackController(
     IContentService contentService,
-    IGovUkContentParser contentParser,
     IFeedbackFormService feedbackFormService,
     IUserJourneyCookieService userJourneyCookieService,
-    INotificationService notificationService)
+    INotificationService notificationService,
+    IFeedbackFormPageMapper feedbackFormPageMapper,
+    IFeedbackFormConfirmationPageMapper feedbackFormConfirmationPageMapper)
     : ServiceController
 {
     [HttpGet]
@@ -25,8 +25,7 @@ public class GiveFeedbackController(
         var feedbackFormPage = await contentService.GetFeedbackFormPage();
         if (feedbackFormPage == null) return RedirectToAction("Index", "Error");
 
-        var model = FeedbackFormPageMapper.Map(feedbackFormPage,
-                                               await contentParser.ToHtml(feedbackFormPage.PostHeadingContent));
+        var model = await feedbackFormPageMapper.Map(feedbackFormPage);
         feedbackFormService.SetDefaultAnswers(feedbackFormPage, model);
         return View(model);
     }
@@ -43,8 +42,7 @@ public class GiveFeedbackController(
 
         if (errorSummaryModel.ErrorSummaryLinks.Count != 0)
         {
-            var mappedModel = FeedbackFormPageMapper.Map(feedbackFormPage,
-                                                         await contentParser.ToHtml(feedbackFormPage.PostHeadingContent));
+            var mappedModel = await feedbackFormPageMapper.Map(feedbackFormPage);
             mappedModel.HasError = true;
             mappedModel.ErrorSummaryModel = errorSummaryModel;
             mappedModel.QuestionList = model.QuestionList;
@@ -64,9 +62,7 @@ public class GiveFeedbackController(
         var feedbackFormConfirmationPage = await contentService.GetFeedbackFormConfirmationPage();
         if (feedbackFormConfirmationPage == null) return RedirectToAction("Index", "Error");
 
-        var model = FeedbackFormConfirmationPageMapper.Map(feedbackFormConfirmationPage,
-                                               await contentParser.ToHtml(feedbackFormConfirmationPage.Body),
-                                               await contentParser.ToHtml(feedbackFormConfirmationPage.OptionalEmailBody));
+        var model = await feedbackFormConfirmationPageMapper.Map(feedbackFormConfirmationPage);
         
         model.ShowOptionalSection = userJourneyCookieService.GetHasSubmittedEmailAddressInFeedbackFormQuestion();
         return View(model);

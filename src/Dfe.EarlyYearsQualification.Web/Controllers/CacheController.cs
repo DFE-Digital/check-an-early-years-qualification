@@ -94,6 +94,6 @@ public class CacheController(
                 InvalidOperationException("The expected cache authorisation secret is missing from configuration.");
         }
 
-        return expectedSecret!;
+        return expectedSecret;
     }
 }

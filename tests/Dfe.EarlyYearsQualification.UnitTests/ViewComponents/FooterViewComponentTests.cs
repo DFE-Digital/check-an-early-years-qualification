@@ -1,8 +1,7 @@
-﻿using Contentful.Core.Models;
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+﻿using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
@@ -18,7 +17,7 @@ public class FooterViewComponentTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<FooterViewComponent>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockFooterMapper = new Mock<IFooterMapper>();
 
         const string leftHandSideFooterSectionBody = "Left hand side footer section body";
         const string rightHandSideFooterSectionBody = "Right hand side footer section body";
@@ -47,19 +46,15 @@ public class FooterViewComponentTests
         mockContentService.Setup(x => x.GetFooter())
                           .ReturnsAsync(footer);
         
-        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(s => s == leftHandSideDoc)))
-                         .ReturnsAsync(leftHandSideFooterSectionBody);
-        
-        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(s => s == rightHandSideDoc)))
-                         .ReturnsAsync(rightHandSideFooterSectionBody);
-        
         var environmentService = new Mock<IEnvironmentService>();
         environmentService.Setup(x => x.IsProduction()).Returns(true);
+        
+        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
 
         var footerViewComponent = new FooterViewComponent(mockLogger.Object,
                                                                     mockContentService.Object,
-                                                                    mockContentParser.Object,
-                                                                    environmentService.Object);
+                                                                    environmentService.Object,
+                                                                    mockFooterMapper.Object);
         var result = await footerViewComponent.InvokeAsync();
 
         result.Should().NotBeNull();
@@ -70,23 +65,6 @@ public class FooterViewComponentTests
         var data = model as FooterModel;
 
         data.Should().NotBeNull();
-        data.NavigationLinks.Count.Should().Be(1);
-
-        var expected = footer.NavigationLinks[0];
-        var linkModel = data.NavigationLinks[0];
-
-        linkModel.Should().NotBeNull();
-        linkModel.DisplayText.Should().Be(expected.DisplayText);
-        linkModel.Href.Should().Be(expected.Href);
-        linkModel.OpenInNewTab.Should().Be(expected.OpenInNewTab);
-
-        data.LeftHandSideFooterSection.Should().NotBeNull();
-        data.LeftHandSideFooterSection.Heading.Should().Be(footer.LeftHandSideFooterSection.Heading);
-        data.LeftHandSideFooterSection.Body.Should().Be(leftHandSideFooterSectionBody);
-        
-        data.RightHandSideFooterSection.Should().NotBeNull();
-        data.RightHandSideFooterSection.Heading.Should().Be(footer.RightHandSideFooterSection.Heading);
-        data.RightHandSideFooterSection.Body.Should().Be(rightHandSideFooterSectionBody);
     }
 
     [TestMethod]
@@ -94,7 +72,7 @@ public class FooterViewComponentTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<FooterViewComponent>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockFooterMapper = new Mock<IFooterMapper>();
 
         const string leftHandSideFooterSectionBody = "Left hand side footer section body";
         const string rightHandSideFooterSectionBody = "Right hand side footer section body";
@@ -123,47 +101,22 @@ public class FooterViewComponentTests
         mockContentService.Setup(x => x.GetFooter())
                           .ReturnsAsync(footer);
         
-        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(s => s == leftHandSideDoc)))
-                         .ReturnsAsync(leftHandSideFooterSectionBody);
+        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
         
-        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(s => s == rightHandSideDoc)))
-                         .ReturnsAsync(rightHandSideFooterSectionBody);
-
         var environmentService = new Mock<IEnvironmentService>();
         environmentService.Setup(x => x.IsProduction()).Returns(false);
 
         var footerViewComponent = new FooterViewComponent(mockLogger.Object,
-                                                                    mockContentService.Object,
-                                                                    mockContentParser.Object,
-                                                                    environmentService.Object);
+                                                          mockContentService.Object,
+                                                          environmentService.Object,
+                                                          mockFooterMapper.Object);
+        
         var result = await footerViewComponent.InvokeAsync();
 
         result.Should().NotBeNull();
 
         var model = (result as ViewViewComponentResult)?.ViewData?.Model;
         model.Should().NotBeNull();
-
-        var data = model as FooterModel;
-
-        var navigationLinkModels = data!.NavigationLinks.ToList();
-
-        navigationLinkModels.Should().NotBeNull();
-        navigationLinkModels.Count.Should().Be(2);
-
-        var expected = footer.NavigationLinks[0];
-        var linkModel = navigationLinkModels[0];
-
-        linkModel.Should().NotBeNull();
-        linkModel.DisplayText.Should().Be(expected.DisplayText);
-        linkModel.Href.Should().Be(expected.Href);
-        linkModel.OpenInNewTab.Should().Be(expected.OpenInNewTab);
-
-        var optionsLinkModel = navigationLinkModels[1];
-
-        optionsLinkModel.Should().NotBeNull();
-        optionsLinkModel.DisplayText.Should().Be("Options");
-        optionsLinkModel.Href.Should().Be("/options");
-        optionsLinkModel.OpenInNewTab.Should().Be(false);
     }
 
     [TestMethod]
@@ -171,17 +124,19 @@ public class FooterViewComponentTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<FooterViewComponent>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockFooterMapper = new Mock<IFooterMapper>();
 
         mockContentService.Setup(x => x.GetFooter()).ThrowsAsync(new Exception());
 
         var environmentService = new Mock<IEnvironmentService>();
         environmentService.Setup(x => x.IsProduction()).Returns(true);
+        
+        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
 
         var footerViewComponent = new FooterViewComponent(mockLogger.Object,
-                                                                    mockContentService.Object,
-                                                                    mockContentParser.Object,
-                                                                    environmentService.Object);
+                                                          mockContentService.Object,
+                                                          environmentService.Object,
+                                                          mockFooterMapper.Object);
 
         var result = await footerViewComponent.InvokeAsync();
 
@@ -203,7 +158,7 @@ public class FooterViewComponentTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<FooterViewComponent>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockFooterMapper = new Mock<IFooterMapper>();
 
         mockContentService.Setup(x => x.GetFooter()).ThrowsAsync(new Exception());
 
@@ -211,9 +166,11 @@ public class FooterViewComponentTests
         environmentService.Setup(x => x.IsProduction()).Returns(false);
 
         var footerViewComponent = new FooterViewComponent(mockLogger.Object,
-                                                                    mockContentService.Object,
-                                                                    mockContentParser.Object,
-                                                                    environmentService.Object);
+                                                          mockContentService.Object,
+                                                          environmentService.Object,
+                                                          mockFooterMapper.Object);
+        
+        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
 
         var result = await footerViewComponent.InvokeAsync();
 

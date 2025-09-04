@@ -1,4 +1,7 @@
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
@@ -7,20 +10,25 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class ConfirmQualificationPageMapperTests
 {
     [TestMethod]
-    public void Map_PassInParameters_NoAdditionalRequirementQuestions_ReturnsModel()
+    public async Task Map_PassInParameters_NoAdditionalRequirementQuestions_ReturnsModel()
     {
-        var content = GetConfirmQualificationPageContent();
+        const string postHeadingContentHtml = "Post heading content";
+        const string variousAwardingOrganisationsExplanationHtml = "Various awarding organisations explanation";
+        var content = GetConfirmQualificationPageContent(postHeadingContentHtml, variousAwardingOrganisationsExplanationHtml);
 
         var qualification = new Qualification("Test-ABC", "QualificationName", "NCFE", 3)
                             {
                                 FromWhichYear = "Sep-16"
                             };
 
-        const string postHeadingContentHtml = "Post heading content";
-        const string variousAwardingOrganisationsExplanationHtml = "Various awarding organisations explanation";
-
-        var result = ConfirmQualificationPageMapper.Map(content, qualification, postHeadingContentHtml,
-                                                        variousAwardingOrganisationsExplanationHtml);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == content.PostHeadingContent)))
+                         .ReturnsAsync(postHeadingContentHtml);
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == content.VariousAwardingOrganisationsExplanation)))
+                         .ReturnsAsync(variousAwardingOrganisationsExplanationHtml);
+        
+        var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(content, qualification);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(content.Heading);
@@ -49,9 +57,11 @@ public class ConfirmQualificationPageMapperTests
     }
 
     [TestMethod]
-    public void Map_PassInParameters_HasAdditionalRequirementQuestions_ReturnsModel()
+    public async Task Map_PassInParameters_HasAdditionalRequirementQuestions_ReturnsModel()
     {
-        var content = GetConfirmQualificationPageContent();
+        const string postHeadingContentHtml = "Post heading content";
+        const string variousAwardingOrganisationsExplanationHtml = "Various awarding organisations explanation";
+        var content = GetConfirmQualificationPageContent(postHeadingContentHtml, variousAwardingOrganisationsExplanationHtml);
 
         var qualification = new Qualification("Test-ABC", "QualificationName", "NCFE", 3)
                             {
@@ -59,11 +69,14 @@ public class ConfirmQualificationPageMapperTests
                                 AdditionalRequirementQuestions = [new AdditionalRequirementQuestion()]
                             };
 
-        const string postHeadingContentHtml = "Post heading content";
-        const string variousAwardingOrganisationsExplanationHtml = "Various awarding organisations explanation";
-
-        var result = ConfirmQualificationPageMapper.Map(content, qualification, postHeadingContentHtml,
-                                                        variousAwardingOrganisationsExplanationHtml);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == content.PostHeadingContent)))
+                         .ReturnsAsync(postHeadingContentHtml);
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == content.VariousAwardingOrganisationsExplanation)))
+                         .ReturnsAsync(variousAwardingOrganisationsExplanationHtml);
+        
+        var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(content, qualification);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(content.Heading);
@@ -91,7 +104,7 @@ public class ConfirmQualificationPageMapperTests
         result.AnswerDisclaimerText.Should().BeSameAs(content.AnswerDisclaimerText);
     }
 
-    private static ConfirmQualificationPage GetConfirmQualificationPageContent()
+    private static ConfirmQualificationPage GetConfirmQualificationPageContent(string postHeadingContentHtml, string variousAwardingOrganisationsExplanationHtml)
     {
         return new ConfirmQualificationPage
                {
@@ -113,7 +126,9 @@ public class ConfirmQualificationPageMapperTests
                                     Href = "/"
                                 },
                    NoAdditionalRequirementsButtonText = "Get result",
-                   AnswerDisclaimerText = "Disclaimer text"
+                   AnswerDisclaimerText = "Disclaimer text",
+                   PostHeadingContent = ContentfulContentHelper.Paragraph(postHeadingContentHtml),
+                   VariousAwardingOrganisationsExplanation = ContentfulContentHelper.Paragraph(variousAwardingOrganisationsExplanationHtml)
                };
     }
 }

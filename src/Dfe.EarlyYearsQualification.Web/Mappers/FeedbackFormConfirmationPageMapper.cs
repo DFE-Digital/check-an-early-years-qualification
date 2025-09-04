@@ -1,12 +1,16 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class FeedbackFormConfirmationPageMapper
+public class FeedbackFormConfirmationPageMapper(IGovUkContentParser contentParser) : IFeedbackFormConfirmationPageMapper
 {
-    public static FeedbackFormConfirmationPageModel Map(FeedbackFormConfirmationPage feedbackFormConfirmationPage, string bodyHtml, string optionEmailBodyHtml)
+    public async Task<FeedbackFormConfirmationPageModel> Map(FeedbackFormConfirmationPage feedbackFormConfirmationPage)
     {
+        var bodyHtml = await contentParser.ToHtml(feedbackFormConfirmationPage.Body);
+        var optionEmailBodyHtml = await contentParser.ToHtml(feedbackFormConfirmationPage.OptionalEmailBody);
         return new FeedbackFormConfirmationPageModel
                {
                    SuccessMessage = feedbackFormConfirmationPage.SuccessMessage,

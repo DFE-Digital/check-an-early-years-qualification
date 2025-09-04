@@ -1,9 +1,10 @@
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -20,8 +21,13 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
+
+        mockChallengePageMapper
+            .Setup(x => x.Map(It.IsAny<ChallengePageModel>(), It.IsAny<ChallengePage>(), It.IsAny<string>()))
+            .ReturnsAsync((ChallengePageModel _, ChallengePage _, string redirect) => new ChallengePageModel
+                          { RedirectAddress = redirect });
 
         mockUrlHelper.Setup(u => u.IsLocalUrl(It.IsAny<string?>()))
                      .Returns(true);
@@ -33,8 +39,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -59,9 +65,14 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
-
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
+        
+        mockChallengePageMapper
+            .Setup(x => x.Map(It.IsAny<ChallengePageModel>(), It.IsAny<ChallengePage>(), It.IsAny<string>()))
+            .ReturnsAsync((ChallengePageModel _, ChallengePage _, string redirect) => new ChallengePageModel
+                              { RedirectAddress = redirect });
+        
         var mockContentfulService = new MockContentfulService();
 
         contentService.Setup(x => x.GetChallengePage()).Returns(mockContentfulService.GetChallengePage());
@@ -72,8 +83,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -98,8 +109,13 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
+        
+        mockChallengePageMapper
+            .Setup(x => x.Map(It.IsAny<ChallengePageModel>(), It.IsAny<ChallengePage>(), It.IsAny<string>()))
+            .ReturnsAsync((ChallengePageModel _, ChallengePage _, string redirect) => new ChallengePageModel
+                              { RedirectAddress = redirect });
 
         var mockContentfulService = new MockContentfulService();
 
@@ -108,8 +124,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -131,8 +147,8 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
 
         var accessKeys = new List<string>
                          {
@@ -164,8 +180,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -198,8 +214,8 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
 
         var accessKeys = new List<string>
                          {
@@ -231,8 +247,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -265,8 +281,8 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
 
         var accessKeys = new List<string>
                          {
@@ -298,8 +314,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -329,8 +345,12 @@ public class ChallengeControllerTests
     {
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
+        
+        mockChallengePageMapper
+            .Setup(x => x.Map(It.IsAny<ChallengePageModel>(), It.IsAny<ChallengePage>(), It.IsAny<string>()))
+            .ReturnsAsync((ChallengePageModel model, ChallengePage _, string _) => model);
 
         var mockContentfulService = new MockContentfulService();
 
@@ -344,8 +364,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(NullLogger<ChallengeController>.Instance,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         var result = await controller.Post(new ChallengePageModel { RedirectAddress = "/", PasswordValue = " \t " });
 
@@ -370,8 +390,8 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
 
         var mockContentfulService = new MockContentfulService();
 
@@ -380,8 +400,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -402,14 +422,14 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
 
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -431,14 +451,14 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
 
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -460,8 +480,12 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
+        
+        mockChallengePageMapper
+            .Setup(x => x.Map(It.IsAny<ChallengePageModel>(), It.IsAny<ChallengePage>(), It.IsAny<string>()))
+            .ReturnsAsync((ChallengePageModel model, ChallengePage _, string _) => model);
 
         var mockContentfulService = new MockContentfulService();
         var content = await mockContentfulService.GetChallengePage();
@@ -476,8 +500,8 @@ public class ChallengeControllerTests
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -507,16 +531,16 @@ public class ChallengeControllerTests
 
         var mockUrlHelper = new Mock<IUrlHelper>();
         var contentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var accessKeysHelper = new Mock<ICheckServiceAccessKeysHelper>();
+        var mockChallengePageMapper = new Mock<IChallengePageMapper>();
 
         accessKeysHelper.SetupGet(x => x.AllowPublicAccess).Returns(true);
 
         var controller = new ChallengeController(mockLogger.Object,
                                                  mockUrlHelper.Object,
                                                  contentService.Object,
-                                                 mockContentParser.Object,
-                                                 accessKeysHelper.Object);
+                                                 accessKeysHelper.Object,
+                                                 mockChallengePageMapper.Object);
 
         controller.ControllerContext = new ControllerContext
                                        {
@@ -531,7 +555,7 @@ public class ChallengeControllerTests
         var redirect = result as RedirectToActionResult;
 
         redirect.Should().NotBeNull();
-        redirect!.ActionName.Should().Be("Index");
-        redirect!.ControllerName.Should().Be("Home");
+        redirect.ActionName.Should().Be("Index");
+        redirect.ControllerName.Should().Be("Home");
     }
 }

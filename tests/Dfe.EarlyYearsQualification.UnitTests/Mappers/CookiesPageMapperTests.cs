@@ -1,4 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
@@ -7,7 +9,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class CookiesPageMapperTests
 {
     [TestMethod]
-    public void Map_PassInParameters_ReturnsModel()
+    public async Task Map_PassInParameters_ReturnsModel()
     {
         const string bodyContentHtml = "Body content";
         const string successBannerContentHtml = "Success banner content";
@@ -24,10 +26,16 @@ public class CookiesPageMapperTests
                                                DisplayText = "Back",
                                                OpenInNewTab = true,
                                                Href = "/"
-                                           }
+                                           },
+                              Body = ContentfulContentHelper.Paragraph(bodyContentHtml),
+                              SuccessBannerContent = ContentfulContentHelper.Paragraph(successBannerContentHtml)
                           };
 
-        var result = CookiesPageMapper.Map(cookiesPage, bodyContentHtml, successBannerContentHtml);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(cookiesPage.Body)).ReturnsAsync(bodyContentHtml);
+        mockContentParser.Setup(x => x.ToHtml(cookiesPage.SuccessBannerContent)).ReturnsAsync(successBannerContentHtml);
+        var mapper = new CookiesPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(cookiesPage);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(cookiesPage.Heading);

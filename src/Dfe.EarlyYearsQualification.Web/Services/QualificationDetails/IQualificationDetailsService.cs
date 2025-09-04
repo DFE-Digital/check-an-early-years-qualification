@@ -8,7 +8,7 @@ public interface IQualificationDetailsService
     Task<Qualification?> GetQualification(string qualificationId);
     Task<DetailsPage?> GetDetailsPage();
     bool HasStartDate();
-    Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner);
+
     bool QualificationContainsQtsQuestion(Qualification qualification);
 
     bool UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(Qualification qualification,

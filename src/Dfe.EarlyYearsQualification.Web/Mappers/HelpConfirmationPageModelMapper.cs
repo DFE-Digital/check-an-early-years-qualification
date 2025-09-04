@@ -1,13 +1,17 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class HelpConfirmationPageModelMapper
+public class HelpConfirmationPageModelMapper(IGovUkContentParser contentParser) : IHelpConfirmationPageModelMapper
 {
-    public static HelpConfirmationPageModel Map(HelpConfirmationPage helpConfirmationPage, string bodyHtml,
-                                                string feedbackBodyHtml)
+    public async Task<HelpConfirmationPageModel> Map(HelpConfirmationPage helpConfirmationPage)
     {
+        var bodyHtml = await contentParser.ToHtml(helpConfirmationPage.Body);
+        var feedbackBodyHtml = await contentParser.ToHtml(helpConfirmationPage.FeedbackComponent!.Body);
+        
         return new HelpConfirmationPageModel
                {
                    SuccessMessage = helpConfirmationPage.SuccessMessage,

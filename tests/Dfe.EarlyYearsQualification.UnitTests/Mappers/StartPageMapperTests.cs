@@ -1,4 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
@@ -7,7 +9,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class StartPageMapperTests
 {
     [TestMethod]
-    public void Map_PassInParameters_ReturnsModel()
+    public async Task Map_PassInParameters_ReturnsModel()
     {
         const string preCtaButtonContentHtml = "Pre CTA Button text";
         const string postCtaButtonContentHtml = "Post CTA Button text";
@@ -16,11 +18,19 @@ public class StartPageMapperTests
                         {
                             Header = "Header",
                             CtaButtonText = "Button text",
-                            RightHandSideContentHeader = "Right side content header"
+                            RightHandSideContentHeader = "Right side content header",
+                            PreCtaButtonContent = ContentfulContentHelper.Paragraph(preCtaButtonContentHtml),
+                            PostCtaButtonContent = ContentfulContentHelper.Paragraph(postCtaButtonContentHtml),
+                            RightHandSideContent = ContentfulContentHelper.Paragraph(rightHandSideContentHtml)
                         };
 
-        var result = StartPageMapper.Map(startPage, preCtaButtonContentHtml, postCtaButtonContentHtml,
-                                         rightHandSideContentHtml);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(startPage.PreCtaButtonContent)).ReturnsAsync(preCtaButtonContentHtml);
+        mockContentParser.Setup(x => x.ToHtml(startPage.PostCtaButtonContent)).ReturnsAsync(postCtaButtonContentHtml);
+        mockContentParser.Setup(x => x.ToHtml(startPage.RightHandSideContent)).ReturnsAsync(rightHandSideContentHtml);
+        
+        var mapper = new StartPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(startPage);
 
         result.Should().NotBeNull();
         result.Header.Should().BeSameAs(startPage.Header);

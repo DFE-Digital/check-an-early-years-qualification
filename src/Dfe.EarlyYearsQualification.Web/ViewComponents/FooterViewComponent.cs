@@ -1,7 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,21 +9,15 @@ namespace Dfe.EarlyYearsQualification.Web.ViewComponents;
 public class FooterViewComponent(
     ILogger<FooterViewComponent> logger,
     IContentService contentService,
-    IGovUkContentParser contentParser,
-    IEnvironmentService environmentService)
+    IEnvironmentService environmentService,
+    IFooterMapper footerMapper)
     : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var footer = await GetFooterAsync();
-        var leftHandSideContent = footer.LeftHandSideFooterSection is not null
-                                      ? await contentParser.ToHtml(footer.LeftHandSideFooterSection.Body)
-                                      : null;
-        var rightHandSideContent = footer.RightHandSideFooterSection is not null
-                                      ? await contentParser.ToHtml(footer.RightHandSideFooterSection.Body)
-                                      : null;
-
-        var footerModel = FooterMapper.Map(footer, leftHandSideContent, rightHandSideContent);
+        
+        var footerModel = await footerMapper.Map(footer);
 
         return View(footerModel);
     }

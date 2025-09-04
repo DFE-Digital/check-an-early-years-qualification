@@ -1,6 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Constants;
-using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,6 +48,6 @@ public partial class QuestionsController
 
     private async Task<PreCheckPageModel> MapPreCheckModel(PreCheckPage preCheckPage)
     {
-        return PreCheckPageMapper.Map(preCheckPage, await contentParser.ToHtml(preCheckPage.PostHeaderContent));
+        return await preCheckPageMapper.Map(preCheckPage);
     }
 }
