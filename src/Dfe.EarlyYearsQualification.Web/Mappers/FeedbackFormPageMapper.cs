@@ -1,12 +1,15 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class FeedbackFormPageMapper
+public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedbackFormPageMapper
 {
-    public static FeedbackFormPageModel Map(FeedbackFormPage feedbackFormPage, string postHeadingContent)
+    public async Task<FeedbackFormPageModel> Map(FeedbackFormPage feedbackFormPage)
     {
+        var postHeadingContent = await contentParser.ToHtml(feedbackFormPage.PostHeadingContent);
         var model = new FeedbackFormPageModel
                {
                    Heading = feedbackFormPage.Heading,

@@ -1,4 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
@@ -8,8 +10,13 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class RadioQuestionMapperTests
 {
     [TestMethod]
-    public void Map_PassInParameters_ReturnsModel()
+    public async Task Map_PassInParameters_ReturnsModel()
     {
+        const string actionName = "action";
+        const string controllerName = "controller";
+        const string additionalInformationBodyHtml = "additional info body";
+        const string selectedAnswer = "selected answer";
+        
         var question = new RadioQuestionPage
                        {
                            Question = "Question",
@@ -28,15 +35,15 @@ public class RadioQuestionMapperTests
                                             Href = "/"
                                         },
                            ErrorBannerHeading = "Error banner heading",
-                           ErrorBannerLinkText = "Error banner link text"
+                           ErrorBannerLinkText = "Error banner link text",
+                           AdditionalInformationBody = ContentfulContentHelper.Paragraph(additionalInformationBodyHtml)
                        };
-        const string actionName = "action";
-        const string controllerName = "controller";
-        const string additionalInformationBodyHtml = "additional info body";
-        const string selectedAnswer = "selected answer";
 
-        var result = RadioQuestionMapper.Map(new RadioQuestionModel(), question, actionName, controllerName,
-                                             additionalInformationBodyHtml, selectedAnswer);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(question.AdditionalInformationBody)).ReturnsAsync(additionalInformationBodyHtml);
+        var mapper = new RadioQuestionMapper(mockContentParser.Object);
+        var result = await mapper.Map(new RadioQuestionModel(), question, actionName, controllerName,
+                                             selectedAnswer);
 
         result.Should().NotBeNull();
         result.Question.Should().BeSameAs(question.Question);

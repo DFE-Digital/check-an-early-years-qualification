@@ -1,7 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
@@ -17,13 +17,16 @@ public class GiveFeedbackControllerTests
     public async Task Get_ContentServiceReturnsNull_RedirectsToError()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         mockContentService.Setup(x => x.GetFeedbackFormPage()).ReturnsAsync((FeedbackFormPage?)null);
 
@@ -43,17 +46,22 @@ public class GiveFeedbackControllerTests
     public async Task Get_ContentServiceReturnsData_ReturnsExpectedView()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         var feedbackFormPage = GetFeedbackFormPage();
-
         mockContentService.Setup(x => x.GetFeedbackFormPage()).ReturnsAsync(feedbackFormPage);
+
+        var expectedModel = GetFeedbackFormPageModel();
+        mockFeedbackFormPageMapper.Setup(x => x.Map(feedbackFormPage)).ReturnsAsync(expectedModel);
 
         var result = await controller.Get();
 
@@ -74,13 +82,16 @@ public class GiveFeedbackControllerTests
     public async Task Post_ContentServiceReturnsNull_RedirectsToError()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         mockContentService.Setup(x => x.GetFeedbackFormPage()).ReturnsAsync((FeedbackFormPage?)null);
 
@@ -102,13 +113,16 @@ public class GiveFeedbackControllerTests
     public async Task Post_ValidationContainsError_ReturnsGetView()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         var feedbackFormPage = GetFeedbackFormPage();
 
@@ -119,6 +133,9 @@ public class GiveFeedbackControllerTests
                      {
                          ErrorSummaryLinks = [new ErrorSummaryLink()]
                      });
+        
+        var expectedModel = GetFeedbackFormPageModel();
+        mockFeedbackFormPageMapper.Setup(x => x.Map(feedbackFormPage)).ReturnsAsync(expectedModel);
 
         var model = GetFeedbackFormPageModel();
 
@@ -142,13 +159,16 @@ public class GiveFeedbackControllerTests
     public async Task Post_PassesValidation_RedirectsToConfirmation()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         var feedbackFormPage = GetFeedbackFormPage();
 
@@ -184,13 +204,16 @@ public class GiveFeedbackControllerTests
     public async Task Confirmation_ContentServiceReturnsNull_RedirectsToError()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         mockContentService.Setup(x => x.GetFeedbackFormConfirmationPage())
                           .ReturnsAsync((FeedbackFormConfirmationPage?)null);
@@ -211,13 +234,16 @@ public class GiveFeedbackControllerTests
     public async Task Confirmation_ContentServiceReturnsData_ReturnsView()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         var pageData = new FeedbackFormConfirmationPage
                        {
@@ -226,6 +252,10 @@ public class GiveFeedbackControllerTests
         mockContentService.Setup(x => x.GetFeedbackFormConfirmationPage()).ReturnsAsync(pageData);
         mockUserJourneyCookieService.Setup(x => x.GetHasSubmittedEmailAddressInFeedbackFormQuestion()).Returns(true);
 
+        var expectedModel = new FeedbackFormConfirmationPageModel { SuccessMessage = pageData.SuccessMessage };
+        mockFeedbackFormConfirmationPageMapper.Setup(x => x.Map(It.IsAny<FeedbackFormConfirmationPage>()))
+                                              .ReturnsAsync(expectedModel);
+        
         var result = await controller.Confirmation();
 
         result.Should().NotBeNull();
@@ -244,13 +274,16 @@ public class GiveFeedbackControllerTests
     public void HasUserGotWhatTheyNeededToday_PassInTrue_CallsCookieServiceWithCorrectValue()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         var result = controller.HasUserGotWhatTheyNeededToday(true);
         result.Should().NotBeNull();
@@ -262,13 +295,16 @@ public class GiveFeedbackControllerTests
     public void HasUserGotWhatTheyNeededToday_PassInFalse_CallsCookieServiceWithCorrectValue()
     {
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockFeedbackFormService = new Mock<IFeedbackFormService>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockNotificationService = new Mock<INotificationService>();
-        var controller = new GiveFeedbackController(mockContentService.Object, mockContentParser.Object,
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+        var mockFeedbackFormConfirmationPageMapper = new Mock<IFeedbackFormConfirmationPageMapper>();
+        var controller = new GiveFeedbackController(mockContentService.Object,
                                                     mockFeedbackFormService.Object, mockUserJourneyCookieService.Object,
-                                                    mockNotificationService.Object);
+                                                    mockNotificationService.Object,
+                                                    mockFeedbackFormPageMapper.Object,
+                                                    mockFeedbackFormConfirmationPageMapper.Object);
 
         var result = controller.HasUserGotWhatTheyNeededToday(false);
         result.Should().NotBeNull();

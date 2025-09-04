@@ -1,10 +1,8 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
-using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -19,13 +17,14 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockHtmlRenderer = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockHtmlRenderer.Object, mockCookieService.Object,
-                                                         mockUrlChecker.Object);
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object);
 
         mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync((CookiesPage?)null);
 
@@ -42,50 +41,19 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
-        var expectedContent = new CookiesPage
-                              {
-                                  Heading = "Test Heading",
-                                  ButtonText = "Test Button Text",
-                                  Options =
-                                  [
-                                      new Option
-                                      {
-                                          Label = "Click Me!",
-                                          Value = "test option 1"
-                                      },
-
-                                      new Option
-                                      {
-                                          Label = "No Click Me!",
-                                          Value = "test option 2"
-                                      }
-                                  ],
-                                  SuccessBannerHeading = "Test success banner heading",
-                                  ErrorText = "Test error text",
-                                  Body = ContentfulContentHelper.Paragraph("Test Body"),
-                                  FormHeading = "Test form heading",
-                                  SuccessBannerContent = ContentfulContentHelper.Paragraph("Test success banner"),
-                                  BackButton = new NavigationLink
-                                               {
-                                                   DisplayText = "Test display text",
-                                                   OpenInNewTab = false,
-                                                   Href = "Test Href"
-                                               }
-                              };
-
-        mockContentParser.Setup(x => x.ToHtml(expectedContent.Body)).ReturnsAsync("Formatted Body");
-        mockContentParser.Setup(x => x.ToHtml(expectedContent.SuccessBannerContent))
-                         .ReturnsAsync("Formatted Success Banner Content");
-
-        mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync(expectedContent);
+        var expectedModel = new CookiesPageModel { Heading = "test" };
+        mockCookiePageMapper.Setup(x => x.Map(It.IsAny<CookiesPage>())).ReturnsAsync(expectedModel).Verifiable();
+        
+        mockContentService.Setup(x => x.GetCookiesPage()).ReturnsAsync(new CookiesPage()).Verifiable();
 
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object,
-                                                         mockCookieService.Object, mockUrlChecker.Object);
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object);
 
         var result = await controller.Index();
 
@@ -94,36 +62,10 @@ public class CookiesPreferenceControllerTests
               .BeAssignableTo<ViewResult>()
               .Which.Model
               .Should()
-              .BeEquivalentTo(new CookiesPageModel
-                              {
-                                  Heading = expectedContent.Heading,
-                                  BodyContent = "Formatted Body",
-                                  ButtonText = expectedContent.ButtonText,
-                                  Options =
-                                  [
-                                      new OptionModel
-                                      {
-                                          Label = expectedContent.Options[0].Label,
-                                          Value = expectedContent.Options[0].Value
-                                      },
-
-                                      new OptionModel
-                                      {
-                                          Label = expectedContent.Options[1].Label,
-                                          Value = expectedContent.Options[1].Value
-                                      }
-                                  ],
-                                  SuccessBannerHeading = expectedContent.SuccessBannerHeading,
-                                  SuccessBannerContent = "Formatted Success Banner Content",
-                                  ErrorText = expectedContent.ErrorText,
-                                  FormHeading = "Test form heading",
-                                  BackButton = new NavigationLinkModel
-                                               {
-                                                   DisplayText = "Test display text",
-                                                   OpenInNewTab = false,
-                                                   Href = "Test Href"
-                                               }
-                              });
+              .BeEquivalentTo(expectedModel);
+        
+        mockContentService.VerifyAll();
+        mockCookieService.VerifyAll();
     }
 
     [TestMethod]
@@ -131,15 +73,16 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         mockUrlChecker.Setup(x => x.IsLocalUrl("some URL")).Returns(true);
 
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object,
-                                                         mockCookieService.Object, mockUrlChecker.Object);
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object);
 
         var result = controller.Accept("some URL");
 
@@ -157,15 +100,16 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         mockUrlChecker.Setup(x => x.IsLocalUrl("some URL")).Returns(false);
 
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object, mockCookieService.Object,
-                                                         mockUrlChecker.Object);
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object);
 
         var result = controller.Accept("some URL");
 
@@ -183,15 +127,16 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         mockUrlChecker.Setup(x => x.IsLocalUrl("some URL")).Returns(true);
 
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object, mockCookieService.Object,
-                                                         mockUrlChecker.Object);
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object);
 
         var result = controller.Reject("some URL");
 
@@ -209,15 +154,16 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         mockUrlChecker.Setup(x => x.IsLocalUrl("some URL")).Returns(false);
 
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object, mockCookieService.Object,
-                                                         mockUrlChecker.Object);
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object);
 
         var result = controller.Reject("some URL");
 
@@ -235,15 +181,16 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         mockUrlChecker.Setup(x => x.IsLocalUrl("some URL")).Returns(true);
 
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object, mockCookieService.Object,
-                                                         mockUrlChecker.Object);
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object);
 
         var result = controller.HideBanner("some URL");
 
@@ -261,15 +208,16 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         mockUrlChecker.Setup(x => x.IsLocalUrl("some URL")).Returns(false);
 
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object, mockCookieService.Object,
-                                                         mockUrlChecker.Object);
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object);
 
         var result = controller.HideBanner("some URL");
 
@@ -287,17 +235,18 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         var tempData = new TempDataDictionary(new DefaultHttpContext(), new Mock<ITempDataProvider>().Object)
                        {
                            ["UserPreferenceRecorded"] = false
                        };
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object, mockCookieService.Object,
-                                                         mockUrlChecker.Object)
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object)
                          {
                              TempData = tempData
                          };
@@ -319,17 +268,18 @@ public class CookiesPreferenceControllerTests
     {
         var mockContentService = new Mock<IContentService>();
         var mockLogger = new Mock<ILogger<CookiesPreferenceController>>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockCookieService = new Mock<ICookiesPreferenceService>();
         var mockUrlChecker = new Mock<IUrlHelper>();
+        var mockCookiePageMapper = new Mock<ICookiesPageMapper>();
 
         var tempData = new TempDataDictionary(new DefaultHttpContext(), new Mock<ITempDataProvider>().Object)
                        {
                            ["UserPreferenceRecorded"] = false
                        };
         var controller = new CookiesPreferenceController(mockLogger.Object, mockContentService.Object,
-                                                         mockContentParser.Object, mockCookieService.Object,
-                                                         mockUrlChecker.Object)
+                                                         mockCookieService.Object,
+                                                         mockUrlChecker.Object,
+                                                         mockCookiePageMapper.Object)
                          {
                              TempData = tempData
                          };

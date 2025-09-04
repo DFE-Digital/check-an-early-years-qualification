@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
@@ -8,7 +9,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class FooterMapperTests
 {
     [TestMethod]
-    public void Map_LeftHandSectionIsNull_DoesntMapLeftHandSection()
+    public async Task Map_LeftHandSectionIsNull_DoesntMapLeftHandSection()
     {
         const string rightHandSectionBody = "This is the right hand section body";
         var footer = new Footer
@@ -22,7 +23,10 @@ public class FooterMapperTests
                                                       }
                      };
 
-        var result = FooterMapper.Map(footer, string.Empty, rightHandSectionBody);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(footer.RightHandSideFooterSection.Body)).ReturnsAsync(rightHandSectionBody);
+        var mapper = new FooterMapper(mockContentParser.Object);
+        var result = await mapper.Map(footer);
 
         result.Should().NotBeNull();
         result.NavigationLinks.Should().NotBeEmpty();
@@ -36,7 +40,7 @@ public class FooterMapperTests
     }
     
     [TestMethod]
-    public void Map_LeftHandSectionIsNotNull_PassedInLeftHandContentIsNull_DoesntMapLeftHandSection()
+    public async Task Map_LeftHandSectionIsNotNull_PassedInLeftHandContentIsNull_DoesntMapLeftHandSection()
     {
         const string rightHandSectionBody = "This is the right hand section body";
         var footer = new Footer
@@ -45,7 +49,7 @@ public class FooterMapperTests
                          LeftHandSideFooterSection = new FooterSection
                                                      {
                                                          Heading = "Left section",
-                                                         Body = ContentfulContentHelper.Text("This is the left hand section body")
+                                                         Body = null!
                                                      },
                          RightHandSideFooterSection = new FooterSection
                                                       {
@@ -54,7 +58,11 @@ public class FooterMapperTests
                                                       }
                      };
 
-        var result = FooterMapper.Map(footer, string.Empty, rightHandSectionBody);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(footer.LeftHandSideFooterSection.Body)).ReturnsAsync(string.Empty);
+        mockContentParser.Setup(x => x.ToHtml(footer.RightHandSideFooterSection.Body)).ReturnsAsync(rightHandSectionBody);
+        var mapper = new FooterMapper(mockContentParser.Object);
+        var result = await mapper.Map(footer);
 
         result.Should().NotBeNull();
         result.NavigationLinks.Should().NotBeEmpty();
@@ -68,7 +76,7 @@ public class FooterMapperTests
     }
     
     [TestMethod]
-    public void Map_RightHandSectionIsNull_DoesntMapRightHandSection()
+    public async Task Map_RightHandSectionIsNull_DoesntMapRightHandSection()
     {
         const string leftHandSectionBody = "This is the left hand section body";
         var footer = new Footer
@@ -82,7 +90,10 @@ public class FooterMapperTests
                          RightHandSideFooterSection = null
                      };
 
-        var result = FooterMapper.Map(footer, leftHandSectionBody, string.Empty);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(footer.LeftHandSideFooterSection.Body)).ReturnsAsync(leftHandSectionBody);
+        var mapper = new FooterMapper(mockContentParser.Object);
+        var result = await mapper.Map(footer);
 
         result.Should().NotBeNull();
         result.NavigationLinks.Should().NotBeEmpty();
@@ -96,7 +107,7 @@ public class FooterMapperTests
     }
     
     [TestMethod]
-    public void Map_RightHandSectionIsNotNull_PassedInRightHandContentIsNull_DoesntMapRightHandSection()
+    public async Task Map_RightHandSectionIsNotNull_PassedInRightHandContentIsNull_DoesntMapRightHandSection()
     {
         const string leftHandSectionBody = "This is the left hand section body";
         var footer = new Footer
@@ -110,11 +121,15 @@ public class FooterMapperTests
                          RightHandSideFooterSection = new FooterSection
                                                       {
                                                           Heading = "Right section",
-                                                          Body = ContentfulContentHelper.Text("This is the right hand section body")
+                                                          Body = null!
                                                       }
                      };
 
-        var result = FooterMapper.Map(footer, leftHandSectionBody, string.Empty);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(footer.LeftHandSideFooterSection.Body)).ReturnsAsync(leftHandSectionBody);
+        mockContentParser.Setup(x => x.ToHtml(footer.RightHandSideFooterSection.Body)).ReturnsAsync(string.Empty);
+        var mapper = new FooterMapper(mockContentParser.Object);
+        var result = await mapper.Map(footer);
 
         result.Should().NotBeNull();
         result.NavigationLinks.Should().NotBeEmpty();

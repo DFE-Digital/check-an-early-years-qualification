@@ -1,12 +1,15 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class HelpPageMapper
+public class HelpPageMapper(IGovUkContentParser contentParser) : IHelpPageMapper
 {
-    public static HelpPageModel Map(HelpPage helpPage, string postHeadingContent, string emailAddressErrorMessage)
+    public async Task<HelpPageModel> Map(HelpPage helpPage, string emailAddressErrorMessage)
     {
+        var postHeadingContent = await contentParser.ToHtml(helpPage.PostHeadingContent);
         return new HelpPageModel
                {
                    Heading = helpPage.Heading,
