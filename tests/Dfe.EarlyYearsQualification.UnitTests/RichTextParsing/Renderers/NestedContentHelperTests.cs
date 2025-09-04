@@ -144,12 +144,13 @@ public class NestedContentHelperTests
     }
 
     [TestMethod]
-    public void ContentHelper_RenderList()
+    public void ContentHelper_RenderUnorderedList()
     {
         var paragraph = new Paragraph { Content = [new Text { Value = "Test list item" }] };
 
         var list = new List
                    {
+                       NodeType = "unordered-list",
                        Content = [new ListItem { Content = [paragraph] }]
                    };
 
@@ -158,6 +159,24 @@ public class NestedContentHelperTests
         var output = NestedContentHelper.Render(content).Result;
 
         output.Should().Be("<ul class=\"govuk-list govuk-list--bullet\"><li>Test list item</li></ul>");
+    }
+    
+    [TestMethod]
+    public void ContentHelper_RenderOrderedList()
+    {
+        var paragraph = new Paragraph { Content = [new Text { Value = "Test list item" }] };
+
+        var list = new List
+                   {
+                       NodeType = "ordered-list",
+                       Content = [new ListItem { Content = [paragraph] }]
+                   };
+
+        var content = new List<IContent> { list };
+
+        var output = NestedContentHelper.Render(content).Result;
+
+        output.Should().Be("<ol class=\"govuk-list govuk-list--number\"><li>Test list item</li></ol>");
     }
 
     [TestMethod]

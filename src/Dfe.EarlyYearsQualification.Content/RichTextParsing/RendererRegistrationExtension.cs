@@ -34,7 +34,8 @@ public static class RendererRegistrationExtension
                 .AddSingleton<IContentRenderer>(new TableRenderer { Order = 17 })
                 .AddSingleton<IContentRenderer>(new TableRowRenderer { Order = 18 })
                 .AddSingleton<IContentRenderer>(new UnorderedListRenderer { Order = 19 })
-                .AddSingleton<IContentRenderer>(new UnorderedListHyperlinksRenderer { Order = 20 });
+                .AddSingleton<IContentRenderer>(new UnorderedListHyperlinksRenderer { Order = 20 })
+                .AddSingleton<IContentRenderer>(new OrderedListRenderer { Order = 21 });
 
         // Register GovUk parser after each renderer registration
         services.AddTransient<IGovUkContentParser, GovUkContentParser>();

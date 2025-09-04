@@ -13,7 +13,7 @@
     {
         <form method="post">
             <input type="hidden" id="returnUrl" name="returnUrl"/>
-            <govuk-cookie-banner id="choose-cookies-preference" aria-label="@Model.CookiesBannerTitle">
+            <govuk-cookie-banner id="choose-cookies-preference" aria-label="@Model.CookiesBannerTitle" class="govuk-!-display-none-print">
                 <govuk-cookie-banner-message>
                     <govuk-cookie-banner-message-heading>@Model.CookiesBannerTitle</govuk-cookie-banner-message-heading>
                     <govuk-cookie-banner-message-content id="cookies-banner-choose-pref-content">@Html.Raw(Model.CookiesBannerContent)</govuk-cookie-banner-message-content>
@@ -30,7 +30,7 @@
     {
         <form method="post" asp-controller="CookiesPreference" asp-action="HideBanner">
             <input type="hidden" id="returnUrlHideBanner" name="returnUrl"/>
-            <govuk-cookie-banner id="cookies-preference-chosen" aria-label="@Model.CookiesBannerTitle">
+            <govuk-cookie-banner id="cookies-preference-chosen" aria-label="@Model.CookiesBannerTitle" class="govuk-!-display-none-print">
                 <govuk-cookie-banner-message>
                     <govuk-cookie-banner-message-heading>@Model.CookiesBannerTitle</govuk-cookie-banner-message-heading>
                     <govuk-cookie-banner-message-content id="cookies-banner-pref-chosen-content">

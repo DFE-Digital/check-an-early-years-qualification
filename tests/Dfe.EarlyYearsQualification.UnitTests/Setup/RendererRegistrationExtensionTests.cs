@@ -20,7 +20,7 @@ public class RendererRegistrationExtensionTests
         // ReSharper disable once InvokeAsExtensionMethod
         RendererRegistrationExtension.AddModelRenderers(services);
 
-        services.Count.Should().Be(21);
+        services.Count.Should().Be(22);
 
         VerifyService<IContentRenderer, PhaseBannerRenderer>(services, ServiceLifetime.Singleton);
 
@@ -59,6 +59,8 @@ public class RendererRegistrationExtensionTests
         VerifyService<IContentRenderer, UnorderedListRenderer>(services, ServiceLifetime.Singleton);
 
         VerifyService<IContentRenderer, UnorderedListHyperlinksRenderer>(services, ServiceLifetime.Singleton);
+        
+        VerifyService<IContentRenderer, OrderedListRenderer>(services, ServiceLifetime.Singleton);
 
         VerifyService<IGovUkContentParser, GovUkContentParser>(services, ServiceLifetime.Transient, AllowNulls.Yes);
 

@@ -366,6 +366,8 @@ public class QualificationDetailsService(
                                                                        RatioRequirements.Level2RatioRequirementName,
                                                                        qualification);
 
+        await SetDefaultCardContentForApprovedQualifications(qualification, model);
+        
         switch (qualification.QualificationLevel)
         {
             case 2 when wasAwardedInJune2016:
@@ -427,11 +429,12 @@ public class QualificationDetailsService(
         var improveServiceBodyHtml = content.UpDownFeedback is not null
                                          ? await contentParser.ToHtml(content.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
+        var printInformationBody = await contentParser.ToHtml(content.PrintInformationBody);
         return QualificationDetailsMapper.Map(qualification, content, backNavLink,
                                               MapAdditionalRequirementAnswers(qualification
                                                                                   .AdditionalRequirementQuestions),
                                               dateStarted, dateAwarded,
-                                              requirementsText, feedbackBodyHtml, improveServiceBodyHtml);
+                                              requirementsText, feedbackBodyHtml, improveServiceBodyHtml, printInformationBody);
     }
 
     public async Task SetRatioText(QualificationDetailsModel model, DetailsPage content)
@@ -442,18 +445,15 @@ public class QualificationDetailsService(
                 await SetRatioTextWhereIsNotFullAndRelevant(model, content);
                 break;
             case false:
-                await SetRatioTextWhereIsFullAndRelevant(model, content);
+                SetRatioTextWhereIsFullAndRelevant(model);
                 break;
         }
     }
 
-    private async Task SetRatioTextWhereIsFullAndRelevant(QualificationDetailsModel model, DetailsPage content)
+    private void SetRatioTextWhereIsFullAndRelevant(QualificationDetailsModel model)
     {
         var wasAwardedBeforeSeptember2014 = userJourneyCookieService.WasAwardedBeforeSeptember2014();
-        var wasAwardedOnOrAfterSeptember2014 = userJourneyCookieService.WasAwardedOnOrAfterSeptember2014();
         var wasAwardedBeforeJune2016 = userJourneyCookieService.WasAwardedBeforeJune2016();
-        var wasAwardedInJune2016 = userJourneyCookieService.WasAwardedInJune2016();
-        var wasAwardedAfterJune2016 = userJourneyCookieService.WasAwardedAfterJune2016();
         var approvedAllLevels = model.RatioRequirements is
                                 {
                                     ApprovedForUnqualified: QualificationApprovalStatus.Approved,
@@ -476,20 +476,6 @@ public class QualificationDetailsService(
             case 6 or 7 when approvedAllLevels:
             case 6 or 7 when approvedAllLevelsButL6 && wasAwardedBeforeSeptember2014:
                 model.Content!.RatiosText = string.Empty;
-                break;
-
-            case 2 when wasAwardedInJune2016:
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextMaybeRequirements);
-                break;
-
-            case 2 when wasAwardedAfterJune2016:
-            case 3 or 4 or 5 when wasAwardedOnOrAfterSeptember2014:
-            case 6 or 7 when approvedAllLevelsButL6 && wasAwardedOnOrAfterSeptember2014:
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextWillRequirements);
-                break;
-
-            default:
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosText);
                 break;
         }
     }
@@ -520,6 +506,47 @@ public class QualificationDetailsService(
         }
     }
 
+    public async Task SetDefaultCardContentForApprovedQualifications(Qualification qualification, QualificationDetailsModel model)
+    {
+        var requirements = model.RatioRequirements;
+        
+        if (IsApproved(requirements.ApprovedForUnqualified))
+        {
+            var unqualifiedContentSummary = GetRatioProperty<Document>(nameof(RatioRequirement.SummaryCardDefaultContent),
+                                                                       RatioRequirements.UnqualifiedRatioRequirementName,
+                                                                       qualification);
+            
+            requirements.RequirementsForUnqualified = await contentParser.ToHtml(unqualifiedContentSummary);
+        }
+        
+        if (IsApproved(requirements.ApprovedForLevel2))
+        {
+            var level2ContentSummary = GetRatioProperty<Document>(nameof(RatioRequirement.SummaryCardDefaultContent),
+                                                                  RatioRequirements.Level2RatioRequirementName,
+                                                                  qualification);
+            
+            requirements.RequirementsForLevel2 = await contentParser.ToHtml(level2ContentSummary);
+        }
+        
+        if (IsApproved(requirements.ApprovedForLevel3))
+        {
+            var level3ContentSummary = GetRatioProperty<Document>(nameof(RatioRequirement.SummaryCardDefaultContent),
+                                                                  RatioRequirements.Level3RatioRequirementName,
+                                                                  qualification);
+            
+            requirements.RequirementsForLevel3 = await contentParser.ToHtml(level3ContentSummary);
+        }
+        
+        if (IsApproved(requirements.ApprovedForLevel6))
+        {
+            var level6ContentSummary = GetRatioProperty<Document>(nameof(RatioRequirement.SummaryCardDefaultContent),
+                                                                  RatioRequirements.Level6RatioRequirementName,
+                                                                  qualification);
+            
+            requirements.RequirementsForLevel6 = await contentParser.ToHtml(level6ContentSummary);
+        }
+    }
+    
     public void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPage content)
     {
         model.Content!.QualificationResultHeading = content.QualificationResultHeading;
@@ -583,4 +610,6 @@ public class QualificationDetailsService(
             throw;
         }
     }
+    
+    private static bool IsApproved(QualificationApprovalStatus status) => status == QualificationApprovalStatus.Approved;
 }
