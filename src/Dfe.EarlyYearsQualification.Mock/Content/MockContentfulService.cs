@@ -744,7 +744,7 @@ public class MockContentfulService : IContentService
                 {
                     MonthLabel = "Month",
                     YearLabel = "Year",
-                    QuestionHeader = "Start date",
+                    QuestionHeader = "Start date (optional)",
                     QuestionHint = "Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.",
                     ErrorBannerLinkText = "Enter the month and year that the qualification was started",
                     ErrorMessage = "Enter the month and year that the qualification was started",
@@ -1042,7 +1042,7 @@ public class MockContentfulService : IContentService
                    NoButtonText = "No",
                    NoButtonSubText = " this service is not useful",
                    HelpButtonText = "Get help with this page",
-                   HelpButtonLink = "/advice/help",
+                   HelpButtonLink = "/help/get-help",
                    CancelButtonText = "Cancel",
                    FeedbackComponent = GetFeedbackComponent()
                };

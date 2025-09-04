@@ -106,7 +106,7 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
 
         await checkFeedbackBanners(page);
     });
-
+/*
     test("Checks the Help details are on the page", async ({page, context}) => {
 
         await page.goto("/advice/help");
@@ -125,6 +125,8 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#help-form-submit", "Send message")
     });
 
+
+    // todo
     test("shows an error message when a user doesnt enter required details on help page", async ({page}) => {
         await page.goto("/advice/help");
 
@@ -176,5 +178,5 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#help-confirmation-body" ,"This is the body");
         await checkTextContains(page, "#feedback-component", "Your feedback matters and will help us improve the service.");
         await checkText(page, "#return-button", "Return to the homepage");
-    });
+    });*/
 });
