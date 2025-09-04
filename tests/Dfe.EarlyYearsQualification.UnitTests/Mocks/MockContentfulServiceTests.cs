@@ -735,7 +735,7 @@ public class MockContentfulServiceTests
 
         result.StartDateQuestion.MonthLabel.Should().Be("Month");
         result.StartDateQuestion.YearLabel.Should().Be("Year");
-        result.StartDateQuestion.QuestionHeader.Should().Be("Start date");
+        result.StartDateQuestion.QuestionHeader.Should().Be("Start date (optional)");
         result.StartDateQuestion.QuestionHint.Should().Be("Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.");
         result.StartDateQuestion.ErrorBannerLinkText.Should().Be("Enter the month and year that the qualification was started");
         result.StartDateQuestion.ErrorMessage.Should().Be("Enter the month and year that the qualification was started");
