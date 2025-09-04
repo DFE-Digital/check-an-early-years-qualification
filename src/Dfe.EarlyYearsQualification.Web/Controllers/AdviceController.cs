@@ -1,11 +1,8 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Mappers;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,8 +13,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class AdviceController(
     ILogger<AdviceController> logger,
     IContentService contentService,
-    IGovUkContentParser contentParser,
-    IUserJourneyCookieService userJourneyCookieService)
+    IUserJourneyCookieService userJourneyCookieService,
+    IAdvicePageMapper advicePageMapper)
     : ServiceController
 {
     public override void OnActionExecuting(ActionExecutingContext context)
@@ -75,7 +72,7 @@ public class AdviceController(
 
             if (specificCannotFindQualificationPage is not null)
             {
-                var model = await Map(specificCannotFindQualificationPage);
+                var model = await advicePageMapper.Map(specificCannotFindQualificationPage);
                 model.Level = level == 0 ? "Any level" : level.ToString();
                 model.StartedDate = $"{startMonth}-{startYear}";
 
@@ -108,35 +105,8 @@ public class AdviceController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await Map(advicePage);
+        var model = await advicePageMapper.Map(advicePage);
 
         return View("Advice", model);
-    }
-
-    private async Task<AdvicePageModel> Map(AdvicePage advicePage)
-    {
-        var bodyHtml = await contentParser.ToHtml(advicePage.Body);
-        var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(advicePage.FeedbackBanner, contentParser);
-        var improveServiceBodyHtml = advicePage.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(advicePage.UpDownFeedback.FeedbackComponent!.Body)
-                                         : null;
-        var rightHandSideContentHtml = advicePage.RightHandSideContent is not null
-                                           ? await contentParser.ToHtml(advicePage.RightHandSideContent.Body)
-                                           : null;
-        return AdvicePageMapper.Map(advicePage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml, rightHandSideContentHtml);
-    }
-
-    private async Task<QualificationNotOnListPageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
-    {
-        var bodyHtml = await contentParser.ToHtml(cannotFindQualificationPage.Body);
-        var feedbackBodyHtml =
-            await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
-        var improveServiceBodyHtml = cannotFindQualificationPage.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(cannotFindQualificationPage.UpDownFeedback.FeedbackComponent!.Body)
-                                         : null;
-        var rightHandSideContentHtml = cannotFindQualificationPage.RightHandSideContent is not null
-                                           ? await contentParser.ToHtml(cannotFindQualificationPage.RightHandSideContent.Body)
-                                           : null;
-        return AdvicePageMapper.Map(cannotFindQualificationPage, bodyHtml, feedbackBodyHtml, improveServiceBodyHtml, rightHandSideContentHtml);
     }
 }

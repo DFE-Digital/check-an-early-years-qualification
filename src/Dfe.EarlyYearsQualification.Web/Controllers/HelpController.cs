@@ -1,8 +1,7 @@
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -16,11 +15,14 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class HelpController(
     ILogger<HelpController> logger,
     IContentService contentService,
-    IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
     INotificationService notificationService,
     IDateQuestionModelValidator questionModelValidator,
-    IPlaceholderUpdater placeholderUpdater
+    IHelpGetHelpPageMapper getHelpPageMapper,
+    IHelpQualificationDetailsPageMapper helpQualificationDetailsPageMapper,
+    IHelpProvideDetailsPageMapper helpProvideDetailsPageMapper,
+    IHelpEmailAddressPageMapper helpEmailAddressPageMapper,
+    IHelpConfirmationPageMapper helpConfirmationPageMapper
     )
     : ServiceController
 {
@@ -36,7 +38,7 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = await HelpControllerPageMapper.MapGetHelpPageContentToViewModelAsync(content, contentParser);
+        var viewModel = await getHelpPageMapper.MapGetHelpPageContentToViewModelAsync(content);
 
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
@@ -65,7 +67,7 @@ public class HelpController(
 
         if (!ModelState.IsValid || !submittedValueIsValid)
         {
-            var viewModel = await HelpControllerPageMapper.MapGetHelpPageContentToViewModelAsync(content, contentParser);
+            var viewModel = await getHelpPageMapper.MapGetHelpPageContentToViewModelAsync(content);
             viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
 
             return View("GetHelp", viewModel);
@@ -139,7 +141,7 @@ public class HelpController(
             viewModel.QuestionModel.AwardedQuestion.SelectedYear = enquiryAwarded.startYear;
         }
 
-        viewModel = HelpControllerPageMapper.MapQualificationDetailsContentToViewModel(viewModel, content, null, ModelState, placeholderUpdater);
+        viewModel = helpQualificationDetailsPageMapper.MapQualificationDetailsContentToViewModel(viewModel, content, null, ModelState);
 
         return View("QualificationDetails", viewModel);
     }
@@ -174,7 +176,7 @@ public class HelpController(
 
             model.QuestionModel.HasErrors = hasInvalidDates;
 
-            model = HelpControllerPageMapper.MapQualificationDetailsContentToViewModel(model, content, datesValidationResult, ModelState, placeholderUpdater);
+            model = helpQualificationDetailsPageMapper.MapQualificationDetailsContentToViewModel(model, content, datesValidationResult, ModelState);
 
             return View("QualificationDetails", model);
         }
@@ -206,7 +208,7 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
   
-        var viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
+        var viewModel = helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
 
         viewModel.ProvideAdditionalInformation = userJourneyCookieService.GetHelpFormEnquiry().AdditionalInformation;
 
@@ -226,7 +228,7 @@ public class HelpController(
                 return RedirectToAction("Index", "Error");
             }
 
-            viewModel = HelpControllerPageMapper.MapProvideDetailsPageContentToViewModel(content, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
+            viewModel = helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
 
             viewModel.HasAdditionalInformationError = ModelState.Keys.Any(_ => ModelState["ProvideAdditionalInformation"]?.Errors.Count > 0);
 
@@ -254,7 +256,7 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = HelpControllerPageMapper.MapEmailAddressPageContentToViewModel(content);
+        var viewModel = helpEmailAddressPageMapper.MapEmailAddressPageContentToViewModel(content);
 
         return View("EmailAddress", viewModel);
     }
@@ -272,7 +274,7 @@ public class HelpController(
                 return RedirectToAction("Index", "Error");
             }
 
-            var viewModel = HelpControllerPageMapper.MapEmailAddressPageContentToViewModel(content);
+            var viewModel = helpEmailAddressPageMapper.MapEmailAddressPageContentToViewModel(content);
 
             viewModel.HasEmailAddressError = string.IsNullOrEmpty(model.EmailAddress) || ModelState.Keys.Any(_ => ModelState["EmailAddress"]?.Errors.Count > 0);
             viewModel.EmailAddressErrorMessage = string.IsNullOrEmpty(model.EmailAddress)
@@ -304,7 +306,7 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = await HelpControllerPageMapper.MapConfirmationPageContentToViewModelAsync(content, contentParser);
+        var viewModel = await helpConfirmationPageMapper.MapConfirmationPageContentToViewModelAsync(content);
 
         return View("Confirmation", viewModel);
     }

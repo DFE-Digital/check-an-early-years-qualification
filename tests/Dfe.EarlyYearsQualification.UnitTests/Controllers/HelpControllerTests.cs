@@ -1,43 +1,45 @@
-using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers;
-using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 
 [TestClass]
 public class HelpControllerTests
 {
-    private readonly Mock<IConfiguration> _configurationMock = new();
-    private readonly Mock<IConfigurationSection> _configurationSectionMock = new();
     Mock<ILogger<HelpController>> mockLogger = new Mock<ILogger<HelpController>>();
     Mock<IContentService> mockContentService = new Mock<IContentService>();
-    Mock<IGovUkContentParser> mockContentParser = new Mock<IGovUkContentParser>();
     Mock<INotificationService> mockNotificationService = new Mock<INotificationService>();
     Mock<IDateQuestionModelValidator> mockDateQuestionValidator = new Mock<IDateQuestionModelValidator>();
-    Mock<IPlaceholderUpdater> mockPlaceHolderUpdater = new Mock<IPlaceholderUpdater>();
     Mock<IUserJourneyCookieService> mockUserJourneyService = new Mock<IUserJourneyCookieService>();
+    Mock<IHelpGetHelpPageMapper> mockGetPageMapper = new Mock<IHelpGetHelpPageMapper>();
+    Mock<IHelpQualificationDetailsPageMapper> mockQualificationDetailsPageMapper = new Mock<IHelpQualificationDetailsPageMapper>();
+    Mock<IHelpProvideDetailsPageMapper> mockProvideDetailsPageMapper = new Mock<IHelpProvideDetailsPageMapper>();
+    Mock<IHelpEmailAddressPageMapper> mockEmailAddressMapper = new Mock<IHelpEmailAddressPageMapper>();
+    Mock<IHelpConfirmationPageMapper> mockConfirmationMapper = new Mock<IHelpConfirmationPageMapper>();
 
     private HelpController GetSut()
     {
         return new HelpController(mockLogger.Object,
                                 mockContentService.Object,
-                                mockContentParser.Object,
                                 mockUserJourneyService.Object,
                                 mockNotificationService.Object,
                                 mockDateQuestionValidator.Object,
-                                mockPlaceHolderUpdater.Object
+                                mockGetPageMapper.Object,
+                                mockQualificationDetailsPageMapper.Object,
+                                mockProvideDetailsPageMapper.Object,
+                                mockEmailAddressMapper.Object,
+                                mockConfirmationMapper.Object
                                 );
     }
 
@@ -72,7 +74,13 @@ public class HelpControllerTests
         var content = new GetHelpPage { Heading = "Heading" };
 
         mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(content);
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockGetPageMapper.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(
+            new GetHelpPageViewModel()
+            {
+                Heading = content.Heading,
+                PostHeadingContent = "Test html body"
+            }
+        ));
 
         // Act
         var result = await GetSut().GetHelp();
@@ -88,8 +96,6 @@ public class HelpControllerTests
 
         model.Heading.Should().Be(content.Heading);
         model.PostHeadingContent.Should().Be("Test html body");
-
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
 
     [TestMethod]
@@ -173,7 +179,11 @@ public class HelpControllerTests
     public async Task Post_GetHelp_InvalidModelState_ReturnsGetHelpPageViewModel()
     {
         // Arrange
-        mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(new GetHelpPage());
+        var content = new GetHelpPage();
+
+        mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(content);
+
+        mockGetPageMapper.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(new GetHelpPageViewModel()));
 
         var controller = GetSut();
 
@@ -237,11 +247,11 @@ public class HelpControllerTests
         {
             ReasonForEnquiring = "Question about a qualification",
         };
-        
-        var startedAt = (1, 2000);
-        var awardedAt = (6, 2002);
 
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+
+        var startedAt = (1, 2000);
+        var awardedAt = (6, 2002);
 
         mockUserJourneyService.Setup(x => x.GetAwardingOrganisation()).Returns("Awarding organisation");
         mockUserJourneyService.Setup(x => x.GetSelectedQualificationName()).Returns("Qualification name");
@@ -249,8 +259,54 @@ public class HelpControllerTests
         mockUserJourneyService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(startedAt);
         mockUserJourneyService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns(awardedAt);
 
+        var controller = GetSut();
+
+        var viewModel = new QualificationDetailsPageViewModel()
+        {
+            Heading = content.Heading,
+            BackButton = new NavigationLinkModel()
+            {
+                DisplayText = content.BackButton.DisplayText,
+                Href = content.BackButton.Href
+            },
+            QualificationName = "Qualification name",
+            QuestionModel = new DatesQuestionModel()
+            {
+                StartedQuestion = new()
+                {
+                    SelectedMonth = startedAt.Item1,
+                    SelectedYear = startedAt.Item2
+                },
+                AwardedQuestion = new()
+                {
+                    SelectedMonth = awardedAt.Item1,
+                    SelectedYear = awardedAt.Item2
+                }
+            },
+            AwardingOrganisation = "Some organisation where the qualification is from",
+        };
+
+
+        var e = new DatesValidationResult()
+        {
+            StartedValidationResult = new DateValidationResult()
+            {
+                MonthValid = true,
+                YearValid = true
+            },
+            AwardedValidationResult = new DateValidationResult()
+            {
+                MonthValid = true,
+                YearValid = true
+            }
+        };
+        mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion, e.StartedValidationResult)).Returns(viewModel.QuestionModel.StartedQuestion);
+        mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion, e.AwardedValidationResult)).Returns(viewModel.QuestionModel.AwardedQuestion);
+
+        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(It.IsAny<QualificationDetailsPageViewModel>(), content, null, It.IsAny<ModelStateDictionary>())).Returns(viewModel);
+
         // Act
-        var result = await GetSut().QualificationDetails();
+        var result = await controller.QualificationDetails();
 
         // Assert
         result.Should().NotBeNull();
@@ -427,11 +483,49 @@ public class HelpControllerTests
     public async Task Post_QualificationDetails_MissingRequiredFieldQualificationName_ReturnsProvideDetailsPageViewModel()
     {
         // Arrange
-        SetUpQualificationDetailsContent();
+        var content = new HelpQualificationDetailsPage
+        {
+            Heading = "Heading",
+        };
+        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        var vm = SetUpSubmission(null, "awarding org", 1, 2001, 1 , 2002, new(), new());
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+            new HelpFormEnquiry()
+            {
+                ReasonForEnquiring = "Question about a qualification",
+            }
+        );
+
+        var vm = new QualificationDetailsPageViewModel()
+        {
+            QualificationName = null,
+            QuestionModel = new DatesQuestionModel()
+            {
+                StartedQuestion = new()
+                {
+                    SelectedMonth = 1,
+                    SelectedYear = 2001
+                },
+                AwardedQuestion = new()
+                {
+                    SelectedMonth = 1,
+                    SelectedYear = 2002
+                }
+            },
+            AwardingOrganisation = "awarding org",
+        };
+
+        var validationResult = new DatesValidationResult()
+        {
+            StartedValidationResult = new(),
+            AwardedValidationResult = new()
+        };
+
+        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
 
         var controller = GetSut();
+
+        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
 
         // force validation error
         controller.ModelState.AddModelError(nameof(QualificationDetailsPageViewModel.QualificationName), "Invalid");
@@ -453,11 +547,49 @@ public class HelpControllerTests
     public async Task Post_QualificationDetails_MissingRequiredFieldAwardingOrganisation_ReturnsProvideDetailsPageViewModel()
     {
         // Arrange
-        SetUpQualificationDetailsContent();
+        var content = new HelpQualificationDetailsPage
+        {
+            Heading = "Heading",
+        };
+        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        var vm = SetUpSubmission("qualification name", null, 1, 2001, 1, 2002, new(), new());
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+            new HelpFormEnquiry()
+            {
+                ReasonForEnquiring = "Question about a qualification",
+            }
+        );
+
+        var vm = new QualificationDetailsPageViewModel()
+        {
+            QualificationName = "qualification name",
+            QuestionModel = new DatesQuestionModel()
+            {
+                StartedQuestion = new()
+                {
+                    SelectedMonth = 1,
+                    SelectedYear = 2001
+                },
+                AwardedQuestion = new()
+                {
+                    SelectedMonth = 1,
+                    SelectedYear = 2002
+                }
+            },
+            AwardingOrganisation = null,
+        };
+
+        var validationResult = new DatesValidationResult()
+        {
+            StartedValidationResult = new(),
+            AwardedValidationResult = new()
+        };
+
+        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
 
         var controller = GetSut();
+
+        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
 
         // force validation error
         controller.ModelState.AddModelError(nameof(QualificationDetailsPageViewModel.AwardingOrganisation), "Invalid");
@@ -479,11 +611,49 @@ public class HelpControllerTests
     public async Task Post_QualificationDetails_MissingRequiredFieldAwardedMonth_ReturnsProvideDetailsPageViewModel()
     {
         // Arrange
-        SetUpQualificationDetailsContent();
+        var content = new HelpQualificationDetailsPage
+        {
+            Heading = "Heading",
+        };
+        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        var vm = SetUpSubmission("qualification name", "awarding org", 1, 2001, null, 2002, new(), new() { MonthValid = false });
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+            new HelpFormEnquiry()
+            {
+                ReasonForEnquiring = "Question about a qualification",
+            }
+        );
+
+        var vm = new QualificationDetailsPageViewModel()
+        {
+            QualificationName = "qualification name",
+            QuestionModel = new DatesQuestionModel()
+            {
+                StartedQuestion = new()
+                {
+                    SelectedMonth = 1,
+                    SelectedYear = 2001
+                },
+                AwardedQuestion = new()
+                {
+                    SelectedMonth = null,
+                    SelectedYear = 2002
+                },
+            },
+            AwardingOrganisation = "awarding org",
+        };
+
+        var validationResult = new DatesValidationResult()
+        {
+            StartedValidationResult = new(),
+            AwardedValidationResult = new() { MonthValid = false }
+        };
+
+        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
 
         var controller = GetSut();
+
+        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
 
         // force validation error
         controller.ModelState.AddModelError(nameof(QualificationDetailsPageViewModel.QuestionModel.AwardedQuestion.SelectedMonth), "Invalid");
@@ -502,14 +672,52 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task Post_QualificationDetails_MissingRequiredFieldAwardeYear_ReturnsProvideDetailsPageViewModel()
+    public async Task Post_QualificationDetails_MissingRequiredFieldAwardedYear_ReturnsProvideDetailsPageViewModel()
     {
         // Arrange
-        SetUpQualificationDetailsContent();
+        var content = new HelpQualificationDetailsPage
+        {
+            Heading = "Heading",
+        };
+        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        var vm = SetUpSubmission("qualification name", "awarding org", 1, 2001, 1, null, new(), new() { MonthValid = false });
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+            new HelpFormEnquiry()
+            {
+                ReasonForEnquiring = "Question about a qualification",
+            }
+        );
+
+        var vm = new QualificationDetailsPageViewModel()
+        {
+            QualificationName = "qualification name",
+            QuestionModel = new DatesQuestionModel()
+            {
+                StartedQuestion = new()
+                {
+                    SelectedMonth = 1,
+                    SelectedYear = 2001
+                },
+                AwardedQuestion = new()
+                {
+                    SelectedMonth = 1,
+                    SelectedYear = null
+                }
+            },
+            AwardingOrganisation = "awarding org",
+        };
+
+        var validationResult = new DatesValidationResult()
+        {
+            StartedValidationResult = new(),
+            AwardedValidationResult = new() { YearValid = false }
+        };
+
+        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
 
         var controller = GetSut();
+
+        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
 
         // force validation error
         controller.ModelState.AddModelError(nameof(QualificationDetailsPageViewModel.QuestionModel.AwardedQuestion.SelectedYear), "Invalid");
@@ -574,12 +782,42 @@ public class HelpControllerTests
 
         mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(content);
 
-        var helpForm = new HelpFormEnquiry()
+        var enquiry = new HelpFormEnquiry()
         {
             ReasonForEnquiring = selectedOption,
         };
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
+
+        var viewModel = new ProvideDetailsPageViewModel();
+
+        if (pageToRedirectTo == "GetHelp")
+        {
+            viewModel = new ProvideDetailsPageViewModel()
+            {
+                Heading = content.Heading,
+                BackButton = new()
+                {
+                    DisplayText = content.BackButtonToGetHelpPage.DisplayText,
+                    Href = content.BackButtonToGetHelpPage.Href
+                }
+            };
+        }
+
+        if (pageToRedirectTo == "QualificationDetails")
+        {
+            viewModel = new ProvideDetailsPageViewModel()
+            {
+                Heading = content.Heading,
+                BackButton = new()
+                {
+                    DisplayText = content.BackButtonToQualificationDetailsPage.DisplayText,
+                    Href = content.BackButtonToQualificationDetailsPage.Href
+                }
+            };
+        }
+
+        mockProvideDetailsPageMapper.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring)).Returns(viewModel);
 
         // Act
         var result = await GetSut().ProvideDetails();
@@ -646,14 +884,18 @@ public class HelpControllerTests
     public async Task Post_ProvideDetails_InvalidModelState_ReturnsProvideDetailsPageViewModel()
     {
         // Arrange
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
-            new HelpFormEnquiry()
-            {
-                ReasonForEnquiring = "Issue with the service",
-            }
-        );
+        var enquiry = new HelpFormEnquiry()
+        {
+            ReasonForEnquiring = "Issue with the service",
+        };
 
-        mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(new HelpProvideDetailsPage());
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
+
+        var content = new HelpProvideDetailsPage();
+
+        mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(content);
+
+        mockProvideDetailsPageMapper.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring)).Returns(new ProvideDetailsPageViewModel());
 
         var controller = GetSut();
 
@@ -707,6 +949,12 @@ public class HelpControllerTests
         };
 
         mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(content);
+        mockEmailAddressMapper.Setup(x => x.MapEmailAddressPageContentToViewModel(content)).Returns(
+            new EmailAddressPageViewModel()
+            {
+                Heading = content.Heading,
+            }
+        );
 
         var helpForm = new HelpFormEnquiry()
         {
@@ -778,14 +1026,17 @@ public class HelpControllerTests
     public async Task Post_EmailAddress_InvalidModelState_ReturnsEmailAddressPageViewModel()
     {
         // Arrange
-        mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(new HelpEmailAddressPage());
+        var content = new HelpEmailAddressPage();
+
+        mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(content);
+        mockEmailAddressMapper.Setup(x => x.MapEmailAddressPageContentToViewModel(content)).Returns(new EmailAddressPageViewModel());
 
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         var controller = GetSut();
 
         // force validation error
-        controller.ModelState.AddModelError(nameof(ProvideDetailsPageViewModel.ProvideAdditionalInformation), "Invalid");
+        controller.ModelState.AddModelError(nameof(EmailAddressPageViewModel.EmailAddress), "Invalid");
 
         // Act
         var result = await controller.EmailAddress(new());
@@ -840,6 +1091,12 @@ public class HelpControllerTests
         };
 
         mockContentService.Setup(x => x.GetHelpConfirmationPage()).ReturnsAsync(content);
+        mockConfirmationMapper.Setup(x => x.MapConfirmationPageContentToViewModelAsync(content)).Returns(Task.FromResult(
+            new ConfirmationPageViewModel()
+            {
+                SuccessMessage = content.SuccessMessage,
+            }
+        ));
 
         // Act
         var result = await GetSut().Confirmation();
@@ -872,6 +1129,9 @@ public class HelpControllerTests
                 ReasonForEnquiring = "Question about a qualification",
             }
         );
+
+        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(new(), content, null , new())).Returns(new QualificationDetailsPageViewModel());
+
     }
 
     private QualificationDetailsPageViewModel SetUpSubmission(string? qualificationName, string? awardingOrganisation,
@@ -895,7 +1155,6 @@ public class HelpControllerTests
             },
             AwardingOrganisation = awardingOrganisation,
         };
-
 
         mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(
             new DatesValidationResult()

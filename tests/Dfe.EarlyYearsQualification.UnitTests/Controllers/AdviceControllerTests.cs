@@ -1,10 +1,11 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -15,19 +16,20 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 public class AdviceControllerTests
 {
     private static readonly Mock<IUserJourneyCookieService> UserJourneyMockNoOp = new();
+    private const string BodyContent = "Test html body";
+    private const string Heading = "Heading";
 
     [TestMethod]
     public async Task QualificationOutsideTheUnitedKingdom_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk))
                           .ReturnsAsync((AdvicePage?)null).Verifiable();
@@ -50,19 +52,19 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
-        var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        var advicePage = new AdvicePage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.QualificationOutsideTheUnitedKingdom();
 
@@ -75,9 +77,9 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(advicePage.Heading);
-        model.BodyContent.Should().Be("Test html body");
+        model.BodyContent.Should().Be(BodyContent);
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -86,13 +88,12 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync((AdvicePage?)null).Verifiable();
@@ -116,19 +117,19 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
-        var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        var advicePage = new AdvicePage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.QualificationsStartedBetweenSept2014AndAug2019();
 
@@ -143,7 +144,7 @@ public class AdviceControllerTests
         model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -151,13 +152,12 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedInNorthernIreland))
                           .ReturnsAsync((AdvicePage?)null).Verifiable();
@@ -181,19 +181,19 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
-        var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        var advicePage = new AdvicePage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedInNorthernIreland))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.QualificationsAchievedInNorthernIreland();
 
@@ -208,7 +208,7 @@ public class AdviceControllerTests
         model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be("Test html body");
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -216,13 +216,12 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedInScotland))
                           .ReturnsAsync((AdvicePage?)null).Verifiable();
@@ -246,19 +245,19 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
-        var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        var advicePage = new AdvicePage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedInScotland))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.QualificationsAchievedInScotland();
 
@@ -271,9 +270,9 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(advicePage.Heading);
-        model.BodyContent.Should().Be("Test html body");
+        model.BodyContent.Should().Be(BodyContent);
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -281,13 +280,12 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedInWales))
                           .ReturnsAsync((AdvicePage?)null).Verifiable();
@@ -311,19 +309,19 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
-        var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        var advicePage = new AdvicePage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationsAchievedInWales))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.QualificationsAchievedInWales();
 
@@ -336,9 +334,9 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(advicePage.Heading);
-        model.BodyContent.Should().Be("Test html body");
+        model.BodyContent.Should().Be(BodyContent);
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -346,8 +344,7 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         UserJourneyMockNoOp.Setup(x => x.GetLevelOfQualification()).Returns(2);
         UserJourneyMockNoOp.Setup(x => x.GetWhenWasQualificationStarted()).Returns((2, 2015));
@@ -356,15 +353,15 @@ public class AdviceControllerTests
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
-                                              mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
-        var advicePage = new AdvicePage
-                         { Heading = "Default Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        var advicePage = new AdvicePage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationNotOnTheList))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.QualificationNotOnTheList();
 
@@ -377,10 +374,10 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(advicePage.Heading);
-        model.BodyContent.Should().Be("Test html body");
+        model.BodyContent.Should().Be(BodyContent);
 
         mockContentService.Verify(x => x.GetCannotFindQualificationPage(2, 2, 2015), Times.Once);
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -388,24 +385,27 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
+
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         UserJourneyMockNoOp.Setup(x => x.GetLevelOfQualification()).Returns(2);
         UserJourneyMockNoOp.Setup(x => x.GetWhenWasQualificationStarted()).Returns((2, 2015));
 
         var cannotFindQualificationPage = new CannotFindQualificationPage
                                           {
-                                              Heading = "Specific cannot find page",
-                                              Body = ContentfulContentHelper.Text("Test html body")
+                                              Heading = Heading,
+                                              Body = ContentfulContentHelper.Text(BodyContent)
                                           };
         mockContentService.Setup(x => x.GetCannotFindQualificationPage(2, 2, 2015))
                           .ReturnsAsync(cannotFindQualificationPage);
 
-        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
-
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockAdvicePageMapper.Setup(x => x.Map(cannotFindQualificationPage))
+                            .ReturnsAsync(new QualificationNotOnListPageModel
+                                          { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.QualificationNotOnTheList();
 
@@ -418,11 +418,11 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(cannotFindQualificationPage.Heading);
-        model.BodyContent.Should().Be("Test html body");
+        model.BodyContent.Should().Be(BodyContent);
 
         mockContentService.Verify(x => x.GetAdvicePage(AdvicePages.QualificationNotOnTheList), Times.Never);
         mockContentService.Verify(x => x.GetCannotFindQualificationPage(2, 2, 2015), Times.Once);
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<CannotFindQualificationPage>()), Times.Once);
     }
 
     [TestMethod]
@@ -430,11 +430,12 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
-        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationNotOnTheList))
                           .ReturnsAsync((AdvicePage?)null).Verifiable();
@@ -458,17 +459,19 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
-        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
-        var advicePage = new AdvicePage { Heading = "Heading", Body = ContentfulContentHelper.Text("Test html body") };
+        var advicePage = new AdvicePage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.QualificationNotOnTheList))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.QualificationNotOnTheList();
 
@@ -481,9 +484,9 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(advicePage.Heading);
-        model.BodyContent.Should().Be("Test html body");
+        model.BodyContent.Should().Be(BodyContent);
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -492,11 +495,12 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
-        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync((AdvicePage?)null).Verifiable();
@@ -521,23 +525,24 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
-        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
-
-        const string renderedHtmlBody = "Test html body (level 7 post 2014-2019)";
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         var advicePage = new AdvicePage
                          {
-                             Heading = "Heading (level 7 post 2014-2019)",
-                             Body = ContentfulContentHelper.Text("Anything")
+                             Heading = Heading,
+                             Body = ContentfulContentHelper.Text(BodyContent)
                          };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(renderedHtmlBody);
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel
+                                          { Heading = advicePage.Heading, BodyContent = BodyContent });
 
         var result = await controller.Level7QualificationStartedBetweenSept2014AndAug2019();
 
@@ -550,9 +555,9 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(advicePage.Heading);
-        model.BodyContent.Should().Be(renderedHtmlBody);
+        model.BodyContent.Should().Be(BodyContent);
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -560,11 +565,12 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
-        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationAfterAug2019))
                           .ReturnsAsync((AdvicePage?)null).Verifiable();
@@ -588,20 +594,19 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
-        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
-        const string renderedHtmlBody = "Test html body (level 7 post 2019)";
-
-        var advicePage = new AdvicePage
-                         { Heading = "Heading (level 7 post 2019)", Body = ContentfulContentHelper.Text("Anything") };
+        var advicePage = new AdvicePage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
         mockContentService.Setup(x => x.GetAdvicePage(AdvicePages.Level7QualificationAfterAug2019))
                           .ReturnsAsync(advicePage);
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(renderedHtmlBody);
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new AdvicePageModel { Heading = Heading, BodyContent = BodyContent });
 
         var result = await controller.Level7QualificationAfterAug2019();
 
@@ -614,9 +619,9 @@ public class AdviceControllerTests
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(advicePage.Heading);
-        model.BodyContent.Should().Be(renderedHtmlBody);
+        model.BodyContent.Should().Be(BodyContent);
 
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
     [TestMethod]
@@ -624,11 +629,12 @@ public class AdviceControllerTests
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
-        var mockNotificationService = new Mock<INotificationService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
-        var controller = new AdviceController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                              UserJourneyMockNoOp.Object);
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
 
         controller.OnActionExecuting(null!);
 

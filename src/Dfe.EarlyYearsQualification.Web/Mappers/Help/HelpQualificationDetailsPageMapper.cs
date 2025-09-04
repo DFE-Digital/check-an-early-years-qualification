@@ -1,59 +1,21 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Dfe.EarlyYearsQualification.Web.Mappers;
+namespace Dfe.EarlyYearsQualification.Web.Mappers.Help;
 
-public class HelpControllerPageMapper
+public class HelpQualificationDetailsPageMapper(IPlaceholderUpdater placeholderUpdater) : IHelpQualificationDetailsPageMapper
 {
-    public static async Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage helpPageContent, IGovUkContentParser contentParser)
+    public QualificationDetailsPageViewModel MapQualificationDetailsContentToViewModel(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content, DatesValidationResult? validationResult, ModelStateDictionary modelState)
     {
-        var viewModel = new GetHelpPageViewModel()
-        {
-            BackButton = new()
-            {
-                DisplayText = helpPageContent.BackButton.DisplayText,
-                Href = helpPageContent.BackButton.Href
-            },
-            Heading = helpPageContent.Heading,
-            PostHeadingContent = await contentParser.ToHtml(helpPageContent.PostHeadingContent),
-            CtaButtonText = helpPageContent.CtaButtonText,
-            EnquiryReasons = MapEnquiryReasons(helpPageContent.EnquiryReasons),
-            NoEnquiryOptionSelectedErrorMessage = helpPageContent.NoEnquiryOptionSelectedErrorMessage,
-            ErrorBannerHeading = helpPageContent.ErrorBannerHeading,
-            ReasonForEnquiryHeading = helpPageContent.ReasonForEnquiryHeading,
-        };
-
-        return viewModel;
-    }
-
-    private static List<EnquiryOptionModel> MapEnquiryReasons(List<EnquiryOption> helpPageEnquiryReasons)
-    {
-        var results = new List<EnquiryOptionModel>();
-        if (helpPageEnquiryReasons.Count == 0)
-        {
-            return results;
-        }
-
-        foreach (var enquiryReason in helpPageEnquiryReasons)
-        {
-            results.Add(new EnquiryOptionModel { Label = enquiryReason.Label, Value = enquiryReason.Value });
-        }
-
-        return results;
-    }
-
-    public static QualificationDetailsPageViewModel MapQualificationDetailsContentToViewModel(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content, DatesValidationResult? validationResult, ModelStateDictionary modelState, IPlaceholderUpdater placeholderUpdater)
-    {
-        var startedModel = MapDateModel(viewModel.QuestionModel.StartedQuestion!, content.StartDateQuestion!, validationResult?.StartedValidationResult, placeholderUpdater);
-        var awardedModel = MapDateModel(viewModel.QuestionModel.AwardedQuestion!, content.AwardedDateQuestion!, validationResult?.AwardedValidationResult, placeholderUpdater);
+        var startedModel = MapDateModel(viewModel.QuestionModel.StartedQuestion!, content.StartDateQuestion!, validationResult?.StartedValidationResult);
+        var awardedModel = MapDateModel(viewModel.QuestionModel.AwardedQuestion!, content.AwardedDateQuestion!, validationResult?.AwardedValidationResult);
 
         var errorLinks = new List<ErrorSummaryLink>();
 
@@ -112,7 +74,7 @@ public class HelpControllerPageMapper
         return viewModel;
     }
 
-    public static DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question, DateValidationResult? validationResult, IPlaceholderUpdater placeholderUpdater)
+    public DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question, DateValidationResult? validationResult)
     {
         var bannerErrors = validationResult is { BannerErrorMessages.Count: > 0 } ? validationResult.BannerErrorMessages : null;
 
@@ -165,63 +127,5 @@ public class HelpControllerPageMapper
         }
 
         return (dateQuestion!, errorLinks);
-    }
-
-    public static ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage helpPageContent, string reasonForEnquiring)
-    {
-        var backButton = reasonForEnquiring == "Question about a qualification"
-                             ? helpPageContent.BackButtonToQualificationDetailsPage
-                             : helpPageContent.BackButtonToGetHelpPage;
-
-        var viewModel = new ProvideDetailsPageViewModel()
-        {
-            BackButton = new()
-            {
-                DisplayText = backButton.DisplayText,
-                Href = backButton.Href
-            },
-            Heading = helpPageContent.Heading,
-            PostHeadingContent = helpPageContent.PostHeadingContent,
-            CtaButtonText = helpPageContent.CtaButtonText,
-            AdditionalInformationWarningText = helpPageContent.AdditionalInformationWarningText,
-            AdditionalInformationErrorMessage = helpPageContent.AdditionalInformationErrorMessage,
-            ErrorBannerHeading = helpPageContent.ErrorBannerHeading,
-        };
-
-        return viewModel;
-    }
-
-    public static EmailAddressPageViewModel MapEmailAddressPageContentToViewModel(HelpEmailAddressPage content)
-    {
-        var viewModel = new EmailAddressPageViewModel()
-        {
-            BackButton = new()
-            {
-                DisplayText = content.BackButton.DisplayText,
-                Href = content.BackButton.Href
-            },
-            Heading = content.Heading,
-            PostHeadingContent = content.PostHeadingContent,
-            CtaButtonText = content.CtaButtonText,
-            ErrorBannerHeading = content.ErrorBannerHeading,
-        };
-
-        return viewModel;
-    }
-
-    public static async Task<ConfirmationPageViewModel> MapConfirmationPageContentToViewModelAsync(HelpConfirmationPage helpConfirmationPage, IGovUkContentParser contentParser)
-    {
-        var bodyHtml = await contentParser.ToHtml(helpConfirmationPage.Body);
-        var feedbackBodyHtml = await contentParser.ToHtml(helpConfirmationPage.FeedbackComponent!.Body);
-
-        return new ConfirmationPageViewModel
-        {
-            SuccessMessage = helpConfirmationPage.SuccessMessage,
-            BodyHeading = helpConfirmationPage.BodyHeading,
-            Body = bodyHtml,
-            FeedbackComponent = FeedbackComponentModelMapper.Map(helpConfirmationPage.FeedbackComponent!.Header, feedbackBodyHtml),
-            ReturnToTheHomepageLink = NavigationLinkMapper.Map(helpConfirmationPage.ReturnToHomepageLink),
-            SuccessMessageFollowingText = helpConfirmationPage.SuccessMessageFollowingText
-        };
     }
 }

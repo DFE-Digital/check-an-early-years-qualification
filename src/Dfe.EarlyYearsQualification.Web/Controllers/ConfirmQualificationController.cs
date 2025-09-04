@@ -1,9 +1,7 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +15,7 @@ public class ConfirmQualificationController(
     IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IUserJourneyCookieService userJourneyCookieService,
-    IGovUkContentParser contentParser)
+    IConfirmQualificationPageMapper confirmQualificationPageMapper)
     : ServiceController
 {
     [HttpGet]
@@ -50,7 +48,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await Map(content, qualification);
+        var model = await confirmQualificationPageMapper.Map(content, qualification);
 
         userJourneyCookieService.SetSelectedQualificationName(qualification.QualificationName);
         userJourneyCookieService.SetAwardingOrganisation(qualification.AwardingOrganisationTitle);
@@ -122,19 +120,9 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        model = await Map(content, qualification);
+        model = await confirmQualificationPageMapper.Map(content, qualification);
         model.HasErrors = true;
 
         return View("Index", model);
-    }
-
-    private async Task<ConfirmQualificationPageModel> Map(ConfirmQualificationPage content, Qualification qualification)
-    {
-        var postHeadingContent = await contentParser.ToHtml(content.PostHeadingContent);
-        var variousAwardingOrganisationsExplanation =
-            await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation);
-
-        return ConfirmQualificationPageMapper.Map(content, qualification, postHeadingContent,
-                                                  variousAwardingOrganisationsExplanation);
     }
 }

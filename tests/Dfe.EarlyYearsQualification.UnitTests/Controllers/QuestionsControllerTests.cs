@@ -1,13 +1,12 @@
-using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -23,15 +22,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result = controller.StartNew();
 
@@ -50,18 +53,22 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                           .ReturnsAsync((RadioQuestionPage?)null).Verifiable();
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhereWasTheQualificationAwarded();
 
@@ -83,11 +90,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new RadioQuestionPage
                            {
@@ -97,10 +112,8 @@ public class QuestionsControllerTests
                            };
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                           .ReturnsAsync(questionPage);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+        
+        mockRadioQuestionMapper.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new  RadioQuestionModel());
 
         var result = await controller.WhereWasTheQualificationAwarded();
 
@@ -109,17 +122,8 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as RadioQuestionModel;
+        var model = resultType.Model as RadioQuestionModel;
         model.Should().NotBeNull();
-
-        model!.Question.Should().Be(questionPage.Question);
-        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.OptionsItems.Count.Should().Be(1);
-        model.OptionsItems[0].Should().BeAssignableTo<OptionModel>();
-        var modelOption = model.OptionsItems[0] as OptionModel;
-        modelOption!.Label.Should().Be((questionPage.Options[0] as Option)!.Label);
-        modelOption.Value.Should().Be((questionPage.Options[0] as Option)!.Value);
-        model.HasErrors.Should().BeFalse();
     }
 
     [TestMethod]
@@ -127,20 +131,28 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded))
                           .ReturnsAsync(new RadioQuestionPage());
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
-
         controller.ModelState.AddModelError("option", "test error");
+        
+        mockRadioQuestionMapper.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new  RadioQuestionModel());
+
+        
         var result = await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel());
 
         result.Should().NotBeNull();
@@ -148,12 +160,12 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("Radio");
+        resultType.ViewName.Should().Be("Radio");
 
         var model = resultType.Model as RadioQuestionModel;
 
         model.Should().NotBeNull();
-        model!.HasErrors.Should().BeTrue();
+        model.HasErrors.Should().BeTrue();
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(It.IsAny<string>()), Times.Never);
     }
@@ -163,15 +175,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -185,7 +201,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("QualificationOutsideTheUnitedKingdom");
+        resultType.ActionName.Should().Be("QualificationOutsideTheUnitedKingdom");
         resultType.ControllerName.Should().Be("Advice");
 
         mockUserJourneyCookieService
@@ -198,15 +214,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -217,7 +237,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("QualificationsAchievedInScotland");
+        resultType.ActionName.Should().Be("QualificationsAchievedInScotland");
         resultType.ControllerName.Should().Be("Advice");
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.Scotland),
@@ -229,15 +249,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -248,7 +272,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("QualificationsAchievedInWales");
+        resultType.ActionName.Should().Be("QualificationsAchievedInWales");
         resultType.ControllerName.Should().Be("Advice");
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.Wales),
@@ -260,15 +284,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -279,7 +307,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("QualificationsAchievedInNorthernIreland");
+        resultType.ActionName.Should().Be("QualificationsAchievedInNorthernIreland");
         resultType.ControllerName.Should().Be("Advice");
 
         mockUserJourneyCookieService
@@ -292,15 +320,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result =
             await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel
@@ -311,7 +343,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("WhenWasTheQualificationStarted");
+        resultType.ActionName.Should().Be("WhenWasTheQualificationStarted");
 
         mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(QualificationAwardLocation.England),
                                             Times.Once);
@@ -322,11 +354,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new DatesQuestionPage
                            {
@@ -352,10 +392,6 @@ public class QuestionsControllerTests
 
         mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns<string>(x => x);
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
-
         var result = await controller.WhenWasTheQualificationStarted();
 
         result.Should().NotBeNull();
@@ -363,10 +399,10 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as DatesQuestionModel;
+        var model = resultType.Model as DatesQuestionModel;
         model.Should().NotBeNull();
 
-        model!.Question.Should().Be(questionPage.Question);
+        model.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.ErrorBannerHeading.Should().Be(string.Empty);
         model.StartedQuestion.Should().NotBeNull();
@@ -379,18 +415,22 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
                           .ReturnsAsync((DatesQuestionPage?)null).Verifiable();
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhenWasTheQualificationStarted();
 
@@ -409,11 +449,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new DatesQuestionPage
                            {
@@ -454,10 +502,6 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
                           .ReturnsAsync(questionPage);
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
-
         mockQuestionModelValidator.Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
                                   .Returns(validationResult);
 
@@ -470,12 +514,12 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("Dates");
+        resultType.ViewName.Should().Be("Dates");
 
         var model = resultType.Model as DatesQuestionModel;
         model.Should().NotBeNull();
 
-        model!.Question.Should().Be(questionPage.Question);
+        model.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.Errors!.ErrorBannerHeading.Should().Be(questionPage.ErrorBannerHeading);
         model.StartedQuestion!.Prefix.Should().Be("started");
@@ -505,11 +549,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockQuestionModelValidator
             .Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
@@ -518,10 +570,6 @@ public class QuestionsControllerTests
                          StartedValidationResult = new DateValidationResult { MonthValid = true, YearValid = true },
                          AwardedValidationResult = new DateValidationResult { MonthValid = true, YearValid = true }
                      });
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         const int startedSelectedMonth = 12;
         const int startedSelectedYear = 2024;
@@ -546,7 +594,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("WhatLevelIsTheQualification");
+        resultType.ActionName.Should().Be("WhatLevelIsTheQualification");
 
         mockUserJourneyCookieService
             .Verify(x => x.SetWhenWasQualificationStarted($"{startedSelectedMonth}/{startedSelectedYear}"),
@@ -561,18 +609,22 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
                           .ReturnsAsync((RadioQuestionPage?)null).Verifiable();
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification();
 
@@ -594,11 +646,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new RadioQuestionPage
                            {
@@ -614,12 +674,8 @@ public class QuestionsControllerTests
                            };
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
                           .ReturnsAsync(questionPage);
-
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+        
+        mockRadioQuestionMapper.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new  RadioQuestionModel());
 
         var result = await controller.WhatLevelIsTheQualification();
 
@@ -628,24 +684,8 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as RadioQuestionModel;
+        var model = resultType.Model as RadioQuestionModel;
         model.Should().NotBeNull();
-
-        model!.Question.Should().Be(questionPage.Question);
-        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.OptionsItems.Count.Should().Be(2);
-        model.OptionsItems[0].Should().BeAssignableTo<OptionModel>();
-        var modelOption = model.OptionsItems[0] as OptionModel;
-        modelOption!.Label.Should().Be((questionPage.Options[0] as Option)!.Label);
-        modelOption.Value.Should().Be((questionPage.Options[0] as Option)!.Value);
-        model.OptionsItems[1].Should().BeAssignableTo<DividerModel>();
-        var dividerOption = model.OptionsItems[1] as DividerModel;
-        dividerOption!.Text.Should().Be((questionPage.Options[1] as Divider)!.Text);
-        model.HasErrors.Should().BeFalse();
-        model.AdditionalInformationHeader.Should().Be(questionPage.AdditionalInformationHeader);
-        model.AdditionalInformationBody.Should().Be("Test html body");
-
-        mockContentParser.Verify(x => x.ToHtml(It.IsAny<Document>()), Times.Once);
     }
 
     [TestMethod]
@@ -653,22 +693,26 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns((int?)null);
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
                           .ReturnsAsync(new RadioQuestionPage());
-
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync("Test html body");
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+        
+        mockRadioQuestionMapper.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new  RadioQuestionModel());
 
         var result = await controller.WhatLevelIsTheQualification();
 
@@ -677,9 +721,9 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as RadioQuestionModel;
+        var model = resultType.Model as RadioQuestionModel;
         model.Should().NotBeNull();
-        model!.Option.Should().BeEmpty();
+        model.Option.Should().BeEmpty();
     }
 
     [TestMethod]
@@ -687,20 +731,27 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification))
                           .ReturnsAsync(new RadioQuestionPage());
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
-
         controller.ModelState.AddModelError("option", "test error");
+        
+        mockRadioQuestionMapper.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new  RadioQuestionModel());
+        
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel());
 
         result.Should().NotBeNull();
@@ -708,12 +759,12 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("Radio");
+        resultType.ViewName.Should().Be("Radio");
 
         var model = resultType.Model as RadioQuestionModel;
 
         model.Should().NotBeNull();
-        model!.HasErrors.Should().BeTrue();
+        model.HasErrors.Should().BeTrue();
 
         mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification(It.IsAny<string>()), Times.Never);
     }
@@ -723,15 +774,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -743,7 +798,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("WhatIsTheAwardingOrganisation");
+        resultType.ActionName.Should().Be("WhatIsTheAwardingOrganisation");
 
         mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification("3"), Times.Once);
     }
@@ -753,18 +808,22 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019())
                                     .Returns(true);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -776,7 +835,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
+        resultType.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
 
@@ -785,18 +844,22 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019())
                                     .Returns(true);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -808,7 +871,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Level7QualificationStartedBetweenSept2014AndAug2019");
+        resultType.ActionName.Should().Be("Level7QualificationStartedBetweenSept2014AndAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
 
@@ -817,18 +880,22 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2019())
                                     .Returns(true);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel
                                                                   {
@@ -840,7 +907,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Level7QualificationAfterAug2019");
+        resultType.ActionName.Should().Be("Level7QualificationAfterAug2019");
         resultType.ControllerName.Should().Be("Advice");
     }
 
@@ -849,18 +916,22 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync((DropdownQuestionPage?)null).Verifiable();
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -882,11 +953,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -909,10 +988,9 @@ public class QuestionsControllerTests
                               It.IsAny<string?>(),
                               It.IsAny<string?>()))
             .ReturnsAsync([]);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+        
+        mockDropdownQuestionMapper.Setup(x => x.Map(It.IsAny<DropdownQuestionModel>(), It.IsAny<DropdownQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IOrderedEnumerable<string>>(), It.IsAny<string>(), It.IsAny<bool>()))
+                                  .ReturnsAsync(new DropdownQuestionModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -921,33 +999,28 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as DropdownQuestionModel;
+        var model = resultType.Model as DropdownQuestionModel;
         model.Should().NotBeNull();
-
-        model!.Question.Should().Be(questionPage.Question);
-        model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
-        model.ErrorMessage.Should().Be(questionPage.ErrorMessage);
-        model.DropdownHeading.Should().Be(questionPage.DropdownHeading);
-        model.HasErrors.Should().BeFalse();
-        model.Values.Count.Should().Be(1);
-        model.Values[0].Text.Should().Be(questionPage.DefaultText);
-        model.Values[0].Value.Should().BeEmpty();
-        model.NotInListText.Should().Be(questionPage.NotInListText);
-        model.DropdownId.Should().Be("awarding-organisation-select");
-        model.CheckboxId.Should().Be("awarding-organisation-not-in-list");
     }
 
     [TestMethod]
-    public async Task
-        WhatIsTheAwardingOrganisation_ContentServiceReturnsQualifications_OrdersAwardingOrganisationsInModel()
+    public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsQualifications_OrdersAwardingOrganisationsInModel()
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -975,10 +1048,9 @@ public class QuestionsControllerTests
             .Setup(x => x.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
                               It.IsAny<string?>(), It.IsAny<string?>()))
             .ReturnsAsync(listOfQualifications);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+        
+        mockDropdownQuestionMapper.Setup(x => x.Map(It.IsAny<DropdownQuestionModel>(), It.IsAny<DropdownQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IOrderedEnumerable<string>>(), It.IsAny<string>(), It.IsAny<bool>()))
+                                  .ReturnsAsync(new DropdownQuestionModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -987,20 +1059,9 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as DropdownQuestionModel;
+        var model = resultType.Model as DropdownQuestionModel;
         model.Should().NotBeNull();
-        model!.Values.Should().NotBeNull();
-
-        // Count here includes default value added in mapping
-        model.Values.Count.Should().Be(6);
-        model.Values[0].Text.Should().Be(questionPage.DefaultText);
-        model.Values[0].Value.Should().BeEmpty();
-
-        model.Values[1].Text.Should().Be("A awarding organisation");
-        model.Values[2].Text.Should().Be("B awarding organisation");
-        model.Values[3].Text.Should().Be("C awarding organisation");
-        model.Values[4].Text.Should().Be("D awarding organisation");
-        model.Values[5].Text.Should().Be("E awarding organisation");
+        model.Values.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -1009,11 +1070,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -1039,10 +1108,9 @@ public class QuestionsControllerTests
             .Setup(x => x.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(),
                               It.IsAny<string?>(), It.IsAny<string?>()))
             .ReturnsAsync(listOfQualifications);
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+        
+        mockDropdownQuestionMapper.Setup(x => x.Map(It.IsAny<DropdownQuestionModel>(), It.IsAny<DropdownQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IOrderedEnumerable<string>>(), It.IsAny<string>(), It.IsAny<bool>()))
+                                  .ReturnsAsync(new DropdownQuestionModel());
 
         var result = await controller.WhatIsTheAwardingOrganisation();
 
@@ -1051,14 +1119,9 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as DropdownQuestionModel;
+        var model = resultType.Model as DropdownQuestionModel;
         model.Should().NotBeNull();
-        model!.Values.Should().NotBeNull();
-
-        // Count here includes default value added in mapping
-        model.Values.Count.Should().Be(3);
-        model.Values[1].Text.Should().Be("D awarding organisation");
-        model.Values[2].Text.Should().Be("E awarding organisation");
+        model.Values.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -1066,15 +1129,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -1095,6 +1162,10 @@ public class QuestionsControllerTests
             .ReturnsAsync([]);
 
         controller.ModelState.AddModelError("option", "test error");
+
+        mockDropdownQuestionMapper.Setup(x => x.Map(It.IsAny<DropdownQuestionModel>(), It.IsAny<DropdownQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IOrderedEnumerable<string>>(), It.IsAny<string>(), It.IsAny<bool>()))
+                                  .ReturnsAsync(new DropdownQuestionModel());
+        
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel());
 
         result.Should().NotBeNull();
@@ -1102,12 +1173,12 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("Dropdown");
+        resultType.ViewName.Should().Be("Dropdown");
 
         var model = resultType.Model as DropdownQuestionModel;
         model.Should().NotBeNull();
 
-        model!.HasErrors.Should().BeTrue();
+        model.HasErrors.Should().BeTrue();
 
         mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation(It.IsAny<string>()), Times.Never);
     }
@@ -1117,15 +1188,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
@@ -1138,7 +1213,7 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("Dropdown");
+        resultType.ViewName.Should().Be("Dropdown");
 
         mockUserJourneyCookieService.Verify(x => x.SetAwardingOrganisation(It.IsAny<string>()), Times.Never);
     }
@@ -1149,15 +1224,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -1184,7 +1263,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckYourAnswers");
 
         mockUserJourneyCookieService
@@ -1197,15 +1276,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var questionPage = new DropdownQuestionPage
                            {
@@ -1232,7 +1315,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckYourAnswers");
 
         mockUserJourneyCookieService
@@ -1244,18 +1327,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
-        mockContentService.Setup(x => x.GetPreCheckPage())
-                          .ReturnsAsync((PreCheckPage?)null).Verifiable();
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result = await controller.PreCheck();
 
@@ -1277,18 +1361,24 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
+        
         mockContentService.Setup(x => x.GetPreCheckPage())
                           .ReturnsAsync(new PreCheckPage()).Verifiable();
-
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+        
+        mockPreCheckPageMapper.Setup(x => x.Map(It.IsAny<PreCheckPage>())).ReturnsAsync(new  PreCheckPageModel());
 
         var result = await controller.PreCheck();
 
@@ -1299,7 +1389,7 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("PreCheck");
+        resultType.ViewName.Should().Be("PreCheck");
         resultType.Model.Should().NotBeNull();
         resultType.Model.Should().BeAssignableTo<PreCheckPageModel>();
     }
@@ -1309,19 +1399,26 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         mockContentService.Setup(x => x.GetPreCheckPage())
                           .ReturnsAsync(new PreCheckPage()).Verifiable();
 
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
-                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
         controller.ModelState.AddModelError("option", "test error");
+
+        mockPreCheckPageMapper.Setup(x => x.Map(It.IsAny<PreCheckPage>())).ReturnsAsync(new PreCheckPageModel());
 
         var result = await controller.PreCheck(new PreCheckPageModel());
 
@@ -1332,7 +1429,7 @@ public class QuestionsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ViewName.Should().Be("PreCheck");
+        resultType.ViewName.Should().Be("PreCheck");
         resultType.Model.Should().NotBeNull();
         resultType.Model.Should().BeAssignableTo<PreCheckPageModel>();
     }
@@ -1342,15 +1439,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
-        
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result = await controller.PreCheck(new PreCheckPageModel { Option = Options.Yes });
 
@@ -1359,7 +1460,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be(nameof(QuestionsController.StartNew));
+        resultType.ActionName.Should().Be(nameof(QuestionsController.StartNew));
     }
     
     [TestMethod]
@@ -1367,15 +1468,19 @@ public class QuestionsControllerTests
     {
         var mockLogger = new Mock<ILogger<QuestionsController>>();
         var mockContentService = new Mock<IContentService>();
-        var mockContentParser = new Mock<IGovUkContentParser>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         var mockRepository = new Mock<IQualificationsRepository>();
         var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
-        
-        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object, mockContentParser.Object,
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
                                                  mockUserJourneyCookieService.Object, mockRepository.Object,
-                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object);
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
 
         var result = await controller.PreCheck(new PreCheckPageModel { Option = Options.No });
 
@@ -1384,7 +1489,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be(nameof(HomeController.Index));
+        resultType.ActionName.Should().Be(nameof(HomeController.Index));
         resultType.ControllerName.Should().Be("Home");
     }
 }

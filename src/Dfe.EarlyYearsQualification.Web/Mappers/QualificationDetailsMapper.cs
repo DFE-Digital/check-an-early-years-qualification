@@ -1,22 +1,28 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public static class QualificationDetailsMapper
+public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQualificationDetailsMapper
 {
-    public static QualificationDetailsModel Map(
+    public async Task<QualificationDetailsModel> Map(
         Qualification qualification,
         DetailsPage content,
         NavigationLink? backNavLink,
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
-        string dateAwarded,
-        string requirementsTextHtml,
-        string? feedbackBodyHtml,
-        string? improveServiceBodyHtml,
-        string printInformationBody)
+        string dateAwarded)
     {
+        var requirementsTextHtml = await contentParser.ToHtml(content.RequirementsText);
+        var feedbackBodyHtml = content.FeedbackBanner is not null
+                                   ? await contentParser.ToHtml(content.FeedbackBanner.Body)
+                                   : null;
+        var improveServiceBodyHtml = content.UpDownFeedback is not null
+                                         ? await contentParser.ToHtml(content.UpDownFeedback.FeedbackComponent!.Body)
+                                         : null;
+        var printInformationBody = await contentParser.ToHtml(content.PrintInformationBody);
         return new QualificationDetailsModel
                {
                    QualificationId = qualification.QualificationId,
