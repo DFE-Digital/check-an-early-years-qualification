@@ -64,7 +64,7 @@ public class CachingHandlerTests
 
         // Assert...
         Moq.Mock.Get(distributedCache)
-           .Verify(c => c.Get(key), Times.Once);
+           .Verify(c => c.GetAsync(key, It.IsAny<CancellationToken>()), Times.Once);
 
         response.Content.ReadAsByteArrayAsync().Result.Should().ContainInOrder(value);
     }
@@ -103,7 +103,7 @@ public class CachingHandlerTests
         // Assert...
         var cache = Moq.Mock.Get(distributedCache);
 
-        cache.Verify(c => c.Get(key), Times.Once);
+        cache.Verify(c => c.GetAsync(key, It.IsAny<CancellationToken>()), Times.Once);
 
         cache.Verify(c => c.SetAsync(key,
                                      It.IsAny<byte[]>(),
