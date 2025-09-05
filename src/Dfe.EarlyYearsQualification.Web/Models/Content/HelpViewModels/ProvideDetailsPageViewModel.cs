@@ -18,7 +18,6 @@ public class ProvideDetailsPageViewModel
 
     // text area input
     [Required]
-    [IncludeInTelemetry]
     public string ProvideAdditionalInformation { get; set; } = string.Empty;
 
     // validation handling

@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
@@ -45,8 +46,8 @@ public class HelpController(
         if (enquiry is not null)
         {
             viewModel.SelectedOption = 
-                enquiry.ReasonForEnquiring == "Question about a qualification" ? "QuestionAboutAQualification" : 
-                enquiry.ReasonForEnquiring == "Issue with the service" ? "IssueWithTheService" : "";
+                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification ? nameof(HelpFormEnquiryReasons.QuestionAboutAQualification) : 
+                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.IssueWithTheService ? nameof(HelpFormEnquiryReasons.IssueWithTheService) : "";
         }
 
         return View("GetHelp", viewModel);
@@ -78,12 +79,13 @@ public class HelpController(
         // valid submit
         switch (model.SelectedOption)
         {
-            case "QuestionAboutAQualification":
-                enquiry.ReasonForEnquiring = "Question about a qualification";
+
+            case nameof(HelpFormEnquiryReasons.QuestionAboutAQualification):
+                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification;
                 userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(QualificationDetails));
-            case "IssueWithTheService":
-                enquiry.ReasonForEnquiring = "Issue with the service";
+            case nameof(HelpFormEnquiryReasons.IssueWithTheService):
+                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService;
                 userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(ProvideDetails));
             default:

@@ -1187,7 +1187,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpProvideDetailsPage();
+        var result = await service.GetHelpEmailAddressPage();
 
         result.Should().BeNull();
     }

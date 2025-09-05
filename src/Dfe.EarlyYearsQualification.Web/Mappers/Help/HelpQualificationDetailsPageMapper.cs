@@ -34,10 +34,10 @@ public class HelpQualificationDetailsPageMapper(IPlaceholderUpdater placeholderU
         viewModel.AwardingOrganisationErrorMessage = content.AwardingOrganisationErrorMessage;
         viewModel.ErrorBannerHeading = content.ErrorBannerHeading;
 
-        var (startedQuestionMapped, startedQuestionErrors) = MapDate(viewModel.QuestionModel.StartedQuestion, "started", "QuestionModel." + nameof(viewModel.QuestionModel.StartedQuestion));
+        var (startedQuestionMapped, startedQuestionErrors) = MapDate(viewModel.QuestionModel.StartedQuestion!, "started", "QuestionModel." + nameof(viewModel.QuestionModel.StartedQuestion));
         viewModel.QuestionModel.StartedQuestion = startedQuestionMapped;
 
-        var (awardedQuestionMapped, awardedQuestionErrors) = MapDate(viewModel.QuestionModel.AwardedQuestion, "awarded", "QuestionModel." + nameof(viewModel.QuestionModel.AwardedQuestion));
+        var (awardedQuestionMapped, awardedQuestionErrors) = MapDate(viewModel.QuestionModel.AwardedQuestion!, "awarded", "QuestionModel." + nameof(viewModel.QuestionModel.AwardedQuestion));
         viewModel.QuestionModel.AwardedQuestion = awardedQuestionMapped;
 
 

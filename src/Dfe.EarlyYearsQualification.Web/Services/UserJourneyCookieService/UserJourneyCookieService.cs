@@ -463,7 +463,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
-    public HelpFormEnquiry GetHelpFormEnquiry()
+    public HelpFormEnquiry? GetHelpFormEnquiry()
     {
         lock (_lockObject)
         {

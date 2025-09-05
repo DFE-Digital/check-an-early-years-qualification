@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
@@ -38,16 +39,16 @@ public class HelpGetHelpPageMapperTests
             EnquiryReasons =
             [
                 new EnquiryOption
-                { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
+                { Label = "I have a question about a qualification", Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification)},
                 new EnquiryOption
-                { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" }
+                { Label = "I am experiencing an issue with the service", Value = nameof(HelpFormEnquiryReasons.IssueWithTheService) }
             ]
         };
 
         var enquiryReasons = new List<Option>
                              {
-                                 new() { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
-                                 new() { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" },
+                                 new() { Label = "I have a question about a qualification", Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification) },
+                                 new() { Label = "I am experiencing an issue with the service", Value = nameof(HelpFormEnquiryReasons.IssueWithTheService) },
                              };
 
         var result = await new HelpGetHelpPageMapper(mockContentParser.Object).MapGetHelpPageContentToViewModelAsync(content);

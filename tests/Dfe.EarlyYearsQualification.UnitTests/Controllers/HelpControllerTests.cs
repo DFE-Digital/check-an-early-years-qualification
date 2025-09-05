@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -111,12 +112,12 @@ public class HelpControllerTests
                new EnquiryOption
                {
                    Value = "QuestionAboutAQualification",
-                   Label = "Question about a qualification"
+                   Label = HelpFormEnquiryReasons.QuestionAboutAQualification
                },
                new EnquiryOption
                {
                    Value = "IssueWithTheService",
-                   Label = "Issue with the service"
+                   Label = HelpFormEnquiryReasons.IssueWithTheService
                }
            }
         };
@@ -153,12 +154,12 @@ public class HelpControllerTests
                 new EnquiryOptionModel()
                 {
                     Value = "QuestionAboutAQualification",
-                    Label = "Question about a qualification"
+                    Label = HelpFormEnquiryReasons.QuestionAboutAQualification
                 },
                 new EnquiryOptionModel()
                 {
                     Value = "IssueWithTheService",
-                    Label = "Issue with the service"
+                    Label = HelpFormEnquiryReasons.IssueWithTheService
                 }
             }
         };
@@ -245,7 +246,7 @@ public class HelpControllerTests
 
         var helpForm = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = "Question about a qualification",
+            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
         };
 
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
@@ -341,7 +342,7 @@ public class HelpControllerTests
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
-                ReasonForEnquiring = "Question about a qualification",
+                ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             }
         );
 
@@ -388,7 +389,7 @@ public class HelpControllerTests
         // Assert
         result.Should().NotBeNull();
 
-        enquiry.ReasonForEnquiring.Should().Be("Question about a qualification");
+        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.QuestionAboutAQualification);
 
         enquiry.QualificationName.Should().Be("Qualification name");
         enquiry.QualificationStartDate.Should().Be("1/2000");
@@ -421,7 +422,7 @@ public class HelpControllerTests
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
-                ReasonForEnquiring = "Question about a qualification",
+                ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             }
         );
 
@@ -460,7 +461,7 @@ public class HelpControllerTests
         // Assert
         result.Should().NotBeNull();
 
-        enquiry.ReasonForEnquiring.Should().Be("Question about a qualification");
+        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.QuestionAboutAQualification);
 
         enquiry.QualificationName.Should().Be("Qualification name");
         enquiry.QualificationStartDate.Should().BeNullOrEmpty();
@@ -492,7 +493,7 @@ public class HelpControllerTests
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
-                ReasonForEnquiring = "Question about a qualification",
+                ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             }
         );
 
@@ -556,7 +557,7 @@ public class HelpControllerTests
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
-                ReasonForEnquiring = "Question about a qualification",
+                ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             }
         );
 
@@ -620,7 +621,7 @@ public class HelpControllerTests
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
-                ReasonForEnquiring = "Question about a qualification",
+                ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             }
         );
 
@@ -684,7 +685,7 @@ public class HelpControllerTests
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
-                ReasonForEnquiring = "Question about a qualification",
+                ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             }
         );
 
@@ -760,8 +761,8 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    [DataRow("Question about a qualification", "QualificationDetails")]
-    [DataRow("Issue with the service", "GetHelp")]
+    [DataRow(HelpFormEnquiryReasons.QuestionAboutAQualification, "QualificationDetails")]
+    [DataRow(HelpFormEnquiryReasons.IssueWithTheService, "GetHelp")]
     public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_ReturnsProvideDetailsPageViewModel(string selectedOption, string pageToRedirectTo)
     {
         // Arrange
@@ -852,7 +853,7 @@ public class HelpControllerTests
         // Arrange
         var helpForm = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = "Issue with the service",
+            ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
         };
 
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
@@ -870,7 +871,7 @@ public class HelpControllerTests
         // Assert
         result.Should().NotBeNull();
 
-        enquiry.ReasonForEnquiring.Should().Be("Issue with the service");
+        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.IssueWithTheService);
         enquiry.AdditionalInformation.Should().Be("Some details about the issue");
 
         var resultType = result as RedirectToActionResult;
@@ -886,7 +887,7 @@ public class HelpControllerTests
         // Arrange
         var enquiry = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = "Issue with the service",
+            ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
         };
 
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
@@ -958,7 +959,7 @@ public class HelpControllerTests
 
         var helpForm = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = "Question about a qualification",
+            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             AdditionalInformation = "Some details about the issue",
             QualificationName = "A qualification name",
             QualificationStartDate = "1/2000",
@@ -989,7 +990,7 @@ public class HelpControllerTests
         // Arrange
         var helpForm = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = "Issue with the service",
+            ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
             AdditionalInformation = "Some details about the issue",
         };
 
@@ -1009,7 +1010,7 @@ public class HelpControllerTests
         // Assert
         result.Should().NotBeNull();
 
-        enquiry.ReasonForEnquiring.Should().Be("Issue with the service");
+        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.IssueWithTheService);
         enquiry.AdditionalInformation.Should().Be("Some details about the issue");
 
         var resultType = result as RedirectToActionResult;
@@ -1126,7 +1127,7 @@ public class HelpControllerTests
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
-                ReasonForEnquiring = "Question about a qualification",
+                ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             }
         );
 

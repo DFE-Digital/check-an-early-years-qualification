@@ -502,7 +502,7 @@ public class MockContentfulService : IContentService
                                          ],
                                          InformationMessage = "You need all the information listed above to get a result. If you do not have it, you will not be able to complete this check.",
                                          CtaButtonText = CtaButtonText,
-                                         ErrorBannerHeading = "There is a problem",
+                                         ErrorBannerHeading = ThereIsAProblem,
                                          ErrorMessage = "Confirm if you have all the information you need to complete the check"
                                      });
     }
@@ -555,7 +555,7 @@ public class MockContentfulService : IContentService
                                                           OpenInNewTab = false
                                                       },
                                          CtaButtonText = "Submit feedback",
-                                         ErrorBannerHeading = "There is a problem",
+                                         ErrorBannerHeading = ThereIsAProblem,
                                          Questions =
                                          [
                                              new FeedbackFormQuestionRadio
@@ -696,7 +696,7 @@ public class MockContentfulService : IContentService
                 Heading = "Get help with the Check an early years qualification service",
                 PostHeadingContent = ContentfulContentHelper.Paragraph("Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n"),
                 ReasonForEnquiryHeading = "Why are you contacting us?",
-                CtaButtonText = "Continue",
+                CtaButtonText = CtaButtonText,
                 BackButton = new NavigationLink
                 {
                     DisplayText = "Home",
@@ -723,7 +723,7 @@ public class MockContentfulService : IContentService
             {
                 Heading = "What are the qualification details?",
                 PostHeadingContent = "We need to know the following qualification details to quickly and accurately respond to any questions you may have.",
-                CtaButtonText = "Continue",
+                CtaButtonText = CtaButtonText,
                 BackButton = new NavigationLink
                 {
                     DisplayText = "Back to get help with the Check an early years qualification service",
@@ -785,7 +785,7 @@ public class MockContentfulService : IContentService
             {
                 Heading = "How can we help you?",
                 PostHeadingContent = "Give as much detail as you can. This helps us give you the right support.",
-                CtaButtonText = "Continue",
+                CtaButtonText = CtaButtonText,
                 BackButtonToGetHelpPage = new NavigationLink
                 {
                     DisplayText = "Back to get help with the Check an early years qualification service",

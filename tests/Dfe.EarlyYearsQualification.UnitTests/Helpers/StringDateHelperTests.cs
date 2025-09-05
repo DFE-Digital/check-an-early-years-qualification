@@ -17,4 +17,18 @@ public class StringDateHelperTests
         split.startMonth.Should().Be(int.Parse(date.Split('/')[0]));
         split.startYear.Should().Be(int.Parse(date.Split('/')[1]));
     }
+
+    [TestMethod]
+    [DataRow("25")]
+    [DataRow("26/03/2000")]
+    [DataRow("Text/Text")]
+    public void SplitDate_IntoMonthAndYear_ReturnsNull(string date)
+    {
+        // Act
+        var split = StringDateHelper.SplitDate(date);
+
+        // Assert
+        split.startMonth.Should().BeNull();
+        split.startYear.Should().BeNull();
+    }
 }

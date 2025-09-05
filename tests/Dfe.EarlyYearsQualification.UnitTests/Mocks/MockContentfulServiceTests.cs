@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Mock.Content;
+using Dfe.EarlyYearsQualification.Web.Constants;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 
@@ -674,8 +675,8 @@ public class MockContentfulServiceTests
 
         var enquiryReasons = new List<Option>
                              {
-                                 new() { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
-                                 new() { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" },
+                                 new() { Label = "I have a question about a qualification", Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification) },
+                                 new() { Label = "I am experiencing an issue with the service", Value = nameof(HelpFormEnquiryReasons.IssueWithTheService) },
                              };
 
         result.Should().NotBeNull();

@@ -31,7 +31,7 @@ public class GovUkNotifyServiceTests
 
         var form = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = "Issue with the service",
+            ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.IssueWithTheService,
             AdditionalInformation = "Some additional information",
         };
 
@@ -72,7 +72,7 @@ public class GovUkNotifyServiceTests
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
         var form = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = "Issue with the service",
+            ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.IssueWithTheService,
             AdditionalInformation = "Some additional information",
         };
 
@@ -108,7 +108,7 @@ public class GovUkNotifyServiceTests
 
         var form = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = "Issue with the service",
+            ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.IssueWithTheService,
             AdditionalInformation = "Some additional information",
         };
 
