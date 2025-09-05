@@ -13,7 +13,7 @@ public static class DistributedCacheExtensions
     {
         const int timeout = 500; // ½ second
 
-        var tokenSource = new CancellationTokenSource(timeout);
+        using var tokenSource = new CancellationTokenSource(timeout);
         var cancellationToken = tokenSource.Token;
 
         var task = cache.GetAsync(key, cancellationToken);
