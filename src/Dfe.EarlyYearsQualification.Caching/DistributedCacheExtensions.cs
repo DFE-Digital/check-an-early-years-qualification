@@ -9,28 +9,26 @@ public static class DistributedCacheExtensions
           .SetSlidingExpiration(TimeSpan.FromHours(18))
           .SetAbsoluteExpiration(TimeSpan.FromHours(24));
 
-    private static Task SetAsync(
-        IDistributedCache cache,
-        string key,
-        byte[] value,
-        DistributedCacheEntryOptions options)
+    private static async Task<byte[]?> GetValueAsync(IDistributedCache cache, string key)
     {
-        return cache.SetAsync(key, value, options);
-    }
+        const int timeout = 500; // ½ second
 
-    private static bool TryGetValue(IDistributedCache cache, string key, out byte[]? value)
-    {
-        value = null;
+        var tokenSource = new CancellationTokenSource(timeout);
+        var cancellationToken = tokenSource.Token;
 
-        var val = cache.Get(key);
-        if (val == null)
+        var task = cache.GetAsync(key, cancellationToken);
+
+        if (await Task.WhenAny(task, Task.Delay(timeout, cancellationToken)) == task)
         {
-            return false;
+            // task completed within timeout, so return
+            byte[]? value = await task;
+
+            return value;
         }
 
-        value = val;
+        await tokenSource.CancelAsync();
 
-        return true;
+        return null; // cache miss
     }
 
     public static async Task<HttpResponseMessage?> GetOrSetAsync(
@@ -40,9 +38,12 @@ public static class DistributedCacheExtensions
         DistributedCacheEntryOptions? options = null)
     {
         var cacheOptions = options ?? DefaultCacheOptions;
-        if (TryGetValue(cache, key, out var bytes) && bytes is not null)
+
+        byte[]? value = await GetValueAsync(cache, key);
+
+        if (value is not null)
         {
-            var responseFromCache = new HttpResponseMessage { Content = new ByteArrayContent(bytes) };
+            var responseFromCache = new HttpResponseMessage { Content = new ByteArrayContent(value) };
 
             return responseFromCache;
         }
@@ -51,7 +52,16 @@ public static class DistributedCacheExtensions
 
         if (responseFromContentful.IsSuccessStatusCode) // don't cache unsuccessful requests
         {
-            await SetAsync(cache, key, await responseFromContentful.Content.ReadAsByteArrayAsync(), cacheOptions);
+            try
+            {
+                await cache.SetAsync(key,
+                                     await responseFromContentful.Content.ReadAsByteArrayAsync(),
+                                     cacheOptions);
+            }
+            catch (Exception)
+            {
+                // failing to write the response to the cache doesn't really matter
+            }
         }
 
         return responseFromContentful;
