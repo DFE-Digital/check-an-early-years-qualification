@@ -3,8 +3,6 @@ using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
-using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,10 +14,7 @@ public class AdviceController(
     ILogger<AdviceController> logger,
     IContentService contentService,
     IUserJourneyCookieService userJourneyCookieService,
-    INotificationService notificationService,
-    IAdvicePageMapper advicePageMapper,
-    IHelpPageMapper helpPageMapper,
-    IHelpConfirmationPageModelMapper helpConfirmationPageModelMapper)
+    IAdvicePageMapper advicePageMapper)
     : ServiceController
 {
     public override void OnActionExecuting(ActionExecutingContext context)
@@ -101,72 +96,6 @@ public class AdviceController(
     {
         return await GetView(AdvicePages.Level7QualificationAfterAug2019);
     }
-    
-    [HttpGet("help")]
-    public async Task<IActionResult> Help()
-    {
-        var helpPage = await contentService.GetHelpPage();
-        if (helpPage is null)
-        {
-            logger.LogError("No content for the help page");
-            return RedirectToAction("Index", "Error");
-        }
-
-        var model = await helpPageMapper.Map(helpPage, string.Empty);
-
-        return View("Help", model);
-    }
-    
-    [HttpPost("help")]
-    public async Task<IActionResult> Help([FromForm] HelpPageModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            notificationService.SendHelpPageNotification(new HelpPageNotification
-                                                         {
-                                                             EmailAddress = model.EmailAddress,
-                                                             Subject = model.SelectedOption,
-                                                             Message = model.AdditionalInformationMessage
-                                                         });
-            return RedirectToAction("HelpConfirmation");
-        }
-        
-        var helpPage = await contentService.GetHelpPage();
-        if (helpPage is null)
-        {
-            logger.LogError("No content for the help page");
-            return RedirectToAction("Index", "Error");
-        }
-        
-        var emailAddressErrorMessage = string.IsNullOrEmpty(model.EmailAddress)
-                                            ? helpPage.NoEmailAddressEnteredErrorMessage
-                                            : helpPage.InvalidEmailAddressErrorMessage;
-        var newModel = await helpPageMapper.Map(helpPage, emailAddressErrorMessage);
-        newModel.HasEmailAddressError = string.IsNullOrEmpty(model.EmailAddress) || ModelState.Keys.Any(_ => ModelState["EmailAddress"]?.Errors.Count > 0);
-        newModel.HasFurtherInformationError = ModelState.Keys.Any(_ => ModelState["AdditionalInformationMessage"]?.Errors.Count > 0);
-        newModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0);
-        newModel.EmailAddress = model.EmailAddress;
-        newModel.SelectedOption = model.SelectedOption;
-        newModel.AdditionalInformationMessage = model.AdditionalInformationMessage;
-
-        return View("Help", newModel);
-    }
-    
-    [HttpGet("help/confirmation")]
-    public async Task<IActionResult> HelpConfirmation()
-    {
-        var helpConfirmationPage = await contentService.GetHelpConfirmationPage();
-        if (helpConfirmationPage is null)
-        {
-            logger.LogError("No content for the help confirmation page");
-            return RedirectToAction("Index", "Error");
-        }
-
-        var model = await helpConfirmationPageModelMapper.Map(helpConfirmationPage);
-
-        return View("HelpConfirmation", model);
-    }
-
     private async Task<IActionResult> GetView(string advicePageId)
     {
         var advicePage = await contentService.GetAdvicePage(advicePageId);

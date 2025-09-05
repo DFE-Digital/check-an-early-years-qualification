@@ -11,6 +11,6 @@ public class DatesValidationResult
         }
     }
 
-    public DateValidationResult? StartedValidationResult { get; init; }
-    public DateValidationResult? AwardedValidationResult { get; init; }
+    public DateValidationResult? StartedValidationResult { get; set; }
+    public DateValidationResult? AwardedValidationResult { get; set; }
 }

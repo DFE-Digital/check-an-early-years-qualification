@@ -12,7 +12,9 @@ import {
     goToStartPage,
     checkSnapshot,
     clickSubmitAndCheckSnapshot,
-    precheckPage
+    precheckPage,
+    inputText,
+    checkUrl
 } from '../../_shared/playwrightWrapper';
 
 test.describe('Snapshots', {tag: "@snapshot"}, () => {
@@ -165,6 +167,56 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
 
     test("Page not found page", async ({page}) => {
         await page.goto("/error/404");
+        await checkSnapshot(page);
+    });
+
+    test("Get help page", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await checkSnapshot(page);
+    });
+
+    test("Help qualification details", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("#QuestionAboutAQualification");
+        await page.click("#reason-for-enquiring-form-submit");
+        await checkUrl(page, "/help/qualification-details");
+
+        await checkSnapshot(page);
+    });
+
+    test("Help provide details", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("#IssueWithTheService");
+        await page.click("#reason-for-enquiring-form-submit");
+        await checkUrl(page, "/help/provide-details");
+
+        await checkSnapshot(page);
+    });
+
+    test("Help email address", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("#IssueWithTheService");
+        await page.click("#reason-for-enquiring-form-submit");
+        await checkUrl(page, "/help/provide-details");
+        await inputText(page, "#ProvideAdditionalInformation", "This is some additional info the user has entered");
+        await page.click("#question-submit");
+        await checkUrl(page, "/help/email-address");
+
+        await checkSnapshot(page);
+    });
+
+    test("Help confirmation page", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("#IssueWithTheService");
+        await page.click("#reason-for-enquiring-form-submit");
+        await checkUrl(page, "/help/provide-details");
+        await inputText(page, "#ProvideAdditionalInformation", "This is some additional info the user has entered");
+        await page.click("#question-submit");
+        await checkUrl(page, "/help/email-address");
+        await inputText(page, "#EmailAddress", "test@test.com");
+        await page.click("#question-submit");
+        await checkUrl(page, "/help/confirmation");
+
         await checkSnapshot(page);
     });
 });

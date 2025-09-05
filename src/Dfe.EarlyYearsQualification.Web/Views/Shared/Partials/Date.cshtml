@@ -14,7 +14,11 @@
             {
                 <h2 class="govuk-heading-s" id="@Model.Prefix-header">@Model.QuestionHeader</h2>
             }
-            <div id="@Model.Prefix-hint" class="govuk-hint">@Model.QuestionHint</div>
+
+            @if (!string.IsNullOrEmpty(Model.QuestionHint))
+            {
+                <div id="@Model.Prefix-hint" class="govuk-hint">@Model.QuestionHint</div>
+            }
 
             @if (Model.MonthError || Model.YearError)
             {

@@ -25,15 +25,43 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await startJourney(page, context);
     });
 
-    test("should redirect user to the help confirmation page when form is submitted on the help page", async ({page}) => {
-        await page.goto("/advice/help");
+    test("should redirect user to the help confirmation page when the issue with the service form is completed", async ({page}) => {
+        await page.goto("/help/get-help");
+        await page.click("input#IssueWithTheService");
+        await page.click("button#reason-for-enquiring-form-submit");
 
-        await page.click("#Option\\ 1");
+        await inputText(page, "#ProvideAdditionalInformation", "This is the message");
+        await page.click("#question-submit");
+
         await inputText(page, "#EmailAddress", "test@test.com");
-        await inputText(page, "#AdditionalInformationMessage", "This is the message");
-        await page.click("#help-form-submit");
+        await page.click("#question-submit");
         
-        await checkUrl(page, "/advice/help/confirmation");
+        await checkUrl(page, "/help/confirmation");
+        await isVisible(page, "#success-message");
+        await isVisible(page, "#help-confirmation-body");
+    });
+
+
+    test("should redirect user to the help confirmation page when the question about a qualification help form is completed", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("input#QuestionAboutAQualification");
+        await page.click("button#reason-for-enquiring-form-submit");
+
+        await inputText(page, "#QualificationName", "QualificationName");
+        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", "1");
+        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", "2000");
+        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", "2");
+        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", "2002");
+        await inputText(page, "#AwardingOrganisation", "AwardingOrganisation");
+        await page.click("#question-submit");
+
+        await inputText(page, "#ProvideAdditionalInformation", "This is the message");
+        await page.click("#question-submit");
+
+        await inputText(page, "#EmailAddress", "test@test.com");
+        await page.click("#question-submit");
+
+        await checkUrl(page, "/help/confirmation");
         await isVisible(page, "#success-message");
         await isVisible(page, "#help-confirmation-body");
     });
