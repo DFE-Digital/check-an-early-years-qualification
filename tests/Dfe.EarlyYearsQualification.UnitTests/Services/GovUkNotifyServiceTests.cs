@@ -103,7 +103,7 @@ public class GovUkNotifyServiceTests
         message.Should().Contain("Qualification start date: 09/2020");
         message.Should().Contain("Qualification awarded date: 10/2025");
         message.Should().Contain("Awarding organisation: Awarding organisation");
-        message.Should().Contain("Additional information: Some additional information\r\n\r\n");
+        message.Should().Contain("Additional information: Some additional information");
 
     }
 
