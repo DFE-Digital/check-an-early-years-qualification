@@ -51,7 +51,7 @@ public class GovUkNotifyServiceTests
             .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
                     Times.Once());
     }
-    
+
     [TestMethod]
     public void SendHelpPageNotification_TestEnvironmentIsTrue_MatchesExpected()
     {
@@ -60,20 +60,24 @@ public class GovUkNotifyServiceTests
         const string emailAddress = "test@test.com";
         const string templateId = "TEST123";
         var options = Options.Create(new NotificationOptions
-                                     {
-                                         IsTestEnvironment = true,
-                                         HelpPageForm = new NotificationData
-                                                    {
-                                                        EmailAddress = emailAddress,
-                                                        TemplateId = templateId
-                                                    }
-                                     });
+        {
+            IsTestEnvironment = true,
+            HelpPageForm = new NotificationData
+            {
+                EmailAddress = emailAddress,
+                TemplateId = templateId
+            }
+        });
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
         var form = new HelpFormEnquiry()
         {
             ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.IssueWithTheService,
             AdditionalInformation = "Some additional information",
+            AwardingOrganisation = "Awarding organisation",
+            QualificationAwardedDate = "10/2025",
+            QualificationStartDate = "09/2020",
+            QualificationName = "Qualification name"
         };
 
         var feedbackNotification = new HelpPageNotification("user@email.com", form);
@@ -91,6 +95,11 @@ public class GovUkNotifyServiceTests
         mockNotificationClient
             .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
                     Times.Once());
+
+        var message = expectedPersonalisation.GetValueOrDefault("message") as string;
+
+        message.Should().NotBeNullOrEmpty();
+        message.Should().Be("\r\n\r\nQualification name: Qualification name\r\n\r\nQualification start date: 09/2020\r\n\r\nQualification awarded date: 10/2025\r\n\r\nAwarding organisation: Awarding organisation\r\n\r\nAdditional information: Some additional information\r\n\r\n");
     }
 
     [TestMethod]

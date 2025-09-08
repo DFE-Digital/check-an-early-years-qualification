@@ -79,7 +79,6 @@ public class HelpController(
         // valid submit
         switch (model.SelectedOption)
         {
-
             case nameof(HelpFormEnquiryReasons.QuestionAboutAQualification):
                 enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification;
                 userJourneyCookieService.SetHelpFormEnquiry(enquiry);
