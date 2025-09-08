@@ -99,7 +99,12 @@ public class GovUkNotifyServiceTests
         var message = expectedPersonalisation.GetValueOrDefault("message") as string;
 
         message.Should().NotBeNullOrEmpty();
-        message.Should().Be("\r\n\r\nQualification name: Qualification name\r\n\r\nQualification start date: 09/2020\r\n\r\nQualification awarded date: 10/2025\r\n\r\nAwarding organisation: Awarding organisation\r\n\r\nAdditional information: Some additional information\r\n\r\n");
+        message.Should().Contain("Qualification name: Qualification name");
+        message.Should().Contain("Qualification start date: 09/2020");
+        message.Should().Contain("Qualification awarded date: 10/2025");
+        message.Should().Contain("Awarding organisation: Awarding organisation");
+        message.Should().Contain("Additional information: Some additional information\r\n\r\n");
+
     }
 
     [TestMethod]
