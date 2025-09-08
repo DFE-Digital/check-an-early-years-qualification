@@ -109,6 +109,12 @@ public class HelpController(
 
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
+        if (enquiry is null)
+        {
+            logger.LogError("Help form enquiry is null");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
         // set any previously entered qualification details from cookie
         viewModel.AwardingOrganisation = enquiry.AwardingOrganisation ?? userJourneyCookieService.GetAwardingOrganisation() ?? "";
         viewModel.QualificationName = enquiry.QualificationName ?? userJourneyCookieService.GetSelectedQualificationName() ?? "";
@@ -184,17 +190,23 @@ public class HelpController(
         }
 
         // valid submit 
-        var helpCookie = userJourneyCookieService.GetHelpFormEnquiry();
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
-        helpCookie.QualificationName = model.QualificationName;
+        if (enquiry is null)
+        {
+            logger.LogError("Help form enquiry is null");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
+        enquiry.QualificationName = model.QualificationName;
         if (model.QuestionModel.StartedQuestion is not null)
         {
-            helpCookie.QualificationStartDate = $"{model.QuestionModel.StartedQuestion?.SelectedMonth}/{model.QuestionModel.StartedQuestion?.SelectedYear}";
+            enquiry.QualificationStartDate = $"{model.QuestionModel.StartedQuestion?.SelectedMonth}/{model.QuestionModel.StartedQuestion?.SelectedYear}";
         }
-        helpCookie.QualificationAwardedDate = $"{model.QuestionModel.AwardedQuestion?.SelectedMonth}/{model.QuestionModel.AwardedQuestion?.SelectedYear}";
-        helpCookie.AwardingOrganisation = model.AwardingOrganisation;
+        enquiry.QualificationAwardedDate = $"{model.QuestionModel.AwardedQuestion?.SelectedMonth}/{model.QuestionModel.AwardedQuestion?.SelectedYear}";
+        enquiry.AwardingOrganisation = model.AwardingOrganisation;
 
-        userJourneyCookieService.SetHelpFormEnquiry(helpCookie);
+        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
 
         return RedirectToAction(nameof(ProvideDetails));
     }
@@ -209,10 +221,18 @@ public class HelpController(
             logger.LogError("'Help provide details page' content could not be found");
             return RedirectToAction("Index", "Error");
         }
-  
-        var viewModel = helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
 
-        viewModel.ProvideAdditionalInformation = userJourneyCookieService.GetHelpFormEnquiry().AdditionalInformation;
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        if (enquiry is null)
+        {
+            logger.LogError("Help form enquiry is null");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
+        var viewModel = helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring);
+
+        viewModel.ProvideAdditionalInformation = enquiry.AdditionalInformation;
 
         return View("ProvideDetails", viewModel);
     }
@@ -220,6 +240,14 @@ public class HelpController(
     [HttpPost("provide-details")]
     public async Task<IActionResult> ProvideDetails([FromForm] ProvideDetailsPageViewModel viewModel)
     {
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        if (enquiry is null)
+        {
+            logger.LogError("Help form enquiry is null");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
         if (!ModelState.IsValid)
         {
             var content = await contentService.GetHelpProvideDetailsPage();
@@ -230,7 +258,7 @@ public class HelpController(
                 return RedirectToAction("Index", "Error");
             }
 
-            viewModel = helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, userJourneyCookieService.GetHelpFormEnquiry().ReasonForEnquiring);
+            viewModel = helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring);
 
             viewModel.HasAdditionalInformationError = ModelState.Keys.Any(_ => ModelState["ProvideAdditionalInformation"]?.Errors.Count > 0);
 
@@ -238,11 +266,10 @@ public class HelpController(
         }
 
         // valid submit
-        var helpCookie = userJourneyCookieService.GetHelpFormEnquiry();
 
-        helpCookie.AdditionalInformation = viewModel.ProvideAdditionalInformation;
+        enquiry.AdditionalInformation = viewModel.ProvideAdditionalInformation;
 
-        userJourneyCookieService.SetHelpFormEnquiry(helpCookie);
+        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
 
         return RedirectToAction(nameof(EmailAddress));
     }
@@ -256,6 +283,14 @@ public class HelpController(
         {
             logger.LogError("'Help email address page' content could not be found");
             return RedirectToAction("Index", "Error");
+        }
+
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        if (enquiry is null)
+        {
+            logger.LogError("Help form enquiry is null");
+            return RedirectToAction("GetHelp", "Help");
         }
 
         var viewModel = helpEmailAddressPageMapper.MapEmailAddressPageContentToViewModel(content);
@@ -286,13 +321,21 @@ public class HelpController(
             return View("EmailAddress", viewModel);
         }
 
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        if (enquiry is null)
+        {
+            logger.LogError("Help form enquiry is null");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
         // send help form email
         notificationService.SendHelpPageNotification(
-            new HelpPageNotification(model.EmailAddress, userJourneyCookieService.GetHelpFormEnquiry())
+            new HelpPageNotification(model.EmailAddress, enquiry)
         );
 
         // clear data collected from help form on successful submit
-        userJourneyCookieService.SetHelpFormEnquiry(new());
+        userJourneyCookieService.SetHelpFormEnquiry(null);
 
         return RedirectToAction(nameof(Confirmation));
     }

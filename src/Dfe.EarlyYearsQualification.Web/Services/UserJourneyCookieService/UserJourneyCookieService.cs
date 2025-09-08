@@ -473,7 +473,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
-    public void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry)
+    public void SetHelpFormEnquiry(HelpFormEnquiry? formEnquiry)
     {
         lock (_lockObject)
         {

@@ -41,5 +41,5 @@ public interface IUserJourneyCookieService
     void SetHasUserGotEverythingTheyNeededToday(string hasGotEverythingTheyNeededToday);
     string GetHasUserGotEverythingTheyNeededToday();
     HelpFormEnquiry? GetHelpFormEnquiry();
-    void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry);
+    void SetHelpFormEnquiry(HelpFormEnquiry? formEnquiry);
 }
