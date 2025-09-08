@@ -160,6 +160,101 @@ public class CachingHandlerTests
 
         response.Should().NotBeNull();
     }
+    
+    [TestMethod]
+    public async Task Request_CacheTimedOut_CallsBaseSend_AndWritesToCache()
+    {
+        // Arrange...
+        var address = new Uri("https://example.com/");
+        // NB this test does a real request to that address, as you can't mock an HttpHandler's HttpClient
+
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(m => m.GetCachingOption())
+                             .ReturnsAsync(CachingOption.UseCache);
+
+        const string key = "some key";
+
+        var urlToKeyConverter = new Mock<IUrlToKeyConverter>();
+        urlToKeyConverter
+            .Setup(c => c.GetKeyAsync(It.IsAny<Uri>()))
+            .ReturnsAsync(key);
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, address);
+
+        var distributedCache = GetCache();
+        var mockCache = Moq.Mock.Get(distributedCache);
+        // Simulate delayed response
+        mockCache.Setup(c => c.GetAsync(key, It.IsAny<CancellationToken>()))
+            .ReturnsAsync([], TimeSpan.FromMilliseconds(600));
+
+        var handler = new TestCachingHandler(mockCache.Object,
+                                             urlToKeyConverter.Object,
+                                             cachingOptionsManager.Object,
+                                             NullLogger<CachingHandler>.Instance);
+
+        // Act...
+        await handler.PublicSendAsync(httpRequestMessage,
+                                      CancellationToken.None);
+
+        // Assert...
+        mockCache.Verify(c => c.GetAsync(key, It.IsAny<CancellationToken>()), Times.Once);
+
+        mockCache.Verify(c => c.SetAsync(key,
+                                         It.IsAny<byte[]>(),
+                                         It.IsAny<DistributedCacheEntryOptions>(),
+                                         It.IsAny<CancellationToken>()),
+                         Times.Once);
+
+        byte[]? cached = await distributedCache.GetAsync(key);
+
+        cached.Should().NotBeNull();
+    }
+    
+        [TestMethod]
+    public async Task Request_SetCacheThrowsException_ReturnsValueFromContentful()
+    {
+        // Arrange...
+        var address = new Uri("https://example.com/");
+        // NB this test does a real request to that address, as you can't mock an HttpHandler's HttpClient
+
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(m => m.GetCachingOption())
+                             .ReturnsAsync(CachingOption.UseCache);
+
+        const string key = "some key";
+
+        var urlToKeyConverter = new Mock<IUrlToKeyConverter>();
+        urlToKeyConverter
+            .Setup(c => c.GetKeyAsync(It.IsAny<Uri>()))
+            .ReturnsAsync(key);
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, address);
+
+        var distributedCache = GetCache();
+        var mockCache = Moq.Mock.Get(distributedCache);
+        // Simulate delayed response
+        mockCache.Setup(c => c.GetAsync(key, It.IsAny<CancellationToken>()))
+            .ReturnsAsync([], TimeSpan.FromMilliseconds(600));
+        
+        mockCache.Setup(c => c.SetAsync(key,
+                                         It.IsAny<byte[]>(),
+                                         It.IsAny<DistributedCacheEntryOptions>(),
+                                         It.IsAny<CancellationToken>())).Throws<Exception>();
+
+        var handler = new TestCachingHandler(mockCache.Object,
+                                             urlToKeyConverter.Object,
+                                             cachingOptionsManager.Object,
+                                             NullLogger<CachingHandler>.Instance);
+
+        // Act...
+        await handler.PublicSendAsync(httpRequestMessage,
+                                      CancellationToken.None);
+
+        // Assert...
+        byte[]? cached = await distributedCache.GetAsync(key);
+
+        cached.Should().NotBeNull();
+    }
 
     private class TestCachingHandler(
         IDistributedCache cache,
