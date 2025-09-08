@@ -390,8 +390,7 @@ public class HelpControllerTests
             AwardingOrganisation = "Some organisation where the qualification is from",
         };
 
-
-        var e = new DatesValidationResult()
+        var validationResult = new DatesValidationResult()
         {
             StartedValidationResult = new DateValidationResult()
             {
@@ -404,8 +403,9 @@ public class HelpControllerTests
                 YearValid = true
             }
         };
-        _mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion, e.StartedValidationResult)).Returns(viewModel.QuestionModel.StartedQuestion);
-        _mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion, e.AwardedValidationResult)).Returns(viewModel.QuestionModel.AwardedQuestion);
+
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion, validationResult.StartedValidationResult)).Returns(viewModel.QuestionModel.StartedQuestion);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion, validationResult.AwardedValidationResult)).Returns(viewModel.QuestionModel.AwardedQuestion);
 
         _mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(It.IsAny<QualificationDetailsPageViewModel>(), content, null, It.IsAny<ModelStateDictionary>())).Returns(viewModel);
 
@@ -428,6 +428,77 @@ public class HelpControllerTests
         model.BackButton.DisplayText.Should().Be(content.BackButton.DisplayText);
         model.BackButton.Href.Should().Be(content.BackButton.Href);
 
+        model.QuestionModel.StartedQuestion.SelectedMonth.Should().Be(startedAt.Item1);
+        model.QuestionModel.StartedQuestion.SelectedYear.Should().Be(startedAt.Item2);
+        model.QuestionModel.AwardedQuestion.SelectedMonth.Should().Be(awardedAt.Item1);
+        model.QuestionModel.AwardedQuestion.SelectedYear.Should().Be(awardedAt.Item2);
+    }
+
+    [TestMethod]
+    public async Task QualificationDetails_ContentServiceReturnsHelpProvideDetailsPage_ReturnsProvideDetailsPageViewModel_PrepopulatedWithPreviouslyEnteredDetails()
+    {
+        // Arrange
+        var content = new HelpQualificationDetailsPage();
+
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
+
+        var startedAt = (1, 2000);
+        var awardedAt = (6, 2002);
+
+        var viewModel = new QualificationDetailsPageViewModel()
+        {
+            Heading = content.Heading,
+            BackButton = new NavigationLinkModel()
+            {
+                DisplayText = content.BackButton.DisplayText,
+                Href = content.BackButton.Href
+            },
+            QualificationName = "Qualification name",
+            QuestionModel = new DatesQuestionModel()
+            {
+                StartedQuestion = new()
+                {
+                    SelectedMonth = startedAt.Item1,
+                    SelectedYear = startedAt.Item2
+                },
+                AwardedQuestion = new()
+                {
+                    SelectedMonth = awardedAt.Item1,
+                    SelectedYear = awardedAt.Item2
+                }
+            },
+            AwardingOrganisation = "Some organisation where the qualification is from",
+        };
+
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion, null)).Returns(viewModel.QuestionModel.StartedQuestion);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion, null)).Returns(viewModel.QuestionModel.AwardedQuestion);
+
+        var helpForm = new HelpFormEnquiry()
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+            QualificationStartDate = "1/2001",
+            QualificationAwardedDate = "2/2002",
+            QualificationName = "Some qualification name",
+            AwardingOrganisation = "Some organisation"
+        };
+
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(It.IsAny<QualificationDetailsPageViewModel>(), content, null, It.IsAny<ModelStateDictionary>())).Returns(viewModel);
+
+        // Act
+        var result = await GetSut().QualificationDetails();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as QualificationDetailsPageViewModel;
+        model.Should().NotBeNull();
+        model.QuestionModel.StartedQuestion.Should().NotBeNull();
+        model.QuestionModel.AwardedQuestion.Should().NotBeNull();
         model.QuestionModel.StartedQuestion.SelectedMonth.Should().Be(startedAt.Item1);
         model.QuestionModel.StartedQuestion.SelectedYear.Should().Be(startedAt.Item2);
         model.QuestionModel.AwardedQuestion.SelectedMonth.Should().Be(awardedAt.Item1);
@@ -698,7 +769,6 @@ public class HelpControllerTests
 
         var vm = new QualificationDetailsPageViewModel()
         {
-            QualificationName = null,
             QuestionModel = new DatesQuestionModel()
             {
                 StartedQuestion = new()
@@ -775,8 +845,7 @@ public class HelpControllerTests
                     SelectedMonth = 1,
                     SelectedYear = 2002
                 }
-            },
-            AwardingOrganisation = null,
+            }
         };
 
         var validationResult = new DatesValidationResult()

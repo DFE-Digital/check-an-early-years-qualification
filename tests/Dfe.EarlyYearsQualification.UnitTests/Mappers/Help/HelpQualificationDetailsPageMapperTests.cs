@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Web.Mappers.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers.Help;
@@ -17,63 +18,7 @@ public class HelpQualificationDetailsPageMapperTests
     {
         var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
 
-        var content = new HelpQualificationDetailsPage()
-        {
-            Heading = "What are the qualification details?",
-            PostHeadingContent = "We need to know the following qualification details to quickly and accurately respond to any questions you may have.",
-            CtaButtonText = "Continue",
-            BackButton = new NavigationLink
-            {
-                DisplayText = "Back to get help with the Check an early years qualification service",
-                Href = "/help/get-help",
-                OpenInNewTab = false
-            },
-            QualificationNameHeading = "Qualification name",
-            QualificationNameErrorMessage = "Enter the qualification name",
-            AwardingOrganisationHeading = "Awarding organisation",
-            AwardingOrganisationErrorMessage = "Enter the awarding organisation",
-            ErrorBannerHeading = "There is a problem",
-            AwardedDateIsAfterStartedDateErrorText = "The awarded date must be after the started date",
-            StartDateQuestion = new DateQuestion
-            {
-                MonthLabel = "Month",
-                YearLabel = "Year",
-                QuestionHeader = "Start date",
-                QuestionHint = null,
-                ErrorBannerLinkText = "Enter the month and year that the qualification was started",
-                ErrorMessage = "Enter the month and year that the qualification was started",
-                FutureDateErrorBannerLinkText = "The date the qualification was started must be in the past",
-                FutureDateErrorMessage = "The date the qualification was started must be in the past",
-                MissingMonthErrorMessage = "Enter the month that the qualification was started",
-                MissingYearErrorMessage = "Enter the year that the qualification was started",
-                MissingMonthBannerLinkText = "Enter the month that the qualification was started",
-                MissingYearBannerLinkText = "Enter the year that the qualification was started",
-                MonthOutOfBoundsErrorLinkText = "The month the qualification was started must be between 1 and 12",
-                MonthOutOfBoundsErrorMessage = "The month the qualification was started must be between 1 and 12",
-                YearOutOfBoundsErrorLinkText = "The year the qualification was started must be between 1900 and $[actual-year]$",
-                YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$"
-            },
-            AwardedDateQuestion = new DateQuestion
-            {
-                MonthLabel = "Month",
-                YearLabel = "Year",
-                QuestionHeader = "Award date",
-                QuestionHint = null,
-                ErrorBannerLinkText = "Enter the month and year that the qualification was awarded",
-                ErrorMessage = "Enter the date the qualification was awarded",
-                FutureDateErrorBannerLinkText = "The date the qualification was awarded must be in the past",
-                FutureDateErrorMessage = "The date the qualification was awarded must be in the past",
-                MissingMonthErrorMessage = "Enter the month that the qualification was awarded",
-                MissingYearErrorMessage = "Enter the year that the qualification was awarded",
-                MissingMonthBannerLinkText = "Enter the month that the qualification was awarded",
-                MissingYearBannerLinkText = "Enter the year that the qualification was awarded",
-                MonthOutOfBoundsErrorLinkText = "The month the qualification was awarded must be between 1 and 12",
-                MonthOutOfBoundsErrorMessage = "The month the qualification was awarded must be between 1 and 12",
-                YearOutOfBoundsErrorLinkText = "The year the qualification was awarded must be between 1900 and $[actual-year]$",
-                YearOutOfBoundsErrorMessage = "The year the qualification was awarded must be between 1900 and $[actual-year]$"
-            },
-
-        };
+        var content = GetHelpQualificationDetailsPageContent();
 
         var viewModel = new QualificationDetailsPageViewModel()
         {
@@ -139,5 +84,137 @@ public class HelpQualificationDetailsPageMapperTests
         result.QuestionModel.AwardedQuestion.YearLabel.Should().Be(content.AwardedDateQuestion.YearLabel);
         result.QuestionModel.AwardedQuestion.SelectedMonth.Should().Be(1);
         result.QuestionModel.AwardedQuestion.SelectedYear.Should().Be(2002);
+    }
+
+    [TestMethod]
+    public void MapQualificationDetailsContentToViewModel_InvalidViewModel_MapsToViewModel()
+    {
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+
+        var content = GetHelpQualificationDetailsPageContent();
+
+        var viewModel = new QualificationDetailsPageViewModel()
+        {
+            QuestionModel = new DatesQuestionModel()
+            {
+                StartedQuestion = new DateQuestionModel()
+                {
+                    QuestionHeader = content.StartDateQuestion.QuestionHeader,
+                    MonthLabel = content.StartDateQuestion.MonthLabel,
+                    YearLabel = content.StartDateQuestion.YearLabel,
+                    SelectedMonth = 1,
+                    SelectedYear = 2000
+                },
+                AwardedQuestion = new DateQuestionModel()
+                {
+                    QuestionHeader = content.AwardedDateQuestion.QuestionHeader,
+                    MonthLabel = content.AwardedDateQuestion.MonthLabel,
+                    YearLabel = content.AwardedDateQuestion.YearLabel,
+                    SelectedMonth = 1,
+                    SelectedYear = 2002
+                }
+            }
+        };
+
+        var validationResult = new DatesValidationResult()
+        {
+            StartedValidationResult = new() { MonthValid = false, YearValid = false },
+            AwardedValidationResult = new() { MonthValid = false, YearValid = false }
+        };
+
+        var modelState = new ModelStateDictionary();
+
+        modelState.AddModelError(nameof(QualificationDetailsPageViewModel.QualificationName), "Invalid");
+
+        modelState.AddModelError(nameof(QualificationDetailsPageViewModel.AwardingOrganisation), "Invalid");
+
+        var result = new HelpQualificationDetailsPageMapper(mockPlaceholderUpdater.Object).MapQualificationDetailsContentToViewModel(viewModel, content, validationResult, modelState);
+
+        result.Should().NotBeNull();
+
+        result.ErrorSummaryModel.Should().NotBeNull();
+        result.ErrorSummaryModel.ErrorSummaryLinks.Should().HaveCount(4);
+        result.ErrorSummaryModel.ErrorBannerHeading.Should().Be(content.ErrorBannerHeading);
+
+        var qualificationNameErrors = result.ErrorSummaryModel.ErrorSummaryLinks.ElementAt(0);
+        qualificationNameErrors.Should().NotBeNull();
+        qualificationNameErrors.ErrorBannerLinkText.Should().Be(content.QualificationNameErrorMessage);
+        qualificationNameErrors.ElementLinkId.Should().Be("QualificationName");
+
+        var startedDateErrors = result.ErrorSummaryModel.ErrorSummaryLinks.ElementAt(1);
+        startedDateErrors.Should().NotBeNull();
+        startedDateErrors.ErrorBannerLinkText.Should().Be(content.StartDateQuestion.ErrorMessage);
+        startedDateErrors.ElementLinkId.Should().Be("QuestionModel.StartedQuestion.SelectedMonth");
+
+        var awardedDateErrors = result.ErrorSummaryModel.ErrorSummaryLinks.ElementAt(2);
+        awardedDateErrors.Should().NotBeNull();
+        awardedDateErrors.ErrorBannerLinkText.Should().Be(content.AwardedDateQuestion.ErrorMessage);
+        awardedDateErrors.ElementLinkId.Should().Be("QuestionModel.AwardedQuestion.SelectedMonth");
+
+        var awardingOrgErrors = result.ErrorSummaryModel.ErrorSummaryLinks.ElementAt(3);
+        awardingOrgErrors.Should().NotBeNull();
+        awardingOrgErrors.ErrorBannerLinkText.Should().Be(content.AwardingOrganisationErrorMessage);
+        awardingOrgErrors.ElementLinkId.Should().Be("AwardingOrganisation");
+    }
+
+    private HelpQualificationDetailsPage GetHelpQualificationDetailsPageContent()
+    {
+
+        return new HelpQualificationDetailsPage()
+        {
+            Heading = "What are the qualification details?",
+            PostHeadingContent = "We need to know the following qualification details to quickly and accurately respond to any questions you may have.",
+            CtaButtonText = "Continue",
+            BackButton = new NavigationLink
+            {
+                DisplayText = "Back to get help with the Check an early years qualification service",
+                Href = "/help/get-help",
+                OpenInNewTab = false
+            },
+            QualificationNameHeading = "Qualification name",
+            QualificationNameErrorMessage = "Enter the qualification name",
+            AwardingOrganisationHeading = "Awarding organisation",
+            AwardingOrganisationErrorMessage = "Enter the awarding organisation",
+            ErrorBannerHeading = "There is a problem",
+            AwardedDateIsAfterStartedDateErrorText = "The awarded date must be after the started date",
+            StartDateQuestion = new DateQuestion
+            {
+                MonthLabel = "Month",
+                YearLabel = "Year",
+                QuestionHeader = "Start date",
+                QuestionHint = "",
+                ErrorBannerLinkText = "Enter the month and year that the qualification was started",
+                ErrorMessage = "Enter the month and year that the qualification was started",
+                FutureDateErrorBannerLinkText = "The date the qualification was started must be in the past",
+                FutureDateErrorMessage = "The date the qualification was started must be in the past",
+                MissingMonthErrorMessage = "Enter the month that the qualification was started",
+                MissingYearErrorMessage = "Enter the year that the qualification was started",
+                MissingMonthBannerLinkText = "Enter the month that the qualification was started",
+                MissingYearBannerLinkText = "Enter the year that the qualification was started",
+                MonthOutOfBoundsErrorLinkText = "The month the qualification was started must be between 1 and 12",
+                MonthOutOfBoundsErrorMessage = "The month the qualification was started must be between 1 and 12",
+                YearOutOfBoundsErrorLinkText = "The year the qualification was started must be between 1900 and $[actual-year]$",
+                YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$"
+            },
+            AwardedDateQuestion = new DateQuestion
+            {
+                MonthLabel = "Month",
+                YearLabel = "Year",
+                QuestionHeader = "Award date",
+                QuestionHint = "",
+                ErrorBannerLinkText = "Enter the month and year that the qualification was awarded",
+                ErrorMessage = "Enter the date the qualification was awarded",
+                FutureDateErrorBannerLinkText = "The date the qualification was awarded must be in the past",
+                FutureDateErrorMessage = "The date the qualification was awarded must be in the past",
+                MissingMonthErrorMessage = "Enter the month that the qualification was awarded",
+                MissingYearErrorMessage = "Enter the year that the qualification was awarded",
+                MissingMonthBannerLinkText = "Enter the month that the qualification was awarded",
+                MissingYearBannerLinkText = "Enter the year that the qualification was awarded",
+                MonthOutOfBoundsErrorLinkText = "The month the qualification was awarded must be between 1 and 12",
+                MonthOutOfBoundsErrorMessage = "The month the qualification was awarded must be between 1 and 12",
+                YearOutOfBoundsErrorLinkText = "The year the qualification was awarded must be between 1900 and $[actual-year]$",
+                YearOutOfBoundsErrorMessage = "The year the qualification was awarded must be between 1900 and $[actual-year]$"
+            },
+        };
     }
 }

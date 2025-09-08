@@ -33,10 +33,6 @@ public class HelpGetHelpPageMapper(IGovUkContentParser contentParser) : IHelpGet
     private static List<EnquiryOptionModel> MapEnquiryReasons(List<EnquiryOption> helpPageEnquiryReasons)
     {
         var results = new List<EnquiryOptionModel>();
-        if (helpPageEnquiryReasons.Count == 0)
-        {
-            return results;
-        }
 
         foreach (var enquiryReason in helpPageEnquiryReasons)
         {
