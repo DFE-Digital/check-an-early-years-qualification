@@ -18,29 +18,29 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class HelpControllerTests
 {
-    Mock<ILogger<HelpController>> mockLogger = new Mock<ILogger<HelpController>>();
-    Mock<IContentService> mockContentService = new Mock<IContentService>();
-    Mock<INotificationService> mockNotificationService = new Mock<INotificationService>();
-    Mock<IDateQuestionModelValidator> mockDateQuestionValidator = new Mock<IDateQuestionModelValidator>();
-    Mock<IUserJourneyCookieService> mockUserJourneyService = new Mock<IUserJourneyCookieService>();
-    Mock<IHelpGetHelpPageMapper> mockGetPageMapper = new Mock<IHelpGetHelpPageMapper>();
-    Mock<IHelpQualificationDetailsPageMapper> mockQualificationDetailsPageMapper = new Mock<IHelpQualificationDetailsPageMapper>();
-    Mock<IHelpProvideDetailsPageMapper> mockProvideDetailsPageMapper = new Mock<IHelpProvideDetailsPageMapper>();
-    Mock<IHelpEmailAddressPageMapper> mockEmailAddressMapper = new Mock<IHelpEmailAddressPageMapper>();
-    Mock<IHelpConfirmationPageMapper> mockConfirmationMapper = new Mock<IHelpConfirmationPageMapper>();
+    private readonly Mock<ILogger<HelpController>> _mockLogger = new Mock<ILogger<HelpController>>();
+    private readonly Mock<IContentService> _mockContentService = new Mock<IContentService>();
+    private readonly Mock<INotificationService> _mockNotificationService = new Mock<INotificationService>();
+    private readonly Mock<IDateQuestionModelValidator> _mockDateQuestionValidator = new Mock<IDateQuestionModelValidator>();
+    private readonly Mock<IUserJourneyCookieService> _mockUserJourneyService = new Mock<IUserJourneyCookieService>();
+    private readonly Mock<IHelpGetHelpPageMapper> _mockGetPageMapper = new Mock<IHelpGetHelpPageMapper>();
+    private readonly Mock<IHelpQualificationDetailsPageMapper> _mockQualificationDetailsPageMapper = new Mock<IHelpQualificationDetailsPageMapper>();
+    private readonly Mock<IHelpProvideDetailsPageMapper> _mockProvideDetailsPageMapper = new Mock<IHelpProvideDetailsPageMapper>();
+    private readonly Mock<IHelpEmailAddressPageMapper> _mockEmailAddressMapper = new Mock<IHelpEmailAddressPageMapper>();
+    private readonly Mock<IHelpConfirmationPageMapper> _mockConfirmationMapper = new Mock<IHelpConfirmationPageMapper>();
 
     private HelpController GetSut()
     {
-        return new HelpController(mockLogger.Object,
-                                mockContentService.Object,
-                                mockUserJourneyService.Object,
-                                mockNotificationService.Object,
-                                mockDateQuestionValidator.Object,
-                                mockGetPageMapper.Object,
-                                mockQualificationDetailsPageMapper.Object,
-                                mockProvideDetailsPageMapper.Object,
-                                mockEmailAddressMapper.Object,
-                                mockConfirmationMapper.Object
+        return new HelpController(_mockLogger.Object,
+                                _mockContentService.Object,
+                                _mockUserJourneyService.Object,
+                                _mockNotificationService.Object,
+                                _mockDateQuestionValidator.Object,
+                                _mockGetPageMapper.Object,
+                                _mockQualificationDetailsPageMapper.Object,
+                                _mockProvideDetailsPageMapper.Object,
+                                _mockEmailAddressMapper.Object,
+                                _mockConfirmationMapper.Object
                                 );
     }
 
@@ -50,7 +50,7 @@ public class HelpControllerTests
     public async Task GetHelp_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
-        mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(() => null).Verifiable();
+        _mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(() => null).Verifiable();
 
         // Act
         var result = await GetSut().GetHelp();
@@ -65,7 +65,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
-        mockLogger.VerifyError("'Get help page' content could not be found");
+        _mockLogger.VerifyError("'Get help page' content could not be found");
     }
 
     [TestMethod]
@@ -74,8 +74,8 @@ public class HelpControllerTests
         // Arrange
         var content = new GetHelpPage { Heading = "Heading" };
 
-        mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(content);
-        mockGetPageMapper.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(
+        _mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(content);
+        _mockGetPageMapper.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(
             new GetHelpPageViewModel()
             {
                 Heading = content.Heading,
@@ -122,7 +122,7 @@ public class HelpControllerTests
            }
         };
         
-        mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(content);
 
         var submittedViewModel = new GetHelpPageViewModel()
         {
@@ -139,7 +139,7 @@ public class HelpControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(pageToRedirectTo);
 
-        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+        _mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -182,9 +182,9 @@ public class HelpControllerTests
         // Arrange
         var content = new GetHelpPage();
 
-        mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetGetHelpPage()).ReturnsAsync(content);
 
-        mockGetPageMapper.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(new GetHelpPageViewModel()));
+        _mockGetPageMapper.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(new GetHelpPageViewModel()));
 
         var controller = GetSut();
 
@@ -210,7 +210,7 @@ public class HelpControllerTests
     public async Task QualificationDetails_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(() => null).Verifiable();
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(() => null).Verifiable();
 
         // Act
         var result = await GetSut().QualificationDetails();
@@ -225,7 +225,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
-        mockLogger.VerifyError("'Help qualification details page' content could not be found");
+        _mockLogger.VerifyError("'Help qualification details page' content could not be found");
     }
 
     [TestMethod]
@@ -242,23 +242,23 @@ public class HelpControllerTests
             }
         };
 
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
         var helpForm = new HelpFormEnquiry()
         {
             ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
         };
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
         var startedAt = (1, 2000);
         var awardedAt = (6, 2002);
 
-        mockUserJourneyService.Setup(x => x.GetAwardingOrganisation()).Returns("Awarding organisation");
-        mockUserJourneyService.Setup(x => x.GetSelectedQualificationName()).Returns("Qualification name");
+        _mockUserJourneyService.Setup(x => x.GetAwardingOrganisation()).Returns("Awarding organisation");
+        _mockUserJourneyService.Setup(x => x.GetSelectedQualificationName()).Returns("Qualification name");
 
-        mockUserJourneyService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(startedAt);
-        mockUserJourneyService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns(awardedAt);
+        _mockUserJourneyService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(startedAt);
+        _mockUserJourneyService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns(awardedAt);
 
         var controller = GetSut();
 
@@ -301,10 +301,10 @@ public class HelpControllerTests
                 YearValid = true
             }
         };
-        mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion, e.StartedValidationResult)).Returns(viewModel.QuestionModel.StartedQuestion);
-        mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion, e.AwardedValidationResult)).Returns(viewModel.QuestionModel.AwardedQuestion);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion, e.StartedValidationResult)).Returns(viewModel.QuestionModel.StartedQuestion);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion, e.AwardedValidationResult)).Returns(viewModel.QuestionModel.AwardedQuestion);
 
-        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(It.IsAny<QualificationDetailsPageViewModel>(), content, null, It.IsAny<ModelStateDictionary>())).Returns(viewModel);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(It.IsAny<QualificationDetailsPageViewModel>(), content, null, It.IsAny<ModelStateDictionary>())).Returns(viewModel);
 
         // Act
         var result = await controller.QualificationDetails();
@@ -337,9 +337,9 @@ public class HelpControllerTests
             Heading = "Heading",
         };
 
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
@@ -365,7 +365,7 @@ public class HelpControllerTests
             AwardingOrganisation = "Some organisation where the qualification is from",
         };
 
-        mockDateQuestionValidator.Setup(x => x.IsValid(submittedViewModel.QuestionModel, content)).Returns(
+        _mockDateQuestionValidator.Setup(x => x.IsValid(submittedViewModel.QuestionModel, content)).Returns(
             new DatesValidationResult()
             {
                 StartedValidationResult = new DateValidationResult()
@@ -384,7 +384,7 @@ public class HelpControllerTests
         // Act
         var result = await GetSut().QualificationDetails(submittedViewModel);
 
-        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
+        var enquiry = _mockUserJourneyService.Object.GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
@@ -405,7 +405,7 @@ public class HelpControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
 
-        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+        _mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -417,9 +417,9 @@ public class HelpControllerTests
             Heading = "Heading",
         };
 
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
@@ -441,7 +441,7 @@ public class HelpControllerTests
             AwardingOrganisation = "Some organisation where the qualification is from",
         };
 
-        mockDateQuestionValidator.Setup(x => x.IsValid(submittedViewModel.QuestionModel, content)).Returns(
+        _mockDateQuestionValidator.Setup(x => x.IsValid(submittedViewModel.QuestionModel, content)).Returns(
             new DatesValidationResult()
             {
                 StartedValidationResult = null,
@@ -456,7 +456,7 @@ public class HelpControllerTests
         // Act
         var result = await GetSut().QualificationDetails(submittedViewModel);
 
-        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
+        var enquiry = _mockUserJourneyService.Object.GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
@@ -477,7 +477,7 @@ public class HelpControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
 
-        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+        _mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -488,9 +488,9 @@ public class HelpControllerTests
         {
             Heading = "Heading",
         };
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
@@ -522,11 +522,11 @@ public class HelpControllerTests
             AwardedValidationResult = new()
         };
 
-        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
+        _mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
 
         var controller = GetSut();
 
-        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
 
         // force validation error
         controller.ModelState.AddModelError(nameof(QualificationDetailsPageViewModel.QualificationName), "Invalid");
@@ -552,9 +552,9 @@ public class HelpControllerTests
         {
             Heading = "Heading",
         };
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
@@ -586,11 +586,11 @@ public class HelpControllerTests
             AwardedValidationResult = new()
         };
 
-        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
+        _mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
 
         var controller = GetSut();
 
-        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
 
         // force validation error
         controller.ModelState.AddModelError(nameof(QualificationDetailsPageViewModel.AwardingOrganisation), "Invalid");
@@ -616,9 +616,9 @@ public class HelpControllerTests
         {
             Heading = "Heading",
         };
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
@@ -650,11 +650,11 @@ public class HelpControllerTests
             AwardedValidationResult = new() { MonthValid = false }
         };
 
-        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
+        _mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
 
         var controller = GetSut();
 
-        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
 
         // force validation error
         controller.ModelState.AddModelError(nameof(QualificationDetailsPageViewModel.QuestionModel.AwardedQuestion.SelectedMonth), "Invalid");
@@ -680,9 +680,9 @@ public class HelpControllerTests
         {
             Heading = "Heading",
         };
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
             new HelpFormEnquiry()
             {
                 ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
@@ -714,11 +714,11 @@ public class HelpControllerTests
             AwardedValidationResult = new() { YearValid = false }
         };
 
-        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
+        _mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(validationResult);
 
         var controller = GetSut();
 
-        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
+        _mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(vm, content, validationResult, controller.ModelState)).Returns(vm);
 
         // force validation error
         controller.ModelState.AddModelError(nameof(QualificationDetailsPageViewModel.QuestionModel.AwardedQuestion.SelectedYear), "Invalid");
@@ -742,7 +742,7 @@ public class HelpControllerTests
     public async Task ProvideDetails_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
-        mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(() => null).Verifiable();
+        _mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(() => null).Verifiable();
 
         // Act
         var result = await GetSut().ProvideDetails();
@@ -757,7 +757,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
-        mockLogger.VerifyError("'Help provide details page' content could not be found");
+        _mockLogger.VerifyError("'Help provide details page' content could not be found");
     }
 
     [TestMethod]
@@ -781,14 +781,14 @@ public class HelpControllerTests
             }
         };
 
-        mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(content);
 
         var enquiry = new HelpFormEnquiry()
         {
             ReasonForEnquiring = selectedOption,
         };
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
 
         var viewModel = new ProvideDetailsPageViewModel();
 
@@ -818,7 +818,7 @@ public class HelpControllerTests
             };
         }
 
-        mockProvideDetailsPageMapper.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring)).Returns(viewModel);
+        _mockProvideDetailsPageMapper.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring)).Returns(viewModel);
 
         // Act
         var result = await GetSut().ProvideDetails();
@@ -856,7 +856,7 @@ public class HelpControllerTests
             ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
         };
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
         var submittedViewModel = new ProvideDetailsPageViewModel()
         {
@@ -866,7 +866,7 @@ public class HelpControllerTests
         // Act
         var result = await GetSut().ProvideDetails(submittedViewModel);
 
-        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
+        var enquiry = _mockUserJourneyService.Object.GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
@@ -878,7 +878,7 @@ public class HelpControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be("EmailAddress");
 
-        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+        _mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -890,13 +890,13 @@ public class HelpControllerTests
             ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
         };
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
 
         var content = new HelpProvideDetailsPage();
 
-        mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(content);
+        _mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(content);
 
-        mockProvideDetailsPageMapper.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring)).Returns(new ProvideDetailsPageViewModel());
+        _mockProvideDetailsPageMapper.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring)).Returns(new ProvideDetailsPageViewModel());
 
         var controller = GetSut();
 
@@ -922,7 +922,7 @@ public class HelpControllerTests
     public async Task EmailAddress_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
-        mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(() => null).Verifiable();
+        _mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(() => null).Verifiable();
 
         // Act
         var result = await GetSut().EmailAddress();
@@ -937,7 +937,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
-        mockLogger.VerifyError("'Help email address page' content could not be found");
+        _mockLogger.VerifyError("'Help email address page' content could not be found");
     }
 
     [TestMethod]
@@ -949,8 +949,8 @@ public class HelpControllerTests
             Heading = "Heading",
         };
 
-        mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(content);
-        mockEmailAddressMapper.Setup(x => x.MapEmailAddressPageContentToViewModel(content)).Returns(
+        _mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(content);
+        _mockEmailAddressMapper.Setup(x => x.MapEmailAddressPageContentToViewModel(content)).Returns(
             new EmailAddressPageViewModel()
             {
                 Heading = content.Heading,
@@ -967,7 +967,7 @@ public class HelpControllerTests
             AwardingOrganisation = "An awarding organisation",
         };
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
         // Act
         var result = await GetSut().EmailAddress();
@@ -994,7 +994,7 @@ public class HelpControllerTests
             AdditionalInformation = "Some details about the issue",
         };
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
 
         var submittedViewModel = new EmailAddressPageViewModel()
         {
@@ -1005,7 +1005,7 @@ public class HelpControllerTests
         var result = await GetSut().EmailAddress(submittedViewModel);
 
 
-        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
+        var enquiry = _mockUserJourneyService.Object.GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
@@ -1018,9 +1018,9 @@ public class HelpControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be("Confirmation");
 
-        mockNotificationService.Verify(x => x.SendHelpPageNotification(It.IsAny<HelpPageNotification>()), Times.Once());
+        _mockNotificationService.Verify(x => x.SendHelpPageNotification(It.IsAny<HelpPageNotification>()), Times.Once());
 
-        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+        _mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -1029,10 +1029,10 @@ public class HelpControllerTests
         // Arrange
         var content = new HelpEmailAddressPage();
 
-        mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(content);
-        mockEmailAddressMapper.Setup(x => x.MapEmailAddressPageContentToViewModel(content)).Returns(new EmailAddressPageViewModel());
+        _mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(content);
+        _mockEmailAddressMapper.Setup(x => x.MapEmailAddressPageContentToViewModel(content)).Returns(new EmailAddressPageViewModel());
 
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         var controller = GetSut();
 
@@ -1059,7 +1059,7 @@ public class HelpControllerTests
     public async Task Confirmation_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
-        mockContentService.Setup(x => x.GetHelpConfirmationPage()).ReturnsAsync(() => null).Verifiable();
+        _mockContentService.Setup(x => x.GetHelpConfirmationPage()).ReturnsAsync(() => null).Verifiable();
 
         // Act
         var result = await GetSut().Confirmation();
@@ -1074,7 +1074,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
-        mockLogger.VerifyError("'Help confirmation page' content could not be found");
+        _mockLogger.VerifyError("'Help confirmation page' content could not be found");
     }
 
     [TestMethod]
@@ -1091,8 +1091,8 @@ public class HelpControllerTests
             }
         };
 
-        mockContentService.Setup(x => x.GetHelpConfirmationPage()).ReturnsAsync(content);
-        mockConfirmationMapper.Setup(x => x.MapConfirmationPageContentToViewModelAsync(content)).Returns(Task.FromResult(
+        _mockContentService.Setup(x => x.GetHelpConfirmationPage()).ReturnsAsync(content);
+        _mockConfirmationMapper.Setup(x => x.MapConfirmationPageContentToViewModelAsync(content)).Returns(Task.FromResult(
             new ConfirmationPageViewModel()
             {
                 SuccessMessage = content.SuccessMessage,
@@ -1113,60 +1113,4 @@ public class HelpControllerTests
 
         model.SuccessMessage.Should().Be(content.SuccessMessage);
     }
-
-    #region private methods for setup
-
-    private void SetUpQualificationDetailsContent()
-    {
-        var content = new HelpQualificationDetailsPage
-        {
-            Heading = "Heading",
-        };
-        mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
-
-        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(
-            new HelpFormEnquiry()
-            {
-                ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
-            }
-        );
-
-        mockQualificationDetailsPageMapper.Setup(x => x.MapQualificationDetailsContentToViewModel(new(), content, null , new())).Returns(new QualificationDetailsPageViewModel());
-
-    }
-
-    private QualificationDetailsPageViewModel SetUpSubmission(string? qualificationName, string? awardingOrganisation,
-        int? startedMonth, int? startedYear, int? awardedMonth, int? awardedYear, DateValidationResult startedValidationResult, DateValidationResult awardedValidationResult)
-    {
-        var vm = new QualificationDetailsPageViewModel()
-        {
-            QualificationName = qualificationName,
-            QuestionModel = new DatesQuestionModel()
-            {
-                StartedQuestion = new()
-                {
-                    SelectedMonth = startedMonth,
-                    SelectedYear = startedYear
-                },
-                AwardedQuestion = new()
-                {
-                    SelectedMonth = awardedMonth,
-                    SelectedYear = awardedYear
-                },
-            },
-            AwardingOrganisation = awardingOrganisation,
-        };
-
-        mockDateQuestionValidator.Setup(x => x.IsValid(vm.QuestionModel, It.IsAny<HelpQualificationDetailsPage>())).Returns(
-            new DatesValidationResult()
-            {
-                StartedValidationResult = startedValidationResult,
-                AwardedValidationResult = awardedValidationResult
-            }
-        );
-
-        return vm;
-    }
-
-    #endregion
 }

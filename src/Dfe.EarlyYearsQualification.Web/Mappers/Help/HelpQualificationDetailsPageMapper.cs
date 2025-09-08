@@ -14,8 +14,8 @@ public class HelpQualificationDetailsPageMapper(IPlaceholderUpdater placeholderU
 {
     public QualificationDetailsPageViewModel MapQualificationDetailsContentToViewModel(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content, DatesValidationResult? validationResult, ModelStateDictionary modelState)
     {
-        var startedModel = MapDateModel(viewModel.QuestionModel.StartedQuestion!, content.StartDateQuestion!, validationResult?.StartedValidationResult);
-        var awardedModel = MapDateModel(viewModel.QuestionModel.AwardedQuestion!, content.AwardedDateQuestion!, validationResult?.AwardedValidationResult);
+        var startedModel = MapDateModel(viewModel.QuestionModel.StartedQuestion!, content.StartDateQuestion, validationResult?.StartedValidationResult);
+        var awardedModel = MapDateModel(viewModel.QuestionModel.AwardedQuestion!, content.AwardedDateQuestion, validationResult?.AwardedValidationResult);
 
         var errorLinks = new List<ErrorSummaryLink>();
 
@@ -39,7 +39,6 @@ public class HelpQualificationDetailsPageMapper(IPlaceholderUpdater placeholderU
 
         var (awardedQuestionMapped, awardedQuestionErrors) = MapDate(viewModel.QuestionModel.AwardedQuestion!, "awarded", "QuestionModel." + nameof(viewModel.QuestionModel.AwardedQuestion));
         viewModel.QuestionModel.AwardedQuestion = awardedQuestionMapped;
-
 
         if (!modelState.IsValid)
         {
@@ -119,13 +118,11 @@ public class HelpQualificationDetailsPageMapper(IPlaceholderUpdater placeholderU
             };
         }
 
-        if (dateQuestion is not null &&
-            (dateQuestion.MonthError || dateQuestion.YearError) &&
-            dateQuestion.ErrorSummaryLinks is not null)
+        if (dateQuestion.MonthError || dateQuestion.YearError)
         {
             errorLinks.AddRange(dateQuestion.ErrorSummaryLinks);
         }
 
-        return (dateQuestion!, errorLinks);
+        return (dateQuestion, errorLinks);
     }
 }
