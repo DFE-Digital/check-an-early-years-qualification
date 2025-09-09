@@ -22,10 +22,13 @@ public static class ContentTypes
     public const string CheckAdditionalRequirementsAnswerPage = "checkAdditionalRequirementsAnswerPage";
     public const string OpenGraphData = "openGraphData";
     public const string CheckYourAnswersPage = "checkYourAnswersPage";
-    public const string HelpPage = "helpPage";
-    public const string HelpConfirmationPage = "helpConfirmationPage";
     public const string PreCheckPage = "preCheckPage";
     public const string Footer = "footer";
     public const string FeedbackFormPage = "feedbackPage";
     public const string FeedbackFormConfirmationPage = "feedbackFormConfirmationPage";
+    public const string GetHelpPage = "getHelpPage";
+    public const string HelpQualificationDetailsPage = "helpQualificationDetails";
+    public const string HelpProvideDetailsPage = "helpProvideDetailsPage";
+    public const string HelpEmailAddressPage = "helpEmailAddress";
+    public const string HelpConfirmationPage = "helpConfirmationPage";
 }

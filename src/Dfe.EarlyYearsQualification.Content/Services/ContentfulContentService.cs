@@ -2,6 +2,7 @@
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Validators;
 using Microsoft.Extensions.Logging;
@@ -264,37 +265,6 @@ public class ContentfulContentService(
         return checkYourAnswersPages.First();
     }
 
-    public async Task<HelpPage?> GetHelpPage()
-    {
-        var helpPage = await GetEntriesByType<HelpPage>();
-
-        // ReSharper disable once InvertIf
-        if (helpPage is null || !helpPage.Any())
-        {
-            Logger.LogWarning("No 'Help Page' returned");
-            return null;
-        }
-
-        return helpPage.First();
-    }
-
-    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
-    {
-        var helpConfirmationPageType = ContentTypeLookup[typeof(HelpConfirmationPage)]; 
-        var queryBuilder = new QueryBuilder<HelpConfirmationPage>().ContentTypeIs(helpConfirmationPageType)
-                                                                   .Include(2);
-        var helpConfirmationPage = await GetEntriesByType(queryBuilder);
-
-        // ReSharper disable once InvertIf
-        if (helpConfirmationPage is null || !helpConfirmationPage.Any())
-        {
-            Logger.LogWarning("No 'Help Confirmation Page' returned");
-            return null;
-        }
-
-        return helpConfirmationPage.First();
-    }
-
     public async Task<PreCheckPage?> GetPreCheckPage()
     {
         ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
@@ -358,6 +328,79 @@ public class ContentfulContentService(
         }
 
         return feedbackFormConfirmationPage.First();
+    }
+
+    public async Task<GetHelpPage?> GetGetHelpPage()
+    {
+        var getHelpPage = await GetEntriesByType<GetHelpPage>();
+
+        // ReSharper disable once InvertIf
+        if (getHelpPage is null || !getHelpPage.Any())
+        {
+            Logger.LogWarning("No 'help page' returned");
+            return null;
+        }
+
+        return getHelpPage.First();
+    }
+
+    public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()
+    {
+        var helpQualificationDetailsPage = await GetEntriesByType<HelpQualificationDetailsPage>();
+
+        // ReSharper disable once InvertIf
+        if (helpQualificationDetailsPage is null || !helpQualificationDetailsPage.Any())
+        {
+            Logger.LogWarning("No 'help qualification details page' returned");
+            return null;
+        }
+
+        return helpQualificationDetailsPage.First();
+    }
+
+    public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage()
+    {
+        var helpProvideDetailsPage = await GetEntriesByType<HelpProvideDetailsPage>();
+
+        // ReSharper disable once InvertIf
+        if (helpProvideDetailsPage is null || !helpProvideDetailsPage.Any())
+        {
+            Logger.LogWarning("No 'help provide details page' returned");
+            return null;
+        }
+
+        return helpProvideDetailsPage.First();
+    }
+
+    public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
+    {
+        var emailAddressContent = await GetEntriesByType<HelpEmailAddressPage>();
+
+        // ReSharper disable once InvertIf
+        if (emailAddressContent is null || !emailAddressContent.Any())
+        {
+            Logger.LogWarning("No 'help email address page' returned");
+            return null;
+        }
+
+        return emailAddressContent.First();
+    }
+
+    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
+    {
+        var helpConfirmationPageType = ContentTypeLookup[typeof(HelpConfirmationPage)];
+        var queryBuilder = new QueryBuilder<HelpConfirmationPage>().ContentTypeIs(helpConfirmationPageType)
+                                                                   .Include(2);
+        var helpConfirmationPage = await GetEntriesByType(queryBuilder);
+
+        // ReSharper disable once InvertIf
+        if (helpConfirmationPage is null || !helpConfirmationPage.Any())
+        {
+            Logger.LogWarning("No 'Help Confirmation Page' returned");
+            return null;
+        }
+
+        return helpConfirmationPage.First();
     }
 
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(

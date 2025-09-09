@@ -90,7 +90,7 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await page.locator("#ud-get-help").click();
 
 
-            await checkUrl(page, "/advice/help");
+            await checkUrl(page, "/help/get-help");
         });
     });
 });

@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -61,6 +62,18 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             EnsureModelLoaded();
 
             _model!.LevelOfQualification = level;
+
+            SetJourneyCookie();
+        }
+    }
+
+    public void SetSelectedQualificationName(string qualificationName)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.SelectedQualificationName = qualificationName;
 
             SetJourneyCookie();
         }
@@ -163,20 +176,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         {
             EnsureModelLoaded();
 
-            int? startDateMonth = null;
-            int? startDateYear = null;
-            string[] qualificationAwardedDateSplit = _model!.WhenWasQualificationStarted.Split('/');
-
-            // ReSharper disable once InvertIf
-            if (qualificationAwardedDateSplit.Length == 2
-                && int.TryParse(qualificationAwardedDateSplit[0], out var parsedStartMonth)
-                && int.TryParse(qualificationAwardedDateSplit[1], out var parsedStartYear))
-            {
-                startDateMonth = parsedStartMonth;
-                startDateYear = parsedStartYear;
-            }
-
-            return (startDateMonth, startDateYear);
+            return StringDateHelper.SplitDate(_model!.WhenWasQualificationStarted);
         }
     }
 
@@ -186,20 +186,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         {
             EnsureModelLoaded();
 
-            int? awardedDateMonth = null;
-            int? awardedDateYear = null;
-            string[] qualificationAwardedDateSplit = _model!.WhenWasQualificationAwarded.Split('/');
-
-            // ReSharper disable once InvertIf
-            if (qualificationAwardedDateSplit.Length == 2
-                && int.TryParse(qualificationAwardedDateSplit[0], out var parsedAwardedMonth)
-                && int.TryParse(qualificationAwardedDateSplit[1], out var parsedAwardedYear))
-            {
-                awardedDateMonth = parsedAwardedMonth;
-                awardedDateYear = parsedAwardedYear;
-            }
-
-            return (awardedDateMonth, awardedDateYear);
+            return StringDateHelper.SplitDate(_model!.WhenWasQualificationAwarded);
         }
     }
 
@@ -258,6 +245,22 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             }
 
             return level;
+        }
+    }
+
+    public string? GetSelectedQualificationName()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            string? qualificationName = null;
+            if (!string.IsNullOrEmpty(_model!.SelectedQualificationName))
+            {
+                qualificationName = _model.SelectedQualificationName;
+            }
+
+            return qualificationName;
         }
     }
 
@@ -460,6 +463,28 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public HelpFormEnquiry? GetHelpFormEnquiry()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.HelpFormEnquiry;
+        }
+    }
+
+    public void SetHelpFormEnquiry(HelpFormEnquiry? formEnquiry)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.HelpFormEnquiry = formEnquiry;
+
+            SetJourneyCookie();
+        }
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)
@@ -532,19 +557,30 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
     /// </remarks>
     public class UserJourneyModel
     {
+        public string SelectedQualificationName { get; set; } = string.Empty;
+
         public string WhereWasQualificationAwarded { get; set; } = string.Empty;
+
         public string WhenWasQualificationStarted { get; set; } = string.Empty;
+
         public string WhenWasQualificationAwarded { get; set; } = string.Empty;
+
         public string LevelOfQualification { get; set; } = string.Empty;
+
         public string WhatIsTheAwardingOrganisation { get; set; } = string.Empty;
+
         public bool SelectedAwardingOrganisationNotOnTheList { get; set; }
 
         public string SearchCriteria { get; set; } = string.Empty;
 
         public Dictionary<string, string> AdditionalQuestionsAnswers { get; init; } = new();
+
         public YesOrNo QualificationWasSelectedFromList { get; set; }
 
         public bool HasSubmittedEmailAddressInFeedbackFormQuestion { get; set; }
+
         public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
+
+        public HelpFormEnquiry? HelpFormEnquiry { get; set; }
     }
 }

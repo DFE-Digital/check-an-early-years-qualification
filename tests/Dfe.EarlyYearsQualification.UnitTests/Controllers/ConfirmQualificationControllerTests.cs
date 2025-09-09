@@ -120,11 +120,12 @@ public class ConfirmQualificationControllerTests
                                               "Qualification Name",
                                               AwardingOrganisations.Ncfe,
                                               2)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2019",
-                                QualificationNumber = "ABC/547/900",
-                                AdditionalRequirements = "additional requirements"
-                            };
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements"
+        };
 
         mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(qualification);
@@ -146,6 +147,9 @@ public class ConfirmQualificationControllerTests
         var model = resultType.Model as ConfirmQualificationPageModel;
         model.Should().NotBeNull();
         model.Should().BeEquivalentTo(expectedModel);
+
+        mockUserJourneyService.Verify(x => x.SetAwardingOrganisation(qualification.AwardingOrganisationTitle), Times.Once);
+        mockUserJourneyService.Verify(x => x.SetSelectedQualificationName(qualification.QualificationName), Times.Once);
     }
 
     [TestMethod]
@@ -163,11 +167,12 @@ public class ConfirmQualificationControllerTests
                                               "Qualification Name",
                                               AwardingOrganisations.Ncfe,
                                               2)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2019",
-                                QualificationNumber = "ABC/547/900",
-                                AdditionalRequirements = "additional requirements"
-                            };
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements"
+        };
         mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(qualification);
 
@@ -242,9 +247,9 @@ public class ConfirmQualificationControllerTests
         controller.ModelState.AddModelError("test", "error");
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
-                                              {
-                                                  QualificationId = "Some ID"
-                                              });
+        {
+            QualificationId = "Some ID"
+        });
 
         result.Should().BeOfType<RedirectToActionResult>();
 
@@ -275,11 +280,12 @@ public class ConfirmQualificationControllerTests
                                               "Qualification Name",
                                               AwardingOrganisations.Ncfe,
                                               2)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2019",
-                                QualificationNumber = "ABC/547/900",
-                                AdditionalRequirements = "additional requirements"
-                            };
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements"
+        };
 
         mockRepository.Setup(x => x.GetById("Some ID"))
                       .ReturnsAsync(qualification);
@@ -294,9 +300,9 @@ public class ConfirmQualificationControllerTests
         controller.ModelState.AddModelError("test", "error");
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
-                                              {
-                                                  QualificationId = "Some ID"
-                                              });
+        {
+            QualificationId = "Some ID"
+        });
 
         result.Should().NotBeNull();
 
@@ -324,12 +330,13 @@ public class ConfirmQualificationControllerTests
                                               "Qualification Name",
                                               AwardingOrganisations.Ncfe,
                                               2)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2019",
-                                QualificationNumber = "ABC/547/900",
-                                AdditionalRequirements = "additional requirements",
-                                AdditionalRequirementQuestions = additionalRequirements
-                            };
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements",
+            AdditionalRequirementQuestions = additionalRequirements
+        };
 
         mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
@@ -342,10 +349,10 @@ public class ConfirmQualificationControllerTests
                                                mockConfirmQualificationPageMapper.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
-                                              {
-                                                  QualificationId = "TEST-123",
-                                                  ConfirmQualificationAnswer = "yes"
-                                              });
+        {
+            QualificationId = "TEST-123",
+            ConfirmQualificationAnswer = "yes"
+        });
 
         result.Should().BeOfType<RedirectToActionResult>();
 
@@ -372,13 +379,14 @@ public class ConfirmQualificationControllerTests
                                               "Qualification Name",
                                               AwardingOrganisations.Ncfe,
                                               2)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2019",
-                                QualificationNumber = "ABC/547/900",
-                                AdditionalRequirements = "additional requirements",
-                                AdditionalRequirementQuestions = additionalRequirements,
-                                IsAutomaticallyApprovedAtLevel6 = true
-                            };
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements",
+            AdditionalRequirementQuestions = additionalRequirements,
+            IsAutomaticallyApprovedAtLevel6 = true
+        };
 
         mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
@@ -391,10 +399,10 @@ public class ConfirmQualificationControllerTests
                                                mockConfirmQualificationPageMapper.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
-                                              {
-                                                  QualificationId = "TEST-123",
-                                                  ConfirmQualificationAnswer = "yes"
-                                              });
+        {
+            QualificationId = "TEST-123",
+            ConfirmQualificationAnswer = "yes"
+        });
 
         result.Should().BeOfType<RedirectToActionResult>();
 
@@ -418,11 +426,12 @@ public class ConfirmQualificationControllerTests
                                               "Qualification Name",
                                               AwardingOrganisations.Ncfe,
                                               2)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2019",
-                                QualificationNumber = "ABC/547/900",
-                                AdditionalRequirements = "additional requirements"
-                            };
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements"
+        };
 
         mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
@@ -435,10 +444,10 @@ public class ConfirmQualificationControllerTests
                                                mockConfirmQualificationPageMapper.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
-                                              {
-                                                  QualificationId = "TEST-123",
-                                                  ConfirmQualificationAnswer = "yes"
-                                              });
+        {
+            QualificationId = "TEST-123",
+            ConfirmQualificationAnswer = "yes"
+        });
 
         result.Should().BeOfType<RedirectToActionResult>();
 
@@ -462,11 +471,12 @@ public class ConfirmQualificationControllerTests
                                               "Qualification Name",
                                               AwardingOrganisations.Ncfe,
                                               2)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2019",
-                                QualificationNumber = "ABC/547/900",
-                                AdditionalRequirements = "additional requirements"
-                            };
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements"
+        };
 
         mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
@@ -479,10 +489,10 @@ public class ConfirmQualificationControllerTests
                                                mockConfirmQualificationPageMapper.Object);
 
         var result = await controller.Confirm(new ConfirmQualificationPageModel
-                                              {
-                                                  QualificationId = "TEST-123",
-                                                  ConfirmQualificationAnswer = "not yes"
-                                              });
+        {
+            QualificationId = "TEST-123",
+            ConfirmQualificationAnswer = "not yes"
+        });
 
         result.Should().BeOfType<RedirectToActionResult>();
 
@@ -505,11 +515,12 @@ public class ConfirmQualificationControllerTests
                                               "Qualification Name",
                                               AwardingOrganisations.Ncfe,
                                               2)
-                            {
-                                FromWhichYear = "2014", ToWhichYear = "2019",
-                                QualificationNumber = "ABC/547/900",
-                                AdditionalRequirements = "additional requirements"
-                            };
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements"
+        };
 
         mockRepository.Setup(x => x.GetById("TEST-123"))
                       .ReturnsAsync(qualification);
@@ -522,10 +533,10 @@ public class ConfirmQualificationControllerTests
                                                mockConfirmQualificationPageMapper.Object);
 
         await controller.Confirm(new ConfirmQualificationPageModel
-                                 {
-                                     QualificationId = "TEST-123",
-                                     ConfirmQualificationAnswer = "yes"
-                                 });
+        {
+            QualificationId = "TEST-123",
+            ConfirmQualificationAnswer = "yes"
+        });
 
         mockUserJourneyService.Verify(x => x.ClearAdditionalQuestionsAnswers(), Times.Once);
     }
@@ -533,20 +544,20 @@ public class ConfirmQualificationControllerTests
     private static ConfirmQualificationPage GetConfirmQualificationPageContent()
     {
         return new ConfirmQualificationPage
-               {
-                   QualificationLabel = "Test qualification label",
-                   BackButton = new NavigationLink
-                                {
-                                    DisplayText = "Test back button",
-                                    OpenInNewTab = false,
-                                    Href = "/select-a-qualification-to-check"
-                                },
-                   ErrorText = "Test error text",
-                   ButtonText = "Test button text",
-                   LevelLabel = "Test level label",
-                   DateAddedLabel = "Test date added label",
-                   Heading = "Test heading",
-                   Options =
+        {
+            QualificationLabel = "Test qualification label",
+            BackButton = new NavigationLink
+            {
+                DisplayText = "Test back button",
+                OpenInNewTab = false,
+                Href = "/select-a-qualification-to-check"
+            },
+            ErrorText = "Test error text",
+            ButtonText = "Test button text",
+            LevelLabel = "Test level label",
+            DateAddedLabel = "Test date added label",
+            Heading = "Test heading",
+            Options =
                    [
                        new Option
                        {
@@ -559,12 +570,12 @@ public class ConfirmQualificationControllerTests
                            Value = "no"
                        }
                    ],
-                   RadioHeading = "Test radio heading",
-                   AwardingOrganisationLabel = "Test awarding organisation label",
-                   ErrorBannerHeading = "Test error banner heading",
-                   ErrorBannerLink = "Test error banner link",
-                   AnswerDisclaimerText = "Answer disclaimer text",
-                   NoAdditionalRequirementsButtonText = "Get result"
-               };
+            RadioHeading = "Test radio heading",
+            AwardingOrganisationLabel = "Test awarding organisation label",
+            ErrorBannerHeading = "Test error banner heading",
+            ErrorBannerLink = "Test error banner link",
+            AnswerDisclaimerText = "Answer disclaimer text",
+            NoAdditionalRequirementsButtonText = "Get result"
+        };
     }
 }

@@ -1,5 +1,7 @@
 using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Help;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.ServiceCollection;
 
@@ -8,8 +10,11 @@ public static class ServiceCollectionExtensions
     public static void AddMappers(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IAdvicePageMapper, AdvicePageMapper>();
-        serviceCollection.AddScoped<IHelpPageMapper, HelpPageMapper>();
-        serviceCollection.AddScoped<IHelpConfirmationPageModelMapper, HelpConfirmationPageModelMapper>();
+        serviceCollection.AddScoped<IHelpGetHelpPageMapper, HelpGetHelpPageMapper>();
+        serviceCollection.AddScoped<IHelpQualificationDetailsPageMapper, HelpQualificationDetailsPageMapper>();
+        serviceCollection.AddScoped<IHelpProvideDetailsPageMapper, HelpProvideDetailsPageMapper>();
+        serviceCollection.AddScoped<IHelpEmailAddressPageMapper, HelpEmailAddressPageMapper>();
+        serviceCollection.AddScoped<IHelpConfirmationPageMapper, HelpConfirmationPageMapper>();
         serviceCollection.AddScoped<IAccessibilityStatementMapper,  AccessibilityStatementMapper>();
         serviceCollection.AddScoped<IChallengePageMapper, ChallengePageMapper>();
         serviceCollection.AddScoped<IConfirmQualificationPageMapper, ConfirmQualificationPageMapper>();

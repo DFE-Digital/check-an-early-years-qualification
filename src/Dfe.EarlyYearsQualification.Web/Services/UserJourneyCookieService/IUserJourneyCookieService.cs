@@ -1,3 +1,5 @@
+using static Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService.UserJourneyCookieService;
+
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 public interface IUserJourneyCookieService
@@ -6,6 +8,7 @@ public interface IUserJourneyCookieService
     void SetWhenWasQualificationStarted(string date);
     void SetWhenWasQualificationAwarded(string date);
     void SetLevelOfQualification(string level);
+    void SetSelectedQualificationName(string qualificationName);
     void SetAwardingOrganisation(string awardingOrganisation);
     void SetAwardingOrganisationNotOnList(bool isOnList);
     void SetUserSelectedQualificationFromList(YesOrNo yesOrNo);
@@ -20,6 +23,7 @@ public interface IUserJourneyCookieService
     bool WasStartedBetweenSeptember2014AndAugust2019();
     bool WasStartedOnOrAfterSeptember2019();
     int? GetLevelOfQualification();
+    string? GetSelectedQualificationName();
     string? GetAwardingOrganisation();
     bool GetAwardingOrganisationIsNotOnList();
     string? GetSearchCriteria();
@@ -36,4 +40,6 @@ public interface IUserJourneyCookieService
     bool GetHasSubmittedEmailAddressInFeedbackFormQuestion();
     void SetHasUserGotEverythingTheyNeededToday(string hasGotEverythingTheyNeededToday);
     string GetHasUserGotEverythingTheyNeededToday();
+    HelpFormEnquiry? GetHelpFormEnquiry();
+    void SetHelpFormEnquiry(HelpFormEnquiry? formEnquiry);
 }
