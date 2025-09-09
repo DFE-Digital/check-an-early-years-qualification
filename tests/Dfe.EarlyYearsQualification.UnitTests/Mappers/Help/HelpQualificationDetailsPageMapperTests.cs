@@ -118,8 +118,16 @@ public class HelpQualificationDetailsPageMapperTests
 
         var validationResult = new DatesValidationResult()
         {
-            StartedValidationResult = new() { MonthValid = false, YearValid = false },
-            AwardedValidationResult = new() { MonthValid = false, YearValid = false }
+            StartedValidationResult = new()
+            {
+                MonthValid = false,
+                YearValid = false
+            },
+            AwardedValidationResult = new()
+            {
+                MonthValid = false,
+                YearValid = false
+            }
         };
 
         var modelState = new ModelStateDictionary();
@@ -155,6 +163,101 @@ public class HelpQualificationDetailsPageMapperTests
         awardingOrgErrors.Should().NotBeNull();
         awardingOrgErrors.ErrorBannerLinkText.Should().Be(content.AwardingOrganisationErrorMessage);
         awardingOrgErrors.ElementLinkId.Should().Be("AwardingOrganisation");
+    }
+
+    [TestMethod]
+    public void MapQualificationDetailsContentToViewModel_InvalidViewModel_BannerPlacementMessageOverwritesErrorsViewModel()
+    {
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+
+        var content = GetHelpQualificationDetailsPageContent();
+
+        var viewModel = new QualificationDetailsPageViewModel()
+        {
+            QuestionModel = new DatesQuestionModel()
+            {
+                StartedQuestion = new DateQuestionModel()
+                {
+                    QuestionHeader = content.StartDateQuestion.QuestionHeader,
+                    MonthLabel = content.StartDateQuestion.MonthLabel,
+                    YearLabel = content.StartDateQuestion.YearLabel,
+                    SelectedMonth = 1,
+                    SelectedYear = 2000
+                },
+                AwardedQuestion = new DateQuestionModel()
+                {
+                    QuestionHeader = content.AwardedDateQuestion.QuestionHeader,
+                    MonthLabel = content.AwardedDateQuestion.MonthLabel,
+                    YearLabel = content.AwardedDateQuestion.YearLabel,
+                    SelectedMonth = 1,
+                    SelectedYear = 2002
+                }
+            }
+        };
+
+        var validationResult = new DatesValidationResult()
+        {
+            StartedValidationResult = new()
+            {
+                MonthValid = false,
+                YearValid = false,
+                BannerErrorMessages = new List<Web.Models.BannerError>()
+                {
+                    new("some error message about the started month", Web.Models.FieldId.Month),
+                    new("some error message about the started year", Web.Models.FieldId.Year)
+                },
+                ErrorMessages = new List<string>()
+                {
+                    "some error message about the started month",
+                    "some error message about the started year"
+                }
+            },
+            AwardedValidationResult = new()
+            {
+                MonthValid = false,
+                YearValid = false,
+                BannerErrorMessages = new List<Web.Models.BannerError>()
+                {
+                    new("some error message about the awarded month", Web.Models.FieldId.Month),
+                    new("some error message about the awarded year", Web.Models.FieldId.Year)
+                },
+                ErrorMessages = new List<string>()
+                {
+                    "some error message about the awarded month",
+                    "some error message about the awarded year"
+                },
+            }
+        };
+
+        mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>())).Returns("Some error message replacement");
+
+        var modelState = new ModelStateDictionary();
+
+        modelState.AddModelError(nameof(QualificationDetailsPageViewModel.QualificationName), "Invalid");
+
+        modelState.AddModelError(nameof(QualificationDetailsPageViewModel.AwardingOrganisation), "Invalid");
+        var result = new HelpQualificationDetailsPageMapper(mockPlaceholderUpdater.Object).MapQualificationDetailsContentToViewModel(viewModel, content, validationResult, modelState);
+
+        result.Should().NotBeNull();
+
+        result.ErrorSummaryModel.Should().NotBeNull();
+        result.ErrorSummaryModel.ErrorSummaryLinks.Should().HaveCount(6);
+
+        var startedMonth = result.ErrorSummaryModel.ErrorSummaryLinks.ElementAt(1);
+        startedMonth.ErrorBannerLinkText.Should().Be("Some error message replacement");
+        startedMonth.ElementLinkId.Should().Be("QuestionModel.StartedQuestion.SelectedMonth");
+
+        var startedYear = result.ErrorSummaryModel.ErrorSummaryLinks.ElementAt(2);
+        startedYear.ErrorBannerLinkText.Should().Be("Some error message replacement");
+        startedYear.ElementLinkId.Should().Be("QuestionModel.StartedQuestion.SelectedYear");
+
+        var awardedMonth = result.ErrorSummaryModel.ErrorSummaryLinks.ElementAt(3);
+        awardedMonth.ErrorBannerLinkText.Should().Be("Some error message replacement");
+        awardedMonth.ElementLinkId.Should().Be("QuestionModel.AwardedQuestion.SelectedMonth");
+
+        var awardedYear = result.ErrorSummaryModel.ErrorSummaryLinks.ElementAt(4);
+        awardedYear.ErrorBannerLinkText.Should().Be("Some error message replacement");
+        awardedYear.ElementLinkId.Should().Be("QuestionModel.AwardedQuestion.SelectedYear");
     }
 
     private HelpQualificationDetailsPage GetHelpQualificationDetailsPageContent()

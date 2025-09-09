@@ -631,4 +631,29 @@ public class QualificationDetailsControllerTests
         orderedRows.ElementAt(2).ApprovalStatus.Should().Be(QualificationApprovalStatus.PossibleRouteAvailable);
         orderedRows.ElementAt(3).ApprovalStatus.Should().Be(QualificationApprovalStatus.NotApproved);
     }
+
+    [TestMethod]
+    public void QualificationDetailsModel_MapsTo_ExpectedQualificationResultModel()
+    {
+        var model = new QualificationDetailsModel
+        {
+            Content = new DetailsPageModel()
+            {
+                QualificationResultHeading = "result heading",
+                QualificationResultMessageHeading = "message heading",
+                QualificationResultMessageBody = "message heading"
+            },
+            RatioRequirements = new RatioRequirementModel
+                                {
+                                    ApprovedForLevel2 = QualificationApprovalStatus.Approved,
+                                    ApprovedForLevel3 = QualificationApprovalStatus.Approved,
+                                    ApprovedForLevel6 = QualificationApprovalStatus.NotApproved
+                                },
+        };
+
+        model.QualificationResultModel.Heading.Should().Be(model.Content.QualificationResultHeading);
+        model.QualificationResultModel.MessageHeading.Should().Be(model.Content.QualificationResultMessageHeading);
+        model.QualificationResultModel.MessageBody.Should().Be(model.Content.QualificationResultMessageBody);
+        model.QualificationResultModel.IsFullAndRelevant.Should().BeTrue();
+    }
 }
