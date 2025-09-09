@@ -36,7 +36,7 @@
         </div>
     }
 
-    <div id="ud-improve-service" class="ud-feedback__form ud-feedback__prompt ud-feedback__form--email ud-feedback__js-show">
+    <div id="ud-improve-service" class="ud-feedback__form ud-feedback__form--email ud-feedback__js-show">
         @{ await Html.RenderPartialAsync("Partials/FeedbackComponent", Model.FeedbackComponent); }
         @if (TrackingConfiguration.UseCookies)
         {

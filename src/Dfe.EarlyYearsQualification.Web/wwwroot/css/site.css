@@ -458,6 +458,7 @@ body {
 
 #ud-improve-service {
     padding: 15px;
+    border-top: 1px solid #8eb8dc;
 }
 
 @media (min-width: 40.0625em) {
