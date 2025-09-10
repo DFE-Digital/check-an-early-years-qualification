@@ -13,20 +13,7 @@ const config = {
             'wait for url to be http://localhost:5000/challenge',
             'set field #PasswordValue to ${AUTH_SECRET}',
             'click element #question-submit',
-            'wait for url to be http://localhost:5000/',
-            'click element #start-now-button',
-            'wait for url to be http://localhost:5000/questions/pre-check',
-            'click element #yes',
-            'click element #pre-check-submit',
-            'wait for url to be http://localhost:5000/questions/where-was-the-qualification-awarded',
-            'click element #england',
-            'click element #question-submit',
-            'wait for url to be http://localhost:5000/questions/when-was-the-qualification-started-and-awarded',
-            'set field #StartedQuestion.SelectedMonth to 07',
-            'set field #StartedQuestion.SelectedYear to 2015',
-            'set field #AwardedQuestion.SelectedMonth to 09',
-            'set field #AwardedQuestion.SelectedYear to 2017',
-            'click element #question-submit'
+            'wait for url to be http://localhost:5000/'
         ]
     },
     urls: [
