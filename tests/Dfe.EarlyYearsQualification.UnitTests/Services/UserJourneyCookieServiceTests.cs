@@ -1680,45 +1680,6 @@ public class UserJourneyCookieServiceTests
         CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
 
-    [TestMethod]
-    public void GetSelectedQualificationName_GetsValue()
-    {
-        var existingModel = new UserJourneyCookieService.UserJourneyModel
-        {
-            SelectedQualificationName = "Bsc some qualification"
-        };
-
-        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
-        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-
-        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
-
-        var modelValue = service.GetSelectedQualificationName();
-
-        modelValue.Should().BeEquivalentTo(existingModel.SelectedQualificationName);
-    }
-
-    [TestMethod]
-    public void SetSelectedQualificationName_SetsValue()
-    {
-        var mockHttpContextAccessor =
-            SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
-        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
-
-        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
-
-        var qualificationName = "Bsc some qualification";
-
-        service.SetSelectedQualificationName(qualificationName);
-
-        var model = new UserJourneyCookieService.UserJourneyModel()
-        {
-            SelectedQualificationName = qualificationName
-        };
-
-        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
-    }
-
     private static void CheckSerializedModelWasSet(
         (Mock<ICookieManager> mockContext, Dictionary<string, string> cookies) cookies,
         UserJourneyCookieService.UserJourneyModel expectedModel)

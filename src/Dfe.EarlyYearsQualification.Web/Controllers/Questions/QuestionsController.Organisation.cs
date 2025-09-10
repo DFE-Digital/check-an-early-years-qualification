@@ -58,6 +58,11 @@ public partial class QuestionsController
         userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue!);
         userJourneyCookieService.SetAwardingOrganisationNotOnList(model.NotInTheList);
 
+        // Used to prepopulate help form
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+        enquiry.AwardingOrganisation = model.SelectedValue ?? "";
+        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
+
         return RedirectToAction("Index", "CheckYourAnswers");
     }
 

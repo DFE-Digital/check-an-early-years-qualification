@@ -72,7 +72,7 @@ public class GovUkNotifyServiceTests
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
         var form = new HelpFormEnquiry()
         {
-            ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.IssueWithTheService,
+            ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.QuestionAboutAQualification,
             AdditionalInformation = "Some additional information",
             AwardingOrganisation = "Awarding organisation",
             QualificationAwardedDate = "10/2025",
