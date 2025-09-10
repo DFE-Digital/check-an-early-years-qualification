@@ -12,7 +12,7 @@ const config = {
 };
 
 function getPa11yUrls(authSecret){
-    return     urls: [
+    return [
         {
             url: "http://localhost:5000/",
             actions:[
