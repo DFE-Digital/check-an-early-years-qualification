@@ -7,27 +7,29 @@ const config = {
         headers: {
             Cookie: 'user_journey=%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2212%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Atrue%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D'
         },
-        hideElements: 'svg[role=presentation]',
-        actions: [
-            'navigate to http://localhost:5000/challenge',
-            'wait for url to be http://localhost:5000/challenge',
-            'set field #PasswordValue to ${AUTH_SECRET}',
-            'click element #question-submit'
-        ]
-    },
-    urls: [
-        "http://localhost:5000/",
-        "http://localhost:5000/accessibility-statement",
+        hideElements: 'svg[role=presentation]'
+    }
+};
+
+function getPa11yUrls(authSecret){
+    return     urls: [
         {
             url: "http://localhost:5000/",
             actions:[
-                'navigate to http://localhost:5000/',
+                'navigate to http://localhost:5000/challenge',
+                'wait for url to be http://localhost:5000/challenge',
+                `set field #PasswordValue to ${authSecret}`,
+                'click element #question-submit'
             ]
         },
         {
             url: "http://localhost:5000/accessibility-statement",
             actions:[
-                'http://localhost:5000/accessibility-statement',
+                'navigate to http://localhost:5000/challenge',
+                'wait for url to be http://localhost:5000/challenge',
+                `set field #PasswordValue to ${authSecret}`,
+                'click element #question-submit',
+                'navigate to http://localhost:5000/accessibility-statement',
             ]
         },
         "http://localhost:5000/cookies",
@@ -59,15 +61,17 @@ const config = {
         "http://localhost:5000/give-feedback",
         "http://localhost:5000/give-feedback/confirmation"
     ]
-};
+}
 
-function createPa11yCiConfiguration(urls, defaults) {
+function createPa11yCiConfiguration(defaults) {
 
     console.error('Env:', process.env.AUTH_SECRET);
 
     defaults.headers.Cookie = defaults.headers.Cookie.replace('${AUTH_SECRET}', process.env.AUTH_SECRET);
     defaults.actions = defaults.actions.map(x => x.replace('${AUTH_SECRET}', process.env.AUTH_SECRET));
 
+    let urls = getPa11yUrls(process.env.AUTH_SECRET);
+    
     return {
         defaults: defaults,
         urls: urls
@@ -75,4 +79,4 @@ function createPa11yCiConfiguration(urls, defaults) {
 };
 
 // Important ~ call the function, don't just return a reference to it!
-module.exports = createPa11yCiConfiguration(config.urls, config.defaults);
+module.exports = createPa11yCiConfiguration(config.defaults);
