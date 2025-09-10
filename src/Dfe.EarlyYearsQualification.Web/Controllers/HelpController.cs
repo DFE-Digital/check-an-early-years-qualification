@@ -108,15 +108,15 @@ public class HelpController(
 
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
-        if (enquiry is null)
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
         {
-            logger.LogError("Help form enquiry is null");
+            logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
         }
 
         // set any previously entered qualification details from cookie
-        viewModel.AwardingOrganisation = enquiry.AwardingOrganisation ?? userJourneyCookieService.GetAwardingOrganisation() ?? "";
-        viewModel.QualificationName = enquiry.QualificationName ?? userJourneyCookieService.GetSelectedQualificationName() ?? "";
+        viewModel.AwardingOrganisation = enquiry.AwardingOrganisation;
+        viewModel.QualificationName = enquiry.QualificationName;
 
         var qualificationStart = userJourneyCookieService.GetWhenWasQualificationStarted();
         var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
@@ -126,13 +126,14 @@ public class HelpController(
             SelectedMonth = qualificationStart.startMonth,
             SelectedYear = qualificationStart.startYear
         };
+
         viewModel.QuestionModel.AwardedQuestion = new DateQuestionModel()
         {
             SelectedMonth = qualificationAwarded.startMonth,
             SelectedYear = qualificationAwarded.startYear
         };
 
-        if (enquiry.QualificationStartDate is not null)
+        if (!string.IsNullOrEmpty(enquiry.QualificationStartDate))
         {
             var enquiryStart = StringDateHelper.SplitDate(enquiry.QualificationStartDate);
 
@@ -140,7 +141,7 @@ public class HelpController(
             viewModel.QuestionModel.StartedQuestion.SelectedYear = enquiryStart.startYear;
         }
 
-        if (enquiry.QualificationAwardedDate is not null)
+        if (!string.IsNullOrEmpty(enquiry.QualificationAwardedDate))
         {
             var enquiryAwarded = StringDateHelper.SplitDate(enquiry.QualificationAwardedDate);
 
@@ -191,9 +192,9 @@ public class HelpController(
         // valid submit 
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
-        if (enquiry is null)
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
         {
-            logger.LogError("Help form enquiry is null");
+            logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
         }
 
@@ -223,9 +224,9 @@ public class HelpController(
 
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
-        if (enquiry is null)
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
         {
-            logger.LogError("Help form enquiry is null");
+            logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
         }
 
@@ -241,9 +242,9 @@ public class HelpController(
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
-        if (enquiry is null)
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
         {
-            logger.LogError("Help form enquiry is null");
+            logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
         }
 
@@ -286,9 +287,9 @@ public class HelpController(
 
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
-        if (enquiry is null)
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring) || string.IsNullOrEmpty(enquiry.AdditionalInformation))
         {
-            logger.LogError("Help form enquiry is null");
+            logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
         }
 
@@ -322,9 +323,9 @@ public class HelpController(
 
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
-        if (enquiry is null)
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring) || string.IsNullOrEmpty(enquiry.AdditionalInformation))
         {
-            logger.LogError("Help form enquiry is null");
+            logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
         }
 
@@ -334,7 +335,7 @@ public class HelpController(
         );
 
         // clear data collected from help form on successful submit
-        userJourneyCookieService.SetHelpFormEnquiry(null);
+        userJourneyCookieService.SetHelpFormEnquiry(new());
 
         return RedirectToAction(nameof(Confirmation));
     }

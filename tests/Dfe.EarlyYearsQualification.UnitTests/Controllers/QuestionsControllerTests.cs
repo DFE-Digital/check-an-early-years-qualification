@@ -1251,6 +1251,8 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync(questionPage);
 
+        mockUserJourneyCookieService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
                                                                         SelectedValue = "Some Awarding Organisation",
@@ -1268,6 +1270,10 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation("Some Awarding Organisation"), Times.Once);
+
+        var enquiry = mockUserJourneyCookieService.Object.GetHelpFormEnquiry();
+        enquiry.AwardingOrganisation.Should().Be("Some Awarding Organisation");
+        mockUserJourneyCookieService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
@@ -1303,6 +1309,8 @@ public class QuestionsControllerTests
         mockContentService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
                           .ReturnsAsync(questionPage);
 
+        mockUserJourneyCookieService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel
                                                                     {
                                                                         SelectedValue = "",
@@ -1320,6 +1328,10 @@ public class QuestionsControllerTests
 
         mockUserJourneyCookieService
             .Verify(x => x.SetAwardingOrganisation(string.Empty), Times.Once);
+
+        var enquiry = mockUserJourneyCookieService.Object.GetHelpFormEnquiry();
+        enquiry.AwardingOrganisation.Should().Be("");
+        mockUserJourneyCookieService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]

@@ -67,17 +67,6 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
-    public void SetSelectedQualificationName(string qualificationName)
-    {
-        lock (_lockObject)
-        {
-            EnsureModelLoaded();
-
-            _model!.SelectedQualificationName = qualificationName;
-
-            SetJourneyCookie();
-        }
-    }
 
     public void SetAwardingOrganisation(string awardingOrganisation)
     {
@@ -245,22 +234,6 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
             }
 
             return level;
-        }
-    }
-
-    public string? GetSelectedQualificationName()
-    {
-        lock (_lockObject)
-        {
-            EnsureModelLoaded();
-
-            string? qualificationName = null;
-            if (!string.IsNullOrEmpty(_model!.SelectedQualificationName))
-            {
-                qualificationName = _model.SelectedQualificationName;
-            }
-
-            return qualificationName;
         }
     }
 
@@ -463,7 +436,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
-    public HelpFormEnquiry? GetHelpFormEnquiry()
+    public HelpFormEnquiry GetHelpFormEnquiry()
     {
         lock (_lockObject)
         {
@@ -473,7 +446,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
-    public void SetHelpFormEnquiry(HelpFormEnquiry? formEnquiry)
+    public void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry)
     {
         lock (_lockObject)
         {
@@ -581,6 +554,6 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
 
         public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
 
-        public HelpFormEnquiry? HelpFormEnquiry { get; set; }
+        public HelpFormEnquiry HelpFormEnquiry { get; set; } = new();
     }
 }

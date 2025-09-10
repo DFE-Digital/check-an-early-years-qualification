@@ -310,10 +310,12 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task QualificationDetails_EnquiryReturnsNull_RedirectsToGetHelpPage()
+    public async Task QualificationDetails_EnquiryIsEmpty_RedirectsToGetHelpPage()
     {
         // Arrange
         _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(() => new()).Verifiable();
+        
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         // Act
         var result = await GetSut().QualificationDetails();
@@ -328,7 +330,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("GetHelp");
         resultType.ControllerName.Should().Be("Help");
 
-        _mockLogger.VerifyError("Help form enquiry is null");
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
     }
 
     [TestMethod]
@@ -347,18 +349,17 @@ public class HelpControllerTests
 
         _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
-        var helpForm = new HelpFormEnquiry()
+        var enquiry = new HelpFormEnquiry()
         {
             ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+            AwardingOrganisation = "Awarding organisation",
+            QualificationName = "Qualification name"
         };
 
-        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
 
         var startedAt = (1, 2000);
         var awardedAt = (6, 2002);
-
-        _mockUserJourneyService.Setup(x => x.GetAwardingOrganisation()).Returns("Awarding organisation");
-        _mockUserJourneyService.Setup(x => x.GetSelectedQualificationName()).Returns("Qualification name");
 
         _mockUserJourneyService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(startedAt);
         _mockUserJourneyService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns(awardedAt);
@@ -373,7 +374,7 @@ public class HelpControllerTests
                 DisplayText = content.BackButton.DisplayText,
                 Href = content.BackButton.Href
             },
-            QualificationName = "Qualification name",
+            QualificationName = enquiry.QualificationName,
             QuestionModel = new DatesQuestionModel()
             {
                 StartedQuestion = new()
@@ -387,7 +388,7 @@ public class HelpControllerTests
                     SelectedYear = awardedAt.Item2
                 }
             },
-            AwardingOrganisation = "Some organisation where the qualification is from",
+            AwardingOrganisation = enquiry.AwardingOrganisation,
         };
 
         var validationResult = new DatesValidationResult()
@@ -423,6 +424,8 @@ public class HelpControllerTests
         model.BackButton.Should().NotBeNull();
         model.QuestionModel.StartedQuestion.Should().NotBeNull();
         model.QuestionModel.AwardedQuestion.Should().NotBeNull();
+        model.QualificationName.Should().Be(enquiry.QualificationName);
+        model.AwardingOrganisation.Should().Be(enquiry.AwardingOrganisation);
 
         model.Heading.Should().Be(content.Heading);
         model.BackButton.DisplayText.Should().Be(content.BackButton.DisplayText);
@@ -587,13 +590,15 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task Post_QualificationDetails_ValidModelState_EnquiryReturnsNull_RedirectsToGetHelpPage()
+    public async Task Post_QualificationDetails_ValidModelState_EnquiryIsEmpty_RedirectsToGetHelpPage()
     {
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
             Heading = "Heading",
         };
+
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         _mockContentService.Setup(x => x.GetHelpQualificationDetailsPage()).ReturnsAsync(content);
 
@@ -645,7 +650,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("GetHelp");
         resultType.ControllerName.Should().Be("Help");
 
-        _mockLogger.VerifyError("Help form enquiry is null");
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
     }
 
     [TestMethod]
@@ -1029,10 +1034,12 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task ProvideDetails_EnquiryReturnsNull_RedirectsToGetHelpPage()
+    public async Task ProvideDetails_EnquiryIsEmpty_RedirectsToGetHelpPage()
     {
         // Arrange
         _mockContentService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(() => new()).Verifiable();
+
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         // Act
         var result = await GetSut().ProvideDetails();
@@ -1047,7 +1054,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("GetHelp");
         resultType.ControllerName.Should().Be("Help");
 
-        _mockLogger.VerifyError("Help form enquiry is null");
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
     }
 
     [TestMethod]
@@ -1174,13 +1181,15 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task Post_ProvideDetails_ValidModelState_EnquiryReturnsNull_RedirectsToGetHelpPage()
+    public async Task Post_ProvideDetails_ValidModelState_EnquiryIsEmpty_RedirectsToGetHelpPage()
     {
         // Arrange
         var submittedViewModel = new ProvideDetailsPageViewModel()
         {
             ProvideAdditionalInformation = "Some details about the issue",
         };
+
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         // Act
         var result = await GetSut().ProvideDetails(submittedViewModel);
@@ -1195,7 +1204,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("GetHelp");
         resultType.ControllerName.Should().Be("Help");
 
-        _mockLogger.VerifyError("Help form enquiry is null");
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
     }
 
     [TestMethod]
@@ -1306,10 +1315,12 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task EmailAddress_EnquiryReturnsNull_RedirectsToGetHelpPage()
+    public async Task EmailAddress_EnquiryIsEmpty_RedirectsToGetHelpPage()
     {
         // Arrange
         _mockContentService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(() => new()).Verifiable();
+
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         // Act
         var result = await GetSut().EmailAddress();
@@ -1323,8 +1334,8 @@ public class HelpControllerTests
 
         resultType.ActionName.Should().Be("GetHelp");
         resultType.ControllerName.Should().Be("Help");
-
-        _mockLogger.VerifyError("Help form enquiry is null");
+        
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
     }
 
     [TestMethod]
@@ -1405,13 +1416,15 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task Post_EmailAddress_ValidModelState_EnquiryReturnsNull_RedirectsToGetHelpPage()
+    public async Task Post_EmailAddress_ValidModelState_EnquiryIsEmpty_RedirectsToGetHelpPage()
     {
         // Arrange
         var submittedViewModel = new EmailAddressPageViewModel()
         {
             EmailAddress = "test@test.com"
         };
+
+        _mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         // Act
         var result = await GetSut().EmailAddress(submittedViewModel);
@@ -1426,7 +1439,7 @@ public class HelpControllerTests
         resultType.ActionName.Should().Be("GetHelp");
         resultType.ControllerName.Should().Be("Help");
 
-        _mockLogger.VerifyError("Help form enquiry is null");
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
     }
 
 

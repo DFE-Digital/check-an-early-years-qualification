@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using System.Text;
 
@@ -25,26 +26,20 @@ public class HelpPageNotification
         message.AppendLine();
         message.AppendLine();
 
-        if (!string.IsNullOrEmpty(enquiry.QualificationName))
+        if (enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification)
         {
             message.AppendLine($"Qualification name: {enquiry.QualificationName}");
             message.AppendLine();
-        }
 
-        if (!string.IsNullOrEmpty(enquiry.QualificationStartDate))
-        {
-            message.AppendLine($"Qualification start date: {enquiry.QualificationStartDate}");
-            message.AppendLine();
-        }
+            if (!string.IsNullOrEmpty(enquiry.QualificationStartDate))
+            {
+                message.AppendLine($"Qualification start date: {enquiry.QualificationStartDate}");
+                message.AppendLine();
+            }
 
-        if (!string.IsNullOrEmpty(enquiry.QualificationAwardedDate))
-        {
             message.AppendLine($"Qualification awarded date: {enquiry.QualificationAwardedDate}");
             message.AppendLine();
-        }
 
-        if (!string.IsNullOrEmpty(enquiry.AwardingOrganisation))
-        {
             message.AppendLine($"Awarding organisation: {enquiry.AwardingOrganisation}");
             message.AppendLine();
         }

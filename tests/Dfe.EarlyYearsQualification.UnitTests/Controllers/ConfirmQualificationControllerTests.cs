@@ -109,6 +109,9 @@ public class ConfirmQualificationControllerTests
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
         var mockConfirmQualificationPageMapper = new Mock<IConfirmQualificationPageMapper>();
 
+
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+
         var expectedModel = new ConfirmQualificationPageModel { Heading = "Test" };
         mockConfirmQualificationPageMapper.Setup(x => x.Map(It.IsAny<ConfirmQualificationPage>(), It.IsAny<Qualification>())).ReturnsAsync(expectedModel);
 
@@ -148,8 +151,10 @@ public class ConfirmQualificationControllerTests
         model.Should().NotBeNull();
         model.Should().BeEquivalentTo(expectedModel);
 
-        mockUserJourneyService.Verify(x => x.SetAwardingOrganisation(qualification.AwardingOrganisationTitle), Times.Once);
-        mockUserJourneyService.Verify(x => x.SetSelectedQualificationName(qualification.QualificationName), Times.Once);
+        var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
+        enquiry.QualificationName.Should().Be(qualification.QualificationName);
+        enquiry.AwardingOrganisation.Should().Be(qualification.AwardingOrganisationTitle);
+        mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]

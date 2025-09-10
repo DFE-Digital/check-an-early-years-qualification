@@ -50,8 +50,11 @@ public class ConfirmQualificationController(
 
         var model = await confirmQualificationPageMapper.Map(content, qualification);
 
-        userJourneyCookieService.SetSelectedQualificationName(qualification.QualificationName);
-        userJourneyCookieService.SetAwardingOrganisation(qualification.AwardingOrganisationTitle);
+        // Used to prepopulate help form
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+        enquiry.QualificationName = qualification.QualificationName;
+        enquiry.AwardingOrganisation = qualification.AwardingOrganisationTitle;
+        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
 
         return View(model);
     }
