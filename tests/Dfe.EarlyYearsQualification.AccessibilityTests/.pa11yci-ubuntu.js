@@ -25,7 +25,7 @@ const config = {
                 'click element #question-submit',
                 'navigate to http://localhost:5000/'
             ]
-        }
+        },
         {
             actions: [
                 'navigate to http://localhost:5000/challenge',
