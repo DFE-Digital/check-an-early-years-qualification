@@ -17,8 +17,18 @@ const config = {
         ]
     },
     urls: [
-        "http://localhost:5000/",
-        "http://localhost:5000/accessibility-statement",
+        {
+            url: "http://localhost:5000/",
+            actions:[
+                'navigate to http://localhost:5000/',
+            ]
+        },
+        {
+            url: "http://localhost:5000/",
+            actions:[
+                'http://localhost:5000/accessibility-statement',
+            ]
+        },
         "http://localhost:5000/cookies",
         "http://localhost:5000/questions/where-was-the-qualification-awarded",
         "http://localhost:5000/questions/when-was-the-qualification-started-and-awarded",
