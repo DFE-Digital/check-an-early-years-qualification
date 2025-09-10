@@ -5,9 +5,15 @@ const config = {
             executablePath: "/usr/bin/google-chrome"
         },
         headers: {
-            Cookie: 'auth-secret=${AUTH_SECRET},user_journey=%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2212%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Atrue%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D'
+            Cookie: 'user_journey=%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%2212%2F2022%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Atrue%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%22Test%20question%22%3A%22yes%22%2C%22Test%20question%202%22%3A%22yes%22%7D%2C%22QualificationWasSelectedFromList%22%3A1%7D'
         },
-        hideElements: 'svg[role=presentation]'
+        hideElements: 'svg[role=presentation]',
+        actions:[
+            'navigate to http://localhost:5000/challenge'
+            'wait for url to be http://localhost:5000/challenge'
+            `set field #PasswordValue to ${AUTH_SECRET}`
+            'click element #question-submit'
+        ]
     },
     urls: [
         "http://localhost:5000/",
