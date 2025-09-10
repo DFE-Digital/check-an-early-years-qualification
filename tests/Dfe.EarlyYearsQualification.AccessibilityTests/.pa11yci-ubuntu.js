@@ -16,6 +16,8 @@ const config = {
         ]
     },
     urls: [
+        "http://localhost:5000/",
+        "http://localhost:5000/accessibility-statement",
         {
             url: "http://localhost:5000/",
             actions:[
@@ -23,7 +25,7 @@ const config = {
             ]
         },
         {
-            url: "http://localhost:5000/",
+            url: "http://localhost:5000/accessibility-statement",
             actions:[
                 'http://localhost:5000/accessibility-statement',
             ]
