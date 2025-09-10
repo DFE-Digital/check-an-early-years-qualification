@@ -26,7 +26,8 @@ const config = {
             'set field #StartedQuestion.SelectedYear to 2015',
             'set field #AwardedQuestion.SelectedMonth to 09',
             'set field #AwardedQuestion.SelectedYear to 2017',
-            'click element #question-submit',
+            'click element #question-submit'
+        ]
     },
     urls: [
         "http://localhost:5000/",
