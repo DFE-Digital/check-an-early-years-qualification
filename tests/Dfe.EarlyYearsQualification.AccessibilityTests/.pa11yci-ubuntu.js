@@ -17,7 +17,30 @@ const config = {
         ]
     },
     urls: [
-        "http://localhost:5000/",
+        {
+            "http://localhost:5000/",
+            {
+                actions: [
+                    'navigate to http://localhost:5000/challenge',
+                    'wait for url to be http://localhost:5000/challenge',
+                    'set field #PasswordValue to ${AUTH_SECRET}',
+                    'click element #question-submit',
+                    'navigate to http://localhost:5000/'
+                ]
+            }
+        },
+        {
+            "http://localhost:5000/accessibility-statement",
+            {
+                actions: [
+                    'navigate to http://localhost:5000/challenge',
+                    'wait for url to be http://localhost:5000/challenge',
+                    'set field #PasswordValue to ${AUTH_SECRET}',
+                    'click element #question-submit',
+                    'navigate to http://localhost:5000/accessibility-statement'
+                ]
+            }
+        },
         "http://localhost:5000/accessibility-statement",
         "http://localhost:5000/cookies",
         "http://localhost:5000/questions/where-was-the-qualification-awarded",
