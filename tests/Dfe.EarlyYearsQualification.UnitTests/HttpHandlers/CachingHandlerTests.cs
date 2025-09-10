@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace Dfe.EarlyYearsQualification.UnitTests.HttpHandlers;
 
 [TestClass]
-public class CachingHandlerTests
+public class CachingHandlerTests(TestContext testContext)
 {
     private static IDistributedCache GetCache()
     {
@@ -51,7 +51,7 @@ public class CachingHandlerTests
         var distributedCache = GetCache();
 
         byte[] value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        await distributedCache.SetAsync(key, value, new DistributedCacheEntryOptions());
+        await distributedCache.SetAsync(key, value, new DistributedCacheEntryOptions(), TestContext.CancellationTokenSource.Token);
 
         var handler = new TestCachingHandler(distributedCache,
                                              urlToKeyConverter.Object,
@@ -64,9 +64,9 @@ public class CachingHandlerTests
 
         // Assert...
         Moq.Mock.Get(distributedCache)
-           .Verify(c => c.Get(key), Times.Once);
+           .Verify(c => c.GetAsync(key, It.IsAny<CancellationToken>()), Times.Once);
 
-        response.Content.ReadAsByteArrayAsync().Result.Should().ContainInOrder(value);
+        response.Content.ReadAsByteArrayAsync(TestContext.CancellationTokenSource.Token).Result.Should().ContainInOrder(value);
     }
 
     [TestMethod]
@@ -103,7 +103,7 @@ public class CachingHandlerTests
         // Assert...
         var cache = Moq.Mock.Get(distributedCache);
 
-        cache.Verify(c => c.Get(key), Times.Once);
+        cache.Verify(c => c.GetAsync(key, It.IsAny<CancellationToken>()), Times.Once);
 
         cache.Verify(c => c.SetAsync(key,
                                      It.IsAny<byte[]>(),
@@ -111,7 +111,7 @@ public class CachingHandlerTests
                                      It.IsAny<CancellationToken>()),
                      Times.Once);
 
-        byte[]? cached = await distributedCache.GetAsync(key);
+        byte[]? cached = await distributedCache.GetAsync(key, TestContext.CancellationTokenSource.Token);
 
         cached.Should().NotBeNull();
     }
@@ -160,6 +160,101 @@ public class CachingHandlerTests
 
         response.Should().NotBeNull();
     }
+    
+    [TestMethod]
+    public async Task Request_CacheTimedOut_CallsBaseSend_AndWritesToCache()
+    {
+        // Arrange...
+        var address = new Uri("https://example.com/");
+        // NB this test does a real request to that address, as you can't mock an HttpHandler's HttpClient
+
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(m => m.GetCachingOption())
+                             .ReturnsAsync(CachingOption.UseCache);
+
+        const string key = "some key";
+
+        var urlToKeyConverter = new Mock<IUrlToKeyConverter>();
+        urlToKeyConverter
+            .Setup(c => c.GetKeyAsync(It.IsAny<Uri>()))
+            .ReturnsAsync(key);
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, address);
+
+        var distributedCache = GetCache();
+        var mockCache = Moq.Mock.Get(distributedCache);
+        // Simulate delayed response
+        mockCache.Setup(c => c.GetAsync(key, It.IsAny<CancellationToken>()))
+            .ReturnsAsync([], TimeSpan.FromMilliseconds(600));
+
+        var handler = new TestCachingHandler(mockCache.Object,
+                                             urlToKeyConverter.Object,
+                                             cachingOptionsManager.Object,
+                                             NullLogger<CachingHandler>.Instance);
+
+        // Act...
+        await handler.PublicSendAsync(httpRequestMessage,
+                                      CancellationToken.None);
+
+        // Assert...
+        mockCache.Verify(c => c.GetAsync(key, It.IsAny<CancellationToken>()), Times.Once);
+
+        mockCache.Verify(c => c.SetAsync(key,
+                                         It.IsAny<byte[]>(),
+                                         It.IsAny<DistributedCacheEntryOptions>(),
+                                         It.IsAny<CancellationToken>()),
+                         Times.Once);
+
+        byte[]? cached = await distributedCache.GetAsync(key, TestContext.CancellationTokenSource.Token);
+
+        cached.Should().NotBeNull();
+    }
+    
+        [TestMethod]
+    public async Task Request_SetCacheThrowsException_ReturnsValueFromContentful()
+    {
+        // Arrange...
+        var address = new Uri("https://example.com/");
+        // NB this test does a real request to that address, as you can't mock an HttpHandler's HttpClient
+
+        var cachingOptionsManager = new Mock<ICachingOptionsManager>();
+        cachingOptionsManager.Setup(m => m.GetCachingOption())
+                             .ReturnsAsync(CachingOption.UseCache);
+
+        const string key = "some key";
+
+        var urlToKeyConverter = new Mock<IUrlToKeyConverter>();
+        urlToKeyConverter
+            .Setup(c => c.GetKeyAsync(It.IsAny<Uri>()))
+            .ReturnsAsync(key);
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, address);
+
+        var distributedCache = GetCache();
+        var mockCache = Moq.Mock.Get(distributedCache);
+        // Simulate delayed response
+        mockCache.Setup(c => c.GetAsync(key, It.IsAny<CancellationToken>()))
+            .ReturnsAsync([], TimeSpan.FromMilliseconds(600));
+        
+        mockCache.Setup(c => c.SetAsync(key,
+                                         It.IsAny<byte[]>(),
+                                         It.IsAny<DistributedCacheEntryOptions>(),
+                                         It.IsAny<CancellationToken>())).Throws<Exception>();
+
+        var handler = new TestCachingHandler(mockCache.Object,
+                                             urlToKeyConverter.Object,
+                                             cachingOptionsManager.Object,
+                                             NullLogger<CachingHandler>.Instance);
+
+        // Act...
+        await handler.PublicSendAsync(httpRequestMessage,
+                                      CancellationToken.None);
+
+        // Assert...
+        byte[]? cached = await distributedCache.GetAsync(key, TestContext.CancellationTokenSource.Token);
+
+        cached.Should().NotBeNull();
+    }
 
     private class TestCachingHandler(
         IDistributedCache cache,
@@ -174,4 +269,6 @@ public class CachingHandlerTests
             return await base.SendAsync(request, cancellationToken);
         }
     }
+
+    public TestContext TestContext { get; init; } = testContext;
 }
