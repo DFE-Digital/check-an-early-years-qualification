@@ -9,9 +9,9 @@ const config = {
         },
         hideElements: 'svg[role=presentation]',
         actions:[
-            'navigate to http://localhost:5000/challenge'
-            'wait for url to be http://localhost:5000/challenge'
-            `set field #PasswordValue to ${AUTH_SECRET}`
+            'navigate to http://localhost:5000/challenge',
+            'wait for url to be http://localhost:5000/challenge',
+            `set field #PasswordValue to ${AUTH_SECRET}`,
             'click element #question-submit'
         ]
     },
