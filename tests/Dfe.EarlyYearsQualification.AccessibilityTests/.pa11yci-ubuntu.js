@@ -11,7 +11,7 @@ const config = {
         actions:[
             'navigate to http://localhost:5000/challenge',
             'wait for url to be http://localhost:5000/challenge',
-            `set field #PasswordValue to ${AUTH_SECRET}`,
+            'set field #PasswordValue to ${AUTH_SECRET}',
             'click element #question-submit'
         ]
     },
