@@ -54,6 +54,7 @@ function createPa11yCiConfiguration(urls, defaults) {
     console.error('Env:', process.env.AUTH_SECRET);
 
     defaults.headers.Cookie = defaults.headers.Cookie.replace('${AUTH_SECRET}', process.env.AUTH_SECRET)
+    defaults.headers.Cookie = defaults.actions.entries().replace('${AUTH_SECRET}', process.env.AUTH_SECRET)
 
     return {
         defaults: defaults,
