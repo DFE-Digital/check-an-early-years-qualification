@@ -1,4 +1,6 @@
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
@@ -8,7 +10,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class AccessibilityStatementMapperTests
 {
     [TestMethod]
-    public void Map_MapsAccessibilityStatement_ToModel()
+    public async Task Map_MapsAccessibilityStatement_ToModel()
     {
         const string body = "This is the body";
         var page = new AccessibilityStatementPage
@@ -23,7 +25,11 @@ public class AccessibilityStatementMapperTests
                                     }
                    };
 
-        var result = AccessibilityStatementMapper.Map(page, body);
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == page.Body)))
+                         .ReturnsAsync(body);
+        var mapper = new AccessibilityStatementMapper(mockContentParser.Object);
+        var result = await mapper.Map(page);
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(page.Heading);

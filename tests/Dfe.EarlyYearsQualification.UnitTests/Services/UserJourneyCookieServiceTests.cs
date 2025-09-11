@@ -1625,6 +1625,61 @@ public class UserJourneyCookieServiceTests
         modelValue.Should().Be(result);
     }
 
+
+    [TestMethod]
+    public void GetHelpFormEnquiry_GetsValue()
+    {
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+        {
+            HelpFormEnquiry = new HelpFormEnquiry
+            {
+                ReasonForEnquiring = "some reason",
+                AdditionalInformation = "some info",
+                AwardingOrganisation = "some org",
+                QualificationStartDate = "2/2000",
+                QualificationAwardedDate = "1/2001",
+                QualificationName = "some qualification name"
+            }
+        };
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var modelValue = service.GetHelpFormEnquiry();
+
+        modelValue.Should().BeEquivalentTo(existingModel.HelpFormEnquiry);
+    }
+
+    [TestMethod]
+    public void SetHelpFormEnquiry_SetsValue()
+    {
+        var mockHttpContextAccessor =
+            SetCookieManagerWithExistingCookie(new UserJourneyCookieService.UserJourneyModel());
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var enquiry = new HelpFormEnquiry
+        {
+            ReasonForEnquiring = "some reason",
+            AdditionalInformation = "some info",
+            AwardingOrganisation = "some org",
+            QualificationStartDate = "2/2000",
+            QualificationAwardedDate = "1/2001",
+            QualificationName = "some qualification name"
+        };
+        
+        service.SetHelpFormEnquiry(enquiry);
+
+        var model = new UserJourneyCookieService.UserJourneyModel()
+        {
+            HelpFormEnquiry = enquiry
+        };
+
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
+    }
+
     private static void CheckSerializedModelWasSet(
         (Mock<ICookieManager> mockContext, Dictionary<string, string> cookies) cookies,
         UserJourneyCookieService.UserJourneyModel expectedModel)

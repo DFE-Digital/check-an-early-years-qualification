@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
@@ -368,6 +369,122 @@ public class DateQuestionModelValidatorTests
         dateTimeAdapter.Setup(d => d.Now())
                        .Returns(new DateTime(2025, 5, 1, 0, 0, 1, DateTimeKind.Local));
         
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var result = validator.IsValid(model, page);
+
+        result.StartedValidationResult!.MonthValid.Should().BeTrue();
+        result.StartedValidationResult.MonthValid.Should().BeTrue();
+        result.AwardedValidationResult!.MonthValid.Should().BeFalse();
+        result.AwardedValidationResult.MonthValid.Should().BeFalse();
+        result.AwardedValidationResult.ErrorMessages.Count.Should().Be(1);
+        result.AwardedValidationResult.ErrorMessages[0].Should().Match(message);
+        result.AwardedValidationResult.BannerErrorMessages.Count.Should().Be(1);
+        result.AwardedValidationResult.BannerErrorMessages[0].Message.Should().Match(message);
+    }
+
+    [TestMethod]
+    public void HelpQualificationDetailsPage_DatesQuestionModel_IsValid_AwardedQuestionIsNull_ThrowsException()
+    {
+        var model = new DatesQuestionModel { AwardedQuestion = null };
+        var page = new HelpQualificationDetailsPage();
+
+        var validator = new DateQuestionModelValidator(new Mock<IDateTimeAdapter>().Object);
+
+        Action action = () => { validator.IsValid(model, page); };
+
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [TestMethod]
+    public void HelpQualificationDetailsPage_DatesQuestionModel_IsValid_StartDateOptionalAwardedDateIsValid_ReturnsExpectedResult()
+    {
+        var awardedDate = new DateQuestionModel
+        {
+            SelectedMonth = 11,
+            SelectedYear = 2011
+        };
+
+        var model = new DatesQuestionModel { AwardedQuestion = awardedDate };
+        var page = new HelpQualificationDetailsPage();
+
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(2025, 5, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var result = validator.IsValid(model, page);
+
+        result.StartedValidationResult.Should().BeNull();
+
+        result.AwardedValidationResult.Should().NotBeNull();
+        result.AwardedValidationResult.YearValid.Should().BeTrue();
+        result.AwardedValidationResult.MonthValid.Should().BeTrue();
+        result.AwardedValidationResult.ErrorMessages.Count.Should().Be(0);
+        result.AwardedValidationResult.BannerErrorMessages.Count.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void HelpQualificationDetailsPage_DatesQuestionModel_IsValid_StartDateIsValidAwardedDateIsValid_ReturnsExpectedResult()
+    {
+        var startedDate = new DateQuestionModel
+        {
+            SelectedMonth = 11,
+            SelectedYear = 2010
+        };
+
+        var awardedDate = new DateQuestionModel
+        {
+            SelectedMonth = 11,
+            SelectedYear = 2011
+        };
+
+        var model = new DatesQuestionModel { StartedQuestion = startedDate, AwardedQuestion = awardedDate };
+        var page = new HelpQualificationDetailsPage();
+
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(2025, 5, 1, 0, 0, 1, DateTimeKind.Local));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var result = validator.IsValid(model, page);
+
+        result.StartedValidationResult.Should().NotBeNull();
+        result.AwardedValidationResult.Should().NotBeNull();
+
+        result.StartedValidationResult.MonthValid.Should().BeTrue();
+        result.StartedValidationResult.MonthValid.Should().BeTrue();
+        result.AwardedValidationResult.MonthValid.Should().BeTrue();
+        result.AwardedValidationResult.MonthValid.Should().BeTrue();
+        result.AwardedValidationResult.ErrorMessages.Count.Should().Be(0);
+        result.AwardedValidationResult.BannerErrorMessages.Count.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void HelpQualificationDetailsPage_DatesQuestionModel_IsValid_AwardedDateBeforeStartDate_ReturnsExpectedResult()
+    {
+        var startedDate = new DateQuestionModel
+        {
+            SelectedMonth = 11,
+            SelectedYear = 2012
+        };
+
+        var awardedDate = new DateQuestionModel
+        {
+            SelectedMonth = 11,
+            SelectedYear = 2011
+        };
+
+        const string message = "Awarded date is before start date";
+        var model = new DatesQuestionModel { StartedQuestion = startedDate, AwardedQuestion = awardedDate };
+        var page = new HelpQualificationDetailsPage { AwardedDateIsAfterStartedDateErrorText = message };
+
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now())
+                       .Returns(new DateTime(2025, 5, 1, 0, 0, 1, DateTimeKind.Local));
+
         var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
 
         var result = validator.IsValid(model, page);

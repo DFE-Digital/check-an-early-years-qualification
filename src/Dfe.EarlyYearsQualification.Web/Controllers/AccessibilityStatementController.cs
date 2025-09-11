@@ -1,7 +1,6 @@
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -10,7 +9,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class AccessibilityStatementController(
     ILogger<AccessibilityStatementController> logger,
     IContentService contentService,
-    IGovUkContentParser contentParser)
+    IAccessibilityStatementMapper accessibilityStatementMapper)
     : ServiceController
 {
     [HttpGet]
@@ -23,9 +22,8 @@ public class AccessibilityStatementController(
             logger.LogError("No content for the accessibility statement page");
             return RedirectToAction("Index", "Error");
         }
-
-        var bodyHtml = await contentParser.ToHtml(content.Body);
-        var model = AccessibilityStatementMapper.Map(content, bodyHtml);
+        
+        var model = await accessibilityStatementMapper.Map(content);
 
         return View(model);
     }

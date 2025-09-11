@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -9,7 +10,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class QualificationDetailsMapperTests
 {
     [TestMethod]
-    public void Map_PassInParameters_ReturnsModel()
+    public async Task Map_PassInParameters_ReturnsModel()
     {
         var qualification = new Qualification("TEST-123", "Test name", "awarding organisation title", 3)
                             {
@@ -78,10 +79,16 @@ public class QualificationDetailsMapperTests
 
         const string dateStarted = "Date started";
         const string dateAwarded = "Date awarded";
-
-        var result = QualificationDetailsMapper.Map(qualification, detailsPage, backNavLink,
-                                                    additionalRequirementAnswers, dateStarted, dateAwarded, requirementsText,
-                                                    feedbackBannerBody, improveServiceBody, printInformationBody);
+        
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.RequirementsText)).ReturnsAsync(requirementsText);
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.FeedbackBanner.Body)).ReturnsAsync(feedbackBannerBody);
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.UpDownFeedback.FeedbackComponent!.Body)).ReturnsAsync(improveServiceBody);
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.PrintInformationBody)).ReturnsAsync(printInformationBody);
+        
+        var mapper = new QualificationDetailsMapper(mockContentParser.Object);
+        var result = await mapper.Map(qualification, detailsPage, backNavLink,
+                                                    additionalRequirementAnswers, dateStarted, dateAwarded);
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);

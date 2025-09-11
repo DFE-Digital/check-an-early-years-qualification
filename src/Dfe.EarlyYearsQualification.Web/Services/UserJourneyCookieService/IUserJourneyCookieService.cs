@@ -1,3 +1,5 @@
+using static Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService.UserJourneyCookieService;
+
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 public interface IUserJourneyCookieService
@@ -36,4 +38,6 @@ public interface IUserJourneyCookieService
     bool GetHasSubmittedEmailAddressInFeedbackFormQuestion();
     void SetHasUserGotEverythingTheyNeededToday(string hasGotEverythingTheyNeededToday);
     string GetHasUserGotEverythingTheyNeededToday();
+    HelpFormEnquiry GetHelpFormEnquiry();
+    void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry);
 }

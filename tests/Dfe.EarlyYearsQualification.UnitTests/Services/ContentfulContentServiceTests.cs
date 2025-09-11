@@ -2,6 +2,7 @@ using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Validators;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
@@ -1054,23 +1055,23 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetHelpPage_ReturnsData()
     {
-        var data = new HelpPage { Heading = "test heading" };
+        var content = new GetHelpPage { Heading = "test heading" };
 
         ClientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<HelpPage>>(),
+                                                It.IsAny<QueryBuilder<GetHelpPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<HelpPage> { Items = [data] });
+                  .ReturnsAsync(new ContentfulCollection<GetHelpPage> { Items = [content] });
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpPage();
+        var result = await service.GetGetHelpPage();
 
-        result.Should().Be(data);
+        result.Should().Be(content);
     }
 
     [TestMethod]
@@ -1078,17 +1079,119 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     {
         ClientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<HelpPage>>(),
+                                                It.IsAny<QueryBuilder<GetHelpPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<HelpPage> { Items = [] });
+                  .ReturnsAsync(new ContentfulCollection<GetHelpPage> { Items = [] });
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpPage();
+        var result = await service.GetGetHelpPage();
 
         result.Should().BeNull();
     }
-    
+
+    [TestMethod]
+    public async Task GetHelpQualificationDetailsPage_ReturnsData()
+    {
+        var content = new HelpQualificationDetailsPage { Heading = "test heading" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpQualificationDetailsPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpQualificationDetailsPage> { Items = [content] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetHelpQualificationDetailsPage();
+
+        result.Should().Be(content);
+    }
+
+    [TestMethod]
+    public async Task GetHelpQualificationDetailsPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpQualificationDetailsPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpQualificationDetailsPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetHelpQualificationDetailsPage();
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetHelpProvideDetailsPage_ReturnsData()
+    {
+        var content = new HelpProvideDetailsPage { Heading = "test heading" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpProvideDetailsPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpProvideDetailsPage> { Items = [content] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetHelpProvideDetailsPage();
+
+        result.Should().Be(content);
+    }
+
+    [TestMethod]
+    public async Task GetHelpProvideDetailsPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpProvideDetailsPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpProvideDetailsPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetHelpProvideDetailsPage();
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_ReturnsData()
+    {
+        var content = new HelpEmailAddressPage { Heading = "test heading" };
+
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpEmailAddressPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpEmailAddressPage> { Items = [content] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetHelpEmailAddressPage();
+
+        result.Should().Be(content);
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_ContentfulHasNoData_ReturnsNull()
+    {
+        ClientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<HelpEmailAddressPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<HelpEmailAddressPage> { Items = [] });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetHelpEmailAddressPage();
+
+        result.Should().BeNull();
+    }
+
     [TestMethod]
     public async Task GetHelpConfirmationPage_ReturnsData()
     {

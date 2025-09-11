@@ -22,6 +22,7 @@ using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
+using Dfe.EarlyYearsQualification.Web.Services.ServiceCollection;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
@@ -140,6 +141,7 @@ builder.Services.AddTransient<TrackingConfiguration>();
 builder.Services.AddTransient<OpenGraphDataHelper>();
 builder.Services.AddTransient<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
+builder.Services.AddMappers();
 
 if (useMockContentful)
 {

@@ -1,9 +1,8 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Dfe.EarlyYearsQualification.Web.Helpers;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +13,8 @@ public class ChallengeController(
     ILogger<ChallengeController> logger,
     IUrlHelper urlHelper,
     IContentService contentService,
-    IGovUkContentParser contentParser,
-    ICheckServiceAccessKeysHelper accessKeysHelper)
+    ICheckServiceAccessKeysHelper accessKeysHelper,
+    IChallengePageMapper challengePageMapper)
     : Controller
 {
     private const string DefaultRedirectAddress = "/";
@@ -130,8 +129,6 @@ public class ChallengeController(
     private async Task<ChallengePageModel> Map(ChallengePageModel model, ChallengePage content)
     {
         var sanitisedReferralAddress = SanitiseReferralAddress(model.RedirectAddress);
-        var footerContentHtml = await contentParser.ToHtml(content.FooterContent);
-        var mainContentHtml = await contentParser.ToHtml(content.MainContent);
-        return ChallengePageMapper.Map(model, content, sanitisedReferralAddress, footerContentHtml, mainContentHtml);
+        return await challengePageMapper.Map(model, content, sanitisedReferralAddress);
     }
 }

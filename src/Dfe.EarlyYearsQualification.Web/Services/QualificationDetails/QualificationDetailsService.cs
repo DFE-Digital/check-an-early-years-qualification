@@ -5,7 +5,7 @@ using Dfe.EarlyYearsQualification.Content.RatioRequirements;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Helpers;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -18,7 +18,8 @@ public class QualificationDetailsService(
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
-    IPlaceholderUpdater placeholderUpdater
+    IPlaceholderUpdater placeholderUpdater,
+    IQualificationDetailsMapper qualificationDetailsMapper
 ) : IQualificationDetailsService
 {
     public async Task<Qualification?> GetQualification(string qualificationId)
@@ -35,13 +36,6 @@ public class QualificationDetailsService(
     {
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         return startDateMonth is not null && startDateYear is not null;
-    }
-
-    public async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner)
-    {
-        return feedbackBanner is not null
-                   ? await contentParser.ToHtml(feedbackBanner.Body)
-                   : null;
     }
 
     public List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
@@ -424,17 +418,10 @@ public class QualificationDetailsService(
             dateAwarded = dateOnly.ToString("MMMM yyyy");
         }
 
-        var requirementsText = await contentParser.ToHtml(content.RequirementsText);
-        var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(content.FeedbackBanner);
-        var improveServiceBodyHtml = content.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(content.UpDownFeedback.FeedbackComponent!.Body)
-                                         : null;
-        var printInformationBody = await contentParser.ToHtml(content.PrintInformationBody);
-        return QualificationDetailsMapper.Map(qualification, content, backNavLink,
-                                              MapAdditionalRequirementAnswers(qualification
-                                                                                  .AdditionalRequirementQuestions),
-                                              dateStarted, dateAwarded,
-                                              requirementsText, feedbackBodyHtml, improveServiceBodyHtml, printInformationBody);
+        return await qualificationDetailsMapper.Map(qualification, content, backNavLink,
+                                                    MapAdditionalRequirementAnswers(qualification
+                                                        .AdditionalRequirementQuestions),
+                                                    dateStarted, dateAwarded);
     }
 
     public async Task SetRatioText(QualificationDetailsModel model, DetailsPage content)

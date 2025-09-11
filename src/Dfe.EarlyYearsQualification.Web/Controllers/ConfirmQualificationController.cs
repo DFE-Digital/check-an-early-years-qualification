@@ -1,9 +1,8 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Mappers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,7 @@ public class ConfirmQualificationController(
     IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IUserJourneyCookieService userJourneyCookieService,
-    IGovUkContentParser contentParser)
+    IConfirmQualificationPageMapper confirmQualificationPageMapper)
     : ServiceController
 {
     [HttpGet]
@@ -50,7 +49,13 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await Map(content, qualification);
+        var model = await confirmQualificationPageMapper.Map(content, qualification);
+
+        // Used to prepopulate help form
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+        enquiry.QualificationName = qualification.QualificationName;
+        enquiry.AwardingOrganisation = SetHelpFormAwardingQualification(userJourneyCookieService.GetAwardingOrganisation(), qualification.AwardingOrganisationTitle);
+        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
 
         return View(model);
     }
@@ -85,24 +90,31 @@ public class ConfirmQualificationController(
                                              AdditionalRequirementQuestions.Count: > 0
                                          };
 
-            return model.ConfirmQualificationAnswer switch
-                   {
-                       "yes" when hasAdditionalQuestions => RedirectToAction("Index",
-                                                                             "CheckAdditionalRequirements",
-                                                                             new
-                                                                             {
-                                                                                 qualificationId =
-                                                                                     model.QualificationId,
-                                                                                 questionIndex = 1
-                                                                             }),
+            switch (model.ConfirmQualificationAnswer)
+            {
+                case "yes":
+                    if (hasAdditionalQuestions)
+                    {
+                        return RedirectToAction("Index", "CheckAdditionalRequirements",
+                           new
+                           {
+                               qualificationId =
+                                   model.QualificationId,
+                               questionIndex = 1
+                           }
+                       );
+                    }
 
-                       "yes" => RedirectToAction("Index",
-                                                 "QualificationDetails",
-                                                 new { qualificationId = model.QualificationId }),
-
-                       _ => RedirectToAction("Get", "QualificationSearch")
-                   };
-        }
+                    return RedirectToAction("Index", "QualificationDetails",
+                        new
+                        {
+                            qualificationId = model.QualificationId
+                        }
+                    );
+                default:
+                    return RedirectToAction("Get", "QualificationSearch");
+                }
+            }
 
         var content = await contentService.GetConfirmQualificationPage();
 
@@ -112,19 +124,22 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        model = await Map(content, qualification);
+        model = await confirmQualificationPageMapper.Map(content, qualification);
         model.HasErrors = true;
 
         return View("Index", model);
     }
 
-    private async Task<ConfirmQualificationPageModel> Map(ConfirmQualificationPage content, Qualification qualification)
+    protected internal string SetHelpFormAwardingQualification(string? awardingOrgFromDropdown, string qualificationTitle)
     {
-        var postHeadingContent = await contentParser.ToHtml(content.PostHeadingContent);
-        var variousAwardingOrganisationsExplanation =
-            await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation);
+        // awardingOrgFromDropdown will be null if selected "Not in list"
+        awardingOrgFromDropdown = awardingOrgFromDropdown ?? string.Empty;
 
-        return ConfirmQualificationPageMapper.Map(content, qualification, postHeadingContent,
-                                                  variousAwardingOrganisationsExplanation);
+        if (awardingOrgFromDropdown == string.Empty && qualificationTitle != AwardingOrganisations.Various)
+        {
+            return qualificationTitle;
+        }
+
+        return awardingOrgFromDropdown;
     }
 }

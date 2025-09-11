@@ -82,6 +82,11 @@ export async function checkEmptyValue(page: Page, locator: string) {
     await expect(page.locator(locator).first()).toBeEmpty();
 }
 
+export async function checkElementIsChecked(page: Page, locator: string) {
+    await page.waitForLoadState("domcontentloaded");
+    await expect(page.locator(locator)).toBeChecked();
+}
+
 export async function clickBackButton(page: Page) {
     await page.locator("#back-button").click();
 }

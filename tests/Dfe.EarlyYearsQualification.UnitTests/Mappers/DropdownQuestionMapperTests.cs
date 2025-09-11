@@ -1,4 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
@@ -8,8 +10,14 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class DropdownQuestionMapperTests
 {
     [TestMethod]
-    public void Map_PassInParameters_ReturnsModel()
+    public async Task Map_PassInParameters_ReturnsModel()
     {
+        const string actionName = "action";
+        const string controllerName = "controller";
+        const string additionalInformationBodyHtml = "additionalInformationBodyHtml";
+        const string selectedAwardingOrganisation = "selectedAwardingOrganisation";
+        const bool selectedNotOnTheList = true;
+        
         var question = new DropdownQuestionPage
                        {
                            CtaButtonText = "Button text",
@@ -26,17 +34,18 @@ public class DropdownQuestionMapperTests
                            DefaultText = "Default text",
                            ErrorBannerHeading = "Error banner heading",
                            ErrorBannerLinkText = "Error banner link text",
-                           AdditionalInformationHeader = "Additional information header"
+                           AdditionalInformationHeader = "Additional information header",
+                           AdditionalInformationBody = ContentfulContentHelper.Paragraph(additionalInformationBodyHtml)
                        };
-        const string actionName = "action";
-        const string controllerName = "controller";
-        const string additionalInformationBodyHtml = "additionalInformationBodyHtml";
-        const string selectedAwardingOrganisation = "selectedAwardingOrganisation";
-        const bool selectedNotOnTheList = true;
+        
         var uniqueAwardingOrganisations = new List<string> { "awarding org A", "awarding org B" };
 
-        var result = DropdownQuestionMapper.Map(new DropdownQuestionModel(), question, actionName, controllerName,
-                                                uniqueAwardingOrganisations.Order(), additionalInformationBodyHtml,
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(question.AdditionalInformationBody)).ReturnsAsync(additionalInformationBodyHtml);
+        var mapper = new DropdownQuestionMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(new DropdownQuestionModel(), question, actionName, controllerName,
+                                                uniqueAwardingOrganisations.Order(),
                                                 selectedAwardingOrganisation, selectedNotOnTheList);
 
         result.Should().NotBeNull();

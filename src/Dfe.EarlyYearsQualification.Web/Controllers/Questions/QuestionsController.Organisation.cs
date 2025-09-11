@@ -1,7 +1,6 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Attributes;
-using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,6 +58,11 @@ public partial class QuestionsController
         userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue!);
         userJourneyCookieService.SetAwardingOrganisationNotOnList(model.NotInTheList);
 
+        // Used to prepopulate help form
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+        enquiry.AwardingOrganisation = model.SelectedValue ?? "";
+        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
+
         return RedirectToAction("Index", "CheckYourAnswers");
     }
 
@@ -85,10 +89,7 @@ public partial class QuestionsController
                             .Where(x => !Array.Exists(awardingOrganisationExclusions, x.Contains))
                             .Order();
 
-        var additionalInformationBodyHtml = await contentParser.ToHtml(question.AdditionalInformationBody);
-
-        return DropdownQuestionMapper.Map(model, question, actionName, controllerName, uniqueAwardingOrganisations,
-                                          additionalInformationBodyHtml, selectedAwardingOrganisation,
-                                          selectedNotOnTheList);
+        return await dropdownQuestionMapper.Map(model, question, actionName, controllerName, uniqueAwardingOrganisations,selectedAwardingOrganisation,
+                                                selectedNotOnTheList);
     }
 }
