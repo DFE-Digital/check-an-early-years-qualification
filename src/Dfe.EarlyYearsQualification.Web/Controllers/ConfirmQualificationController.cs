@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -53,7 +54,7 @@ public class ConfirmQualificationController(
         // Used to prepopulate help form
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
         enquiry.QualificationName = qualification.QualificationName;
-        enquiry.AwardingOrganisation = qualification.AwardingOrganisationTitle;
+        enquiry.AwardingOrganisation = SetHelpFormAwardingQualification(userJourneyCookieService.GetAwardingOrganisation(), qualification.AwardingOrganisationTitle);
         userJourneyCookieService.SetHelpFormEnquiry(enquiry);
 
         return View(model);
@@ -127,5 +128,18 @@ public class ConfirmQualificationController(
         model.HasErrors = true;
 
         return View("Index", model);
+    }
+
+    protected internal string SetHelpFormAwardingQualification(string? awardingOrgFromDropdown, string qualificationTitle)
+    {
+        // awardingOrgFromDropdown will be null if selected "Not in list"
+        awardingOrgFromDropdown = awardingOrgFromDropdown ?? string.Empty;
+
+        if (awardingOrgFromDropdown == string.Empty && qualificationTitle != AwardingOrganisations.Various)
+        {
+            return qualificationTitle;
+        }
+
+        return awardingOrgFromDropdown;
     }
 }
