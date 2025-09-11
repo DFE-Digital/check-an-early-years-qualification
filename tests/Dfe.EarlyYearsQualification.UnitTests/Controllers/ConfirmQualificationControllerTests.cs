@@ -109,7 +109,6 @@ public class ConfirmQualificationControllerTests
         var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
         var mockConfirmQualificationPageMapper = new Mock<IConfirmQualificationPageMapper>();
 
-
         mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         var expectedModel = new ConfirmQualificationPageModel { Heading = "Test" };
@@ -150,10 +149,66 @@ public class ConfirmQualificationControllerTests
         var model = resultType.Model as ConfirmQualificationPageModel;
         model.Should().NotBeNull();
         model.Should().BeEquivalentTo(expectedModel);
+    }
+
+    [TestMethod]
+    [DataRow("Open University OU", AwardingOrganisations.Various, "Open University OU")]
+    [DataRow("Open University OU", AwardingOrganisations.Ncfe, "Open University OU")]
+    [DataRow(null, AwardingOrganisations.Various, "")]
+    [DataRow(null, AwardingOrganisations.Ncfe, AwardingOrganisations.Ncfe)]
+    public async Task Index_VariousOrganisationPrepopulates_HelpForm_WithSelectedAwardedOrganisation(string? awardingOrgDropdownValue, string pageTitle, string expected)
+    {
+        var mockLogger = new Mock<ILogger<ConfirmQualificationController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyService = new Mock<IUserJourneyCookieService>();
+        var mockConfirmQualificationPageMapper = new Mock<IConfirmQualificationPageMapper>();
+
+        mockUserJourneyService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        mockUserJourneyService.Setup(x => x.GetAwardingOrganisation()).Returns(awardingOrgDropdownValue);
+
+        var expectedModel = new ConfirmQualificationPageModel { Heading = "Test" };
+        mockConfirmQualificationPageMapper.Setup(x => x.Map(It.IsAny<ConfirmQualificationPage>(), It.IsAny<Qualification>())).ReturnsAsync(expectedModel);
+
+        var confirmQualificationPageContent = GetConfirmQualificationPageContent();
+
+        mockContentService.Setup(x => x.GetConfirmQualificationPage()).ReturnsAsync(confirmQualificationPageContent);
+
+        var qualification = new Qualification("Some ID",
+                                              "Qualification Name",
+                                              pageTitle,
+                                              2)
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2019",
+            QualificationNumber = "ABC/547/900",
+            AdditionalRequirements = "additional requirements"
+        };
+
+        mockRepository.Setup(x => x.GetById("Some ID"))
+                      .ReturnsAsync(qualification);
+
+        var controller =
+            new ConfirmQualificationController(mockLogger.Object,
+                                               mockRepository.Object,
+                                               mockContentService.Object,
+                                               mockUserJourneyService.Object,
+                                               mockConfirmQualificationPageMapper.Object);
+
+        var result = await controller.Index("Some ID");
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as ConfirmQualificationPageModel;
+        model.Should().NotBeNull();
+        model.Should().BeEquivalentTo(expectedModel);
 
         var enquiry = mockUserJourneyService.Object.GetHelpFormEnquiry();
         enquiry.QualificationName.Should().Be(qualification.QualificationName);
-        enquiry.AwardingOrganisation.Should().Be(qualification.AwardingOrganisationTitle);
+        enquiry.AwardingOrganisation.Should().Be(expected);
         mockUserJourneyService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
