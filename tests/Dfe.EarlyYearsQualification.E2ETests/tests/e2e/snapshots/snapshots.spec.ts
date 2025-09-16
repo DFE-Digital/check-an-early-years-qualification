@@ -14,7 +14,8 @@ import {
     clickSubmitAndCheckSnapshot,
     precheckPage,
     inputText,
-    checkUrl
+    checkUrl,
+    checkingOwnQualificationOrSomeoneElsesPage
 } from '../../_shared/playwrightWrapper';
 
 test.describe('Snapshots', {tag: "@snapshot"}, () => {
@@ -33,9 +34,16 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await checkSnapshot(page);
     });
 
+    test("Checking own qualification page", async ({page}) => {
+        await page.locator('#start-now-button').click();
+        await precheckPage(page, '#yes');
+        await checkSnapshot(page);
+    });
+
     test("Location page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await checkSnapshot(page);
         await clickSubmitAndCheckSnapshot(page);
     });
@@ -45,6 +53,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
             test(`${location}`, async ({page}) => {
                 await page.locator('#start-now-button').click();
                 await precheckPage(page, '#yes');
+                await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
                 await whereWasTheQualificationAwarded(page, "#" + location);
                 await checkSnapshot(page);
             });
@@ -54,6 +63,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("When page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await checkSnapshot(page);
         await clickSubmitAndCheckSnapshot(page);
@@ -64,6 +74,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Level page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
         await checkSnapshot(page);
@@ -73,6 +84,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Awarding Organisation page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
@@ -83,6 +95,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Check answers page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
@@ -93,6 +106,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Qualification select page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
@@ -104,6 +118,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Qualification not on list page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
@@ -116,6 +131,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Qualification confirm page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
@@ -128,6 +144,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Additional questions page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
@@ -147,6 +164,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Qualification details page", async ({page}) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
         await whatLevelIsTheQualification(page, 3);
