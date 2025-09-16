@@ -96,6 +96,13 @@ public class AdviceController(
     {
         return await GetView(AdvicePages.Level7QualificationAfterAug2019);
     }
+
+    [HttpGet("help")]
+    public IActionResult Help()
+    {
+        return RedirectToAction("GetHelp", "Help");
+    }
+
     private async Task<IActionResult> GetView(string advicePageId)
     {
         var advicePage = await contentService.GetAdvicePage(advicePageId);
