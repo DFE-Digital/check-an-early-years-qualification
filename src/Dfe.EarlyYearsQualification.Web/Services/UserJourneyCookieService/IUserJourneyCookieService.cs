@@ -1,5 +1,3 @@
-using static Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService.UserJourneyCookieService;
-
 namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 public interface IUserJourneyCookieService
@@ -40,4 +38,6 @@ public interface IUserJourneyCookieService
     string GetHasUserGotEverythingTheyNeededToday();
     HelpFormEnquiry GetHelpFormEnquiry();
     void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry);
+    void SetIsUserCheckingTheirOwnQualification(string value);
+    string GetIsUserCheckingTheirOwnQualification();
 }

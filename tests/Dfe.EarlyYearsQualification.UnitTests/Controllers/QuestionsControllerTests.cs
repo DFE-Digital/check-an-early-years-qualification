@@ -43,7 +43,7 @@ public class QuestionsControllerTests
         var resultType = result as RedirectToActionResult;
         result.Should().NotBeNull();
 
-        resultType!.ActionName.Should().Be("WhereWasTheQualificationAwarded");
+        resultType!.ActionName.Should().Be("AreYouCheckingYourOwnQualification");
 
         mockUserJourneyCookieService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
     }
@@ -1503,5 +1503,166 @@ public class QuestionsControllerTests
 
         resultType.ActionName.Should().Be(nameof(HomeController.Index));
         resultType.ControllerName.Should().Be("Home");
+    }
+    
+    [TestMethod]
+    public async Task AreYouCheckingYourOwnQualification_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
+
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.AreYouCheckingYourOwnQualification))
+                          .ReturnsAsync((RadioQuestionPage?)null).Verifiable();
+
+        var result = await controller.AreYouCheckingYourOwnQualification();
+
+        mockContentService.VerifyAll();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        result.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the question page");
+    }
+    
+    [TestMethod]
+    public async Task AreYouCheckingYourOwnQualification_ContentServiceReturnsQuestionPage_ReturnsQuestionModel()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
+
+        var questionPage = new RadioQuestionPage
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue",
+                               Options =
+                               [
+                                   new Option { Label = "Label", Value = "Value" },
+                                   new Divider { Text = "Test" }
+                               ],
+                               AdditionalInformationHeader = "Test header",
+                               AdditionalInformationBody = ContentfulContentHelper.Text("Test html body")
+                           };
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.AreYouCheckingYourOwnQualification))
+                          .ReturnsAsync(questionPage);
+        
+        mockRadioQuestionMapper.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new  RadioQuestionModel());
+
+        var result = await controller.AreYouCheckingYourOwnQualification();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as RadioQuestionModel;
+        model.Should().NotBeNull();
+    }
+    
+    [TestMethod]
+    public async Task Post_AreYouCheckingYourOwnQualification_InvalidModel_ReturnsQuestionPage()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
+
+        mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.AreYouCheckingYourOwnQualification))
+                          .ReturnsAsync(new RadioQuestionPage());
+
+        controller.ModelState.AddModelError("option", "test error");
+        
+        mockRadioQuestionMapper.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new  RadioQuestionModel());
+        
+        var result = await controller.AreYouCheckingYourOwnQualification(new RadioQuestionModel());
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        resultType.ViewName.Should().Be("Radio");
+
+        var model = resultType.Model as RadioQuestionModel;
+
+        model.Should().NotBeNull();
+        model.HasErrors.Should().BeTrue();
+
+        mockUserJourneyCookieService.Verify(x => x.SetIsUserCheckingTheirOwnQualification(It.IsAny<string>()), Times.Never);
+    }
+
+    [TestMethod]
+    public async Task Post_AreYouCheckingYourOwnQualification_ReturnsRedirectResponse()
+    {
+        var mockLogger = new Mock<ILogger<QuestionsController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockRadioQuestionMapper = new Mock<IRadioQuestionMapper>();
+        var mockDropdownQuestionMapper = new Mock<IDropdownQuestionMapper>();
+        var mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
+
+        var controller = new QuestionsController(mockLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object, mockRepository.Object,
+                                                 mockQuestionModelValidator.Object, mockPlaceholderUpdater.Object,
+                                                 mockRadioQuestionMapper.Object, mockDropdownQuestionMapper.Object,
+                                                 mockPreCheckPageMapper.Object);
+
+        var result = await controller.AreYouCheckingYourOwnQualification(new RadioQuestionModel
+                                                                         {
+                                                                             Option = "yes"
+                                                                         });
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("WhereWasTheQualificationAwarded");
+
+        mockUserJourneyCookieService.Verify(x => x.SetIsUserCheckingTheirOwnQualification("yes"), Times.Once);
     }
 }

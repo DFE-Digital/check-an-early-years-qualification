@@ -1679,6 +1679,44 @@ public class UserJourneyCookieServiceTests
 
         CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
+    
+    [TestMethod]
+    public void SetIsUserCheckingTheirOwnQualification_SetsValue()
+    {
+        const  string result = "yes";
+        var modelInCookie = new UserJourneyCookieService.UserJourneyModel();
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        service.SetIsUserCheckingTheirOwnQualification(result);
+
+        var model = new UserJourneyCookieService.UserJourneyModel
+                    {
+                        IsUserCheckingTheirOwnQualification = result
+                    };
+
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
+    }
+    
+    [TestMethod]
+    public void GetIsUserCheckingTheirOwnQualification_ModelValueIsReturned()
+    {
+        const string result = "yes"; 
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                IsUserCheckingTheirOwnQualification = result
+                            };
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var modelValue = service.GetIsUserCheckingTheirOwnQualification();
+
+        modelValue.Should().Be(result);
+    }
 
     private static void CheckSerializedModelWasSet(
         (Mock<ICookieManager> mockContext, Dictionary<string, string> cookies) cookies,

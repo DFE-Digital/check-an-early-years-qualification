@@ -257,6 +257,27 @@ public class MockContentfulServiceTests
         (result.Options[5] as Option)!.Label.Should().Be("Outside the United Kingdom");
         (result.Options[5] as Option)!.Value.Should().Be("outside-uk");
     }
+    
+    [TestMethod]
+    public async Task GetRadioQuestionPage_PassInAreYouCheckingYourOwnQualification_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetRadioQuestionPage(QuestionPages.AreYouCheckingYourOwnQualification);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<RadioQuestionPage>();
+        result.Question.Should().NotBeNullOrEmpty();
+        result.CtaButtonText.Should().NotBeNullOrEmpty();
+        result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.ErrorBannerHeading.Should().NotBeNull();
+        result.ErrorBannerLinkText.Should().NotBeNull();
+        result.Options.Should().NotBeNullOrEmpty();
+        result.Options.Count.Should().Be(2);
+        (result.Options[0] as Option)!.Label.Should().Be("Yes, I am checking my own qualification");
+        (result.Options[0] as Option)!.Value.Should().Be("yes");
+        (result.Options[1] as Option)!.Label.Should().Be("No, I am checking someone else's qualification");
+        (result.Options[1] as Option)!.Value.Should().Be("no");
+    }
 
     [TestMethod]
     public async Task GetRadioQuestionPage_PassInWhatLevelIsTheQualification_ReturnsExpectedDetails()
