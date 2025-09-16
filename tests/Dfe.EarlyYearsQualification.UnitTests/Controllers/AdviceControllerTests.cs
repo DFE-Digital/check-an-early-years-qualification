@@ -641,4 +641,26 @@ public class AdviceControllerTests
         UserJourneyMockNoOp.Verify(o => o.SetUserSelectedQualificationFromList(YesOrNo.No), Times.Once);
         UserJourneyMockNoOp.Verify(o => o.ClearAdditionalQuestionsAnswers(), Times.Once);
     }
+
+    [TestMethod]
+    public void Help_RedirectsToNewHelpJourney()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
+
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
+
+        var result = controller.Help();
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("GetHelp");
+        resultType.ControllerName.Should().Be("Help");
+    }
 }

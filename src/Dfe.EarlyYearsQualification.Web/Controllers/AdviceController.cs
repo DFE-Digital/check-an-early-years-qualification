@@ -109,4 +109,7 @@ public class AdviceController(
 
         return View("Advice", model);
     }
+
+    [HttpGet("help")]
+    public IActionResult Help() => RedirectToAction("GetHelp", "Help");
 }
