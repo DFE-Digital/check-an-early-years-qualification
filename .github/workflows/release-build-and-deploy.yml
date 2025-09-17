@@ -84,6 +84,14 @@ jobs:
         run: |
           az webapp deployment slot swap --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --slot ${{ vars.WEBAPP_SLOT_NAME }} --target-slot production
 
+      # Run validation checks
+      - name: Run Playwright validation tests
+        uses: ./.github/actions/run-playwright-tests
+        with:
+          webapp_url: "${{ vars.SERVICE_GOV_UK_CUSTOM_DOMAIN_NAME }}"
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          test_type: "validation"
+
   deploy-to-production:
     runs-on: ubuntu-22.04
     needs: [create-and-publish-image, deploy-to-staging]
