@@ -458,6 +458,28 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public void SetIsUserCheckingTheirOwnQualification(string value)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.IsUserCheckingTheirOwnQualification = value;
+
+            SetJourneyCookie();
+        }
+    }
+
+    public string GetIsUserCheckingTheirOwnQualification()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.IsUserCheckingTheirOwnQualification;
+        }
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)
@@ -555,5 +577,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         public string HasUserGotEverythingTheyNeededToday { get; set; } = string.Empty;
 
         public HelpFormEnquiry HelpFormEnquiry { get; set; } = new();
+        
+        public string IsUserCheckingTheirOwnQualification { get; set; } = string.Empty;
     }
 }

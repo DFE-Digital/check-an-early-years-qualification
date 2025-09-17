@@ -13,6 +13,7 @@ const config = {
         "http://localhost:5000/",
         "http://localhost:5000/accessibility-statement",
         "http://localhost:5000/cookies",
+        "http://localhost:5000/questions/are-you-checking-your-own-qualification",
         "http://localhost:5000/questions/where-was-the-qualification-awarded",
         "http://localhost:5000/questions/when-was-the-qualification-started-and-awarded",
         "http://localhost:5000/questions/what-level-is-the-qualification",

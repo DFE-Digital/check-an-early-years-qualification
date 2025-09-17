@@ -5,6 +5,7 @@ import {
     checkText,
     clickBackButton,
     refineQualificationSearch,
+    checkingOwnQualificationOrSomeoneElsesPage,
     whereWasTheQualificationAwarded,
     whenWasQualificationStarted,
     whatLevelIsTheQualification,
@@ -23,6 +24,7 @@ import {
 test.describe('A spec used to test the various routes through the journey', {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
     });
 
     test("should redirect user to the help confirmation page when the issue with the service form is completed", async ({page}) => {

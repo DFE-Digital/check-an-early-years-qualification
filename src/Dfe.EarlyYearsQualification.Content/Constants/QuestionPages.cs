@@ -27,4 +27,9 @@ public static class QuestionPages
     ///     Entry ID for the "What is the awarding organisation" question page.
     /// </summary>
     public const string WhatIsTheAwardingOrganisation = "7A9txhwSGFrgh3Ye9k5PJ9";
+
+    /// <summary>
+    ///     Entry ID for the "Are you checking your own qualification" question page.
+    /// </summary>
+    public const string AreYouCheckingYourOwnQualification = "78fFIspsNu8cn9uydmUf32";
 }

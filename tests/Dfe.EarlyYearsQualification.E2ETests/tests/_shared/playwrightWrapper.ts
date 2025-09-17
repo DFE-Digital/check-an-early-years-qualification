@@ -37,6 +37,12 @@ export async function precheckPage(page: Page, option: string) {
     await page.locator("#pre-check-submit").click();
 }
 
+export async function checkingOwnQualificationOrSomeoneElsesPage(page: Page, option: string) {
+    await page.waitForURL("/questions/are-you-checking-your-own-qualification");
+    await page.locator(option).click();
+    await page.locator("#question-submit").click();
+}
+
 export async function checkUrl(page: Page, expectedUrl: string) {
     await page.waitForLoadState("domcontentloaded");
     expect(page.url()).toContain(expectedUrl);
