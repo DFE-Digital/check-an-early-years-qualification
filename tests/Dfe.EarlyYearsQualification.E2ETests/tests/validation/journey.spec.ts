@@ -13,7 +13,8 @@ import {
     confirmQualification,
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
-    checkDetailsPage
+    checkDetailsPage,
+    checkingOwnQualificationOrSomeoneElsesPage
 } from '../_shared/playwrightWrapper';
 
 type Scenario = {
@@ -112,6 +113,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
         } as Scenario,
     ].forEach((scenario) => {
         test(`Various AO qualification check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({page}) => {
+            await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
             await whenWasQualificationStarted(page, scenario.monthStarted, scenario.yearStarted, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
@@ -222,6 +224,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
         } as Scenario,
     ].forEach((scenario) => {
         test(`Selected AO qualification check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({page}) => {
+            await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
             await whenWasQualificationStarted(page, scenario.monthStarted, scenario.yearStarted, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
@@ -317,6 +320,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
         } as Scenario,
     ].forEach((scenario) => {
         test(`Various AO qualification with additional questions check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({page}) => {
+            await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
             await whenWasQualificationStarted(page, scenario.monthStarted, scenario.yearStarted, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
@@ -440,6 +444,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
                                                                                                                                                                                page,
                                                                                                                                                                                context
                                                                                                                                                                            }) => {
+            await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
             await whenWasQualificationStarted(page, scenario.monthStarted, scenario.yearStarted, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
