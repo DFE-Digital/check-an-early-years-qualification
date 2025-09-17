@@ -78,12 +78,7 @@ jobs:
           webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}.azurewebsites.net"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           test_type: 'smoke'
-     
-      # Swap the slots
-      - name: Swap to the production slot
-        run: |
-          az webapp deployment slot swap --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --slot ${{ vars.WEBAPP_SLOT_NAME }} --target-slot production
-
+          
       # Run validation checks
       - name: Run Playwright validation tests
         uses: ./.github/actions/run-playwright-tests
@@ -91,6 +86,11 @@ jobs:
           webapp_url: "${{ vars.SERVICE_GOV_UK_CUSTOM_DOMAIN_NAME }}"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           test_type: "validation"
+     
+      # Swap the slots
+      - name: Swap to the production slot
+        run: |
+          az webapp deployment slot swap --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.WEBAPP_NAME }} --slot ${{ vars.WEBAPP_SLOT_NAME }} --target-slot production
 
   deploy-to-production:
     runs-on: ubuntu-22.04
@@ -127,7 +127,7 @@ jobs:
         uses: ./.github/actions/health-check
         with:
           webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}"
-                    
+
       - name: Install playwright
         uses: ./.github/actions/install-playwright         
         
