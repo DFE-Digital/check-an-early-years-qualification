@@ -30,7 +30,7 @@ public partial class QuestionsController(
     public IActionResult StartNew()
     {
         userJourneyCookieService.ResetUserJourneyCookie();
-        return RedirectToAction(nameof(this.WhereWasTheQualificationAwarded));
+        return RedirectToAction(nameof(this.AreYouCheckingYourOwnQualification));
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName,

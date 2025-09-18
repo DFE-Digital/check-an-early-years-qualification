@@ -225,6 +225,8 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateWhatLevelIsTheQualificationPage()),
                    QuestionPages.WhereWasTheQualificationAwarded =>
                        await Task.FromResult(CreateWhereWasTheQualificationAwardedPage()),
+                   QuestionPages.AreYouCheckingYourOwnQualification =>
+                       await Task.FromResult(CreateAreYouCheckingYourOwnQualificationPage()),
                    _ => throw new NotImplementedException($"No radio question page mock for entry {entryId}")
                };
     }
@@ -843,6 +845,23 @@ public class MockContentfulService : IContentService
                 }
             }
         );
+    }
+    
+    private static RadioQuestionPage CreateAreYouCheckingYourOwnQualificationPage()
+    {
+        var options = new List<IOptionItem>
+                      {
+                          new Option
+                          {
+                              Label = "Yes, I am checking my own qualification", Value = "yes"
+                          },
+                          new Option
+                          {
+                              Label = "No, I am checking someone else's qualification", Value = "no"
+                          }
+                      };
+
+        return CreateRadioQuestionPage("Are you checking your qualification or someone else's?", options, "/");
     }
 
     private static RadioQuestionPage CreateWhereWasTheQualificationAwardedPage()

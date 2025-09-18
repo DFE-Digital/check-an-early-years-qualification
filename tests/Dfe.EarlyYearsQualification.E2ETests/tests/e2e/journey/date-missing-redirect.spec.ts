@@ -11,7 +11,7 @@ test.describe('A spec used to check that if the user skips entering the date of 
     pagesThatRedirectIfDateMissing.forEach((url) => {
         test(`navigating to ${url} should redirect the user to the date selection page`, async ({page}) => {
             await page.goto(url);
-            await checkUrl(page, "/questions/where-was-the-qualification-awarded");
+            await checkUrl(page, "/questions/are-you-checking-your-own-qualification");
         })
     });
 });

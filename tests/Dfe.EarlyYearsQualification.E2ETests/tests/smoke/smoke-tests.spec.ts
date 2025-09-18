@@ -1,6 +1,7 @@
 import {test, expect} from '@playwright/test';
 import {
     startJourney,
+    checkingOwnQualificationOrSomeoneElsesPage,
     whereWasTheQualificationAwarded,
     whenWasQualificationStarted,
     whatLevelIsTheQualification,
@@ -14,6 +15,7 @@ test.describe("A spec used to smoke test the environment once a deployment has h
     test("should return search results", async ({page, context}) => {
 
         await startJourney(page, context);
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await whenWasQualificationStarted(page, '7', '2015', '9', '2019');
         await whatLevelIsTheQualification(page, 0);

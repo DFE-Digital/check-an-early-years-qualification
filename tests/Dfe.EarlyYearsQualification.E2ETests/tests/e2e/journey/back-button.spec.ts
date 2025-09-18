@@ -3,6 +3,7 @@ import {
     startJourney,
     checkUrl,
     clickBackButton,
+    checkingOwnQualificationOrSomeoneElsesPage,
     whereWasTheQualificationAwarded,
     whenWasQualificationStarted,
     whatLevelIsTheQualification,
@@ -18,6 +19,7 @@ import {
 test.describe("A spec used to test the main back button route through the journey", {tag: "@e2e"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
     });
     test("back buttons should all navigate to the appropriate pages in the main journey", async ({page}) => {
 

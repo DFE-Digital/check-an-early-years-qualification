@@ -2,6 +2,7 @@ export const pages = [
     "/",
     "/accessibility-statement",
     "/cookies",
+    "/questions/are-you-checking-your-own-qualification",
     "/questions/where-was-the-qualification-awarded",
     "/questions/when-was-the-qualification-started-and-awarded",
     "/questions/what-level-is-the-qualification",
@@ -27,6 +28,7 @@ export const pages = [
 ];
 
 export const pagesWithForms = [
+    "/questions/are-you-checking-your-own-qualification",
     "/questions/where-was-the-qualification-awarded",
     "/questions/when-was-the-qualification-started-and-awarded",
     "/questions/what-level-is-the-qualification",
