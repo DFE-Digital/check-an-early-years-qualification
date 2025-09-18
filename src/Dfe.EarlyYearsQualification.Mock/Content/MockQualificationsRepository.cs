@@ -112,11 +112,11 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQualification("EYQ-111", "City & Guilds", 7, startDate, endDate),
                 CreateQualification("EYQ-112", AwardingOrganisations.Pearson, 8, startDate, endDate),
                 CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate),
-                new Qualification("EYQ-114", "BA (Hons) Childhood Studies", AwardingOrganisations.Ncfe, 6)
+                new Qualification("EYQ-114", "dupe qualification name", AwardingOrganisations.Ncfe, 6)
                 {
                     QualificationNumber = "123/345/678"
                 },
-                new Qualification("EYQ-115", "BA (Hons) Childhood Studies", AwardingOrganisations.Ncfe, 6)
+                new Qualification("EYQ-115", "dupe qualification name", AwardingOrganisations.Ncfe, 6)
                 {
                     QualificationNumber = "233/420/12"
                 },
@@ -145,11 +145,11 @@ public class MockQualificationsRepository : IQualificationsRepository
                                    CreateQualification("EYQ-240","T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)", AwardingOrganisations.Ncfe, 3),
                                    CreateQualification("EYQ-250", "BTEC", AwardingOrganisations.Various, 3),
                                    degreeQualification,
-                                   new Qualification("EYQ-114", "BA (Hons) Childhood Studies", AwardingOrganisations.Ncfe, 6)
+                                   new Qualification("EYQ-114", "duped qualification name", AwardingOrganisations.Ncfe, 6)
                                    {
                                        QualificationNumber = "123/345/678"
                                    },
-                                   new Qualification("EYQ-115", "BA (Hons) Childhood Studies", AwardingOrganisations.Ncfe, 6)
+                                   new Qualification("EYQ-115", "duped qualification name", AwardingOrganisations.Ncfe, 6)
                                    {
                                        QualificationNumber = "233/420/12"
                                    }

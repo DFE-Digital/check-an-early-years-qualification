@@ -2,8 +2,11 @@ using System.Text.RegularExpressions;
 
 namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
-public static class StringFormattingHelper
+public static partial class StringFormattingHelper
 {
+    [GeneratedRegex(@"\s*/\s*")]
+    private static partial Regex MatchSpacesAndSlashesRegex();
+
     public static string? FormatSlashedNumbers(string? input)
     {
         if (input is null)
@@ -11,6 +14,6 @@ public static class StringFormattingHelper
             return null;
         }
 
-        return Regex.Replace(input, @"\s*/\s*", " / ");
+        return MatchSpacesAndSlashesRegex().Replace(input, " / ");
     }
 }
