@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
@@ -148,6 +150,53 @@ public class QualificationSearchServiceTests
             thisResult.AwardingOrganisationTitle.Should().Be(expectedResult.AwardingOrganisationTitle);
             thisResult.QualificationLevel.Should().Be(expectedResult.QualificationLevel);
         }
+    }
+
+    private const string Pre2014Heading = "Pre 2014 Heading";
+    private const string Post2014Heading = "Post 2014 Heading";
+    private const string Pre2014Body = "Pre 2014 Body";
+    private const string Post2014Body = "Post 2014 Body";
+    
+    [TestMethod]
+    [DataRow(6, true, Pre2014Heading, Pre2014Body, true)]
+    [DataRow(6, false, Post2014Heading, Post2014Body, true)]
+    [DataRow(0, true, Pre2014Heading, Pre2014Body, true)]
+    [DataRow(0, false, Post2014Heading, Post2014Body, true)]
+    [DataRow(3, true, "", "", false)]
+    [DataRow(3, false, "", "", false)]
+    public async Task MapList_UserSearchedForLevel_IsPreOrPost2014(int level, bool isPre2014, string expectedHeading, string expectedBody, bool showL6OrNotSureContent)
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new("qual-1", "qual-name-1", "org-1", 1)
+                             };
+        
+        _mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level).Verifiable();
+        _mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014()).Returns(isPre2014).Verifiable();
+
+        var sut = GetSut();
+
+        var qualificationListPage = new QualificationListPage
+                                    {
+                                        Pre2014L6OrNotSureContentHeading = Pre2014Heading,
+                                        Pre2014L6OrNotSureContent = ContentfulContentHelper.Paragraph(Pre2014Body),
+                                        Post2014L6OrNotSureContentHeading = Post2014Heading,
+                                        Post2014L6OrNotSureContent = ContentfulContentHelper.Paragraph(Post2014Body)
+                                    };
+        
+        _mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == qualificationListPage.Pre2014L6OrNotSureContent)))
+                          .ReturnsAsync(Pre2014Body);
+        
+        _mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == qualificationListPage.Post2014L6OrNotSureContent)))
+                          .ReturnsAsync(Post2014Body);
+        
+        var result = await sut.MapList(qualificationListPage, qualifications);
+
+        _mockUserJourneyCookieService.VerifyAll();
+        var resultQualifications = result.Qualifications;
+        resultQualifications.Count.Should().Be(qualifications.Count);
+        result.L6OrNotSureContentHeading.Should().Be(expectedHeading);
+        result.L6OrNotSureContent.Should().Be(expectedBody);
     }
 
     [TestMethod]

@@ -268,14 +268,19 @@ public class MockContentfulService : IContentService
                                          MultipleQualificationsFoundText = "matching qualifications",
                                          SingleQualificationFoundText = "matching qualification",
                                          PreSearchBoxContent =
-                                             ContentfulContentHelper.Text("Pre search box content"),
+                                             ContentfulContentHelper.Paragraph("Pre search box content"),
+                                         Pre2014L6OrNotSureContentHeading = "Pre 2014 L6 or not sure heading",
+                                         Pre2014L6OrNotSureContent = ContentfulContentHelper.Paragraph("Pre 2014 L6 or not sure content"),
+                                         Post2014L6OrNotSureContentHeading = "Post 2014 L6 or not sure heading",
+                                         Post2014L6OrNotSureContent = ContentfulContentHelper.Paragraph("Post 2014 L6 or not sure content"),
+                                         PostQualificationListContentHeading = "Post qualification list header",
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
                                                                           "/advice/qualification-not-on-the-list"),
                                          AnyLevelHeading = "any level",
                                          AnyAwardingOrganisationHeading = "various awarding organisations",
                                          NoResultsText =
-                                             ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
+                                             ContentfulContentHelper.Paragraph("Test no qualifications text"),
                                          ClearSearchText = "Clear search",
                                          AwardedLocationPrefixText = "awarded in",
                                          StartDatePrefixText = "started in",

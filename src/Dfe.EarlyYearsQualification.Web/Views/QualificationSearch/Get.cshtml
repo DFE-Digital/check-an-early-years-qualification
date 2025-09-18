@@ -104,9 +104,25 @@
                 </div>
             </div>
         }
+        @if (Model.ShowL6OrNotSureContent)
+        {
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <div id="l6-or-not-sure-content" class="govuk-!-static-margin-top-4">
+                        <h2 id="l6-or-not-sure-heading" class="govuk-heading-m">
+                            @Model.L6OrNotSureContentHeading
+                        </h2>
+                        @Html.Raw(Model.L6OrNotSureContent)
+                    </div>
+                </div>
+            </div>
+        }
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 <div id="post-list-content" class="govuk-!-static-margin-top-4">
+                    <h2 id="post-list-heading" class="govuk-heading-m">
+                        @Model.PostQualificationListContentHeading
+                    </h2>
                     @Html.Raw(Model.PostQualificationListContent)
                 </div>
             </div>
