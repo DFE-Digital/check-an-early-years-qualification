@@ -17,10 +17,10 @@ public class QualificationSearchServiceTests
     private const string Pre2014Body = "Pre 2014 Body";
     private const string Post2014Body = "Post 2014 Body";
     
-    private Mock<IGovUkContentParser> _mockContentParser = new();
-    private Mock<IContentService> _mockContentService = new();
-    private Mock<IQualificationsRepository> _mockRepository = new();
-    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
+    private Mock<IGovUkContentParser> _mockContentParser = new Mock<IGovUkContentParser>();
+    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
+    private Mock<IQualificationsRepository> _mockRepository = new Mock<IQualificationsRepository>();
+    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
 
     private QualificationSearchService GetSut()
     {
