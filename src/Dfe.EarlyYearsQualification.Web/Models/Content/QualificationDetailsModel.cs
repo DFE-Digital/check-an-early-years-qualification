@@ -20,6 +20,8 @@ public class QualificationDetailsModel : BasicQualificationModel
 
     public string DateAwarded { get; init; } = string.Empty;
 
+    public string QualificationNumberLabel { get; init; } = string.Empty;
+
     public List<RatioRowModel> OrderRatioRows()
     {
         var ratioRowModels = new List<RatioRowModel>

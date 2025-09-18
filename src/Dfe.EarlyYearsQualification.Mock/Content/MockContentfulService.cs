@@ -177,7 +177,8 @@ public class MockContentfulService : IContentService
                                          UpDownFeedback = GetUpDownFeedback(),
                                          PrintButtonText = "Print this page",
                                          PrintInformationBody = ContentfulContentHelper.Paragraph("Print information body"),
-                                         PrintInformationHeading = "Print information heading"
+                                         PrintInformationHeading = "Print information heading",
+                                         QualificationNumberLabel = "Qualification Number (QN)"
                                      });
     }
 
@@ -281,7 +282,8 @@ public class MockContentfulService : IContentService
                                          StartDatePrefixText = "started in",
                                          AwardedDatePrefixText = "awarded in",
                                          LevelPrefixText = "level",
-                                         AwardedByPrefixText = "awarded by"
+                                         AwardedByPrefixText = "awarded by",
+                                         QualificationNumberLabel = "Qualification Number (QN)"
                                      });
     }
 
@@ -324,8 +326,9 @@ public class MockContentfulService : IContentService
                                              ContentfulContentHelper
                                                  .Paragraph("Various awarding organisation explanation text"),
                                          AnswerDisclaimerText = "Answer disclaimer text",
-                                         NoAdditionalRequirementsButtonText = "Get result"
-                                     });
+                                         NoAdditionalRequirementsButtonText = "Get result",
+                                         QualificationNumberLabel = "Qualification Number (QN)"
+        });
     }
 
     public async Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage()

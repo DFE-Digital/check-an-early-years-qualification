@@ -217,6 +217,7 @@ public class MockContentfulServiceTests
         result.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
         result.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
         result.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
+        result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
     }
 
     [TestMethod]
@@ -448,6 +449,7 @@ public class MockContentfulServiceTests
                                                       Href = "/questions/check-your-answers",
                                                       OpenInNewTab = false
                                                   });
+        result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
     }
 
     [TestMethod]
@@ -491,6 +493,7 @@ public class MockContentfulServiceTests
         result.VariousAwardingOrganisationsExplanation!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should()
               .ContainSingle(x => ((Text)x).Value == "Various awarding organisation explanation text");
+        result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
     }
 
     [TestMethod]
