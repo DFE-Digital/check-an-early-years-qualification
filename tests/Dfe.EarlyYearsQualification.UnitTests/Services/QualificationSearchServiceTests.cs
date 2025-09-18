@@ -12,6 +12,11 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class QualificationSearchServiceTests
 {
+    private const string Pre2014Heading = "Pre 2014 Heading";
+    private const string Post2014Heading = "Post 2014 Heading";
+    private const string Pre2014Body = "Pre 2014 Body";
+    private const string Post2014Body = "Post 2014 Body";
+    
     private Mock<IGovUkContentParser> _mockContentParser = new();
     private Mock<IContentService> _mockContentService = new();
     private Mock<IQualificationsRepository> _mockRepository = new();
@@ -152,11 +157,6 @@ public class QualificationSearchServiceTests
         }
     }
 
-    private const string Pre2014Heading = "Pre 2014 Heading";
-    private const string Post2014Heading = "Post 2014 Heading";
-    private const string Pre2014Body = "Pre 2014 Body";
-    private const string Post2014Body = "Post 2014 Body";
-    
     [TestMethod]
     [DataRow(6, true, Pre2014Heading, Pre2014Body, true)]
     [DataRow(6, false, Post2014Heading, Post2014Body, true)]
