@@ -4,8 +4,6 @@ public class QualificationDetailsModel : BasicQualificationModel
 {
     public string? FromWhichYear { get; init; }
 
-    public string? QualificationNumber { get; init; }
-
     public NavigationLinkModel? BackButton { get; init; }
 
     public DetailsPageModel? Content { get; init; }
