@@ -18,6 +18,16 @@ public class QualificationListPage
 
     public string SearchButtonText { get; init; } = string.Empty;
 
+    public string Pre2014L6OrNotSureContentHeading { get; init; } = string.Empty;
+    
+    public Document? Pre2014L6OrNotSureContent { get; init; }
+    
+    public string Post2014L6OrNotSureContentHeading { get; init; } = string.Empty;
+    
+    public Document? Post2014L6OrNotSureContent { get; init; }
+
+    public string PostQualificationListContentHeading { get; init; } = string.Empty;
+    
     public Document? PostQualificationListContent { get; init; }
 
     public string SearchCriteriaHeading { get; init; } = string.Empty;
