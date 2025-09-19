@@ -29,9 +29,9 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var allQualifications = await qualificationDetailsService.GetAllQualifications();
+        var filteredQualifications = await qualificationDetailsService.GetFilteredQualifications();
 
-        var qualification = allQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId, StringComparison.OrdinalIgnoreCase));
+        var qualification = filteredQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId, StringComparison.OrdinalIgnoreCase));
 
         if (qualification is null)
         {
@@ -40,7 +40,7 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await qualificationDetailsService.MapDetails(qualification, detailsPageContent, allQualifications);
+        var model = await qualificationDetailsService.MapDetails(qualification, detailsPageContent, filteredQualifications);
 
         var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
 

@@ -8,23 +8,24 @@ using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 
 public class QualificationDetailsService(
     ILogger<QualificationDetailsService> logger,
-    IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
     IPlaceholderUpdater placeholderUpdater,
-    IQualificationDetailsMapper qualificationDetailsMapper
+    IQualificationDetailsMapper qualificationDetailsMapper,
+    IQualificationSearchService qualificationSearchService
 ) : IQualificationDetailsService
 {
-    public Task<List<Qualification>> GetAllQualifications()
+    public async Task<List<Qualification>> GetFilteredQualifications()
     {
-        return qualificationsRepository.GetAllQualifications();
+        return await qualificationSearchService.GetFilteredQualifications();
     }
 
     public async Task<DetailsPage?> GetDetailsPage()

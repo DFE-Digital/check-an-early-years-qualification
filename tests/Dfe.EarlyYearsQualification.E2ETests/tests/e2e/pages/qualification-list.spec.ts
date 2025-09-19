@@ -25,7 +25,7 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await checkText(page, "#filter-level", "level 3");
         await checkText(page, "#filter-org", "awarded by NCFE");
         await checkText(page, "#heading", "Test Header");
-        await checkText(page, "#found-heading", "We found 3 matching qualifications");
+        await checkText(page, "#found-heading", "We found 6 matching qualifications");
         await checkText(page, "#pre-search-content", "Pre search box content");
         await checkText(page, "#post-list-heading", "Post qualification list header");
         await checkTextContains(page, "#post-list-content", "Link to not on list advice page");
@@ -60,7 +60,7 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
                                                                                                        page,
                                                                                                        context
                                                                                                    }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22WhenWasQualificationAwarded%22%3A%221%2F2025%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
         await page.goto("/select-a-qualification-to-check");
 
         await exists(page, "#ao-text-EYQ-114");

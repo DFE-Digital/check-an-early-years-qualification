@@ -9,6 +9,7 @@ using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
+using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -19,21 +20,21 @@ public class QualificationDetailsServiceTests
     private Mock<IGovUkContentParser> _mockContentParser = new Mock<IGovUkContentParser>();
     private Mock<IContentService> _mockContentService = new Mock<IContentService>();
     private Mock<ILogger<QualificationDetailsService>> _mockLogger = new Mock<ILogger<QualificationDetailsService>>();
-    private Mock<IQualificationsRepository> _mockRepository = new Mock<IQualificationsRepository>();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
     private Mock<IPlaceholderUpdater> _mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
     private Mock<IQualificationDetailsMapper> _mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+    private Mock<IQualificationSearchService> _mockQualificationSearchService = new Mock<IQualificationSearchService>();
 
     private QualificationDetailsService GetSut()
     {
         return new QualificationDetailsService(
                                                _mockLogger.Object,
-                                               _mockRepository.Object,
                                                _mockContentService.Object,
                                                _mockContentParser.Object,
                                                _mockUserJourneyCookieService.Object,
                                                _mockPlaceholderUpdater.Object,
-                                               _mockQualificationDetailsMapper.Object
+                                               _mockQualificationDetailsMapper.Object,
+                                               _mockQualificationSearchService.Object
                                               );
     }
 
@@ -41,7 +42,6 @@ public class QualificationDetailsServiceTests
     public void Initialize()
     {
         _mockLogger = new Mock<ILogger<QualificationDetailsService>>();
-        _mockRepository = new Mock<IQualificationsRepository>();
         _mockContentService = new Mock<IContentService>();
         _mockContentParser = new Mock<IGovUkContentParser>();
         _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
@@ -50,11 +50,11 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public async Task GetAllQualifications_Calls_Repository_GetAllQualifications()
+    public async Task GetFilteredQualifications_Calls_SearchService_GetFilteredQualifications()
     {
-        _ = await GetSut().GetAllQualifications();
+        _ = await GetSut().GetFilteredQualifications();
 
-        _mockRepository.Verify(o => o.GetAllQualifications(), Times.Once);
+        _mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(), Times.Once);
     }
 
     [TestMethod]
