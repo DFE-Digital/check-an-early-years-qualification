@@ -11,5 +11,7 @@ public interface IQualificationDetailsMapper
         NavigationLink? backNavLink,
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
-        string dateAwarded);
+        string dateAwarded,
+        List<Qualification> qualifications
+        );
 }

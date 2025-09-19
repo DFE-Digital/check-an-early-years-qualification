@@ -64,9 +64,9 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await page.goto("/select-a-qualification-to-check");
 
         await exists(page, "#ao-text-EYQ-114");
-        await checkText(page, "#ao-text-EYQ-114", "(Edexcel (now Pearson Education Ltd))");
+        await checkText(page, "#ao-text-EYQ-114", "Qualification Number (QN) 123 / 345 / 678");
         await exists(page, "#ao-text-EYQ-115");
-        await checkText(page, "#ao-text-EYQ-115", "(NCFE)");
+        await checkText(page, "#ao-text-EYQ-115", "Qualification Number (QN) 233 / 420 / 12");
     });
 
     test("Shows the correct no results content when there are no results in the search", async ({

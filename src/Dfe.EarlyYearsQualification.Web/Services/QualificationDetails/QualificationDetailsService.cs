@@ -22,9 +22,9 @@ public class QualificationDetailsService(
     IQualificationDetailsMapper qualificationDetailsMapper
 ) : IQualificationDetailsService
 {
-    public async Task<Qualification?> GetQualification(string qualificationId)
+    public Task<List<Qualification>> GetAllQualifications()
     {
-        return await qualificationsRepository.GetById(qualificationId);
+        return qualificationsRepository.GetAllQualifications();
     }
 
     public async Task<DetailsPage?> GetDetailsPage()
@@ -396,7 +396,7 @@ public class QualificationDetailsService(
         }
     }
 
-    public async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content)
+    public async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content, List<Qualification> qualifications)
     {
         var backNavLink = CalculateBackButton(content, qualification.QualificationId);
 
@@ -421,7 +421,7 @@ public class QualificationDetailsService(
         return await qualificationDetailsMapper.Map(qualification, content, backNavLink,
                                                     MapAdditionalRequirementAnswers(qualification
                                                         .AdditionalRequirementQuestions),
-                                                    dateStarted, dateAwarded);
+                                                    dateStarted, dateAwarded, qualifications);
     }
 
     public async Task SetRatioText(QualificationDetailsModel model, DetailsPage content)
