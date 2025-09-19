@@ -39,4 +39,6 @@ public class QualificationListPage
     public string LevelPrefixText { get; init; } = string.Empty;
 
     public string AwardedByPrefixText { get; init; } = string.Empty;
+
+    public string QualificationNumberLabel { get; init; } = string.Empty;
 }

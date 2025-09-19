@@ -44,6 +44,17 @@
                     @Model.QualificationName
                 </dd>
             </div>
+            @if (Model.IsQualificationNameDuplicate && !string.IsNullOrEmpty(Model.QualificationNumber))
+            {
+                <div id="qualification-number-row" class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        @Model.QualificationNumberLabel
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.QualificationNumber
+                    </dd>
+                </div>
+            }
             <div id="qualification-level-row" class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     @Model.LevelLabel

@@ -68,8 +68,9 @@ public class QualificationSearchService(
                    SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
                    Qualifications = basicQualificationsModels,
                    NoResultText = await contentParser.ToHtml(content.NoResultsText),
-                   ClearSearchText = content.ClearSearchText
-               };
+                   ClearSearchText = content.ClearSearchText,
+                   QualificationNumberLabel = content.QualificationNumberLabel
+        };
     }
 
     public FilterModel GetFilterModel(QualificationListPage content)
@@ -117,8 +118,13 @@ public class QualificationSearchService(
 
     private static List<BasicQualificationModel> GetBasicQualificationsModels(List<Qualification> qualifications)
     {
-        return qualifications.Select(qualification => new BasicQualificationModel(qualification))
-                             .OrderBy(qualification => qualification.QualificationName)
-                             .ToList();
+        return qualifications.Select(qualification => 
+            new BasicQualificationModel(qualification)
+            {
+                IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1
+            }
+        )
+        .OrderBy(qualification => qualification.QualificationName)
+        .ToList();
     }
 }
