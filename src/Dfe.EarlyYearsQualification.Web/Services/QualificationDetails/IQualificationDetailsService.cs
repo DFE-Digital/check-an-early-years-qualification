@@ -5,8 +5,10 @@ namespace Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 
 public interface IQualificationDetailsService
 {
-    Task<Qualification?> GetQualification(string qualificationId);
+    Task<List<Qualification>> GetAllQualifications();
+
     Task<DetailsPage?> GetDetailsPage();
+
     bool HasStartDate();
 
     bool QualificationContainsQtsQuestion(Qualification qualification);
@@ -39,7 +41,8 @@ public interface IQualificationDetailsService
     List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
         List<AdditionalRequirementQuestion>? additionalRequirementQuestions);
 
-    Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content);
+    Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content, List<Qualification> qualifications);
+
     Task SetRatioText(QualificationDetailsModel model, DetailsPage content);
 
     void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPage content);

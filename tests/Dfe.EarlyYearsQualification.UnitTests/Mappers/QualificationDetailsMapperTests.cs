@@ -1,3 +1,4 @@
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
@@ -88,7 +89,7 @@ public class QualificationDetailsMapperTests
         
         var mapper = new QualificationDetailsMapper(mockContentParser.Object);
         var result = await mapper.Map(qualification, detailsPage, backNavLink,
-                                                    additionalRequirementAnswers, dateStarted, dateAwarded);
+                                                    additionalRequirementAnswers, dateStarted, dateAwarded, new List<Qualification>() { qualification });
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);
@@ -134,5 +135,32 @@ public class QualificationDetailsMapperTests
         result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
         result.UpDownFeedback.FeedbackComponent.Header.Should()
               .BeSameAs(detailsPage.UpDownFeedback.FeedbackComponent!.Header);
+        result.IsQualificationNameDuplicate.Should().BeFalse();
+        result.QualificationNumberLabel.Should().Be(detailsPage.QualificationNumberLabel);
+        result.QualificationNumber.Should().Be(qualification.QualificationNumber);
+    }
+
+    [TestMethod]
+    public async Task Map_DuplicateQualificationNames_ReturnsTrue()
+    {
+        // Arrange
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(It.IsAny<string>());
+
+        var qualifications = new List<Qualification>()
+        {
+            new Qualification("Test-1", "This is a duplicate", "ABC", 1),
+            new Qualification("Test-2", "This is a duplicate", "DEF", 2),
+            new Qualification("Test-3", "This is unique", "GHI", 3),
+        };
+
+        var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
+
+        // Act
+        var result = await mapper.Map(new ConfirmQualificationPage(), qualifications.First(), qualifications);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsQualificationNameDuplicate.Should().BeTrue();
     }
 }

@@ -50,14 +50,11 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public async Task GetQualification_Calls_Repository_GetById()
+    public async Task GetAllQualifications_Calls_Repository_GetAllQualifications()
     {
-        const string qualificationId = "qualificationId";
-        var sut = GetSut();
+        _ = await GetSut().GetAllQualifications();
 
-        _ = await sut.GetQualification(qualificationId);
-
-        _mockRepository.Verify(o => o.GetById(qualificationId), Times.Once);
+        _mockRepository.Verify(o => o.GetAllQualifications(), Times.Once);
     }
 
     [TestMethod]
@@ -649,14 +646,14 @@ public class QualificationDetailsServiceTests
 
         _mockQualificationDetailsMapper
             .Setup(x => x.Map(qualification, detailsPage, backButton,
-                              It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded))
+                              It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded, It.IsAny<List<Qualification>>()))
             .ReturnsAsync(new QualificationDetailsModel());
 
         var sut = GetSut();
-        var result = await sut.MapDetails(qualification, detailsPage);
+        var result = await sut.MapDetails(qualification, detailsPage, It.IsAny<List<Qualification>>());
 
         result.Should().NotBeNull();
-        _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton, It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded), Times.Once);
+        _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton, It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded, It.IsAny<List<Qualification>>()), Times.Once);
     }
 
     [TestMethod]

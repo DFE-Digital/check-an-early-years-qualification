@@ -6,5 +6,5 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 public interface IConfirmQualificationPageMapper
 {
     Task<ConfirmQualificationPageModel> Map(ConfirmQualificationPage content,
-                                            Qualification qualification);
+                                            Qualification qualification, List<Qualification> qualifications);
 }

@@ -177,7 +177,8 @@ public class MockContentfulService : IContentService
                                          UpDownFeedback = GetUpDownFeedback(),
                                          PrintButtonText = "Print this page",
                                          PrintInformationBody = ContentfulContentHelper.Paragraph("Print information body"),
-                                         PrintInformationHeading = "Print information heading"
+                                         PrintInformationHeading = "Print information heading",
+                                         QualificationNumberLabel = "Qualification Number (QN)"
                                      });
     }
 
@@ -268,20 +269,26 @@ public class MockContentfulService : IContentService
                                          MultipleQualificationsFoundText = "matching qualifications",
                                          SingleQualificationFoundText = "matching qualification",
                                          PreSearchBoxContent =
-                                             ContentfulContentHelper.Text("Pre search box content"),
+                                             ContentfulContentHelper.Paragraph("Pre search box content"),
+                                         Pre2014L6OrNotSureContentHeading = "Pre 2014 L6 or not sure heading",
+                                         Pre2014L6OrNotSureContent = ContentfulContentHelper.Paragraph("Pre 2014 L6 or not sure content"),
+                                         Post2014L6OrNotSureContentHeading = "Post 2014 L6 or not sure heading",
+                                         Post2014L6OrNotSureContent = ContentfulContentHelper.Paragraph("Post 2014 L6 or not sure content"),
+                                         PostQualificationListContentHeading = "Post qualification list header",
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
                                                                           "/advice/qualification-not-on-the-list"),
                                          AnyLevelHeading = "any level",
                                          AnyAwardingOrganisationHeading = "various awarding organisations",
                                          NoResultsText =
-                                             ContentfulContentHelper.ParagraphWithBold("Test no qualifications text"),
+                                             ContentfulContentHelper.Paragraph("Test no qualifications text"),
                                          ClearSearchText = "Clear search",
                                          AwardedLocationPrefixText = "awarded in",
                                          StartDatePrefixText = "started in",
                                          AwardedDatePrefixText = "awarded in",
                                          LevelPrefixText = "level",
-                                         AwardedByPrefixText = "awarded by"
+                                         AwardedByPrefixText = "awarded by",
+                                         QualificationNumberLabel = "Qualification Number (QN)"
                                      });
     }
 
@@ -324,8 +331,9 @@ public class MockContentfulService : IContentService
                                              ContentfulContentHelper
                                                  .Paragraph("Various awarding organisation explanation text"),
                                          AnswerDisclaimerText = "Answer disclaimer text",
-                                         NoAdditionalRequirementsButtonText = "Get result"
-                                     });
+                                         NoAdditionalRequirementsButtonText = "Get result",
+                                         QualificationNumberLabel = "Qualification Number (QN)"
+        });
     }
 
     public async Task<CheckAdditionalRequirementsPage?> GetCheckAdditionalRequirementsPage()

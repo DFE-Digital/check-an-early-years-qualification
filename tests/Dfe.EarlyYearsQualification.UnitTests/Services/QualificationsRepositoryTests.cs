@@ -171,4 +171,39 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Should().BeEmpty();
     }
+
+    [TestMethod]
+    public async Task GetAllQualifications_ReturnsQualifications()
+    {
+        var qualification = new Qualification("Id",
+                                              "Name",
+                                              "AO",
+                                              6)
+        {
+            FromWhichYear = "2014",
+            ToWhichYear = "2020",
+            QualificationNumber = "number",
+            AdditionalRequirements = "Rq"
+        };
+
+        var qualificationInProgressBeingCreated = new Qualification("", "Name", "AO", 5);
+
+        ClientMock.Setup(c =>
+                             c.GetEntries(It.IsAny<QueryBuilder<Qualification>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [qualification, qualificationInProgressBeingCreated] });
+
+        var mockQualificationFilterFactory = new Mock<IQualificationListFilter>();
+
+        mockQualificationFilterFactory.Setup(x => x.ApplyFilters(It.IsAny<List<Qualification>>(), It.IsAny<int?>(),
+                                                                 It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(),
+                                                                 It.IsAny<string?>()))
+                                      .Returns([qualification]);
+
+        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, mockQualificationFilterFactory.Object);
+
+        var result = await service.GetAllQualifications();
+
+        result.Should().HaveCount(1).And.Contain(qualification);
+    }
 }

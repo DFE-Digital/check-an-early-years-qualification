@@ -28,7 +28,7 @@ public class ConfirmQualificationPageMapperTests
                          .ReturnsAsync(variousAwardingOrganisationsExplanationHtml);
         
         var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
-        var result = await mapper.Map(content, qualification);
+        var result = await mapper.Map(content, qualification, new List<Qualification>() { qualification });
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(content.Heading);
@@ -54,6 +54,8 @@ public class ConfirmQualificationPageMapperTests
         result.VariousAwardingOrganisationsExplanation.Should().BeSameAs(variousAwardingOrganisationsExplanationHtml);
         result.ShowAnswerDisclaimerText.Should().BeTrue();
         result.AnswerDisclaimerText.Should().BeSameAs(content.AnswerDisclaimerText);
+        result.IsQualificationNameDuplicate.Should().BeFalse();
+        result.QualificationNumberLabel.Should().Be(content.QualificationNumberLabel);
     }
 
     [TestMethod]
@@ -76,7 +78,7 @@ public class ConfirmQualificationPageMapperTests
                          .ReturnsAsync(variousAwardingOrganisationsExplanationHtml);
         
         var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
-        var result = await mapper.Map(content, qualification);
+        var result = await mapper.Map(content, qualification, new List<Qualification>() { qualification });
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(content.Heading);
@@ -102,6 +104,31 @@ public class ConfirmQualificationPageMapperTests
         result.VariousAwardingOrganisationsExplanation.Should().BeSameAs(variousAwardingOrganisationsExplanationHtml);
         result.ShowAnswerDisclaimerText.Should().BeFalse();
         result.AnswerDisclaimerText.Should().BeSameAs(content.AnswerDisclaimerText);
+        result.IsQualificationNameDuplicate.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public async Task Map_DuplicateQualificationNames_ReturnsTrue()
+    {
+        // Arrange
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(It.IsAny<string>());
+
+        var qualifications = new List<Qualification>()
+        {
+            new Qualification("Test-1", "This is a duplicate", "ABC", 1),
+            new Qualification("Test-2", "This is a duplicate", "DEF", 2),
+            new Qualification("Test-3", "This is unique", "GHI", 3),
+        };
+
+        var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
+
+        // Act
+        var result = await mapper.Map(new ConfirmQualificationPage(), qualifications.First(), qualifications);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsQualificationNameDuplicate.Should().BeTrue();
     }
 
     private static ConfirmQualificationPage GetConfirmQualificationPageContent(string postHeadingContentHtml, string variousAwardingOrganisationsExplanationHtml)

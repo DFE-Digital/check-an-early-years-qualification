@@ -52,7 +52,7 @@ public class QualificationsRepository(
         return filteredQualifications;
     }
 
-    private async Task<List<Qualification>> GetAllQualifications()
+    public async Task<List<Qualification>> GetAllQualifications()
     {
         var queryBuilder = QueryBuilder<Qualification>.New.ContentTypeIs(ContentTypes.Qualification).Include(2).Limit(1000);
         try

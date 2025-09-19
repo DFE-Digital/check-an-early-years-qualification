@@ -10,6 +10,7 @@ public class ConfirmQualificationPage
     public string LevelLabel { get; init; } = string.Empty;
     public string AwardingOrganisationLabel { get; init; } = string.Empty;
     public string DateAddedLabel { get; init; } = string.Empty;
+    public string QualificationNumberLabel { get; init; } = string.Empty;
     public Document? VariousAwardingOrganisationsExplanation { get; init; }
     public string RadioHeading { get; init; } = string.Empty;
     public List<Option> Options { get; init; } = [];

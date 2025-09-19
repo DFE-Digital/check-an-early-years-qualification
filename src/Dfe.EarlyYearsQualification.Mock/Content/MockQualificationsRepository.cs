@@ -112,14 +112,49 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQualification("EYQ-111", "City & Guilds", 7, startDate, endDate),
                 CreateQualification("EYQ-112", AwardingOrganisations.Pearson, 8, startDate, endDate),
                 CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate),
-                CreateQualification("EYQ-114", "BA (Hons) Childhood Studies", AwardingOrganisations.Edexcel, 6),
-                CreateQualification("EYQ-115", "BA (Hons) Childhood Studies", AwardingOrganisations.Ncfe, 6),
+                new Qualification("EYQ-114", "dupe qualification name", AwardingOrganisations.Ncfe, 6)
+                {
+                    QualificationNumber = "123/345/678"
+                },
+                new Qualification("EYQ-115", "dupe qualification name", AwardingOrganisations.Ncfe, 6)
+                {
+                    QualificationNumber = "233/420/12"
+                },
                 CreateQualificationWithAdditionalRequirements("EYQ-909", AwardingOrganisations.Ncfe, 3, startDate,
                                                               endDate)
             };
 
         // For now, inbound parameters startDateMonth and startDateYear are ignored
         return Task.FromResult(qualifications.Where(x => x.QualificationLevel == level).ToList());
+    }
+
+    public Task<List<Qualification>> GetAllQualifications()
+    {
+
+        var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
+                                                 AwardingOrganisations.Various, 6);
+        degreeQualification.IsTheQualificationADegree = true;
+
+        return Task.FromResult(new List<Qualification>
+                               {
+                                   CreateQualification("EYQ-105", "BTEC", AwardingOrganisations.Various, 4),
+                                   CreateQualification("EYQ-107", "BTEC", AwardingOrganisations.Various, 5),
+                                   CreateQtsQualification("EYQ-108", "BTEC", AwardingOrganisations.Various, 6),
+                                   CreateQtsQualification("EYQ-111", "BTEC", AwardingOrganisations.Various, 7),
+                                   CreateQualification("EYQ-241", "BTEC", AwardingOrganisations.Various, 2),
+                                   CreateQualification("EYQ-240","T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)", AwardingOrganisations.Ncfe, 3),
+                                   CreateQualification("EYQ-250", "BTEC", AwardingOrganisations.Various, 3),
+                                   degreeQualification,
+                                   new Qualification("EYQ-114", "duped qualification name", AwardingOrganisations.Ncfe, 6)
+                                   {
+                                       QualificationNumber = "123/345/678"
+                                   },
+                                   new Qualification("EYQ-115", "duped qualification name", AwardingOrganisations.Ncfe, 6)
+                                   {
+                                       QualificationNumber = "233/420/12"
+                                   }
+                                }
+        );
     }
 
     private static Qualification CreateQualificationWithAdditionalRequirements(
