@@ -18,6 +18,14 @@ public class QualificationListModel
 
     public string SearchButtonText { get; init; } = string.Empty;
 
+    public bool ShowL6OrNotSureContent { get; init; }
+    
+    public string L6OrNotSureContentHeading { get; init; } = string.Empty;
+
+    public string L6OrNotSureContent { get; init; } = string.Empty;
+
+    public string PostQualificationListContentHeading { get; init; } = string.Empty;
+
     public string PostQualificationListContent { get; init; } = string.Empty;
 
     public string SearchCriteriaHeading { get; init; } = string.Empty;

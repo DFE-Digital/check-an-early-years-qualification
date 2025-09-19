@@ -449,6 +449,32 @@ public class MockContentfulServiceTests
                                                       Href = "/questions/check-your-answers",
                                                       OpenInNewTab = false
                                                   });
+        result.QualificationFoundPrefix.Should().Be("We found");
+        result.SearchButtonText.Should().Be("Refine");
+        result.SearchCriteriaHeading.Should().Be("Your search");
+        result.MultipleQualificationsFoundText.Should().Be("matching qualifications");
+        result.SingleQualificationFoundText.Should().Be("matching qualification");
+        result.PreSearchBoxContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Pre search box content");
+        result.Pre2014L6OrNotSureContentHeading.Should().Be("Pre 2014 L6 or not sure heading");
+        result.Pre2014L6OrNotSureContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Pre 2014 L6 or not sure content");
+        result.Post2014L6OrNotSureContentHeading.Should().Be("Post 2014 L6 or not sure heading");
+        result.Post2014L6OrNotSureContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Post 2014 L6 or not sure content");
+        result.PostQualificationListContentHeading.Should().Be("Post qualification list header");
+        result.PostQualificationListContent!.Content[0].Should().BeAssignableTo<Hyperlink>()
+              .Which.Content.Should().Contain(x => ((Text)x).Value == "Link to not on list advice page");
+        result.AnyLevelHeading.Should().Be("any level");
+        result.AnyAwardingOrganisationHeading.Should().Be("various awarding organisations");
+        result.NoResultsText!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test no qualifications text");
+        result.ClearSearchText.Should().Be("Clear search");
+        result.AwardedLocationPrefixText.Should().Be("awarded in");
+        result.StartDatePrefixText.Should().Be("started in");
+        result.AwardedDatePrefixText.Should().Be("awarded in");
+        result.LevelPrefixText.Should().Be("level");
+        result.AwardedByPrefixText.Should().Be("awarded by");
         result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
     }
 
