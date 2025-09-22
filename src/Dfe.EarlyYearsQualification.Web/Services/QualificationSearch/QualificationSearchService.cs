@@ -46,6 +46,11 @@ public class QualificationSearchService(
                                                  );
     }
 
+    public async Task<List<Qualification>> GetAllQualifications()
+    {
+        return await qualificationsRepository.Get(null, null, null, null, null);
+    }
+
     public async Task<QualificationListModel> MapList(QualificationListPage content,
                                                       List<Qualification>? qualifications)
     {

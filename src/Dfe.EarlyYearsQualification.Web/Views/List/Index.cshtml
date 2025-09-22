@@ -1,0 +1,109 @@
+@model Dfe.EarlyYearsQualification.Web.Models.List.ListModel
+@using Dfe.EarlyYearsQualification.Web.Models.Content
+
+@{
+    ViewData["Title"] = "Check additional requirements";
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", new NavigationLinkModel { Href = "/", DisplayText = "Back to start", OpenInNewTab = false });
+    }
+}
+
+<div class="govuk-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">
+    Contents
+  </h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#pre-sept-2014">
+        Pre September 2014
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#post-sept-2014">
+        Pre September 2014
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#post-sept-2024">
+        Post September 2024
+      </a>
+    </li>
+  </ul>
+  <div class="govuk-tabs__panel" id="pre-sept-2014">
+    <h2 class="govuk-heading-l">Full & relevant qualification - pre-2014</h2>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Qualification Level</th>
+          <th scope="col" class="govuk-table__header">Qualification Name</th>
+          <th scope="col" class="govuk-table__header">Awarding Organisation Title</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      @foreach (var qualification in Model.Pre2014Qualifications)
+      {
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">@qualification.QualificationLevel</td>
+          <td class="govuk-table__cell">@qualification.QualificationName</td>
+          <td class="govuk-table__cell">@qualification.AwardingOrganisationTitle</td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="post-sept-2014">
+    <h2 class="govuk-heading-l">Full & relevant qualification - post-2014</h2>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Qualification Level</th>
+        <th scope="col" class="govuk-table__header">From Which Year</th>
+        <th scope="col" class="govuk-table__header">Qualification Name</th>
+        <th scope="col" class="govuk-table__header">Awarding Organisation Title</th>
+        <th scope="col" class="govuk-table__header">Qualification Number</th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      @foreach (var qualification in Model.Post2014Qualifications)
+      {
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">@qualification.QualificationLevel</td>
+          <td class="govuk-table__cell">@qualification.FromWhichYear</td>
+          <td class="govuk-table__cell">@qualification.QualificationName</td>
+          <td class="govuk-table__cell">@qualification.AwardingOrganisationTitle</td>
+          <td class="govuk-table__cell">@qualification.QualificationNumber</td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="post-sept-2024">
+    <h2 class="govuk-heading-l">Full & relevant qualification - post-2024</h2>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Qualification Level</th>
+        <th scope="col" class="govuk-table__header">From Which Year</th>
+        <th scope="col" class="govuk-table__header">Qualification Name</th>
+        <th scope="col" class="govuk-table__header">Awarding Organisation Title</th>
+        <th scope="col" class="govuk-table__header">Qualification Number</th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      @foreach (var qualification in Model.Post2024Qualifications)
+      {
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">@qualification.QualificationLevel</td>
+          <td class="govuk-table__cell">@qualification.FromWhichYear</td>
+          <td class="govuk-table__cell">@qualification.QualificationName</td>
+          <td class="govuk-table__cell">@qualification.AwardingOrganisationTitle</td>
+          <td class="govuk-table__cell">@qualification.QualificationNumber</td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+</div>
