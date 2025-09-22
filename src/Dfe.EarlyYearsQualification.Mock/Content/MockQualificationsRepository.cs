@@ -13,7 +13,7 @@ public class MockQualificationsRepository : IQualificationsRepository
 
     public async Task<Qualification?> GetById(string qualificationId)
     {
-        var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE", 
+        var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
                                                          AwardingOrganisations.Various, 6);
         degreeQualification.IsTheQualificationADegree = true;
 
@@ -92,7 +92,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                          string? awardingOrganisation, string? qualificationName)
     {
         var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
-                                                 AwardingOrganisations.Various, 6);
+                                                         AwardingOrganisations.Various, 6);
         degreeQualification.IsTheQualificationADegree = true;
 
         const string startDate = "Sep-14";
@@ -126,19 +126,20 @@ public class MockQualificationsRepository : IQualificationsRepository
                     ToWhichYear = endDate,
                     QualificationNumber = "233/420/12"
                 },
-                CreateQualification("EYQ-240","T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)", AwardingOrganisations.Ncfe, 3),
+                CreateQualification("EYQ-240",
+                                    "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
+                                    AwardingOrganisations.Ncfe, 3),
                 CreateQualification("EYQ-241", "BTEC", AwardingOrganisations.Ncfe, 2),
                 CreateQualification("EYQ-242", "BA (Hons) Early Childhood Studies", AwardingOrganisations.Ncfe, 2),
                 CreateQualification("EYQ-250", "BTEC", AwardingOrganisations.Various, 3),
                 degreeQualification,
                 CreateQualificationWithAdditionalRequirements("EYQ-909", AwardingOrganisations.Ncfe, 3, startDate,
-                                                endDate),
+                                                              endDate),
             };
 
         // For now, inbound parameters startDateMonth and startDateYear are ignored
         return Task.FromResult(qualifications.Where(x => x.QualificationLevel == level).ToList());
     }
-    
 
     private static Qualification CreateQualificationWithAdditionalRequirements(
         string qualificationId,
@@ -207,8 +208,9 @@ public class MockQualificationsRepository : IQualificationsRepository
                                                        new AdditionalRequirementQuestion
                                                        {
                                                            Question = "Test question",
-                                                           HintText =
-                                                               "This is the hint text: answer yes for full and relevant",
+                                                           HintTextContent =
+                                                               ContentfulContentHelper
+                                                                   .Paragraph("This is the hint text: answer yes for full and relevant"),
                                                            DetailsHeading =
                                                                "This is the details heading",
                                                            DetailsContent =
@@ -274,7 +276,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
                            RequirementForAfterJune2016 =
                                ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
-                           RequirementForL3PlusBetweenSept14AndMay16 = ContentfulContentHelper.Paragraph("Level 3 must English"),
+                           RequirementForL3PlusBetweenSept14AndMay16 =
+                               ContentfulContentHelper.Paragraph("Level 3 must English"),
                            RequirementHeading = "Level 3 Requirements",
                            SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        },
@@ -319,8 +322,9 @@ public class MockQualificationsRepository : IQualificationsRepository
                            Sys = new SystemProperties
                                  { Id = AdditionalRequirementQuestions.QtsQuestion },
                            Question = "This is the Qts question",
-                           HintText =
-                               "This is the hint text: answer yes for full and relevant",
+                           HintTextContent =
+                               ContentfulContentHelper
+                                   .Paragraph("This is the hint text: answer yes for full and relevant"),
                            DetailsHeading =
                                "Qts question heading",
                            DetailsContent =
@@ -374,7 +378,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                ContentfulContentHelper.Paragraph("Level 3 must English maybe PFA"),
                            RequirementForAfterJune2016 =
                                ContentfulContentHelper.Paragraph("Level 3 must English must PFA"),
-                           RequirementForL3PlusBetweenSept14AndMay16 = ContentfulContentHelper.Paragraph("Level 3 must English"),
+                           RequirementForL3PlusBetweenSept14AndMay16 =
+                               ContentfulContentHelper.Paragraph("Level 3 must English"),
                            RequirementHeading = "Level 3 Requirements",
                            SummaryCardDefaultContent = ContentfulContentHelper.Paragraph("Summary card default content")
                        },
@@ -410,8 +415,9 @@ public class MockQualificationsRepository : IQualificationsRepository
         return new AdditionalRequirementQuestion
                {
                    Question = "Test question 2",
-                   HintText =
-                       "This is the hint text: answer no for full and relevant",
+                   HintTextContent =
+                       ContentfulContentHelper
+                           .Paragraph("This is the hint text: answer no for full and relevant"),
                    DetailsHeading =
                        "This is the details heading",
                    DetailsContent =

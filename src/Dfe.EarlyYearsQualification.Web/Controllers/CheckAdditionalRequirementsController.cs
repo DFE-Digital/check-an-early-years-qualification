@@ -220,7 +220,7 @@ public class CheckAdditionalRequirementsController(
         return new AdditionalRequirementQuestionModel
                {
                    Question = additionalRequirementQuestion.Question,
-                   HintText = additionalRequirementQuestion.HintText,
+                   HintText = await contentParser.ToHtml(additionalRequirementQuestion.HintTextContent),
                    DetailsHeading = additionalRequirementQuestion.DetailsHeading,
                    DetailsContent = await contentParser.ToHtml(additionalRequirementQuestion.DetailsContent),
                    Options = MapOptions(additionalRequirementQuestion.Answers)

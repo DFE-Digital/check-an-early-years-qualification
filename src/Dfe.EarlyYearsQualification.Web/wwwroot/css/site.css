@@ -548,3 +548,8 @@ body {
 .govuk-footer__section > .govuk-footer__list > .govuk-footer__list-item > p {
     margin-bottom: 0!important;
 }
+
+.additional-requirement-hint > * {
+    color: #505a5f !important;
+    margin-top: 15px !important;
+}

@@ -8,7 +8,7 @@ public class AdditionalRequirementQuestion
 
     public string Question { get; init; } = string.Empty;
 
-    public string HintText { get; init; } = string.Empty;
+    public Document? HintTextContent { get; init; }
 
     public string DetailsHeading { get; init; } = string.Empty;
 
