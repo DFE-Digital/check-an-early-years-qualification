@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -34,7 +35,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("No qualificationId passed in");
@@ -65,7 +66,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockContentService.VerifyAll();
@@ -96,7 +97,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("QualificationDetails");
     }
 
@@ -126,7 +127,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockContentService.VerifyAll();
@@ -161,7 +162,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
-        resultType!.ViewName.Should().Be("Index");
+        resultType.ViewName.Should().Be("Index");
 
         resultType.Model.Should().NotBeNull();
         resultType.Model.Should().BeAssignableTo<CheckAdditionalRequirementsPageModel>();
@@ -210,7 +211,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
-        resultType!.ViewName.Should().Be("Index");
+        resultType.ViewName.Should().Be("Index");
 
         resultType.Model.Should().NotBeNull();
         resultType.Model.Should().BeAssignableTo<CheckAdditionalRequirementsPageModel>();
@@ -255,7 +256,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
         resultType.RouteValues.Should().Contain("questionIndex", 2);
@@ -287,7 +288,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
     }
 
@@ -315,7 +316,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("ConfirmAnswers");
+        resultType.ActionName.Should().Be("ConfirmAnswers");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
         mockUserJourneyCookieService
@@ -346,7 +347,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("ConfirmAnswers");
+        resultType.ActionName.Should().Be("ConfirmAnswers");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
     }
@@ -386,7 +387,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("ConfirmAnswers");
+        resultType.ActionName.Should().Be("ConfirmAnswers");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
         mockUserJourneyCookieService
@@ -441,7 +442,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ControllerName.Should().Be("CheckAdditionalRequirements");
+        resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
         resultType.RouteValues.Should().Contain("questionIndex", 2);
         mockUserJourneyCookieService
@@ -474,7 +475,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockContentService.VerifyAll();
@@ -507,7 +508,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("QualificationDetails");
     }
     
@@ -540,7 +541,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockContentService.VerifyAll();
@@ -580,7 +581,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
-        resultType!.ViewName.Should().Be("Index");
+        resultType.ViewName.Should().Be("Index");
 
         resultType.Model.Should().NotBeNull();
         resultType.Model.Should().BeAssignableTo<CheckAdditionalRequirementsPageModel>();
@@ -622,7 +623,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockContentService.VerifyAll();
@@ -653,7 +654,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockContentService.VerifyAll();
@@ -689,7 +690,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("QualificationDetails");
         resultType.RouteValues.Should().ContainSingle("qualificationId", "Test-123");
     }
@@ -723,7 +724,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
         resultType.RouteValues.Should().Contain("questionIndex", 1);
@@ -764,7 +765,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
         resultType.RouteValues.Should().Contain("questionIndex", 1);
@@ -820,7 +821,7 @@ public class CheckAdditionalRequirementsControllerTests
 
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
-        resultType!.ViewName.Should().Be("ConfirmAnswers");
+        resultType.ViewName.Should().Be("ConfirmAnswers");
 
         resultType.Model.Should().NotBeNull();
         resultType.Model.Should().BeAssignableTo<CheckAdditionalRequirementsAnswerPageModel>();
@@ -877,7 +878,7 @@ public class CheckAdditionalRequirementsControllerTests
                 ],
                 DetailsContent = new Document(),
                 DetailsHeading = "Details heading",
-                HintText = "Hint text",
+                HintTextContent = ContentfulContentHelper.Paragraph("Hint text"),
                 ConfirmationStatement = "Confirmation statement",
                 AnswerToBeFullAndRelevant = true
             },
@@ -899,7 +900,7 @@ public class CheckAdditionalRequirementsControllerTests
                 ],
                 DetailsContent = new Document(),
                 DetailsHeading = "Details heading",
-                HintText = "Hint text",
+                HintTextContent = ContentfulContentHelper.Paragraph("Hint text"),
                 ConfirmationStatement = "Confirmation statement",
                 AnswerToBeFullAndRelevant = true
             }

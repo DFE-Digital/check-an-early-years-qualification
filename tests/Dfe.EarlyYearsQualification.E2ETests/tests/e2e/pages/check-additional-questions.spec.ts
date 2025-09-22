@@ -7,7 +7,8 @@ import {
     journeyCookieName,
     isVisible,
     hasAttribute,
-    attributeContains
+    attributeContains,
+    checkTextContains
 } from '../../_shared/playwrightWrapper';
 
 test.describe('A spec that tests the check additional questions page', {tag: "@e2e"}, () => {
@@ -23,7 +24,7 @@ test.describe('A spec that tests the check additional questions page', {tag: "@e
         await attributeContains(page, "#back-button", 'href', '/select-a-qualification-to-check');
 
         await checkText(page, '#question', 'Test question');
-        await checkText(page, '#hint', 'This is the hint text: answer yes for full and relevant');
+        await checkTextContains(page, '#hint', 'This is the hint text: answer yes for full and relevant');
         await checkText(page, ".govuk-details__summary-text", "This is the details heading");
         await checkText(page, ".govuk-details__text", "This is the details content");
         await checkText(page, "Label[for='yes']", "Yes");
@@ -38,7 +39,7 @@ test.describe('A spec that tests the check additional questions page', {tag: "@e
         await attributeContains(page, "#back-button", 'href', '/qualifications/check-additional-questions');
      
         await checkText(page, '#question', 'Test question 2');
-        await checkText(page, '#hint', 'This is the hint text: answer no for full and relevant');
+        await checkTextContains(page, '#hint', 'This is the hint text: answer no for full and relevant');
         await checkText(page, ".govuk-details__summary-text", "This is the details heading");
         await checkText(page, ".govuk-details__text", "This is the details content");
         await checkText(page, "Label[for='yes']", "Yes");
