@@ -8,6 +8,4 @@ public interface IQualificationsRepository
 
     Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
                                   string? awardingOrganisation, string? qualificationName);
-
-    Task<List<Qualification>> GetAllQualifications();
 }

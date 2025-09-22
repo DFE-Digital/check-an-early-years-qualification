@@ -11,11 +11,11 @@ public class MockQualificationsRepositoryTests
 #pragma warning disable CA1861
     // An attribute argument must be a constant expression, 'typeof()' expression or array creation
     // expression of an attribute parameter type
-    [DataRow(2, new[] { "EYQ-100", "EYQ-101", "EYQ-241" })]
-    [DataRow(3, new[] { "EYQ-240", "EYQ-103", "EYQ-909" })]
+    [DataRow(2, new[] { "EYQ-100", "EYQ-101", "EYQ-241", "EYQ-242" })]
+    [DataRow(3, new[] { "EYQ-103", "EYQ-114", "EYQ-115", "EYQ-240", "EYQ-250", "EYQ-909" })]
     [DataRow(4, new[] { "EYQ-104", "EYQ-105" })]
     [DataRow(5, new[] { "EYQ-106", "EYQ-107" })]
-    [DataRow(6, new[] { "EYQ-108", "EYQ-109", "EYQ-114", "EYQ-115" })]
+    [DataRow(6, new[] { "EYQ-108", "EYQ-109", "EYQ-321" })]
     [DataRow(7, new[] { "EYQ-110", "EYQ-111" })]
     [DataRow(8, new[] { "EYQ-112", "EYQ-113" })]
 #pragma warning restore CA1861
@@ -43,7 +43,7 @@ public class MockQualificationsRepositoryTests
         var results = await repository.Get(3, null, null, null, null);
 
         var qualificationWithAdditionalRequirements =
-            results.SingleOrDefault(q => q.AdditionalRequirementQuestions?.Count > 0);
+            results.FirstOrDefault(q => q.QualificationId == "EYQ-909");
 
         qualificationWithAdditionalRequirements.Should().NotBeNull();
 
@@ -774,16 +774,5 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         answers[0].Value.Should().Be("yes");
         answers[1].Label.Should().Be("No");
         answers[1].Value.Should().Be("no");
-    }
-
-    [TestMethod]
-    public async Task GetAllQualifications_ReturnsAListOfQualifications()
-    {
-        var repository = new MockQualificationsRepository();
-
-        var result = await repository.GetAllQualifications();
-
-        result.Count.Should().Be(10);
-        result.Where(x => x.QualificationName == "duped qualification name").Count().Should().Be(2);
     }
 }

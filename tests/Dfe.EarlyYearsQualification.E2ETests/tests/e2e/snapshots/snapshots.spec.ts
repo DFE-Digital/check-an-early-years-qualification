@@ -112,7 +112,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
-        await checkSnapshot(page);
+        await checkSnapshot(page, false, 2000, 2430);
     });
 
     test("Qualification not on list page", async ({page}) => {

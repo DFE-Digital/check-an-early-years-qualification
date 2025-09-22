@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +14,10 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [RedirectIfDateMissing]
 public class ConfirmQualificationController(
     ILogger<ConfirmQualificationController> logger,
-    IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IUserJourneyCookieService userJourneyCookieService,
-    IConfirmQualificationPageMapper confirmQualificationPageMapper)
+    IConfirmQualificationPageMapper confirmQualificationPageMapper,
+    IQualificationSearchService qualificationSearchService)
     : ServiceController
 {
     [HttpGet]
@@ -39,9 +40,9 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var allQualifications = await qualificationsRepository.GetAllQualifications();
+        var filteredQualifications = await qualificationSearchService.GetFilteredQualifications();
 
-        var qualification = allQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId, StringComparison.OrdinalIgnoreCase));
+        var qualification = filteredQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId, StringComparison.OrdinalIgnoreCase));
 
         if (qualification is null)
         {
@@ -52,7 +53,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await confirmQualificationPageMapper.Map(content, qualification, allQualifications);
+        var model = await confirmQualificationPageMapper.Map(content, qualification, filteredQualifications);
 
         // Used to prepopulate help form
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
@@ -72,9 +73,9 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var allQualifications = await qualificationsRepository.GetAllQualifications();
+        var filteredQualifications = await qualificationSearchService.GetFilteredQualifications();
 
-        var qualification = allQualifications.SingleOrDefault(x => x.QualificationId == model.QualificationId);
+        var qualification = filteredQualifications.SingleOrDefault(x => x.QualificationId == model.QualificationId);
 
         if (qualification is null)
         {
@@ -130,7 +131,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        model = await confirmQualificationPageMapper.Map(content, qualification, allQualifications);
+        model = await confirmQualificationPageMapper.Map(content, qualification, filteredQualifications);
         model.HasErrors = true;
 
         return View("Index", model);
