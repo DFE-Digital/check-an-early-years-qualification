@@ -775,15 +775,4 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         answers[1].Label.Should().Be("No");
         answers[1].Value.Should().Be("no");
     }
-
-    /*[TestMethod]
-    public async Task GetAllQualifications_ReturnsAListOfQualifications()
-    {
-        var repository = new MockQualificationsRepository();
-
-        var result = await repository.GetAllQualifications();
-
-        result.Count.Should().Be(10);
-        result.Where(x => x.QualificationName == "duped qualification name").Count().Should().Be(2);
-    }*/
 }
