@@ -80,10 +80,10 @@ jobs:
           test_type: 'smoke'
           
       # Run validation checks
-      - name: Run Playwright validation tests
+      - name: Run Playwright validation tests against slot
         uses: ./.github/actions/run-playwright-tests
         with:
-          webapp_url: "${{ vars.SERVICE_GOV_UK_CUSTOM_DOMAIN_NAME }}"
+          webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}.azurewebsites.net"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           test_type: "validation"
      
