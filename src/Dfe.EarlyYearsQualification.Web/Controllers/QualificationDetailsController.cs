@@ -29,7 +29,10 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var qualification = await qualificationDetailsService.GetQualification(qualificationId);
+        var filteredQualifications = await qualificationDetailsService.GetFilteredQualifications();
+
+        var qualification = filteredQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId, StringComparison.OrdinalIgnoreCase));
+
         if (qualification is null)
         {
             logger.LogError("Could not find details for qualification with ID: {QualificationId}",
@@ -37,8 +40,8 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await qualificationDetailsService.MapDetails(qualification, detailsPageContent);
-        
+        var model = await qualificationDetailsService.MapDetails(qualification, detailsPageContent, filteredQualifications);
+
         var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
 
         model.Content!.QualificationResultHeading = detailsPageContent.QualificationResultHeading;

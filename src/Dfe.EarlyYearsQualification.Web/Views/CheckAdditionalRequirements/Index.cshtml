@@ -43,7 +43,7 @@
                         </h1>
                     </legend>
 
-                    <div id="hint" class="govuk-hint">@Model.AdditionalRequirementQuestion.HintText</div>
+                    <div id="hint" class="govuk-hint additional-requirement-hint">@Html.Raw(Model.AdditionalRequirementQuestion.HintText)</div>
 
                     @if (!string.IsNullOrEmpty(Model.AdditionalRequirementQuestion.DetailsHeading) && !string.IsNullOrEmpty(Model.AdditionalRequirementQuestion.DetailsContent))
                     {

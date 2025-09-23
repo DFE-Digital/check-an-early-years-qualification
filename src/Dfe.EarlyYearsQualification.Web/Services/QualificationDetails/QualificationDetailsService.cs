@@ -8,23 +8,24 @@ using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 
 public class QualificationDetailsService(
     ILogger<QualificationDetailsService> logger,
-    IQualificationsRepository qualificationsRepository,
     IContentService contentService,
     IGovUkContentParser contentParser,
     IUserJourneyCookieService userJourneyCookieService,
     IPlaceholderUpdater placeholderUpdater,
-    IQualificationDetailsMapper qualificationDetailsMapper
+    IQualificationDetailsMapper qualificationDetailsMapper,
+    IQualificationSearchService qualificationSearchService
 ) : IQualificationDetailsService
 {
-    public async Task<Qualification?> GetQualification(string qualificationId)
+    public async Task<List<Qualification>> GetFilteredQualifications()
     {
-        return await qualificationsRepository.GetById(qualificationId);
+        return await qualificationSearchService.GetFilteredQualifications();
     }
 
     public async Task<DetailsPage?> GetDetailsPage()
@@ -396,7 +397,7 @@ public class QualificationDetailsService(
         }
     }
 
-    public async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content)
+    public async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content, List<Qualification> qualifications)
     {
         var backNavLink = CalculateBackButton(content, qualification.QualificationId);
 
@@ -421,7 +422,7 @@ public class QualificationDetailsService(
         return await qualificationDetailsMapper.Map(qualification, content, backNavLink,
                                                     MapAdditionalRequirementAnswers(qualification
                                                         .AdditionalRequirementQuestions),
-                                                    dateStarted, dateAwarded);
+                                                    dateStarted, dateAwarded, qualifications);
     }
 
     public async Task SetRatioText(QualificationDetailsModel model, DetailsPage content)

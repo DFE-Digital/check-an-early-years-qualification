@@ -37,4 +37,7 @@ public class ConfirmQualificationPageModel
     public string VariousAwardingOrganisationsExplanation { get; init; } = string.Empty;
     public bool ShowAnswerDisclaimerText { get; init; }
     public string AnswerDisclaimerText { get; init; } = string.Empty;
+    public string QualificationNumberLabel { get; init; } = string.Empty;
+    public string? QualificationNumber { get; init; } = string.Empty;
+    public bool IsQualificationNameDuplicate { get; set; }
 }
