@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
@@ -13,7 +14,8 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
         NavigationLink? backNavLink,
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
-        string dateAwarded)
+        string dateAwarded,
+        List<Qualification> qualifications)
     {
         var requirementsTextHtml = await contentParser.ToHtml(content.RequirementsText);
         var feedbackBodyHtml = content.FeedbackBanner is not null
@@ -28,7 +30,8 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
                    QualificationId = qualification.QualificationId,
                    QualificationLevel = qualification.QualificationLevel,
                    QualificationName = qualification.QualificationName,
-                   QualificationNumber = qualification.QualificationNumber,
+                   QualificationNumber = StringFormattingHelper.FormatSlashedNumbers(qualification.QualificationNumber),
+                   QualificationNumberLabel = content.QualificationNumberLabel,
                    AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
                    FromWhichYear = qualification.FromWhichYear,
                    BackButton = NavigationLinkMapper.Map(backNavLink),
@@ -55,7 +58,8 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
                                  QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader,
                                  FeedbackBanner = FeedbackBannerMapper.Map(content.FeedbackBanner, feedbackBodyHtml)
                              },
-                   UpDownFeedback = UpDownFeedbackMapper.Map(content.UpDownFeedback, improveServiceBodyHtml)
-               };
+                   UpDownFeedback = UpDownFeedbackMapper.Map(content.UpDownFeedback, improveServiceBodyHtml),
+                   IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1
+        };
     }
 }
