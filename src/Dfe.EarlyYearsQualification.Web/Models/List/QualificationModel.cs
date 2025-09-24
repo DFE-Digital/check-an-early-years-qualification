@@ -4,13 +4,15 @@ public class QualificationModel
 {
     public string QualificationId { get; set; } = string.Empty;
 
-    public string QualificationName { get; set; } = string.Empty;
+    public string QualificationName { get; init; } = string.Empty;
 
-    public string AwardingOrganisationTitle { get; set; } = string.Empty;
+    public string AwardingOrganisationTitle { get; init; } = string.Empty;
 
-    public int QualificationLevel { get; set; }
+    public int QualificationLevel { get; init; }
 
-    public string FromWhichYear { get; set; } = string.Empty;
+    public string FromWhichYear { get; init; } = string.Empty;
 
-    public string? QualificationNumber { get; set; } = string.Empty;
+    public string? QualificationNumber { get; init; } = string.Empty;
+
+    public string? AdditionalRequirements { get; init; } = string.Empty;
 }

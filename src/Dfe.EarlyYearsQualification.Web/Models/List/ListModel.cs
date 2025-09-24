@@ -8,6 +8,8 @@ public class ListModel
     
     public List<QualificationModel> Post2024Qualifications { get; set; } = [];
 
+    public string? SearchTerm { get; set; }
+
     public void OrderQualificationLists()
     {
         Pre2014Qualifications = Pre2014Qualifications.OrderBy(q => q.QualificationLevel).ThenBy(n => n.QualificationName).ToList();

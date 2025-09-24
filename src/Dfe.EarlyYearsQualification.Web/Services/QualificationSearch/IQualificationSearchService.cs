@@ -9,6 +9,5 @@ public interface IQualificationSearchService
     Task<QualificationListModel?> GetQualifications();
     Task<QualificationListModel> MapList(QualificationListPage content, List<Qualification>? qualifications);
     Task<List<Qualification>> GetFilteredQualifications();
-    Task<List<Qualification>> GetAllQualifications();
     FilterModel GetFilterModel(QualificationListPage content);
 }
