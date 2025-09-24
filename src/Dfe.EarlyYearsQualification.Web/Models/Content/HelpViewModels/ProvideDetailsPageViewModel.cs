@@ -21,7 +21,7 @@ public class ProvideDetailsPageViewModel
     public string ProvideAdditionalInformation { get; set; } = string.Empty;
 
     // validation handling
-    public bool HasValidationErrors => Errors.Any();
+    public bool HasValidationErrors => Errors.Count > 0;
 
     public string ErrorBannerHeading { get; init; } = string.Empty;
 

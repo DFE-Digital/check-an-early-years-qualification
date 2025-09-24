@@ -27,7 +27,7 @@ const ENVIRONMENT = {
 // See https://grafana.com/docs/k6/latest/examples/get-started-with-k6/ to learn more
 // about authoring k6 scripts.
 //
-export default async function () {
+export default async function startPage() {
 
   const address = 'https://' + ENVIRONMENT.customDomain + '/';
 
