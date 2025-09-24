@@ -10,6 +10,8 @@ public class ListModel
 
     public string? SearchTerm { get; set; }
 
+    public int[]? Levels { get; set; }
+
     public void OrderQualificationLists()
     {
         Pre2014Qualifications = Pre2014Qualifications.OrderBy(q => q.QualificationLevel).ThenBy(n => n.QualificationName).ToList();

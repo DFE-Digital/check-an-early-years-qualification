@@ -14,19 +14,36 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-xl">Early years qualification list</h1>
-    <p class="govuk-body" name="search-label">Search for qualifications by name.</p>
+    <p class="govuk-body" id="search-label">Search for qualifications by name.</p>
   </div>
 </div>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     @using (Html.BeginForm("Search", "List", FormMethod.Post, new { id = "refine-search-form" }))
     {
-      <input class="govuk-input" style="width: 75%" id="searchTerm" name="searchTerm"
+      <input class="govuk-input" id="searchTerm" name="searchTerm"
              aria-labelledby="search-label" type="text" value="@Model.SearchTerm">
+      <govuk-checkboxes name="levels">
+        <govuk-checkboxes-fieldset>
+          <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--m">
+            Filter by level
+          </govuk-checkboxes-fieldset-legend>
+          <govuk-checkboxes-hint>
+            Select all levels you want to filter by
+          </govuk-checkboxes-hint>
+          @for (int i = 2; i < 7; i++)
+          {
+            var isChecked = Model.Levels != null && Model.Levels.Contains(i);
+            <govuk-checkboxes-item value="@i" checked="isChecked">
+              @("Level " + i)
+            </govuk-checkboxes-item>
+          }
+        </govuk-checkboxes-fieldset>
+      </govuk-checkboxes>
       <button id="refineSearchButton" type="submit"
-              class="govuk-button govuk-button--secondary govuk-!-static-margin-left-1"
+              class="govuk-button govuk-button--primary govuk-!-static-margin-left-1"
               data-module="govuk-button">
-        Refine
+        Apply
       </button>
     }
     @using (Html.BeginForm("Search", "List", FormMethod.Post, new { id = "clear-search-form" }))

@@ -14,17 +14,30 @@ public class ListController(IQualificationsRepository qualificationsRepository,
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var searchTerm = userJourneyCookieService.GetSearchCriteria();
-        var allQualifications = await qualificationsRepository.Get(null, null, null, null, searchTerm);
-        var model = CreateListModel(allQualifications);
-        model.SearchTerm = searchTerm;
+        var listFilters = userJourneyCookieService.GetListFilters();
+        var qualifications = new List<Qualification>();
+        if (listFilters.Levels is { Length: > 0 })
+        {
+            // TODO: Only done in the POC to reuse existing functionality. If we go ahead with this, we should look to at refactoring this so it only performs 1 call
+            foreach (var listFiltersLevel in listFilters.Levels)
+            {
+                qualifications.AddRange(await qualificationsRepository.Get(listFiltersLevel, null, null, null, listFilters.SearchTerm));
+            }
+        }
+        else
+        {
+            qualifications = await qualificationsRepository.Get(null, null, null, null, listFilters.SearchTerm);
+        }
+        var model = CreateListModel(qualifications);
+        model.SearchTerm = listFilters.SearchTerm;
+        model.Levels = listFilters.Levels;
         return View(model);
     }
 
     [HttpPost]
-    public IActionResult Search(string searchTerm)
+    public IActionResult Search(string searchTerm, int[]? levels)
     {
-        userJourneyCookieService.SetQualificationNameSearchCriteria(searchTerm);
+        userJourneyCookieService.SetListFilters(new ListFilters { SearchTerm = searchTerm, Levels = levels });
         return RedirectToAction("Index");
     }
     
