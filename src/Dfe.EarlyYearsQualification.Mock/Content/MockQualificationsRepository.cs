@@ -8,10 +8,6 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockQualificationsRepository : IQualificationsRepository
 {
-    private static Document Level3Ebr => ContentfulContentHelper.Paragraph("Level 3 EBR");
-    private static Document Level6MustQts => ContentfulContentHelper.Paragraph("Level 6 must QTS");
-    private static Document SummaryCardDefaultContent => ContentfulContentHelper.Paragraph("Summary card default content");
-
     public async Task<Qualification?> GetById(string qualificationId)
     {
         var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
@@ -442,5 +438,29 @@ public class MockQualificationsRepository : IQualificationsRepository
                        "This is the confirmation statement 2",
                    AnswerToBeFullAndRelevant = answerToBeFullAndRelevant
                };
+    }
+
+    private static Document Level3Ebr
+    {
+        get
+        {
+            return ContentfulContentHelper.Paragraph("Level 3 EBR");
+        }
+    }
+
+    private static Document Level6MustQts
+    {
+        get
+        {
+            return ContentfulContentHelper.Paragraph("Level 6 must QTS");
+        }
+    }
+
+    private static Document SummaryCardDefaultContent
+    {
+        get
+        {
+            return ContentfulContentHelper.Paragraph("Summary card default content");
+        }
     }
 }
