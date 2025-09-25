@@ -553,3 +553,8 @@ body {
     color: #505a5f !important;
     margin-top: 15px !important;
 }
+
+/* Eyql Table styling */
+.eyql-table .govuk-table__header {
+    cursor: pointer;
+}
