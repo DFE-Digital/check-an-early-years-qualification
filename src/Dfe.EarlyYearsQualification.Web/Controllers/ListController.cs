@@ -1,3 +1,4 @@
+using System.Text;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
@@ -18,7 +19,7 @@ public class ListController(IQualificationsRepository qualificationsRepository,
         var qualifications = new List<Qualification>();
         if (listFilters.Levels is { Length: > 0 })
         {
-            // TODO: Only done in the POC to reuse existing functionality. If we go ahead with this, we should look to at refactoring this so it only performs 1 call
+            // TODO: Only done in the POC to reuse existing functionality. If we go ahead with this, we should look at refactoring this so it only performs 1 call
             foreach (var listFiltersLevel in listFilters.Levels)
             {
                 qualifications.AddRange(await qualificationsRepository.Get(listFiltersLevel, null, null, null, listFilters.SearchTerm));
@@ -31,7 +32,26 @@ public class ListController(IQualificationsRepository qualificationsRepository,
         var model = CreateListModel(qualifications);
         model.SearchTerm = listFilters.SearchTerm;
         model.Levels = listFilters.Levels;
+        var levelFilters = new StringBuilder();
+        if (listFilters.Levels is { Length: > 0 })
+        {
+            foreach (var level in listFilters.Levels)
+            {
+                levelFilters.Append($"levels={level}&");
+            }
+            levelFilters.Remove(levelFilters.Length - 1, 1);
+        }
+        
+        model.CopyLink = $"searchTerm={listFilters.SearchTerm}&{levelFilters}";
         return View(model);
+    }
+
+    [HttpGet]
+    [Route("/copy-link")]
+    public IActionResult Link(string searchTerm, int[]? levels)
+    {
+        userJourneyCookieService.SetListFilters(new ListFilters { SearchTerm = searchTerm, Levels = levels });
+        return RedirectToAction("Index");
     }
 
     [HttpPost]

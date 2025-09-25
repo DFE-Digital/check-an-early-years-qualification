@@ -29,3 +29,18 @@ document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() =
         .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
         .forEach(tr => tbody.appendChild(tr));
 })));
+
+$("#copy-link").on("click", async(e) => {
+    e.preventDefault();
+    let copyLinkButton = $("#copy-link");
+    let copyLink = copyLinkButton.attr('data-copy-link');
+    let urlLink = window.location.origin + "/copy-link/?" + copyLink;
+    console.log(urlLink);
+    copyLinkButton.select();
+    await navigator.clipboard.writeText(urlLink).then(() => {
+        copyLinkButton.text('Copied!');
+    });
+    setTimeout(() => {
+        copyLinkButton.text('Copy link');
+    }, 2000);
+})

@@ -12,6 +12,8 @@ public class ListModel
 
     public int[]? Levels { get; set; }
 
+    public string? CopyLink { get; set; }
+
     public void OrderQualificationLists()
     {
         Pre2014Qualifications = Pre2014Qualifications.OrderBy(q => q.QualificationLevel).ThenBy(n => n.QualificationName).ToList();
