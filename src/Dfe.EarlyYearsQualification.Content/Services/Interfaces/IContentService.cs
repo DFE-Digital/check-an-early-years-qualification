@@ -35,7 +35,7 @@ public interface IContentService
 
     Task<ChallengePage?> GetChallengePage();
 
-    Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear);
+    Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear, bool isPractitionerSpecificPage);
 
     Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage();
 

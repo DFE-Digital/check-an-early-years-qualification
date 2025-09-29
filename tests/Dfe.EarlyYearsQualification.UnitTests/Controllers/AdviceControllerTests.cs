@@ -1,13 +1,10 @@
-using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
-using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
-using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -15,7 +12,7 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class AdviceControllerTests
 {
-    private static readonly Mock<IUserJourneyCookieService> UserJourneyMockNoOp = new();
+    private static readonly Mock<IUserJourneyCookieService> UserJourneyMockNoOp = new Mock<IUserJourneyCookieService>();
     private const string BodyContent = "Test html body";
     private const string Heading = "Heading";
 
@@ -347,9 +344,10 @@ public class AdviceControllerTests
         var mockAdvicePageMapper = new Mock<IAdvicePageMapper>();
 
         UserJourneyMockNoOp.Setup(x => x.GetLevelOfQualification()).Returns(2);
+        UserJourneyMockNoOp.Setup(x => x.GetIsUserCheckingTheirOwnQualification()).Returns("no");
         UserJourneyMockNoOp.Setup(x => x.GetWhenWasQualificationStarted()).Returns((2, 2015));
 
-        mockContentService.Setup(x => x.GetCannotFindQualificationPage(2, 2, 2015)).ReturnsAsync(value: null);
+        mockContentService.Setup(x => x.GetCannotFindQualificationPage(2, 2, 2015, false)).ReturnsAsync(value: null);
 
         var controller = new AdviceController(mockLogger.Object,
                                               mockContentService.Object,
@@ -376,7 +374,7 @@ public class AdviceControllerTests
         model.Heading.Should().Be(advicePage.Heading);
         model.BodyContent.Should().Be(BodyContent);
 
-        mockContentService.Verify(x => x.GetCannotFindQualificationPage(2, 2, 2015), Times.Once);
+        mockContentService.Verify(x => x.GetCannotFindQualificationPage(2, 2, 2015, false), Times.Once);
         mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<AdvicePage>()), Times.Once);
     }
 
@@ -393,6 +391,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         UserJourneyMockNoOp.Setup(x => x.GetLevelOfQualification()).Returns(2);
+        UserJourneyMockNoOp.Setup(x => x.GetIsUserCheckingTheirOwnQualification()).Returns("no");
         UserJourneyMockNoOp.Setup(x => x.GetWhenWasQualificationStarted()).Returns((2, 2015));
 
         var cannotFindQualificationPage = new CannotFindQualificationPage
@@ -400,7 +399,7 @@ public class AdviceControllerTests
                                               Heading = Heading,
                                               Body = ContentfulContentHelper.Text(BodyContent)
                                           };
-        mockContentService.Setup(x => x.GetCannotFindQualificationPage(2, 2, 2015))
+        mockContentService.Setup(x => x.GetCannotFindQualificationPage(2, 2, 2015, false))
                           .ReturnsAsync(cannotFindQualificationPage);
 
         mockAdvicePageMapper.Setup(x => x.Map(cannotFindQualificationPage))
@@ -421,7 +420,7 @@ public class AdviceControllerTests
         model.BodyContent.Should().Be(BodyContent);
 
         mockContentService.Verify(x => x.GetAdvicePage(AdvicePages.QualificationNotOnTheList), Times.Never);
-        mockContentService.Verify(x => x.GetCannotFindQualificationPage(2, 2, 2015), Times.Once);
+        mockContentService.Verify(x => x.GetCannotFindQualificationPage(2, 2, 2015, false), Times.Once);
         mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<CannotFindQualificationPage>()), Times.Once);
     }
 
