@@ -235,7 +235,7 @@ public class ContentfulContentService(
                            .ContentTypeIs(cannotFindQualificationPageType)
                            .Include(2)
                            .FieldEquals("fields.level", level.ToString())
-                           .FieldEquals("fields.isPractitionerSpecificPage",  isPractitionerSpecificPage.ToString());
+                           .FieldEquals("fields.isPractitionerSpecificPage",  isPractitionerSpecificPage ? "1" : "0");
 
         var cannotFindQualificationPages = await GetEntriesByType(queryBuilder);
         if (cannotFindQualificationPages is null || !cannotFindQualificationPages.Any())
