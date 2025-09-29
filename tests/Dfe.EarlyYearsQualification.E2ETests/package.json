@@ -2,7 +2,10 @@
   "name": "dfe.earlyyearsqualification.e2etests",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "snapshot": "npx playwright test --grep @snapshot --project chromium",
+    "e2e": "npx playwright test --grep @e2e"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
