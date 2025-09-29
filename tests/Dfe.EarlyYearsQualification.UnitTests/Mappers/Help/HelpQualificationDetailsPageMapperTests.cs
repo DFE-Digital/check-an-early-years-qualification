@@ -260,7 +260,7 @@ public class HelpQualificationDetailsPageMapperTests
         awardedYear.ElementLinkId.Should().Be("QuestionModel.AwardedQuestion.SelectedYear");
     }
 
-    private HelpQualificationDetailsPage GetHelpQualificationDetailsPageContent()
+    private static HelpQualificationDetailsPage GetHelpQualificationDetailsPageContent()
     {
 
         return new HelpQualificationDetailsPage()
