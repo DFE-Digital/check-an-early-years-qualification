@@ -228,13 +228,14 @@ public class ContentfulContentService(
     }
 
     public async Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(
-        int level, int startMonth, int startYear)
+        int level, int startMonth, int startYear, bool isUserCheckingTheirOwnQualification)
     {
         var cannotFindQualificationPageType = ContentTypeLookup[typeof(CannotFindQualificationPage)];
         var queryBuilder = new QueryBuilder<CannotFindQualificationPage>()
                            .ContentTypeIs(cannotFindQualificationPageType)
                            .Include(2)
-                           .FieldEquals("fields.level", level.ToString());
+                           .FieldEquals("fields.level", level.ToString())
+                           .FieldEquals("fields.isPractitionerSpecificPage",  isUserCheckingTheirOwnQualification ? "1" : "0");
 
         var cannotFindQualificationPages = await GetEntriesByType(queryBuilder);
         if (cannotFindQualificationPages is null || !cannotFindQualificationPages.Any())

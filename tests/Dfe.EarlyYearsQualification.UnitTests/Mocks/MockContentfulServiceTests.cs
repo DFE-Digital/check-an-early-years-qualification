@@ -622,10 +622,34 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetCannotFindQualificationPage_PassInLevel3AndPractitioner_ReturnsExpectedContent()
+    {
+        var contentfulService = new MockContentfulService();
+        var result = await contentfulService.GetCannotFindQualificationPage(3, 7, 2015, true);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CannotFindQualificationPage>();
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "TEST",
+                                                      OpenInNewTab = false,
+                                                      Href = "/select-a-qualification-to-check"
+                                                  });
+
+        result.Heading.Should().Be("This is the practitioner level 3 page");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the practitioner body text");
+        result.FromWhichYear.Should().Be("Sep-14");
+        result.ToWhichYear.Should().Be("Aug-19");
+        result.FeedbackBanner.Should().NotBeNull();
+        result.IsPractitionerSpecificPage.Should().BeTrue();
+    }
+    
+    [TestMethod]
     public async Task GetCannotFindQualificationPage_PassInLevel3_ReturnsExpectedContent()
     {
         var contentfulService = new MockContentfulService();
-        var result = await contentfulService.GetCannotFindQualificationPage(3, 7, 2015);
+        var result = await contentfulService.GetCannotFindQualificationPage(3, 7, 2015, false);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CannotFindQualificationPage>();
@@ -647,7 +671,7 @@ public class MockContentfulServiceTests
     public async Task GetCannotFindQualificationPage_PassInLevel4_ReturnsExpectedContent()
     {
         var contentfulService = new MockContentfulService();
-        var result = await contentfulService.GetCannotFindQualificationPage(4, 7, 2015);
+        var result = await contentfulService.GetCannotFindQualificationPage(4, 7, 2015, false);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CannotFindQualificationPage>();
@@ -669,7 +693,7 @@ public class MockContentfulServiceTests
     public async Task GetCannotFindQualificationPage_PassInLevel5_ReturnsNull()
     {
         var contentfulService = new MockContentfulService();
-        var result = await contentfulService.GetCannotFindQualificationPage(5, 7, 2015);
+        var result = await contentfulService.GetCannotFindQualificationPage(5, 7, 2015, false);
 
         result.Should().BeNull();
     }

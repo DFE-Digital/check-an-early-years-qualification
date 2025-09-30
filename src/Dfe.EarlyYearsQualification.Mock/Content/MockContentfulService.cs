@@ -382,7 +382,7 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
+    public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear, bool isUserCheckingTheirOwnQualification)
     {
         var backButton = new NavigationLink
                          {
@@ -402,6 +402,18 @@ public class MockContentfulService : IContentService
 
         return (level switch
                 {
+                    3 when isUserCheckingTheirOwnQualification => Task.FromResult(new CannotFindQualificationPage
+                                         {
+                                             Heading = "This is the practitioner level 3 page",
+                                             Body = ContentfulContentHelper.Paragraph("This is the practitioner body text"),
+                                             FromWhichYear = "Sep-14",
+                                             ToWhichYear = "Aug-19",
+                                             BackButton = backButton,
+                                             FeedbackBanner = feedbackBanner,
+                                             UpDownFeedback = upDownFeedback,
+                                             RightHandSideContent = GetFeedbackComponent(),
+                                             IsPractitionerSpecificPage = true
+                                         }),
                     3 => Task.FromResult(new CannotFindQualificationPage
                                          {
                                              Heading = "This is the level 3 page",
@@ -411,7 +423,8 @@ public class MockContentfulService : IContentService
                                              BackButton = backButton,
                                              FeedbackBanner = feedbackBanner,
                                              UpDownFeedback = upDownFeedback,
-                                             RightHandSideContent = GetFeedbackComponent()
+                                             RightHandSideContent = GetFeedbackComponent(),
+                                             IsPractitionerSpecificPage = false
                                          }),
                     4 => Task.FromResult(new CannotFindQualificationPage
                                          {
@@ -422,7 +435,8 @@ public class MockContentfulService : IContentService
                                              BackButton = backButton,
                                              FeedbackBanner = feedbackBanner,
                                              UpDownFeedback = upDownFeedback,
-                                             RightHandSideContent = GetFeedbackComponent()
+                                             RightHandSideContent = GetFeedbackComponent(),
+                                             IsPractitionerSpecificPage = false
                                          }),
                     _ => Task.FromResult<CannotFindQualificationPage>(null!)
                 })!;
