@@ -382,7 +382,7 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear, bool isPractitionerSpecificPage)
+    public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear, bool isUserCheckingTheirOwnQualification)
     {
         var backButton = new NavigationLink
                          {
@@ -402,7 +402,7 @@ public class MockContentfulService : IContentService
 
         return (level switch
                 {
-                    3 when isPractitionerSpecificPage => Task.FromResult(new CannotFindQualificationPage
+                    3 when isUserCheckingTheirOwnQualification => Task.FromResult(new CannotFindQualificationPage
                                          {
                                              Heading = "This is the practitioner level 3 page",
                                              Body = ContentfulContentHelper.Paragraph("This is the practitioner body text"),

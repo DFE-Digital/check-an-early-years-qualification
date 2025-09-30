@@ -65,12 +65,12 @@ public class AdviceController(
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         var isUserCheckingTheirOwnQualification = userJourneyCookieService.GetIsUserCheckingTheirOwnQualification();
-        var isUserAPractitioner = isUserCheckingTheirOwnQualification == "yes";
 
         if (level is not null && startMonth is not null && startYear is not null)
         {
             var specificCannotFindQualificationPage =
-                await contentService.GetCannotFindQualificationPage(level.Value, startMonth.Value, startYear.Value, isUserAPractitioner);
+                await contentService.GetCannotFindQualificationPage(level.Value, startMonth.Value, startYear.Value,
+                                                                    isUserCheckingTheirOwnQualification == "yes");
 
             if (specificCannotFindQualificationPage is not null)
             {
