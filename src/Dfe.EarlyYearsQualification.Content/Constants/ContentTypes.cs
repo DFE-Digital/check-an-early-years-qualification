@@ -8,7 +8,6 @@ public static class ContentTypes
     public const string AdvicePage = "advicePage";
     public const string RadioQuestionPage = "radioQuestionPage";
     public const string AccessibilityStatementPage = "accessibilityStatementPage";
-    public const string NavigationLinks = "navigationLinks";
     public const string CookiesPage = "cookiesPage";
     public const string PhaseBanner = "phaseBanner";
     public const string CookiesBanner = "cookiesBanner";
