@@ -6,9 +6,7 @@ namespace Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 public interface IContentService
 {
     Task<StartPage?> GetStartPage();
-
-    Task<List<NavigationLink>> GetNavigationLinks();
-
+    
     Task<DetailsPage?> GetDetailsPage();
 
     Task<AdvicePage?> GetAdvicePage(string entryId);

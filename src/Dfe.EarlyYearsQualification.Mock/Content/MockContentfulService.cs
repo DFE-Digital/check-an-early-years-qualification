@@ -182,23 +182,6 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<List<NavigationLink>> GetNavigationLinks()
-    {
-        return await Task.FromResult(new List<NavigationLink>
-                                     {
-                                         new NavigationLink
-                                         {
-                                             DisplayText = "Privacy notice",
-                                             Href = "/link-to-privacy-notice"
-                                         },
-                                         new NavigationLink
-                                         {
-                                             DisplayText = "Accessibility statement",
-                                             Href = "/link-to-accessibility-statement"
-                                         }
-                                     });
-    }
-
     public async Task<PhaseBanner?> GetPhaseBannerContent()
     {
         var content = new Document

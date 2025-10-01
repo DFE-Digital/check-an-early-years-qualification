@@ -74,18 +74,6 @@ public class ContentfulContentService(
         return cookiesContent;
     }
 
-    public async Task<List<NavigationLink>> GetNavigationLinks()
-    {
-        var navigationLinkEntries = await GetEntriesByType<NavigationLinks>();
-        if (navigationLinkEntries is not null && navigationLinkEntries.Any())
-        {
-            return navigationLinkEntries.First().Links;
-        }
-
-        Logger.LogWarning("No navigation links returned");
-        return [];
-    }
-
     public async Task<AdvicePage?> GetAdvicePage(string entryId)
     {
         var advicePage = await GetEntryById<AdvicePage>(entryId);

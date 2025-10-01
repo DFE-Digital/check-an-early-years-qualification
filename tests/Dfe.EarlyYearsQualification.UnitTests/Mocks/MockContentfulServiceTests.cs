@@ -221,17 +221,6 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetNavigationLinks_ReturnsExpectedDetails()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetNavigationLinks();
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<List<NavigationLink>>();
-        result.Count.Should().Be(2);
-    }
-
-    [TestMethod]
     public async Task GetRadioQuestionPage_PassInWhereWasTheQualificationAwarded_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
