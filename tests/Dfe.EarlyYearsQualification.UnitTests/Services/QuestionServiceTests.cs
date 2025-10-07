@@ -6,6 +6,7 @@ using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.Help;
@@ -227,6 +228,24 @@ public class QuestionServiceTests
     }
 
     [TestMethod]
+    public void RedirectBasedOnQualificationInvalidLevelSelected_ReturnsExpected()
+    {
+        var option = "invalidLevel";
+        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
+        _mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2019()).Returns(true);
+
+        // Act
+        var result = GetSut().RedirectBasedOnQualificationLevelSelected(option);
+
+        // Assert
+        result.Should().NotBeNull();
+        var resultType = result as RedirectToActionResult;
+
+        resultType!.ActionName.Should().Be(nameof(QuestionsController.WhatIsTheAwardingOrganisation));
+        _mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification(option), Times.Once);
+    }
+
+    [TestMethod]
     [DataRow(QualificationAwardLocation.OutsideOfTheUnitedKingdom, "QualificationOutsideTheUnitedKingdom")]
     [DataRow(QualificationAwardLocation.Scotland, "QualificationsAchievedInScotland")]
     [DataRow(QualificationAwardLocation.Wales, "QualificationsAchievedInWales")]
@@ -244,6 +263,25 @@ public class QuestionServiceTests
 
         resultType!.ActionName.Should().Be(action);
         resultType!.ControllerName.Should().Be("Advice");
+
+        _mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(option), Times.Once);
+    }
+
+    [TestMethod]
+    public void RedirectBasedOnWhereTheQualificationWasAwarded_InvalidOption_ReturnsExpected()
+    {
+        // Arrange
+        var option = "invalidOption";
+        _mockUserJourneyCookieService.Setup(x => x.SetWhereWasQualificationAwarded(option));
+
+        // Act
+        var result = GetSut().RedirectBasedOnWhereTheQualificationWasAwarded(option);
+
+        // Assert
+        result.Should().NotBeNull();
+        var resultType = result as RedirectToActionResult;
+
+        resultType!.ActionName.Should().Be(nameof(QuestionsController.WhenWasTheQualificationStarted));
 
         _mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(option), Times.Once);
     }
@@ -322,8 +360,16 @@ public class QuestionServiceTests
         // Arrange
         DropdownQuestionModel model = new();
         DropdownQuestionPage question = new();
-        Qualification qualification = new Qualification("2", "", "", 3);
-        List<Qualification> qualifications = new(); 
+        List<Qualification> qualifications = new()
+        {
+            new Qualification("1", "qualification title 1", AwardingOrganisations.Edexcel, 3),
+            new Qualification("2", "qualification title 2", AwardingOrganisations.Edexcel, 3),
+            new Qualification("3", "qualification title 3", AwardingOrganisations.Edexcel, 3),
+            new Qualification("4", "qualification title 4", AwardingOrganisations.Edexcel, 3),
+            new Qualification("5", "qualification title 5", AwardingOrganisations.Edexcel, 3)
+        };
+        Qualification qualification = qualifications.First();
+
         string actionName = "";
         string controllerName = "";
         string? selectedAwardingOrganisation = "";
@@ -392,6 +438,64 @@ public class QuestionServiceTests
         string actionName = "";
         string controllerName = "";
         DatesValidationResult? validationResult = null;
+
+        _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((3, 2002));
+        _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((5, 2005));
+
+        // Act
+        var result = GetSut().MapDatesModel(model, question, actionName, controllerName, validationResult);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        result.StartedQuestion.Should().NotBeNull();
+        result.StartedQuestion.SelectedMonth.Should().Be(3);
+        result.StartedQuestion.SelectedYear.Should().Be(2002);
+        result.AwardedQuestion.Should().NotBeNull();
+        result.AwardedQuestion.SelectedMonth.Should().Be(5);
+        result.AwardedQuestion.SelectedYear.Should().Be(2005);
+
+        _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationStarted(), Times.Once);
+        _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationAwarded(), Times.Once);
+    }
+
+    [TestMethod]
+    public void MapDatesModel_Validate_ValidationResult_WithCustomValidationMessages()
+    {
+        // Arrange
+        DatesQuestionModel model = new();
+        DatesQuestionPage question = new()
+        {
+            StartedQuestion = new DateQuestion()
+            {
+                ErrorMessage = "Started Error Message"
+            },
+            AwardedQuestion = new DateQuestion()
+            {
+                ErrorMessage = "Awarded Error Message"
+            }
+        };
+        string actionName = "";
+        string controllerName = "";
+        DatesValidationResult? validationResult = new()
+        {
+            AwardedValidationResult = new()
+            {
+                BannerErrorMessages = 
+                    new () 
+                    {
+                        new("awarded validation error message", FieldId.Month)
+                    }
+            },
+            StartedValidationResult = new()
+            {
+                BannerErrorMessages =
+                    new()
+                    {
+                        new("started validation error message", FieldId.Month)
+                    }
+            }
+        };
 
         _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((3, 2002));
         _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((5, 2005));

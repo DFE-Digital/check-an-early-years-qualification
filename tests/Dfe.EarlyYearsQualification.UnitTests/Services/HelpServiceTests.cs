@@ -77,6 +77,17 @@ public class HelpServiceTests
     }
 
     [TestMethod]
+    public void GetSelectedOption_EnquiryIsNull_Returns_EmptyString()
+    {
+        // Act
+        var result = GetSut().GetSelectedOption();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().Be(string.Empty);
+    }
+
+    [TestMethod]
     [DataRow(nameof(HelpFormEnquiryReasons.IssueWithTheService), true)]
     [DataRow(nameof(HelpFormEnquiryReasons.QuestionAboutAQualification), true)]
     [DataRow("random value", false)]
@@ -144,6 +155,24 @@ public class HelpServiceTests
     }
 
     [TestMethod]
+    public void GetHelpValidSubmit_Null_GetHelpFormEnquiry_InitialisesNew_Returns_Expected()
+    {
+        // Arrange
+        var result = GetSut().GetHelpValidSubmit(
+            new GetHelpPageViewModel
+            {
+                SelectedOption = nameof(HelpFormEnquiryReasons.IssueWithTheService)
+            }
+        );
+
+        // Assert
+        result.Should().NotBeNull();
+        result.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
+      
+        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+    }
+
+    [TestMethod]
     public async Task GetHelpQualificationDetailsPageAsync_Calls_ContentService_GetHelpQualificationDetailsPage()
     {
         // Arrange
@@ -188,6 +217,42 @@ public class HelpServiceTests
         viewModel.QuestionModel.StartedQuestion.SelectedYear.Should().Be(2000);
         viewModel.QuestionModel.AwardedQuestion.SelectedMonth.Should().Be(2);
         viewModel.QuestionModel.AwardedQuestion.SelectedYear.Should().Be(2002);
+    }
+
+    [TestMethod]
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_Overwrites_GetWhenWasQualificationStartedAndAwarded()
+    {
+        // Arrange
+        var viewModel = new QualificationDetailsPageViewModel();
+
+        var enquiry = new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+            AwardingOrganisation = "Test Awarding Organisation",
+            QualificationName = "Test Qualification Name",
+            QualificationStartDate = "5/2004",
+            QualificationAwardedDate = "7/2008"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((1, 2000));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((2, 2002));
+
+        // Act
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel);
+
+        // Assert
+        viewModel.Should().NotBeNull();
+
+        viewModel.QuestionModel.StartedQuestion.Should().NotBeNull();
+        viewModel.QuestionModel.AwardedQuestion.Should().NotBeNull();
+
+        viewModel.QualificationName.Should().Be(enquiry.QualificationName);
+        viewModel.AwardingOrganisation.Should().Be(enquiry.AwardingOrganisation);
+        viewModel.QuestionModel.StartedQuestion.SelectedMonth.Should().Be(5);
+        viewModel.QuestionModel.StartedQuestion.SelectedYear.Should().Be(2004);
+        viewModel.QuestionModel.AwardedQuestion.SelectedMonth.Should().Be(7);
+        viewModel.QuestionModel.AwardedQuestion.SelectedYear.Should().Be(2008);
     }
 
     [TestMethod]
