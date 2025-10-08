@@ -39,7 +39,7 @@ public class NoCacheTests
     {
         var sut = new NoCache();
 
-        var action = async () => await sut.SetAsync("any key", [0, 1, 2, 3], new DistributedCacheEntryOptions());
+        var action = async () => await sut.SetAsync("any key", [0, 1, 2, 3], new DistributedCacheEntryOptions(), new CancellationToken());
 
         await action.Should().NotThrowAsync();
     }
@@ -59,7 +59,7 @@ public class NoCacheTests
     {
         var sut = new NoCache();
 
-        var action = async () => await sut.RefreshAsync("any key");
+        var action = async () => await sut.RefreshAsync("any key", new CancellationToken());
 
         await action.Should().NotThrowAsync();
     }
@@ -79,7 +79,7 @@ public class NoCacheTests
     {
         var sut = new NoCache();
 
-        var action = async () => await sut.RemoveAsync("any key");
+        var action = async () => await sut.RemoveAsync("any key", new CancellationToken());
 
         await action.Should().NotThrowAsync();
     }
