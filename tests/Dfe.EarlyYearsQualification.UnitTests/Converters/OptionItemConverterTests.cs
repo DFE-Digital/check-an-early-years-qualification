@@ -41,6 +41,28 @@ public class OptionItemConverterTests
     }
 
     [TestMethod]
+    public void ReadJson_PassInObjectContaininglabel_ReturnsOption()
+    {
+        var option = new {
+            label = "Test"
+        };
+
+        var json = JsonConvert.SerializeObject(option);
+        JsonReader reader = new JsonTextReader(new StringReader(json));
+        while (reader.TokenType == JsonToken.None)
+            if (!reader.Read())
+                break;
+
+        var result =
+            new OptionItemConverter().ReadJson(reader, typeof(IOptionItem), null, JsonSerializer.CreateDefault());
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<Option>();
+        var data = result as Option;
+        data!.Label.Should().Match(option.label);
+    }
+
+    [TestMethod]
     public void ReadJson_PassInObjectNotContainingLabel_ReturnsDivider()
     {
         var divider = new Divider { Text = "Or" };

@@ -657,6 +657,25 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
+    public async Task Post_WhatIsTheAwardingOrganisation_ValidSubmit_ReturnsRedirectToActionResult()
+    {
+        var result = await GetSut().WhatIsTheAwardingOrganisation(
+            new DropdownQuestionModel
+            {
+                SelectedValue = "some value",
+                NotInTheList = false
+            }
+        );
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckYourAnswers");
+    }
+
+    [TestMethod]
     public async Task PreCheck_UnableToGetContent_ReturnsErrorPage()
     {
         _mockQuestionService.Setup(x => x.GetPreCheckView())
