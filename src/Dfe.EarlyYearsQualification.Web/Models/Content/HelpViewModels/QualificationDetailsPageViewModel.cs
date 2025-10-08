@@ -40,7 +40,7 @@ public class QualificationDetailsPageViewModel
 
     public bool HasQualificationNameError { get; set; }
 
-    public bool HasValidationErrors => Errors.Any();
+    public bool HasValidationErrors => Errors.Count > 0;
 
     public List<ErrorSummaryLink> Errors { get; set; } = new();
 

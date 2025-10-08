@@ -34,7 +34,10 @@ const DATA = {}
 
 export default function main() {
 
-  [...TESTS].forEach(t => { t(ENVIRONMENT, DATA); });
+    for (const t of TESTS) {
+
+        t(ENVIRONMENT, DATA);
+    }
 
 }
 

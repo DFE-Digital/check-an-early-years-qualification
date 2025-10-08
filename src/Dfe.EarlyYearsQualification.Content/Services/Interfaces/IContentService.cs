@@ -6,9 +6,7 @@ namespace Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 public interface IContentService
 {
     Task<StartPage?> GetStartPage();
-
-    Task<List<NavigationLink>> GetNavigationLinks();
-
+    
     Task<DetailsPage?> GetDetailsPage();
 
     Task<AdvicePage?> GetAdvicePage(string entryId);
@@ -35,7 +33,7 @@ public interface IContentService
 
     Task<ChallengePage?> GetChallengePage();
 
-    Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear);
+    Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear, bool isUserCheckingTheirOwnQualification);
 
     Task<CheckAdditionalRequirementsAnswerPage?> GetCheckAdditionalRequirementsAnswerPage();
 

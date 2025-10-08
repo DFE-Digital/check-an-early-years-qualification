@@ -212,80 +212,6 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetNavigationLinks_NoContent_LogsWarningAndReturns()
-    {
-        ClientMock.Setup(client =>
-                             client.GetEntriesByType(
-                                                     It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<NavigationLinks>>(),
-                                                     It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<NavigationLinks> { Items = new List<NavigationLinks>() });
-
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
-
-        var result = await service.GetNavigationLinks();
-
-        Logger.VerifyWarning("No navigation links returned");
-
-        result.Should().BeEmpty();
-    }
-
-    [TestMethod]
-    public async Task GetNavigationLinks_Null_LogsWarningAndReturns()
-    {
-        ClientMock.Setup(client =>
-                             client.GetEntriesByType(
-                                                     It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<NavigationLinks>>(),
-                                                     It.IsAny<CancellationToken>()))
-                  .ReturnsAsync((ContentfulCollection<NavigationLinks>)null!);
-
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
-
-        var result = await service.GetNavigationLinks();
-
-        Logger.VerifyWarning("No navigation links returned");
-
-        result.Should().BeEmpty();
-    }
-
-    [TestMethod]
-    public async Task GetNavigationLinks_LinksFound_ReturnsListOfLinks()
-    {
-        var links = new List<NavigationLink>
-                    {
-                        new()
-                        {
-                            DisplayText = "Some Link",
-                            Href = "/some-link",
-                            OpenInNewTab = true
-                        },
-                        new()
-                        {
-                            DisplayText = "Another Link",
-                            Href = "/another-link",
-                            OpenInNewTab = false
-                        }
-                    };
-
-        var content = new ContentfulCollection<NavigationLinks> { Items = [new NavigationLinks { Links = links }] };
-
-        ClientMock.Setup(client =>
-                             client.GetEntriesByType(
-                                                     It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<NavigationLinks>>(),
-                                                     It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(content);
-
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
-
-        var result = await service.GetNavigationLinks();
-
-        result.Should().NotBeNull();
-        result.Should().BeSameAs(links);
-    }
-
-    [TestMethod]
     public async Task GetAdvicePage_Null_LogsAndReturnsDefault()
     {
         ClientMock.Setup(client =>
@@ -890,7 +816,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetCannotFindQualificationPage(2, 2, 2015);
+        var result = await service.GetCannotFindQualificationPage(2, 2, 2015, false);
 
         result.Should().BeNull();
         Logger.VerifyWarning("No 'cannot find qualification' page entries returned");
@@ -907,7 +833,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetCannotFindQualificationPage(2, 2, 2015);
+        var result = await service.GetCannotFindQualificationPage(2, 2, 2015,false);
 
         result.Should().BeNull();
         Logger.VerifyWarning("No 'cannot find qualification' page entries returned");
@@ -951,7 +877,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
             .Returns(expectedResult);
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
 
-        var result = await service.GetCannotFindQualificationPage(2, 2, 2016);
+        var result = await service.GetCannotFindQualificationPage(2, 2, 2016, false);
 
         result.Should().NotBeNull();
         result.Heading.Should().Be("Test heading sep 15 to aug 19");
@@ -982,7 +908,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         mockDateValidator.Setup(x => x.GetDay()).Returns(28);
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
 
-        var result = await service.GetCannotFindQualificationPage(2, 10, 2019);
+        var result = await service.GetCannotFindQualificationPage(2, 10, 2019, false);
 
         result.Should().BeNull();
         Logger.VerifyWarning("No filtered 'cannot find qualification' page entries returned");

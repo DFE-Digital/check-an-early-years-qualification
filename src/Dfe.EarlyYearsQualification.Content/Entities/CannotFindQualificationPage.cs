@@ -17,5 +17,8 @@ public class CannotFindQualificationPage
     public FeedbackComponent? RightHandSideContent { get; init; }
 
     public FeedbackBanner? FeedbackBanner { get; init; }
+    
     public UpDownFeedback? UpDownFeedback { get; init; }
+
+    public bool IsPractitionerSpecificPage { get; init; }
 }
