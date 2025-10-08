@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Web.Services.Contentful;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -136,5 +137,20 @@ public class ContentOptionsManagerTests
         var option = await sut.GetContentOption();
 
         option.Should().Be(ContentOption.UsePublished);
+    }
+
+    [TestMethod]
+    public async Task SetContentOption_Calls_CookieManager_SetOutboundCookie()
+    {
+        // Arrange
+        var logger = new Mock<ILogger<ContentOptionsManager>>();
+        var cookieManager = new Mock<ICookieManager>();
+        var contentOption = new ContentOption();
+
+        // Act
+        await new ContentOptionsManager(logger.Object, cookieManager.Object).SetContentOption(contentOption);
+
+        // Assert
+        cookieManager.Verify(x => x.SetOutboundCookie(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CookieOptions>()));
     }
 }
