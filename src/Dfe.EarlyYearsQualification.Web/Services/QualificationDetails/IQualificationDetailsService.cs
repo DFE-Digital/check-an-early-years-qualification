@@ -18,6 +18,7 @@ public interface IQualificationDetailsService
                                                                    additionalRequirementAnswerModels);
 
     bool AnswersIndicateNotFullAndRelevant(List<AdditionalRequirementAnswerModel> additionalRequirementsAnswers);
+
     RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model);
 
     Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,

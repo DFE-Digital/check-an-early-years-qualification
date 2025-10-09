@@ -63,6 +63,16 @@ public class EmbeddedParagraphRendererTests
     }
 
     [TestMethod]
+    public void EmbeddedParagraphRenderer_DataTargetIsNotEmbeddedParagraph_IsNotSupported()
+    {
+        var embeddedParagraph = new EmbeddedParagraph();
+
+        var content = new Heading1();
+
+        new EmbeddedParagraphRenderer().SupportsContent(content).Should().BeFalse();
+    }
+
+    [TestMethod]
     public async Task EmbeddedParagraphRenderer_RendersContent()
     {
         var embeddedParagraph = new EmbeddedParagraph
