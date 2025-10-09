@@ -10,7 +10,7 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using IHelpService = Dfe.EarlyYearsQualification.Web.Services.Help.IHelpService;
+using Dfe.EarlyYearsQualification.Web.Services.Help;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 
@@ -168,7 +168,7 @@ public class HelpControllerTests
             SelectedOption = selectedOption,
         };
 
-        _mockHelpService.Setup(x => x.GetHelpValidSubmit(submittedViewModel)).Returns(new RedirectToActionResult(pageToRedirectTo, "b", null));
+        _mockHelpService.Setup(x => x.SetHelpFormEnquiryReason(submittedViewModel)).Returns(new RedirectToActionResult(pageToRedirectTo, "b", null));
 
         // Act
         var result = await GetSut().GetHelp(submittedViewModel);
@@ -180,7 +180,7 @@ public class HelpControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(pageToRedirectTo);
 
-        _mockHelpService.Verify(x => x.GetHelpValidSubmit(submittedViewModel), Times.Once);
+        _mockHelpService.Verify(x => x.SetHelpFormEnquiryReason(submittedViewModel), Times.Once);
     }
 
     [TestMethod]
@@ -450,10 +450,6 @@ public class HelpControllerTests
             },
             AwardingOrganisation = "Some organisation where the qualification is from",
         };
-
-        //todo 
-        //_mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion, null)).Returns(viewModel.QuestionModel.StartedQuestion);
-        //_mockQualificationDetailsPageMapper.Setup(x => x.MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion, null)).Returns(viewModel.QuestionModel.AwardedQuestion);
 
         var helpForm = new HelpFormEnquiry()
         {

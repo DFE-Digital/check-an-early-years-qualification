@@ -17,7 +17,7 @@ public interface IHelpService
 
     public bool SelectedOptionIsValid(GetHelpPage content, GetHelpPageViewModel model);
 
-    RedirectToActionResult GetHelpValidSubmit(GetHelpPageViewModel model);
+    RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model);
 
     public string GetSelectedOption();
 

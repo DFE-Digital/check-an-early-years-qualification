@@ -51,7 +51,7 @@ public class HelpController(
             return View("GetHelp", viewModel);
         }
         
-        return helpService.GetHelpValidSubmit(model);
+        return helpService.SetHelpFormEnquiryReason(model);
     }
 
     [HttpGet("qualification-details")]

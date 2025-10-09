@@ -37,8 +37,12 @@ public class QuestionsControllerTests
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
         // Arrange
-        _mockQuestionService.Setup(x => x.GetRadioView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                          .ReturnsAsync(() => new RedirectToActionResult("Index", "Error", null));
+        RadioQuestionPage? questionPage = null;
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded))
+            .ReturnsAsync(
+                questionPage
+            );
 
         // Act
         var result = await GetSut().WhereWasTheQualificationAwarded();
@@ -51,25 +55,39 @@ public class QuestionsControllerTests
 
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
-        _mockQuestionService.Verify(x => x.GetRadioView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded), Times.Once);
     }
 
     [TestMethod]
     public async Task WhereWasTheQualificationAwarded_ContentServiceReturnsQuestionPage_ReturnsQuestionModel()
     {
-        _mockQuestionService.Setup(x => x.GetRadioView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+        // Arrange
+        var questionPage = new RadioQuestionPage
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue"
+                           };
+
+        var viewModel = new RadioQuestionModel
+                        {
+                            Question = questionPage.Question,
+                            CtaButtonText = questionPage.CtaButtonText
+                        };
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded))
             .ReturnsAsync(
-                new ViewResult()
-                {
-                    ViewName = "Radio",
-                    ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
-                    {
-                        Model = new RadioQuestionModel()
-                    }
-                }
+                questionPage
             );
+
+        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), questionPage, nameof(QuestionsController.WhereWasTheQualificationAwarded), "Questions", It.IsAny<string>()))
+            .ReturnsAsync(
+                viewModel
+            );
+
+        // Act
         var result = await GetSut().WhereWasTheQualificationAwarded();
 
+        // Assert
         result.Should().NotBeNull();
 
         var resultType = result as ViewResult;
@@ -82,6 +100,7 @@ public class QuestionsControllerTests
     [TestMethod]
     public async Task Post_WhereWasTheQualificationAwarded_InvalidModel_ReturnsQuestionPage()
     {
+        // Arrange
         _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded))
                           .ReturnsAsync(new RadioQuestionPage());
 
@@ -90,9 +109,11 @@ public class QuestionsControllerTests
         controller.ModelState.AddModelError("option", "test error");
 
         _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new RadioQuestionModel());
-
+        
+        // Act
         var result = await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel());
 
+        // Assert
         result.Should().NotBeNull();
 
         var resultType = result as ViewResult;
@@ -114,6 +135,7 @@ public class QuestionsControllerTests
             .Setup(x => x.RedirectBasedOnWhereTheQualificationWasAwarded(QualificationAwardLocation.OutsideOfTheUnitedKingdom))
             .Returns(new RedirectToActionResult(nameof(QualificationAwardLocation.OutsideOfTheUnitedKingdom), "Advice", null));
 
+        // Act
         var result =
             await GetSut().WhereWasTheQualificationAwarded(
                 new RadioQuestionModel
@@ -122,6 +144,7 @@ public class QuestionsControllerTests
                 }
             );
 
+        // Assert
         result.Should().NotBeNull();
 
         var resultType = result as RedirectToActionResult;
@@ -400,9 +423,12 @@ public class QuestionsControllerTests
     {
         _mockQuestionService.Setup(x => x.GetLevelOfQualification()).Returns(3);
 
-        _mockQuestionService.Setup(x => x.GetRadioView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                     .ReturnsAsync(() => new RedirectToActionResult("Index", "Error", null));
+        RadioQuestionPage? questionPage = null;
 
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification))
+            .ReturnsAsync(
+                questionPage
+            );
 
         var result = await GetSut().WhatLevelIsTheQualification();
 
@@ -414,9 +440,8 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
-
         _mockQuestionService.Verify(x => x.GetLevelOfQualification(), Times.Once);
-        _mockQuestionService.Verify(x => x.GetRadioView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification), Times.Once);
     }
 
     [TestMethod]
@@ -779,16 +804,36 @@ public class QuestionsControllerTests
     [TestMethod]
     public async Task AreYouCheckingYourOwnQualification_ContentServiceReturnsQuestionPage_ReturnsQuestionModel()
     {
-        _mockQuestionService
-            .Setup(x => x.GetRadioView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-            .Returns(Task.FromResult(new Mock<IActionResult>().Object));
+        // Arrange
+        var questionPage = new RadioQuestionPage
+        {
+            Question = "Test question",
+            CtaButtonText = "Continue"
+        };
+
+        var viewModel = new RadioQuestionModel
+        {
+            Question = questionPage.Question,
+            CtaButtonText = questionPage.CtaButtonText
+        };
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.AreYouCheckingYourOwnQualification))
+            .ReturnsAsync(
+                questionPage
+            );
+
+        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), questionPage, nameof(QuestionsController.AreYouCheckingYourOwnQualification), "Questions", It.IsAny<string>()))
+            .ReturnsAsync(
+                viewModel
+            );
 
         var result = await GetSut().AreYouCheckingYourOwnQualification();
 
         result.Should().NotBeNull();
         _mockQuestionService.Verify(x => x.GetIsUserCheckingTheirOwnQualification(), Times.Once);
+        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.AreYouCheckingYourOwnQualification), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task Post_AreYouCheckingYourOwnQualification_InvalidModel_ReturnsQuestionPage()
     {

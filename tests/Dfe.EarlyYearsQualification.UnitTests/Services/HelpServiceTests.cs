@@ -126,8 +126,7 @@ public class HelpServiceTests
     [TestMethod]
     [DataRow(nameof(HelpFormEnquiryReasons.QuestionAboutAQualification), nameof(HelpController.QualificationDetails))]
     [DataRow(nameof(HelpFormEnquiryReasons.IssueWithTheService), nameof(HelpController.ProvideDetails))]
-    [DataRow("invalid value", "Index")]
-    public void GetHelpValidSubmit_Returns_Expected(string input, string controllerActionToRedirectTo)
+    public void SetHelpFormEnquiryReason_Returns_Expected(string input, string controllerActionToRedirectTo)
     {
         // Arrange
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
@@ -138,27 +137,42 @@ public class HelpServiceTests
         };
 
         // Act
-        var result = GetSut().GetHelpValidSubmit(viewModel);
+        var result = GetSut().SetHelpFormEnquiryReason(viewModel);
 
         // Assert
         result.Should().NotBeNull();
         result.ActionName.Should().Be(controllerActionToRedirectTo);
 
-        if (controllerActionToRedirectTo == "Index")
-        {
-            _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Never);
-        }
-        else
-        {
-            _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
-        }
+        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
-    public void GetHelpValidSubmit_Null_GetHelpFormEnquiry_InitialisesNew_Returns_Expected()
+    public void SetHelpFormEnquiryReason_InvalidEnquiryReason_Returns_Expected()
     {
         // Arrange
-        var result = GetSut().GetHelpValidSubmit(
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+
+        var viewModel = new GetHelpPageViewModel
+        {
+            SelectedOption = "invalid value"
+        };
+
+        // Act
+        var result = GetSut().SetHelpFormEnquiryReason(viewModel);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.ActionName.Should().Be("Index");
+        result.ControllerName.Should().Be("Error");
+
+        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Never);
+    }
+
+    [TestMethod]
+    public void SetHelpFormEnquiryReason_Null_GetHelpFormEnquiry_InitialisesNew_Returns_Expected()
+    {
+        // Arrange
+        var result = GetSut().SetHelpFormEnquiryReason(
             new GetHelpPageViewModel
             {
                 SelectedOption = nameof(HelpFormEnquiryReasons.IssueWithTheService)

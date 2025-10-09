@@ -28,22 +28,6 @@ public class QuestionService(
     IPreCheckPageMapper preCheckPageMapper
 ) : ServiceController, IQuestionService
 {
-    public async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName,
-                                                   string? selectedAnswer)
-    {
-        var questionPage = await GetRadioQuestionPageContent(questionPageId);
-        if (questionPage is null)
-        {
-            logger.LogError("No content for the question page");
-            return RedirectToAction("Index", "Error");
-        }
-
-        var model = await radioQuestionMapper.Map(new RadioQuestionModel(), questionPage, actionName, controllerName,
-                                        selectedAnswer);
-
-        return View("Radio", model);
-    }
-
     public async Task<RadioQuestionPage?> GetRadioQuestionPageContent(string questionPage)
     {
         return await contentService.GetRadioQuestionPage(questionPage);

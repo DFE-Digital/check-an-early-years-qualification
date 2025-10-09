@@ -9,7 +9,7 @@ public partial class QuestionsController
     [HttpGet("where-was-the-qualification-awarded")]
     public async Task<IActionResult> WhereWasTheQualificationAwarded()
     {
-        return await questionService.GetRadioView(QuestionPages.WhereWasTheQualificationAwarded,
+        return await GetRadioView(QuestionPages.WhereWasTheQualificationAwarded,
                                   nameof(this.WhereWasTheQualificationAwarded),
                                   Questions, questionService.GetWhereWasQualificationAwarded());
     }

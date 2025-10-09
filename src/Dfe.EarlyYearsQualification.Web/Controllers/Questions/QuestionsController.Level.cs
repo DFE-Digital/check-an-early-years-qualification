@@ -11,7 +11,7 @@ public partial class QuestionsController
     [HttpGet("what-level-is-the-qualification")]
     public async Task<IActionResult> WhatLevelIsTheQualification()
     {
-        return await questionService.GetRadioView(QuestionPages.WhatLevelIsTheQualification, nameof(this.WhatLevelIsTheQualification),
+        return await GetRadioView(QuestionPages.WhatLevelIsTheQualification, nameof(this.WhatLevelIsTheQualification),
                                   Questions, questionService.GetLevelOfQualification()?.ToString());
     }
     

@@ -9,7 +9,7 @@ public partial class QuestionsController
     [HttpGet("are-you-checking-your-own-qualification")]
     public async Task<IActionResult> AreYouCheckingYourOwnQualification()
     {
-        return await questionService.GetRadioView(QuestionPages.AreYouCheckingYourOwnQualification, nameof(this.AreYouCheckingYourOwnQualification),
+        return await GetRadioView(QuestionPages.AreYouCheckingYourOwnQualification, nameof(this.AreYouCheckingYourOwnQualification),
                                   Questions, questionService.GetIsUserCheckingTheirOwnQualification());
     }
     

@@ -28,48 +28,6 @@ public class QuestionServiceTests
     private Mock<IPreCheckPageMapper> _mockPreCheckPageMapper = new Mock<IPreCheckPageMapper>();
 
     [TestMethod]
-    public async Task GetRadioView_Returns_RedirectToActionResult_When_ContentNull()
-    {
-        // Arrange
-        _mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.AreYouCheckingYourOwnQualification)).ReturnsAsync(() => null);
-
-        // Act
-        var result = await GetSut().GetRadioView(QuestionPages.AreYouCheckingYourOwnQualification, nameof(QuestionsController.AreYouCheckingYourOwnQualification),
-                                  "Questions", "false");
-
-        // Assert
-        result.Should().NotBeNull();
-        var resultType = result as RedirectToActionResult;
-
-        resultType!.ActionName.Should().Be("Index");
-        resultType!.ControllerName.Should().Be("Error");
-
-        _mockContentService.Verify(x => x.GetRadioQuestionPage(It.IsAny<string>()), Times.Once);
-        _mockRadioQuestionMapper.Verify(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-    }
-
-    [TestMethod]
-    public async Task GetRadioView_Returns_ViewResult()
-    {
-        // Arrange
-        _mockContentService.Setup(x => x.GetRadioQuestionPage(QuestionPages.AreYouCheckingYourOwnQualification)).ReturnsAsync(new RadioQuestionPage());
-
-        // Act
-        var result = await GetSut().GetRadioView(QuestionPages.AreYouCheckingYourOwnQualification, nameof(QuestionsController.AreYouCheckingYourOwnQualification),
-                                  "Questions", "false");
-
-        // Assert
-        result.Should().NotBeNull();
-
-        var resultType = result as ViewResult;
-        resultType.Should().NotBeNull();
-        resultType.ViewName.Should().Be("Radio");
-
-        _mockContentService.Verify(x => x.GetRadioQuestionPage(It.IsAny<string>()), Times.Once);
-        _mockRadioQuestionMapper.Verify(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-    }
-
-    [TestMethod]
     public async Task GetRadioQuestionPageContent_Calls_ContentService_GetRadioQuestionPage()
     {
         // Act
@@ -183,7 +141,7 @@ public class QuestionServiceTests
         var resultType = result as RedirectToActionResult;
 
         resultType!.ActionName.Should().Be("QualificationsStartedBetweenSept2014AndAug2019");
-        resultType!.ControllerName.Should().Be("Advice");
+        resultType.ControllerName.Should().Be("Advice");
 
         _mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification(option), Times.Once);
     }
@@ -202,7 +160,7 @@ public class QuestionServiceTests
         var resultType = result as RedirectToActionResult;
 
         resultType!.ActionName.Should().Be(nameof(AdviceController.Level7QualificationStartedBetweenSept2014AndAug2019));
-        resultType!.ControllerName.Should().Be("Advice");
+        resultType.ControllerName.Should().Be("Advice");
 
         _mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification(option), Times.Once);
     }
@@ -222,7 +180,7 @@ public class QuestionServiceTests
         var resultType = result as RedirectToActionResult;
 
         resultType!.ActionName.Should().Be(nameof(AdviceController.Level7QualificationAfterAug2019));
-        resultType!.ControllerName.Should().Be("Advice");
+        resultType.ControllerName.Should().Be("Advice");
 
         _mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification(option), Times.Once);
     }
@@ -262,7 +220,7 @@ public class QuestionServiceTests
         var resultType = result as RedirectToActionResult;
 
         resultType!.ActionName.Should().Be(action);
-        resultType!.ControllerName.Should().Be("Advice");
+        resultType.ControllerName.Should().Be("Advice");
 
         _mockUserJourneyCookieService.Verify(x => x.SetWhereWasQualificationAwarded(option), Times.Once);
     }
@@ -301,7 +259,7 @@ public class QuestionServiceTests
         var resultType = result as RedirectToActionResult;
 
         resultType!.ActionName.Should().Be("Index");
-        resultType!.ControllerName.Should().Be("Error");
+        resultType.ControllerName.Should().Be("Error");
 
         _mockContentService.Verify(x => x.GetPreCheckPage(), Times.Once);
         _mockPreCheckPageMapper.Verify(x => x.Map(It.IsAny<PreCheckPage>()), Times.Never);

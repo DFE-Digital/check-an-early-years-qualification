@@ -57,7 +57,7 @@ public class HelpService(
         return content.EnquiryReasons.Select(x => x.Value).Contains(model.SelectedOption);
     }
 
-    public RedirectToActionResult GetHelpValidSubmit(GetHelpPageViewModel model)
+    public RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model)
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry() ?? new();
 

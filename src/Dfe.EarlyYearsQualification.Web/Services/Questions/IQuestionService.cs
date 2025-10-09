@@ -7,8 +7,6 @@ namespace Dfe.EarlyYearsQualification.Web.Services.Help;
 
 public interface IQuestionService
 {
-    public Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName, string? selectedAnswer);
-
     public void ResetUserJourneyCookie();
 
     public string GetIsUserCheckingTheirOwnQualification();
