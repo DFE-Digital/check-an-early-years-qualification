@@ -343,9 +343,6 @@ public class HelpControllerTests
         var startedAt = (1, 2000);
         var awardedAt = (6, 2002);
 
-        //_mockUserJourneyService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(startedAt);
-        //_mockUserJourneyService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns(awardedAt);
-
         var controller = GetSut();
 
         var viewModel = new QualificationDetailsPageViewModel()
@@ -386,9 +383,6 @@ public class HelpControllerTests
                 YearValid = true
             }
         };
-
-        //_mockHelpService.Setup(x => x.MapDateModel(viewModel.QuestionModel.StartedQuestion, content.StartDateQuestion, validationResult.StartedValidationResult)).Returns(viewModel.QuestionModel.StartedQuestion);
-        //_mockHelpService.Setup(x => x.MapDateModel(viewModel.QuestionModel.AwardedQuestion, content.AwardedDateQuestion, validationResult.AwardedValidationResult)).Returns(viewModel.QuestionModel.AwardedQuestion);
 
         _mockHelpService.Setup(x => x.HasInvalidDates(validationResult)).Returns(false);
 
