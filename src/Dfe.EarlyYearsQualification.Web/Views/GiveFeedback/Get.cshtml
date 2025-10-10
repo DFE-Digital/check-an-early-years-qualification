@@ -101,7 +101,7 @@
                                             class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
                                     </p>
                                 }
-                                @Html.TextAreaFor(x => x.QuestionList[questionIndex].Answer, 5, 1, new { @class = "govuk-textarea", id = textAreaId })
+                                @Html.TextAreaFor(x => x.QuestionList[questionIndex].Answer, 5, 1, new { @class = "govuk-textarea", id = textAreaId, aria_labelledBy = questionId })
                             </div>
                         }
                         else if (question.GetType() == typeof(FeedbackFormQuestionRadioAndInputModel))
@@ -147,7 +147,7 @@
                                                 var additionalInfoHasError = Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == additionalInfoId);
                                                 <div class="govuk-radios__conditional">
                                                     <div class="govuk-form-group @(additionalInfoHasError ? "govuk-form-group--error" : "")">
-                                                        <label class="govuk-label">
+                                                        <label class="govuk-label" for="@additionalInfoId">
                                                             @questionData.InputHeading
                                                         </label>
                                                         @if (!string.IsNullOrEmpty(questionData.InputHeadingHintText))
@@ -166,9 +166,9 @@
                                                             </p>
                                                         }
                                                         @{
-                                                            var additionalInfoCss = additionalInfoHasError? "govuk-input govuk-input--error" : "govuk-input";
+                                                            var additionalInfoCss = additionalInfoHasError ? "govuk-input govuk-input--error" : "govuk-input";
                                                         }
-                                                        @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", new { @class=additionalInfoCss, id = additionalInfoId })
+                                                        @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", new { @class = additionalInfoCss, id = additionalInfoId });
                                                     </div>
                                                 </div>
                                             }
