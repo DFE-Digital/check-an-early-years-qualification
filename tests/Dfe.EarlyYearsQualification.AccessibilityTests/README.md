@@ -1,6 +1,6 @@
 # Notes on running the tests locally
 
-The tests running using pa11y-ci.
+The tests run using pa11y-ci against the mock data.
 
 ## Running Tests
 
@@ -8,7 +8,7 @@ To run locally ensure you have Node >= v20 installed and you all have pa11y-ci i
 
 `npm install -g pa11y-ci`
 
-Also, make sure the solution is running locally.
+Also, make sure the solution is running locally with the `UseMockContentful = true` flag.
 
 In the .pa11yci-ubuntu.js file, update the port at the top of the file to your local port number (e.g. 5025). The build server runs it as 5000 which is the default value in the file.
 Make sure this isn't overriden when committing changes!

@@ -1,4 +1,5 @@
 function getUrls(authSecret) {
+    // NOTE: CHANGE THIS WHEN RUNNING LOCALLY
     let port = 5000;
 
     let basicActions = [
@@ -36,11 +37,19 @@ function getUrls(authSecret) {
         `wait for url to be http://localhost:${port}/questions/check-your-answers`,
         'click element #cta-button',
         `wait for url to be http://localhost:${port}/select-a-qualification-to-check`,
-        'click element a[href="/confirm-qualification/EYQ-222"]',
-        `wait for url to be http://localhost:${port}/confirm-qualification/EYQ-222`,
+        'click element a[href="/confirm-qualification/EYQ-240"]',
+        `wait for url to be http://localhost:${port}/confirm-qualification/EYQ-240`,
         'click element #yes',
         'click element #confirm-qualification-button',
-        `wait for url to be http://localhost:${port}/qualifications/qualification-details/EYQ-222`,
+        `wait for url to be http://localhost:${port}/qualifications/check-additional-questions/EYQ-240/1`,
+        'click element #yes',
+        'click element #additional-requirement-button',
+        `wait for url to be http://localhost:${port}/qualifications/check-additional-questions/EYQ-240/2`,
+        'click element #no',
+        'click element #additional-requirement-button',
+        `wait for url to be http://localhost:${port}/qualifications/check-additional-questions/EYQ-240/confirm-answers`,
+        'click element #confirm-answers',
+        `wait for url to be http://localhost:${port}/qualifications/qualification-details/EYQ-240`,
     ];
 
     return [
@@ -79,16 +88,16 @@ function getUrls(authSecret) {
             actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/select-a-qualification-to-check`)
         },
         {
-            url: `http://localhost:${port}/confirm-qualification/eyq-222`,
-            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/confirm-qualification/eyq-222`)
+            url: `http://localhost:${port}/confirm-qualification/EYQ-240`,
+            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/confirm-qualification/EYQ-240`)
         },
         {
-            url: `http://localhost:${port}/qualifications/qualification-details/eyq-222`,
-            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/qualifications/qualification-details/eyq-222`)
+            url: `http://localhost:${port}/qualifications/qualification-details/EYQ-240`,
+            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/qualifications/qualification-details/EYQ-240`)
         },
         {
-            url: `http://localhost:${port}/qualifications/check-additional-questions/eyq-240/1`,
-            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/qualifications/check-additional-questions/eyq-240/1`)
+            url: `http://localhost:${port}/qualifications/check-additional-questions/EYQ-240/1`,
+            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/qualifications/check-additional-questions/EYQ-240/1`)
         },
         `http://localhost:${port}/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019`,
         `http://localhost:${port}/advice/qualification-outside-the-united-kingdom`,
