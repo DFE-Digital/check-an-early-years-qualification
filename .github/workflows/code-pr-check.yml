@@ -52,6 +52,12 @@ jobs:
         with:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          
+      - name: Run Accessibility tests
+        uses: ./.github/actions/run-accessibility-tests
+        with:
+          url: ${{ env.URL }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
       - name: Install playwright
         uses: ./.github/actions/install-playwright
@@ -61,12 +67,6 @@ jobs:
 
       - name: Run Playwright e2e tests
         uses: ./.github/actions/run-playwright-e2e-tests
-
-      - name: Run Accessibility tests
-        uses: ./.github/actions/run-accessibility-tests
-        with:
-          url: ${{ env.URL }}
-          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
   security-checks-local:
     name: Run baseline security checks locally
