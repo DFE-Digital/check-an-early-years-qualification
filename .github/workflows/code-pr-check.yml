@@ -30,7 +30,7 @@ jobs:
 
   build-app:  
     name: Build, check and run tests
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Check out repository
@@ -52,21 +52,21 @@ jobs:
         with:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-
-      - name: Install playwright
-        uses: ./.github/actions/install-playwright
-        
-      - name: Run Playwright snapshot tests
-        uses: ./.github/actions/run-playwright-snapshot-tests
-
-      - name: Run Playwright e2e tests
-        uses: ./.github/actions/run-playwright-e2e-tests
-
+          
       - name: Run Accessibility tests
         uses: ./.github/actions/run-accessibility-tests
         with:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+
+      - name: Run Playwright snapshot tests
+        uses: ./.github/actions/run-playwright-snapshot-tests
+
+      - name: Run Playwright e2e tests
+        uses: ./.github/actions/run-playwright-e2e-tests
 
   security-checks-local:
     name: Run baseline security checks locally
