@@ -1,7 +1,4 @@
-function getUrls(authSecret) {
-    // NOTE: CHANGE THIS WHEN RUNNING LOCALLY
-    let port = 5000;
-
+function getUrls(authSecret, port) {
     let basicActions = [
         `navigate to http://localhost:${port}/challenge`,
         `wait for url to be http://localhost:${port}/challenge`,
@@ -171,9 +168,12 @@ const config = {
 };
 
 function createPa11yCiConfiguration(defaults) {
+    
+    let port = process.env.PORT || 5000;
+    
     return {
         defaults: defaults,
-        urls: getUrls(process.env.AUTH_SECRET)
+        urls: getUrls(process.env.AUTH_SECRET, port)
     }
 };
 
