@@ -62,9 +62,9 @@ public class QualificationDetailsServiceTests
     {
         var sut = GetSut();
 
-        _ = await sut.GetDetailsPage();
+        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001);
 
-        _mockContentService.Verify(o => o.GetDetailsPage(), Times.Once);
+        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001), Times.Once);
     }
 
     [TestMethod]
@@ -207,11 +207,11 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void CalculateBackButton_Calls_Cookies_UserHasAnsweredAdditionalQuestions()
     {
-        var detailsPage = new DetailsPage();
+        var detailsPage = new QualificationDetailsPage();
         const string qualificationId = "qualificationId";
         var sut = GetSut();
 
-        _ = sut.CalculateBackButton(detailsPage, qualificationId);
+        _ = sut.CalculateBackButton(detailsPage.Labels, qualificationId);
 
         _mockUserJourneyCookieService.Verify(o => o.UserHasAnsweredAdditionalQuestions(), Times.Once);
     }
@@ -219,18 +219,22 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void CalculateBackButton_HasAnsweredAdditionalQuestions_BackToConfirmAnswersNull_ReturnsBackButton()
     {
-        var detailsPage = new DetailsPage
-                          {
-                              BackToConfirmAnswers = null,
-                              BackButton = new NavigationLink()
-                          };
+        var detailsPage = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                BackToConfirmAnswers = null,
+                BackButton = new NavigationLink()
+            }
+        };
+
         const string qualificationId = "qualificationId";
         _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(true);
         var sut = GetSut();
 
-        var result = sut.CalculateBackButton(detailsPage, qualificationId);
+        var result = sut.CalculateBackButton(detailsPage.Labels, qualificationId);
 
-        result.Should().Be(detailsPage.BackButton);
+        result.Should().Be(detailsPage.Labels.BackButton);
     }
 
     [TestMethod]
@@ -240,13 +244,18 @@ public class QualificationDetailsServiceTests
         const string qualificationId = "qualificationId";
         const string expectedHref = "qualificationId LINK";
 
-        var detailsPage = new DetailsPage
-                          { BackToConfirmAnswers = new NavigationLink { Href = "$[qualification-id]$ LINK" } };
+        var detailsPage = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels
+            {
+                BackToConfirmAnswers = new NavigationLink { Href = "$[qualification-id]$ LINK" }
+            }
+        };
 
         _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(true);
         var sut = GetSut();
 
-        var result = sut.CalculateBackButton(detailsPage, qualificationId);
+        var result = sut.CalculateBackButton(detailsPage.Labels, qualificationId);
         result.Should().NotBeNull();
         result.Href.Should().BeEquivalentTo(expectedHref);
     }
@@ -257,7 +266,13 @@ public class QualificationDetailsServiceTests
         const string qualificationId = "qualificationId";
         const string backButton = "backButton";
 
-        var detailsPage = new DetailsPage { BackButton = new NavigationLink { Href = backButton } };
+        var detailsPage = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                BackButton = new NavigationLink { Href = backButton }
+            }
+        };
 
         _mockUserJourneyCookieService.Setup(o => o.UserHasAnsweredAdditionalQuestions()).Returns(false);
         _mockUserJourneyCookieService.Setup(o => o.GetQualificationWasSelectedFromList()).Returns(YesOrNo.Yes);
@@ -265,7 +280,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        var result = sut.CalculateBackButton(detailsPage, qualificationId);
+        var result = sut.CalculateBackButton(detailsPage.Labels, qualificationId);
         result.Should().NotBeNull();
         result.Href.Should().BeEquivalentTo(backButton);
     }
@@ -634,12 +649,15 @@ public class QualificationDetailsServiceTests
         var qualification =
             new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
             { FromWhichYear = "FromWhichYear" };
-        var detailsPage = new DetailsPage
-                          {
-                              RequirementsText = requirementsText,
-                              FeedbackBanner = feedbackBanner,
-                              BackButton = backButton
-                          };
+        var detailsPage = new QualificationDetailsPage
+        {
+            RequirementsText = requirementsText,
+            Labels = new DetailsPageLabels()
+            {
+                FeedbackBanner = feedbackBanner,
+                BackButton = backButton
+            }
+        };
 
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardMonth, awardYear));
@@ -759,11 +777,14 @@ public class QualificationDetailsServiceTests
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
                           .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
-                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
+            }
+        };
 
         var model = new QualificationDetailsModel
                     {
@@ -778,7 +799,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
     }
@@ -798,12 +819,15 @@ public class QualificationDetailsServiceTests
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
                           .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
         _mockContentParser.Setup(o => o.ToHtml(ratioTextL3EbrDoc)).ReturnsAsync(ratioTextL3Ebr);
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
-                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc,
-                                     RatiosTextL3Ebr = ratioTextL3EbrDoc
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc,
+                RatiosTextL3Ebr = ratioTextL3EbrDoc
+            }
+        };
 
         var model = new QualificationDetailsModel
                     {
@@ -823,7 +847,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextL3PlusNotFrBetweenSep14Aug19);
@@ -842,11 +866,16 @@ public class QualificationDetailsServiceTests
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
                           .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
-                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+
+
+                RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextL3PlusNotFrBetweenSep14Aug19Doc
+            }
+        };
 
         var model = new QualificationDetailsModel
                     {
@@ -865,7 +894,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
@@ -874,12 +903,15 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void SetQualificationResultSuccessDetails_ShowsSuccessText()
     {
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     QualificationResultHeading = "Result heading",
-                                     QualificationResultFrMessageHeading = "Message heading",
-                                     QualificationResultFrMessageBody = "Message body"
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                QualificationResultHeading = "Result heading",
+                QualificationResultFrMessageHeading = "Message heading",
+                QualificationResultFrMessageBody = "Message body"
+            }
+        };
 
         var model = new QualificationDetailsModel
                     {
@@ -888,24 +920,27 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        sut.SetQualificationResultSuccessDetails(model, detailsPageContent);
+        sut.SetQualificationResultSuccessDetails(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
-        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.QualificationResultHeading);
+        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.Labels.QualificationResultHeading);
         model.Content.QualificationResultMessageHeading.Should()
-             .Be(detailsPageContent.QualificationResultFrMessageHeading);
-        model.Content.QualificationResultMessageBody.Should().Be(detailsPageContent.QualificationResultFrMessageBody);
+             .Be(detailsPageContent.Labels.QualificationResultFrMessageHeading);
+        model.Content.QualificationResultMessageBody.Should().Be(detailsPageContent.Labels.QualificationResultFrMessageBody);
     }
 
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndOutsideOfAug19_ShowsCorrectText()
     {
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     QualificationResultHeading = "Result heading",
-                                     QualificationResultNotFrMessageHeading = "Message heading",
-                                     QualificationResultNotFrMessageBody = "Message body"
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                QualificationResultHeading = "Result heading",
+                QualificationResultNotFrMessageHeading = "Message heading",
+                QualificationResultNotFrMessageBody = "Message body"
+            }
+        };
 
         var model = new QualificationDetailsModel
                     {
@@ -924,25 +959,28 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        sut.SetQualificationResultFailureDetails(model, detailsPageContent);
+        sut.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
-        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.QualificationResultHeading);
+        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.Labels.QualificationResultHeading);
         model.Content.QualificationResultMessageHeading.Should()
-             .Be(detailsPageContent.QualificationResultNotFrMessageHeading);
+             .Be(detailsPageContent.Labels.QualificationResultNotFrMessageHeading);
         model.Content.QualificationResultMessageBody.Should()
-             .Be(detailsPageContent.QualificationResultNotFrMessageBody);
+             .Be(detailsPageContent.Labels.QualificationResultNotFrMessageBody);
     }
 
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsCorrectText()
     {
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     QualificationResultHeading = "Result heading",
-                                     QualificationResultNotFrL3MessageHeading = "Message heading",
-                                     QualificationResultNotFrL3MessageBody = "Message body"
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                QualificationResultHeading = "Result heading",
+                QualificationResultNotFrL3MessageHeading = "Message heading",
+                QualificationResultNotFrL3MessageBody = "Message body"
+            }
+        };
 
         var model = new QualificationDetailsModel
                     {
@@ -961,25 +999,28 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        sut.SetQualificationResultFailureDetails(model, detailsPageContent);
+        sut.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
-        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.QualificationResultHeading);
+        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.Labels.QualificationResultHeading);
         model.Content.QualificationResultMessageHeading.Should()
-             .Be(detailsPageContent.QualificationResultNotFrL3MessageHeading);
+             .Be(detailsPageContent.Labels.QualificationResultNotFrL3MessageHeading);
         model.Content.QualificationResultMessageBody.Should()
-             .Be(detailsPageContent.QualificationResultNotFrL3MessageBody);
+             .Be(detailsPageContent.Labels.QualificationResultNotFrL3MessageBody);
     }
 
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_Level_6_ShowsCorrectText()
     {
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     QualificationResultHeading = "Result heading",
-                                     QualificationResultNotFrL3OrL6MessageHeading = "Message heading",
-                                     QualificationResultNotFrL3OrL6MessageBody = "Message body"
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                QualificationResultHeading = "Result heading",
+                QualificationResultNotFrL3OrL6MessageHeading = "Message heading",
+                QualificationResultNotFrL3OrL6MessageBody = "Message body"
+            }
+        };
 
         var model = new QualificationDetailsModel
                     {
@@ -998,14 +1039,14 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        sut.SetQualificationResultFailureDetails(model, detailsPageContent);
+        sut.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
-        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.QualificationResultHeading);
+        model.Content.QualificationResultHeading.Should().Be(detailsPageContent.Labels.QualificationResultHeading);
         model.Content.QualificationResultMessageHeading.Should()
-             .Be(detailsPageContent.QualificationResultNotFrL3OrL6MessageHeading);
+             .Be(detailsPageContent.Labels.QualificationResultNotFrL3OrL6MessageHeading);
         model.Content.QualificationResultMessageBody.Should()
-             .Be(detailsPageContent.QualificationResultNotFrL3OrL6MessageBody);
+             .Be(detailsPageContent.Labels.QualificationResultNotFrL3OrL6MessageBody);
     }
 
     [TestMethod]
@@ -1015,10 +1056,13 @@ public class QualificationDetailsServiceTests
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
         _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+            }
+        };
 
         var model = new QualificationDetailsModel
                     {
@@ -1035,7 +1079,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
@@ -1044,7 +1088,7 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task SetRatiosText_IsFullAndRelevantAndL2BeforeJune2016_ShowNoText()
     {
-        var detailsPageContent = new DetailsPage();
+        var detailsPageContent = new QualificationDetailsPage();
 
         var model = new QualificationDetailsModel
                     {
@@ -1060,7 +1104,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(string.Empty);
@@ -1072,7 +1116,7 @@ public class QualificationDetailsServiceTests
     [DataRow(5)]
     public async Task SetRatiosText_IsFullAndRelevantAwardedBeforeSept2014_ShowsNoText(int level)
     {
-        var detailsPageContent = new DetailsPage();
+        var detailsPageContent = new QualificationDetailsPage();
 
         var model = new QualificationDetailsModel
                     {
@@ -1090,7 +1134,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(string.Empty);
@@ -1101,7 +1145,7 @@ public class QualificationDetailsServiceTests
     [DataRow(7)]
     public async Task SetRatiosText_IsFullAndRelevantForAllLevels_ShowNoText(int level)
     {
-        var detailsPageContent = new DetailsPage();
+        var detailsPageContent = new QualificationDetailsPage();
 
         var model = new QualificationDetailsModel
                     {
@@ -1118,7 +1162,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(string.Empty);
@@ -1129,7 +1173,7 @@ public class QualificationDetailsServiceTests
     [DataRow(7)]
     public async Task SetRatiosText_IsFullAndRelevantForAllLevelsButL6AwardedBeforeSeptember2014_ShowNoText(int level)
     {
-        var detailsPageContent = new DetailsPage();
+        var detailsPageContent = new QualificationDetailsPage();
 
         var model = new QualificationDetailsModel
                     {
@@ -1149,7 +1193,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(string.Empty);
@@ -1172,11 +1216,15 @@ public class QualificationDetailsServiceTests
         var l3EbrDoc = new Document { NodeType = l3Ebr };
         _mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
                           .ReturnsAsync(l3Ebr);
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
-                                     RatiosTextL3Ebr = l3EbrDoc
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                RatiosTextL3Ebr = l3EbrDoc
+            }
+        };
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = level,
@@ -1195,7 +1243,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
@@ -1219,11 +1267,15 @@ public class QualificationDetailsServiceTests
         var l3EbrDoc = new Document { NodeType = l3Ebr };
         _mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
                           .ReturnsAsync(l3Ebr);
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
-                                     RatiosTextL3Ebr = l3EbrDoc
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                RatiosTextNotFullAndRelevant = ratiosTextNotFullAndRelevantDoc,
+                RatiosTextL3Ebr = l3EbrDoc
+            }
+        };
+
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = level,
@@ -1242,7 +1294,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
@@ -1266,11 +1318,14 @@ public class QualificationDetailsServiceTests
         var l3EbrDoc = new Document { NodeType = l3Ebr };
         _mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
                           .ReturnsAsync(l3Ebr);
-        var detailsPageContent = new DetailsPage
-                                 {
-                                     RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextNotFullAndRelevantBetweenDatesDoc,
-                                     RatiosTextL3Ebr = l3EbrDoc
-                                 };
+        var detailsPageContent = new QualificationDetailsPage
+        {
+            Labels = new DetailsPageLabels()
+            {
+                RatiosTextL3PlusNotFrBetweenSep14Aug19 = ratiosTextNotFullAndRelevantBetweenDatesDoc,
+                RatiosTextL3Ebr = l3EbrDoc
+            }
+        };
         var model = new QualificationDetailsModel
                     {
                         QualificationLevel = level,
@@ -1288,7 +1343,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        await sut.SetRatioText(model, detailsPageContent);
+        await sut.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevantBetweenDates);

@@ -450,57 +450,60 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetDetailsPage_Null_LogsAndReturnsDefault()
+    public async Task GetQualificationDetailsPage_UserIsNotCheckingOwnQualification_Null_LogsAndReturnsDefault()
     {
         ClientMock.Setup(client =>
                              client.GetEntriesByType(
                                                      It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                     It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
                                                      It.IsAny<CancellationToken>()))
-                  .ReturnsAsync((ContentfulCollection<DetailsPage>)null!);
+                  .ReturnsAsync((ContentfulCollection<QualificationDetailsPage>)null!);
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetDetailsPage();
+        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001);
 
-        Logger.VerifyWarning("No details page entry returned");
+        Logger.VerifyWarning("No qualification details page entry returned");
 
         result.Should().BeNull();
     }
 
     [TestMethod]
-    public async Task GetDetailsPage_NoContent_LogsAndReturnsDefault()
+    public async Task GetQualificationDetailsPage_UserIsNotCheckingOwnQualification_NoContent_LogsAndReturnsDefault()
     {
         ClientMock.Setup(client =>
                              client.GetEntriesByType(
                                                      It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                     It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
                                                      It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<DetailsPage> { Items = new List<DetailsPage>() });
+                  .ReturnsAsync(new ContentfulCollection<QualificationDetailsPage> { Items = new List<QualificationDetailsPage>() });
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetDetailsPage();
+        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001);
 
-        Logger.VerifyWarning("No details page entry returned");
+        Logger.VerifyWarning("No qualification details page entry returned");
 
         result.Should().BeNull();
     }
 
     [TestMethod]
-    public async Task GetDetailsPage_Content_RendersHtmlAndReturns()
+    public async Task GetQualificationDetailsPage_UserIsNotCheckingOwnQualification_Content_RendersHtmlAndReturns()
     {
-        var content = new ContentfulCollection<DetailsPage>
+        var content = new ContentfulCollection<QualificationDetailsPage>
                       {
                           Items =
                           [
-                              new DetailsPage
+                              new QualificationDetailsPage
                               {
-                                  AwardingOrgLabel = "Test Awarding Org Label",
-                                  DateOfCheckLabel = "Test date of check label",
-                                  LevelLabel = "Test level label",
-                                  MainHeader = "Test main header",
-                                  UpDownFeedback = new UpDownFeedback()
+                                  Labels = new DetailsPageLabels() 
+                                  {
+                                      AwardingOrgLabel = "Test Awarding Org Label",
+                                      DateOfCheckLabel = "Test date of check label",
+                                      LevelLabel = "Test level label",
+                                      MainHeader = "Test main header",
+                                      UpDownFeedback = new UpDownFeedback()
+                                  }
                               }
                           ]
                       };
@@ -508,18 +511,188 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         ClientMock.Setup(client =>
                              client.GetEntriesByType(
                                                      It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<DetailsPage>>(),
+                                                     It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetDetailsPage();
+        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001);
 
-        result!.AwardingOrgLabel.Should().Be("Test Awarding Org Label");
-        result.DateOfCheckLabel.Should().Be("Test date of check label");
-        result.LevelLabel.Should().Be("Test level label");
-        result.MainHeader.Should().Be("Test main header");
+
+        result!.Labels.AwardingOrgLabel.Should().Be("Test Awarding Org Label");
+        result.IsPractitionerSpecificPage.Should().BeFalse();
+        result.Level.Should().BeNull();
+        result.FromWhichYear.Should().BeNull();
+        result.ToWhichYear.Should().BeNull();
+        result.IsFullAndRelevant.Should().BeFalse();
+        result.Labels.DateOfCheckLabel.Should().Be("Test date of check label");
+        result.Labels.LevelLabel.Should().Be("Test level label");
+        result.Labels.MainHeader.Should().Be("Test main header");
+    }
+
+    [TestMethod]
+    public async Task GetQualificationDetailsPage_UserIsCheckingOwnQualification_Null_LogsAndReturnsDefault()
+    {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<QualificationDetailsPage>)null!);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetQualificationDetailsPage(true, true, 1, 6, 2013);
+
+        Logger.VerifyWarning("No qualification details page entry returned");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetQualificationDetailsPage_UserIsCheckingOwnQualification_NoContent_LogsAndReturnsDefault()
+    {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<QualificationDetailsPage> { Items = new List<QualificationDetailsPage>() });
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetQualificationDetailsPage(true, true, 1, 6, 2013);
+
+        Logger.VerifyWarning("No qualification details page entry returned");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetQualificationDetailsPage_UserIsCheckingOwnQualification_Content_RendersHtmlAndReturns()
+    {
+        var content = new ContentfulCollection<QualificationDetailsPage>
+        {
+            Items =
+                    [
+                        new QualificationDetailsPage
+                        {
+                            Labels = new DetailsPageLabels()
+                            {
+                                AwardingOrgLabel = "Test Awarding Org Label",
+                                DateOfCheckLabel = "Test date of check label",
+                                LevelLabel = "Test level label",
+                                MainHeader = "Test main header",
+                                UpDownFeedback = new UpDownFeedback()
+                            }
+                        },
+                        new QualificationDetailsPage
+                        {
+                            IsFullAndRelevant = true,
+                            IsPractitionerSpecificPage = true,
+                            FromWhichYear = "Feb-00",
+                            ToWhichYear = "Mar-05",
+                            Level = "3",
+                            Name = "Practitioner specific page level 3 - F&R",
+                            RequirementsHeading = "Requirements heading",
+                            RequirementsText = _testRichText,
+                            Labels = new DetailsPageLabels()
+                            {
+                                AwardingOrgLabel = "Test Awarding Org Label",
+                                DateOfCheckLabel = "Test date of check label",
+                                LevelLabel = "Test level label",
+                                MainHeader = "Test main header",
+                                UpDownFeedback = new UpDownFeedback()
+                            }
+                        },
+                        new QualificationDetailsPage
+                        {
+                            IsFullAndRelevant = false,
+                            IsPractitionerSpecificPage = true,
+                            FromWhichYear = "Feb-00",
+                            ToWhichYear = "Mar-05",
+                            Level = "3",
+                            Name = "Practitioner specific page level 3 - NF&R",
+                            RequirementsHeading = "Requirements heading",
+                            RequirementsText = _testRichText,
+                            Labels = new DetailsPageLabels()
+                            {
+                                AwardingOrgLabel = "Test Awarding Org Label",
+                                DateOfCheckLabel = "Test date of check label",
+                                LevelLabel = "Test level label",
+                                MainHeader = "Test main header",
+                                UpDownFeedback = new UpDownFeedback()
+                            }
+                        }
+                    ]
+        };
+
+        var userEnteredStartDate = new DateOnly(2001, 3, 28);
+        var qualificationStartDate = new DateOnly(2000, 2, 28);
+        var qualificationEndedDate = new DateOnly(2005, 3, 28);
+
+        var mockDateValidator = new Mock<IDateValidator>();
+        mockDateValidator.Setup(x => x.GetDay()).Returns(28);
+        mockDateValidator.Setup(x => x.GetDate("Feb-00")).Returns(qualificationStartDate);
+        mockDateValidator.Setup(x => x.GetDate("Mar-05")).Returns(qualificationEndedDate);
+        mockDateValidator.Setup(x => x.ValidateDateEntry(qualificationStartDate, qualificationEndedDate, userEnteredStartDate, It.IsAny<QualificationDetailsPage>())).Returns(content.Items.ElementAt(1));
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
+
+        var result = await service.GetQualificationDetailsPage(true, true, 3, 3, 2001);
+
+        result!.FromWhichYear.Should().Be("Feb-00");
+        result.ToWhichYear.Should().Be("Mar-05");
+        result.Level.Should().Be("3");
+        result.IsFullAndRelevant.Should().BeTrue();
+        result.IsPractitionerSpecificPage.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task GetQualificationDetailsPage_UserIsCheckingOwnQualification_ContentNotFound()
+    {
+        var content = new ContentfulCollection<QualificationDetailsPage>
+        {
+            Items =
+                    [
+                        new QualificationDetailsPage
+                        {
+                            Labels = new DetailsPageLabels()
+                            {
+                                AwardingOrgLabel = "Test Awarding Org Label",
+                                DateOfCheckLabel = "Test date of check label",
+                                LevelLabel = "Test level label",
+                                MainHeader = "Test main header",
+                                UpDownFeedback = new UpDownFeedback()
+                            }
+                        }
+                    ]
+        };
+
+        var mockDateValidator = new Mock<IDateValidator>();
+        mockDateValidator.Setup(x => x.GetDay()).Returns(28);
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
+
+        var result = await service.GetQualificationDetailsPage(true, true, 3, 2, 2015);
+
+        Logger.VerifyError("No user is checking own qualification details page entry returned");
+        result.Should().BeNull();
     }
 
     [TestMethod]

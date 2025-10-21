@@ -7,7 +7,7 @@ public interface IQualificationDetailsMapper
 {
     Task<QualificationDetailsModel> Map(
         Qualification qualification,
-        DetailsPage content,
+        QualificationDetailsPage content,
         NavigationLink? backNavLink,
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,

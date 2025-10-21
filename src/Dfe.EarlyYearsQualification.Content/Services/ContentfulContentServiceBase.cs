@@ -18,7 +18,7 @@ public abstract class ContentfulContentServiceBase
           {
               { typeof(StartPage), ContentTypes.StartPage },
               { typeof(Qualification), ContentTypes.Qualification },
-              { typeof(DetailsPage), ContentTypes.DetailsPage },
+              { typeof(QualificationDetailsPage), ContentTypes.QualificationDetailsPage },
               { typeof(AdvicePage), ContentTypes.AdvicePage },
               { typeof(RadioQuestionPage), ContentTypes.RadioQuestionPage },
               { typeof(AccessibilityStatementPage), ContentTypes.AccessibilityStatementPage },

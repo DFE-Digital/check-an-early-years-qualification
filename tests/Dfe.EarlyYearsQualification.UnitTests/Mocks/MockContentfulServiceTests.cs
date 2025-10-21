@@ -193,31 +193,31 @@ public class MockContentfulServiceTests
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetDetailsPage();
+        var result = await contentfulService.GetQualificationDetailsPage(false, false, 3, 6, 2001);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<DetailsPage>();
-        result.AwardingOrgLabel.Should().NotBeNullOrEmpty();
-        result.DateOfCheckLabel.Should().NotBeNullOrEmpty();
-        result.LevelLabel.Should().NotBeNullOrEmpty();
-        result.MainHeader.Should().NotBeNullOrEmpty();
-        result.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
-        result.QualificationNameLabel.Should().NotBeNullOrEmpty();
-        result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
-        result.QualificationAwardedDateLabel.Should().NotBeNullOrEmpty();
-        result.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
+        result.Should().BeAssignableTo<QualificationDetailsPage>();
+        result.Labels.AwardingOrgLabel.Should().NotBeNullOrEmpty();
+        result.Labels.DateOfCheckLabel.Should().NotBeNullOrEmpty();
+        result.Labels.LevelLabel.Should().NotBeNullOrEmpty();
+        result.Labels.MainHeader.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationNameLabel.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationAwardedDateLabel.Should().NotBeNullOrEmpty();
+        result.Labels.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
-        result.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
+        result.Labels.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text L3 EBR");
-        result.QualificationResultHeading.Should().Be("Qualification result heading");
-        result.QualificationResultFrMessageHeading.Should().Be("Full and relevant");
-        result.QualificationResultFrMessageBody.Should().Be("Full and relevant body");
-        result.QualificationResultNotFrMessageHeading.Should().Be("Not full and relevant");
-        result.QualificationResultNotFrMessageBody.Should().Be("Not full and relevant body");
-        result.QualificationResultNotFrL3MessageHeading.Should().Be("Not full and relevant L3");
-        result.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
-        result.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
-        result.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
-        result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+        result.Labels.QualificationResultHeading.Should().Be("Qualification result heading");
+        result.Labels.QualificationResultFrMessageHeading.Should().Be("Full and relevant");
+        result.Labels.QualificationResultFrMessageBody.Should().Be("Full and relevant body");
+        result.Labels.QualificationResultNotFrMessageHeading.Should().Be("Not full and relevant");
+        result.Labels.QualificationResultNotFrMessageBody.Should().Be("Not full and relevant body");
+        result.Labels.QualificationResultNotFrL3MessageHeading.Should().Be("Not full and relevant L3");
+        result.Labels.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
+        result.Labels.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
+        result.Labels.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
+        result.Labels.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
     }
 
     [TestMethod]

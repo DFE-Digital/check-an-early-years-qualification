@@ -29,22 +29,53 @@ public class ContentfulContentService(
         return startPageEntries.First();
     }
 
-    public async Task<DetailsPage?> GetDetailsPage()
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear)
     {
-        var detailsPageType = ContentTypeLookup[typeof(DetailsPage)];
+        var qualificationDetailsPageType = ContentTypeLookup[typeof(QualificationDetailsPage)];
 
-        var queryBuilder = new QueryBuilder<DetailsPage>().ContentTypeIs(detailsPageType)
-                                                          .Include(3);
+        var queryBuilder = new QueryBuilder<QualificationDetailsPage>()
+            .ContentTypeIs(qualificationDetailsPageType)
+            .Include(3)
+            .FieldEquals("fields.isPractitionerSpecificPage", userIsCheckingOwnQualification ? "1" : "0");
 
-        var detailsPageEntries = await GetEntriesByType(queryBuilder);
-        if (detailsPageEntries is null || !detailsPageEntries.Any())
+        if (userIsCheckingOwnQualification)
         {
-            Logger.LogWarning("No details page entry returned");
+            queryBuilder = queryBuilder
+            .FieldEquals("fields.level", level.ToString())
+            .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0");
+        }
+
+        var qualificationDetailsPageEntries = await GetEntriesByType(queryBuilder);
+
+        if (qualificationDetailsPageEntries is null || !qualificationDetailsPageEntries.Any())
+        {
+            Logger.LogWarning("No qualification details page entry returned");
             return null;
         }
 
-        var detailsPageContent = detailsPageEntries.First();
-        return detailsPageContent;
+        // Filter out content where date is not between FromWhichYear and ToWhichYear
+        if (userIsCheckingOwnQualification)
+        {
+            var enteredStartDate = new DateOnly(startYear, startMonth, dateValidator.GetDay());
+
+            foreach (var page in qualificationDetailsPageEntries)
+            {
+                var pageStartDate = dateValidator.GetDate(page.FromWhichYear);
+                var pageEndDate = dateValidator.GetDate(page.ToWhichYear);
+
+                var result = dateValidator.ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, page);
+
+                if (result is not null)
+                {
+                    return result;
+                }
+            }
+
+            Logger.LogError("No user is checking own qualification details page entry returned");
+            return null;
+        }
+
+        return qualificationDetailsPageEntries.FirstOrDefault();
     }
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
