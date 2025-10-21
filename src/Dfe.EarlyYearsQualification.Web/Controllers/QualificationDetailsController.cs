@@ -136,11 +136,13 @@ public class QualificationDetailsController(
 
     private async Task<QualificationDetailsPage?> GetPageContent(Qualification qualification)
     {
-        var model = new QualificationDetailsModel();
+        var model = new QualificationDetailsModel()
+        {
+            AdditionalRequirementAnswers = qualificationDetailsService.MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions)
+        };
 
-        await qualificationDetailsService.CheckRatioRequirements(qualification, model);
-
-        var isFullAndRelevant = !model.RatioRequirements.IsNotFullAndRelevant;
+        var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
+        var isFullAndRelevant = validateAdditionalRequirementQuestions.isValid;
         var level = qualificationDetailsService.GetLevelOfQualification();
         var (startMonth, startYear) = qualificationDetailsService.GetWhenWasQualificationStarted();
         var isUserCheckingTheirOwnQualification = qualificationDetailsService.GetUserIsCheckingOwnQualification();
@@ -148,7 +150,7 @@ public class QualificationDetailsController(
         if (level is not null && startMonth is not null && startYear is not null)
         {
             return await qualificationDetailsService.GetQualificationDetailsPage(
-                qualificationDetailsService.GetUserIsCheckingOwnQualification(),
+                isUserCheckingTheirOwnQualification,
                 isFullAndRelevant,
                 level.Value,
                 startMonth.Value,
