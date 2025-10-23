@@ -506,7 +506,7 @@ body {
 }
 
 .feedback-container > p {
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
     font-size: 16px;
 }
 
@@ -514,6 +514,10 @@ body {
     display: inline-block;
     margin-bottom: 50px;
 }
+
+    .feedback-container.mobile-only > p {
+        font-size: 14px;
+    }
 
 .feedback-container.desktop-only {
     display: none;
