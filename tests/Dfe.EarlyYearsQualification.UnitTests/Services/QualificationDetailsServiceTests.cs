@@ -2258,4 +2258,34 @@ public class QualificationDetailsServiceTests
         model.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
         model.RatioRequirements.RequirementsForUnqualified.Should().Be(defaultQualificationContent);
     }
+
+    [TestMethod]
+    [DataRow(Web.Constants.Options.Yes, true)]
+    [DataRow(Web.Constants.Options.No, false)]
+    public void GetUserIsCheckingOwnQualification_Calls_UserJourneyCookieService_GetIsUserCheckingTheirOwnQualification(string input, bool expected)
+    {
+        _mockUserJourneyCookieService.Setup(o => o.GetIsUserCheckingTheirOwnQualification())
+            .Returns(input);
+
+        var result = GetSut().GetUserIsCheckingOwnQualification();
+
+        result.Should().Be(expected);
+        _mockUserJourneyCookieService.Verify(o => o.GetIsUserCheckingTheirOwnQualification(), Times.Once);
+    }
+
+    [TestMethod]
+    public void GetLevelOfQualification_Calls_UserJourneyCookieService_GetLevelOfQualification()
+    {
+        _ = GetSut().GetLevelOfQualification();
+
+        _mockUserJourneyCookieService.Verify(o => o.GetLevelOfQualification(), Times.Once);
+    }
+
+    [TestMethod]
+    public void GetWhenWasQualificationStarted_Calls_UserJourneyCookieService_GetWhenWasQualificationStarted()
+    {
+        _ = GetSut().GetWhenWasQualificationStarted();
+
+        _mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
+    }
 }

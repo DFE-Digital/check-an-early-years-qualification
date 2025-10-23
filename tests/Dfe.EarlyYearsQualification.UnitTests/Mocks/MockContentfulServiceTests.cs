@@ -221,6 +221,38 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetDetailsPage_UserIsCheckingOwnQualification_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetQualificationDetailsPage(true, false, 3, 1, 2024);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<QualificationDetailsPage>();
+        result.Labels.AwardingOrgLabel.Should().NotBeNullOrEmpty();
+        result.Labels.DateOfCheckLabel.Should().NotBeNullOrEmpty();
+        result.Labels.LevelLabel.Should().NotBeNullOrEmpty();
+        result.Labels.MainHeader.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationNameLabel.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationAwardedDateLabel.Should().NotBeNullOrEmpty();
+        result.Labels.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
+        result.Labels.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text L3 EBR");
+        result.Labels.QualificationResultHeading.Should().Be("Qualification result heading");
+        result.Labels.QualificationResultFrMessageHeading.Should().Be("Full and relevant");
+        result.Labels.QualificationResultFrMessageBody.Should().Be("Full and relevant body");
+        result.Labels.QualificationResultNotFrMessageHeading.Should().Be("Not full and relevant");
+        result.Labels.QualificationResultNotFrMessageBody.Should().Be("Not full and relevant body");
+        result.Labels.QualificationResultNotFrL3MessageHeading.Should().Be("Not full and relevant L3");
+        result.Labels.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
+        result.Labels.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
+        result.Labels.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
+        result.Labels.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+    }
+
+    [TestMethod]
     public async Task GetRadioQuestionPage_PassInWhereWasTheQualificationAwarded_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
