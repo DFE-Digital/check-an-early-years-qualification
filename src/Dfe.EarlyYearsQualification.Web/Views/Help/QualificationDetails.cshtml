@@ -48,7 +48,7 @@
                         </span>@Model.QualificationNameErrorMessage
                     </p>
                 }
-                @Html.TextBoxFor(x => x.QualificationName, new { @class = "govuk-input" })
+                @Html.TextBoxFor(x => x.QualificationName, new { @class = "govuk-input", autocomplete = "off" })
             </div>
         </div>
     </div>
@@ -80,7 +80,7 @@
                         </span>@Model.AwardingOrganisationErrorMessage
                     </p>
                 }
-                @Html.TextBoxFor(x => x.AwardingOrganisation, new { @class = "govuk-input" })
+                @Html.TextBoxFor(x => x.AwardingOrganisation, new { @class = "govuk-input", autocomplete = "off" })
             </div>
 
             <div class="govuk-form-group">

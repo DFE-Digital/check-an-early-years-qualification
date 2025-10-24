@@ -168,7 +168,7 @@
                                                         @{
                                                             var additionalInfoCss = additionalInfoHasError? "govuk-input govuk-input--error" : "govuk-input";
                                                         }
-                                                        @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", new { @class=additionalInfoCss, id = additionalInfoId })
+                                                        @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", new { @class = additionalInfoCss, id = additionalInfoId, autocomplete = "off" })
                                                     </div>
                                                 </div>
                                             }
