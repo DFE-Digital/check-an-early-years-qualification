@@ -6,8 +6,8 @@ namespace Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 public interface IContentService
 {
     Task<StartPage?> GetStartPage();
-    
-    Task<DetailsPage?> GetDetailsPage();
+
+    Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear);
 
     Task<AdvicePage?> GetAdvicePage(string entryId);
 
