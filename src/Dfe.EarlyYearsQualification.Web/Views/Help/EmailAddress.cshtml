@@ -38,7 +38,7 @@
                         </span>@Model.EmailAddressErrorMessage
                     </p>
                 }
-                @Html.TextBoxFor(x => x.EmailAddress, new { @class = "govuk-input", aria_describedby = "email-address-heading", autocomplete = "off" })
+                @Html.TextBoxFor(x => x.EmailAddress, new { @class = "govuk-input", aria_describedby = "email-address-heading", autocomplete = "on" })
             </div>
 
             <div class="govuk-form-group">
