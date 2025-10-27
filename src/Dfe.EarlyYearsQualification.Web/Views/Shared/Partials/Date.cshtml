@@ -32,14 +32,14 @@
                     <div class="govuk-form-group">
                         <label id="@Model.Prefix-month-label" class="govuk-label govuk-date-input__label"
                                for="@Model.MonthId">@Model.MonthLabel</label>
-                        @Html.TextBox(Model.MonthId, Model.SelectedMonth, new { id = Model.MonthId, @class=monthClass, maxlength=2, name=Model.MonthId, type="text", inputmode="numeric" })
+                        @Html.TextBox(Model.MonthId, Model.SelectedMonth, new { id = Model.MonthId, @class=monthClass, maxlength=2, name=Model.MonthId, type="text", inputmode="numeric", autocomplete="off" })
                     </div>
                 </div>
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
                         <label id="@Model.Prefix-year-label" class="govuk-label govuk-date-input__label"
                                for="@Model.YearId">@Model.YearLabel</label>
-                        @Html.TextBox(Model.YearId, Model.SelectedYear, new { id = Model.YearId, @class=yearClass, maxlength=4, name=Model.YearId, type="text", inputmode="numeric" })
+                        @Html.TextBox(Model.YearId, Model.SelectedYear, new { id = Model.YearId, @class=yearClass, maxlength=4, name=Model.YearId, type="text", inputmode="numeric", autocomplete="off" })
                     </div>
                 </div>
             </div>
