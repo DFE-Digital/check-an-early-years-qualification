@@ -9,6 +9,10 @@ $(window).on('load', function() {
     
     let eventName = qualificationCount === '0' ? 'no-search-results-returned' : 'search-results-returned';
 
+    if (searchTerm !== "") {
+        $("#found-heading").attr("role", "alert");
+    }
+
     window.dataLayer.push({
         'event': eventName,
         'filterCountry': filterCountry,
