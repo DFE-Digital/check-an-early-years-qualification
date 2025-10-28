@@ -14,9 +14,6 @@ resource "azurerm_service_plan" "asp" {
       tags["Service Offering"]
     ]
   }
-
-  #checkov:skip=CKV_AZURE_212:Argument not available
-  #checkov:skip=CKV_AZURE_225:Ensure the App Service Plan is zone redundant
 }
 
 # Create Web Application
@@ -109,14 +106,6 @@ resource "azurerm_linux_web_app" "webapp" {
   }
 
   tags = var.tags
-
-  #checkov:skip=CKV_AZURE_13:App uses built-in authentication
-  #checkov:skip=CKV_AZURE_88:Using Docker
-  #checkov:skip=CKV_AZURE_17:Argument not available
-  #checkov:skip=CKV_AZURE_78:Disabled by default in Terraform version used
-  #checkov:skip=CKV_AZURE_16:Using VNET Integration
-  #checkov:skip=CKV_AZURE_71:Using VNET Integration
-  #checkov:skip=CKV_AZURE_222:Network access rules configured
 }
 
 # Create Web Application Deployment Slot

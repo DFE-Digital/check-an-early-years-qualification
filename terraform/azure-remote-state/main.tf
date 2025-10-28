@@ -66,19 +66,10 @@ resource "azurerm_storage_account" "tfstate" {
   tags = merge(local.common_tags, {
     "Region" = var.default_azure_region
   })
-
-  #checkov:skip=CKV_AZURE_206:GRS not required
-  #checkov:skip=CKV_AZURE_59:Argument has been deprecated
-  #checkov:skip=CKV2_AZURE_18:Microsoft Managed keys are sufficient
-  #checkov:skip=CKV2_AZURE_1:Microsoft Managed keys are sufficient
-  #checkov:skip=CKV2_AZURE_38:Soft-delete not required
-  #checkov:skip=CKV2_AZURE_33:VNet not configured
 }
 
 resource "azurerm_storage_container" "tfstate" {
   name                  = "${var.resource_name_prefix}-tfstate-stc"
   storage_account_name  = azurerm_storage_account.tfstate.name
   container_access_type = "private"
-
-  #checkov:skip=CKV2_AZURE_21:Logging not required
 }
