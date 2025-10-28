@@ -6,11 +6,9 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-        <div class="govuk-panel govuk-panel--confirmation">
-            <h1 class="govuk-panel__title" id="success-message">
-                @Model.SuccessMessage
-            </h1>
-        </div>
+        <govuk-panel heading-level="1">
+            <govuk-panel-title id="success-message">@Model.SuccessMessage</govuk-panel-title>
+        </govuk-panel>
         <div class="govuk-body govuk-!-margin-top-8" id="main-confirmation-body">@Html.Raw(Model.Body)</div>
         @if (Model.ShowOptionalSection)
         {

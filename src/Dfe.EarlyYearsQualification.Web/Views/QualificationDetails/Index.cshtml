@@ -150,8 +150,9 @@
             </div>
 
             <p class="govuk-body govuk-!-static-margin-top-6 govuk-!-margin-bottom-2 govuk-!-display-none-print">
-                <a id="check-another-qualification-link" href="@Model.Content.CheckAnotherQualificationLink?.Href"
-                   class="govuk-button govuk-button--secondary">@Model.Content.CheckAnotherQualificationLink?.DisplayText</a>
+                <govuk-button-link id="check-another-qualification-link" class="govuk-button--secondary" href="@Model.Content.CheckAnotherQualificationLink?.Href">
+                    @Model.Content.CheckAnotherQualificationLink?.DisplayText
+                </govuk-button-link>
             </p>
 
             @if (Model.Content.FeedbackBanner is not null)
