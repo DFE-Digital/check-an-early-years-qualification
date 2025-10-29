@@ -83,37 +83,40 @@
             </div>
         }
 
-        @foreach (var qualification in Model.Qualifications)
-        {
-            var linkDisplayType = qualification.IsQualificationNameDuplicate ? "inline-block" : "block";
+        <div id="qualification-search-results">
+            @foreach (var qualification in Model.Qualifications)
+            {
+                var linkDisplayType = qualification.IsQualificationNameDuplicate ? "inline-block" : "block";
 
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    <div class="chevron-card__wrapper">
-                        <div class="chevron-card-link__wrapper">
-                            <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })"
-                               class="govuk-link govuk-heading-m chevron-card__link"
-                               style="display: @linkDisplayType;">
-                                @qualification.QualificationName
-                            </a>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        <div class="chevron-card__wrapper">
+                            <div class="chevron-card-link__wrapper">
+                                <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })"
+                                   class="govuk-link govuk-heading-m chevron-card__link"
+                                   style="display: @linkDisplayType;">
+                                    @qualification.QualificationName
+                                </a>
                             
-                            @if (qualification.IsQualificationNameDuplicate)
-                            {
-                                if (string.IsNullOrEmpty(qualification.QualificationNumber))
+                                @if (qualification.IsQualificationNameDuplicate)
                                 {
-                                    <span id="ao-text-@qualification.QualificationId" class="govuk-body mb-0">(@qualification.AwardingOrganisationTitle)</span>
+                                    if (string.IsNullOrEmpty(qualification.QualificationNumber))
+                                    {
+                                        <span id="ao-text-@qualification.QualificationId" class="govuk-body mb-0">(@qualification.AwardingOrganisationTitle)</span>
+                                    }
+                                    else
+                                    {
+                                        <div id="ao-text-@qualification.QualificationId" class="govuk-body mb-0">@Model.QualificationNumberLabel @qualification.QualificationNumber</div>
+                                    }
                                 }
-                                else
-                                {
-                                    <div id="ao-text-@qualification.QualificationId" class="govuk-body mb-0">@Model.QualificationNumberLabel @qualification.QualificationNumber</div>
-                                }
-                            }
+                            </div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                         </div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
+
         @if (Model.ShowL6OrNotSureContent)
         {
             <div class="govuk-grid-row">

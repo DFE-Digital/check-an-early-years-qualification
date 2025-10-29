@@ -11,8 +11,10 @@ $(window).on('load', function() {
 
     if (searchTerm !== "") {
         $("#found-heading").attr("tabindex", "-1");
-        $("#found-heading").attr("role", "alert");
         $("#found-heading").focus();
+        $("#found-heading").attr("role", "alert");
+        $("#qualification-search-results").attr("role", "alert");
+
     }
 
     window.dataLayer.push({
