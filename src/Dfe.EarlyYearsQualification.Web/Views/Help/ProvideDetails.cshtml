@@ -1,5 +1,4 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels
-@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
 @model ProvideDetailsPageViewModel
 
 @{
@@ -19,7 +18,7 @@
             await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel);
         }
 
-        @using (Html.BeginForm("provide-details", "help", FormMethod.Post, new { id = "provide-additional-details-form" }))
+        @using (Html.BeginForm("ProvideDetails", "Help", FormMethod.Post, new { id = "provide-additional-details-form" }))
         {
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasAdditionalInformationError ? "govuk-form-group--error" : "")">
                 <h1 class="govuk-heading-xl govuk-label-wrapper govuk-!-margin-bottom-3" id="additional-information-heading">
