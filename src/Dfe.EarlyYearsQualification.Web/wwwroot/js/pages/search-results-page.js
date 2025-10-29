@@ -11,6 +11,7 @@ $(window).on('load', function() {
 
     if (searchTerm !== "") {
         $("#found-heading").attr("tabindex", "-1");
+        $("#found-heading").attr("role", "alert");
         $("#found-heading").focus();
     }
 
