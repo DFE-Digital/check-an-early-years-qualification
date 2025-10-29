@@ -10,7 +10,8 @@ $(window).on('load', function() {
     let eventName = qualificationCount === '0' ? 'no-search-results-returned' : 'search-results-returned';
 
     if (searchTerm !== "") {
-        $("#found-heading").attr("role", "alert");
+        $("#found-heading").attr("tabindex", "-1");
+        $("#found-heading").focus();
     }
 
     window.dataLayer.push({
