@@ -1,17 +1,8 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels
-@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
 @model QualificationDetailsPageViewModel
 
 @{
     ViewData["Title"] = Model.Heading;
-}
-
-@{
-    var monthClass = "govuk-input govuk-date-input__input govuk-input--width-2";
-    var monthErrorClass = monthClass + " govuk-input--error";
-
-    var yearClass = "govuk-input govuk-date-input__input govuk-input--width-4";
-    var yearErrorClass = yearClass + " govuk-input--error";
 }
 
 @section BeforeMainContent {
@@ -20,7 +11,7 @@
     }
 }
 
-@using (Html.BeginForm("qualification-details", "help", FormMethod.Post, new { id = "qualification-details-form" }))
+@using (Html.BeginForm("QualificationDetails", "Help", FormMethod.Post, new { id = "qualification-details-form" }))
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
@@ -84,9 +75,7 @@
             </div>
 
             <div class="govuk-form-group">
-                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
-                    @Model.CtaButtonText
-                </button>
+                <govuk-button id="question-submit" type="submit">@Model.CtaButtonText</govuk-button>
             </div>
         </div>
     </div>

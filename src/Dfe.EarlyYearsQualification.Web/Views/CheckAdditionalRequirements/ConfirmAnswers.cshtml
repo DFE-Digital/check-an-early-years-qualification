@@ -40,9 +40,6 @@
         @{
             await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel{ WarningText = Model.AnswerDisclaimerText });
         }
-
-        <a id="confirm-answers" href="@Model.GetResultsHref" class="govuk-button" data-module="govuk-button">
-            @Model.ButtonText
-        </a>
+        <govuk-button-link id="confirm-answers" href="@Model.GetResultsHref">@Model.ButtonText</govuk-button-link>
     </div>
 </div>

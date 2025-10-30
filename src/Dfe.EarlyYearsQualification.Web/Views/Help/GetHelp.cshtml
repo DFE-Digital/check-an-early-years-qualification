@@ -23,7 +23,7 @@
             @Html.Raw(Model.PostHeadingContent)
         </div>
 
-        @using (Html.BeginForm("get-help", "help", FormMethod.Post, new { id = "reason-for-enquiring-form" }))
+        @using (Html.BeginForm("GetHelp", "Help", FormMethod.Post, new { id = "reason-for-enquiring-form" }))
         {
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
@@ -57,9 +57,7 @@
                 </fieldset>
             </div>
             <div class="govuk-form-group">
-                <button id="reason-for-enquiring-form-submit" type="submit" class="govuk-button" data-module="govuk-button">
-                    @Model.CtaButtonText
-                </button>
+                <govuk-button id="reason-for-enquiring-form-submit" type="submit">@Model.CtaButtonText</govuk-button>
             </div>
         }
     </div>

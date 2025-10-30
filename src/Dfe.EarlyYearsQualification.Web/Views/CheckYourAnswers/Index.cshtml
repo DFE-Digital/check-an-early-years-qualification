@@ -37,10 +37,6 @@
                 </tr>
             }
         </table>
-
-        <a id="cta-button" href="@Url.Action("Get", "QualificationSearch")" class="govuk-button"
-           data-module="govuk-button">
-            @Model.CtaButtonText
-        </a>
+        <govuk-button-link id="cta-button" href="@Url.Action("Get", "QualificationSearch")">@Model.CtaButtonText</govuk-button-link>
     </div>
 </div>

@@ -21,7 +21,7 @@ test.describe('A spec that tests the get help page', { tag: "@e2e" }, () => {
         await checkText(page, "#back-button", "Back to get help with the Check an early years qualification service");
         await checkText(page, "#additional-information-heading", "How can we help you?");
         await checkText(page, "#additional-information-hint", "Give as much detail as you can. This helps us give you the right support.");
-        await checkText(page, "#warning-text-container > strong", "Warning:Do not include any personal information");
+        await checkText(page, "#warning-text-container > strong", "Warning Do not include any personal information");
         await checkText(page, "#question-submit", "Continue");
     });
 
