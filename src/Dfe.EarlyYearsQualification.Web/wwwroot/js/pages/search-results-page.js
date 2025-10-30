@@ -12,8 +12,6 @@ $(window).on('load', function() {
     if (searchTerm !== "") {
         $("#found-heading").attr("tabindex", "-1");
         $("#found-heading").focus();
-        $("#body").attr("aria-hidden", "true");
-        $("#found-heading").attr("role", "alert");
         $("#qualification-search-results").attr("role", "alert");
     }
 

@@ -38,52 +38,52 @@
                 </ul>
             </div>
         </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
-                <h2 id="found-heading" class="govuk-heading-m govuk-!-static-margin-bottom-8">
-                        @(Model.QualificationFoundPrefixText + " " + Model.Qualifications.Count + " " + (Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText))
-                </h2>
-            </div>
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
-                <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
-            </div>
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
-                @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id = "refine-search-form" }))
-                {
-                    <input class="govuk-input" style="width: 75%" id="refineSearch" name="refineSearch"
-                           aria-labelledby="pre-search-content" type="text" value="@Model.SearchCriteria" autocomplete="off">
-                    <button id="refineSearchButton" type="submit"
-                            class="govuk-button govuk-button--secondary govuk-!-static-margin-left-1"
-                            data-module="govuk-button">
-                        @Model.SearchButtonText
-                    </button>
-                }
-                @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id = "clear-search-form" }))
-                {
-                    <input name="refineSearch" type="hidden" value="">
-                    <button id="clear-search" type="submit"
-                            class="govuk-link button-as-link float-left govuk-!-static-margin-top-1 govuk-!-font-size-19">@Model.ClearSearchText</button>
-                }
-            </div>
-        </div>
-
-        @if (Model.Qualifications.Count == 0)
-        {
+        <div id="qualification-search-results">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
-                    <div id="no-result-content">
-                        @Html.Raw(Model.NoResultText)
-                        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible"/>
-                    </div>
+                    <h2 id="found-heading" class="govuk-heading-m govuk-!-static-margin-bottom-8">
+                            @(Model.QualificationFoundPrefixText + " " + Model.Qualifications.Count + " " + (Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText))
+                    </h2>
                 </div>
             </div>
-        }
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
+                </div>
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id = "refine-search-form" }))
+                    {
+                        <input class="govuk-input" style="width: 75%" id="refineSearch" name="refineSearch"
+                               aria-labelledby="pre-search-content" type="text" value="@Model.SearchCriteria" autocomplete="off">
+                        <button id="refineSearchButton" type="submit"
+                                class="govuk-button govuk-button--secondary govuk-!-static-margin-left-1"
+                                data-module="govuk-button">
+                            @Model.SearchButtonText
+                        </button>
+                    }
+                    @using (Html.BeginForm("Refine", "QualificationSearch", FormMethod.Post, new { id = "clear-search-form" }))
+                    {
+                        <input name="refineSearch" type="hidden" value="">
+                        <button id="clear-search" type="submit"
+                                class="govuk-link button-as-link float-left govuk-!-static-margin-top-1 govuk-!-font-size-19">@Model.ClearSearchText</button>
+                    }
+                </div>
+            </div>
 
-        <div id="qualification-search-results">
+            @if (Model.Qualifications.Count == 0)
+            {
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        <div id="no-result-content">
+                            @Html.Raw(Model.NoResultText)
+                            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible"/>
+                        </div>
+                    </div>
+                </div>
+            }
+
             @foreach (var qualification in Model.Qualifications)
             {
                 var linkDisplayType = qualification.IsQualificationNameDuplicate ? "inline-block" : "block";
@@ -115,21 +115,21 @@
                     </div>
                 </div>
             }
-        </div>
 
-        @if (Model.ShowL6OrNotSureContent)
-        {
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    <div id="l6-or-not-sure-content" class="govuk-!-static-margin-top-4">
-                        <h2 id="l6-or-not-sure-heading" class="govuk-heading-m">
-                            @Model.L6OrNotSureContentHeading
-                        </h2>
-                        @Html.Raw(Model.L6OrNotSureContent)
+            @if (Model.ShowL6OrNotSureContent)
+            {
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        <div id="l6-or-not-sure-content" class="govuk-!-static-margin-top-4">
+                            <h2 id="l6-or-not-sure-heading" class="govuk-heading-m">
+                                @Model.L6OrNotSureContentHeading
+                            </h2>
+                            @Html.Raw(Model.L6OrNotSureContent)
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 <div id="post-list-content" class="govuk-!-static-margin-top-4">
