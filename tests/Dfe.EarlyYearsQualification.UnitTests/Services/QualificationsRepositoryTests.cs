@@ -1,6 +1,7 @@
 using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Services;
@@ -11,8 +12,34 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<QualificationsRepository>
 {
     [TestMethod]
+    public async Task GetQualificationById_NullRatioRequirements_LogsAndReturnsDefault()
+    {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(ContentTypes.RatioRequirement,
+                                                     It.IsAny<QueryBuilder<RatioRequirement>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<RatioRequirement>)null!);
+
+        var service =
+            new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
+
+        var result = await service.GetById("SomeId");
+
+        Logger.VerifyWarning("No ratio requirements returned");
+
+        result.Should().BeNull();
+    }
+    
+    [TestMethod]
     public async Task GetQualificationById_Null_LogsAndReturnsDefault()
     {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(ContentTypes.RatioRequirement,
+                                                     It.IsAny<QueryBuilder<RatioRequirement>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<RatioRequirement>
+                                { Items = [new RatioRequirement()] });
+        
         ClientMock.Setup(client =>
                              client.GetEntriesByType(
                                                      It.IsAny<string>(),
@@ -20,7 +47,8 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync((ContentfulCollection<Qualification>)null!);
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
+        var service =
+            new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.GetById("SomeId");
 
@@ -33,13 +61,21 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
     public async Task GetQualificationById_NoContent_LogsAndReturnsDefault()
     {
         ClientMock.Setup(client =>
+                             client.GetEntriesByType(ContentTypes.RatioRequirement,
+                                                     It.IsAny<QueryBuilder<RatioRequirement>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<RatioRequirement>
+                                { Items = [new RatioRequirement()] });
+        
+        ClientMock.Setup(client =>
                              client.GetEntriesByType(
                                                      It.IsAny<string>(),
                                                      It.IsAny<QueryBuilder<Qualification>>(),
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = new List<Qualification>() });
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
+        var service =
+            new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.GetById("SomeId");
 
@@ -63,20 +99,28 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                             };
 
         ClientMock.Setup(client =>
-                             client.GetEntries(
-                                                     It.IsAny<QueryBuilder<Qualification>>(),
+                             client.GetEntriesByType(ContentTypes.RatioRequirement,
+                                                     It.IsAny<QueryBuilder<RatioRequirement>>(),
                                                      It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<RatioRequirement>
+                                { Items = [new RatioRequirement()] });
+
+        ClientMock.Setup(client =>
+                             client.GetEntries(
+                                               It.IsAny<QueryBuilder<Qualification>>(),
+                                               It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification>
                                 { Items = [qualification] });
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
+        var service =
+            new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.GetById("SomeId");
 
         result.Should().NotBeNull();
         result.Should().Be(qualification);
     }
-    
+
     [TestMethod]
     public async Task GetQualificationById_QualificationsContainEmptyQualificationId_Exists_Returns()
     {
@@ -92,18 +136,47 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                             };
 
         ClientMock.Setup(client =>
+                             client.GetEntriesByType(ContentTypes.RatioRequirement,
+                                                     It.IsAny<QueryBuilder<RatioRequirement>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<RatioRequirement>
+                                { Items = [new RatioRequirement()] });
+
+        ClientMock.Setup(client =>
                              client.GetEntries(
                                                It.IsAny<QueryBuilder<Qualification>>(),
                                                It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification>
-                                { Items = [new Qualification(string.Empty, "Test name", "Test AO", 3), qualification] });
+                                {
+                                    Items = [new Qualification(string.Empty, "Test name", "Test AO", 3), qualification]
+                                });
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
+        var service =
+            new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.GetById("SomeId");
 
         result.Should().NotBeNull();
         result.Should().Be(qualification);
+    }
+    
+    [TestMethod]
+    public async Task GetQualifications_NullRatioRequirements_LogsAndReturnsDefault()
+    {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(ContentTypes.RatioRequirement,
+                                                     It.IsAny<QueryBuilder<RatioRequirement>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<RatioRequirement>)null!);
+
+        var service =
+            new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
+
+        var result = await service.Get(null, null, null, null, null);
+
+        Logger.VerifyWarning("No ratio requirements returned");
+
+        result.Should().BeEmpty();
     }
 
     [TestMethod]
@@ -118,19 +191,28 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                 QualificationNumber = "number", AdditionalRequirements = "Rq"
                             };
 
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(ContentTypes.RatioRequirement,
+                                                     It.IsAny<QueryBuilder<RatioRequirement>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<RatioRequirement>
+                                { Items = [new RatioRequirement()] });
+
         ClientMock.Setup(c =>
                              c.GetEntries(It.IsAny<QueryBuilder<Qualification>>(),
-                                                It.IsAny<CancellationToken>()))
+                                          It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [qualification] });
 
         var mockQualificationFilterFactory = new Mock<IQualificationListFilter>();
 
         mockQualificationFilterFactory.Setup(x => x.ApplyFilters(It.IsAny<List<Qualification>>(), It.IsAny<int?>(),
-                                                                 It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(),
+                                                                 It.IsAny<int?>(), It.IsAny<int?>(),
+                                                                 It.IsAny<string?>(),
                                                                  It.IsAny<string?>()))
                                       .Returns([qualification]);
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, mockQualificationFilterFactory.Object);
+        var service =
+            new QualificationsRepository(Logger.Object, ClientMock.Object, mockQualificationFilterFactory.Object);
 
         var result = await service.Get(null, null, null, null, null);
 
@@ -140,13 +222,21 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
     [TestMethod]
     public async Task GetQualifications_ContentfulHasNoQualifications_ReturnsEmpty()
     {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(ContentTypes.RatioRequirement,
+                                                     It.IsAny<QueryBuilder<RatioRequirement>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<RatioRequirement>
+                                { Items = [new RatioRequirement()] });
+        
         ClientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
                                                 It.IsAny<QueryBuilder<Qualification>>(),
                                                 It.IsAny<CancellationToken>()))
                   .ReturnsAsync(new ContentfulCollection<Qualification> { Items = [] });
 
-        var service = new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
+        var service =
+            new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
         var result = await service.Get(null, null, null, null, null);
 
@@ -164,7 +254,8 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
 
         var mockLogger = new Mock<ILogger<QualificationsRepository>>();
         var repository =
-            new QualificationsRepository(mockLogger.Object, mockContentfulClient.Object, new Mock<IQualificationListFilter>().Object);
+            new QualificationsRepository(mockLogger.Object, mockContentfulClient.Object,
+                                         new Mock<IQualificationListFilter>().Object);
 
         var filteredQualifications = await repository.Get(4, 5, 2016, null, null);
 
