@@ -39,69 +39,84 @@
                         @if (question.GetType() == typeof(FeedbackFormQuestionRadioModel))
                         {
                             var questionData = question as FeedbackFormQuestionRadioModel;
-                            <input type="hidden" name="QuestionList[@questionIndex].Question"
-                                   value="@questionData!.Question"/>
-                            <div
-                                class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">@questionData.Question</h2>
-                                <div class="govuk-radios" data-module="govuk-radios">
-                                    @foreach (var option in questionData.OptionsItems)
-                                    {
-                                        var optionModel = option as OptionModel;
-                                        var @checked = optionModel!.Value == Model.QuestionList[questionIndex].Answer ? "checked" : "";
-                                        var radioButtonId = $"{questionIndex}_{optionModel.Value}";
-                                        if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == radioButtonId))
+                            <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData!.Question"/>
+                            <div class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
+                                <fieldset class="govuk-fieldset">
+                                    <legend class="govuk-!-margin-bottom-3">
+                                        <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="@questionId">@questionData.Question</h2>
+                                    </legend>
+                                    <div class="govuk-radios" data-module="govuk-radios">
+                                        @foreach (var option in questionData.OptionsItems)
                                         {
-                                            var errorId = $"{questionId}_error-message";
-                                            <p class="govuk-error-message" id="@errorId">
-                                                <span
-                                                    class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
-                                            </p>
-                                        }
-
-                                        <div class="govuk-radios__item">
-                                            @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = "govuk-radios__input", id = radioButtonId, @checked })
-                                            <label class="govuk-label govuk-radios__label" for="@radioButtonId">
-                                                @optionModel.Label
-                                            </label>
-                                            @if (!string.IsNullOrEmpty(optionModel.Hint))
+                                            var optionModel = option as OptionModel;
+                                            var @checked = optionModel!.Value == Model.QuestionList[questionIndex].Answer ? "checked" : "";
+                                            var radioButtonId = $"{questionIndex}_{optionModel.Value}";
+                                            if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == radioButtonId))
                                             {
-                                                var hintId = $"{optionModel.Value}_hint";
-                                                <div id="@hintId" class="govuk-hint govuk-radios__hint">
-                                                    @optionModel.Hint
-                                                </div>
+                                                var errorId = $"{questionId}_error-message";
+                                                <p class="govuk-error-message" id="@errorId">
+                                                    <span
+                                                        class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
+                                                </p>
                                             }
-                                        </div>
-                                    }
-                                </div>
+
+                                            <div class="govuk-radios__item">
+                                                @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = "govuk-radios__input", id = radioButtonId, @checked })
+                                                <label class="govuk-label govuk-radios__label" for="@radioButtonId">
+                                                    @optionModel.Label
+                                                </label>
+                                                @if (!string.IsNullOrEmpty(optionModel.Hint))
+                                                {
+                                                    var hintId = $"{optionModel.Value}_hint";
+                                                    <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                                        @optionModel.Hint
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </fieldset>
                             </div>
                         }
                         else if (question.GetType() == typeof(FeedbackFormQuestionTextAreaModel))
                         {
+                            var textAreaId = $"{questionIndex}_textArea";
+                            var hintId = $"textarea_{questionIndex}_hint";
+                            var errorId = $"{questionId}_error-message";
                             var questionData = question as FeedbackFormQuestionTextAreaModel;
-                            <input type="hidden" name="QuestionList[@questionIndex].Question"
-                                   value="@questionData!.Question"/>
-                            <div
-                                class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">@questionData.Question</h2>
+
+                            var textAreaAttributes = new Dictionary<string, object>
+                            {
+                                { "class", "govuk-textarea" },
+                                { "id", textAreaId }
+                            };
+
+                            <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData!.Question"/>
+
+                            <div class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
+                                <h2 class="govuk-label-wrapper" id="@questionId">
+                                    <label class="govuk-heading-m govuk-!-margin-bottom-3" for="@textAreaId">
+                                        @questionData.Question
+                                    </label>
+                                </h2>
+
                                 @if (!string.IsNullOrEmpty(questionData.HintText))
                                 {
-                                    var hintId = $"textarea_{questionIndex}_hint";
+                                    textAreaAttributes.Add("aria-describedby", hintId);
                                     <div class="govuk-hint" id="@hintId">
                                         @questionData.HintText
                                     </div>
                                 }
 
-                                @{ var textAreaId = $"{questionIndex}_textArea"; }
                                 @if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == textAreaId))
                                 {
-                                    var errorId = $"{questionId}_error-message";
                                     <p class="govuk-error-message" id="@errorId">
                                         <span
                                             class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
                                     </p>
                                 }
-                                @Html.TextAreaFor(x => x.QuestionList[questionIndex].Answer, 5, 1, new { @class = "govuk-textarea", id = textAreaId })
+
+                                @Html.TextAreaFor(x => x.QuestionList[questionIndex].Answer, 5, 1, textAreaAttributes)
                             </div>
                         }
                         else if (question.GetType() == typeof(FeedbackFormQuestionRadioAndInputModel))
@@ -111,70 +126,86 @@
                                    value="@questionData!.Question"/>
                             <div
                                 class="govuk-form-group @(Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ErrorBannerLinkText == Model.QuestionList[questionIndex].ErrorMessage && !x.ElementLinkId.Contains("additionalInfo")) ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">@questionData.Question</h2>
-                                <div class="govuk-radios" data-module="govuk-radios">
-                                    @for (var optionIndex = 0; optionIndex < questionData.OptionsItems.Count; optionIndex++)
-                                    {
-                                        var optionModel = questionData.OptionsItems[optionIndex] as OptionModel;
-                                        var @checked = optionModel!.Value == Model.QuestionList[questionIndex].Answer ? "checked" : "";
-                                        var radioButtonId = $"{questionIndex}_{optionModel.Value}";
-                                        var conditionalElementClass = optionIndex == 0 ? "has__conditional__element" : "has__no__conditional__element";
-                                        if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == radioButtonId))
-                                        {
-                                            var errorId = $"{questionId}_error-message";
-                                            <p class="govuk-error-message" id="@errorId">
-                                                <span
-                                                    class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
-                                            </p>
-                                        }
+                                <fieldset class="govuk-fieldset">
+                                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                        <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="@questionId">@questionData.Question</h2>
+                                    </legend>
 
-                                        <div class="govuk-radios__item">
-                                            @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = $"govuk-radios__input {conditionalElementClass}", id = radioButtonId, @checked })
-                                            <label class="govuk-label govuk-radios__label" for="@radioButtonId">
-                                                @optionModel.Label
-                                            </label>
-                                            @if (!string.IsNullOrEmpty(optionModel.Hint))
+                                    <div class="govuk-radios" data-module="govuk-radios">
+                                        @for (var optionIndex = 0; optionIndex < questionData.OptionsItems.Count; optionIndex++)
+                                        {
+                                            var optionModel = questionData.OptionsItems[optionIndex] as OptionModel;
+                                            var @checked = optionModel!.Value == Model.QuestionList[questionIndex].Answer ? "checked" : "";
+                                            var radioButtonId = $"{questionIndex}_{optionModel.Value}";
+                                            var conditionalElementClass = optionIndex == 0 ? "has__conditional__element" : "has__no__conditional__element";
+                                            if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == radioButtonId))
                                             {
-                                                var hintId = $"{optionModel.Value}_hint";
-                                                <div id="@hintId" class="govuk-hint govuk-radios__hint">
-                                                    @optionModel.Hint
-                                                </div>
+                                                var errorId = $"{questionId}_error-message";
+                                                <p class="govuk-error-message" id="@errorId">
+                                                    <span
+                                                        class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
+                                                </p>
                                             }
-                                            @*We associate the input with the first option*@
-                                            @if (optionIndex == 0)
-                                            {
-                                                var additionalInfoId = $"{questionIndex}_additionalInfo";
-                                                var additionalInfoHasError = Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == additionalInfoId);
-                                                <div class="govuk-radios__conditional">
-                                                    <div class="govuk-form-group @(additionalInfoHasError ? "govuk-form-group--error" : "")">
-                                                        <label class="govuk-label">
-                                                            @questionData.InputHeading
-                                                        </label>
-                                                        @if (!string.IsNullOrEmpty(questionData.InputHeadingHintText))
-                                                        {
-                                                            var hintId = $"{questionData.InputHeading}_hint";
-                                                            <div id="@hintId" class="govuk-hint">
-                                                                @questionData.InputHeadingHintText
-                                                            </div>
-                                                        }
-                                                        @if (additionalInfoHasError)
-                                                        {
-                                                            var errorId = $"{questionId}_error-message-additional-info";
-                                                            <p class="govuk-error-message additional-info-error" id="@errorId">
-                                                                <span
-                                                                    class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
-                                                            </p>
-                                                        }
-                                                        @{
-                                                            var additionalInfoCss = additionalInfoHasError? "govuk-input govuk-input--error" : "govuk-input";
-                                                        }
-                                                        @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", new { @class = additionalInfoCss, id = additionalInfoId, autocomplete = "off" })
+
+                                            <div class="govuk-radios__item">
+                                                @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = $"govuk-radios__input {conditionalElementClass}", id = radioButtonId, @checked })
+                                                <label class="govuk-label govuk-radios__label" for="@radioButtonId">
+                                                    @optionModel.Label
+                                                </label>
+                                                @if (!string.IsNullOrEmpty(optionModel.Hint))
+                                                {
+                                                    var hintId = $"{optionModel.Value}_hint";
+                                                    <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                                        @optionModel.Hint
                                                     </div>
-                                                </div>
-                                            }
-                                        </div>
-                                    }
-                                </div>
+                                                }
+                                                @*We associate the input with the first option*@
+                                                @if (optionIndex == 0)
+                                                {
+                                                    var additionalInfoId = $"{questionIndex}_additionalInfo";
+                                                    var additionalInfoHasError = Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == additionalInfoId);
+                                                    var additionalInfoCss = additionalInfoHasError ? "govuk-input govuk-input--error" : "govuk-input";
+                                                    var hintId = $"{questionData.InputHeading.Replace(" ", "_")}_hint";
+
+                                                    var textInputAttributes = new Dictionary<string, object>
+                                                    {
+                                                        { "class", additionalInfoCss },
+                                                        { "id", additionalInfoId },
+                                                        { "autocomplete", "off" }
+                                                    };
+
+                                                    <div class="govuk-radios__conditional">
+                                                        <div class="govuk-form-group @(additionalInfoHasError ? "govuk-form-group--error" : "")">
+                                                            <label class="govuk-label" for="@additionalInfoId">
+                                                                @questionData.InputHeading
+                                                            </label>
+
+                                                            @if (!string.IsNullOrEmpty(questionData.InputHeadingHintText))
+                                                            {
+                                                                textInputAttributes.Add("aria-describedby", hintId);
+
+                                                                <div id="@hintId" class="govuk-hint">
+                                                                    @questionData.InputHeadingHintText
+                                                                </div>
+                                                            }
+                                                            @if (additionalInfoHasError)
+                                                            {
+                                                                var errorId = $"{questionId}_error-message-additional-info";
+                                                                <p class="govuk-error-message additional-info-error" id="@errorId">
+                                                                    <span
+                                                                        class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
+                                                                </p>
+                                                            }
+                                                            @{
+                                                            }
+                                                            @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", textInputAttributes)
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </fieldset>
                             </div>
                         }
                     </div>
