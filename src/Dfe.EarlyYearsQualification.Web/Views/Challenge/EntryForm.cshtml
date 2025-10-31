@@ -36,7 +36,7 @@
                     <button id="togglePassword" type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" style="width: 14%; display: inline-block;">@Model.ShowPasswordButtonText</button>
                 </div>
                 
-                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">@Model.SubmitButtonText</button>
+                <govuk-button id="question-submit" type="submit">@Model.SubmitButtonText</govuk-button>
             }
             @Html.Raw(Model.FooterContent)
         </div>
