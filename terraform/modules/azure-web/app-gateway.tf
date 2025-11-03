@@ -72,7 +72,7 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
       excluded_rule_set {
         rule_group {
           rule_group_name = "REQUEST-942-APPLICATION-ATTACK-SQLI"
-          excluded_rules  = "942360"
+          excluded_rules  = ["942360"]
         }
       }
     }
