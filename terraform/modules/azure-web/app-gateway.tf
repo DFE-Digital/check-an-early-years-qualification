@@ -63,12 +63,17 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
       selector_match_operator = "StartsWith"
     }
 
-    /* The exclusion below stops the cookie banner hide functionality from triggering the 949110 - REQUEST-949-BLOCKING-EVALUATION rule.
-     As it contains the word select in the request arg, it thinks it's a SQLi attack. */
+    /* The exclusion below stops the cookie banner hide functionality from triggering a SQLi firewall rule.
+     If the user is on select-a-qualification-to-check, and as it contains the word select in the request arg, it thinks it's a SQLi attack. */
     exclusion {
       match_variable          = "RequestArgValues"
-      selector                = "/select-a-qualification-to-check"
+      selector                = "returnUrl"
       selector_match_operator = "Contains"
+      excluded_rule_set {
+        rule_group {
+          rule_group_name = "REQUEST-942-APPLICATION-ATTACK-SQLI"
+        }
+      }
     }
   }
 
