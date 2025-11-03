@@ -1,4 +1,3 @@
-using Dfe.EarlyYearsQualification.Web.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;

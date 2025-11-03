@@ -6,7 +6,11 @@ $(document).ready(function () {
     }
     
     $(".has__conditional__element").on('click', function () {
-        $(this).siblings(".govuk-radios__conditional").show();
+        let siblingInputs = $(".has__conditional__element").siblings(".govuk-radios__conditional");
+        siblingInputs.show();
+
+        // Find the first input inside the conditional element and focus on it
+        siblingInputs.find("input").first().focus();
     });
     
     $(".has__no__conditional__element").on('click', function () {

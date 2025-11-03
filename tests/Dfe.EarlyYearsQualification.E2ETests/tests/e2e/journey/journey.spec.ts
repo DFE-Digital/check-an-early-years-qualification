@@ -39,7 +39,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await page.click("#question-submit");
         
         await checkUrl(page, "/help/confirmation");
-        await isVisible(page, "#success-message");
+        await isVisible(page, ".govuk-panel__title");
         await isVisible(page, "#help-confirmation-body");
     });
 
@@ -64,7 +64,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await page.click("#question-submit");
 
         await checkUrl(page, "/help/confirmation");
-        await isVisible(page, "#success-message");
+        await isVisible(page, ".govuk-panel__title");
         await isVisible(page, "#help-confirmation-body");
     });
 

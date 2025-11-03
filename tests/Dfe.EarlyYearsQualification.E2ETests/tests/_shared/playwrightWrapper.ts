@@ -74,8 +74,8 @@ export async function checkError(page: Page, locator: string, expectedText: stri
 
 export async function checkDisclaimer(page: Page, expectedText: string) {
     await checkText(page, ".govuk-warning-text__icon", "!");
-    await checkText(page, ".govuk-warning-text__text" + " > span", "Warning:");
-    await checkText(page, ".govuk-warning-text__text", `Warning:${expectedText}`);
+    await checkText(page, ".govuk-warning-text__text" + " > span", "Warning");
+    await checkText(page, ".govuk-warning-text__text", `Warning ${expectedText}`);
 }
 
 export async function checkValue(page: Page, locator: string, expectedValue: any) {
