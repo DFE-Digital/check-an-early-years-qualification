@@ -134,10 +134,19 @@ body {
     margin: 40px 0;
 }
 
+/* Resize  3 column summary list */
+.summary-list-action .govuk-summary-list__row .govuk-summary-list__key {
+    width: 59%;
+}
+
 @media (max-width: 640px) {
     #clear-search {
         width: 100%;
         margin: 0 auto;
+    }
+
+    .summary-list-action .govuk-summary-list__row .govuk-summary-list__key {
+        width: 100%;
     }
 }
 
