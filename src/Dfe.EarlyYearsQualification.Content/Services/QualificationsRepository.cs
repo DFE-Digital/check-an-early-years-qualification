@@ -54,10 +54,17 @@ public class QualificationsRepository(
 
     private async Task<List<Qualification>> GetAllQualifications()
     {
+        var ratioRequirements = await GetEntriesByType<RatioRequirement>();
+        if (ratioRequirements == null)
+        {
+            logger.LogWarning("No ratio requirements returned");
+            return [];
+        }
         var queryBuilder = QueryBuilder<Qualification>.New.ContentTypeIs(ContentTypes.Qualification).Include(2).Limit(1000);
         try
         {
             var qualifications = await ContentfulClient.GetEntries(queryBuilder);
+            qualifications.ToList().ForEach(x => x.RatioRequirements = ratioRequirements.ToList());
             // In the test environments, a qualificationId can be null when a new Qualification is in the progress of being created.
             // When the list of qualifications is being iterated on, it can cause an error hence the filter below.
             return qualifications.Where(x => !string.IsNullOrEmpty(x.QualificationId)).ToList();
