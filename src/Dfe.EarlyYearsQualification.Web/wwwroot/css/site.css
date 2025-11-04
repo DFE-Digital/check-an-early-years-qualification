@@ -134,7 +134,8 @@ body {
     margin: 40px 0;
 }
 
-.govuk-summary-list__row .govuk-summary-list__key {
+/* Resize  3 column summary list */
+.summary-list-action .govuk-summary-list__row .govuk-summary-list__key {
     width: 59%;
 }
 
@@ -144,7 +145,7 @@ body {
         margin: 0 auto;
     }
 
-    .govuk-summary-list__row .govuk-summary-list__key {
+    .summary-list-action .govuk-summary-list__row .govuk-summary-list__key {
         width: 100%;
     }
 }
