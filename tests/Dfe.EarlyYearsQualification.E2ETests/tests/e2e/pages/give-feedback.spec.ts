@@ -83,11 +83,11 @@ test.describe('A spec that tests the give feedback pages', {tag: "@e2e"}, () => 
     test("Checks the details are on the feedback confirmation page when no email was supplied", async ({page}) => {
         await page.goto("/give-feedback/confirmation");
 
-        await isVisible(page, "#success-message");
+        await isVisible(page, ".govuk-panel__title");
         await isVisible(page, "#main-confirmation-body");
         await isVisible(page, "#return-button");
 
-        await checkText(page, "#success-message" ,"Your feedback has been successfully submitted");
+        await checkText(page, ".govuk-panel__title" ,"Your feedback has been successfully submitted");
         await checkTextContains(page, "#main-confirmation-body" ,"Thank you for your feedback. We look at every piece of feedback and will use your comments to make the service better for everyone.");
         await checkText(page, "#return-button", "Home");
     });
@@ -96,13 +96,13 @@ test.describe('A spec that tests the give feedback pages', {tag: "@e2e"}, () => 
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22%22%2C%22WhenWasQualificationStarted%22%3A%22%22%2C%22WhenWasQualificationAwarded%22%3A%22%22%2C%22LevelOfQualification%22%3A%22%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A0%2C%22HasSubmittedEmailAddressInFeedbackFormQuestion%22%3Atrue%7D', journeyCookieName);
         await page.goto("/give-feedback/confirmation");
 
-        await isVisible(page, "#success-message");
+        await isVisible(page, ".govuk-panel__title");
         await isVisible(page, "#main-confirmation-body");
         await isVisible(page, "#optional-body-heading");
         await isVisible(page, "#optional-confirmation-body");
         await isVisible(page, "#return-button");
 
-        await checkText(page, "#success-message" ,"Your feedback has been successfully submitted");
+        await checkText(page, ".govuk-panel__title" ,"Your feedback has been successfully submitted");
         await checkTextContains(page, "#main-confirmation-body" ,"Thank you for your feedback. We look at every piece of feedback and will use your comments to make the service better for everyone.");
         await checkTextContains(page, "#optional-body-heading" ,"What happens next");
         await checkTextContains(page, "#optional-confirmation-body" ,"As you agreed to be contacted about future research, someone from our research team may contact you by email.");

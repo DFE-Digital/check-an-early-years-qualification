@@ -88,9 +88,7 @@
             await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel{ WarningText = Model.InformationMessage });
 
             <div class="govuk-form-group">
-                <button id="pre-check-submit" type="submit" class="govuk-button" data-module="govuk-button">
-                    @Model.CtaButtonText
-                </button>
+                <govuk-button id="pre-check-submit" type="submit">@Model.CtaButtonText</govuk-button>
             </div>
         }
     </div>

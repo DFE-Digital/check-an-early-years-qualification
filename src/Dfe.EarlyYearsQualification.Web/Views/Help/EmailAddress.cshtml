@@ -1,5 +1,4 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels
-@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
 @model EmailAddressPageViewModel
 
 @{
@@ -19,7 +18,7 @@
             await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel);
         }
 
-        @using (Html.BeginForm("email-address", "help", FormMethod.Post, new { id = "email-address-form" }))
+        @using (Html.BeginForm("EmailAddress", "Help", FormMethod.Post, new { id = "email-address-form" }))
         {
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasEmailAddressError ? "govuk-form-group--error" : "")">
                 <h1 class="govuk-heading-xl govuk-label-wrapper govuk-!-margin-bottom-3" id="email-address-heading">
@@ -38,13 +37,11 @@
                         </span>@Model.EmailAddressErrorMessage
                     </p>
                 }
-                @Html.TextBoxFor(x => x.EmailAddress, new { @class = "govuk-input", aria_describedby = "email-address-heading" })
+                @Html.TextBoxFor(x => x.EmailAddress, new { @class = "govuk-input", aria_describedby = "email-address-heading", autocomplete = "on" })
             </div>
 
             <div class="govuk-form-group">
-                <button id="question-submit" type="submit" class="govuk-button" data-module="govuk-button">
-                    @Model.CtaButtonText
-                </button>
+                <govuk-button id="question-submit" type="submit">@Model.CtaButtonText</govuk-button>
             </div>
         }
     </div>

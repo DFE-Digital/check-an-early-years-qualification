@@ -12,14 +12,14 @@
                         <h2 class="ud-feedback__prompt-question">@Model.Question</h2>
                         <ul class="ud-feedback__option-list">
                             <li class="ud-feedback__option-list-item">
-                                <button id="ud-page-is-useful" class="govuk-button ud-feedback__button">
+                                <button id="yes-button" class="govuk-button ud-feedback__button">
                                     @Model.YesButtonText
                                     <span
                                         class="govuk-visually-hidden">@Model.YesButtonSubText</span>
                                 </button>
                             </li>
                             <li class="ud-feedback__option-list-item">
-                                <button id="ud-page-is-not-useful" class="govuk-button ud-feedback__button">
+                                <button id="no-button" class="govuk-button ud-feedback__button">
                                     @Model.NoButtonText
                                     <span class="govuk-visually-hidden">@Model.NoButtonSubText</span>
                                 </button>
@@ -29,8 +29,8 @@
                 </div>
                 <div
                     class="ud-feedback__prompt-questions ud-feedback__prompt-questions--get-help feedback-buttons">
-                    <a href="@Model.HelpButtonLink" id="ud-get-help"
-                       class="govuk-button ud-feedback__button">@Model.HelpButtonText</a>
+                    <button id="ud-get-help" data-link=@(Model.HelpButtonLink)
+                       class="govuk-button ud-feedback__button">@Model.HelpButtonText</button>
                 </div>
             </div>
         </div>

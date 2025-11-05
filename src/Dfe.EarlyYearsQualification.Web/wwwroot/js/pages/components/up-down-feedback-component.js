@@ -2,8 +2,9 @@
     const improveServiceBody = $("#ud-improve-service");
     const prompt = $("#ud-prompt");
     const cancelButton = $("#ud-cancel");
-    const pageIsUsefulButton = $("#ud-page-is-useful");
-    const pageIsNotUsefulButton = $("#ud-page-is-not-useful");
+    const yesButton = $("#yes-button");
+    const noButton = $("#no-button");
+    const getHelpWithServiceButton = $("#ud-get-help");
     const hasUserGotWhatTheyNeededTodayEndpoint = "/api/setHasUserGotWhatTheyNeededToday";
     
     // If the prompt is showing set the initial state
@@ -31,18 +32,22 @@
 
         showInitialPrompt();
 
-        pageIsUsefulButton.on('click', function (e) {
+        yesButton.on('click', function (e) {
             e.preventDefault();
             showImproveServiceBody();
             $.post(hasUserGotWhatTheyNeededTodayEndpoint, { hasUserGotWhatTheyNeededToday: true });
         });
 
-        pageIsNotUsefulButton.on('click', function (e) {
+        noButton.on('click', function (e) {
             e.preventDefault();
             showImproveServiceBody();
             $.post(hasUserGotWhatTheyNeededTodayEndpoint, { hasUserGotWhatTheyNeededToday: false });
         });
 
+        getHelpWithServiceButton.on('click', function () {
+            location.href = getHelpWithServiceButton.data().link;
+        });
+        
         cancelButton.on('click', function (e) {
             e.preventDefault();
             showInitialPrompt();

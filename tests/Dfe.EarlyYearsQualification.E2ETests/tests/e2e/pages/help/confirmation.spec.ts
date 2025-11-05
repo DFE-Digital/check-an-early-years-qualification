@@ -23,7 +23,7 @@ test.describe('A spec that tests the confirmation page', { tag: "@e2e" }, () => 
     });
 
     test("Checks the content is on the page", async ({ page }) => {
-        await checkText(page, "#success-message", "Message sent");
+        await checkText(page, ".govuk-panel__title", "Message sent");
         await checkText(page, "#main-content > div > div > p", "Your message was successfully sent to the Check an early years qualification team.");
         await checkText(page, "#help-confirmation-body-heading", "What happens next");
 
