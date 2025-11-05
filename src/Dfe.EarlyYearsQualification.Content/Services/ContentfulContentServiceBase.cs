@@ -43,7 +43,8 @@ public abstract class ContentfulContentServiceBase
               { typeof(HelpQualificationDetailsPage), ContentTypes.HelpQualificationDetailsPage },
               { typeof(HelpProvideDetailsPage), ContentTypes.HelpProvideDetailsPage },
               { typeof(HelpEmailAddressPage), ContentTypes.HelpEmailAddressPage },
-              { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage }
+              { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage },
+              { typeof(RatioRequirement), ContentTypes.RatioRequirement }
           };
 
     protected readonly ILogger Logger;

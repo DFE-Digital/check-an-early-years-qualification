@@ -30,4 +30,5 @@ public static class ContentTypes
     public const string HelpProvideDetailsPage = "helpProvideDetailsPage";
     public const string HelpEmailAddressPage = "helpEmailAddress";
     public const string HelpConfirmationPage = "helpConfirmationPage";
+    public const string RatioRequirement =  "ratioRequirement";
 }

@@ -1,4 +1,3 @@
 @model Dfe.EarlyYearsQualification.Web.Models.Content.NavigationLinkModel
 
-<a id="back-button" href="@Model.Href" class="govuk-back-link govuk-!-display-none-print"
-   target=@(Model.OpenInNewTab ? "_blank" : "")>@Model.DisplayText</a>
+<govuk-back-link id="back-button" class="govuk-!-display-none-print" href="@Model.Href" target=@(Model.OpenInNewTab ? "_blank" : "")>@Model.DisplayText</govuk-back-link>

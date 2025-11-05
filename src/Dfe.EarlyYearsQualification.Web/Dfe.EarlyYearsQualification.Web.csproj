@@ -28,8 +28,4 @@
         <ProjectReference Include="..\Dfe.EarlyYearsQualification.Mock\Dfe.EarlyYearsQualification.Mock.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Views\Shared\Components\BackButton\" />
-    </ItemGroup>
-
 </Project>
