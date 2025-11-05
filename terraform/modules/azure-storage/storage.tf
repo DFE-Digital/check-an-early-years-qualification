@@ -49,13 +49,6 @@ resource "azurerm_storage_account" "sa" {
       tags["Service Offering"]
     ]
   }
-
-  #checkov:skip=CKV_AZURE_206:GRS not required
-  #checkov:skip=CKV_AZURE_59:Argument has been deprecated
-  #checkov:skip=CKV2_AZURE_18:Microsoft Managed keys are sufficient
-  #checkov:skip=CKV2_AZURE_1:Microsoft Managed keys are sufficient
-  #checkov:skip=CKV2_AZURE_38:Soft-delete not required
-  #checkov:skip=CKV2_AZURE_33:VNet not configured
 }
 
 resource "azurerm_storage_account_network_rules" "sa_network_rules" {
@@ -76,8 +69,6 @@ resource "azurerm_storage_container" "data_protection" {
     # ...reports storage_account_name as deprecated, but this ignore_changes block is necessary here.
     # Without it, the switch from storage_account_name to storage_account_id causes destruction and recreation.
   }
-
-  #checkov:skip=CKV2_AZURE_21:Logging not required
 }
 
 resource "azurerm_key_vault_secret" "storage_connection_string" {

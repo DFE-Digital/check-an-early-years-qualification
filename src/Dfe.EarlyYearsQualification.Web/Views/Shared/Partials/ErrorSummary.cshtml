@@ -1,19 +1,9 @@
 @model ErrorSummaryModel
 
-<div id="error-banner" class="govuk-error-summary" data-module="govuk-error-summary">
-    <div role="alert">
-        <h2 class="govuk-error-summary__title">
-            @Model.ErrorBannerHeading
-        </h2>
-        <div class="govuk-error-summary__body">
-            <ul class="govuk-list govuk-error-summary__list">
-                @foreach (var link in Model.ErrorSummaryLinks)
-                {
-                    <li>
-                        <a id="error-banner-link-@{@link.ElementLinkId}" href="#@{@link.ElementLinkId}">@Html.Raw(link.ErrorBannerLinkText)</a>
-                    </li>
-                }
-            </ul>
-        </div>
-    </div>
-</div>
+<govuk-error-summary id="error-banner">
+    <govuk-error-summary-title>@Model.ErrorBannerHeading</govuk-error-summary-title>
+    @foreach (var link in Model.ErrorSummaryLinks)
+    {
+        <govuk-error-summary-item id="error-banner-link-@{@link.ElementLinkId}" href="#@{@link.ElementLinkId}">@Html.Raw(link.ErrorBannerLinkText)</govuk-error-summary-item>
+    }
+</govuk-error-summary>

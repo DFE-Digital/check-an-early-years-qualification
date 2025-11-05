@@ -134,10 +134,19 @@ body {
     margin: 40px 0;
 }
 
+/* Resize  3 column summary list */
+.summary-list-action .govuk-summary-list__row .govuk-summary-list__key {
+    width: 59%;
+}
+
 @media (max-width: 640px) {
     #clear-search {
         width: 100%;
         margin: 0 auto;
+    }
+
+    .summary-list-action .govuk-summary-list__row .govuk-summary-list__key {
+        width: 100%;
     }
 }
 
@@ -506,8 +515,8 @@ body {
 }
 
 .feedback-container > p {
-    margin-bottom: 0!important;
-    font-size: 16px;
+    margin-bottom: 0 !important;
+    font-size: 1rem;
 }
 
 .feedback-container.mobile-only {

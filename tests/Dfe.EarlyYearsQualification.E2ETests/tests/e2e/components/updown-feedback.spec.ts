@@ -24,26 +24,26 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await page.locator("#accept-cookies-button").click();
             await isVisible(page, "#ud-feedback");
             await isVisible(page, "#ud-prompt");
-            await isVisible(page, "#ud-page-is-useful");
-            await isVisible(page, "#ud-page-is-not-useful");
+            await isVisible(page, "#yes-button");
+            await isVisible(page, "#no-button");
             await isVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isNotVisible(page, "#ud-improve-service");
             await isNotVisible(page, "#ud-cancel");
             await checkText(page, ".ud-feedback__prompt-question", "Did you get everything you needed today?");
-            await checkText(page, "#ud-page-is-useful", "Yes this service is useful");
-            await checkText(page, "#ud-page-is-not-useful", "No this service is not useful");
+            await checkText(page, "#yes-button", "Yes this service is useful");
+            await checkText(page, "#no-button", "No this service is not useful");
             await checkText(page, "#ud-get-help", "Get help with this page");
         });
 
         test(`Checks that the is-useful displays useful response at the URL: ${url}`, async ({page}) => {
             await page.goto(url);
             await page.locator("#accept-cookies-button").click();
-            await page.locator("#ud-page-is-useful").click();
+            await page.locator("#yes-button").click();
             await isVisible(page, "#ud-feedback");
             await isNotVisible(page, "#ud-prompt");
-            await isNotVisible(page, "#ud-page-is-useful");
-            await isNotVisible(page, "#ud-page-is-not-useful");
+            await isNotVisible(page, "#yes-button");
+            await isNotVisible(page, "#no-button");
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
@@ -58,11 +58,11 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await page.goto(url);
             await checkUrl(page, url);
             await page.locator("#accept-cookies-button").click();
-            await page.locator("#ud-page-is-not-useful").click();
+            await page.locator("#no-button").click();
             await isVisible(page, "#ud-feedback");
             await isNotVisible(page, "#ud-prompt");
-            await isNotVisible(page, "#ud-page-is-useful");
-            await isNotVisible(page, "#ud-page-is-not-useful");
+            await isNotVisible(page, "#yes-button");
+            await isNotVisible(page, "#no-button");
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
@@ -76,8 +76,8 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
 
             await isVisible(page, "#ud-feedback");
             await isVisible(page, "#ud-prompt");
-            await isVisible(page, "#ud-page-is-useful");
-            await isVisible(page, "#ud-page-is-not-useful");
+            await isVisible(page, "#yes-button");
+            await isVisible(page, "#no-button");
             await isVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isNotVisible(page, "#ud-improve-service");
@@ -106,8 +106,8 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await page.locator("#reject-cookies-button").click();
             await isVisible(page, "#ud-feedback");
             await isNotVisible(page, "#ud-prompt");
-            await isNotVisible(page, "#ud-page-is-useful");
-            await isNotVisible(page, "#ud-page-is-not-useful");
+            await isNotVisible(page, "#yes-button");
+            await isNotVisible(page, "#no-button");
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
@@ -132,8 +132,8 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await page.goto(url);
             await isVisible(page, "#ud-feedback");
             await isNotVisible(page, "#ud-prompt");
-            await isNotVisible(page, "#ud-page-is-useful");
-            await isNotVisible(page, "#ud-page-is-not-useful");
+            await isNotVisible(page, "#yes-button");
+            await isNotVisible(page, "#no-button");
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");
@@ -159,8 +159,8 @@ test.describe('A spec that tests that the updown-feedback shows on all pages. Co
             await page.goto(url);
             await isVisible(page, "#ud-feedback");
             await isNotVisible(page, "#ud-prompt");
-            await isNotVisible(page, "#ud-page-is-useful");
-            await isNotVisible(page, "#ud-page-is-not-useful");
+            await isNotVisible(page, "#yes-button");
+            await isNotVisible(page, "#no-button");
             await isNotVisible(page, "#ud-get-help");
             await isNotVisible(page, "#ud-prompt-success");
             await isVisible(page, "#ud-improve-service");

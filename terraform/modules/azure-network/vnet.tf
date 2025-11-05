@@ -31,8 +31,6 @@ resource "azurerm_subnet" "webapp_snet" {
       actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   }
-
-  #checkov:skip=CKV2_AZURE_31:NSG not required
 }
 
 # Create Subnet for App Gateway
@@ -46,8 +44,6 @@ resource "azurerm_subnet" "agw_snet" {
   address_prefixes                  = ["172.1.3.0/24"]
   service_endpoints                 = ["Microsoft.Storage", "Microsoft.Web"]
   private_endpoint_network_policies = "Enabled"
-
-  #checkov:skip=CKV2_AZURE_31:NSG not required
 }
 
 # Create Subnet for Redis Cache
