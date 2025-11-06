@@ -29,20 +29,22 @@ public class ContentfulContentService(
         return startPageEntries.First();
     }
 
-    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear)
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage)
     {
         var qualificationDetailsPageType = ContentTypeLookup[typeof(QualificationDetailsPage)];
 
         var queryBuilder = new QueryBuilder<QualificationDetailsPage>()
-            .ContentTypeIs(qualificationDetailsPageType)
-            .Include(3)
-            .FieldEquals("fields.isPractitionerSpecificPage", userIsCheckingOwnQualification ? "1" : "0");
+                           .ContentTypeIs(qualificationDetailsPageType)
+                           .Include(3)
+                           .FieldEquals("fields.isPractitionerSpecificPage",
+                                        userIsCheckingOwnQualification ? "1" : "0");
 
         if (userIsCheckingOwnQualification)
         {
             queryBuilder = queryBuilder
             .FieldEquals("fields.level", level.ToString())
-            .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0");
+            .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0")
+            .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0");
         }
 
         var qualificationDetailsPageEntries = await GetEntriesByType(queryBuilder);

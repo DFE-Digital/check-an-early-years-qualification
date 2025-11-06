@@ -114,7 +114,7 @@ public class MockContentfulService : IContentService
                                      });
     }
     
-    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear)
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage)
     {
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =

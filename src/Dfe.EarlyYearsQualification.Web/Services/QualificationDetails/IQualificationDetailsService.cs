@@ -7,7 +7,8 @@ public interface IQualificationDetailsService
 {
     Task<List<Qualification>> GetFilteredQualifications();
 
-    Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content, List<Qualification> qualifications);
+    Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content,
+                                               List<Qualification> qualifications);
 
     bool HasStartDate();
 
@@ -23,11 +24,14 @@ public interface IQualificationDetailsService
 
     Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
                                                            Qualification qualification);
+
     Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model,
                                           Qualification qualification);
+
     // ReSharper disable once IdentifierTypo
     Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model,
                                             Qualification qualification);
+
     Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model);
 
     (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(
@@ -48,9 +52,9 @@ public interface IQualificationDetailsService
     void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPageLabels content);
 
     void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPageLabels content);
-    
+
     Task SetRequirementOverrides(Qualification qualification, QualificationDetailsModel model);
-    
+
     Task SetDefaultCardContentForApprovedQualifications(Qualification qualification, QualificationDetailsModel model);
 
     bool GetUserIsCheckingOwnQualification();
@@ -59,5 +63,9 @@ public interface IQualificationDetailsService
 
     (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
 
-    Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear);
+    Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification,
+                                                                bool isFullAndRelevant, int level, int startMonth,
+                                                                int startYear, Qualification qualification,
+                                                                List<AdditionalRequirementAnswerModel>?
+                                                                    additionalRequirementAnswerModels);
 }

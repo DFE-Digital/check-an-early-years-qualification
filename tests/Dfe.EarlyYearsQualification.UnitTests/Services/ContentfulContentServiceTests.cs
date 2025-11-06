@@ -461,7 +461,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001);
+        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001, false);
 
         Logger.VerifyWarning("No qualification details page entry returned");
 
@@ -480,7 +480,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001);
+        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001, false);
 
         Logger.VerifyWarning("No qualification details page entry returned");
 
@@ -517,7 +517,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001);
+        var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001, false);
 
 
         result!.Labels.AwardingOrgLabel.Should().Be("Test Awarding Org Label");
@@ -543,7 +543,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetQualificationDetailsPage(true, true, 1, 6, 2013);
+        var result = await service.GetQualificationDetailsPage(true, true, 1, 6, 2013, false);
 
         Logger.VerifyWarning("No qualification details page entry returned");
 
@@ -562,7 +562,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetQualificationDetailsPage(true, true, 1, 6, 2013);
+        var result = await service.GetQualificationDetailsPage(true, true, 1, 6, 2013, false);
 
         Logger.VerifyWarning("No qualification details page entry returned");
 
@@ -647,7 +647,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
 
-        var result = await service.GetQualificationDetailsPage(true, true, 3, 3, 2001);
+        var result = await service.GetQualificationDetailsPage(true, true, 3, 3, 2001, false);
 
         result!.FromWhichYear.Should().Be("Feb-00");
         result.ToWhichYear.Should().Be("Mar-05");
@@ -689,7 +689,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
 
-        var result = await service.GetQualificationDetailsPage(true, true, 3, 2, 2015);
+        var result = await service.GetQualificationDetailsPage(true, true, 3, 2, 2015, false);
 
         Logger.VerifyError("No user is checking own qualification details page entry returned");
         result.Should().BeNull();
