@@ -193,7 +193,7 @@ public class MockContentfulServiceTests
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetQualificationDetailsPage(false, false, 3, 6, 2001);
+        var result = await contentfulService.GetQualificationDetailsPage(false, false, 3, 6, 2001, false);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<QualificationDetailsPage>();
         result.Labels.AwardingOrgLabel.Should().NotBeNullOrEmpty();
@@ -218,6 +218,7 @@ public class MockContentfulServiceTests
         result.Labels.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
         result.Labels.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
         result.Labels.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+        result.IsDegreeSpecificPage.Should().BeFalse();
     }
 
     [TestMethod]
@@ -225,7 +226,7 @@ public class MockContentfulServiceTests
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetQualificationDetailsPage(true, false, 3, 1, 2024);
+        var result = await contentfulService.GetQualificationDetailsPage(true, false, 3, 1, 2024, false);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<QualificationDetailsPage>();
         result.Labels.AwardingOrgLabel.Should().NotBeNullOrEmpty();
@@ -250,6 +251,7 @@ public class MockContentfulServiceTests
         result.Labels.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
         result.Labels.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
         result.Labels.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+        result.IsDegreeSpecificPage.Should().BeFalse();
     }
 
     [TestMethod]

@@ -24,7 +24,9 @@ public class QualificationDetailsController(
 
         var filteredQualifications = await qualificationDetailsService.GetFilteredQualifications();
 
-        var qualification = filteredQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId, StringComparison.OrdinalIgnoreCase));
+        var qualification =
+            filteredQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId,
+                                                    StringComparison.OrdinalIgnoreCase));
 
         if (qualification is null)
         {
@@ -118,7 +120,7 @@ public class QualificationDetailsController(
                                                                          .QtsQuestion);
 
         if (qualificationDetailsService.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification,
-                                                                                              details.AdditionalRequirementAnswers))
+             details.AdditionalRequirementAnswers))
         {
             // Remove the additional requirements that they didn't answer following the bypass.
             details.AdditionalRequirementAnswers!.RemoveAll(x => x.Question != qtsQuestion.Question);
@@ -136,10 +138,12 @@ public class QualificationDetailsController(
 
     private async Task<QualificationDetailsPage?> GetPageContent(Qualification qualification)
     {
-        var model = new QualificationDetailsModel()
-        {
-            AdditionalRequirementAnswers = qualificationDetailsService.MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions)
-        };
+        var model = new QualificationDetailsModel
+                    {
+                        AdditionalRequirementAnswers =
+                            qualificationDetailsService.MapAdditionalRequirementAnswers(qualification
+                                .AdditionalRequirementQuestions)
+                    };
 
         var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
         var isFullAndRelevant = validateAdditionalRequirementQuestions.isValid;
@@ -150,12 +154,14 @@ public class QualificationDetailsController(
         if (level is not null && startMonth is not null && startYear is not null)
         {
             return await qualificationDetailsService.GetQualificationDetailsPage(
-                isUserCheckingTheirOwnQualification,
-                isFullAndRelevant,
-                level.Value,
-                startMonth.Value,
-                startYear.Value
-            );
+                        isUserCheckingTheirOwnQualification,
+                        isFullAndRelevant,
+                        level.Value,
+                        startMonth.Value,
+                        startYear.Value,
+                        qualification,
+                        model.AdditionalRequirementAnswers
+                       );
         }
 
         return null;

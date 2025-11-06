@@ -58,13 +58,27 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
-    public async Task GetDetailsPage_Calls_Content_GetDetailsPage()
+    public async Task GetDetailsPage_QualificationIsADegree_GetDetailsPage()
     {
         var sut = GetSut();
 
-        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001);
+        var qualification = new Qualification("TST001", "Qual Name", "Awarding Org", 6) {  IsTheQualificationADegree = true };
 
-        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001), Times.Once);
+        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, qualification, null);
+
+        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, true), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task GetDetailsPage_QualificationIsNotADegree_GetDetailsPage()
+    {
+        var sut = GetSut();
+
+        var qualification = new Qualification("TST001", "Qual Name", "Awarding Org", 3);
+
+        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, qualification, null);
+
+        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, false), Times.Once);
     }
 
     [TestMethod]

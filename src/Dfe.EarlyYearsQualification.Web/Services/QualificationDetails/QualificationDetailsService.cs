@@ -28,9 +28,14 @@ public class QualificationDetailsService(
         return await qualificationSearchService.GetFilteredQualifications();
     }
 
-    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear)
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification,
+                                                                             bool isFullAndRelevant, int level, int startMonth,
+                                                                             int startYear, Qualification qualification,
+                                                                             List<AdditionalRequirementAnswerModel>?
+                                                                                 additionalRequirementAnswerModels)
     {
-        return await contentService.GetQualificationDetailsPage(userIsCheckingOwnQualification, isFullAndRelevant, level, startMonth, startYear);
+        var getDegreeSpecificPage = qualification.IsTheQualificationADegree || IsQts(qualification, additionalRequirementAnswerModels);
+        return await contentService.GetQualificationDetailsPage(userIsCheckingOwnQualification, isFullAndRelevant, level, startMonth, startYear, getDegreeSpecificPage);
     }
 
     public bool HasStartDate()

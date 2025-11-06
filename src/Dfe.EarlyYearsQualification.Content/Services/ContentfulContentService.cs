@@ -1,4 +1,5 @@
 ﻿using Contentful.Core;
+using Contentful.Core.Models;
 using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
@@ -29,20 +30,24 @@ public class ContentfulContentService(
         return startPageEntries.First();
     }
 
-    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear)
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(
+        bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear,
+        bool isDegreeSpecificPage)
     {
         var qualificationDetailsPageType = ContentTypeLookup[typeof(QualificationDetailsPage)];
 
         var queryBuilder = new QueryBuilder<QualificationDetailsPage>()
-            .ContentTypeIs(qualificationDetailsPageType)
-            .Include(3)
-            .FieldEquals("fields.isPractitionerSpecificPage", userIsCheckingOwnQualification ? "1" : "0");
+                           .ContentTypeIs(qualificationDetailsPageType)
+                           .Include(3)
+                           .FieldEquals("fields.isPractitionerSpecificPage",
+                                        userIsCheckingOwnQualification ? "1" : "0");
 
         if (userIsCheckingOwnQualification)
         {
             queryBuilder = queryBuilder
-            .FieldEquals("fields.level", level.ToString())
-            .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0");
+                           .FieldEquals("fields.level", level.ToString())
+                           .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0")
+                           .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0");
         }
 
         var qualificationDetailsPageEntries = await GetEntriesByType(queryBuilder);
@@ -56,23 +61,7 @@ public class ContentfulContentService(
         // Filter out content where date is not between FromWhichYear and ToWhichYear
         if (userIsCheckingOwnQualification)
         {
-            var enteredStartDate = new DateOnly(startYear, startMonth, dateValidator.GetDay());
-
-            foreach (var page in qualificationDetailsPageEntries)
-            {
-                var pageStartDate = dateValidator.GetDate(page.FromWhichYear);
-                var pageEndDate = dateValidator.GetDate(page.ToWhichYear);
-
-                var result = dateValidator.ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, page);
-
-                if (result is not null)
-                {
-                    return result;
-                }
-            }
-
-            Logger.LogError("No user is checking own qualification details page entry returned");
-            return null;
+            return GetFilteredPractitionerQualificationDetailsPage(startMonth, startYear, qualificationDetailsPageEntries);
         }
 
         return qualificationDetailsPageEntries.FirstOrDefault();
@@ -254,7 +243,8 @@ public class ContentfulContentService(
                            .ContentTypeIs(cannotFindQualificationPageType)
                            .Include(2)
                            .FieldEquals("fields.level", level.ToString())
-                           .FieldEquals("fields.isPractitionerSpecificPage",  isUserCheckingTheirOwnQualification ? "1" : "0");
+                           .FieldEquals("fields.isPractitionerSpecificPage",
+                                        isUserCheckingTheirOwnQualification ? "1" : "0");
 
         var cannotFindQualificationPages = await GetEntriesByType(queryBuilder);
         if (cannotFindQualificationPages is null || !cannotFindQualificationPages.Any())
@@ -302,9 +292,9 @@ public class ContentfulContentService(
 
     public async Task<Footer?> GetFooter()
     {
-        var footerType = ContentTypeLookup[typeof(Footer)]; 
+        var footerType = ContentTypeLookup[typeof(Footer)];
         var queryBuilder = new QueryBuilder<Footer>().ContentTypeIs(footerType)
-                                                                   .Include(2);
+                                                     .Include(2);
         var footer = await GetEntriesByType(queryBuilder);
 
         // ReSharper disable once InvertIf
@@ -321,7 +311,7 @@ public class ContentfulContentService(
     {
         ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
         ContentfulClient.SerializerSettings.Converters.Add(new FeedbackFormQuestionConverter());
-        var feedbackFormPageType = ContentTypeLookup[typeof(FeedbackFormPage)]; 
+        var feedbackFormPageType = ContentTypeLookup[typeof(FeedbackFormPage)];
         var queryBuilder = new QueryBuilder<FeedbackFormPage>().ContentTypeIs(feedbackFormPageType)
                                                                .Include(3);
         var feedbackFormPages = await GetEntriesByType(queryBuilder);
@@ -421,6 +411,34 @@ public class ContentfulContentService(
         }
 
         return helpConfirmationPage.First();
+    }
+    
+    private QualificationDetailsPage? GetFilteredPractitionerQualificationDetailsPage(
+        int startMonth, int startYear, ContentfulCollection<QualificationDetailsPage> qualificationDetailsPageEntries)
+    {
+        var enteredStartDate = new DateOnly(startYear, startMonth, dateValidator.GetDay());
+
+        foreach (var page in qualificationDetailsPageEntries)
+        {
+            var pageStartDate = dateValidator.GetDate(page.FromWhichYear);
+            var pageEndDate = dateValidator.GetDate(page.ToWhichYear);
+
+            // Start & End dates are optional. If the results only contains 1 page, return that.
+            if (qualificationDetailsPageEntries.Items.Count() == 1 && pageStartDate is null && pageEndDate is null)
+            {
+                return page;
+            }
+
+            var result = dateValidator.ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, page);
+
+            if (result is not null)
+            {
+                return result;
+            }
+        }
+
+        Logger.LogError("No user is checking own qualification details page entry returned");
+        return null;
     }
 
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(
