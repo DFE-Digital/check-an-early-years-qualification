@@ -182,6 +182,7 @@ public class MockContentfulService : IContentService
             new QualificationDetailsPage
             {
                 IsPractitionerSpecificPage = false,
+                IsDegreeSpecificPage = false,
                 IsFullAndRelevant = true,
                 FromWhichYear = "Sep-14",
                 ToWhichYear = "Aug-19",
@@ -194,6 +195,7 @@ public class MockContentfulService : IContentService
             new QualificationDetailsPage
             {
                 IsPractitionerSpecificPage = true,
+                IsDegreeSpecificPage = false,
                 IsFullAndRelevant = true,
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
@@ -206,6 +208,7 @@ public class MockContentfulService : IContentService
             new QualificationDetailsPage
             {
                 IsPractitionerSpecificPage = true,
+                IsDegreeSpecificPage = false,
                 IsFullAndRelevant = false,
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
