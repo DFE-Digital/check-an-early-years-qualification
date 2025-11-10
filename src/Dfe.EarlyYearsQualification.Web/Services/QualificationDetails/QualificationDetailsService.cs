@@ -237,7 +237,11 @@ public class QualificationDetailsService(
     /// <param name="qualification">The qualification data from Contentful</param>
     public async Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model, Qualification qualification)
     {
-        if (model.RatioRequirements.ApprovedForLevel6 != QualificationApprovalStatus.Approved && qualification is { QualificationLevel: 6, IsTheQualificationADegree: true })
+        var isQts = IsQts(qualification, model.AdditionalRequirementAnswers);
+        var isPractitioner = userJourneyCookieService.GetIsUserCheckingTheirOwnQualification();
+        if (isPractitioner == "yes" && model.RatioRequirements.ApprovedForLevel6 != QualificationApprovalStatus.Approved 
+                                    && qualification is { QualificationLevel: 6, IsTheQualificationADegree: true }
+                                    && !isQts)
         {
             model.RatioRequirements.ApprovedForLevel6 = QualificationApprovalStatus.PossibleRouteAvailable;
             var requirementsForLevel6 = GetRatioProperty<Document>(nameof(RatioRequirement.EyittRouteAvailable),

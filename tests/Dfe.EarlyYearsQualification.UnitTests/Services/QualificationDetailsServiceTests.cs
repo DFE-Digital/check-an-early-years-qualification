@@ -1525,6 +1525,7 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task QualificationMayBeEligibleForEyitt_Level6_NotFullAndRelevant_IsADegree_SetsLevel6Requirements()
     {
+        _mockUserJourneyCookieService.Setup(x => x.GetIsUserCheckingTheirOwnQualification()).Returns("yes");
         var details = new QualificationDetailsModel
                       {
                           RatioRequirements = new RatioRequirementModel

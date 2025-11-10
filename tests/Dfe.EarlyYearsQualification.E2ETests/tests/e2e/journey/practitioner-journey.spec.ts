@@ -14,7 +14,11 @@ import {
     confirmQualification,
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
-    checkDetailsPage
+    checkDetailsPage,
+    checkDetailsInset,
+    checkRatiosHeading,
+    checkLevelRatioDetails,
+    RatioStatus
 } from '../../_shared/playwrightWrapper';
 
 test.describe('A spec used to test the various routes through the practitioner journey', {tag: "@e2e"}, () => {
@@ -76,5 +80,35 @@ test.describe('A spec used to test the various routes through the practitioner j
         await checkDetailsPage(page, "EYQ-240");
         await checkText(page, "#requirements-heading", "This is F&R practitioner heading", 0);
         await checkText(page, "#requirements-heading ~ p", "This is F&R practitioner text", 0);
+    });
+
+    test('Checks level 6 degree not approved shows EYITT content', async ({
+                                                                              page,
+                                                                              context
+                                                                          }) => {
+
+        await whereWasTheQualificationAwarded(page, "#england");
+        await whenWasQualificationStarted(page, "1", "2012", "7", "2016");
+        await whatLevelIsTheQualification(page, 6);
+        await whatIsTheAwardingOrganisation(page, 1);
+        await checkYourAnswersPage(page);
+        await selectQualification(page, "EYQ-321");
+        await confirmQualification(page, "#yes");
+        await processAdditionalRequirement(page, "EYQ-321", 1, "#no");
+        await processAdditionalRequirement(page, "EYQ-321", 2, "#yes");
+        await confirmAdditonalRequirementsAnswers(page, "EYQ-321");
+        await checkDetailsPage(page, "EYQ-321");
+
+        await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
+        await checkRatiosHeading(page, "Test ratio heading");
+
+        await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
+            detailText: "Level 3 must English must PFA"
+        });
+        await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
+            detailText: "Level 2 must PFA"
+        });
+        await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: "Summary card default content"  });
+        await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.PossibleRouteAvailable, { detailText: 'This is the EYITT content' });
     });
 });
