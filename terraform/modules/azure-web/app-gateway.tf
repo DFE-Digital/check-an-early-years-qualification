@@ -123,8 +123,8 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   autoscale_configuration {
-    min_capacity = 2
-    max_capacity = 10
+    min_capacity = var.environment == "production" ? 2 : var.environment == "staging" ? 1 : 1
+    max_capacity = var.environment == "production" ? 10 : var.environment == "staging" ? 4 : 1
   }
 
   gateway_ip_configuration {
