@@ -122,7 +122,7 @@ public class MockContentfulService : IContentService
         var ratioTextL3Ebr = ContentfulContentHelper.Paragraph("This is the ratio text L3 EBR");
         var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
 
-        var labels = new DetailsPageLabels()
+        var labels = new DetailsPageLabels
         {
             AwardingOrgLabel = "Awarding Org Label",
             DateOfCheckLabel = "Test Date Of Check Label",
@@ -177,7 +177,7 @@ public class MockContentfulService : IContentService
             QualificationNumberLabel = "Qualification Number (QN)"
         };
 
-        var qualificationDetailsPages = new List<QualificationDetailsPage>()
+        var qualificationDetailsPages = new List<QualificationDetailsPage>
         {
             new QualificationDetailsPage
             {
@@ -213,6 +213,19 @@ public class MockContentfulService : IContentService
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
                 Level = "3",
+                Name = "Test name",
+                RequirementsHeading = "This is NF&R practitioner heading",
+                RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
+                Labels = labels
+            },
+            new QualificationDetailsPage
+            {
+                IsPractitionerSpecificPage = true,
+                IsDegreeSpecificPage = false,
+                IsFullAndRelevant = true,
+                FromWhichYear = "Sep-11",
+                ToWhichYear = "Aug-17",
+                Level = "6",
                 Name = "Test name",
                 RequirementsHeading = "This is NF&R practitioner heading",
                 RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),

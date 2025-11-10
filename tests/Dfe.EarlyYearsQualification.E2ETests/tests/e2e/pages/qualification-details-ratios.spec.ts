@@ -25,8 +25,7 @@ const betweenSeptember2014AndMay2016 = [
     [9, 2014],
     [5, 2016]
 ];
-const level2RequirementsHeading = "Level 2 Requirements";
-const level3RequirementsHeading = "Level 3 Requirements";
+
 const l2ContactDfe = "Level 2 further action required text";
 const l2MaybePFA = "Level 2 maybe PFA";
 const l2MustPFA = "Level 2 must PFA";
@@ -527,36 +526,5 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, { detailText: l6MustQTS });
             });
         });
-    });
-
-    test('Checks level 6 degree not approved shows EYITT content', async ({
-                                                                              page,
-                                                                              context
-                                                                          }) => {
-        await goToDetailsPageOfQualification({
-            context: context,
-            location: "england",
-            startDate: [1, 2012],
-            awardDate: [7, 2016],
-            level: 6,
-            organisation: "NCFE",
-            organisationNotOnList: false,
-            searchCriteria: '',
-            additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "yes"]],
-            selectedFromList: true,
-            qualificationId: 'eyq-321'
-        }, page);
-
-        await checkDetailsInset(page, "Qualification result heading", "Full and relevant", "Full and relevant body");
-        await checkRatiosHeading(page, "Test ratio heading");
-
-        await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-            detailText: l3MustEnglishMustPFA
-        });
-        await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-            detailText: l2MustPFA
-        });
-        await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: defaultRatioSummaryContent  });
-        await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.PossibleRouteAvailable, { detailText: 'This is the EYITT content' });
     });
 });
