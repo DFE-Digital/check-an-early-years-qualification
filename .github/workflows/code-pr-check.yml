@@ -75,6 +75,9 @@ jobs:
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           use_mock_contentful: "false"
 
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+
       - name: Run Playwright validation tests
         uses: ./.github/actions/run-playwright-tests
         with:
