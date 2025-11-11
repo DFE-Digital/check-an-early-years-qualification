@@ -10,7 +10,10 @@ inputs:
     description: "Auth secret used by end-to-end tests"
     required: true
     type: string
-
+  use_mock_contentful:
+    description: "Use mock data or use published data from contentful"
+    default: "true"
+    type: string
 
 runs:
   using: composite
@@ -20,5 +23,6 @@ runs:
       shell: bash
       run: |
         dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
-        --UseMockContentful=true \
-        --ServiceAccess:Keys:0="${{ inputs.auth_secret }}" &
+        --UseMockContentful=${{ inputs.use_mock_contentful }} \
+        --ServiceAccess:Keys:0="${{ inputs.auth_secret }}" \
+        --ContentfulOptions:UsePreviewApi="${{ !inputs.use_mock_contentful }}" &
