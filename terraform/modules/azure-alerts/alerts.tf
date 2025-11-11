@@ -108,7 +108,7 @@ resource "azurerm_monitor_metric_alert" "http4xx_errors" {
   }
 }
 
-# Alert for Http5xx errors Avg >= 10
+# Alert for Http5xx errors Avg >= 1
 resource "azurerm_monitor_metric_alert" "http5xx_errors" {
   name                = "http5xx-alert"
   resource_group_name = var.resource_group
@@ -122,7 +122,7 @@ resource "azurerm_monitor_metric_alert" "http5xx_errors" {
     metric_name      = "Http5xx"
     aggregation      = "Average"
     operator         = "GreaterThanOrEqual"
-    threshold        = 10
+    threshold        = 1
   }
 
   action {
