@@ -23,6 +23,6 @@ runs:
       shell: bash
       run: |
         dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
-        --UseMockContentful=${{ inputs.use_mock_contentful }} \
+        --UseMockContentful="${{ inputs.use_mock_contentful }}" \
         --ServiceAccess:Keys:0="${{ inputs.auth_secret }}" \
         --ContentfulOptions:UsePreviewApi="${{ !inputs.use_mock_contentful }}" &
