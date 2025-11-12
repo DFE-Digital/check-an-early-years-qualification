@@ -83,6 +83,8 @@ jobs:
 
       - name: Run playwright tests with build
         uses: ./.github/actions/run-playwright-tests-with-build
+        with:
+           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
   # security-checks-local:
   #   name: Run baseline security checks locally

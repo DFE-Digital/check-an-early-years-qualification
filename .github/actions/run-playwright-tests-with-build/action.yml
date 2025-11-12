@@ -1,6 +1,11 @@
 name: Run playwright tests with build
 description: Run validation tests using Playwright
 
+inputs:
+  auth_secret:
+    required: true
+    description: 'The auth secret to use when running the test'
+
 runs:
   using: composite
   steps:
@@ -9,7 +14,7 @@ runs:
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       env:
         CI: true
-      run: npx playwright test --grep "@validation"
+      run: AUTH_SECRET=${{ inputs.auth_secret }} npx playwright test --grep "@validation"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
