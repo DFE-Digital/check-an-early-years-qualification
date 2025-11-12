@@ -76,15 +76,17 @@ jobs:
         with:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-          use_mock_contentful: "false"
 
       - name: Install playwright
         uses: ./.github/actions/install-playwright
 
-      - name: Run playwright tests with build
-        uses: ./.github/actions/run-playwright-tests-with-build
+      - name: Run Playwright validation tests
+        uses: ./.github/actions/run-playwright-tests
         with:
-           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          webapp_url: ${{ env.URL }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          test_type: "validation"
+          use_mock_contentful: "false"
 
   # security-checks-local:
   #   name: Run baseline security checks locally
