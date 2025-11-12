@@ -81,12 +81,8 @@ jobs:
       - name: Install playwright
         uses: ./.github/actions/install-playwright
 
-      - name: Run Playwright validation tests
-        uses: ./.github/actions/run-playwright-tests
-        with:
-          webapp_url: ${{ env.URL }}
-          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-          test_type: "validation"
+      - name: Run playwright tests with build
+        uses: ./.github/actions/run-playwright-tests-with-build
 
   # security-checks-local:
   #   name: Run baseline security checks locally
