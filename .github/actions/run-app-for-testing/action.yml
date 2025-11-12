@@ -11,8 +11,12 @@ inputs:
     required: true
     type: string
   use_mock_contentful:
-    description: "Use mock data or use published data from contentful"
+    description: "Use mock data"
     default: "true"
+    type: string
+  use_preview_api:
+    description: "Use preview API"
+    default: "false"
     type: string
 
 runs:
@@ -25,4 +29,4 @@ runs:
         dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
         --UseMockContentful="${{ inputs.use_mock_contentful }}" \
         --ServiceAccess:Keys:0="${{ inputs.auth_secret }}" \
-        --ContentfulOptions:UsePreviewApi="${{ !inputs.use_mock_contentful }}" &
+        --ContentfulOptions:UsePreviewApi="${{ inputs.use_preview_api }}" &

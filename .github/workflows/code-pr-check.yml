@@ -74,6 +74,7 @@ jobs:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           use_mock_contentful: "false"
+          use_preview_api: "true"
 
       - name: Install playwright
         uses: ./.github/actions/install-playwright
