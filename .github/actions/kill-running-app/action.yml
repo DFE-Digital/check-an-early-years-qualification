@@ -8,4 +8,4 @@ runs:
     - name: Kill running app
       shell: bash
       run: |
-        killall -KILL Dfe.EarlyYearsQualification.Web.exe
+        killall -KILL Dfe.EarlyYearsQualification.Web
