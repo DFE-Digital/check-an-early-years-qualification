@@ -87,6 +87,9 @@ jobs:
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           test_type: "validation"
           use_mock_contentful: "false"
+          azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
   # security-checks-local:
   #   name: Run baseline security checks locally

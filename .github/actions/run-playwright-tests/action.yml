@@ -15,6 +15,15 @@ inputs:
     description: "Use mock contentful data"
     default: "true"
     type: string
+  azure_tenant_id:
+    required: true
+    description: 'Tenant id'
+  azure_client_id:
+    required: true
+    description: 'Client id'
+  azure_client_secret:
+    required: true
+    description: 'Client secret'
 
 runs:
   using: composite
@@ -22,7 +31,7 @@ runs:
     - name: Run Playwright tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=${{ inputs.webapp_url }} DOMAIN=${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} USE_MOCK_CONTENTFUL=${{ inputs.use_mock_contentful }} npx playwright test --grep "@${{ inputs.test_type }}"
+      run: WEBAPP_URL=${{ inputs.webapp_url }} DOMAIN=${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} USE_MOCK_CONTENTFUL=${{ inputs.use_mock_contentful }} AZURE_TENANT_ID=${{ inputs.azure_tenant_id }} AZURE_CLIENT_ID=${{ inputs.azure_client_id }} AZURE_CLIENT_SECRET=${{ inputs.azure_client_secret }} npx playwright test --grep "@${{ inputs.test_type }}"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
