@@ -25,14 +25,17 @@ env:
   DOTNET_VERSION: 8
   SOLUTION_NAME: 'Dfe.EarlyYearsQualification.sln'
   URL: 'http://127.0.0.1:5000'
-  
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
 jobs:
 
   build-app:  
     name: Build, check and run tests
     runs-on: ubuntu-24.04
     environment: development
-
+        
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
