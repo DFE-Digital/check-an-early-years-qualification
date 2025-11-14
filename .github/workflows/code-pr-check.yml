@@ -43,46 +43,34 @@ jobs:
           dotnet_version: ${{ env.DOTNET_VERSION }}  
           solution_filename: ${{ env.SOLUTION_NAME }}
 
-      # - name: Run unit tests
-      #   uses: ./.github/actions/run-unit-tests
-      #   with:
-      #     solution_filename: ${{ env.SOLUTION_NAME }}
-
-      # - name: Run app for testing
-      #  uses: ./.github/actions/run-app-for-testing
-      #  with:
-      #    url: ${{ env.URL }}
-      #    auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-
-      # - name: Install playwright
-      #  uses: ./.github/actions/install-playwright
-        
-      # - name: Run Playwright snapshot tests
-      #   uses: ./.github/actions/run-playwright-snapshot-tests
-
-      # - name: Run Playwright e2e tests
-      #   uses: ./.github/actions/run-playwright-e2e-tests
-
-      # - name: Run Accessibility tests
-      #   uses: ./.github/actions/run-accessibility-tests
-      #   with:
-      #     url: ${{ env.URL }}
-      #     auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-
-      # - name: Kill running app
-      #  uses: ./.github/actions/kill-running-app
+      - name: Run unit tests
+        uses: ./.github/actions/run-unit-tests
+        with:
+          solution_filename: ${{ env.SOLUTION_NAME }}
 
       - name: Run app for testing
         uses: ./.github/actions/run-app-for-testing
         with:
-          url: ${{ env.URL }}
-          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+         url: ${{ env.URL }}
+         auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
       - name: Install playwright
         uses: ./.github/actions/install-playwright
+        
+      - name: Run Playwright snapshot tests
+        uses: ./.github/actions/run-playwright-snapshot-tests
 
-      - name: Run Playwright validation tests
-        uses: ./.github/actions/run-playwright-tests
+      - name: Run Playwright e2e tests
+        uses: ./.github/actions/run-playwright-e2e-tests
+
+      - name: Run Accessibility tests
+        uses: ./.github/actions/run-accessibility-tests
+        with:
+          url: ${{ env.URL }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+
+      - name: Run Playwright validation tests against development
+        uses: ./.github/actions/run-validation-tests-development
         with:
           webapp_url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
@@ -92,27 +80,27 @@ jobs:
           contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
           contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
 
-  # security-checks-local:
-  #   name: Run baseline security checks locally
-  #   runs-on: ubuntu-22.04
-  #   needs: build-app
+  security-checks-local:
+    name: Run baseline security checks locally
+    runs-on: ubuntu-22.04
+    needs: build-app
 
-  #   steps:
-  #     - name: Check out repository
-  #       uses: actions/checkout@v5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
 
-  #     - name: Run .Net Project
-  #       shell: bash
-  #       run: |
-  #         dotnet run --urls "http://localhost:5000" --project="src/Dfe.EarlyYearsQualification.Web" \
-  #         --UseMockContentful=true \
-  #         --ServiceAccess:IsPublic="true" &
+      - name: Run .Net Project
+        shell: bash
+        run: |
+          dotnet run --urls "http://localhost:5000" --project="src/Dfe.EarlyYearsQualification.Web" \
+          --UseMockContentful=true \
+          --ServiceAccess:IsPublic="true" &
 
-  #     - name: ZAP Scan
-  #       uses: zaproxy/action-baseline@v0.14.0
-  #       with:
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
-  #         target: http://localhost:5000
-  #         allow_issue_writing: false
-  #         artifact_name: local_scan_dev
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
+          target: http://localhost:5000
+          allow_issue_writing: false
+          artifact_name: local_scan_dev

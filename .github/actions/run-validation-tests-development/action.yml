@@ -1,0 +1,39 @@
+name: Run Playwright validation tests against development
+description: Run validation tests using Playwright against development
+
+inputs:
+  webapp_url:
+    required: true
+    description: 'The webapp url to run against'
+  auth_secret:
+    required: true
+    description: 'The auth secret to use when running the test'
+  test_type:
+    required: true
+    description: 'The type of test to run: smoke or validation'
+  use_mock_contentful:
+    description: "Use mock contentful data"
+    default: "true"
+  run_validation_tests:
+    description: "Run validation tests"
+    default: "false"
+  contentful_delivery_api_key:
+    description: "Contentful delivery api key"
+    required: true
+  contentful_space_id:
+    description: "Contentful space id"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Run Playwright tests
+      shell: bash
+      working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
+      run: WEBAPP_URL=${{ inputs.webapp_url }} DOMAIN=${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} USE_MOCK_CONTENTFUL=${{ inputs.use_mock_contentful }} RUN_VALIDATION_TESTS=${{ inputs.run_validation_tests }} CONTENTFUL_DELIVERY_API_KEY=${{ inputs.contentful_delivery_api_key }} CONTENTFUL_SPACE_ID=${{ inputs.contentful_space_id }} ASPNETCORE_ENVIRONMENT="development" npx playwright test --grep "@${{ inputs.test_type }}"
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30

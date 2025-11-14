@@ -11,26 +11,13 @@ inputs:
   test_type:
     required: true
     description: 'The type of test to run: smoke or validation'
-  use_mock_contentful:
-    description: "Use mock contentful data"
-    default: "true"
-  run_validation_tests:
-    description: "Run validation tests"
-    default: "false"
-  contentful_delivery_api_key:
-    description: "Contentful delivery api key"
-    required: true
-  contentful_space_id:
-    description: "Contentful space id"
-    required: true
-
 runs:
   using: composite
   steps:
     - name: Run Playwright tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=${{ inputs.webapp_url }} DOMAIN=${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} USE_MOCK_CONTENTFUL=${{ inputs.use_mock_contentful }} RUN_VALIDATION_TESTS=${{ inputs.run_validation_tests }} CONTENTFUL_DELIVERY_API_KEY=${{ inputs.contentful_delivery_api_key }} CONTENTFUL_SPACE_ID=${{ inputs.contentful_space_id }} ASPNETCORE_ENVIRONMENT="development" npx playwright test --grep "@${{ inputs.test_type }}"
+      run: WEBAPP_URL=https://${{ inputs.webapp_url }} DOMAIN=https://${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} npx playwright test --grep "@${{ inputs.test_type }}"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
