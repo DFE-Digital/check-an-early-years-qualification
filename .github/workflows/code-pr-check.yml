@@ -51,8 +51,9 @@ jobs:
       - name: Run app for testing
         uses: ./.github/actions/run-app-for-testing
         with:
-         url: ${{ env.URL }}
-         auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          url: ${{ env.URL }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          use_mock_contentful: "true"
 
       - name: Install playwright
         uses: ./.github/actions/install-playwright
@@ -65,7 +66,7 @@ jobs:
 
       - name: Run Accessibility tests
         uses: ./.github/actions/run-accessibility-tests
-        with:
+        with: 
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 

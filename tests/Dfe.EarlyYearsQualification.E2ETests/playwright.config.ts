@@ -94,7 +94,7 @@ function buildCommand() {
         command += `--ContentfulOptions:SpaceId="${process.env.CONTENTFUL_SPACE_ID}" `;
     }
 
-    if (process.env.CONTENTFUL_SPACE_ID !== undefined) {
+    if (process.env.ASPNETCORE_ENVIRONMENT !== undefined) {
         command += `--AspNetCoreEnvironment="${process.env.ASPNETCORE_ENVIRONMENT}" `;
     }
 
