@@ -33,4 +33,4 @@ jobs:
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
             -H 'Content-Type: application/vnd.contentful.management.v1+json' \
             -H 'x-contentful-version: $version' \
-            -d '{"name": $name, "url": $url, "topics": $topics, "active": $active, "filters": $filters, "headers": [{"key":"cache-secret", "value": "ABC", "secret": true}]}'
+            -d '{"name": $name, "url": $url, "topics": $topics, "active": $active, "headers": [{"key":"cache-secret", "value": "ABC", "secret": true}]}'
