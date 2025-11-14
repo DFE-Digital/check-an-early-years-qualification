@@ -70,6 +70,9 @@ jobs:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
+      - name: Kill running app
+        uses: ./.github/actions/kill-running-app
+
       - name: Run Playwright validation tests against development
         uses: ./.github/actions/run-validation-tests-development
         with:
