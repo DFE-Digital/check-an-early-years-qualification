@@ -25,9 +25,13 @@ jobs:
           name=$(jq -r '.name' <<< "$result")
           url=$(jq -r '.url' <<< "$result")
           topics=$(jq -r '.topics' <<< "$result")
-          filters=$(jq -r '.filters' <<< "$result")
           active=$(jq -r '.active' <<< "$result")
           version=$(jq -r '.sys.version' <<< "$result")
+          
+          echo $name
+          echo $topics
+          echo $active
+          echo $version
           
           curl -X PUT https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0 \
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
