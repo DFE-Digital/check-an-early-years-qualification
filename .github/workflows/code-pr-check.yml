@@ -25,9 +25,6 @@ env:
   DOTNET_VERSION: 8
   SOLUTION_NAME: 'Dfe.EarlyYearsQualification.sln'
   URL: 'http://127.0.0.1:5000'
-  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
 
 jobs:
 
@@ -35,9 +32,6 @@ jobs:
     name: Build, check and run tests
     runs-on: ubuntu-24.04
     environment: development
-    # Permissions for OIDC authentication
-    permissions:
-      id-token: write
 
     steps:
       - name: Check out repository
@@ -87,15 +81,6 @@ jobs:
       - name: Install playwright
         uses: ./.github/actions/install-playwright
 
-
-      # Login to Azure using OIDC
-      - name: Login to Azure CLI
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
       - name: Run Playwright validation tests
         uses: ./.github/actions/run-playwright-tests
         with:
@@ -103,9 +88,9 @@ jobs:
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           test_type: "validation"
           use_mock_contentful: "false"
-          azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          run_validation_tests: "true"
+          contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
+          contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
 
   # security-checks-local:
   #   name: Run baseline security checks locally
