@@ -17,7 +17,7 @@ jobs:
           CONTENTFUL_MANAGEMENT_API_KEY: ${{ secrets.CONTENTFUL_MANAGEMENT_API_KEY }}
           CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
         run: |
-          result=$(curl -X GET https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0 \
+          result=$(curl -X GET https://api.contentful.com/spaces/${{env.CONTENTFUL_SPACE_ID}}/webhook_definitions/0LQk2seP8OUapY7jElikE0 \
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
             -H 'Content-Type: application/vnd.contentful.management.v1+json')
           
@@ -28,7 +28,7 @@ jobs:
           active=$(jq -r '.active' <<< "$result")
           version=$(jq -r '.sys.version' <<< "$result")
           
-          curl -X PUT https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0 \
+          curl -X PUT https://api.contentful.com/spaces/${{env.CONTENTFUL_SPACE_ID}}/webhook_definitions/0LQk2seP8OUapY7jElikE0 \
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
             -H 'Content-Type: application/vnd.contentful.management.v1+json' \
             -H 'x-contentful-version: $version' \
