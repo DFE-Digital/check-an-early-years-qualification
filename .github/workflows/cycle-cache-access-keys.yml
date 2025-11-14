@@ -6,12 +6,30 @@ on:
 
 jobs:
   cycle-access-keys:
-    name: Update access keys in Contentful
+    name: Update cache access keys in Contentful
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
-    # Permissions for OIDC authentication
-    permissions:
-      id-token: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+
+      - name: Cycle development cache key
+        env:
+          CONTENTFUL_MANAGEMENT_API_KEY: ${{ secrets.CONTENTFUL_MANAGEMENT_API_KEY }}
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+        run: |
+          result=$(curl -X GET "https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0"
+            -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY'
+            -H 'Content-Type: application/vnd.contentful.management.v1+json')
+          
+          name=$(jq -r '.name' <<< "@result")
+          url=$(jq -r '.url' <<< "@result")
+          topics=$(jq -r '.topics' <<< "@result")
+          filters=$(jq -r '.filters' <<< "@result")
+          active=$(jq -r '.active' <<< "@result")
+          version=$(jq -r '.sys.version' <<< "@result")
+          
+          curl -X PUT "https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0"
+            -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY'
+            -H 'Content-Type: application/vnd.contentful.management.v1+json'
+            -H 'x-contentful-version: $version'
+            -d '{"name": $name, "url": $url, "topics": $topics, "active": $active, "filters": $filters, "headers": ["key":"cache-secret", "value": "ABC", "secret": true]}'
