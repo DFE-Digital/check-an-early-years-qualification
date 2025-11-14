@@ -77,7 +77,7 @@ export default defineConfig({
 
     /* Run your local dev server before starting the tests */
     webServer: {
-        command: `cd ../../src/Dfe.EarlyYearsQualification.Web && dotnet run --urls "${process.env.WEBAPP_URL}" --project ./Dfe.EarlyYearsQualification.Web.csproj --UseMockContentful="${process.env.USE_MOCK_CONTENTFUL}" --RunValidationTests="${process.env.RUN_VALIDATION_TESTS}" --ServiceAccess:Keys:0="${process.env.AUTH_SECRET}" --ContentfulOptions:UsePreviewApi="${process.env.USE_MOCK_CONTENTFUL}" --ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" --ContentfulOptions:SpaceId="${process.env.CONTENTFUL_SPACE_ID}" --AspNetCoreEnvironment="development"`,
+        command: `cd ../../src/Dfe.EarlyYearsQualification.Web && dotnet run --urls "${process.env.WEBAPP_URL}" --project ./Dfe.EarlyYearsQualification.Web.csproj --UseMockContentful="${process.env.USE_MOCK_CONTENTFUL}" --RunValidationTests="${process.env.RUN_VALIDATION_TESTS}" --ServiceAccess:Keys:0="${process.env.AUTH_SECRET}" --ContentfulOptions:UsePreviewApi="${process.env.USE_MOCK_CONTENTFUL}" --ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" --ContentfulOptions:SpaceId="${process.env.CONTENTFUL_SPACE_ID}" --AspNetCoreEnvironment="${process.env.ASPNETCORE_ENVIRONMENT}"`,
         url: process.env.WEBAPP_URL,
         reuseExistingServer: true
     },
