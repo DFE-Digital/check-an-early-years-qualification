@@ -17,8 +17,8 @@ jobs:
           CONTENTFUL_MANAGEMENT_API_KEY: ${{ secrets.CONTENTFUL_MANAGEMENT_API_KEY }}
           CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
         run: |
-          result=$(curl -X GET "https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0"
-            -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY'
+          result=$(curl -X GET "https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0" \
+            -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
             -H 'Content-Type: application/vnd.contentful.management.v1+json')
           
           name=$(jq -r '.name' <<< "@result")
@@ -28,8 +28,8 @@ jobs:
           active=$(jq -r '.active' <<< "@result")
           version=$(jq -r '.sys.version' <<< "@result")
           
-          curl -X PUT "https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0"
-            -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY'
-            -H 'Content-Type: application/vnd.contentful.management.v1+json'
-            -H 'x-contentful-version: $version'
+          curl -X PUT "https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0" \
+            -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
+            -H 'Content-Type: application/vnd.contentful.management.v1+json' \
+            -H 'x-contentful-version: $version' \
             -d '{"name": $name, "url": $url, "topics": $topics, "active": $active, "filters": $filters, "headers": ["key":"cache-secret", "value": "ABC", "secret": true]}'
