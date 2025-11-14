@@ -26,11 +26,11 @@ jobs:
           
           printf 'Here'
           
-          name=$(jq -r '.name' <<< "$result")
-          url=$(jq -r '.url' <<< "$result")
-          topics=$(jq -r '.topics' <<< "$result")
-          active=$(jq -r '.active' <<< "$result")
-          version=$(jq -r '.sys.version' <<< "$result")
+          name=$(jq '.name' < result)
+          url=$(jq '.url' < result)
+          topics=$(jq '.topics' < result)
+          active=$(jq .active' < result)
+          version=$(jq '.sys.version' < result)
           
           printf $name
           printf $topics
