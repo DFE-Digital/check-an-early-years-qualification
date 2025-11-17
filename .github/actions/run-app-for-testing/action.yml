@@ -21,7 +21,11 @@ runs:
   steps:
     - name: Run .Net Project
       shell: bash
+
+      env:
+        USE_MOCK_CONTENTFUL: ${{ inputs.use_mock_contentful }}
+
       run: |
         dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
-        --UseMockContentful=${{ inputs.use_mock_contentful }} \
+        --UseMockContentful=${{ env.USE_MOCK_CONTENTFUL }} \
         --ServiceAccess:Keys:0="${{ inputs.auth_secret }}" &

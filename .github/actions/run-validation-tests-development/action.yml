@@ -29,8 +29,18 @@ runs:
   steps:
     - name: Run Playwright tests
       shell: bash
+
+      env:
+        WEBAPP_URL: ${{ inputs.webapp_url }}
+        AUTH_SECRET: ${{ inputs.auth_secret }}
+        TEST_TYPE: ${{ inputs.test_type }}
+        USE_MOCK_CONTENTFUL: ${{ inputs.use_mock_contentful }}
+        RUN_VALIDATION_TESTS: ${{ inputs.run_validation_tests }}
+        CONTENTFUL_DELIVERY_API_KEY: ${{ inputs.contentful_delivery_api_key }}
+        CONTENTFUL_SPACE_ID: ${{ inputs.contentful_space_id }}
+
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=${{ inputs.webapp_url }} DOMAIN=${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} USE_MOCK_CONTENTFUL=${{ inputs.use_mock_contentful }} RUN_VALIDATION_TESTS=${{ inputs.run_validation_tests }} CONTENTFUL_DELIVERY_API_KEY=${{ inputs.contentful_delivery_api_key }} CONTENTFUL_SPACE_ID=${{ inputs.contentful_space_id }} ASPNETCORE_ENVIRONMENT="development" npx playwright test --grep "@${{ inputs.test_type }}"
+      run: WEBAPP_URL=${{ env.WEBAPP_URL }} DOMAIN=${{ env.WEBAPP_URL }} AUTH_SECRET=${{ env.AUTH_SECRET }} USE_MOCK_CONTENTFUL=${{ env.USE_MOCK_CONTENTFUL }} RUN_VALIDATION_TESTS=${{ env.RUN_VALIDATION_TESTS }} CONTENTFUL_DELIVERY_API_KEY=${{ env.CONTENTFUL_DELIVERY_API_KEY }} CONTENTFUL_SPACE_ID=${{ env.CONTENTFUL_SPACE_ID }} ASPNETCORE_ENVIRONMENT="development" npx playwright test --grep "@${{ env.TEST_TYPE }}"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
