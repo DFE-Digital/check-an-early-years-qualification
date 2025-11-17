@@ -20,17 +20,19 @@ jobs:
         run: |
           printf 'Starting'
           
-          result=$(curl -X GET https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0 \
+          response=$(curl -X GET https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0 \
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
             -H 'Content-Type: application/vnd.contentful.management.v1+json')
           
+          response_body=$($response | grep 'body')
+          
           printf 'Here'
           
-          name=$($result | jq '.name')
-          url=$($result | jq '.url')
-          topics=$($result | jq '.topics')
-          active=$($result | jq .active')
-          version=$($result | jq '.sys.version')
+          name=$($response_body | jq '.name')
+          url=$($response_body | jq '.url')
+          topics=$($response_body | jq '.topics')
+          active=$($response_body | jq .active')
+          version=$($response_body | jq '.sys.version')
           
           printf $name
           printf $topics
