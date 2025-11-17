@@ -40,7 +40,7 @@ runs:
         CONTENTFUL_SPACE_ID: ${{ inputs.contentful_space_id }}
 
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=${{ env.WEBAPP_URL }} DOMAIN=${{ env.WEBAPP_URL }} AUTH_SECRET=${{ env.AUTH_SECRET }} USE_MOCK_CONTENTFUL=${{ env.USE_MOCK_CONTENTFUL }} RUN_VALIDATION_TESTS=${{ env.RUN_VALIDATION_TESTS }} CONTENTFUL_DELIVERY_API_KEY=${{ env.CONTENTFUL_DELIVERY_API_KEY }} CONTENTFUL_SPACE_ID=${{ env.CONTENTFUL_SPACE_ID }} ASPNETCORE_ENVIRONMENT="development" npx playwright test --grep "@${{ env.TEST_TYPE }}"
+      run: WEBAPP_URL=${env.WEBAPP_URL} DOMAIN=${env.WEBAPP_URL} AUTH_SECRET=${env.AUTH_SECRET} USE_MOCK_CONTENTFUL=${env.USE_MOCK_CONTENTFUL} RUN_VALIDATION_TESTS=${env.RUN_VALIDATION_TESTS} CONTENTFUL_DELIVERY_API_KEY=${env.CONTENTFUL_DELIVERY_API_KEY} CONTENTFUL_SPACE_ID=${env.CONTENTFUL_SPACE_ID} ASPNETCORE_ENVIRONMENT="development" npx playwright test --grep "@${env.TEST_TYPE}"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
