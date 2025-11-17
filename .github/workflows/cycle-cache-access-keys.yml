@@ -1,0 +1,17 @@
+run-name: 'Cycle Cache Access Keys'
+name: Cycle Cache Access Keys
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cycle-access-keys:
+    name: Update access keys in Contentful
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    # Permissions for OIDC authentication
+    permissions:
+      id-token: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
