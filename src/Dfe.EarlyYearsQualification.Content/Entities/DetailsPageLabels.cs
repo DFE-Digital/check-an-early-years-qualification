@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 
 namespace Dfe.EarlyYearsQualification.Content.Entities;
 
-public class DetailsPage
+public class DetailsPageLabels
 {
     public string MainHeader { get; init; } = string.Empty;
 
@@ -16,26 +16,6 @@ public class DetailsPage
 
     public NavigationLink? BackToConfirmAnswers { get; init; }
 
-    public string RatiosHeading { get; init; } = string.Empty;
-
-    public Document? RatiosTextNotFullAndRelevant { get; init; }
-    
-    public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
-    
-    public Document? RatiosTextL3Ebr { get; init; }
-
-    public string RequirementsHeading { get; init; } = string.Empty;
-
-    public Document? RequirementsText { get; init; }
-
-    public NavigationLink? CheckAnotherQualificationLink { get; init; }
-
-    public string PrintButtonText { get; init; } = string.Empty;
-
-    public string PrintInformationHeading { get; init; } = string.Empty;
-
-    public Document? PrintInformationBody { get; init; }
-
     public string QualificationDetailsSummaryHeader { get; init; } = string.Empty;
 
     public string QualificationNameLabel { get; init; } = string.Empty;
@@ -46,10 +26,24 @@ public class DetailsPage
     
     public string QualificationAwardedDateLabel { get; init; } = string.Empty;
 
+    public string RatiosHeading { get; init; } = string.Empty;
+
+    public Document? RatiosTextNotFullAndRelevant { get; init; }
+
+    public Document? RatiosTextL3PlusNotFrBetweenSep14Aug19 { get; init; }
+
+    public Document? RatiosTextL3Ebr { get; init; }
+
+    public NavigationLink? CheckAnotherQualificationLink { get; init; }
+
+    public string PrintButtonText { get; init; } = string.Empty;
+
+    public string PrintInformationHeading { get; init; } = string.Empty;
+
+    public Document? PrintInformationBody { get; init; }
+
     public FeedbackBanner? FeedbackBanner { get; init; }
     
-    public UpDownFeedback? UpDownFeedback { get; init; }
-
     public string QualificationResultHeading { get; init; } = string.Empty;
 
     public string QualificationResultFrMessageHeading { get; init; } = string.Empty;
@@ -67,4 +61,6 @@ public class DetailsPage
     public string QualificationResultNotFrL3OrL6MessageHeading { get; init; } = string.Empty;
 
     public string QualificationResultNotFrL3OrL6MessageBody { get; init; } = string.Empty;
+
+    public UpDownFeedback? UpDownFeedback { get; init; }
 }

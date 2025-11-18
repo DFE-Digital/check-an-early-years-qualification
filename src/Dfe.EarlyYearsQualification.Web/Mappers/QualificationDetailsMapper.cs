@@ -10,7 +10,7 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
 {
     public async Task<QualificationDetailsModel> Map(
         Qualification qualification,
-        DetailsPage content,
+        QualificationDetailsPage content,
         NavigationLink? backNavLink,
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
@@ -18,48 +18,49 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
         List<Qualification> qualifications)
     {
         var requirementsTextHtml = await contentParser.ToHtml(content.RequirementsText);
-        var feedbackBodyHtml = content.FeedbackBanner is not null
-                                   ? await contentParser.ToHtml(content.FeedbackBanner.Body)
+        var feedbackBodyHtml = content.Labels.FeedbackBanner is not null
+                                   ? await contentParser.ToHtml(content.Labels.FeedbackBanner.Body)
                                    : null;
-        var improveServiceBodyHtml = content.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(content.UpDownFeedback.FeedbackComponent!.Body)
+        var improveServiceBodyHtml = content.Labels.UpDownFeedback is not null
+                                         ? await contentParser.ToHtml(content.Labels.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
-        var printInformationBody = await contentParser.ToHtml(content.PrintInformationBody);
+        var printInformationBody = await contentParser.ToHtml(content.Labels.PrintInformationBody);
+
         return new QualificationDetailsModel
-               {
-                   QualificationId = qualification.QualificationId,
-                   QualificationLevel = qualification.QualificationLevel,
-                   QualificationName = qualification.QualificationName,
-                   QualificationNumber = StringFormattingHelper.FormatSlashedNumbers(qualification.QualificationNumber),
-                   QualificationNumberLabel = content.QualificationNumberLabel,
-                   AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
-                   FromWhichYear = qualification.FromWhichYear,
-                   BackButton = NavigationLinkMapper.Map(backNavLink),
-                   AdditionalRequirementAnswers = additionalRequirementAnswers,
-                   DateStarted = dateStarted,
-                   DateAwarded = dateAwarded,
-                   Content = new DetailsPageModel
-                             {
-                                 AwardingOrgLabel = content.AwardingOrgLabel,
-                                 DateOfCheckLabel = content.DateOfCheckLabel,
-                                 LevelLabel = content.LevelLabel,
-                                 MainHeader = content.MainHeader,
-                                 RequirementsHeading = content.RequirementsHeading,
-                                 RequirementsText = requirementsTextHtml,
-                                 RatiosHeading = content.RatiosHeading,
-                                 CheckAnotherQualificationLink =
-                                     NavigationLinkMapper.Map(content.CheckAnotherQualificationLink),
-                                 PrintButtonText = content.PrintButtonText,
-                                 PrintInformationHeading = content.PrintInformationHeading,
-                                 PrintInformationBody = printInformationBody,
-                                 QualificationNameLabel = content.QualificationNameLabel,
-                                 QualificationStartDateLabel = content.QualificationStartDateLabel,
-                                 QualificationAwardedDateLabel = content.QualificationAwardedDateLabel,
-                                 QualificationDetailsSummaryHeader = content.QualificationDetailsSummaryHeader,
-                                 FeedbackBanner = FeedbackBannerMapper.Map(content.FeedbackBanner, feedbackBodyHtml)
-                             },
-                   UpDownFeedback = UpDownFeedbackMapper.Map(content.UpDownFeedback, improveServiceBodyHtml),
-                   IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1
+        {
+            QualificationId = qualification.QualificationId,
+            QualificationLevel = qualification.QualificationLevel,
+            QualificationName = qualification.QualificationName,
+            QualificationNumber = StringFormattingHelper.FormatSlashedNumbers(qualification.QualificationNumber),
+            QualificationNumberLabel = content.Labels.QualificationNumberLabel,
+            AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
+            FromWhichYear = qualification.FromWhichYear,
+            BackButton = NavigationLinkMapper.Map(backNavLink),
+            AdditionalRequirementAnswers = additionalRequirementAnswers,
+            DateStarted = dateStarted,
+            DateAwarded = dateAwarded,
+            Content = new DetailsPageModel
+            {
+                AwardingOrgLabel = content.Labels.AwardingOrgLabel,
+                DateOfCheckLabel = content.Labels.DateOfCheckLabel,
+                LevelLabel = content.Labels.LevelLabel,
+                MainHeader = content.Labels.MainHeader,
+                RequirementsHeading = content.RequirementsHeading,
+                RequirementsText = requirementsTextHtml,
+                RatiosHeading = content.Labels.RatiosHeading,
+                CheckAnotherQualificationLink =
+                                     NavigationLinkMapper.Map(content.Labels.CheckAnotherQualificationLink),
+                PrintButtonText = content.Labels.PrintButtonText,
+                PrintInformationHeading = content.Labels.PrintInformationHeading,
+                PrintInformationBody = printInformationBody,
+                QualificationNameLabel = content.Labels.QualificationNameLabel,
+                QualificationStartDateLabel = content.Labels.QualificationStartDateLabel,
+                QualificationAwardedDateLabel = content.Labels.QualificationAwardedDateLabel,
+                QualificationDetailsSummaryHeader = content.Labels.QualificationDetailsSummaryHeader,
+                FeedbackBanner = FeedbackBannerMapper.Map(content.Labels.FeedbackBanner, feedbackBodyHtml)
+            },
+            UpDownFeedback = UpDownFeedbackMapper.Map(content.Labels.UpDownFeedback, improveServiceBodyHtml),
+            IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1
         };
     }
 }

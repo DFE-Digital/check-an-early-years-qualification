@@ -10,12 +10,13 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class RadioQuestionMapperTests
 {
     [TestMethod]
-    public async Task Map_PassInParameters_ReturnsModel()
+    [DataRow("selected answer", "selected answer")]
+    [DataRow(null, "")]
+    public async Task Map_PassInParameters_ReturnsModel(string selectedAnswer, string expected)
     {
         const string actionName = "action";
         const string controllerName = "controller";
         const string additionalInformationBodyHtml = "additional info body";
-        const string selectedAnswer = "selected answer";
         
         var question = new RadioQuestionPage
                        {
@@ -61,6 +62,6 @@ public class RadioQuestionMapperTests
         result.BackButton.Should().BeEquivalentTo(question.BackButton, options => options.Excluding(x => x.Sys));
         result.ErrorBannerHeading.Should().BeSameAs(question.ErrorBannerHeading);
         result.ErrorBannerLinkText.Should().BeSameAs(question.ErrorBannerLinkText);
-        result.Option.Should().BeSameAs(selectedAnswer);
+        result.Option.Should().Be(expected);
     }
 }

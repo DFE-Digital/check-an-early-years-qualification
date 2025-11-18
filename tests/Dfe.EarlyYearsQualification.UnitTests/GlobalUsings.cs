@@ -4,3 +4,5 @@ global using Moq;
 global using Microsoft.AspNetCore.Mvc;
 global using Dfe.EarlyYearsQualification.UnitTests.Extensions;
 global using Microsoft.Extensions.Logging;
+
+[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]

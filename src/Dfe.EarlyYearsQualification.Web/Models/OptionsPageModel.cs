@@ -57,9 +57,4 @@ public class OptionsPageModel
     }
 
     public string? ButtonText { get; init; } = "Select option and continue";
-
-    public static string OptionAnswer
-    {
-        get { return "OptionAnswer"; }
-    }
 }

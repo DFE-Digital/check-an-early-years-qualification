@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="contentful.csharp" Version="8.4.2" />
+        <PackageReference Include="contentful.csharp" Version="8.4.3" />
     </ItemGroup>
 
     <ItemGroup>

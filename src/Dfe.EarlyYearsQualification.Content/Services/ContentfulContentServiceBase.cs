@@ -14,15 +14,14 @@ public abstract class ContentfulContentServiceBase
     protected readonly IContentfulClient ContentfulClient;
 
     protected readonly Dictionary<Type, string> ContentTypeLookup
-        = new()
+        = new Dictionary<Type, string>
           {
               { typeof(StartPage), ContentTypes.StartPage },
               { typeof(Qualification), ContentTypes.Qualification },
-              { typeof(DetailsPage), ContentTypes.DetailsPage },
+              { typeof(QualificationDetailsPage), ContentTypes.QualificationDetailsPage },
               { typeof(AdvicePage), ContentTypes.AdvicePage },
               { typeof(RadioQuestionPage), ContentTypes.RadioQuestionPage },
               { typeof(AccessibilityStatementPage), ContentTypes.AccessibilityStatementPage },
-              { typeof(NavigationLinks), ContentTypes.NavigationLinks },
               { typeof(CookiesPage), ContentTypes.CookiesPage },
               { typeof(PhaseBanner), ContentTypes.PhaseBanner },
               { typeof(CookiesBanner), ContentTypes.CookiesBanner },
