@@ -36,6 +36,7 @@ public class OptionsIndicatorViewComponentTests
         var model = componentResult.ViewData.Model as OptionsPageModel;
 
         model!.Option.Should().Be(OptionsPageModel.PublishedOptionValue);
+        model.OptionShortText.Should().Be($"{OptionsPageModel.PublishedOptionValue} content");
     }
 
     [TestMethod]
@@ -64,5 +65,6 @@ public class OptionsIndicatorViewComponentTests
         var model = componentResult.ViewData.Model as OptionsPageModel;
 
         model!.Option.Should().Be(OptionsPageModel.PreviewOptionValue);
+        model.OptionShortText.Should().Be($"{OptionsPageModel.PreviewOptionValue} content");
     }
 }

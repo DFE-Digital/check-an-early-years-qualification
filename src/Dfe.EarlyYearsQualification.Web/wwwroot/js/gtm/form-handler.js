@@ -123,3 +123,17 @@ $("#give-feedback-form").on("submit", function () {
         'answer': answer
     });
 });
+
+$('#reason-for-enquiring-form').on("submit", function(){
+    let selectedAnswer = $(`input[name='SelectedOption']:checked`).val();
+    window.dataLayer.push({
+        'event': 'reasonForEnquiringFormSubmission',
+        'answer': selectedAnswer
+    });
+})
+
+$("#email-address-form").on("submit", function(){
+    window.dataLayer.push({
+        'event': 'helpPageFormSubmission'
+    });
+});

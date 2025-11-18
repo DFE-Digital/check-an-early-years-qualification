@@ -1,11 +1,7 @@
-using Dfe.EarlyYearsQualification.Content.Constants;
-using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
-using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
-using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+using Dfe.EarlyYearsQualification.Web.Services.ConfirmQualification;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers;
@@ -14,10 +10,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [RedirectIfDateMissing]
 public class ConfirmQualificationController(
     ILogger<ConfirmQualificationController> logger,
-    IContentService contentService,
-    IUserJourneyCookieService userJourneyCookieService,
-    IConfirmQualificationPageMapper confirmQualificationPageMapper,
-    IQualificationSearchService qualificationSearchService)
+    IConfirmQualificationService confirmQualificationService)
     : ServiceController
 {
     [HttpGet]
@@ -32,7 +25,7 @@ public class ConfirmQualificationController(
             return BadRequest();
         }
 
-        var content = await contentService.GetConfirmQualificationPage();
+        var content = await confirmQualificationService.GetConfirmQualificationPageAsync();
 
         if (content is null)
         {
@@ -40,26 +33,23 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var filteredQualifications = await qualificationSearchService.GetFilteredQualifications();
+        var filteredQualifications = await confirmQualificationService.GetFilteredQualifications();
 
-        var qualification = filteredQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId, StringComparison.OrdinalIgnoreCase));
+        var qualification = confirmQualificationService.GetQualificationById(filteredQualifications, qualificationId);
 
         if (qualification is null)
         {
-            var loggedQualificationId = qualificationId.Replace(Environment.NewLine, "");
-            logger.LogError("Could not find details for qualification with ID: {QualificationId}",
-                            loggedQualificationId);
-
+            logger.LogError("Could not find details for qualification with ID: {QualificationId}", qualificationId);
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await confirmQualificationPageMapper.Map(content, qualification, filteredQualifications);
-
+        var model = await confirmQualificationService.Map(content, qualification, filteredQualifications);
+            
         // Used to prepopulate help form
-        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+        var enquiry = confirmQualificationService.GetHelpFormEnquiry();
         enquiry.QualificationName = qualification.QualificationName;
-        enquiry.AwardingOrganisation = SetHelpFormAwardingQualification(userJourneyCookieService.GetAwardingOrganisation(), qualification.AwardingOrganisationTitle);
-        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
+        enquiry.AwardingOrganisation = confirmQualificationService.SetHelpFormAwardingQualification(qualification.AwardingOrganisationTitle);
+        confirmQualificationService.SetHelpFormEnquiry(enquiry);
 
         return View(model);
     }
@@ -73,23 +63,19 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var filteredQualifications = await qualificationSearchService.GetFilteredQualifications();
+        var filteredQualifications = await confirmQualificationService.GetFilteredQualifications();
 
-        var qualification = filteredQualifications.SingleOrDefault(x => x.QualificationId == model.QualificationId);
+        var qualification = confirmQualificationService.GetQualificationById(filteredQualifications, model.QualificationId);
 
         if (qualification is null)
         {
-            var loggedQualificationId = model.QualificationId.Replace(Environment.NewLine, "");
-            logger.LogError("Could not find details for qualification with ID: {QualificationId}",
-                            loggedQualificationId);
-
+            logger.LogError("Could not find details for qualification with ID: {QualificationId}", model.QualificationId);
             return RedirectToAction("Index", "Error");
         }
 
         if (ModelState.IsValid)
         {
-            userJourneyCookieService.SetUserSelectedQualificationFromList(YesOrNo.Yes);
-            userJourneyCookieService.ClearAdditionalQuestionsAnswers();
+            confirmQualificationService.ValidSubmitSetCookieValues();
 
             var hasAdditionalQuestions = qualification is
                                          {
@@ -123,7 +109,7 @@ public class ConfirmQualificationController(
             }
         }
 
-        var content = await contentService.GetConfirmQualificationPage();
+        var content = await confirmQualificationService.GetConfirmQualificationPageAsync();
 
         if (content is null)
         {
@@ -131,22 +117,9 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        model = await confirmQualificationPageMapper.Map(content, qualification, filteredQualifications);
+        model = await confirmQualificationService.Map(content, qualification, filteredQualifications);
         model.HasErrors = true;
 
         return View("Index", model);
-    }
-
-    protected internal string SetHelpFormAwardingQualification(string? awardingOrgFromDropdown, string qualificationTitle)
-    {
-        // awardingOrgFromDropdown will be null if selected "Not in list"
-        awardingOrgFromDropdown = awardingOrgFromDropdown ?? string.Empty;
-
-        if (awardingOrgFromDropdown == string.Empty && qualificationTitle != AwardingOrganisations.Various)
-        {
-            return qualificationTitle;
-        }
-
-        return awardingOrgFromDropdown;
     }
 }

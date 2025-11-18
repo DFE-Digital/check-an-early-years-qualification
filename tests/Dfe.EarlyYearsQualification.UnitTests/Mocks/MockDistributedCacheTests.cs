@@ -31,7 +31,7 @@ public class MockDistributedCacheTests
 
         await cache.SetAsync(key, value, new DistributedCacheEntryOptions(), CancellationToken.None);
 
-        var bytes = await cache.GetAsync(key);
+        var bytes = await cache.GetAsync(key, CancellationToken.None);
 
         bytes.Should().ContainInOrder(value);
     }

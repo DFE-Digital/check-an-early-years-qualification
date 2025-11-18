@@ -28,9 +28,14 @@ public class QualificationDetailsService(
         return await qualificationSearchService.GetFilteredQualifications();
     }
 
-    public async Task<DetailsPage?> GetDetailsPage()
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification,
+                                                                             bool isFullAndRelevant, int level, int startMonth,
+                                                                             int startYear, Qualification qualification,
+                                                                             List<AdditionalRequirementAnswerModel>?
+                                                                                 additionalRequirementAnswerModels)
     {
-        return await contentService.GetDetailsPage();
+        var getDegreeSpecificPage = qualification.IsTheQualificationADegree || IsQts(qualification, additionalRequirementAnswerModels);
+        return await contentService.GetQualificationDetailsPage(userIsCheckingOwnQualification, isFullAndRelevant, level, startMonth, startYear, getDegreeSpecificPage);
     }
 
     public bool HasStartDate()
@@ -196,7 +201,7 @@ public class QualificationDetailsService(
         {
             // This is needed to preserve the Not Full and Relevant messaging as changing the L2 status below makes it F&R 
             model.RatioRequirements.OverrideToBeNotFullAndRelevant = true;
-            
+
             // If the qualification is above a level 2 qualification, is not full and relevant and is started between Sept 2014 and Aug 2019
             // then policy have confirmed it can be automatically approved at L2
             model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.Approved;
@@ -232,7 +237,11 @@ public class QualificationDetailsService(
     /// <param name="qualification">The qualification data from Contentful</param>
     public async Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model, Qualification qualification)
     {
-        if (model.RatioRequirements.ApprovedForLevel6 != QualificationApprovalStatus.Approved && qualification is { QualificationLevel: 6, IsTheQualificationADegree: true })
+        var isQts = IsQts(qualification, model.AdditionalRequirementAnswers);
+        var isPractitioner = userJourneyCookieService.GetIsUserCheckingTheirOwnQualification();
+        if (isPractitioner == "yes" && model.RatioRequirements.ApprovedForLevel6 != QualificationApprovalStatus.Approved 
+                                    && qualification is { QualificationLevel: 6, IsTheQualificationADegree: true }
+                                    && !isQts)
         {
             model.RatioRequirements.ApprovedForLevel6 = QualificationApprovalStatus.PossibleRouteAvailable;
             var requirementsForLevel6 = GetRatioProperty<Document>(nameof(RatioRequirement.EyittRouteAvailable),
@@ -243,7 +252,7 @@ public class QualificationDetailsService(
         }
     }
 
-    public NavigationLink? CalculateBackButton(DetailsPage content, string qualificationId)
+    public NavigationLink? CalculateBackButton(DetailsPageLabels content, string qualificationId)
     {
         if (userJourneyCookieService.UserHasAnsweredAdditionalQuestions())
         {
@@ -397,9 +406,9 @@ public class QualificationDetailsService(
         }
     }
 
-    public async Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content, List<Qualification> qualifications)
+    public async Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content, List<Qualification> qualifications)
     {
-        var backNavLink = CalculateBackButton(content, qualification.QualificationId);
+        var backNavLink = CalculateBackButton(content.Labels, qualification.QualificationId);
 
         var dateStarted = string.Empty;
         var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
@@ -425,7 +434,7 @@ public class QualificationDetailsService(
                                                     dateStarted, dateAwarded, qualifications);
     }
 
-    public async Task SetRatioText(QualificationDetailsModel model, DetailsPage content)
+    public async Task SetRatioText(QualificationDetailsModel model, DetailsPageLabels content)
     {
         switch (model.RatioRequirements.IsNotFullAndRelevant)
         {
@@ -468,7 +477,7 @@ public class QualificationDetailsService(
         }
     }
 
-    private async Task SetRatioTextWhereIsNotFullAndRelevant(QualificationDetailsModel model, DetailsPage content)
+    private async Task SetRatioTextWhereIsNotFullAndRelevant(QualificationDetailsModel model, DetailsPageLabels content)
     {
         var wasStartedBetweenSeptember2014AndAugust2019 = userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019();
         var wasStartedBeforeSeptember2014 = userJourneyCookieService.WasStartedBeforeSeptember2014();
@@ -535,14 +544,14 @@ public class QualificationDetailsService(
         }
     }
     
-    public void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPage content)
+    public void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPageLabels content)
     {
         model.Content!.QualificationResultHeading = content.QualificationResultHeading;
         model.Content.QualificationResultMessageHeading = content.QualificationResultFrMessageHeading;
         model.Content.QualificationResultMessageBody = content.QualificationResultFrMessageBody;
     }
 
-    public void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPage content)
+    public void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPageLabels content)
     {
         model.Content!.QualificationResultHeading = content.QualificationResultHeading;
 
@@ -565,6 +574,21 @@ public class QualificationDetailsService(
             model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrMessageHeading;
             model.Content.QualificationResultMessageBody = content.QualificationResultNotFrMessageBody;
         }
+    }
+
+    public bool GetUserIsCheckingOwnQualification()
+    {
+        return userJourneyCookieService.GetIsUserCheckingTheirOwnQualification() == Constants.Options.Yes;
+    }
+
+    public int? GetLevelOfQualification()
+    {
+        return userJourneyCookieService.GetLevelOfQualification();
+    }
+
+    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
+    {
+        return userJourneyCookieService.GetWhenWasQualificationStarted();
     }
 
     private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
