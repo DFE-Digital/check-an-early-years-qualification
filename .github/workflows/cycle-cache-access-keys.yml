@@ -20,7 +20,9 @@ jobs:
         run: |
           printf 'Starting'
           
-          response=$(curl -X GET "https://api.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/webhook_definitions/0LQk2seP8OUapY7jElikE0" \
+          requestUrl="https://api.contentful.com/spaces/"+$CONTENTFUL_SPACE_ID+"/webhook_definitions/0LQk2seP8OUapY7jElikE0"
+          
+          response=$(curl -X GET $requestUrl \
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
             -H 'Content-Type: application/vnd.contentful.management.v1+json')
           
@@ -39,7 +41,7 @@ jobs:
           printf $active
           printf $version
           
-          curl -X PUT "https://api.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/webhook_definitions/0LQk2seP8OUapY7jElikE0" \
+          curl -X PUT $requestUrl \
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
             -H 'Content-Type: application/vnd.contentful.management.v1+json' \
             -H 'x-contentful-version: $version' \
