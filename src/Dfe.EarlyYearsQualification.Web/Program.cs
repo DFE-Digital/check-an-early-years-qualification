@@ -53,9 +53,7 @@ builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeade
 
 bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
 
-bool flagIsDevelopment = builder.Configuration.GetValue<string>("AspNetCoreEnvironment") == "development";
-
-bool runValidationTests = builder.Configuration.GetValue<bool>("RunValidationTests") && flagIsDevelopment;
+bool runValidationTests = builder.Configuration.GetValue<bool>("RunValidationTests") && builder.Environment.IsDevelopment();
 
 if (!useMockContentful)
 {

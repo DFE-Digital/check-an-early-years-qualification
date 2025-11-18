@@ -1,5 +1,5 @@
-name: Run Playwright validation tests against development
-description: Run validation tests using Playwright against development
+name: Run Playwright validation tests locally
+description: Run Playwright validation tests locally
 
 inputs:
   webapp_url:
@@ -40,7 +40,7 @@ runs:
         CONTENTFUL_SPACE_ID: ${{ inputs.contentful_space_id }}
 
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=${WEBAPP_URL} DOMAIN=${WEBAPP_URL} AUTH_SECRET=${AUTH_SECRET} USE_MOCK_CONTENTFUL=${USE_MOCK_CONTENTFUL} RUN_VALIDATION_TESTS=${RUN_VALIDATION_TESTS} CONTENTFUL_DELIVERY_API_KEY=${CONTENTFUL_DELIVERY_API_KEY} CONTENTFUL_SPACE_ID=${CONTENTFUL_SPACE_ID} ASPNETCORE_ENVIRONMENT="development" npx playwright test --grep "@${TEST_TYPE}"
+      run: WEBAPP_URL=${WEBAPP_URL} DOMAIN=${WEBAPP_URL} AUTH_SECRET=${AUTH_SECRET} USE_MOCK_CONTENTFUL=${USE_MOCK_CONTENTFUL} RUN_VALIDATION_TESTS=${RUN_VALIDATION_TESTS} CONTENTFUL_DELIVERY_API_KEY=${CONTENTFUL_DELIVERY_API_KEY} CONTENTFUL_SPACE_ID=${CONTENTFUL_SPACE_ID} npx playwright test --grep "@${TEST_TYPE}"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
