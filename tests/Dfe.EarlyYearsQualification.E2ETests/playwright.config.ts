@@ -84,7 +84,7 @@ export default defineConfig({
 });
 
 function buildCommand() {
-    let command = `cd ../../src/Dfe.EarlyYearsQualification.Web && dotnet run -e Development --urls "${process.env.WEBAPP_URL}" --project ./Dfe.EarlyYearsQualification.Web.csproj --UseMockContentful="${process.env.USE_MOCK_CONTENTFUL ?? true}" --RunValidationTests="${process.env.RUN_VALIDATION_TESTS ?? false}" --ServiceAccess:Keys:0="${process.env.AUTH_SECRET}" --ContentfulOptions:UsePreviewApi="${process.env.USE_MOCK_CONTENTFUL ?? false}" `;
+    let command = `cd ../../src/Dfe.EarlyYearsQualification.Web && dotnet run --environment ASPNETCORE_ENVIRONMENT="Development" --urls "${process.env.WEBAPP_URL}" --project ./Dfe.EarlyYearsQualification.Web.csproj --UseMockContentful="${process.env.USE_MOCK_CONTENTFUL ?? true}" --RunValidationTests="${process.env.RUN_VALIDATION_TESTS ?? false}" --ServiceAccess:Keys:0="${process.env.AUTH_SECRET}" --ContentfulOptions:UsePreviewApi="${process.env.USE_MOCK_CONTENTFUL ?? false}" `;
 
     if (process.env.CONTENTFUL_DELIVERY_API_KEY !== undefined) {
         command += `--ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" `;
