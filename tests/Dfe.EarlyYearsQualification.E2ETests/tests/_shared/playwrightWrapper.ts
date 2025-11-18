@@ -168,16 +168,6 @@ export async function goToDetailsPageOfQualification({
                                                      }: JourneyStateParams, page: Page) {
     var selectedQualificationId = qualificationId ?? getQualificationId(level);
 
-    var additionQuestionsValue = "";
-    if (additionalQuestions != null) {
-        for (let i = 0; i < additionalQuestions.length; i++) {
-            var additionalQuestion = additionalQuestions[i];
-            additionQuestionsValue = additionQuestionsValue + additionalQuestion[0] + '%22%3A%22' + additionalQuestion[1];
-            if (i != additionalQuestions.length - 1) {
-                additionQuestionsValue += '%22%2C%22';
-            }
-        }
-    }
     var startValue = startDate == null ? '' : `${startDate[0] ?? ''}%2F${startDate[1] ?? ''}`;
     var awardValue = awardDate == null ? '' : `${awardDate[0] ?? ''}%2F${awardDate[1] ?? ''}`;
 

@@ -4,11 +4,10 @@ public static class ContentTypes
 {
     public const string StartPage = "startPage";
     public const string Qualification = "Qualification";
-    public const string DetailsPage = "detailsPage";
+    public const string QualificationDetailsPage = "qualificationDetailsPage";
     public const string AdvicePage = "advicePage";
     public const string RadioQuestionPage = "radioQuestionPage";
     public const string AccessibilityStatementPage = "accessibilityStatementPage";
-    public const string NavigationLinks = "navigationLinks";
     public const string CookiesPage = "cookiesPage";
     public const string PhaseBanner = "phaseBanner";
     public const string CookiesBanner = "cookiesBanner";

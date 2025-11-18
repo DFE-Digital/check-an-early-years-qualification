@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Web.Services.Caching;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -136,5 +137,21 @@ public class CachingOptionsManagerTests
         var option = await sut.GetCachingOption();
 
         option.Should().Be(CachingOption.UseCache);
+    }
+
+
+    [TestMethod]
+    public async Task SetCachingOption_Calls_CookieManager_SetOutboundCookie()
+    {
+        // Arrange
+        var logger = new Mock<ILogger<CachingOptionsManager>>();
+        var cookieManager = new Mock<ICookieManager>();
+        var cachingOption = new CachingOption();
+
+        // Act
+        await new CachingOptionsManager(logger.Object, cookieManager.Object).SetCachingOption(cachingOption);
+
+        // Assert
+        cookieManager.Verify(x => x.SetOutboundCookie(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CookieOptions>()));
     }
 }

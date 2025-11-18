@@ -113,90 +113,134 @@ public class MockContentfulService : IContentService
                                          FormHeading = "Test Form Heading"
                                      });
     }
-
-    public async Task<DetailsPage?> GetDetailsPage()
+    
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage)
     {
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
             ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
         var ratioTextL3Ebr = ContentfulContentHelper.Paragraph("This is the ratio text L3 EBR");
         var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
-        return await Task.FromResult(new DetailsPage
-                                     {
-                                         AwardingOrgLabel = "Awarding Org Label",
-                                         DateOfCheckLabel = "Test Date Of Check Label",
-                                         LevelLabel = "Test Level Label",
-                                         MainHeader = "Test Main Heading",
-                                         BackButton = new NavigationLink
-                                                      {
-                                                          DisplayText = "TEST",
-                                                          Href = "/confirm-qualification/eyq-240",
-                                                          OpenInNewTab = false
-                                                      },
-                                         BackToConfirmAnswers = new NavigationLink
-                                                                {
-                                                                    DisplayText =
-                                                                        "TEST (back to additional questions)",
-                                                                    Href =
-                                                                        "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers",
-                                                                    OpenInNewTab = false
-                                                                },
-                                         RatiosHeading = "Test ratio heading",
-                                         RatiosTextL3Ebr = ratioTextL3Ebr,
-                                         RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
-                                         RatiosTextL3PlusNotFrBetweenSep14Aug19 =
-                                             ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19,
-                                         RequirementsHeading = "Test requirements heading",
-                                         RequirementsText = requirementsText,
-                                         CheckAnotherQualificationLink = new NavigationLink
-                                                                         {
-                                                                             DisplayText =
-                                                                                 "Check another qualification",
-                                                                             Href = "/",
-                                                                             OpenInNewTab = false
-                                                                         },
-                                         QualificationDetailsSummaryHeader = "Qualification details",
-                                         QualificationNameLabel = "Qualification",
-                                         QualificationStartDateLabel = "Qualification start date",
-                                         QualificationAwardedDateLabel = "Qualification awarded date",
-                                         FeedbackBanner = new FeedbackBanner
-                                                          {
-                                                              Body = ContentfulContentHelper.Paragraph("Test body"),
-                                                              BannerTitle = "Test banner title",
-                                                              Heading = "Test heading"
-                                                          },
-                                         QualificationResultHeading = "Qualification result heading",
-                                         QualificationResultFrMessageHeading = "Full and relevant",
-                                         QualificationResultFrMessageBody = "Full and relevant body",
-                                         QualificationResultNotFrMessageHeading = "Not full and relevant",
-                                         QualificationResultNotFrMessageBody = "Not full and relevant body",
-                                         QualificationResultNotFrL3MessageHeading = "Not full and relevant L3",
-                                         QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body",   
-                                         QualificationResultNotFrL3OrL6MessageHeading = "Not full and relevant L3 or L6",
-                                         QualificationResultNotFrL3OrL6MessageBody = "Not full and relevant L3 or L6 body",
-                                         UpDownFeedback = GetUpDownFeedback(),
-                                         PrintButtonText = "Print this page",
-                                         PrintInformationBody = ContentfulContentHelper.Paragraph("Print information body"),
-                                         PrintInformationHeading = "Print information heading",
-                                         QualificationNumberLabel = "Qualification Number (QN)"
-                                     });
-    }
 
-    public async Task<List<NavigationLink>> GetNavigationLinks()
-    {
-        return await Task.FromResult(new List<NavigationLink>
-                                     {
-                                         new NavigationLink
-                                         {
-                                             DisplayText = "Privacy notice",
-                                             Href = "/link-to-privacy-notice"
-                                         },
-                                         new NavigationLink
-                                         {
-                                             DisplayText = "Accessibility statement",
-                                             Href = "/link-to-accessibility-statement"
-                                         }
-                                     });
+        var labels = new DetailsPageLabels
+        {
+            AwardingOrgLabel = "Awarding Org Label",
+            DateOfCheckLabel = "Test Date Of Check Label",
+            LevelLabel = "Test Level Label",
+            MainHeader = "Test Main Heading",
+            BackButton = new NavigationLink
+            {
+                DisplayText = "TEST",
+                Href = "/confirm-qualification/eyq-240",
+                OpenInNewTab = false
+            },
+            BackToConfirmAnswers = new NavigationLink
+            {
+                DisplayText = "TEST (back to additional questions)",
+                Href = "/qualifications/check-additional-questions/$[qualification-id]$/confirm-answers",
+                OpenInNewTab = false
+            },
+            RatiosHeading = "Test ratio heading",
+            RatiosTextL3Ebr = ratioTextL3Ebr,
+            RatiosTextNotFullAndRelevant = ratioTextForNotFullAndRelevant,
+            RatiosTextL3PlusNotFrBetweenSep14Aug19 =
+                                                 ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19,
+            CheckAnotherQualificationLink = new NavigationLink
+            {
+                DisplayText = "Check another qualification",
+                Href = "/",
+                OpenInNewTab = false
+            },
+            QualificationDetailsSummaryHeader = "Qualification details",
+            QualificationNameLabel = "Qualification",
+            QualificationStartDateLabel = "Qualification start date",
+            QualificationAwardedDateLabel = "Qualification awarded date",
+            FeedbackBanner = new FeedbackBanner
+            {
+                Body = ContentfulContentHelper.Paragraph("Test body"),
+                BannerTitle = "Test banner title",
+                Heading = "Test heading"
+            },
+            QualificationResultHeading = "Qualification result heading",
+            QualificationResultFrMessageHeading = "Full and relevant",
+            QualificationResultFrMessageBody = "Full and relevant body",
+            QualificationResultNotFrMessageHeading = "Not full and relevant",
+            QualificationResultNotFrMessageBody = "Not full and relevant body",
+            QualificationResultNotFrL3MessageHeading = "Not full and relevant L3",
+            QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body",
+            QualificationResultNotFrL3OrL6MessageHeading = "Not full and relevant L3 or L6",
+            QualificationResultNotFrL3OrL6MessageBody = "Not full and relevant L3 or L6 body",
+            UpDownFeedback = GetUpDownFeedback(),
+            PrintButtonText = "Print this page",
+            PrintInformationBody = ContentfulContentHelper.Paragraph("Print information body"),
+            PrintInformationHeading = "Print information heading",
+            QualificationNumberLabel = "Qualification Number (QN)"
+        };
+
+        var qualificationDetailsPages = new List<QualificationDetailsPage>
+        {
+            new QualificationDetailsPage
+            {
+                IsPractitionerSpecificPage = false,
+                IsDegreeSpecificPage = false,
+                IsFullAndRelevant = true,
+                FromWhichYear = "Sep-14",
+                ToWhichYear = "Aug-19",
+                Level = "3",
+                Name = "Test name",
+                RequirementsHeading = "Test requirements heading",
+                RequirementsText = requirementsText,
+                Labels = labels
+            },
+            new QualificationDetailsPage
+            {
+                IsPractitionerSpecificPage = true,
+                IsDegreeSpecificPage = false,
+                IsFullAndRelevant = true,
+                FromWhichYear = "Sep-23",
+                ToWhichYear = "Aug-24",
+                Level = "3",
+                Name = "Test name",
+                RequirementsHeading = "This is F&R practitioner heading",
+                RequirementsText = ContentfulContentHelper.Paragraph("This is F&R practitioner text"),
+                Labels = labels
+            },
+            new QualificationDetailsPage
+            {
+                IsPractitionerSpecificPage = true,
+                IsDegreeSpecificPage = false,
+                IsFullAndRelevant = false,
+                FromWhichYear = "Sep-23",
+                ToWhichYear = "Aug-24",
+                Level = "3",
+                Name = "Test name",
+                RequirementsHeading = "This is NF&R practitioner heading",
+                RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
+                Labels = labels
+            },
+            new QualificationDetailsPage
+            {
+                IsPractitionerSpecificPage = true,
+                IsDegreeSpecificPage = false,
+                IsFullAndRelevant = true,
+                FromWhichYear = "Sep-11",
+                ToWhichYear = "Aug-17",
+                Level = "6",
+                Name = "Test name",
+                RequirementsHeading = "This is NF&R practitioner heading",
+                RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
+                Labels = labels
+            }
+        };
+
+        if (userIsCheckingOwnQualification)
+        {
+            return await Task.FromResult(qualificationDetailsPages
+                .FirstOrDefault(x => x.IsPractitionerSpecificPage == userIsCheckingOwnQualification &&
+                x.IsFullAndRelevant == isFullAndRelevant && x.Level == level.ToString()));
+        }
+
+        return await Task.FromResult(qualificationDetailsPages.FirstOrDefault(x => x.IsPractitionerSpecificPage == false));
     }
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()
@@ -382,7 +426,7 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear)
+    public Task<CannotFindQualificationPage?> GetCannotFindQualificationPage(int level, int startMonth, int startYear, bool isUserCheckingTheirOwnQualification)
     {
         var backButton = new NavigationLink
                          {
@@ -402,6 +446,18 @@ public class MockContentfulService : IContentService
 
         return (level switch
                 {
+                    3 when isUserCheckingTheirOwnQualification => Task.FromResult(new CannotFindQualificationPage
+                                         {
+                                             Heading = "This is the practitioner level 3 page",
+                                             Body = ContentfulContentHelper.Paragraph("This is the practitioner body text"),
+                                             FromWhichYear = "Sep-14",
+                                             ToWhichYear = "Aug-19",
+                                             BackButton = backButton,
+                                             FeedbackBanner = feedbackBanner,
+                                             UpDownFeedback = upDownFeedback,
+                                             RightHandSideContent = GetFeedbackComponent(),
+                                             IsPractitionerSpecificPage = true
+                                         }),
                     3 => Task.FromResult(new CannotFindQualificationPage
                                          {
                                              Heading = "This is the level 3 page",
@@ -411,7 +467,8 @@ public class MockContentfulService : IContentService
                                              BackButton = backButton,
                                              FeedbackBanner = feedbackBanner,
                                              UpDownFeedback = upDownFeedback,
-                                             RightHandSideContent = GetFeedbackComponent()
+                                             RightHandSideContent = GetFeedbackComponent(),
+                                             IsPractitionerSpecificPage = false
                                          }),
                     4 => Task.FromResult(new CannotFindQualificationPage
                                          {
@@ -422,7 +479,8 @@ public class MockContentfulService : IContentService
                                              BackButton = backButton,
                                              FeedbackBanner = feedbackBanner,
                                              UpDownFeedback = upDownFeedback,
-                                             RightHandSideContent = GetFeedbackComponent()
+                                             RightHandSideContent = GetFeedbackComponent(),
+                                             IsPractitionerSpecificPage = false
                                          }),
                     _ => Task.FromResult<CannotFindQualificationPage>(null!)
                 })!;

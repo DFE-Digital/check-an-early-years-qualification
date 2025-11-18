@@ -1,5 +1,4 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Constants;
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Microsoft.AspNetCore.Mvc;
@@ -12,20 +11,20 @@ public partial class QuestionsController
     [HttpGet("what-is-the-awarding-organisation")]
     public async Task<IActionResult> WhatIsTheAwardingOrganisation()
     {
-        var questionPage = await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
+        var questionPage = await questionService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
         if (questionPage is null)
         {
             logger.LogError("No content for the question page");
             return RedirectToAction("Index", "Error");
         }
 
-        var qualifications = await GetFilteredQualifications();
+        var qualifications = await questionService.GetFilteredQualifications();
 
-        var model = await MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications,
+        var model = await questionService.MapDropdownModel(new DropdownQuestionModel(), questionPage, qualifications,
                                            nameof(this.WhatIsTheAwardingOrganisation),
                                            Questions,
-                                           userJourneyCookieService.GetAwardingOrganisation(),
-                                           userJourneyCookieService.GetAwardingOrganisationIsNotOnList());
+                                           questionService.GetAwardingOrganisation(),
+                                           questionService.GetAwardingOrganisationIsNotOnList());
 
         return View("Dropdown", model);
     }
@@ -37,13 +36,13 @@ public partial class QuestionsController
         if (!ModelState.IsValid || (string.IsNullOrEmpty(model.SelectedValue) && !model.NotInTheList))
         {
             var questionPage =
-                await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
+                await questionService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
 
             if (questionPage is not null)
             {
-                var qualifications = await GetFilteredQualifications();
+                var qualifications = await questionService.GetFilteredQualifications();
 
-                model = await MapDropdownModel(model, questionPage, qualifications,
+                model = await questionService.MapDropdownModel(model, questionPage, qualifications,
                                                nameof(this.WhatIsTheAwardingOrganisation),
                                                Questions,
                                                model.SelectedValue,
@@ -54,42 +53,8 @@ public partial class QuestionsController
             return View("Dropdown", model);
         }
 
-        userJourneyCookieService.SetQualificationNameSearchCriteria(string.Empty);
-        userJourneyCookieService.SetAwardingOrganisation(model.NotInTheList ? string.Empty : model.SelectedValue!);
-        userJourneyCookieService.SetAwardingOrganisationNotOnList(model.NotInTheList);
-
-        // Used to prepopulate help form
-        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
-        enquiry.AwardingOrganisation = model.SelectedValue ?? "";
-        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
+        questionService.SetWhatIsTheAwardingOrganisationValuesInCookie(model);
 
         return RedirectToAction("Index", "CheckYourAnswers");
-    }
-
-    private async Task<List<Qualification>> GetFilteredQualifications()
-    {
-        var level = userJourneyCookieService.GetLevelOfQualification();
-        var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        return await repository.Get(level, startDateMonth, startDateYear, null, null);
-    }
-
-    private async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model,
-                                                               DropdownQuestionPage question,
-                                                               List<Qualification> qualifications, string actionName,
-                                                               string controllerName,
-                                                               string? selectedAwardingOrganisation,
-                                                               bool selectedNotOnTheList)
-    {
-        string[] awardingOrganisationExclusions =
-            [AwardingOrganisations.AllHigherEducation, AwardingOrganisations.Various];
-
-        var uniqueAwardingOrganisations
-            = qualifications.Select(x => x.AwardingOrganisationTitle)
-                            .Distinct()
-                            .Where(x => !Array.Exists(awardingOrganisationExclusions, x.Contains))
-                            .Order();
-
-        return await dropdownQuestionMapper.Map(model, question, actionName, controllerName, uniqueAwardingOrganisations,selectedAwardingOrganisation,
-                                                selectedNotOnTheList);
     }
 }

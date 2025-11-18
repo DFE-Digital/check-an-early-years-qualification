@@ -23,43 +23,46 @@ public class QualificationDetailsMapperTests
         const string improveServiceBody = "This is the improve service body";
         const string requirementsText = "Requirements text";
         const string printInformationBody = "Printing information body";
-        var detailsPage = new DetailsPage
-                          {
-                              AwardingOrgLabel = "Awarding org label",
-                              CheckAnotherQualificationLink = new NavigationLink
-                                                              {
-                                                                  DisplayText = "Check another qualification",
-                                                                  OpenInNewTab = true,
-                                                                  Href = "/"
-                                                              },
-                              DateOfCheckLabel = "Date of check label",
-                              LevelLabel = "Level label",
-                              MainHeader = "Main header",
-                              RequirementsHeading = "Requirements heading",
-                              RequirementsText = ContentfulContentHelper.Paragraph(requirementsText),
-                              RatiosHeading = "Ratios heading",
-                              PrintButtonText = "Print button text",
-                              PrintInformationHeading = "Print information heading",
-                              PrintInformationBody = ContentfulContentHelper.Paragraph(printInformationBody),
-                              QualificationNameLabel = "Qualification name label",
-                              QualificationStartDateLabel = "Qualifications start date label",
-                              QualificationAwardedDateLabel = "Qualifications awarded date label",
-                              QualificationDetailsSummaryHeader = "Qualification details summary label",
-                              FeedbackBanner = new FeedbackBanner
-                                               {
-                                                   Heading = "Feedback banner heading",
-                                                   Body = ContentfulContentHelper.Paragraph(feedbackBannerBody),
-                                                   BannerTitle = "This is the title"
-                                               },
-                              UpDownFeedback = new UpDownFeedback
-                                               {
-                                                   FeedbackComponent = new FeedbackComponent
-                                                                       {
-                                                                           Header = "Feedback header",
-                                                                           Body = ContentfulContentHelper.Paragraph(improveServiceBody)
-                                                                       }
-                                               }
-                          };
+        var detailsPage = new QualificationDetailsPage
+        {
+            RequirementsHeading = "Requirements heading",
+            RequirementsText = ContentfulContentHelper.Paragraph(requirementsText),
+            Labels = new DetailsPageLabels()
+            {
+                AwardingOrgLabel = "Awarding org label",
+                CheckAnotherQualificationLink = new NavigationLink
+                {
+                    DisplayText = "Check another qualification",
+                    OpenInNewTab = true,
+                    Href = "/"
+                },
+                DateOfCheckLabel = "Date of check label",
+                LevelLabel = "Level label",
+                MainHeader = "Main header",
+                RatiosHeading = "Ratios heading",
+                PrintButtonText = "Print button text",
+                PrintInformationHeading = "Print information heading",
+                PrintInformationBody = ContentfulContentHelper.Paragraph(printInformationBody),
+                QualificationNameLabel = "Qualification name label",
+                QualificationStartDateLabel = "Qualifications start date label",
+                QualificationAwardedDateLabel = "Qualifications awarded date label",
+                QualificationDetailsSummaryHeader = "Qualification details summary label",
+                FeedbackBanner = new FeedbackBanner
+                {
+                    Heading = "Feedback banner heading",
+                    Body = ContentfulContentHelper.Paragraph(feedbackBannerBody),
+                    BannerTitle = "This is the title"
+                },
+                UpDownFeedback = new UpDownFeedback
+                {
+                    FeedbackComponent = new FeedbackComponent
+                    {
+                        Header = "Feedback header",
+                        Body = ContentfulContentHelper.Paragraph(improveServiceBody)
+                    }
+                }
+            }
+        };
 
         var backNavLink = new NavigationLink
                           {
@@ -83,9 +86,9 @@ public class QualificationDetailsMapperTests
         
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(detailsPage.RequirementsText)).ReturnsAsync(requirementsText);
-        mockContentParser.Setup(x => x.ToHtml(detailsPage.FeedbackBanner.Body)).ReturnsAsync(feedbackBannerBody);
-        mockContentParser.Setup(x => x.ToHtml(detailsPage.UpDownFeedback.FeedbackComponent!.Body)).ReturnsAsync(improveServiceBody);
-        mockContentParser.Setup(x => x.ToHtml(detailsPage.PrintInformationBody)).ReturnsAsync(printInformationBody);
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.FeedbackBanner.Body)).ReturnsAsync(feedbackBannerBody);
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.UpDownFeedback.FeedbackComponent!.Body)).ReturnsAsync(improveServiceBody);
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.PrintInformationBody)).ReturnsAsync(printInformationBody);
         
         var mapper = new QualificationDetailsMapper(mockContentParser.Object);
         var result = await mapper.Map(qualification, detailsPage, backNavLink,
@@ -111,32 +114,32 @@ public class QualificationDetailsMapperTests
         result.DateStarted.Should().BeSameAs(dateStarted);
         result.DateAwarded.Should().BeSameAs(dateAwarded);
         result.Content.Should().NotBeNull();
-        result.Content!.AwardingOrgLabel.Should().BeSameAs(detailsPage.AwardingOrgLabel);
-        result.Content.DateOfCheckLabel.Should().BeSameAs(detailsPage.DateOfCheckLabel);
-        result.Content.LevelLabel.Should().BeSameAs(detailsPage.LevelLabel);
-        result.Content.MainHeader.Should().BeSameAs(detailsPage.MainHeader);
+        result.Content!.AwardingOrgLabel.Should().BeSameAs(detailsPage.Labels.AwardingOrgLabel);
+        result.Content.DateOfCheckLabel.Should().BeSameAs(detailsPage.Labels.DateOfCheckLabel);
+        result.Content.LevelLabel.Should().BeSameAs(detailsPage.Labels.LevelLabel);
+        result.Content.MainHeader.Should().BeSameAs(detailsPage.Labels.MainHeader);
         result.Content.RequirementsHeading.Should().BeSameAs(detailsPage.RequirementsHeading);
         result.Content.RequirementsText.Should().BeSameAs(requirementsText);
-        result.Content.RatiosHeading.Should().BeSameAs(detailsPage.RatiosHeading);
+        result.Content.RatiosHeading.Should().BeSameAs(detailsPage.Labels.RatiosHeading);
         result.Content.CheckAnotherQualificationLink.Should()
-              .BeEquivalentTo(detailsPage.CheckAnotherQualificationLink, options => options.Excluding(x => x.Sys));
-        result.Content.PrintButtonText.Should().BeSameAs(detailsPage.PrintButtonText);
-        result.Content.PrintInformationHeading.Should().BeSameAs(detailsPage.PrintInformationHeading);
+              .BeEquivalentTo(detailsPage.Labels.CheckAnotherQualificationLink, options => options.Excluding(x => x.Sys));
+        result.Content.PrintButtonText.Should().BeSameAs(detailsPage.Labels.PrintButtonText);
+        result.Content.PrintInformationHeading.Should().BeSameAs(detailsPage.Labels.PrintInformationHeading);
         result.Content.PrintInformationBody.Should().BeSameAs(printInformationBody);
-        result.Content.QualificationNameLabel.Should().BeSameAs(detailsPage.QualificationNameLabel);
-        result.Content.QualificationStartDateLabel.Should().BeSameAs(detailsPage.QualificationStartDateLabel);
-        result.Content.QualificationAwardedDateLabel.Should().BeSameAs(detailsPage.QualificationAwardedDateLabel);
+        result.Content.QualificationNameLabel.Should().BeSameAs(detailsPage.Labels.QualificationNameLabel);
+        result.Content.QualificationStartDateLabel.Should().BeSameAs(detailsPage.Labels.QualificationStartDateLabel);
+        result.Content.QualificationAwardedDateLabel.Should().BeSameAs(detailsPage.Labels.QualificationAwardedDateLabel);
         result.Content.QualificationDetailsSummaryHeader.Should()
-              .BeSameAs(detailsPage.QualificationDetailsSummaryHeader);
+              .BeSameAs(detailsPage.Labels.QualificationDetailsSummaryHeader);
         result.Content.FeedbackBanner.Should()
-              .BeEquivalentTo(detailsPage.FeedbackBanner, options => options.Excluding(x => x.Body));
-        result.UpDownFeedback.Should().BeEquivalentTo(detailsPage.UpDownFeedback,
+              .BeEquivalentTo(detailsPage.Labels.FeedbackBanner, options => options.Excluding(x => x.Body));
+        result.UpDownFeedback.Should().BeEquivalentTo(detailsPage.Labels.UpDownFeedback,
                                                       options => options.Excluding(x => x.FeedbackComponent));
         result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
         result.UpDownFeedback.FeedbackComponent.Header.Should()
-              .BeSameAs(detailsPage.UpDownFeedback.FeedbackComponent!.Header);
+              .BeSameAs(detailsPage.Labels.UpDownFeedback.FeedbackComponent!.Header);
         result.IsQualificationNameDuplicate.Should().BeFalse();
-        result.QualificationNumberLabel.Should().Be(detailsPage.QualificationNumberLabel);
+        result.QualificationNumberLabel.Should().Be(detailsPage.Labels.QualificationNumberLabel);
         result.QualificationNumber.Should().Be(qualification.QualificationNumber);
     }
 

@@ -193,42 +193,65 @@ public class MockContentfulServiceTests
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetDetailsPage();
+        var result = await contentfulService.GetQualificationDetailsPage(false, false, 3, 6, 2001, false);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<DetailsPage>();
-        result.AwardingOrgLabel.Should().NotBeNullOrEmpty();
-        result.DateOfCheckLabel.Should().NotBeNullOrEmpty();
-        result.LevelLabel.Should().NotBeNullOrEmpty();
-        result.MainHeader.Should().NotBeNullOrEmpty();
-        result.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
-        result.QualificationNameLabel.Should().NotBeNullOrEmpty();
-        result.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
-        result.QualificationAwardedDateLabel.Should().NotBeNullOrEmpty();
-        result.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
+        result.Should().BeAssignableTo<QualificationDetailsPage>();
+        result.Labels.AwardingOrgLabel.Should().NotBeNullOrEmpty();
+        result.Labels.DateOfCheckLabel.Should().NotBeNullOrEmpty();
+        result.Labels.LevelLabel.Should().NotBeNullOrEmpty();
+        result.Labels.MainHeader.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationNameLabel.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationAwardedDateLabel.Should().NotBeNullOrEmpty();
+        result.Labels.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
-        result.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
+        result.Labels.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text L3 EBR");
-        result.QualificationResultHeading.Should().Be("Qualification result heading");
-        result.QualificationResultFrMessageHeading.Should().Be("Full and relevant");
-        result.QualificationResultFrMessageBody.Should().Be("Full and relevant body");
-        result.QualificationResultNotFrMessageHeading.Should().Be("Not full and relevant");
-        result.QualificationResultNotFrMessageBody.Should().Be("Not full and relevant body");
-        result.QualificationResultNotFrL3MessageHeading.Should().Be("Not full and relevant L3");
-        result.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
-        result.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
-        result.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
-        result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+        result.Labels.QualificationResultHeading.Should().Be("Qualification result heading");
+        result.Labels.QualificationResultFrMessageHeading.Should().Be("Full and relevant");
+        result.Labels.QualificationResultFrMessageBody.Should().Be("Full and relevant body");
+        result.Labels.QualificationResultNotFrMessageHeading.Should().Be("Not full and relevant");
+        result.Labels.QualificationResultNotFrMessageBody.Should().Be("Not full and relevant body");
+        result.Labels.QualificationResultNotFrL3MessageHeading.Should().Be("Not full and relevant L3");
+        result.Labels.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
+        result.Labels.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
+        result.Labels.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
+        result.Labels.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+        result.IsDegreeSpecificPage.Should().BeFalse();
     }
 
     [TestMethod]
-    public async Task GetNavigationLinks_ReturnsExpectedDetails()
+    public async Task GetDetailsPage_UserIsCheckingOwnQualification_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetNavigationLinks();
+        var result = await contentfulService.GetQualificationDetailsPage(true, false, 3, 1, 2024, false);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<List<NavigationLink>>();
-        result.Count.Should().Be(2);
+        result.Should().BeAssignableTo<QualificationDetailsPage>();
+        result.Labels.AwardingOrgLabel.Should().NotBeNullOrEmpty();
+        result.Labels.DateOfCheckLabel.Should().NotBeNullOrEmpty();
+        result.Labels.LevelLabel.Should().NotBeNullOrEmpty();
+        result.Labels.MainHeader.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationDetailsSummaryHeader.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationNameLabel.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationStartDateLabel.Should().NotBeNullOrEmpty();
+        result.Labels.QualificationAwardedDateLabel.Should().NotBeNullOrEmpty();
+        result.Labels.RatiosTextNotFullAndRelevant!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is not F&R");
+        result.Labels.RatiosTextL3Ebr!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the ratio text L3 EBR");
+        result.Labels.QualificationResultHeading.Should().Be("Qualification result heading");
+        result.Labels.QualificationResultFrMessageHeading.Should().Be("Full and relevant");
+        result.Labels.QualificationResultFrMessageBody.Should().Be("Full and relevant body");
+        result.Labels.QualificationResultNotFrMessageHeading.Should().Be("Not full and relevant");
+        result.Labels.QualificationResultNotFrMessageBody.Should().Be("Not full and relevant body");
+        result.Labels.QualificationResultNotFrL3MessageHeading.Should().Be("Not full and relevant L3");
+        result.Labels.QualificationResultNotFrL3MessageBody.Should().Be("Not full and relevant L3 body");
+        result.Labels.QualificationResultNotFrL3OrL6MessageHeading.Should().Be("Not full and relevant L3 or L6");
+        result.Labels.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
+        result.Labels.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+        result.IsDegreeSpecificPage.Should().BeFalse();
     }
 
     [TestMethod]
@@ -622,10 +645,34 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetCannotFindQualificationPage_PassInLevel3AndPractitioner_ReturnsExpectedContent()
+    {
+        var contentfulService = new MockContentfulService();
+        var result = await contentfulService.GetCannotFindQualificationPage(3, 7, 2015, true);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<CannotFindQualificationPage>();
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+                                                  {
+                                                      DisplayText = "TEST",
+                                                      OpenInNewTab = false,
+                                                      Href = "/select-a-qualification-to-check"
+                                                  });
+
+        result.Heading.Should().Be("This is the practitioner level 3 page");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the practitioner body text");
+        result.FromWhichYear.Should().Be("Sep-14");
+        result.ToWhichYear.Should().Be("Aug-19");
+        result.FeedbackBanner.Should().NotBeNull();
+        result.IsPractitionerSpecificPage.Should().BeTrue();
+    }
+    
+    [TestMethod]
     public async Task GetCannotFindQualificationPage_PassInLevel3_ReturnsExpectedContent()
     {
         var contentfulService = new MockContentfulService();
-        var result = await contentfulService.GetCannotFindQualificationPage(3, 7, 2015);
+        var result = await contentfulService.GetCannotFindQualificationPage(3, 7, 2015, false);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CannotFindQualificationPage>();
@@ -647,7 +694,7 @@ public class MockContentfulServiceTests
     public async Task GetCannotFindQualificationPage_PassInLevel4_ReturnsExpectedContent()
     {
         var contentfulService = new MockContentfulService();
-        var result = await contentfulService.GetCannotFindQualificationPage(4, 7, 2015);
+        var result = await contentfulService.GetCannotFindQualificationPage(4, 7, 2015, false);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<CannotFindQualificationPage>();
@@ -669,7 +716,7 @@ public class MockContentfulServiceTests
     public async Task GetCannotFindQualificationPage_PassInLevel5_ReturnsNull()
     {
         var contentfulService = new MockContentfulService();
-        var result = await contentfulService.GetCannotFindQualificationPage(5, 7, 2015);
+        var result = await contentfulService.GetCannotFindQualificationPage(5, 7, 2015, false);
 
         result.Should().BeNull();
     }

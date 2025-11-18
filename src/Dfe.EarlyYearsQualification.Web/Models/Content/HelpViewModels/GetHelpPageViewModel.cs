@@ -30,7 +30,7 @@ public class GetHelpPageViewModel
     // validation handling
     public bool HasNoEnquiryOptionSelectedError { get; set; }
 
-    public bool HasValidationErrors => Errors.Any();
+    public bool HasValidationErrors => Errors.Count > 0;
 
     List<ErrorSummaryLink> Errors
     {

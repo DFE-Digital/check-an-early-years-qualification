@@ -28,7 +28,7 @@ public class EmailAddressPageViewModel
     // validation handling
     public bool HasEmailAddressError { get; set; }
 
-    public bool HasValidationErrors => Errors.Any();
+    public bool HasValidationErrors => Errors.Count > 0;
 
     List<ErrorSummaryLink> Errors
     {

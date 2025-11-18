@@ -7,7 +7,8 @@ public interface IQualificationDetailsService
 {
     Task<List<Qualification>> GetFilteredQualifications();
 
-    Task<DetailsPage?> GetDetailsPage();
+    Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content,
+                                               List<Qualification> qualifications);
 
     bool HasStartDate();
 
@@ -18,15 +19,19 @@ public interface IQualificationDetailsService
                                                                    additionalRequirementAnswerModels);
 
     bool AnswersIndicateNotFullAndRelevant(List<AdditionalRequirementAnswerModel> additionalRequirementsAnswers);
+
     RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model);
 
     Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
                                                            Qualification qualification);
+
     Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model,
                                           Qualification qualification);
+
     // ReSharper disable once IdentifierTypo
     Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model,
                                             Qualification qualification);
+
     Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model);
 
     (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(
@@ -36,20 +41,31 @@ public interface IQualificationDetailsService
                                                             QualificationDetailsModel details);
 
     bool DoAdditionalAnswersMatchQuestions(QualificationDetailsModel details);
-    NavigationLink? CalculateBackButton(DetailsPage content, string qualificationId);
+
+    NavigationLink? CalculateBackButton(DetailsPageLabels content, string qualificationId);
 
     List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
         List<AdditionalRequirementQuestion>? additionalRequirementQuestions);
 
-    Task<QualificationDetailsModel> MapDetails(Qualification qualification, DetailsPage content, List<Qualification> qualifications);
+    Task SetRatioText(QualificationDetailsModel model, DetailsPageLabels content);
 
-    Task SetRatioText(QualificationDetailsModel model, DetailsPage content);
+    void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPageLabels content);
 
-    void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPage content);
+    void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPageLabels content);
 
-    void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPage content);
-    
     Task SetRequirementOverrides(Qualification qualification, QualificationDetailsModel model);
-    
+
     Task SetDefaultCardContentForApprovedQualifications(Qualification qualification, QualificationDetailsModel model);
+
+    bool GetUserIsCheckingOwnQualification();
+
+    int? GetLevelOfQualification();
+
+    (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
+
+    Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification,
+                                                                bool isFullAndRelevant, int level, int startMonth,
+                                                                int startYear, Qualification qualification,
+                                                                List<AdditionalRequirementAnswerModel>?
+                                                                    additionalRequirementAnswerModels);
 }

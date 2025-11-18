@@ -1,11 +1,6 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Helpers;
-using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
-using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
-using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers.Questions;
@@ -13,14 +8,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 [Route("/questions")]
 public partial class QuestionsController(
     ILogger<QuestionsController> logger,
-    IContentService contentService,
-    IUserJourneyCookieService userJourneyCookieService,
-    IQualificationsRepository repository,
-    IDateQuestionModelValidator questionModelValidator,
-    IPlaceholderUpdater placeholderUpdater,
-    IRadioQuestionMapper radioQuestionMapper,
-    IDropdownQuestionMapper dropdownQuestionMapper,
-    IPreCheckPageMapper preCheckPageMapper)
+    IQuestionService questionService)
     : ServiceController
 {
     private const string Questions = "Questions";
@@ -29,31 +17,23 @@ public partial class QuestionsController(
     [ResponseCache(NoStore = true)]
     public IActionResult StartNew()
     {
-        userJourneyCookieService.ResetUserJourneyCookie();
+        questionService.ResetUserJourneyCookie();
         return RedirectToAction(nameof(this.AreYouCheckingYourOwnQualification));
     }
 
     private async Task<IActionResult> GetRadioView(string questionPageId, string actionName, string controllerName,
                                                    string? selectedAnswer)
     {
-        var questionPage = await contentService.GetRadioQuestionPage(questionPageId);
+        var questionPage = await questionService.GetRadioQuestionPageContent(questionPageId);
+
         if (questionPage is null)
         {
             logger.LogError("No content for the question page");
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await MapRadioModel(new RadioQuestionModel(), questionPage, actionName, controllerName,
-                                        selectedAnswer);
-        
-        return View("Radio", model);
-    }
+        var model = await questionService.Map(new RadioQuestionModel(), questionPage, actionName, controllerName, selectedAnswer);
 
-    private async Task<RadioQuestionModel> MapRadioModel(RadioQuestionModel model, RadioQuestionPage question,
-                                                         string actionName,
-                                                         string controllerName,
-                                                         string? selectedAnswer)
-    {
-        return await radioQuestionMapper.Map(model, question, actionName, controllerName, selectedAnswer);
+        return View("Radio", model);
     }
 }
