@@ -25,15 +25,15 @@ jobs:
           curl -X GET $requestUrl \
             -o response.json \
             -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY" \
-            -H 'Content-Type: application/vnd.contentful.management.v1+json'
+            -H "Content-Type: application/vnd.contentful.management.v1+json"
 
           printf 'Here'
           
           name=$(cat response.json | jq -r '.name')
           url=$(cat response.json | jq -r '.url')
-          topics=$(cat response.json | jq -r '.topics')
+          topics=$(cat response.json | jq -r '.topics[]')
           active=$(cat response.json | jq -r '.active')
-          version=$(cat response.json | jq -r '.version')
+          version=$(cat response.json | jq -r '.sys.version')
           
           printf $name
           printf $topics
@@ -42,6 +42,6 @@ jobs:
           
           curl -X PUT $requestUrl \
             -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY" \
-            -H 'Content-Type: application/vnd.contentful.management.v1+json' \
-            -H 'x-contentful-version: $version' \
-            -d '{"name": "${name}", "url": "${url}", "topics": ${topics}, "active": ${active}, "headers": [{"key":"cache-secret", "value": "ABC", "secret": true}]}'
+            -H "Content-Type: application/vnd.contentful.management.v1+json" \
+            -H "x-contentful-version: $version" \
+            -d "{\"name\": \"${name}\", \"url\": \"${url}\", \"topics\": \"${topics}\", \"active\": \"${active}\", \"headers\": [{\"key\":\"cache-secret\", \"value\": \"ABC\", \"secret\": true}]}"
