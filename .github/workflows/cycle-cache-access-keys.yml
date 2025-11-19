@@ -31,7 +31,7 @@ jobs:
           
           name=$(cat response.json | jq -r '.name')
           url=$(cat response.json | jq -r '.url')
-          topics=$(cat response.json | jq -r '[.topics[] | values[]]')
+          topics=$(cat response.json | jq -r '[.topics[]]')
           active=$(cat response.json | jq -r '.active')
           version=$(cat response.json | jq -r '.sys.version')
           
