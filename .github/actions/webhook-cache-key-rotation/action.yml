@@ -18,13 +18,18 @@ runs:
   using: composite
   steps:
     - name: Cycle cache key
+      env:
+        CONTENTFUL_MANAGEMENT_API_KEY: ${{ inputs.contentful_management_api_key }}
+        CONTENTFUL_SPACE_ID: ${{ inputs.contentful_space_id }}
+        CACHE_ENDPOINT_SECRET: ${{ inputs.cache_endpoint_secret }}
+        WEBHOOK_DEFINITION_ID: ${{ inputs.webhook_definition_id }}
       shell: bash
       run: |
-        requestUrl="https://api.contentful.com/spaces/${{ inputs.contentful_space_id }}/webhook_definitions/${{ inputs.webhook_definition_id }}"
+        requestUrl="https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/$WEBHOOK_DEFINITION_ID"
         
         curl -f -X GET $requestUrl \
           -o response.json \
-          -H "Authorization: Bearer ${{ inputs.contentful_management_api_key }}" \
+          -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY" \
           -H "Content-Type: application/vnd.contentful.management.v1+json" || exit 1
         
         name=$(cat response.json | jq -r '.name')
@@ -34,7 +39,7 @@ runs:
         version=$(cat response.json | jq -r '.sys.version')
         
         curl -f -X PUT $requestUrl \
-          -H "Authorization: Bearer ${{ inputs.contentful_management_api_key }}" \
+          -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY" \
           -H "Content-Type: application/vnd.contentful.management.v1+json" \
           -H "x-contentful-version: $version" \
-          -d "{\"name\": \"$name\", \"url\": \"$url\", \"topics\": $topics, \"active\": $active, \"headers\": [{\"key\":\"cache-secret\", \"value\": \"${{ inputs.cache_endpoint_secret }}\", \"secret\": true}]}" || exit 1
+          -d "{\"name\": \"$name\", \"url\": \"$url\", \"topics\": $topics, \"active\": $active, \"headers\": [{\"key\":\"cache-secret\", \"value\": \"$CACHE_ENDPOINT_SECRET\", \"secret\": true}]}" || exit 1
