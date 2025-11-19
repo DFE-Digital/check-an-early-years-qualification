@@ -10,7 +10,7 @@
         <PackageReference Include="Azure.Identity" Version="1.17.0" />
         <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.10" />
-        <PackageReference Include="StackExchange.Redis" Version="2.9.32" />
+        <PackageReference Include="StackExchange.Redis" Version="2.10.1" />
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.10" />
     </ItemGroup>
 
