@@ -26,8 +26,6 @@ jobs:
             -o response.json \
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
             -H 'Content-Type: application/vnd.contentful.management.v1+json'
-          
-          printf $response
 
           printf 'Here'
           
