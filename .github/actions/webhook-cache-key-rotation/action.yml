@@ -17,7 +17,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Cycle development cache key
+    - name: Cycle cache key
       shell: bash
       run: |
         requestUrl="https://api.contentful.com/spaces/${{ inputs.contentful_space_id }}/webhook_definitions/${{ inputs.webhook_definition_id }}"
