@@ -29,11 +29,11 @@ jobs:
 
           printf 'Here'
           
-          name=$(jq -r '.name' response.json)
-          url=$(jq -r '.url' response.json)
-          topics=$(jq -r '.topics' response.json)
-          active=$(jq -r '.active' response.json)
-          version=$(jq -r '.version' response.json)
+          name=$(cat response.json | jq -r '.name')
+          url=$(cat response.json | jq -r '.url')
+          topics=$(cat response.json | jq -r '.topics')
+          active=$(cat response.json | jq -r '.active')
+          version=$(cat response.json | jq -r '.version')
           
           printf $name
           printf $topics
