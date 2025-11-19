@@ -22,19 +22,20 @@ jobs:
           
           requestUrl="https://api.contentful.com/spaces/"+$CONTENTFUL_SPACE_ID+"/webhook_definitions/0LQk2seP8OUapY7jElikE0"
           
-          response=$(curl -X GET $requestUrl \
+          curl -X GET $requestUrl \
+            -o response.json
             -H 'Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY' \
-            -H 'Content-Type: application/vnd.contentful.management.v1+json')
+            -H 'Content-Type: application/vnd.contentful.management.v1+json'
           
           printf $response
 
           printf 'Here'
           
-          name=$(jq -r '.name' $response)
-          url=$(jq -r '.url' $response)
-          topics=$(jq -r '.topics' $response)
-          active=$(jq -r '.active' $response)
-          version=$(jq -r '.version' $response)
+          name=$(jq -r '.name' response.json)
+          url=$(jq -r '.url' response.json)
+          topics=$(jq -r '.topics' response.json)
+          active=$(jq -r '.active' response.json)
+          version=$(jq -r '.version' response.json)
           
           printf $name
           printf $topics
