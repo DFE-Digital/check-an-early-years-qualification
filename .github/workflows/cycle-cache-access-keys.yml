@@ -30,11 +30,11 @@ jobs:
 
           printf 'Here'
           
-          name=$($response | jq '.name')
-          url=$($response | jq '.url')
-          topics=$($response | jq '.topics')
-          active=$($response | jq .active')
-          version=$($response | jq '.sys.version')
+          name=$(jq -r '.name' $response)
+          url=$(jq -r '.url' $response)
+          topics=$(jq -r '.topics' $response)
+          active=$(jq -r '.active' $response)
+          version=$(jq -r '.version' $response)
           
           printf $name
           printf $topics
