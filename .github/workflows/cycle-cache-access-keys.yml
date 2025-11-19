@@ -17,9 +17,8 @@ jobs:
         env:
           CONTENTFUL_MANAGEMENT_API_KEY: ${{ secrets.CONTENTFUL_MANAGEMENT_API_KEY }}
           CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          CACHE_ENDPOINT_SECRET: ${{ secrets.CACHE_ENDPOINT_SECRET }}
         run: |
-          printf 'Starting'
-          
           requestUrl="https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/webhook_definitions/0LQk2seP8OUapY7jElikE0"
           
           curl -X GET $requestUrl \
@@ -27,21 +26,14 @@ jobs:
             -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY" \
             -H "Content-Type: application/vnd.contentful.management.v1+json"
 
-          printf 'Here'
-          
           name=$(cat response.json | jq -r '.name')
           url=$(cat response.json | jq -r '.url')
-          topics=$(cat response.json | jq -r '[.topics[]]')
+          topics=$(cat response.json | jq -r '.topics')
           active=$(cat response.json | jq -r '.active')
           version=$(cat response.json | jq -r '.sys.version')
-          
-          printf $name
-          printf $topics
-          printf $active
-          printf $version
           
           curl -X PUT $requestUrl \
             -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_API_KEY" \
             -H "Content-Type: application/vnd.contentful.management.v1+json" \
             -H "x-contentful-version: $version" \
-            -d "{\"name\": $name, \"url\": $url, \"topics\": $topics, \"active\": $active, \"headers\": [{\"key\":\"cache-secret\", \"value\": \"ABC\", \"secret\": true}]}"
+            -d "{\"name\": \"$name\", \"url\": \"$url\", \"topics\": $topics, \"active\": $active, \"headers\": [{\"key\":\"cache-secret\", \"value\": \"$CACHE_ENDPOINT_SECRET\", \"secret\": true}]}"
