@@ -1,0 +1,40 @@
+name: Webhook cache key rotation
+description: Used to rotate the keys of the webhooks in Contentful
+
+inputs:
+  contentful_space_id:
+    required: true
+    description: The Contentful Space Id
+  webhook_definition_id:
+    required: true
+    description: The webhook id to update
+  contentful_management_api_key:
+    required: true
+    description: The token used to authenticate the request
+  cache_endpoint_secret:
+    required: true
+    description: The cache endpoint secret
+runs:
+  using: composite
+  steps:
+    - name: Cycle development cache key
+      shell: bash
+      run: |
+        requestUrl="https://api.contentful.com/spaces/${{ inputs.contentful_space_id }}/webhook_definitions/${{ inputs.webhook_definition_id }}"
+        
+        curl -f -X GET $requestUrl \
+          -o response.json \
+          -H "Authorization: Bearer ${{ inputs.contentful_management_api_key }}" \
+          -H "Content-Type: application/vnd.contentful.management.v1+json" || exit 1
+        
+        name=$(cat response.json | jq -r '.name')
+        url=$(cat response.json | jq -r '.url')
+        topics=$(cat response.json | jq -r '.topics')
+        active=$(cat response.json | jq -r '.active')
+        version=$(cat response.json | jq -r '.sys.version')
+        
+        curl -f -X PUT $requestUrl \
+          -H "Authorization: Bearer ${{ inputs.contentful_management_api_key }}" \
+          -H "Content-Type: application/vnd.contentful.management.v1+json" \
+          -H "x-contentful-version: $version" \
+          -d "{\"name\": \"$name\", \"url\": \"$url\", \"topics\": $topics, \"active\": $active, \"headers\": [{\"key\":\"cache-secret\", \"value\": \"${{ inputs.cache_endpoint_secret }}\", \"secret\": true}]}" || exit 1
