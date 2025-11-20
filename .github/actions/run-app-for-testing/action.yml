@@ -28,4 +28,5 @@ runs:
       run: |
         dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
         --UseMockContentful=${USE_MOCK_CONTENTFUL} \
+        --Logging:LogLevel:Default="Debug" \
         --ServiceAccess:Keys:0="${{ inputs.auth_secret }}" &
