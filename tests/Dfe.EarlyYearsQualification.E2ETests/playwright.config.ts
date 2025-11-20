@@ -79,7 +79,7 @@ export default defineConfig({
     webServer: {
         command: buildCommand(),
         url: process.env.WEBAPP_URL,
-        reuseExistingServer: !process.env.CI
+        reuseExistingServer: true
     },
 });
 
