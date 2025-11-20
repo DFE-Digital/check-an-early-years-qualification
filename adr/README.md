@@ -35,4 +35,4 @@ General information about architectural decision records is available at <https:
 | [0021 - Storage Account Key Rotation](./0021-storage-account-key-rotation.md)                   | Accepted   |
 | [0022 - Caching Contentful responses](./0022-cache.md)                                          | Accepted   |
 | [0023 - Changed Tools for Creating UI Tests](./0023-changed-tools-for-creating-ui-tests.md)     | Accepted   |
-| [0024 - Guidance for implementing robots.txt](./0024-robots.md)				                              | Accepted   |
+| [0024 - Guidance for implementing robots.txt](./0024-robots.md)				                  | Accepted   |
