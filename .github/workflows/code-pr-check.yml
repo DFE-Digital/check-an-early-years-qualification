@@ -51,14 +51,14 @@ jobs:
       - name: Run app for testing
         uses: ./.github/actions/run-app-for-testing
         with:
-          url: "http://127.0.0.1:4000"
+          url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           use_mock_contentful: "true"
 
       - name: Run Accessibility tests
         uses: ./.github/actions/run-accessibility-tests
         with:
-          url: "http://127.0.0.1:4000"
+          url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
      
       - name: Install playwright
