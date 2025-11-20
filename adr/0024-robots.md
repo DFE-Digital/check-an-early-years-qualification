@@ -24,4 +24,4 @@ This follows the guidance in the service manual
 Guidance from the service manual indicates that the robots.txt file should not prevent crawling of the service and instead use the noindex directive meta tags on individual pages to manage indexing.
 This means that the robots.txt file should not disallow any user agents and paths.
 The noindex directive has been added to the _layout and is applied to all pages by default.
-A robots.txt file has been added to the wwwroot folder whihc has a wildcard from all user agents and allows all paths.
+A robots.txt file has been added to the wwwroot folder which has a wildcard from all user agents and allows all paths.
