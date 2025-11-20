@@ -48,11 +48,11 @@ jobs:
         with:
           solution_filename: ${{ env.SOLUTION_NAME }}
      
-#      - name: Install playwright
-#        uses: ./.github/actions/install-playwright
-#
-#      - name: Run Playwright snapshot tests
-#        uses: ./.github/actions/run-playwright-snapshot-tests
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+
+      - name: Run Playwright snapshot tests
+        uses: ./.github/actions/run-playwright-snapshot-tests
 #
 #      - name: Run Playwright e2e tests
 #        uses: ./.github/actions/run-playwright-e2e-tests
