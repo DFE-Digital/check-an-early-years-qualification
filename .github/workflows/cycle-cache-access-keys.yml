@@ -1,17 +1,54 @@
 run-name: 'Cycle Cache Access Keys'
-name: Cycle Cache Access Keys
+name: Update cache access keys in Contentful
 
 on:
   workflow_dispatch:
 
 jobs:
-  cycle-access-keys:
-    name: Update access keys in Contentful
-    runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
-    # Permissions for OIDC authentication
-    permissions:
-      id-token: write
+  cycle-cache-key-dev:
+    name: Webhook - Dev
+    runs-on: ubuntu-24.04
+    environment: development
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+        
+      - name: Rotate key for development webhook
+        uses: './.github/actions/webhook-cache-key-rotation'
+        with:
+          contentful_management_api_key: ${{ secrets.CONTENTFUL_MANAGEMENT_API_KEY }}
+          contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          cache_endpoint_secret: ${{ secrets.CACHE_ENDPOINT_SECRET }}
+          webhook_definition_id: "2SXXDY4uNbrkldDSWI0GmC"
+          
+  cycle-cache-key-staging:
+    name: Webhook - Staging
+    runs-on: ubuntu-24.04
+    environment: staging
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Rotate key for staging webhook
+        uses: './.github/actions/webhook-cache-key-rotation'
+        with:
+          contentful_management_api_key: ${{ secrets.CONTENTFUL_MANAGEMENT_API_KEY }}
+          contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          cache_endpoint_secret: ${{ secrets.CACHE_ENDPOINT_SECRET }}
+          webhook_definition_id: "4f96ZnygSF93yiss8kuhMx"
+          
+  cycle-cache-key-production:
+    name: Webhook - Production
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Rotate key for production webhook
+        uses: './.github/actions/webhook-cache-key-rotation'
+        with:
+          contentful_management_api_key: ${{ secrets.CONTENTFUL_MANAGEMENT_API_KEY }}
+          contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          cache_endpoint_secret: ${{ secrets.CACHE_ENDPOINT_SECRET }}
+          webhook_definition_id: "5bVz4BFZHt7n3VsZmqoF6Z"
