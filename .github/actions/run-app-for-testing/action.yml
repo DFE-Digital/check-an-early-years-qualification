@@ -26,6 +26,6 @@ runs:
         USE_MOCK_CONTENTFUL: ${{ inputs.use_mock_contentful }}
 
       run: |
-        dotnet run --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
+        dotnet run -c Local --urls "${{ inputs.url }}" --project="src/Dfe.EarlyYearsQualification.Web" \
         --UseMockContentful="$USE_MOCK_CONTENTFUL" \
         --ServiceAccess:Keys:0="${{ inputs.auth_secret }}" &
