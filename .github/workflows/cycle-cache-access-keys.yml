@@ -11,7 +11,7 @@ jobs:
     environment: development
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         
       - name: Rotate key for development webhook
         uses: './.github/actions/webhook-cache-key-rotation'
@@ -27,7 +27,7 @@ jobs:
     environment: staging
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Rotate key for staging webhook
         uses: './.github/actions/webhook-cache-key-rotation'
@@ -43,7 +43,7 @@ jobs:
     environment: production
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Rotate key for production webhook
         uses: './.github/actions/webhook-cache-key-rotation'
