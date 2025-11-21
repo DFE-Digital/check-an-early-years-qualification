@@ -55,7 +55,8 @@ builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeade
 
 bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
 
-bool runValidationTests = builder.Configuration.GetValue<bool>("RunValidationTests") && builder.Environment.IsDevelopment();
+bool runValidationTests =
+    builder.Configuration.GetValue<bool>("RunValidationTests") && builder.Environment.IsDevelopment();
 
 if (!useMockContentful)
 {
@@ -65,26 +66,26 @@ if (!useMockContentful)
         builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
         builder.Services
-                .AddDataProtection()
-                .ProtectKeysWithAzureKeyVault(new Uri($"{keyVaultEndpoint}keys/data-protection"),
-                                                new DefaultAzureCredential());
+               .AddDataProtection()
+               .ProtectKeysWithAzureKeyVault(new Uri($"{keyVaultEndpoint}keys/data-protection"),
+                                             new DefaultAzureCredential());
     }
 
     if (!builder.Environment.IsDevelopment())
     {
         string? blobStorageConnectionString =
             builder.Configuration
-                    .GetSection("Storage")
-                    .GetValue<string>("ConnectionString");
+                   .GetSection("Storage")
+                   .GetValue<string>("ConnectionString");
 
         const string containerName = "data-protection";
         const string blobName = "data-protection";
 
         builder.Services
-                .AddDataProtection()
-                .PersistKeysToAzureBlobStorage(blobStorageConnectionString,
-                                                containerName,
-                                                blobName);
+               .AddDataProtection()
+               .PersistKeysToAzureBlobStorage(blobStorageConnectionString,
+                                              containerName,
+                                              blobName);
     }
 }
 
