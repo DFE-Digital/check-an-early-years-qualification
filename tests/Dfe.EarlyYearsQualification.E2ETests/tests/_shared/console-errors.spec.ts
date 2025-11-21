@@ -25,8 +25,12 @@ test.describe('error and console log check', {tag: ["@e2e", "@smoke"]}, () => {
         });
     })
 
-    test('Check the exception and logs in console log', async ({page}, testInfo) => {
+    test('Check the exception and logs in console log', async ({browserName, page}, testInfo) => {
 
+        // test only on chrome at the min, due to an issue with the font loading in firefox
+        // https://github.com/alphagov/govuk-frontend/issues/1815
+        test.skip(browserName.toLowerCase() !== 'chromium',`Test only for chromium!`);
+        
         await page.goto('/');
 
         const errorLogs = [...logs?.map(e => e.message)].join('\n');
