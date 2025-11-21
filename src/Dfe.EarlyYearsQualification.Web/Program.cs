@@ -54,15 +54,22 @@ builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptio
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
 bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
+
+bool runValidationTests =
+    builder.Configuration.GetValue<bool>("RunValidationTests") && builder.Environment.IsDevelopment();
+
 if (!useMockContentful)
 {
-    string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
-    builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
+    if (!runValidationTests)
+    {
+        string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
+        builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
-    builder.Services
-           .AddDataProtection()
-           .ProtectKeysWithAzureKeyVault(new Uri($"{keyVaultEndpoint}keys/data-protection"),
-                                         new DefaultAzureCredential());
+        builder.Services
+               .AddDataProtection()
+               .ProtectKeysWithAzureKeyVault(new Uri($"{keyVaultEndpoint}keys/data-protection"),
+                                             new DefaultAzureCredential());
+    }
 
     if (!builder.Environment.IsDevelopment())
     {
