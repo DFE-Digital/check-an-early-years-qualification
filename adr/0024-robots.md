@@ -10,7 +10,7 @@ If a robots.txt is not found crawlers will still attempt to index the site.
 
 ## Decision Drivers
 
-* Government digital service guiance
+* Government digital service guidance
 * Omitting the robots.txt file leads to 404 errors in the logs
 * Straightforward to implement in the public www folder
 
