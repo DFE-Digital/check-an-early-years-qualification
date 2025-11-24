@@ -79,7 +79,7 @@ resource "azurerm_key_vault_secret" "storage_connection_string" {
 
 resource "azurerm_monitor_diagnostic_setting" "storage_account_diagnostics" {
   name                       = "storage-account-diagnostics"
-  target_resource_id         = azurerm_storage_account.sa.id
+  target_resource_id         = "${azurerm_storage_account.sa.id}/blobServices/default/"
   log_analytics_workspace_id = var.logs_id
 
   enabled_log {
