@@ -31,10 +31,11 @@ jobs:
   build-app:  
     name: Build, check and run tests
     runs-on: ubuntu-22.04
+    environment: development
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Build web app  
         uses: ./.github/actions/build-dotnet-app
@@ -46,19 +47,20 @@ jobs:
         uses: ./.github/actions/run-unit-tests
         with:
           solution_filename: ${{ env.SOLUTION_NAME }}
-
+          
       - name: Run app for testing
         uses: ./.github/actions/run-app-for-testing
         with:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-          
+          use_mock_contentful: "true"
+
       - name: Run Accessibility tests
         uses: ./.github/actions/run-accessibility-tests
         with:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-
+     
       - name: Install playwright
         uses: ./.github/actions/install-playwright
 
@@ -68,6 +70,19 @@ jobs:
       - name: Run Playwright e2e tests
         uses: ./.github/actions/run-playwright-e2e-tests
 
+      # NOTE: The previous step spins up a local instance on port 5000 which has use_mock_contentful set to true.
+      # These tests need the flag set to false so we need to spin up a different instance hence the different url.
+      - name: Run Playwright validation tests locally
+        uses: ./.github/actions/run-validation-tests-locally
+        with:
+          webapp_url: "http://127.0.0.1:4000"
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          test_type: "validation"
+          use_mock_contentful: "false"
+          run_validation_tests: "true"
+          contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
+          contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
+
   security-checks-local:
     name: Run baseline security checks locally
     runs-on: ubuntu-22.04
@@ -75,7 +90,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Run .Net Project
         shell: bash
@@ -85,7 +100,7 @@ jobs:
           --ServiceAccess:IsPublic="true" &
 
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.14.0
+        uses: zaproxy/action-baseline@v0.15.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'ghcr.io/zaproxy/zaproxy:stable'

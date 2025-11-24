@@ -23,7 +23,7 @@ jobs:
       id-token: write
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       # Login to Azure using OIDC
       - name: Login to Azure CLI
