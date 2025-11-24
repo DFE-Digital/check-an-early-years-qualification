@@ -82,19 +82,8 @@ resource "azurerm_monitor_diagnostic_setting" "storage_account_diagnostics" {
   target_resource_id         = azurerm_storage_account.sa.id
   log_analytics_workspace_id = var.logs_id
 
-  log {
-    category = "StorageRead"
-    enabled  = true
-  }
-
-  log {
-    category = "StorageWrite"
-    enabled  = true
-  }
-
-  log {
-    category = "StorageDelete"
-    enabled  = true
+  enabled_log {
+    category = "AuditEvent"
   }
 
   metric {
