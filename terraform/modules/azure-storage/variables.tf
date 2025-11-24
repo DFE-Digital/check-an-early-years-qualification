@@ -27,3 +27,8 @@ variable "webapp_subnet_id" {
   description = "The ID of the WebApp Subnet"
   type        = string
 }
+
+variable "logs_id" {
+  description = "Log Analytics workspace ID"
+  type        = string
+}
