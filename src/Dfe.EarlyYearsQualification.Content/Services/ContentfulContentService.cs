@@ -38,7 +38,7 @@ public class ContentfulContentService(
 
         var queryBuilder = new QueryBuilder<QualificationDetailsPage>()
                            .ContentTypeIs(qualificationDetailsPageType)
-                           .Include(3)
+                           .Include(5)
                            .FieldEquals("fields.isPractitionerSpecificPage",
                                         userIsCheckingOwnQualification ? "1" : "0");
 
