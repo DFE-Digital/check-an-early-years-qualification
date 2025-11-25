@@ -103,6 +103,7 @@ module "storage" {
   kv_id                       = module.network.kv_id
   webapp_subnet_id            = module.network.webapp_subnet_id
   tags                        = local.common_tags
+  logs_id                     = module.monitor.logs_id
 }
 
 # Create Redis cache
