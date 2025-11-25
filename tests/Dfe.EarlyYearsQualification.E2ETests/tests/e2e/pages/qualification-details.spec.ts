@@ -41,12 +41,6 @@ test.describe("A spec used to test the qualification details page", {tag: "@e2e"
         await checkText(page, "#requirements-heading", "Test requirements heading");
         await checkText(page, "#requirements-heading + p[class='govuk-body']", "This is the requirements text");
         await checkText(page, "#check-another-qualification-link", "Check another qualification");
-        await checkText(page, ".govuk-notification-banner__title", "Test banner title", 0);
-        await checkText(page, ".govuk-notification-banner__heading", "Test heading", 0);
-        await checkText(page, ".govuk-notification-banner__content > .govuk-body", "Test body", 0);
-        await checkText(page, ".govuk-notification-banner__title", "Test banner title", 1);
-        await checkText(page, ".govuk-notification-banner__heading", "Test heading", 1);
-        await checkText(page, ".govuk-notification-banner__content > .govuk-body", "Test body", 1);
     });
 
     test("Checks the order of the ratios for a level 6 qualification when a user answers yes to the Qts Question", async ({

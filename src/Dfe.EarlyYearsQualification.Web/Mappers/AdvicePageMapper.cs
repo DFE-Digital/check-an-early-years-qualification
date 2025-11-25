@@ -10,7 +10,6 @@ public class AdvicePageMapper(IGovUkContentParser contentParser) : IAdvicePageMa
     public async Task<AdvicePageModel> Map(AdvicePage advicePage)
     {
         var bodyHtml = await contentParser.ToHtml(advicePage.Body);
-        var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(advicePage.FeedbackBanner, contentParser);
         var improveServiceBodyHtml = advicePage.UpDownFeedback is not null
                                          ? await contentParser.ToHtml(advicePage.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
@@ -29,7 +28,6 @@ public class AdvicePageMapper(IGovUkContentParser contentParser) : IAdvicePageMa
                    Heading = advicePage.Heading,
                    BodyContent = bodyHtml,
                    BackButton = NavigationLinkMapper.Map(advicePage.BackButton),
-                   FeedbackBanner = FeedbackBannerMapper.Map(advicePage.FeedbackBanner, feedbackBodyHtml),
                    UpDownFeedback = UpDownFeedbackMapper.Map(advicePage.UpDownFeedback, improveServiceBodyHtml),
                    RightHandSideContent = rightHandSideContent
                };
@@ -38,7 +36,6 @@ public class AdvicePageMapper(IGovUkContentParser contentParser) : IAdvicePageMa
     public async Task<QualificationNotOnListPageModel> Map(CannotFindQualificationPage cannotFindQualificationPage)
     {
         var bodyHtml = await contentParser.ToHtml(cannotFindQualificationPage.Body);
-        var feedbackBodyHtml = await GetFeedbackBannerBodyToHtml(cannotFindQualificationPage.FeedbackBanner, contentParser);
         var improveServiceBodyHtml = cannotFindQualificationPage.UpDownFeedback is not null
                                          ? await contentParser.ToHtml(cannotFindQualificationPage.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
@@ -57,18 +54,8 @@ public class AdvicePageMapper(IGovUkContentParser contentParser) : IAdvicePageMa
                    Heading = cannotFindQualificationPage.Heading,
                    BodyContent = bodyHtml,
                    BackButton = NavigationLinkMapper.Map(cannotFindQualificationPage.BackButton),
-                   FeedbackBanner =
-                       FeedbackBannerMapper.Map(cannotFindQualificationPage.FeedbackBanner, feedbackBodyHtml),
                    UpDownFeedback = UpDownFeedbackMapper.Map(cannotFindQualificationPage.UpDownFeedback, improveServiceBodyHtml),
                    RightHandSideContent = rightHandSideContent
                };
-    }
-    
-    private static async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner,
-                                                                     IGovUkContentParser contentParser)
-    {
-        return feedbackBanner is not null
-                   ? await contentParser.ToHtml(feedbackBanner.Body)
-                   : null;
     }
 }
