@@ -49,7 +49,6 @@
     <meta name="twitter:image" content="@imageUrl">
 
     <title>@ViewData["Title"] - Check an Early Years qualification</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon_new.ico"/>
     <link rel="apple-touch-icon" href="~/apple-touch-icon.png"/>
     @Html.GovUkFrontendStyleImports()
@@ -94,7 +93,7 @@
 
 <div class="govuk-width-container">
     @await RenderSectionAsync("BeforeMainContent", false)
-    <main class="govuk-main-wrapper" role="main" class="pb-3" id="main-content">
+    <main class="govuk-main-wrapper" role="main" id="main-content">
         @RenderBody()
     </main>
 </div>
