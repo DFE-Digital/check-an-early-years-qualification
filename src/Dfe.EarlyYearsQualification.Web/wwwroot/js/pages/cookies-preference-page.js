@@ -4,9 +4,8 @@ $('#cookies-form').on('submit', function(e) {
 
     if (checked === undefined) {
         e.preventDefault();
-        $("#cookies-form-group").addClass("govuk-form-group--error");
-        $("#cookies-choice-error").removeAttr('hidden');
-
+        $("#cookies-form-group").addClass("govuk-form-group--error");   
+        $("#cookies-choice-error").removeClass('govuk-!-display-none');
     }
 
     if (checked === 'essential') {
