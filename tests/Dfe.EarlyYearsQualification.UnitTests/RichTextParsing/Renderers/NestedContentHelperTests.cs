@@ -255,7 +255,7 @@ public class NestedContentHelperTests
                                                    {
                                                        SystemProperties = new SystemProperties
                                                                           {
-                                                                              Id = "externalNavigationLink"
+                                                                              Id = "navigationLink"
                                                                           }
                                                    }
                                  },
