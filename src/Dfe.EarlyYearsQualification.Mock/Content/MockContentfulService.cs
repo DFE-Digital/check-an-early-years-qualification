@@ -155,12 +155,6 @@ public class MockContentfulService : IContentService
             QualificationNameLabel = "Qualification",
             QualificationStartDateLabel = "Qualification start date",
             QualificationAwardedDateLabel = "Qualification awarded date",
-            FeedbackBanner = new FeedbackBanner
-            {
-                Body = ContentfulContentHelper.Paragraph("Test body"),
-                BannerTitle = "Test banner title",
-                Heading = "Test heading"
-            },
             QualificationResultHeading = "Qualification result heading",
             QualificationResultFrMessageHeading = "Full and relevant",
             QualificationResultFrMessageBody = "Full and relevant body",
@@ -435,13 +429,6 @@ public class MockContentfulService : IContentService
                              OpenInNewTab = false
                          };
 
-        var feedbackBanner = new FeedbackBanner
-                             {
-                                 Heading = "Feedback banner heading",
-                                 BannerTitle = "Banner title",
-                                 Body = ContentfulContentHelper.Paragraph("Banner body text")
-                             };
-
         var upDownFeedback = GetUpDownFeedback();
 
         return (level switch
@@ -453,7 +440,6 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-14",
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
-                                             FeedbackBanner = feedbackBanner,
                                              UpDownFeedback = upDownFeedback,
                                              RightHandSideContent = GetFeedbackComponent(),
                                              IsPractitionerSpecificPage = true
@@ -465,7 +451,6 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-14",
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
-                                             FeedbackBanner = feedbackBanner,
                                              UpDownFeedback = upDownFeedback,
                                              RightHandSideContent = GetFeedbackComponent(),
                                              IsPractitionerSpecificPage = false
@@ -477,7 +462,6 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-19",
                                              ToWhichYear = string.Empty,
                                              BackButton = backButton,
-                                             FeedbackBanner = feedbackBanner,
                                              UpDownFeedback = upDownFeedback,
                                              RightHandSideContent = GetFeedbackComponent(),
                                              IsPractitionerSpecificPage = false
@@ -1102,12 +1086,6 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   FeedbackBanner = new FeedbackBanner
-                                    {
-                                        Heading = "Feedback heading",
-                                        Body = ContentfulContentHelper.Paragraph("This is the body text"),
-                                        BannerTitle = "Test banner title"
-                                    },
                    RightHandSideContent = GetFeedbackComponent(),
                    UpDownFeedback = hasUpDownFeedback ? GetUpDownFeedback() : null
                };

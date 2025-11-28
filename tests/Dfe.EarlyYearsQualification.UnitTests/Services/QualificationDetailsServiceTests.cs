@@ -655,10 +655,7 @@ public class QualificationDetailsServiceTests
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
         const int qualificationLevel = 1;
         const string requirements = "requirements";
-        const string feedback = "feedback";
         var requirementsText = new Document { NodeType = requirements };
-        var feedbackText = new Document { NodeType = feedback };
-        var feedbackBanner = new FeedbackBanner { Body = feedbackText };
         var backButton = new NavigationLink { Href = "backButton" };
         var qualification =
             new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
@@ -666,9 +663,8 @@ public class QualificationDetailsServiceTests
         var detailsPage = new QualificationDetailsPage
         {
             RequirementsText = requirementsText,
-            Labels = new DetailsPageLabels()
+            Labels = new DetailsPageLabels
             {
-                FeedbackBanner = feedbackBanner,
                 BackButton = backButton
             }
         };

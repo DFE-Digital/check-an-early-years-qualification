@@ -18,8 +18,7 @@ public class QualificationDetailsMapperTests
                                 QualificationNumber = "Qualification number",
                                 FromWhichYear = "Sep-16"
                             };
-
-        const string feedbackBannerBody = "This is the feedback banner body";
+        
         const string improveServiceBody = "This is the improve service body";
         const string requirementsText = "Requirements text";
         const string printInformationBody = "Printing information body";
@@ -47,12 +46,6 @@ public class QualificationDetailsMapperTests
                 QualificationStartDateLabel = "Qualifications start date label",
                 QualificationAwardedDateLabel = "Qualifications awarded date label",
                 QualificationDetailsSummaryHeader = "Qualification details summary label",
-                FeedbackBanner = new FeedbackBanner
-                {
-                    Heading = "Feedback banner heading",
-                    Body = ContentfulContentHelper.Paragraph(feedbackBannerBody),
-                    BannerTitle = "This is the title"
-                },
                 UpDownFeedback = new UpDownFeedback
                 {
                     FeedbackComponent = new FeedbackComponent
@@ -86,7 +79,6 @@ public class QualificationDetailsMapperTests
         
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(detailsPage.RequirementsText)).ReturnsAsync(requirementsText);
-        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.FeedbackBanner.Body)).ReturnsAsync(feedbackBannerBody);
         mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.UpDownFeedback.FeedbackComponent!.Body)).ReturnsAsync(improveServiceBody);
         mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.PrintInformationBody)).ReturnsAsync(printInformationBody);
         
@@ -131,8 +123,6 @@ public class QualificationDetailsMapperTests
         result.Content.QualificationAwardedDateLabel.Should().BeSameAs(detailsPage.Labels.QualificationAwardedDateLabel);
         result.Content.QualificationDetailsSummaryHeader.Should()
               .BeSameAs(detailsPage.Labels.QualificationDetailsSummaryHeader);
-        result.Content.FeedbackBanner.Should()
-              .BeEquivalentTo(detailsPage.Labels.FeedbackBanner, options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(detailsPage.Labels.UpDownFeedback,
                                                       options => options.Excluding(x => x.FeedbackComponent));
         result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);

@@ -18,9 +18,6 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
         List<Qualification> qualifications)
     {
         var requirementsTextHtml = await contentParser.ToHtml(content.RequirementsText);
-        var feedbackBodyHtml = content.Labels.FeedbackBanner is not null
-                                   ? await contentParser.ToHtml(content.Labels.FeedbackBanner.Body)
-                                   : null;
         var improveServiceBodyHtml = content.Labels.UpDownFeedback is not null
                                          ? await contentParser.ToHtml(content.Labels.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
@@ -56,8 +53,7 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
                 QualificationNameLabel = content.Labels.QualificationNameLabel,
                 QualificationStartDateLabel = content.Labels.QualificationStartDateLabel,
                 QualificationAwardedDateLabel = content.Labels.QualificationAwardedDateLabel,
-                QualificationDetailsSummaryHeader = content.Labels.QualificationDetailsSummaryHeader,
-                FeedbackBanner = FeedbackBannerMapper.Map(content.Labels.FeedbackBanner, feedbackBodyHtml)
+                QualificationDetailsSummaryHeader = content.Labels.QualificationDetailsSummaryHeader
             },
             UpDownFeedback = UpDownFeedbackMapper.Map(content.Labels.UpDownFeedback, improveServiceBodyHtml),
             IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1

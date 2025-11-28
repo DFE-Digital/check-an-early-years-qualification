@@ -34,8 +34,6 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#advice-page-body", "Test Advice Page Body");
         await isVisible(page, ".feedback-container.desktop-only");
         await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
-
-        await checkFeedbackBanners(page);
     });
 
     test("Checks the level 2 between 1 Sept 2014 and 31 Aug 2019 details are on the page", async ({page, context}) => {
@@ -46,8 +44,6 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#advice-page-body", "Test Advice Page Body");
         await isVisible(page, ".feedback-container.desktop-only");
         await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
-
-        await checkFeedbackBanners(page);
     });
 
     test("Checks the Qualifications achieved in Scotland details are on the page", async ({page}) => {
@@ -57,8 +53,6 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#advice-page-body", "Test Advice Page Body");
         await isVisible(page, ".feedback-container.desktop-only");
         await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
-
-        await checkFeedbackBanners(page);
     });
 
     test("Checks the Qualifications achieved in Wales details are on the page", async ({page}) => {
@@ -68,8 +62,6 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#advice-page-body", "Test Advice Page Body");
         await isVisible(page, ".feedback-container.desktop-only");
         await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
-
-        await checkFeedbackBanners(page);
     });
 
     test("Checks the Qualifications achieved in Northern Ireland details are on the page", async ({page}) => {
@@ -79,8 +71,6 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#advice-page-body", "Test Advice Page Body");
         await isVisible(page, ".feedback-container.desktop-only");
         await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
-
-        await checkFeedbackBanners(page);
     });
 
     test("Checks the level 7 between 1 Sept 2014 and 31 Aug 2019 details are on the page", async ({page, context}) => {
@@ -91,8 +81,6 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#advice-page-body", "Test Advice Page Body");
         await isVisible(page, ".feedback-container.desktop-only");
         await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
-
-        await checkFeedbackBanners(page);
     });
 
     test("Checks the Level 7 qualification after aug 2019 details are on the page", async ({page, context}) => {
@@ -103,7 +91,5 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#advice-page-body", "Test Advice Page Body");
         await isVisible(page, ".feedback-container.desktop-only");
         await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
-
-        await checkFeedbackBanners(page);
     });
 });

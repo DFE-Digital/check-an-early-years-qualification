@@ -13,7 +13,6 @@ public class AdvicePageMapperTests
     public async Task Map_PassInAdvicePage_ReturnsModel()
     {
         const string body = "This is the body";
-        const string feedbackBannerBody = "This is the feedback banner body";
         const string improveServiceBody = "This is the improve service body";
         const string rightHandSideContentBody = "This is the right hand side body content";
         var advicePage = new AdvicePage
@@ -26,12 +25,6 @@ public class AdvicePageMapperTests
                                               OpenInNewTab = true,
                                               Href = "/"
                                           },
-                             FeedbackBanner = new FeedbackBanner
-                                              {
-                                                  Heading = "Feedback banner heading",
-                                                  Body = ContentfulContentHelper.Paragraph(feedbackBannerBody),
-                                                  BannerTitle = "This is the title"
-                                              },
                              UpDownFeedback = new UpDownFeedback
                                               {
                                                   FeedbackComponent = new FeedbackComponent
@@ -51,7 +44,6 @@ public class AdvicePageMapperTests
 
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.Body))).ReturnsAsync(body);
-        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.FeedbackBanner.Body))).ReturnsAsync(feedbackBannerBody);
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.UpDownFeedback.FeedbackComponent.Body))).ReturnsAsync(improveServiceBody);
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.RightHandSideContent.Body))).ReturnsAsync(rightHandSideContentBody);
         var mapper = new AdvicePageMapper(mockContentParser.Object);
@@ -61,8 +53,6 @@ public class AdvicePageMapperTests
         result.Heading.Should().BeSameAs(advicePage.Heading);
         result.BodyContent.Should().BeSameAs(body);
         result.BackButton.Should().BeEquivalentTo(advicePage.BackButton, options => options.Excluding(x => x.Sys));
-        result.FeedbackBanner.Should()
-              .BeEquivalentTo(advicePage.FeedbackBanner, options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(advicePage.UpDownFeedback,
                                                       options => options.Excluding(x => x.FeedbackComponent));
         result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
@@ -79,7 +69,6 @@ public class AdvicePageMapperTests
     public async Task Map_PassInCannotFindQualificationPage_ReturnsModel()
     {
         const string body = "This is the body";
-        const string feedbackBannerBody = "This is the feedback banner body";
         const string improveServiceBody = "This is the improve service body";
         const string rightHandSideContentBody = "This is the right hand side body content";
         var cannotFindQualificationPage = new CannotFindQualificationPage
@@ -92,14 +81,6 @@ public class AdvicePageMapperTests
                                                                OpenInNewTab = true,
                                                                Href = "/"
                                                            },
-                                              FeedbackBanner = new FeedbackBanner
-                                                               {
-                                                                   Heading = "Feedback banner heading",
-                                                                   Body =
-                                                                       ContentfulContentHelper
-                                                                           .Paragraph(feedbackBannerBody),
-                                                                   BannerTitle = "This is the title"
-                                                               },
                                               UpDownFeedback = new UpDownFeedback
                                                                {
                                                                    FeedbackComponent = new FeedbackComponent
@@ -119,7 +100,6 @@ public class AdvicePageMapperTests
 
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.Body))).ReturnsAsync(body);
-        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.FeedbackBanner.Body))).ReturnsAsync(feedbackBannerBody);
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.UpDownFeedback.FeedbackComponent.Body))).ReturnsAsync(improveServiceBody);
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.RightHandSideContent.Body))).ReturnsAsync(rightHandSideContentBody);
         var mapper = new AdvicePageMapper(mockContentParser.Object);
@@ -130,8 +110,6 @@ public class AdvicePageMapperTests
         result.BodyContent.Should().BeSameAs(body);
         result.BackButton.Should()
               .BeEquivalentTo(cannotFindQualificationPage.BackButton, options => options.Excluding(x => x.Sys));
-        result.FeedbackBanner.Should().BeEquivalentTo(cannotFindQualificationPage.FeedbackBanner,
-                                                      options => options.Excluding(x => x.Body));
         result.UpDownFeedback.Should().BeEquivalentTo(cannotFindQualificationPage.UpDownFeedback,
                                                       options => options.Excluding(x => x.FeedbackComponent));
         result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);

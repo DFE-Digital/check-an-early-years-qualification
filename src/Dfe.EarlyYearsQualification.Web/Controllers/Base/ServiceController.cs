@@ -13,13 +13,4 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Base;
 ///     and <see cref="HealthController" /> should derive from this type.
 /// </summary>
 [ServiceFilter<IChallengeResourceFilterAttribute>]
-public class ServiceController : Controller
-{
-    protected static async Task<string?> GetFeedbackBannerBodyToHtml(FeedbackBanner? feedbackBanner,
-                                                                     IGovUkContentParser contentParser)
-    {
-        return feedbackBanner is not null
-                   ? await contentParser.ToHtml(feedbackBanner.Body)
-                   : null;
-    }
-}
+public class ServiceController : Controller;

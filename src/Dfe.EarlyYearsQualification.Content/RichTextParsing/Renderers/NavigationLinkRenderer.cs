@@ -23,8 +23,7 @@ public class NavigationLinkRenderer : IContentRenderer
         try
         {
             var navigationLinkModel = (model.JObject as JObject)!.ToObject<NavigationLink>();
-            return navigationLinkModel!.Sys.ContentType.SystemProperties.Id == "externalNavigationLink" ||
-                   navigationLinkModel.Sys.ContentType.SystemProperties.Id == "internalNavigationLink";
+            return navigationLinkModel!.Sys.ContentType.SystemProperties.Id == "navigationLink";
         }
         catch
         {

@@ -91,7 +91,7 @@ public class NavigationLinkRendererTests
                                                    {
                                                        SystemProperties = new SystemProperties
                                                                           {
-                                                                              Id = "externalNavigationLink"
+                                                                              Id = "navigationLink"
                                                                           }
                                                    }
                                  }
@@ -126,7 +126,7 @@ public class NavigationLinkRendererTests
                                                    {
                                                        SystemProperties = new SystemProperties
                                                                           {
-                                                                              Id = "externalNavigationLink"
+                                                                              Id = "navigationLink"
                                                                           }
                                                    }
                                  },

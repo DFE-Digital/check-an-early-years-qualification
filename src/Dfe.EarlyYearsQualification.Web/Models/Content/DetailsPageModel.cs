@@ -36,8 +36,6 @@ public class DetailsPageModel
     
     public string QualificationAwardedDateLabel { get; init; } = string.Empty;
 
-    public FeedbackBannerModel? FeedbackBanner { get; init; }
-
     public string QualificationResultHeading { get; set; } = string.Empty;
 
     public string QualificationResultMessageHeading { get; set; } = string.Empty;

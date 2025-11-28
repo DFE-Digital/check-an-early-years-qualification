@@ -76,7 +76,7 @@ public static class ContentfulContentHelper
                                                    {
                                                        SystemProperties = new SystemProperties
                                                                           {
-                                                                              Id = "externalNavigationLink"
+                                                                              Id = "navigationLink"
                                                                           }
                                                    }
                                  },

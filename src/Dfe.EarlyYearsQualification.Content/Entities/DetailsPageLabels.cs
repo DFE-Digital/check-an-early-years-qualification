@@ -41,8 +41,6 @@ public class DetailsPageLabels
     public string PrintInformationHeading { get; init; } = string.Empty;
 
     public Document? PrintInformationBody { get; init; }
-
-    public FeedbackBanner? FeedbackBanner { get; init; }
     
     public string QualificationResultHeading { get; init; } = string.Empty;
 
