@@ -15,7 +15,16 @@ html {
 }
 
 body {
+    margin: 0;
     margin-bottom: 60px;
+}
+
+p {
+    margin-top: 0;
+}
+
+hr {
+    height: 1px;
 }
 
 /* GovUK style overrides */
@@ -136,7 +145,7 @@ body {
 
 /* Resize  3 column summary list */
 .summary-list-action .govuk-summary-list__row .govuk-summary-list__key {
-    width: 59%;
+    width: 56%;
 }
 
 @media (max-width: 640px) {
