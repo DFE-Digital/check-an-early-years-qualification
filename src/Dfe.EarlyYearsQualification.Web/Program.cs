@@ -58,6 +58,8 @@ bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful
 bool runValidationTests =
     builder.Configuration.GetValue<bool>("RunValidationTests") && builder.Environment.IsDevelopment();
 
+bool upgradeInsecureRequests = (builder.Configuration.GetValue<bool?>("UpgradeInsecureRequests") ?? true) || !builder.Environment.IsDevelopment();
+
 if (!useMockContentful)
 {
     if (!runValidationTests)
@@ -103,16 +105,20 @@ builder.Services.AddAntiforgery(options =>
                                 });
 
 builder.Services.AddControllersWithViews(options =>
-                                         {
-                                             // Ensures that all POST actions are protected by default.
-                                             options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                                             options.Filters.Add(new ResponseCacheAttribute
-                                                                 {
-                                                                     NoStore = true,
-                                                                     Location = ResponseCacheLocation.None
-                                                                 });
-                                             options.Filters.Add<ApplicationInsightsActionFilterAttribute>();
-                                         });
+{
+    options.Filters.Add(new ResponseCacheAttribute
+                        {
+                            NoStore = true,
+                            Location = ResponseCacheLocation.None
+                        });
+
+    if (upgradeInsecureRequests)
+    {
+        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+    }
+
+    options.Filters.Add<ApplicationInsightsActionFilterAttribute>();
+});
 
 builder.Services
        .AddContentful(builder.Configuration)
@@ -197,8 +203,8 @@ app.UseGovUkFrontend();
 app.UseMiddleware<HeadHandlingMiddleware>();
 
 app.UseSecureHeadersMiddleware(
-                               SecureHeaderConfiguration.CustomConfiguration()
-                              );
+                        SecureHeaderConfiguration.CustomConfiguration(upgradeInsecureRequests)
+                        );
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment() || useMockContentful)

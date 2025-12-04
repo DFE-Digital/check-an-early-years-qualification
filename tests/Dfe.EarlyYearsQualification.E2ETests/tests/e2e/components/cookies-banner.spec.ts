@@ -21,8 +21,13 @@ test.describe('A spec that tests that the cookies banner shows on all pages', {t
 
         test(`Accepting the cookies shows the accept message at the URL: ${url}, then clicking to hide the banner should hide the banner`, async ({
                                                                                                                                                       page,
-                                                                                                                                                      context
+                                                                                                                                                      context,
+                                                                                                                                                      browserName
                                                                                                                                                   }) => {
+
+            // Skip test for webkit as cookies transmitted over https
+            test.skip(browserName.toLowerCase() === 'webkit', `Skip tests for webkit`);
+
             await page.goto(url);
             await page.locator("#accept-cookies-button").click();
             await doesNotExist(page, "#choose-cookies-preference");
@@ -37,8 +42,13 @@ test.describe('A spec that tests that the cookies banner shows on all pages', {t
 
         test(`Rejecting the cookies shows the reject message at the URL: ${url}, then clicking to hide the banner should hide the banner`, async ({
                                                                                                                                                       page,
-                                                                                                                                                      context
+                                                                                                                                                      context,
+                                                                                                                                                      browserName
                                                                                                                                                   }) => {
+
+            // Skip test for webkit as cookies transmitted over https
+            test.skip(browserName.toLowerCase() === 'webkit', `Skip tests for webkit`);
+
             await page.goto(url);
             await page.locator("#reject-cookies-button").click();
             await doesNotExist(page, "#choose-cookies-preference");
