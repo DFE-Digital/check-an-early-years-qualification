@@ -45,7 +45,7 @@ public class QualificationSearchService(
                                                   searchCriteria
                                                  );
     }
-
+    
     public async Task<QualificationListModel> MapList(QualificationListPage content,
                                                       List<Qualification>? qualifications)
     {

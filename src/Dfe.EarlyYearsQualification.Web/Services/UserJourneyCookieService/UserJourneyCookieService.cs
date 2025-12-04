@@ -480,6 +480,28 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public ListFilters GetListFilters()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.ListFilters;
+        }
+    }
+
+    public void SetListFilters(ListFilters listFilters)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.ListFilters = listFilters;
+
+            SetJourneyCookie();
+        }
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)
@@ -579,5 +601,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         public HelpFormEnquiry HelpFormEnquiry { get; set; } = new();
         
         public string IsUserCheckingTheirOwnQualification { get; set; } = string.Empty;
+
+        public ListFilters ListFilters { get; set; } = new ListFilters();
     }
 }
