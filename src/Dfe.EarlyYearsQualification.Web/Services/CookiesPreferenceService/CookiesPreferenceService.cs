@@ -4,7 +4,7 @@ using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 
-public class CookiesPreferenceService(ICookieManager cookieManager) : ICookiesPreferenceService
+public class CookiesPreferenceService(ICookieManager cookieManager, bool upgradeInsecureRequests = true) : ICookiesPreferenceService
 {
     public void SetVisibility(bool visibility)
     {
@@ -65,7 +65,7 @@ public class CookiesPreferenceService(ICookieManager cookieManager) : ICookiesPr
     {
         var cookieOptions = new CookieOptions
                             {
-                                Secure = true,
+                                Secure = upgradeInsecureRequests,
                                 HttpOnly = true,
                                 Expires = new DateTimeOffset(DateTime.Now.AddYears(1))
                             };

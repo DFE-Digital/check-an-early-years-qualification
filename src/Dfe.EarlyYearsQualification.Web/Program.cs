@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
@@ -35,6 +34,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Notify.Client;
 using Notify.Interfaces;
 using OwaspHeaders.Core.Extensions;
+using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -142,8 +142,14 @@ builder.Services.AddTransient<IQuestionService, QuestionService>();
 builder.Services.AddModelRenderers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICookieManager, CookieManager>();
-builder.Services.AddTransient<ICookiesPreferenceService, CookiesPreferenceService>();
-builder.Services.AddScoped<IUserJourneyCookieService, UserJourneyCookieService>();
+builder.Services.AddTransient<ICookiesPreferenceService>(sp =>
+{
+    return ActivatorUtilities.CreateInstance<CookiesPreferenceService>(sp, upgradeInsecureRequests);
+});
+builder.Services.AddScoped<IUserJourneyCookieService>(sp =>
+{
+    return ActivatorUtilities.CreateInstance<UserJourneyCookieService>(sp, upgradeInsecureRequests);
+});
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddScoped(x =>
                            {
