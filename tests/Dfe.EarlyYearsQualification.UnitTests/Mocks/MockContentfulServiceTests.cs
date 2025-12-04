@@ -664,7 +664,6 @@ public class MockContentfulServiceTests
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the practitioner body text");
         result.FromWhichYear.Should().Be("Sep-14");
         result.ToWhichYear.Should().Be("Aug-19");
-        result.FeedbackBanner.Should().NotBeNull();
         result.IsPractitionerSpecificPage.Should().BeTrue();
     }
     
@@ -687,7 +686,6 @@ public class MockContentfulServiceTests
         result.Body.Should().NotBeNull();
         result.FromWhichYear.Should().Be("Sep-14");
         result.ToWhichYear.Should().Be("Aug-19");
-        result.FeedbackBanner.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -709,7 +707,6 @@ public class MockContentfulServiceTests
         result.Body.Should().NotBeNull();
         result.FromWhichYear.Should().Be("Sep-19");
         result.ToWhichYear.Should().BeEmpty();
-        result.FeedbackBanner.Should().NotBeNull();
     }
 
     [TestMethod]

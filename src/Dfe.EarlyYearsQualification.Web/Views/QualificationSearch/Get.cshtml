@@ -21,7 +21,7 @@
     <div class="govuk-grid-column-three-quarters">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <h1 id="heading" class="govuk-heading-xl mb-8">@Model.Header</h1>
+                <h1 id="heading" class="govuk-heading-xl">@Model.Header</h1>
             </div>
         </div>
         <div class="govuk-grid-row">
@@ -101,11 +101,11 @@
                             {
                                 if (string.IsNullOrEmpty(qualification.QualificationNumber))
                                 {
-                                    <span id="ao-text-@qualification.QualificationId" class="govuk-body mb-0">(@qualification.AwardingOrganisationTitle)</span>
+                                    <span id="ao-text-@qualification.QualificationId" class="govuk-body govuk-!-margin-0">(@qualification.AwardingOrganisationTitle)</span>
                                 }
                                 else
                                 {
-                                    <div id="ao-text-@qualification.QualificationId" class="govuk-body mb-0">@Model.QualificationNumberLabel @qualification.QualificationNumber</div>
+                                    <div id="ao-text-@qualification.QualificationId" class="govuk-body govuk-!-margin-0">@Model.QualificationNumberLabel @qualification.QualificationNumber</div>
                                 }
                             }
                         </div>

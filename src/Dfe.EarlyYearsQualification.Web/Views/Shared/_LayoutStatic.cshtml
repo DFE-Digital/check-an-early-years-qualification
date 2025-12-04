@@ -15,7 +15,6 @@
     <meta name="robots" content="noindex, nofollow"/>
 
     <title>@ViewData["Title"] - Check an Early Years qualification</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon_new.ico"/>
     <link rel="apple-touch-icon" href="~/apple-touch-icon.png"/>
     @Html.GovUkFrontendStyleImports()
@@ -58,7 +57,7 @@
     <govuk-service-navigation service-name="Check an early years qualification" service-url="/"/>
 
     <div class="govuk-width-container">
-        <main class="govuk-main-wrapper" role="main" class="pb-3" id="main-content">
+        <main class="govuk-main-wrapper" role="main" id="main-content">
             @RenderBody()
         </main>
     </div>
@@ -66,7 +65,6 @@
     <govuk-footer/>
 
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @Html.GovUkFrontendScriptImports()

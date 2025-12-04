@@ -15,8 +15,6 @@ public class CannotFindQualificationPage
     public NavigationLink? BackButton { get; init; }
     
     public FeedbackComponent? RightHandSideContent { get; init; }
-
-    public FeedbackBanner? FeedbackBanner { get; init; }
     
     public UpDownFeedback? UpDownFeedback { get; init; }
 

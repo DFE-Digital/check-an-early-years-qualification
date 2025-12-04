@@ -8,22 +8,12 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-        @if (Model.FeedbackBanner is not null)
-        {
-            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
-        }
-
         @if (Model.RightHandSideContent != null)
         {
             await Html.RenderPartialAsync("Partials/FeedbackComponentContainer", new FeedbackComponentContainerModel { FeedbackComponent = Model.RightHandSideContent, IsMobile = true });
         }
 
         <div class="govuk-body govuk-!-margin-bottom-7" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
-
-        @if (Model.FeedbackBanner is not null)
-        {
-            await Html.RenderPartialAsync("Partials/FeedbackBanner", Model.FeedbackBanner);
-        }
     </div>
     @if (Model.RightHandSideContent != null)
     {
