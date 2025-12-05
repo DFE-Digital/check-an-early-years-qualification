@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
@@ -35,6 +34,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Notify.Client;
 using Notify.Interfaces;
 using OwaspHeaders.Core.Extensions;
+using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +57,8 @@ bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful
 
 bool runValidationTests =
     builder.Configuration.GetValue<bool>("RunValidationTests") && builder.Environment.IsDevelopment();
+
+bool upgradeInsecureRequests = (builder.Configuration.GetValue<bool?>("UpgradeInsecureRequests") ?? true) || !builder.Environment.IsDevelopment();
 
 if (!useMockContentful)
 {
@@ -103,16 +105,20 @@ builder.Services.AddAntiforgery(options =>
                                 });
 
 builder.Services.AddControllersWithViews(options =>
-                                         {
-                                             // Ensures that all POST actions are protected by default.
-                                             options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                                             options.Filters.Add(new ResponseCacheAttribute
-                                                                 {
-                                                                     NoStore = true,
-                                                                     Location = ResponseCacheLocation.None
-                                                                 });
-                                             options.Filters.Add<ApplicationInsightsActionFilterAttribute>();
-                                         });
+{
+    options.Filters.Add(new ResponseCacheAttribute
+                        {
+                            NoStore = true,
+                            Location = ResponseCacheLocation.None
+                        });
+
+    if (upgradeInsecureRequests)
+    {
+        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+    }
+
+    options.Filters.Add<ApplicationInsightsActionFilterAttribute>();
+});
 
 builder.Services
        .AddContentful(builder.Configuration)
@@ -136,8 +142,8 @@ builder.Services.AddTransient<IQuestionService, QuestionService>();
 builder.Services.AddModelRenderers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICookieManager, CookieManager>();
-builder.Services.AddTransient<ICookiesPreferenceService, CookiesPreferenceService>();
-builder.Services.AddScoped<IUserJourneyCookieService, UserJourneyCookieService>();
+builder.Services.AddTransient<ICookiesPreferenceService>(sp => ActivatorUtilities.CreateInstance<CookiesPreferenceService>(sp, upgradeInsecureRequests));
+builder.Services.AddScoped<IUserJourneyCookieService>(sp => ActivatorUtilities.CreateInstance<UserJourneyCookieService>(sp, upgradeInsecureRequests));
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddScoped(x =>
                            {
@@ -197,8 +203,8 @@ app.UseGovUkFrontend();
 app.UseMiddleware<HeadHandlingMiddleware>();
 
 app.UseSecureHeadersMiddleware(
-                               SecureHeaderConfiguration.CustomConfiguration()
-                              );
+                        SecureHeaderConfiguration.CustomConfiguration(upgradeInsecureRequests)
+                        );
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment() || useMockContentful)
