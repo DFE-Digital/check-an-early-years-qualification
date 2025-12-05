@@ -70,6 +70,9 @@ jobs:
       - name: Run Playwright e2e tests
         uses: ./.github/actions/run-playwright-e2e-tests
 
+      - name: Run Playwright webkit e2e tests
+        uses: ./.github/actions/run-playwright-webkit-e2e-tests
+
       # NOTE: The previous step spins up a local instance on port 5000 which has use_mock_contentful set to true.
       # These tests need the flag set to false so we need to spin up a different instance hence the different url.
       - name: Run Playwright validation tests locally
