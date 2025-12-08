@@ -13,6 +13,6 @@ runs:
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
+        name: playwright-webkit-report
         path: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright-report/
         retention-days: 30
