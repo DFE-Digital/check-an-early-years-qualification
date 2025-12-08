@@ -74,7 +74,7 @@ jobs:
         uses: ./.github/actions/run-playwright-webkit-e2e-tests
 
   run-playwright-validation-e2e-tests:
-    name: Build, check and run tests
+    name: Run validation tests
     runs-on: ubuntu-22.04
     environment: development
 
@@ -95,6 +95,19 @@ jobs:
           run_validation_tests: "true"
           contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
           contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
+
+      - name: Run Playwright webkit validation tests locally
+        uses: ./.github/actions/run-validation-tests-locally
+        with:
+          webapp_url: "http://127.0.0.1:4001"
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          test_type: "validation"
+          use_mock_contentful: "false"
+          run_validation_tests: "true"
+          contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
+          contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          ugrade_insecure_requests: "false"
+          projects: "--projects=webkit"
 
   security-checks-local:
     name: Run baseline security checks locally
