@@ -70,6 +70,8 @@ jobs:
       - name: Run Playwright e2e tests
         uses: ./.github/actions/run-playwright-e2e-tests
 
+      - name: Run Playwright webkit e2e tests
+        uses: ./.github/actions/run-playwright-webkit-e2e-tests
 
       # NOTE: The previous step spins up a local instance on port 5000 which has use_mock_contentful set to true.
       # These tests need the flag set to false so we need to spin up a different instance hence the different url.
@@ -108,18 +110,3 @@ jobs:
           target: http://localhost:5000
           allow_issue_writing: false
           artifact_name: local_scan_dev
-
-  run-playwright-webkit-e2e-tests:
-    name: Build, check and run tests
-    runs-on: ubuntu-22.04
-    environment: development
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-
-      - name: Install playwright
-        uses: ./.github/actions/install-playwright
-
-      - name: Run Playwright webkit e2e tests
-        uses: ./.github/actions/run-playwright-webkit-e2e-tests
