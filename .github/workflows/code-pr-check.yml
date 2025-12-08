@@ -79,6 +79,9 @@ jobs:
     environment: development
 
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
       - name: Run Playwright validation tests locally
         uses: ./.github/actions/run-validation-tests-locally
         with:
