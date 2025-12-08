@@ -107,7 +107,7 @@ jobs:
           contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
           contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
           ugrade_insecure_requests: "false"
-          projects: "--projects=webkit"
+          projects: "--project=webkit"
 
   security-checks-local:
     name: Run baseline security checks locally

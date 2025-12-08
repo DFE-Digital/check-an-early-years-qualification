@@ -28,7 +28,7 @@ inputs:
     default: "true"
   projects:
     description: "Projects to run the tests agains"
-    default: "--projects=chromium --projects=firefox"
+    default: "--project=chromium --project=firefox"
 
 runs:
   using: composite
