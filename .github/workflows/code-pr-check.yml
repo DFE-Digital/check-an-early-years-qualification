@@ -99,7 +99,7 @@ jobs:
           contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
 
       - name: Run webkit Playwright webkit validation tests locally
-        uses: ./.github/actions/run-webkit-validation-tests-locally
+        uses: ./.github/actions/run-validation-tests-locally
         with:
           webapp_url: "http://127.0.0.1:8000"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
@@ -109,6 +109,7 @@ jobs:
           contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
           contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
           upgrade_insecure_requests: "false"
+          projects: "--project=webkit"
 
   security-checks-local:
     name: Run baseline security checks locally

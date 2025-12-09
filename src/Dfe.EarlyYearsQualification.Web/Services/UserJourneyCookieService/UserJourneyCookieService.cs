@@ -9,12 +9,7 @@ namespace Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, ICookieManager cookieManager, bool upgradeInsecureRequests = true)
     : IUserJourneyCookieService
 {
-    private readonly CookieOptions _cookieOptions = new()
-                                                    {
-                                                        Secure = upgradeInsecureRequests,
-                                                        HttpOnly = true,
-                                                        Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30))
-    };
+    private readonly CookieOptions _cookieOptions = cookieManager.CreateCookieOptions(new DateTimeOffset(DateTime.Now.AddMinutes(30)), upgradeInsecureRequests);
 
     private readonly object _lockObject = new();
     private volatile UserJourneyModel? _model;

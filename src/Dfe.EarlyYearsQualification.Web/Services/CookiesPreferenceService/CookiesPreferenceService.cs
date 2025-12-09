@@ -63,12 +63,7 @@ public class CookiesPreferenceService(ICookieManager cookieManager, bool upgrade
 
     private void CreateCookie(string key, bool value, bool visibility = true, bool rejected = false)
     {
-        var cookieOptions = new CookieOptions
-                            {
-                                Secure = upgradeInsecureRequests,
-                                HttpOnly = true,
-                                Expires = new DateTimeOffset(DateTime.Now.AddYears(1))
-                            };
+        var cookieOptions = cookieManager.CreateCookieOptions(new DateTimeOffset(DateTime.Now.AddYears(1)), upgradeInsecureRequests);
 
         var cookie = new DfeCookie { IsVisible = visibility, HasApproved = value, IsRejected = rejected };
         var serializedCookie = JsonSerializer.Serialize(cookie);
