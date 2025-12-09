@@ -70,8 +70,32 @@ jobs:
       - name: Run Playwright e2e tests
         uses: ./.github/actions/run-playwright-e2e-tests
 
+  run-playwright-webkit-e2e-tests:
+    name: Run Playwright webkit e2e tests
+    runs-on: ubuntu-22.04
+    environment: development
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+
       - name: Run Playwright webkit e2e tests
         uses: ./.github/actions/run-playwright-webkit-e2e-tests
+
+  run-playwright-validation-e2e-tests:
+    name: Run validation tests
+    runs-on: ubuntu-22.04
+    environment: development
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
 
       # NOTE: The previous step spins up a local instance on port 5000 which has use_mock_contentful set to true.
       # These tests need the flag set to false so we need to spin up a different instance hence the different url.
@@ -85,6 +109,18 @@ jobs:
           run_validation_tests: "true"
           contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
           contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
+
+  run-playwright-webkit-validation-e2e-tests:
+    name: Run webkit validation tests
+    runs-on: ubuntu-22.04
+    environment: development
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
 
       - name: Run webkit Playwright webkit validation tests locally
         uses: ./.github/actions/run-validation-tests-locally
