@@ -73,18 +73,6 @@ jobs:
       - name: Run Playwright webkit e2e tests
         uses: ./.github/actions/run-playwright-webkit-e2e-tests
 
-  run-playwright-validation-e2e-tests:
-    name: Run validation tests
-    runs-on: ubuntu-22.04
-    environment: development
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-        
-      - name: Install playwright
-        uses: ./.github/actions/install-playwright
-
       # NOTE: The previous step spins up a local instance on port 5000 which has use_mock_contentful set to true.
       # These tests need the flag set to false so we need to spin up a different instance hence the different url.
       - name: Run Playwright validation tests locally
