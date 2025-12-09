@@ -44,7 +44,7 @@ runs:
         RUN_VALIDATION_TESTS: ${{ inputs.run_validation_tests }}
         CONTENTFUL_DELIVERY_API_KEY: ${{ inputs.contentful_delivery_api_key }}
         CONTENTFUL_SPACE_ID: ${{ inputs.contentful_space_id }}
-        UPGRADE_INSECURE_REQUESTS: ${{ inputs.ugrade_insecure_requests }}
+        UPGRADE_INSECURE_REQUESTS: ${{ inputs.upgrade_insecure_requests }}
         PROJECTS: ${{ inputs.projects }}
 
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
