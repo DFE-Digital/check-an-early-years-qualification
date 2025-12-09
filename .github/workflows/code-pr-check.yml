@@ -99,7 +99,7 @@ jobs:
       - name: Run Playwright webkit validation tests locally
         uses: ./.github/actions/run-validation-tests-locally
         with:
-          webapp_url: "http://127.0.0.1:4001"
+          webapp_url: "http://127.0.0.1:8000"
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           test_type: "validation"
           use_mock_contentful: "false"

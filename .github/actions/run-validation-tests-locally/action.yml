@@ -47,7 +47,6 @@ runs:
         UPGRADE_INSECURE_REQUESTS: ${{ inputs.ugrade_insecure_requests }}
         PROJECTS: ${{ inputs.projects }}
 
-
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       run: WEBAPP_URL=${WEBAPP_URL} DOMAIN=${WEBAPP_URL} AUTH_SECRET=${AUTH_SECRET} USE_MOCK_CONTENTFUL=${USE_MOCK_CONTENTFUL} RUN_VALIDATION_TESTS=${RUN_VALIDATION_TESTS} CONTENTFUL_DELIVERY_API_KEY=${CONTENTFUL_DELIVERY_API_KEY} CONTENTFUL_SPACE_ID=${CONTENTFUL_SPACE_ID} UPGRADE_INSECURE_REQUESTS=${UPGRADE_INSECURE_REQUESTS} npx playwright test --grep "@${TEST_TYPE}" ${PROJECTS}
     - uses: actions/upload-artifact@v4
