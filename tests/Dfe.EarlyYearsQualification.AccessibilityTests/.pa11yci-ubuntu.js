@@ -162,6 +162,7 @@ function getUrls(authSecret, port) {
 const config = {
     defaults: {
         standard: 'WCAG2AA',
+        wait: 1000,
         hideElements: 'svg[role=presentation], img[id="offline-resources-1x"], img[id="offline-resources-2x"]',
         useIncognitoBrowserContext: false
     }
