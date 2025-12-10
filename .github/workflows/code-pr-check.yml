@@ -134,6 +134,7 @@ jobs:
           contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
           upgrade_insecure_requests: "false"
           projects: "--project=webkit"
+          is_public: "true"
 
   security-checks-local:
     name: Run baseline security checks locally

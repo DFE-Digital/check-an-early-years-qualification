@@ -29,6 +29,9 @@ inputs:
   projects:
     description: "Projects to run the tests against"
     default: "--project=chromium --project=firefox"
+  is_public:
+    description: "The secret to access the journey"
+    default: "false"
 
 runs:
   using: composite
@@ -46,9 +49,10 @@ runs:
         CONTENTFUL_SPACE_ID: ${{ inputs.contentful_space_id }}
         UPGRADE_INSECURE_REQUESTS: ${{ inputs.upgrade_insecure_requests }}
         PROJECTS: ${{ inputs.projects }}
+        IS_PUBLIC: ${{ inputs.is_public }}
 
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=${WEBAPP_URL} DOMAIN=${WEBAPP_URL} AUTH_SECRET=${AUTH_SECRET} USE_MOCK_CONTENTFUL=${USE_MOCK_CONTENTFUL} RUN_VALIDATION_TESTS=${RUN_VALIDATION_TESTS} CONTENTFUL_DELIVERY_API_KEY=${CONTENTFUL_DELIVERY_API_KEY} CONTENTFUL_SPACE_ID=${CONTENTFUL_SPACE_ID} UPGRADE_INSECURE_REQUESTS=${UPGRADE_INSECURE_REQUESTS} npx playwright test --grep "@${TEST_TYPE}" ${PROJECTS}
+      run: WEBAPP_URL=${WEBAPP_URL} DOMAIN=${WEBAPP_URL} AUTH_SECRET=${AUTH_SECRET} USE_MOCK_CONTENTFUL=${USE_MOCK_CONTENTFUL} RUN_VALIDATION_TESTS=${RUN_VALIDATION_TESTS} CONTENTFUL_DELIVERY_API_KEY=${CONTENTFUL_DELIVERY_API_KEY} CONTENTFUL_SPACE_ID=${CONTENTFUL_SPACE_ID} UPGRADE_INSECURE_REQUESTS=${UPGRADE_INSECURE_REQUESTS} IS_PUBLIC=${IS_PUBLIC} npx playwright test --grep "@${TEST_TYPE}" ${PROJECTS}
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
