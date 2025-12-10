@@ -114,6 +114,7 @@ jobs:
     name: Run webkit validation tests
     runs-on: ubuntu-22.04
     environment: development
+    needs: [run-playwright-validation-e2e-tests, run-playwright-webkit-e2e-tests]
 
     steps:
       - name: Check out repository
