@@ -47,24 +47,6 @@ jobs:
         uses: ./.github/actions/run-unit-tests
         with:
           solution_filename: ${{ env.SOLUTION_NAME }}
-          
-  run-accessibility-tests:
-    name: Run Accessibility tests
-    runs-on: ubuntu-22.04
-    environment: development
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-        
-      - name: Install playwright
-        uses: ./.github/actions/install-playwright
-
-      - name: Run Accessibility tests
-        uses: ./.github/actions/run-accessibility-tests
-        with:
-          url: ${{ env.URL }}
-          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
 
   run-playwright-e2e-tests:
     name: Run Playwright e2e tests
@@ -152,10 +134,29 @@ jobs:
           projects: "--project=webkit"
           is_public: "true"
 
+  run-accessibility-tests:
+    name: Run Accessibility tests
+    runs-on: ubuntu-22.04
+    environment: development
+    needs: [build-app, run-playwright-webkit-validation-e2e-tests, run-playwright-webkit-e2e-tests]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+
+      - name: Run Accessibility tests
+        uses: ./.github/actions/run-accessibility-tests
+        with:
+          url: ${{ env.URL }}
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+
   security-checks-local:
     name: Run baseline security checks locally
     runs-on: ubuntu-22.04
-    needs: [build-app, run-playwright-webkit-validation-e2e-tests, run-playwright-webkit-e2e-tests]
+    needs: [run-accessibility-tests]
 
     steps:
       - name: Check out repository
