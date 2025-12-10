@@ -2,17 +2,22 @@ function getUrls(authSecret, port) {
     let basicActions = [
         `navigate to http://localhost:${port}/challenge`,
         `wait for url to be http://localhost:${port}/challenge`,
+        'wait for element #main-content to emit content-loaded',
         `set field #PasswordValue to ${authSecret}`,
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/`,
+        'wait for element #main-content to emit content-loaded',
         'click element #start-now-button',
         `wait for url to be http://localhost:${port}/questions/pre-check`,
+        'wait for element #main-content to emit content-loaded',
         'click element #yes',
         'click element #pre-check-submit',
         `wait for url to be http://localhost:${port}/questions/are-you-checking-your-own-qualification`,
+        'wait for element #main-content to emit content-loaded',
         'click element #no',
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/questions/where-was-the-qualification-awarded`,
+        'wait for element #main-content to emit content-loaded',
     ];
 
     let fullJourneyActions = [
@@ -162,7 +167,6 @@ function getUrls(authSecret, port) {
 const config = {
     defaults: {
         standard: 'WCAG2AA',
-        wait: 1000,
         hideElements: 'svg[role=presentation], img[id="offline-resources-1x"], img[id="offline-resources-2x"]',
         useIncognitoBrowserContext: false
     }
