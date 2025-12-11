@@ -93,10 +93,6 @@ function buildCommand() {
         + `--ContentfulOptions:UsePreviewApi="${process.env.USE_MOCK_CONTENTFUL ?? false}" `
         + `--UpgradeInsecureRequests="${process.env.UPGRADE_INSECURE_REQUESTS ?? true}" `;
 
-    if (process.env.IS_PUBLIC !== undefined) {
-        command += `--ServiceAccess:IsPublic="${process.env.IS_PUBLIC}" `;
-    }
-
     if (process.env.CONTENTFUL_DELIVERY_API_KEY !== undefined) {
         command += `--ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" `;
     }
