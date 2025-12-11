@@ -31,7 +31,6 @@ jobs:
   build-app:  
     name: Build, check and run tests
     runs-on: ubuntu-22.04
-    environment: development
 
     steps:
       - name: Check out repository
@@ -51,7 +50,6 @@ jobs:
   run-accessibility-tests:
     name: Run Accessibility tests
     runs-on: ubuntu-22.04
-    environment: development
     needs: [build-app]
     
     steps:
@@ -80,7 +78,6 @@ jobs:
   run-playwright-e2e-tests:
     name: Run Playwright e2e tests
     runs-on: ubuntu-22.04
-    environment: development
     needs: [run-accessibility-tests]
 
     steps:
@@ -99,7 +96,6 @@ jobs:
   run-playwright-webkit-e2e-tests:
     name: Run Playwright webkit e2e tests
     runs-on: ubuntu-22.04
-    environment: development
     needs: [run-accessibility-tests]
 
     steps:

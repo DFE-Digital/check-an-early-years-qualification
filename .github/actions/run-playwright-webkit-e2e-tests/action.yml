@@ -9,7 +9,7 @@ runs:
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       env:
         CI: true
-      run: UPGRADE_INSECURE_REQUESTS=false npx playwright test --workers=1 --grep "@e2e" --project=webkit
+      run: UPGRADE_INSECURE_REQUESTS=false npx playwright test --workers=2 --grep "@e2e" --project=webkit
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
