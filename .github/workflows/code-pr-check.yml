@@ -78,7 +78,7 @@ jobs:
   run-playwright-e2e-tests:
     name: Run Playwright e2e tests
     runs-on: ubuntu-22.04
-    needs: [run-accessibility-tests]
+    needs: [build-app]
 
     steps:
       - name: Check out repository
@@ -98,7 +98,7 @@ jobs:
   run-playwright-webkit-e2e-tests:
     name: Run Playwright webkit e2e tests
     runs-on: ubuntu-22.04
-    needs: [run-accessibility-tests]
+    needs: [run-playwright-e2e-tests]
 
     steps:
       - name: Check out repository
@@ -116,7 +116,7 @@ jobs:
     name: Run validation tests
     runs-on: ubuntu-22.04
     environment: development
-    needs: [run-accessibility-tests]
+    needs: [run-playwright-e2e-tests]
 
     steps:
       - name: Check out repository
@@ -141,7 +141,7 @@ jobs:
   security-checks-local:
     name: Run baseline security checks locally
     runs-on: ubuntu-22.04
-    needs: [run-accessibility-tests]
+    needs: [build-app]
 
     steps:
       - name: Check out repository
