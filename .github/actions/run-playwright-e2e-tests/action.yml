@@ -1,6 +1,11 @@
 name: Run Playwright end to end tests
 description: Run end to end tests using Playwright
 
+inputs:
+  webapp_url:
+    required: true
+    description: 'The webapp url to run against'
+
 runs:
   using: composite
   steps:
@@ -8,8 +13,9 @@ runs:
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       env:
+        WEBAPP_URL: ${{ inputs.webapp_url }}
         CI: true
-      run: npx playwright test --workers=4 --grep "@e2e" --project=chromium --project=firefox
+      run: WEBAPP_URL=${WEBAPP_URL} npx playwright test --workers=4 --grep "@e2e" --project=chromium --project=firefox
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
