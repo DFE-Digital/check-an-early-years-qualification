@@ -96,7 +96,7 @@ jobs:
   run-playwright-webkit-e2e-tests:
     name: Run Playwright webkit e2e tests
     runs-on: ubuntu-22.04
-    needs: [run-accessibility-tests]
+    needs: [run-playwright-e2e-tests]
 
     steps:
       - name: Check out repository
@@ -112,7 +112,7 @@ jobs:
     name: Run validation tests
     runs-on: ubuntu-22.04
     environment: development
-    needs: [run-playwright-e2e-tests]
+    needs: [run-playwright-webkit-e2e-tests]
 
     steps:
       - name: Check out repository
