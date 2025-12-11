@@ -164,7 +164,7 @@ jobs:
   security-checks-local:
     name: Run baseline security checks locally
     runs-on: ubuntu-22.04
-    needs: [run-playwright-validation-e2e-tests,run-playwright-webkit-validation-e2e-tests]
+    needs: [run-accessibility-tests]
 
     steps:
       - name: Check out repository
