@@ -40,13 +40,7 @@ public class CachingOptionsManager(
     {
         logger.LogInformation("Setting user's caching option to {Option}", option);
 
-        var cookieOptions = new CookieOptions
-                            {
-                                Expires = DateTimeOffset.UtcNow.AddDays(1),
-                                HttpOnly = true,
-                                Secure = true
-                            };
-
+        var cookieOptions = cookieManager.CreateCookieOptions(DateTimeOffset.UtcNow.AddDays(1), true);
         cookieManager.SetOutboundCookie(OptionsCookieKey, option.ToString(), cookieOptions);
 
         return Task.CompletedTask;

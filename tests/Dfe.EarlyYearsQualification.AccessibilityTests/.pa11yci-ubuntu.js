@@ -163,7 +163,9 @@ const config = {
     defaults: {
         standard: 'WCAG2AA',
         hideElements: 'svg[role=presentation], img[id="offline-resources-1x"], img[id="offline-resources-2x"]',
-        useIncognitoBrowserContext: false
+        useIncognitoBrowserContext: true,
+        wait: 2000,
+        timeout: 60000
     }
 };
 

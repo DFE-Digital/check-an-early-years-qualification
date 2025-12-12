@@ -7,7 +7,8 @@
     "snapshot:update": "npx playwright test --grep @snapshot --project chromium --update-snapshots",
     "e2e": "npx playwright test --grep @e2e",
     "e2e:chrome": "npx playwright test --grep @e2e --project chromium",
-    "e2e:firefox": "npx playwright test --grep @e2e --project firefox"
+    "e2e:firefox": "npx playwright test --grep @e2e --project firefox",
+    "e2e:webkit": "npx playwright test --grep @e2e --project webkit"
   },
   "keywords": [],
   "author": "",

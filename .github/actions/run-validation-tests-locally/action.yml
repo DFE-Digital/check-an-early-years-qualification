@@ -23,6 +23,9 @@ inputs:
   contentful_space_id:
     description: "Contentful space id"
     required: true
+  upgrade_insecure_requests:
+    description: "Set whether to allow insecure requests"
+    default: "true"
 
 runs:
   using: composite
@@ -38,12 +41,13 @@ runs:
         RUN_VALIDATION_TESTS: ${{ inputs.run_validation_tests }}
         CONTENTFUL_DELIVERY_API_KEY: ${{ inputs.contentful_delivery_api_key }}
         CONTENTFUL_SPACE_ID: ${{ inputs.contentful_space_id }}
+        UPGRADE_INSECURE_REQUESTS: ${{ inputs.upgrade_insecure_requests }}
 
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=${WEBAPP_URL} DOMAIN=${WEBAPP_URL} AUTH_SECRET=${AUTH_SECRET} USE_MOCK_CONTENTFUL=${USE_MOCK_CONTENTFUL} RUN_VALIDATION_TESTS=${RUN_VALIDATION_TESTS} CONTENTFUL_DELIVERY_API_KEY=${CONTENTFUL_DELIVERY_API_KEY} CONTENTFUL_SPACE_ID=${CONTENTFUL_SPACE_ID} npx playwright test --grep "@${TEST_TYPE}"
+      run: WEBAPP_URL=${WEBAPP_URL} DOMAIN=${WEBAPP_URL} AUTH_SECRET=${AUTH_SECRET} USE_MOCK_CONTENTFUL=${USE_MOCK_CONTENTFUL} RUN_VALIDATION_TESTS=${RUN_VALIDATION_TESTS} CONTENTFUL_DELIVERY_API_KEY=${CONTENTFUL_DELIVERY_API_KEY} CONTENTFUL_SPACE_ID=${CONTENTFUL_SPACE_ID} UPGRADE_INSECURE_REQUESTS=${UPGRADE_INSECURE_REQUESTS} npx playwright test --grep "@${TEST_TYPE}" --project=chromium --project=firefox
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
+        name: playwright-report-validation-results
         path: playwright-report/
         retention-days: 30

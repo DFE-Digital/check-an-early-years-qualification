@@ -29,4 +29,14 @@ public class CookieManager(IHttpContextAccessor context) : ICookieManager
         // This deletes cookies that may have been set with the subdomain (note the .)
         httpContext?.Response.Cookies.Delete(key, new CookieOptions { Domain = $".{httpContext.Request.Host.Host}" });
     }
+
+    public CookieOptions CreateCookieOptions(DateTimeOffset expiration, bool secure = true)
+    {
+        return new CookieOptions
+               {
+                   Expires = expiration,
+                   HttpOnly = true,
+                   Secure = secure
+               };
+    }
 }

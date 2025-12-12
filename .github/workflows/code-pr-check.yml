@@ -31,7 +31,6 @@ jobs:
   build-app:  
     name: Build, check and run tests
     runs-on: ubuntu-22.04
-    environment: development
 
     steps:
       - name: Check out repository
@@ -48,6 +47,21 @@ jobs:
         with:
           solution_filename: ${{ env.SOLUTION_NAME }}
           
+  run-accessibility-tests:
+    name: Run accessibility tests
+    runs-on: ubuntu-22.04
+    needs: [build-app]
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Build web app
+        uses: ./.github/actions/build-dotnet-app
+        with:
+          dotnet_version: ${{ env.DOTNET_VERSION }}
+          solution_filename: ${{ env.SOLUTION_NAME }}
+
       - name: Run app for testing
         uses: ./.github/actions/run-app-for-testing
         with:
@@ -60,15 +74,19 @@ jobs:
         with:
           url: ${{ env.URL }}
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-     
+
+  run-playwright-validation-e2e-tests:
+    name: Run validation tests
+    runs-on: ubuntu-22.04
+    environment: development
+    needs: [run-accessibility-tests]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        
       - name: Install playwright
         uses: ./.github/actions/install-playwright
-
-      - name: Run Playwright snapshot tests
-        uses: ./.github/actions/run-playwright-snapshot-tests
-
-      - name: Run Playwright e2e tests
-        uses: ./.github/actions/run-playwright-e2e-tests
 
       # NOTE: The previous step spins up a local instance on port 5000 which has use_mock_contentful set to true.
       # These tests need the flag set to false so we need to spin up a different instance hence the different url.
@@ -86,7 +104,7 @@ jobs:
   security-checks-local:
     name: Run baseline security checks locally
     runs-on: ubuntu-22.04
-    needs: build-app
+    needs: [run-accessibility-tests]
 
     steps:
       - name: Check out repository
@@ -107,3 +125,36 @@ jobs:
           target: http://localhost:5000
           allow_issue_writing: false
           artifact_name: local_scan_dev
+
+  run-playwright-e2e-tests:
+    name: Run playwright e2e tests
+    runs-on: ubuntu-22.04
+    needs: [run-accessibility-tests]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+
+      - name: Run Playwright snapshot tests
+        uses: ./.github/actions/run-playwright-snapshot-tests
+
+      - name: Run Playwright e2e tests
+        uses: ./.github/actions/run-playwright-e2e-tests
+
+  run-playwright-webkit-e2e-tests:
+    name: Run playwright webkit e2e tests
+    runs-on: ubuntu-22.04
+    needs: [run-playwright-e2e-tests]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        
+      - name: Install playwright
+        uses: ./.github/actions/install-playwright
+
+      - name: Run Playwright webkit e2e tests
+        uses: ./.github/actions/run-playwright-webkit-e2e-tests

@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Web.Security;
+using OwaspHeaders.Core.Models;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Setup;
 
@@ -6,9 +7,11 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Setup;
 public class SecureHeaderConfigurationTests
 {
     [TestMethod]
-    public void SecureHeaderConfiguration_ExplicitConfiguration()
+    [DataRow(true)]
+    [DataRow(false)]
+    public void SecureHeaderConfiguration_ExplicitConfiguration(bool upgradeInsecureRequests)
     {
-        var config = SecureHeaderConfiguration.CustomConfiguration();
+        var config = SecureHeaderConfiguration.CustomConfiguration(upgradeInsecureRequests);
 
         config.UseHsts.Should().BeTrue();
         config.UseXFrameOptions.Should().BeTrue();

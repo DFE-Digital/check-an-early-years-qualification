@@ -1,18 +1,18 @@
-name: Run Playwright end to end tests
-description: Run end to end tests using Playwright
+name: Run Playwright webkit end to end tests
+description: Run webkit end to end tests using Playwright
 
 runs:
   using: composite
   steps:
-    - name: Run Playwright tests
+    - name: Run Playwright webkit tests
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
       env:
         CI: true
-      run: npx playwright test --workers=4 --grep "@e2e" --project=chromium --project=firefox
+      run: UPGRADE_INSECURE_REQUESTS=false npx playwright test --workers=1 --grep "@e2e" --project=webkit
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
+        name: playwright-webkit-report
         path: ./tests/Dfe.EarlyYearsQualification.E2ETests/playwright-report/
         retention-days: 30
