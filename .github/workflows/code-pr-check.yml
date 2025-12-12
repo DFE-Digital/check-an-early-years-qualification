@@ -79,7 +79,7 @@ jobs:
     name: Run validation tests
     runs-on: ubuntu-22.04
     environment: development
-    needs: [build-app]
+    needs: [run-accessibility-tests]
 
     steps:
       - name: Check out repository
@@ -104,7 +104,7 @@ jobs:
   security-checks-local:
     name: Run baseline security checks locally
     runs-on: ubuntu-22.04
-    needs: [build-app]
+    needs: [run-accessibility-tests]
 
     steps:
       - name: Check out repository
