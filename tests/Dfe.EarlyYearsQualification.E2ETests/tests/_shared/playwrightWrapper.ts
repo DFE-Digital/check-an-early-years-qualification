@@ -112,7 +112,7 @@ export async function checkJourneyCookieValue(context: BrowserContext, value: st
 }
 
 export async function setCookie(context: BrowserContext, value: string, cookieName: string) {
-    var isSecure = (process.env.UPGRADE_INSECURE_REQUESTS === 'true');
+    var isSecure = process.env.UPGRADE_INSECURE_REQUESTS === undefined || process.env.UPGRADE_INSECURE_REQUESTS === 'true';
 
     await context.addCookies([
         {
