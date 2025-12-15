@@ -219,6 +219,7 @@ public class MockContentfulServiceTests
         result.Labels.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
         result.Labels.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
         result.IsDegreeSpecificPage.Should().BeFalse();
+        result.IsAutomaticallyApprovedAtLevel6.Should().BeFalse();
     }
 
     [TestMethod]
@@ -252,6 +253,7 @@ public class MockContentfulServiceTests
         result.Labels.QualificationResultNotFrL3OrL6MessageBody.Should().Be("Not full and relevant L3 or L6 body");
         result.Labels.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
         result.IsDegreeSpecificPage.Should().BeFalse();
+        result.IsAutomaticallyApprovedAtLevel6.Should().BeFalse();
     }
 
     [TestMethod]

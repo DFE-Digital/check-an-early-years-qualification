@@ -177,6 +177,7 @@ public class MockContentfulService : IContentService
             {
                 IsPractitionerSpecificPage = false,
                 IsDegreeSpecificPage = false,
+                IsAutomaticallyApprovedAtLevel6 = false,
                 IsFullAndRelevant = true,
                 FromWhichYear = "Sep-14",
                 ToWhichYear = "Aug-19",
@@ -190,6 +191,7 @@ public class MockContentfulService : IContentService
             {
                 IsPractitionerSpecificPage = true,
                 IsDegreeSpecificPage = false,
+                IsAutomaticallyApprovedAtLevel6 = false,
                 IsFullAndRelevant = true,
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
@@ -203,6 +205,7 @@ public class MockContentfulService : IContentService
             {
                 IsPractitionerSpecificPage = true,
                 IsDegreeSpecificPage = false,
+                IsAutomaticallyApprovedAtLevel6 = false,
                 IsFullAndRelevant = false,
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
@@ -216,6 +219,7 @@ public class MockContentfulService : IContentService
             {
                 IsPractitionerSpecificPage = true,
                 IsDegreeSpecificPage = false,
+                IsAutomaticallyApprovedAtLevel6 = false,
                 IsFullAndRelevant = true,
                 FromWhichYear = "Sep-11",
                 ToWhichYear = "Aug-17",
