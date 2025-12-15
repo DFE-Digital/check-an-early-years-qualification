@@ -289,13 +289,13 @@ public class HelpServiceTests
     public void SetHelpQualificationDetailsInCookie_Updates_EnquiryValues()
     {
         // Arrange
-        var enquiry = new HelpFormEnquiry()
-        {
+        var enquiry = new HelpFormEnquiry
+                      {
             ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
         };
 
-        var viewModel = new QualificationDetailsPageViewModel()
-        {
+        var viewModel = new QualificationDetailsPageViewModel
+                        {
             AwardingOrganisation = "Test Awarding Organisation",
             QualificationName = "Test Qualification Name",
             QuestionModel = new()

@@ -28,7 +28,7 @@ public class ConfirmQualificationPageMapperTests
                          .ReturnsAsync(variousAwardingOrganisationsExplanationHtml);
         
         var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
-        var result = await mapper.Map(content, qualification, new List<Qualification>() { qualification });
+        var result = await mapper.Map(content, qualification, new List<Qualification> { qualification });
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(content.Heading);
@@ -78,7 +78,7 @@ public class ConfirmQualificationPageMapperTests
                          .ReturnsAsync(variousAwardingOrganisationsExplanationHtml);
         
         var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
-        var result = await mapper.Map(content, qualification, new List<Qualification>() { qualification });
+        var result = await mapper.Map(content, qualification, new List<Qualification> { qualification });
 
         result.Should().NotBeNull();
         result.Heading.Should().BeSameAs(content.Heading);
@@ -114,8 +114,8 @@ public class ConfirmQualificationPageMapperTests
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(It.IsAny<string>());
 
-        var qualifications = new List<Qualification>()
-        {
+        var qualifications = new List<Qualification>
+                             {
             new Qualification("Test-1", "This is a duplicate", "ABC", 1),
             new Qualification("Test-2", "This is a duplicate", "DEF", 2),
             new Qualification("Test-3", "This is unique", "GHI", 3),

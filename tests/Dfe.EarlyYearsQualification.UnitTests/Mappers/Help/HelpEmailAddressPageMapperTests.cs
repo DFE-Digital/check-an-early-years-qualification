@@ -14,8 +14,8 @@ public class HelpEmailAddressPageMapperTests
     {
         var mockContentParser = new Mock<IGovUkContentParser>();
 
-        var content = new HelpEmailAddressPage()
-        {
+        var content = new HelpEmailAddressPage
+                      {
             Heading = "What is your email address?",
             InvalidEmailAddressErrorMessage = "Enter an email address in the correct format, for example name@example.com",
             NoEmailAddressEnteredErrorMessage = "Enter an email address",

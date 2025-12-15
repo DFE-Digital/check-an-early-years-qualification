@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Help;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
@@ -20,20 +21,20 @@ public class HelpQualificationDetailsPageMapperTests
 
         var content = GetHelpQualificationDetailsPageContent();
 
-        var viewModel = new QualificationDetailsPageViewModel()
-        {
-            QuestionModel = new DatesQuestionModel()
-            {
-                StartedQuestion = new DateQuestionModel()
-                {
+        var viewModel = new QualificationDetailsPageViewModel
+                        {
+            QuestionModel = new DatesQuestionModel
+                            {
+                StartedQuestion = new DateQuestionModel
+                                  {
                     QuestionHeader = content.StartDateQuestion.QuestionHeader,
                     MonthLabel = content.StartDateQuestion.MonthLabel,
                     YearLabel = content.StartDateQuestion.YearLabel,
                     SelectedMonth = 1,
                     SelectedYear = 2000
                 },
-                AwardedQuestion = new DateQuestionModel()
-                {
+                AwardedQuestion = new DateQuestionModel
+                                  {
                     QuestionHeader = content.AwardedDateQuestion.QuestionHeader,
                     MonthLabel = content.AwardedDateQuestion.MonthLabel,
                     YearLabel = content.AwardedDateQuestion.YearLabel,
@@ -93,20 +94,20 @@ public class HelpQualificationDetailsPageMapperTests
 
         var content = GetHelpQualificationDetailsPageContent();
 
-        var viewModel = new QualificationDetailsPageViewModel()
-        {
-            QuestionModel = new DatesQuestionModel()
-            {
-                StartedQuestion = new DateQuestionModel()
-                {
+        var viewModel = new QualificationDetailsPageViewModel
+                        {
+            QuestionModel = new DatesQuestionModel
+                            {
+                StartedQuestion = new DateQuestionModel
+                                  {
                     QuestionHeader = content.StartDateQuestion.QuestionHeader,
                     MonthLabel = content.StartDateQuestion.MonthLabel,
                     YearLabel = content.StartDateQuestion.YearLabel,
                     SelectedMonth = 1,
                     SelectedYear = 2000
                 },
-                AwardedQuestion = new DateQuestionModel()
-                {
+                AwardedQuestion = new DateQuestionModel
+                                  {
                     QuestionHeader = content.AwardedDateQuestion.QuestionHeader,
                     MonthLabel = content.AwardedDateQuestion.MonthLabel,
                     YearLabel = content.AwardedDateQuestion.YearLabel,
@@ -116,8 +117,8 @@ public class HelpQualificationDetailsPageMapperTests
             }
         };
 
-        var validationResult = new DatesValidationResult()
-        {
+        var validationResult = new DatesValidationResult
+                               {
             StartedValidationResult = new()
             {
                 MonthValid = false,
@@ -172,20 +173,20 @@ public class HelpQualificationDetailsPageMapperTests
 
         var content = GetHelpQualificationDetailsPageContent();
 
-        var viewModel = new QualificationDetailsPageViewModel()
-        {
-            QuestionModel = new DatesQuestionModel()
-            {
-                StartedQuestion = new DateQuestionModel()
-                {
+        var viewModel = new QualificationDetailsPageViewModel
+                        {
+            QuestionModel = new DatesQuestionModel
+                            {
+                StartedQuestion = new DateQuestionModel
+                                  {
                     QuestionHeader = content.StartDateQuestion.QuestionHeader,
                     MonthLabel = content.StartDateQuestion.MonthLabel,
                     YearLabel = content.StartDateQuestion.YearLabel,
                     SelectedMonth = 1,
                     SelectedYear = 2000
                 },
-                AwardedQuestion = new DateQuestionModel()
-                {
+                AwardedQuestion = new DateQuestionModel
+                                  {
                     QuestionHeader = content.AwardedDateQuestion.QuestionHeader,
                     MonthLabel = content.AwardedDateQuestion.MonthLabel,
                     YearLabel = content.AwardedDateQuestion.YearLabel,
@@ -195,19 +196,19 @@ public class HelpQualificationDetailsPageMapperTests
             }
         };
 
-        var validationResult = new DatesValidationResult()
-        {
+        var validationResult = new DatesValidationResult
+                               {
             StartedValidationResult = new()
             {
                 MonthValid = false,
                 YearValid = false,
-                BannerErrorMessages = new List<Web.Models.BannerError>()
-                {
-                    new("some error message about the started month", Web.Models.FieldId.Month),
-                    new("some error message about the started year", Web.Models.FieldId.Year)
+                BannerErrorMessages = new List<BannerError>
+                                      {
+                    new("some error message about the started month", FieldId.Month),
+                    new("some error message about the started year", FieldId.Year)
                 },
-                ErrorMessages = new List<string>()
-                {
+                ErrorMessages = new List<string>
+                                {
                     "some error message about the started month",
                     "some error message about the started year"
                 }
@@ -216,13 +217,13 @@ public class HelpQualificationDetailsPageMapperTests
             {
                 MonthValid = false,
                 YearValid = false,
-                BannerErrorMessages = new List<Web.Models.BannerError>()
-                {
-                    new("some error message about the awarded month", Web.Models.FieldId.Month),
-                    new("some error message about the awarded year", Web.Models.FieldId.Year)
+                BannerErrorMessages = new List<BannerError>
+                                      {
+                    new("some error message about the awarded month", FieldId.Month),
+                    new("some error message about the awarded year", FieldId.Year)
                 },
-                ErrorMessages = new List<string>()
-                {
+                ErrorMessages = new List<string>
+                                {
                     "some error message about the awarded month",
                     "some error message about the awarded year"
                 },
@@ -263,8 +264,8 @@ public class HelpQualificationDetailsPageMapperTests
     private static HelpQualificationDetailsPage GetHelpQualificationDetailsPageContent()
     {
 
-        return new HelpQualificationDetailsPage()
-        {
+        return new HelpQualificationDetailsPage
+               {
             Heading = "What are the qualification details?",
             PostHeadingContent = "We need to know the following qualification details to quickly and accurately respond to any questions you may have.",
             CtaButtonText = "Continue",

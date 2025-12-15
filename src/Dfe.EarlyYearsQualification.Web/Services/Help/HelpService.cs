@@ -92,14 +92,14 @@ public class HelpService(
         var qualificationStart = userJourneyCookieService.GetWhenWasQualificationStarted();
         var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
 
-        viewModel.QuestionModel.StartedQuestion = new DateQuestionModel()
-        {
+        viewModel.QuestionModel.StartedQuestion = new DateQuestionModel
+                                                  {
             SelectedMonth = qualificationStart.startMonth,
             SelectedYear = qualificationStart.startYear
         };
 
-        viewModel.QuestionModel.AwardedQuestion = new DateQuestionModel()
-        {
+        viewModel.QuestionModel.AwardedQuestion = new DateQuestionModel
+                                                  {
             SelectedMonth = qualificationAwarded.startMonth,
             SelectedYear = qualificationAwarded.startYear
         };

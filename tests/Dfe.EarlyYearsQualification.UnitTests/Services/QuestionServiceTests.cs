@@ -384,12 +384,12 @@ public class QuestionServiceTests
         DatesQuestionModel model = new();
         DatesQuestionPage question = new()
         {
-            StartedQuestion = new DateQuestion()
-            {
+            StartedQuestion = new DateQuestion
+                              {
                 ErrorMessage = "Started Error Message"
             },
-            AwardedQuestion = new DateQuestion()
-            {
+            AwardedQuestion = new DateQuestion
+                              {
                 ErrorMessage = "Awarded Error Message"
             }
         };
@@ -424,12 +424,12 @@ public class QuestionServiceTests
         DatesQuestionModel model = new();
         DatesQuestionPage question = new()
         {
-            StartedQuestion = new DateQuestion()
-            {
+            StartedQuestion = new DateQuestion
+                              {
                 ErrorMessage = "Started Error Message"
             },
-            AwardedQuestion = new DateQuestion()
-            {
+            AwardedQuestion = new DateQuestion
+                              {
                 ErrorMessage = "Awarded Error Message"
             }
         };
@@ -499,8 +499,8 @@ public class QuestionServiceTests
     public void SetWhenWasQualificationStarted_Calls_UserJourneyCookieService_SetWhenWasQualificationStarted()
     {
         // Arrange
-        DateQuestionModel question = new DateQuestionModel()
-        {
+        DateQuestionModel question = new DateQuestionModel
+                                     {
             SelectedMonth = 2,
             SelectedYear = 2003
         };
@@ -516,8 +516,8 @@ public class QuestionServiceTests
     public void SetWhenWasQualificationAwarded_Calls_UserJourneyCookieService_SetWhenWasQualificationAwarded()
     {
         // Arrange
-        DateQuestionModel question = new DateQuestionModel()
-        {
+        DateQuestionModel question = new DateQuestionModel
+                                     {
             SelectedMonth = 2,
             SelectedYear = 2006
         };

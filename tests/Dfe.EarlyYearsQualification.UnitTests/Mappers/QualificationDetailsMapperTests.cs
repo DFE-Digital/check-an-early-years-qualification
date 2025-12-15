@@ -26,8 +26,8 @@ public class QualificationDetailsMapperTests
         {
             RequirementsHeading = "Requirements heading",
             RequirementsText = ContentfulContentHelper.Paragraph(requirementsText),
-            Labels = new DetailsPageLabels()
-            {
+            Labels = new DetailsPageLabels
+                     {
                 AwardingOrgLabel = "Awarding org label",
                 CheckAnotherQualificationLink = new NavigationLink
                 {
@@ -84,7 +84,7 @@ public class QualificationDetailsMapperTests
         
         var mapper = new QualificationDetailsMapper(mockContentParser.Object);
         var result = await mapper.Map(qualification, detailsPage, backNavLink,
-                                                    additionalRequirementAnswers, dateStarted, dateAwarded, new List<Qualification>() { qualification });
+                                                    additionalRequirementAnswers, dateStarted, dateAwarded, new List<Qualification> { qualification });
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);
@@ -140,8 +140,8 @@ public class QualificationDetailsMapperTests
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).ReturnsAsync(It.IsAny<string>());
 
-        var qualifications = new List<Qualification>()
-        {
+        var qualifications = new List<Qualification>
+                             {
             new Qualification("Test-1", "This is a duplicate", "ABC", 1),
             new Qualification("Test-2", "This is a duplicate", "DEF", 2),
             new Qualification("Test-3", "This is unique", "GHI", 3),

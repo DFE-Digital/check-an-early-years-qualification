@@ -32,7 +32,7 @@ public class ContentfulContentService(
 
     public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(
         bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear,
-        bool isDegreeSpecificPage)
+        bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage)
     {
         var qualificationDetailsPageType = ContentTypeLookup[typeof(QualificationDetailsPage)];
 
@@ -47,7 +47,8 @@ public class ContentfulContentService(
             queryBuilder = queryBuilder
                            .FieldEquals("fields.level", level.ToString())
                            .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0")
-                           .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0");
+                           .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0")
+                           .FieldEquals("fields.isAutomaticallyApprovedAtLevel6", isApprovedAtL6SpecificPage ? "1" : "0");
         }
 
         var qualificationDetailsPageEntries = await GetEntriesByType(queryBuilder);

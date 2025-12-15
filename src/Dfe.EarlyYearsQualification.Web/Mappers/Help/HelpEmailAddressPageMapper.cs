@@ -4,12 +4,12 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers.Help;
 
-public class HelpEmailAddressPageMapper() : IHelpEmailAddressPageMapper
+public class HelpEmailAddressPageMapper : IHelpEmailAddressPageMapper
 {
     public EmailAddressPageViewModel MapEmailAddressPageContentToViewModel(HelpEmailAddressPage content)
     {
-        var viewModel = new EmailAddressPageViewModel()
-        {
+        var viewModel = new EmailAddressPageViewModel
+                        {
             BackButton = new()
             {
                 DisplayText = content.BackButton.DisplayText,

@@ -7,7 +7,7 @@ public interface IContentService
 {
     Task<StartPage?> GetStartPage();
 
-    Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage);
+    Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage);
 
     Task<AdvicePage?> GetAdvicePage(string entryId);
 

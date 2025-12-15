@@ -15,8 +15,8 @@ public class HelpProvideDetailsPageMapperTests
     [DataRow(HelpFormEnquiryReasons.IssueWithTheService)]
     public void MapProvideDetailsPageContentToViewModel_MapsToViewModel(string reasonForEnquiring)
     {
-        var content = new HelpProvideDetailsPage()
-        {
+        var content = new HelpProvideDetailsPage
+                      {
             Heading = "How can we help you?",
             PostHeadingContent = "Give as much detail as you can. This helps us give you the right support.",
             CtaButtonText = "Continue",

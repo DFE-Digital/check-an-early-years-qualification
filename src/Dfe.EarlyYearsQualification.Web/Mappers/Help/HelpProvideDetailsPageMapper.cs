@@ -5,7 +5,7 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers.Help;
 
-public class HelpProvideDetailsPageMapper() : IHelpProvideDetailsPageMapper
+public class HelpProvideDetailsPageMapper : IHelpProvideDetailsPageMapper
 {
     public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage content, string reasonForEnquiring)
     {
@@ -13,8 +13,8 @@ public class HelpProvideDetailsPageMapper() : IHelpProvideDetailsPageMapper
                              ? content.BackButtonToQualificationDetailsPage
                              : content.BackButtonToGetHelpPage;
 
-        var viewModel = new ProvideDetailsPageViewModel()
-        {
+        var viewModel = new ProvideDetailsPageViewModel
+                        {
             BackButton = new()
             {
                 DisplayText = backButton.DisplayText,

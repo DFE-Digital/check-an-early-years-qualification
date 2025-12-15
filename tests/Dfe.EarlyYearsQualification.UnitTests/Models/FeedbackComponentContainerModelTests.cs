@@ -8,8 +8,8 @@ public class FeedbackComponentContainerModelTests
     [TestMethod]
     public void FeedbackComponentContainerModel_SetsInitialValues()
     {
-        var model = new FeedbackComponentContainerModel()
-        {
+        var model = new FeedbackComponentContainerModel
+                    {
             FeedbackComponent = new()
         };
 

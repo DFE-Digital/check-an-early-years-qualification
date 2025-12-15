@@ -11,8 +11,8 @@ public class HelpGetHelpPageMapper(IGovUkContentParser contentParser) : IHelpGet
 {
     public async Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage helpPageContent)
     {
-        var viewModel = new GetHelpPageViewModel()
-        {
+        var viewModel = new GetHelpPageViewModel
+                        {
             BackButton = new()
             {
                 DisplayText = helpPageContent.BackButton.DisplayText,

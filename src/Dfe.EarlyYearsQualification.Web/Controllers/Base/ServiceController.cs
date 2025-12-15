@@ -1,5 +1,3 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Web.Filters;
 using Microsoft.AspNetCore.Mvc;
 

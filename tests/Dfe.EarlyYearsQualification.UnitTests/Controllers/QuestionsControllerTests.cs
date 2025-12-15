@@ -181,8 +181,8 @@ public class QuestionsControllerTests
                           .ReturnsAsync(questionPage);
 
         _mockQuestionService.Setup(x => x.MapDatesModel(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), null))
-                          .Returns(new DatesQuestionModel()
-                          {
+                          .Returns(new DatesQuestionModel
+                                   {
                               Question = questionPage.Question,
                               CtaButtonText = questionPage.CtaButtonText,
                               StartedQuestion = new DateQuestionModel
@@ -301,8 +301,8 @@ public class QuestionsControllerTests
                                      },
                                      Question = questionPage.Question,
                                      CtaButtonText = questionPage.CtaButtonText,
-                                     Errors = new ErrorSummaryModel()
-                                     {
+                                     Errors = new ErrorSummaryModel
+                                              {
                                          ErrorSummaryLinks = [],
                                          ErrorBannerHeading = questionPage.ErrorBannerHeading
                                      },
@@ -722,7 +722,7 @@ public class QuestionsControllerTests
     {
         _mockQuestionService.Setup(x => x.GetPreCheckView())
             .ReturnsAsync(
-                new ViewResult()
+                new ViewResult
                 {
                     ViewName = "PreCheck",
                     ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())

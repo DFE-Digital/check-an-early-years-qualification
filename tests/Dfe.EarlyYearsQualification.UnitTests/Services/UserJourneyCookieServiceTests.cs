@@ -1672,8 +1672,8 @@ public class UserJourneyCookieServiceTests
         
         service.SetHelpFormEnquiry(enquiry);
 
-        var model = new UserJourneyCookieService.UserJourneyModel()
-        {
+        var model = new UserJourneyCookieService.UserJourneyModel
+                    {
             HelpFormEnquiry = enquiry
         };
 

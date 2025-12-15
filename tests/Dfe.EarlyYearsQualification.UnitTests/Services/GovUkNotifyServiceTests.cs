@@ -1,9 +1,10 @@
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
-using Microsoft.Extensions.Options;
 using Notify.Exceptions;
 using Notify.Interfaces;
+using Options = Microsoft.Extensions.Options.Options;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -29,9 +30,9 @@ public class GovUkNotifyServiceTests
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
 
-        var form = new HelpFormEnquiry()
-        {
-            ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.IssueWithTheService,
+        var form = new HelpFormEnquiry
+                   {
+            ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
             AdditionalInformation = "Some additional information",
         };
 
@@ -70,9 +71,9 @@ public class GovUkNotifyServiceTests
         });
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
-        var form = new HelpFormEnquiry()
-        {
-            ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.QuestionAboutAQualification,
+        var form = new HelpFormEnquiry
+                   {
+            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
             AdditionalInformation = "Some additional information",
             AwardingOrganisation = "Awarding organisation",
             QualificationAwardedDate = "10/2025",
@@ -120,9 +121,9 @@ public class GovUkNotifyServiceTests
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
 
-        var form = new HelpFormEnquiry()
-        {
-            ReasonForEnquiring = Web.Constants.HelpFormEnquiryReasons.IssueWithTheService,
+        var form = new HelpFormEnquiry
+                   {
+            ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
             AdditionalInformation = "Some additional information",
         };
 
