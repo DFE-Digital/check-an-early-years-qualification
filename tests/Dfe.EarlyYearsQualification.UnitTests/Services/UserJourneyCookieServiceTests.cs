@@ -1767,6 +1767,15 @@ public class UserJourneyCookieServiceTests
                    .Callback((string key, string value, CookieOptions _) => cookiesReturned[key] = value)
                    .Verifiable();
 
+        mockManager.Setup(x => x.CreateCookieOptions(It.IsAny<DateTimeOffset>(), It.IsAny<bool>())).Returns(
+            new CookieOptions()
+            {
+                Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30)),
+                HttpOnly = true,
+                Secure = true
+            }
+        );
+
         return (mockManager, cookiesReturned);
     }
 }

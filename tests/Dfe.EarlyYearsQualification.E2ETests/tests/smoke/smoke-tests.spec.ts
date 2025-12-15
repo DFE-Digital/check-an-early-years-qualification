@@ -26,4 +26,14 @@ test.describe("A spec used to smoke test the environment once a deployment has h
         await page.goto("/does-not-exist");
         await checkText(page, "#page-not-found-heading", "Page not found");
     });
+
+    test("Cookies should be secure", async ({ page, context }) => {
+        await startJourney(page, context);
+
+        const cookies = await context.cookies();
+
+        for (const cookie of cookies) {
+            expect(cookie.secure).toBe(true, `Cookie "${cookie.name}" should be secure`);
+        }
+    });
 });

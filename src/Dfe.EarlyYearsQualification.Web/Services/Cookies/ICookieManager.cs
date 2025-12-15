@@ -7,4 +7,6 @@ public interface ICookieManager
     void SetOutboundCookie(string key, string value, CookieOptions options);
 
     void DeleteOutboundCookie(string key);
+
+    CookieOptions CreateCookieOptions(DateTimeOffset expiration, bool secure);
 }
