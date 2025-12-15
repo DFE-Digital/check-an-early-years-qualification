@@ -117,7 +117,8 @@ export async function setCookie(context: BrowserContext, value: string, cookieNa
             name: cookieName,
             value: value,
             path: '/',
-            domain: process.env.DOMAIN
+            domain: process.env.DOMAIN,
+            secure: true
         }
     ]);
 }
