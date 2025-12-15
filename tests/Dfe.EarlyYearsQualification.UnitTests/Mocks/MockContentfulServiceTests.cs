@@ -283,7 +283,7 @@ public class MockContentfulServiceTests
         (result.Options[5] as Option)!.Label.Should().Be("Outside the United Kingdom");
         (result.Options[5] as Option)!.Value.Should().Be("outside-uk");
     }
-    
+
     [TestMethod]
     public async Task GetRadioQuestionPage_PassInAreYouCheckingYourOwnQualification_ReturnsExpectedDetails()
     {
@@ -668,7 +668,7 @@ public class MockContentfulServiceTests
         result.ToWhichYear.Should().Be("Aug-19");
         result.IsPractitionerSpecificPage.Should().BeTrue();
     }
-    
+
     [TestMethod]
     public async Task GetCannotFindQualificationPage_PassInLevel3_ReturnsExpectedContent()
     {
@@ -761,7 +761,6 @@ public class MockContentfulServiceTests
         result.AnyLevelText.Should().Be("Any level");
     }
 
-
     [TestMethod]
     public async Task GetGetHelpPage_ReturnsExpectedDetails()
     {
@@ -771,15 +770,24 @@ public class MockContentfulServiceTests
 
         var enquiryReasons = new List<Option>
                              {
-                                 new() { Label = "I have a question about a qualification", Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification) },
-                                 new() { Label = "I am experiencing an issue with the service", Value = nameof(HelpFormEnquiryReasons.IssueWithTheService) },
+                                 new()
+                                 {
+                                     Label = "I have a question about a qualification",
+                                     Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification)
+                                 },
+                                 new()
+                                 {
+                                     Label = "I am experiencing an issue with the service",
+                                     Value = nameof(HelpFormEnquiryReasons.IssueWithTheService)
+                                 },
                              };
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<GetHelpPage>();
         result.Heading.Should().Be("Get help with the Check an early years qualification service");
         result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
+                                                         "Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n");
 
         result.ReasonForEnquiryHeading.Should().Be("Why are you contacting us?");
 
@@ -792,11 +800,11 @@ public class MockContentfulServiceTests
 
         result.CtaButtonText.Should().Be("Continue");
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
-        {
-            DisplayText = "Home",
-            OpenInNewTab = false,
-            Href = "/"
-        });
+                                                  {
+                                                      DisplayText = "Home",
+                                                      OpenInNewTab = false,
+                                                      Href = "/"
+                                                  });
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
     }
@@ -812,16 +820,18 @@ public class MockContentfulServiceTests
         result.Should().BeAssignableTo<HelpQualificationDetailsPage>();
 
         result.Heading.Should().Be("What are the qualification details?");
-        result.PostHeadingContent.Should().Be("We need to know the following qualification details to quickly and accurately respond to any questions you may have.");
+        result.PostHeadingContent.Should()
+              .Be("We need to know the following qualification details to quickly and accurately respond to any questions you may have.");
         result.CtaButtonText.Should().Be("Continue");
         result.BackButton.Should().BeEquivalentTo(
-            new NavigationLink
-            {
-                DisplayText = "Back to get help with the Check an early years qualification service",
-                Href = "/help/get-help",
-                OpenInNewTab = false
-            }
-        );
+                                                  new NavigationLink
+                                                  {
+                                                      DisplayText =
+                                                          "Back to get help with the Check an early years qualification service",
+                                                      Href = "/help/get-help",
+                                                      OpenInNewTab = false
+                                                  }
+                                                 );
 
         result.QualificationNameHeading.Should().Be("Qualification name");
         result.QualificationNameErrorMessage.Should().Be("Enter the qualification name");
@@ -833,36 +843,61 @@ public class MockContentfulServiceTests
         result.StartDateQuestion.MonthLabel.Should().Be("Month");
         result.StartDateQuestion.YearLabel.Should().Be("Year");
         result.StartDateQuestion.QuestionHeader.Should().Be("Start date (optional)");
-        result.StartDateQuestion.QuestionHint.Should().Be("Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.");
-        result.StartDateQuestion.ErrorBannerLinkText.Should().Be("Enter the month and year that the qualification was started");
-        result.StartDateQuestion.ErrorMessage.Should().Be("Enter the month and year that the qualification was started");
-        result.StartDateQuestion.FutureDateErrorBannerLinkText.Should().Be("The date the qualification was started must be in the past");
-        result.StartDateQuestion.FutureDateErrorMessage.Should().Be("The date the qualification was started must be in the past");
-        result.StartDateQuestion.MissingMonthErrorMessage.Should().Be("Enter the month that the qualification was started");
-        result.StartDateQuestion.MissingYearErrorMessage.Should().Be("Enter the year that the qualification was started");
-        result.StartDateQuestion.MissingMonthBannerLinkText.Should().Be("Enter the month that the qualification was started");
-        result.StartDateQuestion.MissingYearBannerLinkText.Should().Be("Enter the year that the qualification was started");
-        result.StartDateQuestion.MonthOutOfBoundsErrorLinkText.Should().Be("The month the qualification was started must be between 1 and 12");
-        result.StartDateQuestion.MonthOutOfBoundsErrorMessage.Should().Be("The month the qualification was started must be between 1 and 12");
-        result.StartDateQuestion.YearOutOfBoundsErrorLinkText.Should().Be("The year the qualification was started must be between 1900 and $[actual-year]$");
-        result.StartDateQuestion.YearOutOfBoundsErrorMessage.Should().Be("The year the qualification was started must be between 1900 and $[actual-year]$");
+        result.StartDateQuestion.QuestionHint.Should()
+              .Be("Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.");
+        result.StartDateQuestion.ErrorBannerLinkText.Should()
+              .Be("Enter the month and year that the qualification was started");
+        result.StartDateQuestion.ErrorMessage.Should()
+              .Be("Enter the month and year that the qualification was started");
+        result.StartDateQuestion.FutureDateErrorBannerLinkText.Should()
+              .Be("The date the qualification was started must be in the past");
+        result.StartDateQuestion.FutureDateErrorMessage.Should()
+              .Be("The date the qualification was started must be in the past");
+        result.StartDateQuestion.MissingMonthErrorMessage.Should()
+              .Be("Enter the month that the qualification was started");
+        result.StartDateQuestion.MissingYearErrorMessage.Should()
+              .Be("Enter the year that the qualification was started");
+        result.StartDateQuestion.MissingMonthBannerLinkText.Should()
+              .Be("Enter the month that the qualification was started");
+        result.StartDateQuestion.MissingYearBannerLinkText.Should()
+              .Be("Enter the year that the qualification was started");
+        result.StartDateQuestion.MonthOutOfBoundsErrorLinkText.Should()
+              .Be("The month the qualification was started must be between 1 and 12");
+        result.StartDateQuestion.MonthOutOfBoundsErrorMessage.Should()
+              .Be("The month the qualification was started must be between 1 and 12");
+        result.StartDateQuestion.YearOutOfBoundsErrorLinkText.Should()
+              .Be("The year the qualification was started must be between 1900 and $[actual-year]$");
+        result.StartDateQuestion.YearOutOfBoundsErrorMessage.Should()
+              .Be("The year the qualification was started must be between 1900 and $[actual-year]$");
 
         result.AwardedDateQuestion.MonthLabel.Should().Be("Month");
         result.AwardedDateQuestion.YearLabel.Should().Be("Year");
         result.AwardedDateQuestion.QuestionHeader.Should().Be("Award date");
-        result.AwardedDateQuestion.QuestionHint.Should().Be("Enter the date the qualification was awarded so we can tell you if other requirements apply. For example 6 2015.");
-        result.AwardedDateQuestion.ErrorBannerLinkText.Should().Be("Enter the month and year that the qualification was awarded");
+        result.AwardedDateQuestion.QuestionHint.Should()
+              .Be("Enter the date the qualification was awarded so we can tell you if other requirements apply. For example 6 2015.");
+        result.AwardedDateQuestion.ErrorBannerLinkText.Should()
+              .Be("Enter the month and year that the qualification was awarded");
         result.AwardedDateQuestion.ErrorMessage.Should().Be("Enter the date the qualification was awarded");
-        result.AwardedDateQuestion.FutureDateErrorBannerLinkText.Should().Be("The date the qualification was awarded must be in the past");
-        result.AwardedDateQuestion.FutureDateErrorMessage.Should().Be("The date the qualification was awarded must be in the past");
-        result.AwardedDateQuestion.MissingMonthErrorMessage.Should().Be("Enter the month that the qualification was awarded");
-        result.AwardedDateQuestion.MissingYearErrorMessage.Should().Be("Enter the year that the qualification was awarded");
-        result.AwardedDateQuestion.MissingMonthBannerLinkText.Should().Be("Enter the month that the qualification was awarded");
-        result.AwardedDateQuestion.MissingYearBannerLinkText.Should().Be("Enter the year that the qualification was awarded");
-        result.AwardedDateQuestion.MonthOutOfBoundsErrorLinkText.Should().Be("The month the qualification was awarded must be between 1 and 12");
-        result.AwardedDateQuestion.MonthOutOfBoundsErrorMessage.Should().Be("The month the qualification was awarded must be between 1 and 12");
-        result.AwardedDateQuestion.YearOutOfBoundsErrorLinkText.Should().Be("The year the qualification was awarded must be between 1900 and $[actual-year]$");
-        result.AwardedDateQuestion.YearOutOfBoundsErrorMessage.Should().Be("The year the qualification was awarded must be between 1900 and $[actual-year]$");
+        result.AwardedDateQuestion.FutureDateErrorBannerLinkText.Should()
+              .Be("The date the qualification was awarded must be in the past");
+        result.AwardedDateQuestion.FutureDateErrorMessage.Should()
+              .Be("The date the qualification was awarded must be in the past");
+        result.AwardedDateQuestion.MissingMonthErrorMessage.Should()
+              .Be("Enter the month that the qualification was awarded");
+        result.AwardedDateQuestion.MissingYearErrorMessage.Should()
+              .Be("Enter the year that the qualification was awarded");
+        result.AwardedDateQuestion.MissingMonthBannerLinkText.Should()
+              .Be("Enter the month that the qualification was awarded");
+        result.AwardedDateQuestion.MissingYearBannerLinkText.Should()
+              .Be("Enter the year that the qualification was awarded");
+        result.AwardedDateQuestion.MonthOutOfBoundsErrorLinkText.Should()
+              .Be("The month the qualification was awarded must be between 1 and 12");
+        result.AwardedDateQuestion.MonthOutOfBoundsErrorMessage.Should()
+              .Be("The month the qualification was awarded must be between 1 and 12");
+        result.AwardedDateQuestion.YearOutOfBoundsErrorLinkText.Should()
+              .Be("The year the qualification was awarded must be between 1900 and $[actual-year]$");
+        result.AwardedDateQuestion.YearOutOfBoundsErrorMessage.Should()
+              .Be("The year the qualification was awarded must be between 1900 and $[actual-year]$");
     }
 
     [TestMethod]
@@ -876,24 +911,27 @@ public class MockContentfulServiceTests
         result.Should().BeAssignableTo<HelpProvideDetailsPage>();
 
         result.Heading.Should().Be("How can we help you?");
-        result.PostHeadingContent.Should().Be("Give as much detail as you can. This helps us give you the right support.");
+        result.PostHeadingContent.Should()
+              .Be("Give as much detail as you can. This helps us give you the right support.");
         result.CtaButtonText.Should().Be("Continue");
         result.BackButtonToGetHelpPage.Should().BeEquivalentTo(
-            new NavigationLink
-            {
-                DisplayText = "Back to get help with the Check an early years qualification service",
-                Href = "/help/get-help",
-                OpenInNewTab = false
-            }
-        );
+                                                               new NavigationLink
+                                                               {
+                                                                   DisplayText =
+                                                                       "Back to get help with the Check an early years qualification service",
+                                                                   Href = "/help/get-help",
+                                                                   OpenInNewTab = false
+                                                               }
+                                                              );
         result.BackButtonToQualificationDetailsPage.Should().BeEquivalentTo(
-            new NavigationLink
-            {
-                DisplayText = "Back to what are the qualification details",
-                Href = "/help/qualification-details",
-                OpenInNewTab = false
-            }
-        );
+                                                                            new NavigationLink
+                                                                            {
+                                                                                DisplayText =
+                                                                                    "Back to what are the qualification details",
+                                                                                Href = "/help/qualification-details",
+                                                                                OpenInNewTab = false
+                                                                            }
+                                                                           );
         result.AdditionalInformationWarningText.Should().Be("Do not include any personal information");
         result.AdditionalInformationErrorMessage.Should().Be("Provide information about how we can help you");
         result.ErrorBannerHeading.Should().Be("There is a problem");
@@ -910,19 +948,20 @@ public class MockContentfulServiceTests
         result.Should().BeAssignableTo<HelpEmailAddressPage>();
 
         result.BackButton.Should().BeEquivalentTo(
-            new NavigationLink
-            {
-                DisplayText = "Back to how can we help you",
-                Href = "/help/provide-details",
-                OpenInNewTab = false
-            }
-        );
+                                                  new NavigationLink
+                                                  {
+                                                      DisplayText = "Back to how can we help you",
+                                                      Href = "/help/provide-details",
+                                                      OpenInNewTab = false
+                                                  }
+                                                 );
         result.Heading.Should().Be("What is your email address?");
         result.PostHeadingContent.Should().Be("We will only use this email address to reply to your message");
         result.CtaButtonText.Should().Be("Send message");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.NoEmailAddressEnteredErrorMessage.Should().Be("Enter an email address");
-        result.InvalidEmailAddressErrorMessage.Should().Be("Enter an email address in the correct format, for example name@example.com");
+        result.InvalidEmailAddressErrorMessage.Should()
+              .Be("Enter an email address in the correct format, for example name@example.com");
     }
 
     [TestMethod]
@@ -937,9 +976,10 @@ public class MockContentfulServiceTests
         result.BodyHeading.Should().Be("What happens next");
         result.Body.Should().NotBeNull();
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
+                                                         "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n");
     }
-    
+
     [TestMethod]
     public async Task GetPreCheckPage_ReturnsExpectedDetails()
     {
@@ -964,7 +1004,8 @@ public class MockContentfulServiceTests
         (result.Options[0] as Option)!.Value.Should().Be("yes");
         (result.Options[1] as Option)!.Label.Should().Be("No");
         (result.Options[1] as Option)!.Value.Should().Be("no");
-        result.InformationMessage.Should().Be("You need all the information listed above to get a result. If you do not have it, you will not be able to complete this check.");
+        result.InformationMessage.Should()
+              .Be("You need all the information listed above to get a result. If you do not have it, you will not be able to complete this check.");
         result.CtaButtonText.Should().Be("Continue");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.ErrorMessage.Should().Be("Confirm if you have all the information you need to complete the check");
@@ -985,20 +1026,22 @@ public class MockContentfulServiceTests
         result.LeftHandSideFooterSection.Should().NotBeNull();
         result.LeftHandSideFooterSection.Heading.Should().Be("Left section");
         result.LeftHandSideFooterSection.Body.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the left hand side footer content");
+              .Which.Content.Should()
+              .ContainSingle(x => ((Text)x).Value == "This is the left hand side footer content");
         result.RightHandSideFooterSection.Should().NotBeNull();
         result.RightHandSideFooterSection.Heading.Should().Be("Right section");
         result.RightHandSideFooterSection.Body.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the right hand side footer content");
+              .Which.Content.Should()
+              .ContainSingle(x => ((Text)x).Value == "This is the right hand side footer content");
     }
-    
+
     [TestMethod]
     public async Task GetFeedbackFormPage_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
-        
+
         var result = await contentfulService.GetFeedbackFormPage();
-        
+
         result.Should().NotBeNull();
         result.Heading.Should().Be("Give feedback");
         result.PostHeadingContent.Should().NotBeNull();
@@ -1015,7 +1058,7 @@ public class MockContentfulServiceTests
         result.Questions.Should().NotBeNullOrEmpty();
         result.Questions.Count.Should().Be(3);
         result.Questions[0].Should().BeAssignableTo<FeedbackFormQuestionRadio>();
-        
+
         var question0 = (FeedbackFormQuestionRadio)result.Questions[0];
         question0.Should().NotBeNull();
         question0.Sys.Should().NotBeNull();
@@ -1029,12 +1072,13 @@ public class MockContentfulServiceTests
         (question0.Options[1] as Option)!.Value.Should().Be("no");
         question0.IsTheQuestionMandatory.Should().BeTrue();
         question0.ErrorMessage.Should().Be("Select whether you got everything you needed today");
-        
+
         var question1 = (FeedbackFormQuestionTextArea)result.Questions[1];
         question1.Should().NotBeNull();
         question1.Question.Should().Be("Tell us about your experience (optional)");
-        question1.HintText.Should().Be("Do not include personal information, for example the name of the qualification holder");
-        
+        question1.HintText.Should()
+                 .Be("Do not include personal information, for example the name of the qualification holder");
+
         var question2 = (FeedbackFormQuestionRadioAndInput)result.Questions[2];
         question2.Should().NotBeNull();
         question2.Question.Should().Be("Would you like us to contact you about future user research?");
@@ -1058,18 +1102,22 @@ public class MockContentfulServiceTests
     public async Task GetFeedbackFormConfirmationPage_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
-        
+
         var result = await contentfulService.GetFeedbackFormConfirmationPage();
-        
+
         result.Should().NotBeNull();
         result.SuccessMessage.Should().Be("Your feedback has been successfully submitted");
         result.Body.Should().NotBeNull();
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Thank you for your feedback. We look at every piece of feedback and will use your comments to make the service better for everyone.");
+              .Which.Content.Should()
+              .ContainSingle(x => ((Text)x).Value ==
+                                  "Thank you for your feedback. We look at every piece of feedback and will use your comments to make the service better for everyone.");
         result.OptionalEmailHeading.Should().Be("What happens next");
         result.OptionalEmailBody.Should().NotBeNull();
         result.OptionalEmailBody.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "As you agreed to be contacted about future research, someone from our research team may contact you by email.");
+              .Which.Content.Should()
+              .ContainSingle(x => ((Text)x).Value ==
+                                  "As you agreed to be contacted about future research, someone from our research team may contact you by email.");
         result.ReturnToHomepageLink.Should().BeEquivalentTo(new NavigationLink
                                                             {
                                                                 DisplayText = "Home",

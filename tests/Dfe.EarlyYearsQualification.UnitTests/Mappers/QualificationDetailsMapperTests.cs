@@ -18,44 +18,48 @@ public class QualificationDetailsMapperTests
                                 QualificationNumber = "Qualification number",
                                 FromWhichYear = "Sep-16"
                             };
-        
+
         const string improveServiceBody = "This is the improve service body";
         const string requirementsText = "Requirements text";
         const string printInformationBody = "Printing information body";
         var detailsPage = new QualificationDetailsPage
-        {
-            RequirementsHeading = "Requirements heading",
-            RequirementsText = ContentfulContentHelper.Paragraph(requirementsText),
-            Labels = new DetailsPageLabels
-                     {
-                AwardingOrgLabel = "Awarding org label",
-                CheckAnotherQualificationLink = new NavigationLink
-                {
-                    DisplayText = "Check another qualification",
-                    OpenInNewTab = true,
-                    Href = "/"
-                },
-                DateOfCheckLabel = "Date of check label",
-                LevelLabel = "Level label",
-                MainHeader = "Main header",
-                RatiosHeading = "Ratios heading",
-                PrintButtonText = "Print button text",
-                PrintInformationHeading = "Print information heading",
-                PrintInformationBody = ContentfulContentHelper.Paragraph(printInformationBody),
-                QualificationNameLabel = "Qualification name label",
-                QualificationStartDateLabel = "Qualifications start date label",
-                QualificationAwardedDateLabel = "Qualifications awarded date label",
-                QualificationDetailsSummaryHeader = "Qualification details summary label",
-                UpDownFeedback = new UpDownFeedback
-                {
-                    FeedbackComponent = new FeedbackComponent
-                    {
-                        Header = "Feedback header",
-                        Body = ContentfulContentHelper.Paragraph(improveServiceBody)
-                    }
-                }
-            }
-        };
+                          {
+                              RequirementsHeading = "Requirements heading",
+                              RequirementsText = ContentfulContentHelper.Paragraph(requirementsText),
+                              Labels = new DetailsPageLabels
+                                       {
+                                           AwardingOrgLabel = "Awarding org label",
+                                           CheckAnotherQualificationLink = new NavigationLink
+                                                                           {
+                                                                               DisplayText =
+                                                                                   "Check another qualification",
+                                                                               OpenInNewTab = true,
+                                                                               Href = "/"
+                                                                           },
+                                           DateOfCheckLabel = "Date of check label",
+                                           LevelLabel = "Level label",
+                                           MainHeader = "Main header",
+                                           RatiosHeading = "Ratios heading",
+                                           PrintButtonText = "Print button text",
+                                           PrintInformationHeading = "Print information heading",
+                                           PrintInformationBody =
+                                               ContentfulContentHelper.Paragraph(printInformationBody),
+                                           QualificationNameLabel = "Qualification name label",
+                                           QualificationStartDateLabel = "Qualifications start date label",
+                                           QualificationAwardedDateLabel = "Qualifications awarded date label",
+                                           QualificationDetailsSummaryHeader = "Qualification details summary label",
+                                           UpDownFeedback = new UpDownFeedback
+                                                            {
+                                                                FeedbackComponent = new FeedbackComponent
+                                                                    {
+                                                                        Header = "Feedback header",
+                                                                        Body =
+                                                                            ContentfulContentHelper
+                                                                                .Paragraph(improveServiceBody)
+                                                                    }
+                                                            }
+                                       }
+                          };
 
         var backNavLink = new NavigationLink
                           {
@@ -76,15 +80,18 @@ public class QualificationDetailsMapperTests
 
         const string dateStarted = "Date started";
         const string dateAwarded = "Date awarded";
-        
+
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(detailsPage.RequirementsText)).ReturnsAsync(requirementsText);
-        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.UpDownFeedback.FeedbackComponent!.Body)).ReturnsAsync(improveServiceBody);
-        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.PrintInformationBody)).ReturnsAsync(printInformationBody);
-        
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.UpDownFeedback.FeedbackComponent!.Body))
+                         .ReturnsAsync(improveServiceBody);
+        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.PrintInformationBody))
+                         .ReturnsAsync(printInformationBody);
+
         var mapper = new QualificationDetailsMapper(mockContentParser.Object);
         var result = await mapper.Map(qualification, detailsPage, backNavLink,
-                                                    additionalRequirementAnswers, dateStarted, dateAwarded, new List<Qualification> { qualification });
+                                      additionalRequirementAnswers, dateStarted, dateAwarded,
+                                      new List<Qualification> { qualification });
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);
@@ -114,13 +121,15 @@ public class QualificationDetailsMapperTests
         result.Content.RequirementsText.Should().BeSameAs(requirementsText);
         result.Content.RatiosHeading.Should().BeSameAs(detailsPage.Labels.RatiosHeading);
         result.Content.CheckAnotherQualificationLink.Should()
-              .BeEquivalentTo(detailsPage.Labels.CheckAnotherQualificationLink, options => options.Excluding(x => x.Sys));
+              .BeEquivalentTo(detailsPage.Labels.CheckAnotherQualificationLink,
+                              options => options.Excluding(x => x.Sys));
         result.Content.PrintButtonText.Should().BeSameAs(detailsPage.Labels.PrintButtonText);
         result.Content.PrintInformationHeading.Should().BeSameAs(detailsPage.Labels.PrintInformationHeading);
         result.Content.PrintInformationBody.Should().BeSameAs(printInformationBody);
         result.Content.QualificationNameLabel.Should().BeSameAs(detailsPage.Labels.QualificationNameLabel);
         result.Content.QualificationStartDateLabel.Should().BeSameAs(detailsPage.Labels.QualificationStartDateLabel);
-        result.Content.QualificationAwardedDateLabel.Should().BeSameAs(detailsPage.Labels.QualificationAwardedDateLabel);
+        result.Content.QualificationAwardedDateLabel.Should()
+              .BeSameAs(detailsPage.Labels.QualificationAwardedDateLabel);
         result.Content.QualificationDetailsSummaryHeader.Should()
               .BeSameAs(detailsPage.Labels.QualificationDetailsSummaryHeader);
         result.UpDownFeedback.Should().BeEquivalentTo(detailsPage.Labels.UpDownFeedback,
@@ -142,10 +151,10 @@ public class QualificationDetailsMapperTests
 
         var qualifications = new List<Qualification>
                              {
-            new Qualification("Test-1", "This is a duplicate", "ABC", 1),
-            new Qualification("Test-2", "This is a duplicate", "DEF", 2),
-            new Qualification("Test-3", "This is unique", "GHI", 3),
-        };
+                                 new Qualification("Test-1", "This is a duplicate", "ABC", 1),
+                                 new Qualification("Test-2", "This is a duplicate", "DEF", 2),
+                                 new Qualification("Test-3", "This is unique", "GHI", 3),
+                             };
 
         var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
 

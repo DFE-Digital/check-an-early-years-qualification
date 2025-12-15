@@ -22,19 +22,19 @@ public class GovUkNotifyServiceTests
                                      {
                                          IsTestEnvironment = false,
                                          HelpPageForm = new NotificationData
-                                                    {
-                                                        EmailAddress = emailAddress,
-                                                        TemplateId = templateId
-                                                    }
+                                                        {
+                                                            EmailAddress = emailAddress,
+                                                            TemplateId = templateId
+                                                        }
                                      });
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
 
         var form = new HelpFormEnquiry
                    {
-            ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
-            AdditionalInformation = "Some additional information",
-        };
+                       ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
+                       AdditionalInformation = "Some additional information",
+                   };
 
         var feedbackNotification = new HelpPageNotification("user@email.com", form);
 
@@ -49,7 +49,10 @@ public class GovUkNotifyServiceTests
         service.SendHelpPageNotification(feedbackNotification);
 
         mockNotificationClient
-            .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
+            .Verify(x => x.SendEmail(emailAddress, templateId,
+                                     It.Is<Dictionary<string, dynamic>>(actual => actual.Should()
+                                                                            .BeEquivalentTo(expectedPersonalisation,
+                                                                             "") != null), null, null, null),
                     Times.Once());
     }
 
@@ -61,25 +64,25 @@ public class GovUkNotifyServiceTests
         const string emailAddress = "test@test.com";
         const string templateId = "TEST123";
         var options = Options.Create(new NotificationOptions
-        {
-            IsTestEnvironment = true,
-            HelpPageForm = new NotificationData
-            {
-                EmailAddress = emailAddress,
-                TemplateId = templateId
-            }
-        });
+                                     {
+                                         IsTestEnvironment = true,
+                                         HelpPageForm = new NotificationData
+                                                        {
+                                                            EmailAddress = emailAddress,
+                                                            TemplateId = templateId
+                                                        }
+                                     });
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
         var form = new HelpFormEnquiry
                    {
-            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
-            AdditionalInformation = "Some additional information",
-            AwardingOrganisation = "Awarding organisation",
-            QualificationAwardedDate = "10/2025",
-            QualificationStartDate = "09/2020",
-            QualificationName = "Qualification name"
-        };
+                       ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                       AdditionalInformation = "Some additional information",
+                       AwardingOrganisation = "Awarding organisation",
+                       QualificationAwardedDate = "10/2025",
+                       QualificationStartDate = "09/2020",
+                       QualificationName = "Qualification name"
+                   };
 
         var feedbackNotification = new HelpPageNotification("user@email.com", form);
 
@@ -94,7 +97,10 @@ public class GovUkNotifyServiceTests
         service.SendHelpPageNotification(feedbackNotification);
 
         mockNotificationClient
-            .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
+            .Verify(x => x.SendEmail(emailAddress, templateId,
+                                     It.Is<Dictionary<string, dynamic>>(actual => actual.Should()
+                                                                            .BeEquivalentTo(expectedPersonalisation,
+                                                                             "") != null), null, null, null),
                     Times.Once());
 
         var message = expectedPersonalisation.GetValueOrDefault("message") as string;
@@ -105,7 +111,6 @@ public class GovUkNotifyServiceTests
         message.Should().Contain("Qualification awarded date: 10/2025");
         message.Should().Contain("Awarding organisation: Awarding organisation");
         message.Should().Contain("Additional information: Some additional information");
-
     }
 
     [TestMethod]
@@ -123,15 +128,15 @@ public class GovUkNotifyServiceTests
 
         var form = new HelpFormEnquiry
                    {
-            ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
-            AdditionalInformation = "Some additional information",
-        };
+                       ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
+                       AdditionalInformation = "Some additional information",
+                   };
 
         service.SendHelpPageNotification(new HelpPageNotification("user@email.com", form));
 
         mockLogger.VerifyError("Error thrown from GovUKNotifyService: Test message");
     }
-    
+
     [TestMethod]
     public void SendEmbeddedFeedbackFormNotification_CallsClient()
     {
@@ -143,17 +148,17 @@ public class GovUkNotifyServiceTests
                                      {
                                          IsTestEnvironment = false,
                                          EmbeddedFeedbackForm = new NotificationData
-                                                    {
-                                                        EmailAddress = emailAddress,
-                                                        TemplateId = templateId
-                                                    }
+                                                                {
+                                                                    EmailAddress = emailAddress,
+                                                                    TemplateId = templateId
+                                                                }
                                      });
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
         var embeddedFeedbackFormNotification = new EmbeddedFeedbackFormNotification
-                                   {
-                                       Message = "Test message",
-                                   };
+                                               {
+                                                   Message = "Test message",
+                                               };
 
         var expectedPersonalisation = new Dictionary<string, dynamic>
                                       {
@@ -164,10 +169,13 @@ public class GovUkNotifyServiceTests
         service.SendEmbeddedFeedbackFormNotification(embeddedFeedbackFormNotification);
 
         mockNotificationClient
-            .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
+            .Verify(x => x.SendEmail(emailAddress, templateId,
+                                     It.Is<Dictionary<string, dynamic>>(actual => actual.Should()
+                                                                            .BeEquivalentTo(expectedPersonalisation,
+                                                                             "") != null), null, null, null),
                     Times.Once());
     }
-    
+
     [TestMethod]
     public void SendEmbeddedFeedbackFormNotification_TestEnvironmentIsSetToTrue_MatchesExpected()
     {
@@ -200,10 +208,13 @@ public class GovUkNotifyServiceTests
         service.SendEmbeddedFeedbackFormNotification(embeddedFeedbackFormNotification);
 
         mockNotificationClient
-            .Verify(x => x.SendEmail(emailAddress, templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
+            .Verify(x => x.SendEmail(emailAddress, templateId,
+                                     It.Is<Dictionary<string, dynamic>>(actual => actual.Should()
+                                                                            .BeEquivalentTo(expectedPersonalisation,
+                                                                             "") != null), null, null, null),
                     Times.Once());
     }
-    
+
     [TestMethod]
     public void SendEmbeddedFeedbackFormNotification_EmailAddressContainsTwoEmailAddresses_CallsSendTwice()
     {
@@ -236,14 +247,20 @@ public class GovUkNotifyServiceTests
         service.SendEmbeddedFeedbackFormNotification(embeddedFeedbackFormNotification);
 
         mockNotificationClient
-            .Verify(x => x.SendEmail("test@test.com", templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
+            .Verify(x => x.SendEmail("test@test.com", templateId,
+                                     It.Is<Dictionary<string, dynamic>>(actual => actual.Should()
+                                                                            .BeEquivalentTo(expectedPersonalisation,
+                                                                             "") != null), null, null, null),
                     Times.Once());
-        
+
         mockNotificationClient
-            .Verify(x => x.SendEmail("testing@test.com", templateId, It.Is<Dictionary<string, dynamic>>(actual => actual.Should().BeEquivalentTo(expectedPersonalisation, "") != null), null, null, null),
+            .Verify(x => x.SendEmail("testing@test.com", templateId,
+                                     It.Is<Dictionary<string, dynamic>>(actual => actual.Should()
+                                                                            .BeEquivalentTo(expectedPersonalisation,
+                                                                             "") != null), null, null, null),
                     Times.Once());
     }
-    
+
     [TestMethod]
     public void SendEmbeddedFeedbackFormNotification_ThrowsException()
     {
@@ -256,7 +273,7 @@ public class GovUkNotifyServiceTests
                                     null, null, null)).Throws(new NotifyClientException("Test message"));
 
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
-        
+
         service.SendEmbeddedFeedbackFormNotification(new EmbeddedFeedbackFormNotification());
 
         mockLogger.VerifyError("Error thrown from GovUKNotifyService: Test message");

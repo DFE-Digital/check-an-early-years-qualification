@@ -48,7 +48,8 @@ public class QuestionServiceTests
     }
 
     [TestMethod]
-    public void GetIsUserCheckingTheirOwnQualification_Calls_UserJourneyCookieService_GetIsUserCheckingTheirOwnQualification()
+    public void
+        GetIsUserCheckingTheirOwnQualification_Calls_UserJourneyCookieService_GetIsUserCheckingTheirOwnQualification()
     {
         // Act
         GetSut().GetIsUserCheckingTheirOwnQualification();
@@ -58,7 +59,8 @@ public class QuestionServiceTests
     }
 
     [TestMethod]
-    public void SetIsUserCheckingTheirOwnQualification_Calls_UserJourneyCookieService_SetIsUserCheckingTheirOwnQualification()
+    public void
+        SetIsUserCheckingTheirOwnQualification_Calls_UserJourneyCookieService_SetIsUserCheckingTheirOwnQualification()
     {
         // Arrange
         var option = "true";
@@ -124,7 +126,8 @@ public class QuestionServiceTests
         _ = await GetSut().Map(radioQuestionModel, radioQuestionPage, actionName, controllerName, selectedAnswer);
 
         // Assert
-        _mockRadioQuestionMapper.Verify(x => x.Map(radioQuestionModel, radioQuestionPage, actionName, controllerName, selectedAnswer), Times.Once);
+        _mockRadioQuestionMapper.Verify(x => x.Map(radioQuestionModel, radioQuestionPage, actionName, controllerName,
+                                                   selectedAnswer), Times.Once);
     }
 
     [TestMethod]
@@ -159,7 +162,8 @@ public class QuestionServiceTests
         result.Should().NotBeNull();
         var resultType = result as RedirectToActionResult;
 
-        resultType!.ActionName.Should().Be(nameof(AdviceController.Level7QualificationStartedBetweenSept2014AndAug2019));
+        resultType!.ActionName.Should()
+                   .Be(nameof(AdviceController.Level7QualificationStartedBetweenSept2014AndAug2019));
         resultType.ControllerName.Should().Be("Advice");
 
         _mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification(option), Times.Once);
@@ -319,13 +323,18 @@ public class QuestionServiceTests
         DropdownQuestionModel model = new();
         DropdownQuestionPage question = new();
         List<Qualification> qualifications = new()
-        {
-            new Qualification("1", "qualification title 1", AwardingOrganisations.Edexcel, 3),
-            new Qualification("2", "qualification title 2", AwardingOrganisations.Edexcel, 3),
-            new Qualification("3", "qualification title 3", AwardingOrganisations.Edexcel, 3),
-            new Qualification("4", "qualification title 4", AwardingOrganisations.Edexcel, 3),
-            new Qualification("5", "qualification title 5", AwardingOrganisations.Edexcel, 3)
-        };
+                                             {
+                                                 new Qualification("1", "qualification title 1",
+                                                                   AwardingOrganisations.Edexcel, 3),
+                                                 new Qualification("2", "qualification title 2",
+                                                                   AwardingOrganisations.Edexcel, 3),
+                                                 new Qualification("3", "qualification title 3",
+                                                                   AwardingOrganisations.Edexcel, 3),
+                                                 new Qualification("4", "qualification title 4",
+                                                                   AwardingOrganisations.Edexcel, 3),
+                                                 new Qualification("5", "qualification title 5",
+                                                                   AwardingOrganisations.Edexcel, 3)
+                                             };
         Qualification qualification = qualifications.First();
 
         string actionName = "";
@@ -334,10 +343,13 @@ public class QuestionServiceTests
         bool selectedNotOnTheList = true;
 
         // Act
-        _ = await GetSut().MapDropdownModel(model, question, qualifications, actionName, controllerName, selectedAwardingOrganisation, selectedNotOnTheList);
+        _ = await GetSut().MapDropdownModel(model, question, qualifications, actionName, controllerName,
+                                            selectedAwardingOrganisation, selectedNotOnTheList);
 
         // Assert
-        _mockDropdownQuestionMapper.Verify(x => x.Map(model, question, actionName, controllerName, It.IsAny<IOrderedEnumerable<string>>() , selectedAwardingOrganisation, selectedNotOnTheList), Times.Once);
+        _mockDropdownQuestionMapper.Verify(x => x.Map(model, question, actionName, controllerName,
+                                                      It.IsAny<IOrderedEnumerable<string>>(),
+                                                      selectedAwardingOrganisation, selectedNotOnTheList), Times.Once);
     }
 
     [TestMethod]
@@ -383,16 +395,16 @@ public class QuestionServiceTests
         // Arrange
         DatesQuestionModel model = new();
         DatesQuestionPage question = new()
-        {
-            StartedQuestion = new DateQuestion
-                              {
-                ErrorMessage = "Started Error Message"
-            },
-            AwardedQuestion = new DateQuestion
-                              {
-                ErrorMessage = "Awarded Error Message"
-            }
-        };
+                                     {
+                                         StartedQuestion = new DateQuestion
+                                                           {
+                                                               ErrorMessage = "Started Error Message"
+                                                           },
+                                         AwardedQuestion = new DateQuestion
+                                                           {
+                                                               ErrorMessage = "Awarded Error Message"
+                                                           }
+                                     };
         string actionName = "";
         string controllerName = "";
         DatesValidationResult? validationResult = null;
@@ -423,37 +435,39 @@ public class QuestionServiceTests
         // Arrange
         DatesQuestionModel model = new();
         DatesQuestionPage question = new()
-        {
-            StartedQuestion = new DateQuestion
-                              {
-                ErrorMessage = "Started Error Message"
-            },
-            AwardedQuestion = new DateQuestion
-                              {
-                ErrorMessage = "Awarded Error Message"
-            }
-        };
+                                     {
+                                         StartedQuestion = new DateQuestion
+                                                           {
+                                                               ErrorMessage = "Started Error Message"
+                                                           },
+                                         AwardedQuestion = new DateQuestion
+                                                           {
+                                                               ErrorMessage = "Awarded Error Message"
+                                                           }
+                                     };
         string actionName = "";
         string controllerName = "";
         DatesValidationResult? validationResult = new()
-        {
-            AwardedValidationResult = new()
-            {
-                BannerErrorMessages = 
-                    new () 
-                    {
-                        new("awarded validation error message", FieldId.Month)
-                    }
-            },
-            StartedValidationResult = new()
-            {
-                BannerErrorMessages =
-                    new()
-                    {
-                        new("started validation error message", FieldId.Month)
-                    }
-            }
-        };
+                                                  {
+                                                      AwardedValidationResult = new()
+                                                          {
+                                                              BannerErrorMessages =
+                                                                  new()
+                                                                  {
+                                                                      new("awarded validation error message",
+                                                                          FieldId.Month)
+                                                                  }
+                                                          },
+                                                      StartedValidationResult = new()
+                                                          {
+                                                              BannerErrorMessages =
+                                                                  new()
+                                                                  {
+                                                                      new("started validation error message",
+                                                                          FieldId.Month)
+                                                                  }
+                                                          }
+                                                  };
 
         _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((3, 2002));
         _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((5, 2005));
@@ -492,7 +506,8 @@ public class QuestionServiceTests
         var result = GetSut().IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>());
 
         // Assert
-        _mockDateQuestionModelValidator.Verify(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()), Times.Once);
+        _mockDateQuestionModelValidator.Verify(x => x.IsValid(It.IsAny<DatesQuestionModel>(),
+                                                              It.IsAny<DatesQuestionPage>()), Times.Once);
     }
 
     [TestMethod]
@@ -501,9 +516,9 @@ public class QuestionServiceTests
         // Arrange
         DateQuestionModel question = new DateQuestionModel
                                      {
-            SelectedMonth = 2,
-            SelectedYear = 2003
-        };
+                                         SelectedMonth = 2,
+                                         SelectedYear = 2003
+                                     };
 
         // Act
         GetSut().SetWhenWasQualificationStarted(question);
@@ -518,9 +533,9 @@ public class QuestionServiceTests
         // Arrange
         DateQuestionModel question = new DateQuestionModel
                                      {
-            SelectedMonth = 2,
-            SelectedYear = 2006
-        };
+                                         SelectedMonth = 2,
+                                         SelectedYear = 2006
+                                     };
 
         // Act
         GetSut().SetWhenWasQualificationAwarded(question);
@@ -532,15 +547,15 @@ public class QuestionServiceTests
     private QuestionService GetSut()
     {
         return new QuestionService(
-                                _mockLogger.Object,
-                                _mockContentService.Object,
-                                _mockUserJourneyCookieService.Object,
-                                _mockQualificationsRepository.Object,
-                                _mockDateQuestionModelValidator.Object,
-                                _mockPlaceholderUpdater.Object,
-                                _mockRadioQuestionMapper.Object,
-                                _mockDropdownQuestionMapper.Object,
-                                _mockPreCheckPageMapper.Object
-                                );
+                                   _mockLogger.Object,
+                                   _mockContentService.Object,
+                                   _mockUserJourneyCookieService.Object,
+                                   _mockQualificationsRepository.Object,
+                                   _mockDateQuestionModelValidator.Object,
+                                   _mockPlaceholderUpdater.Object,
+                                   _mockRadioQuestionMapper.Object,
+                                   _mockDropdownQuestionMapper.Object,
+                                   _mockPreCheckPageMapper.Object
+                                  );
     }
 }

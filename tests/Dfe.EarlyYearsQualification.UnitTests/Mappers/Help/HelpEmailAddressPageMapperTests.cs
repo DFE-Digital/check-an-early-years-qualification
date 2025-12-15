@@ -12,23 +12,22 @@ public class HelpEmailAddressPageMapperTests
     [TestMethod]
     public void MapEmailAddressPageContentToViewModel_MapsToViewModel()
     {
-        var mockContentParser = new Mock<IGovUkContentParser>();
-
         var content = new HelpEmailAddressPage
                       {
-            Heading = "What is your email address?",
-            InvalidEmailAddressErrorMessage = "Enter an email address in the correct format, for example name@example.com",
-            NoEmailAddressEnteredErrorMessage = "Enter an email address",
-            BackButton = new NavigationLink
-            {
-                DisplayText = "Back to how can we help you",
-                Href = "/help/provide-details",
-                OpenInNewTab = false
-            },
-            CtaButtonText = "Send message",
-            ErrorBannerHeading = "There is a problem",
-            PostHeadingContent = "We will only use this email address to reply to your message"
-        };
+                          Heading = "What is your email address?",
+                          InvalidEmailAddressErrorMessage =
+                              "Enter an email address in the correct format, for example name@example.com",
+                          NoEmailAddressEnteredErrorMessage = "Enter an email address",
+                          BackButton = new NavigationLink
+                                       {
+                                           DisplayText = "Back to how can we help you",
+                                           Href = "/help/provide-details",
+                                           OpenInNewTab = false
+                                       },
+                          CtaButtonText = "Send message",
+                          ErrorBannerHeading = "There is a problem",
+                          PostHeadingContent = "We will only use this email address to reply to your message"
+                      };
 
         var result = new HelpEmailAddressPageMapper().MapEmailAddressPageContentToViewModel(content);
 

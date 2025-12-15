@@ -40,9 +40,9 @@ public class QuestionsControllerTests
         RadioQuestionPage? questionPage = null;
 
         _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded))
-            .ReturnsAsync(
-                questionPage
-            );
+                            .ReturnsAsync(
+                                          questionPage
+                                         );
 
         // Act
         var result = await GetSut().WhereWasTheQualificationAwarded();
@@ -55,7 +55,8 @@ public class QuestionsControllerTests
 
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
-        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded), Times.Once);
+        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded),
+                                    Times.Once);
     }
 
     [TestMethod]
@@ -75,14 +76,16 @@ public class QuestionsControllerTests
                         };
 
         _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded))
-            .ReturnsAsync(
-                questionPage
-            );
+                            .ReturnsAsync(
+                                          questionPage
+                                         );
 
-        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), questionPage, nameof(QuestionsController.WhereWasTheQualificationAwarded), "Questions", It.IsAny<string>()))
-            .ReturnsAsync(
-                viewModel
-            );
+        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), questionPage,
+                                              nameof(QuestionsController.WhereWasTheQualificationAwarded), "Questions",
+                                              It.IsAny<string>()))
+                            .ReturnsAsync(
+                                          viewModel
+                                         );
 
         // Act
         var result = await GetSut().WhereWasTheQualificationAwarded();
@@ -102,14 +105,16 @@ public class QuestionsControllerTests
     {
         // Arrange
         _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhereWasTheQualificationAwarded))
-                          .ReturnsAsync(new RadioQuestionPage());
+                            .ReturnsAsync(new RadioQuestionPage());
 
         var controller = GetSut();
 
         controller.ModelState.AddModelError("option", "test error");
 
-        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new RadioQuestionModel());
-        
+        _mockQuestionService
+            .Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(),
+                              It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new RadioQuestionModel());
+
         // Act
         var result = await controller.WhereWasTheQualificationAwarded(new RadioQuestionModel());
 
@@ -132,17 +137,20 @@ public class QuestionsControllerTests
     {
         // Arrange
         _mockQuestionService
-            .Setup(x => x.RedirectBasedOnWhereTheQualificationWasAwarded(QualificationAwardLocation.OutsideOfTheUnitedKingdom))
-            .Returns(new RedirectToActionResult(nameof(QualificationAwardLocation.OutsideOfTheUnitedKingdom), "Advice", null));
+            .Setup(x => x.RedirectBasedOnWhereTheQualificationWasAwarded(QualificationAwardLocation
+                                                                             .OutsideOfTheUnitedKingdom))
+            .Returns(new RedirectToActionResult(nameof(QualificationAwardLocation.OutsideOfTheUnitedKingdom), "Advice",
+                                                null));
 
         // Act
         var result =
             await GetSut().WhereWasTheQualificationAwarded(
-                new RadioQuestionModel
-                {
-                    Option = QualificationAwardLocation.OutsideOfTheUnitedKingdom
-                }
-            );
+                                                           new RadioQuestionModel
+                                                           {
+                                                               Option = QualificationAwardLocation
+                                                                   .OutsideOfTheUnitedKingdom
+                                                           }
+                                                          );
 
         // Assert
         result.Should().NotBeNull();
@@ -178,36 +186,39 @@ public class QuestionsControllerTests
                            };
 
         _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
-                          .ReturnsAsync(questionPage);
+                            .ReturnsAsync(questionPage);
 
-        _mockQuestionService.Setup(x => x.MapDatesModel(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), null))
-                          .Returns(new DatesQuestionModel
-                                   {
-                              Question = questionPage.Question,
-                              CtaButtonText = questionPage.CtaButtonText,
-                              StartedQuestion = new DateQuestionModel
-                                                {
-                                                    Prefix = "started",
-                                                    QuestionId = "date-started",
-                                                    MonthId = "StartedQuestion.SelectedMonth",
-                                                    YearId = "StartedQuestion.SelectedYear",
-                                                    MonthLabel = questionPage.StartedQuestion!.MonthLabel,
-                                                    YearLabel = questionPage.StartedQuestion!.YearLabel,
-                                                    QuestionHint = questionPage.StartedQuestion!.QuestionHint,
-                                                    ErrorMessage = questionPage.StartedQuestion!.ErrorMessage
-                                                },
-                              AwardedQuestion = new DateQuestionModel
-                                                {
-                                                    Prefix = "awarded",
-                                                    QuestionId = "date-awarded",
-                                                    MonthId = "AwardedQuestion.SelectedMonth",
-                                                    YearId = "AwardedQuestion.SelectedYear",
-                                                    MonthLabel = questionPage.AwardedQuestion!.MonthLabel,
-                                                    YearLabel = questionPage.AwardedQuestion!.YearLabel,
-                                                    QuestionHint = questionPage.AwardedQuestion!.QuestionHint,
-                                                    ErrorMessage = questionPage.AwardedQuestion!.ErrorMessage
-                                                },
-                          });
+        _mockQuestionService.Setup(x => x.MapDatesModel(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>(),
+                                                        It.IsAny<string>(), It.IsAny<string>(), null))
+                            .Returns(new DatesQuestionModel
+                                     {
+                                         Question = questionPage.Question,
+                                         CtaButtonText = questionPage.CtaButtonText,
+                                         StartedQuestion = new DateQuestionModel
+                                                           {
+                                                               Prefix = "started",
+                                                               QuestionId = "date-started",
+                                                               MonthId = "StartedQuestion.SelectedMonth",
+                                                               YearId = "StartedQuestion.SelectedYear",
+                                                               MonthLabel = questionPage.StartedQuestion!.MonthLabel,
+                                                               YearLabel = questionPage.StartedQuestion!.YearLabel,
+                                                               QuestionHint =
+                                                                   questionPage.StartedQuestion!.QuestionHint,
+                                                               ErrorMessage = questionPage.StartedQuestion!.ErrorMessage
+                                                           },
+                                         AwardedQuestion = new DateQuestionModel
+                                                           {
+                                                               Prefix = "awarded",
+                                                               QuestionId = "date-awarded",
+                                                               MonthId = "AwardedQuestion.SelectedMonth",
+                                                               YearId = "AwardedQuestion.SelectedYear",
+                                                               MonthLabel = questionPage.AwardedQuestion!.MonthLabel,
+                                                               YearLabel = questionPage.AwardedQuestion!.YearLabel,
+                                                               QuestionHint =
+                                                                   questionPage.AwardedQuestion!.QuestionHint,
+                                                               ErrorMessage = questionPage.AwardedQuestion!.ErrorMessage
+                                                           },
+                                     });
 
         var result = await GetSut().WhenWasTheQualificationStarted();
 
@@ -231,7 +242,7 @@ public class QuestionsControllerTests
     public async Task WhenWasTheQualificationStarted_CantFindContentfulPage_ReturnsErrorPage()
     {
         _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
-                          .ReturnsAsync((DatesQuestionPage?)null).Verifiable();
+                            .ReturnsAsync((DatesQuestionPage?)null).Verifiable();
 
         var result = await GetSut().WhenWasTheQualificationStarted();
 
@@ -269,7 +280,6 @@ public class QuestionsControllerTests
                                                  }
                            };
 
-
         var datesQuestionModel = new DatesQuestionModel
                                  {
                                      StartedQuestion = new DateQuestionModel
@@ -284,8 +294,7 @@ public class QuestionsControllerTests
                                                            YearLabel = questionPage.StartedQuestion!.YearLabel,
                                                            QuestionHint = questionPage.StartedQuestion!.QuestionHint,
                                                            ErrorMessage = "Test error message"
-
-                                     },
+                                                       },
                                      AwardedQuestion = new DateQuestionModel
                                                        {
                                                            SelectedMonth = null,
@@ -298,15 +307,15 @@ public class QuestionsControllerTests
                                                            YearLabel = questionPage.AwardedQuestion!.YearLabel,
                                                            QuestionHint = questionPage.AwardedQuestion!.QuestionHint,
                                                            ErrorMessage = "Test error message"
-                                     },
+                                                       },
                                      Question = questionPage.Question,
                                      CtaButtonText = questionPage.CtaButtonText,
                                      Errors = new ErrorSummaryModel
                                               {
-                                         ErrorSummaryLinks = [],
-                                         ErrorBannerHeading = questionPage.ErrorBannerHeading
-                                     },
-                                };
+                                                  ErrorSummaryLinks = [],
+                                                  ErrorBannerHeading = questionPage.ErrorBannerHeading
+                                              },
+                                 };
 
         var validationResult = new DatesValidationResult
                                {
@@ -314,25 +323,39 @@ public class QuestionsControllerTests
                                                              {
                                                                  MonthValid = false, YearValid = false,
                                                                  ErrorMessages = ["Test error message"],
-                                                                 BannerErrorMessages = [new BannerError("Test banner error message", FieldId.Month), new BannerError("Test banner error message", FieldId.Year)]
+                                                                 BannerErrorMessages =
+                                                                 [
+                                                                     new BannerError("Test banner error message",
+                                                                      FieldId.Month),
+                                                                     new BannerError("Test banner error message",
+                                                                      FieldId.Year)
+                                                                 ]
                                                              },
                                    AwardedValidationResult = new DateValidationResult
                                                              {
                                                                  MonthValid = false, YearValid = false,
                                                                  ErrorMessages = ["Test error message"],
-                                                                 BannerErrorMessages = [new BannerError("Test banner error message", FieldId.Month), new BannerError("Test banner error message", FieldId.Year)]
+                                                                 BannerErrorMessages =
+                                                                 [
+                                                                     new BannerError("Test banner error message",
+                                                                      FieldId.Month),
+                                                                     new BannerError("Test banner error message",
+                                                                      FieldId.Year)
+                                                                 ]
                                                              }
                                };
 
         _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
-                          .ReturnsAsync(questionPage);
+                            .ReturnsAsync(questionPage);
 
         _mockQuestionService.Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
-                                  .Returns(validationResult);
+                            .Returns(validationResult);
 
-        _mockQuestionService.Setup(x => x.MapDatesModel(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DatesValidationResult>()))
-                                  .Returns(datesQuestionModel);
-    
+        _mockQuestionService.Setup(x => x.MapDatesModel(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>(),
+                                                        It.IsAny<string>(), It.IsAny<string>(),
+                                                        It.IsAny<DatesValidationResult>()))
+                            .Returns(datesQuestionModel);
+
         var result = await GetSut().WhenWasTheQualificationStarted(new DatesQuestionModel());
 
         result.Should().NotBeNull();
@@ -375,12 +398,12 @@ public class QuestionsControllerTests
         _mockQuestionService
             .Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
             .Returns(
-                new DatesValidationResult
-                {
-                    StartedValidationResult = new DateValidationResult { MonthValid = true, YearValid = true },
-                    AwardedValidationResult = new DateValidationResult { MonthValid = true, YearValid = true }
-                }
-            );
+                     new DatesValidationResult
+                     {
+                         StartedValidationResult = new DateValidationResult { MonthValid = true, YearValid = true },
+                         AwardedValidationResult = new DateValidationResult { MonthValid = true, YearValid = true }
+                     }
+                    );
 
         const int startedSelectedMonth = 12;
         const int startedSelectedYear = 2024;
@@ -388,18 +411,18 @@ public class QuestionsControllerTests
         const int awardedSelectedYear = 2025;
 
         var datesQuestionModel = new DatesQuestionModel
-        {
-            StartedQuestion = new DateQuestionModel
-            {
-                SelectedMonth = startedSelectedMonth,
-                SelectedYear = startedSelectedYear
-            },
-            AwardedQuestion = new DateQuestionModel
-            {
-                SelectedMonth = awardedSelectedMonth,
-                SelectedYear = awardedSelectedYear
-            }
-        };
+                                 {
+                                     StartedQuestion = new DateQuestionModel
+                                                       {
+                                                           SelectedMonth = startedSelectedMonth,
+                                                           SelectedYear = startedSelectedYear
+                                                       },
+                                     AwardedQuestion = new DateQuestionModel
+                                                       {
+                                                           SelectedMonth = awardedSelectedMonth,
+                                                           SelectedYear = awardedSelectedYear
+                                                       }
+                                 };
 
         var result = await GetSut().WhenWasTheQualificationStarted(datesQuestionModel);
 
@@ -426,9 +449,9 @@ public class QuestionsControllerTests
         RadioQuestionPage? questionPage = null;
 
         _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification))
-            .ReturnsAsync(
-                questionPage
-            );
+                            .ReturnsAsync(
+                                          questionPage
+                                         );
 
         var result = await GetSut().WhatLevelIsTheQualification();
 
@@ -441,21 +464,24 @@ public class QuestionsControllerTests
         resultType.ControllerName.Should().Be("Error");
 
         _mockQuestionService.Verify(x => x.GetLevelOfQualification(), Times.Once);
-        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification), Times.Once);
+        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification),
+                                    Times.Once);
     }
 
     [TestMethod]
     public async Task Post_WhatLevelIsTheQualification_InvalidModel_ReturnsQuestionPage()
     {
         _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification))
-                          .ReturnsAsync(new RadioQuestionPage());
+                            .ReturnsAsync(new RadioQuestionPage());
 
         var controller = GetSut();
 
         controller.ModelState.AddModelError("option", "test error");
 
-        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new RadioQuestionModel());
-        
+        _mockQuestionService
+            .Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(),
+                              It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new RadioQuestionModel());
+
         var result = await controller.WhatLevelIsTheQualification(new RadioQuestionModel());
 
         result.Should().NotBeNull();
@@ -468,8 +494,10 @@ public class QuestionsControllerTests
         model.Should().NotBeNull();
         model.HasErrors.Should().BeTrue();
 
-        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification), Times.Once);
-        _mockQuestionService.Verify(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification),
+                                    Times.Once);
+        _mockQuestionService.Verify(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(),
+                                               It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         _mockQuestionService.Verify(x => x.RedirectBasedOnQualificationLevelSelected("2"), Times.Never);
     }
 
@@ -477,14 +505,15 @@ public class QuestionsControllerTests
     public async Task Post_WhatLevelIsTheQualification_ReturnsRedirectResponse()
     {
         var level = "2";
-        _mockQuestionService.Setup(x => x.RedirectBasedOnQualificationLevelSelected(level)).Returns(new Mock<IActionResult>().Object);
+        _mockQuestionService.Setup(x => x.RedirectBasedOnQualificationLevelSelected(level))
+                            .Returns(new Mock<IActionResult>().Object);
 
         var result = await GetSut().WhatLevelIsTheQualification(
-            new RadioQuestionModel
-            {
-                Option = level
-            }
-        );
+                                                                new RadioQuestionModel
+                                                                {
+                                                                    Option = level
+                                                                }
+                                                               );
 
         result.Should().NotBeNull();
         _mockQuestionService.Verify(x => x.RedirectBasedOnQualificationLevelSelected(level), Times.Once);
@@ -494,7 +523,7 @@ public class QuestionsControllerTests
     public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
     {
         _mockQuestionService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
-                          .ReturnsAsync((DropdownQuestionPage?)null).Verifiable();
+                            .ReturnsAsync((DropdownQuestionPage?)null).Verifiable();
 
         var result = await GetSut().WhatIsTheAwardingOrganisation();
 
@@ -525,10 +554,13 @@ public class QuestionsControllerTests
                            };
 
         _mockQuestionService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
-                          .ReturnsAsync(questionPage);
+                            .ReturnsAsync(questionPage);
 
-        _mockQuestionService.Setup(x => x.MapDropdownModel(It.IsAny<DropdownQuestionModel>(), It.IsAny<DropdownQuestionPage>(), It.IsAny<List<Qualification>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
-                                  .ReturnsAsync(new DropdownQuestionModel());
+        _mockQuestionService.Setup(x => x.MapDropdownModel(It.IsAny<DropdownQuestionModel>(),
+                                                           It.IsAny<DropdownQuestionPage>(),
+                                                           It.IsAny<List<Qualification>>(), It.IsAny<string>(),
+                                                           It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                            .ReturnsAsync(new DropdownQuestionModel());
 
         var result = await GetSut().WhatIsTheAwardingOrganisation();
 
@@ -542,7 +574,8 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task WhatIsTheAwardingOrganisation_ContentServiceReturnsQualifications_OrdersAwardingOrganisationsInModel()
+    public async Task
+        WhatIsTheAwardingOrganisation_ContentServiceReturnsQualifications_OrdersAwardingOrganisationsInModel()
     {
         var questionPage = new DropdownQuestionPage
                            {
@@ -550,7 +583,7 @@ public class QuestionsControllerTests
                            };
 
         _mockQuestionService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
-                          .ReturnsAsync(questionPage);
+                            .ReturnsAsync(questionPage);
 
         var listOfQualifications = new List<Qualification>
                                    {
@@ -568,8 +601,11 @@ public class QuestionsControllerTests
 
         _mockQuestionService.Setup(x => x.GetFilteredQualifications()).ReturnsAsync(listOfQualifications);
 
-        _mockQuestionService.Setup(x => x.MapDropdownModel(It.IsAny<DropdownQuestionModel>(), It.IsAny<DropdownQuestionPage>(), listOfQualifications, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
-                                  .ReturnsAsync(new DropdownQuestionModel());
+        _mockQuestionService.Setup(x => x.MapDropdownModel(It.IsAny<DropdownQuestionModel>(),
+                                                           It.IsAny<DropdownQuestionPage>(), listOfQualifications,
+                                                           It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                                                           It.IsAny<bool>()))
+                            .ReturnsAsync(new DropdownQuestionModel());
 
         var result = await GetSut().WhatIsTheAwardingOrganisation();
 
@@ -593,7 +629,7 @@ public class QuestionsControllerTests
                            };
 
         _mockQuestionService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
-                          .ReturnsAsync(questionPage);
+                            .ReturnsAsync(questionPage);
 
         var listOfQualifications = new List<Qualification>
                                    {
@@ -609,8 +645,11 @@ public class QuestionsControllerTests
 
         _mockQuestionService.Setup(x => x.GetFilteredQualifications()).ReturnsAsync(listOfQualifications);
 
-        _mockQuestionService.Setup(x => x.MapDropdownModel(It.IsAny<DropdownQuestionModel>(), It.IsAny<DropdownQuestionPage>(), listOfQualifications, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
-                                  .ReturnsAsync(new DropdownQuestionModel());
+        _mockQuestionService.Setup(x => x.MapDropdownModel(It.IsAny<DropdownQuestionModel>(),
+                                                           It.IsAny<DropdownQuestionPage>(), listOfQualifications,
+                                                           It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                                                           It.IsAny<bool>()))
+                            .ReturnsAsync(new DropdownQuestionModel());
 
         var result = await GetSut().WhatIsTheAwardingOrganisation();
 
@@ -638,15 +677,18 @@ public class QuestionsControllerTests
                            };
 
         _mockQuestionService.Setup(x => x.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation))
-                          .ReturnsAsync(questionPage);
+                            .ReturnsAsync(questionPage);
 
         var controller = GetSut();
 
         controller.ModelState.AddModelError("option", "test error");
 
-        _mockQuestionService.Setup(x => x.MapDropdownModel(It.IsAny<DropdownQuestionModel>(), It.IsAny<DropdownQuestionPage>(), It.IsAny<List<Qualification>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
-                                  .ReturnsAsync(new DropdownQuestionModel());
-        
+        _mockQuestionService.Setup(x => x.MapDropdownModel(It.IsAny<DropdownQuestionModel>(),
+                                                           It.IsAny<DropdownQuestionPage>(),
+                                                           It.IsAny<List<Qualification>>(), It.IsAny<string>(),
+                                                           It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                            .ReturnsAsync(new DropdownQuestionModel());
+
         var result = await controller.WhatIsTheAwardingOrganisation(new DropdownQuestionModel());
 
         result.Should().NotBeNull();
@@ -666,12 +708,12 @@ public class QuestionsControllerTests
     public async Task Post_WhatIsTheAwardingOrganisation_NoValueSelectedAndNotInListNotSelected_ReturnsQuestionPage()
     {
         var result = await GetSut().WhatIsTheAwardingOrganisation(
-            new DropdownQuestionModel
-            {
-                SelectedValue = string.Empty,
-                NotInTheList = false
-            }
-        );
+                                                                  new DropdownQuestionModel
+                                                                  {
+                                                                      SelectedValue = string.Empty,
+                                                                      NotInTheList = false
+                                                                  }
+                                                                 );
 
         result.Should().NotBeNull();
 
@@ -685,12 +727,12 @@ public class QuestionsControllerTests
     public async Task Post_WhatIsTheAwardingOrganisation_ValidSubmit_ReturnsRedirectToActionResult()
     {
         var result = await GetSut().WhatIsTheAwardingOrganisation(
-            new DropdownQuestionModel
-            {
-                SelectedValue = "some value",
-                NotInTheList = false
-            }
-        );
+                                                                  new DropdownQuestionModel
+                                                                  {
+                                                                      SelectedValue = "some value",
+                                                                      NotInTheList = false
+                                                                  }
+                                                                 );
 
         result.Should().NotBeNull();
 
@@ -704,7 +746,7 @@ public class QuestionsControllerTests
     public async Task PreCheck_UnableToGetContent_ReturnsErrorPage()
     {
         _mockQuestionService.Setup(x => x.GetPreCheckView())
-            .ReturnsAsync(new RedirectToActionResult("Index", "Error", null));
+                            .ReturnsAsync(new RedirectToActionResult("Index", "Error", null));
 
         var result = await GetSut().PreCheck();
 
@@ -716,21 +758,22 @@ public class QuestionsControllerTests
         resultType!.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
     }
-    
+
     [TestMethod]
     public async Task PreCheck_FindsContent_ReturnsPage()
     {
         _mockQuestionService.Setup(x => x.GetPreCheckView())
-            .ReturnsAsync(
-                new ViewResult
-                {
-                    ViewName = "PreCheck",
-                    ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
-                    {
-                        Model = new PreCheckPageModel()
-                    }
-                }
-            );
+                            .ReturnsAsync(
+                                          new ViewResult
+                                          {
+                                              ViewName = "PreCheck",
+                                              ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(),
+                                                                                new ModelStateDictionary())
+                                                         {
+                                                             Model = new PreCheckPageModel()
+                                                         }
+                                          }
+                                         );
 
         var result = await GetSut().PreCheck();
 
@@ -747,18 +790,19 @@ public class QuestionsControllerTests
 
         _mockQuestionService.Verify(x => x.GetPreCheckView(), Times.Once);
     }
-    
+
     [TestMethod]
     public async Task Post_PreCheck_ModelStateInvalid_ReturnsPage()
     {
         var controller = GetSut();
 
         _mockQuestionService.Setup(x => x.GetPreCheckPage())
-                          .ReturnsAsync(new PreCheckPage()).Verifiable();
+                            .ReturnsAsync(new PreCheckPage()).Verifiable();
 
         controller.ModelState.AddModelError("option", "test error");
 
-        _mockQuestionService.Setup(x => x.MapPreCheckModel(It.IsAny<PreCheckPage>())).ReturnsAsync(new PreCheckPageModel());
+        _mockQuestionService.Setup(x => x.MapPreCheckModel(It.IsAny<PreCheckPage>()))
+                            .ReturnsAsync(new PreCheckPageModel());
 
         var result = await controller.PreCheck(new PreCheckPageModel());
 
@@ -773,7 +817,7 @@ public class QuestionsControllerTests
         resultType.Model.Should().NotBeNull();
         resultType.Model.Should().BeAssignableTo<PreCheckPageModel>();
     }
-    
+
     [TestMethod]
     public async Task Post_PreCheck_UserChoosesYesOption_RedirectsToNextQuestion()
     {
@@ -786,7 +830,7 @@ public class QuestionsControllerTests
 
         resultType.ActionName.Should().Be(nameof(QuestionsController.StartNew));
     }
-    
+
     [TestMethod]
     public async Task Post_PreCheck_UserChoosesNoOption_RedirectsToHomePage()
     {
@@ -800,38 +844,42 @@ public class QuestionsControllerTests
         resultType.ActionName.Should().Be(nameof(HomeController.Index));
         resultType.ControllerName.Should().Be("Home");
     }
-    
+
     [TestMethod]
     public async Task AreYouCheckingYourOwnQualification_ContentServiceReturnsQuestionPage_ReturnsQuestionModel()
     {
         // Arrange
         var questionPage = new RadioQuestionPage
-        {
-            Question = "Test question",
-            CtaButtonText = "Continue"
-        };
+                           {
+                               Question = "Test question",
+                               CtaButtonText = "Continue"
+                           };
 
         var viewModel = new RadioQuestionModel
-        {
-            Question = questionPage.Question,
-            CtaButtonText = questionPage.CtaButtonText
-        };
+                        {
+                            Question = questionPage.Question,
+                            CtaButtonText = questionPage.CtaButtonText
+                        };
 
         _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.AreYouCheckingYourOwnQualification))
-            .ReturnsAsync(
-                questionPage
-            );
+                            .ReturnsAsync(
+                                          questionPage
+                                         );
 
-        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), questionPage, nameof(QuestionsController.AreYouCheckingYourOwnQualification), "Questions", It.IsAny<string>()))
-            .ReturnsAsync(
-                viewModel
-            );
+        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), questionPage,
+                                              nameof(QuestionsController.AreYouCheckingYourOwnQualification),
+                                              "Questions", It.IsAny<string>()))
+                            .ReturnsAsync(
+                                          viewModel
+                                         );
 
         var result = await GetSut().AreYouCheckingYourOwnQualification();
 
         result.Should().NotBeNull();
         _mockQuestionService.Verify(x => x.GetIsUserCheckingTheirOwnQualification(), Times.Once);
-        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages.AreYouCheckingYourOwnQualification), Times.Once);
+        _mockQuestionService.Verify(x => x.GetRadioQuestionPageContent(QuestionPages
+                                                                           .AreYouCheckingYourOwnQualification),
+                                    Times.Once);
     }
 
     [TestMethod]
@@ -840,12 +888,14 @@ public class QuestionsControllerTests
         var controller = GetSut();
 
         _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.AreYouCheckingYourOwnQualification))
-                          .ReturnsAsync(new RadioQuestionPage());
+                            .ReturnsAsync(new RadioQuestionPage());
 
         controller.ModelState.AddModelError("option", "test error");
 
-        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(),  It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new  RadioQuestionModel());
-        
+        _mockQuestionService
+            .Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(),
+                              It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new RadioQuestionModel());
+
         var result = await controller.AreYouCheckingYourOwnQualification(new RadioQuestionModel());
 
         result.Should().NotBeNull();
@@ -867,11 +917,11 @@ public class QuestionsControllerTests
     public async Task Post_AreYouCheckingYourOwnQualification_ReturnsRedirectResponse()
     {
         var result = await GetSut().AreYouCheckingYourOwnQualification(
-            new RadioQuestionModel
-            {
-                Option = "yes"
-            }
-        );
+                                                                       new RadioQuestionModel
+                                                                       {
+                                                                           Option = "yes"
+                                                                       }
+                                                                      );
 
         result.Should().NotBeNull();
 
@@ -886,8 +936,8 @@ public class QuestionsControllerTests
     private QuestionsController GetSut()
     {
         return new QuestionsController(
-                                _mockLogger.Object,
-                                _mockQuestionService.Object
-                                );
+                                       _mockLogger.Object,
+                                       _mockQuestionService.Object
+                                      );
     }
 }

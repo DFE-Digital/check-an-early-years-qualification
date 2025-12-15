@@ -23,8 +23,13 @@ public class HelpServiceTests
     private Mock<INotificationService> _mockNotificationService = new Mock<INotificationService>();
     private Mock<IDateQuestionModelValidator> _mockDateQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
     private Mock<IHelpGetHelpPageMapper> _mockHelpGetHelpPageMapper = new Mock<IHelpGetHelpPageMapper>();
-    private Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper = new Mock<IHelpQualificationDetailsPageMapper>();
-    private Mock<IHelpProvideDetailsPageMapper> _mockHelpProvideDetailsPageMapper = new Mock<IHelpProvideDetailsPageMapper>();
+
+    private Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper =
+        new Mock<IHelpQualificationDetailsPageMapper>();
+
+    private Mock<IHelpProvideDetailsPageMapper> _mockHelpProvideDetailsPageMapper =
+        new Mock<IHelpProvideDetailsPageMapper>();
+
     private Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new Mock<IHelpEmailAddressPageMapper>();
     private Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new Mock<IHelpConfirmationPageMapper>();
 
@@ -42,31 +47,33 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    public async Task MapGetHelpPageContentToViewModelAsync_Calls_HelpGetHelpPageMapper_MapGetHelpPageContentToViewModelAsync()
+    public async Task
+        MapGetHelpPageContentToViewModelAsync_Calls_HelpGetHelpPageMapper_MapGetHelpPageContentToViewModelAsync()
     {
         // Arrange
         var content = new GetHelpPage();
 
         // Act
-        var viewModel = await GetSut().MapGetHelpPageContentToViewModelAsync(content);
+        await GetSut().MapGetHelpPageContentToViewModelAsync(content);
 
         // Assert
         _mockHelpGetHelpPageMapper.Verify(o => o.MapGetHelpPageContentToViewModelAsync(content), Times.Once);
     }
 
     [TestMethod]
-    [DataRow(HelpFormEnquiryReasons.QuestionAboutAQualification, nameof(HelpFormEnquiryReasons.QuestionAboutAQualification))]
+    [DataRow(HelpFormEnquiryReasons.QuestionAboutAQualification,
+                nameof(HelpFormEnquiryReasons.QuestionAboutAQualification))]
     [DataRow(HelpFormEnquiryReasons.IssueWithTheService, nameof(HelpFormEnquiryReasons.IssueWithTheService))]
     [DataRow(null, "")]
     public void GetSelectedOption_Returns_PreviouslySelectedRadioOption(string input, string expected)
     {
         // Arrange
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(
-            new HelpFormEnquiry
-            {
-                ReasonForEnquiring = input
-            }
-        );
+             new HelpFormEnquiry
+             {
+                 ReasonForEnquiring = input
+             }
+            );
 
         // Act
         var result = GetSut().GetSelectedOption();
@@ -132,9 +139,9 @@ public class HelpServiceTests
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         var viewModel = new GetHelpPageViewModel
-        {
-            SelectedOption = input
-        };
+                        {
+                            SelectedOption = input
+                        };
 
         // Act
         var result = GetSut().SetHelpFormEnquiryReason(viewModel);
@@ -153,9 +160,9 @@ public class HelpServiceTests
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         var viewModel = new GetHelpPageViewModel
-        {
-            SelectedOption = "invalid value"
-        };
+                        {
+                            SelectedOption = "invalid value"
+                        };
 
         // Act
         var result = GetSut().SetHelpFormEnquiryReason(viewModel);
@@ -173,16 +180,17 @@ public class HelpServiceTests
     {
         // Arrange
         var result = GetSut().SetHelpFormEnquiryReason(
-            new GetHelpPageViewModel
-            {
-                SelectedOption = nameof(HelpFormEnquiryReasons.IssueWithTheService)
-            }
-        );
+                                                       new GetHelpPageViewModel
+                                                       {
+                                                           SelectedOption = nameof(HelpFormEnquiryReasons
+                                                               .IssueWithTheService)
+                                                       }
+                                                      );
 
         // Assert
         result.Should().NotBeNull();
         result.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
-      
+
         _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
@@ -206,11 +214,11 @@ public class HelpServiceTests
         var viewModel = new QualificationDetailsPageViewModel();
 
         var enquiry = new HelpFormEnquiry
-        {
-            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
-            AwardingOrganisation = "Test Awarding Organisation",
-            QualificationName = "Test Qualification Name",
-        };
+                      {
+                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          AwardingOrganisation = "Test Awarding Organisation",
+                          QualificationName = "Test Qualification Name",
+                      };
 
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((1, 2000));
@@ -234,19 +242,20 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_Overwrites_GetWhenWasQualificationStartedAndAwarded()
+    public void
+        SetAnyPreviouslyEnteredQualificationDetailsFromCookie_Overwrites_GetWhenWasQualificationStartedAndAwarded()
     {
         // Arrange
         var viewModel = new QualificationDetailsPageViewModel();
 
         var enquiry = new HelpFormEnquiry
-        {
-            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
-            AwardingOrganisation = "Test Awarding Organisation",
-            QualificationName = "Test Qualification Name",
-            QualificationStartDate = "5/2004",
-            QualificationAwardedDate = "7/2008"
-        };
+                      {
+                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          AwardingOrganisation = "Test Awarding Organisation",
+                          QualificationName = "Test Qualification Name",
+                          QualificationStartDate = "5/2004",
+                          QualificationAwardedDate = "7/2008"
+                      };
 
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((1, 2000));
@@ -270,7 +279,8 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    public void MapHelpQualificationDetailsPageContentToViewModel_Calls_HelpQualificationDetailsPageMapper_MapGetHelpPageContentToViewModelAsync()
+    public void
+        MapHelpQualificationDetailsPageContentToViewModel_Calls_HelpQualificationDetailsPageMapper_MapGetHelpPageContentToViewModelAsync()
     {
         // Arrange
         var content = new HelpQualificationDetailsPage();
@@ -279,10 +289,14 @@ public class HelpServiceTests
         var modelState = new ModelStateDictionary();
 
         // Act
-        var result = GetSut().MapHelpQualificationDetailsPageContentToViewModel(viewModel, content, datesValidationResult, modelState);
+        GetSut()
+            .MapHelpQualificationDetailsPageContentToViewModel(viewModel, content, datesValidationResult, modelState);
 
         // Assert
-        _mockHelpQualificationDetailsPageMapper.Verify(o => o.MapQualificationDetailsContentToViewModel(viewModel, content, datesValidationResult, modelState), Times.Once);
+        _mockHelpQualificationDetailsPageMapper.Verify(o =>
+                                                           o.MapQualificationDetailsContentToViewModel(viewModel,
+                                                            content, datesValidationResult, modelState),
+                                                       Times.Once);
     }
 
     [TestMethod]
@@ -291,27 +305,27 @@ public class HelpServiceTests
         // Arrange
         var enquiry = new HelpFormEnquiry
                       {
-            ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
-        };
+                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                      };
 
         var viewModel = new QualificationDetailsPageViewModel
                         {
-            AwardingOrganisation = "Test Awarding Organisation",
-            QualificationName = "Test Qualification Name",
-            QuestionModel = new()
-            {
-                StartedQuestion = new()
-                {
-                    SelectedMonth = 2,
-                    SelectedYear = 2003
-                },
-                AwardedQuestion = new()
-                {
-                    SelectedMonth = 8,
-                    SelectedYear = 2004
-                }
-            }
-        };
+                            AwardingOrganisation = "Test Awarding Organisation",
+                            QualificationName = "Test Qualification Name",
+                            QuestionModel = new()
+                                            {
+                                                StartedQuestion = new()
+                                                                  {
+                                                                      SelectedMonth = 2,
+                                                                      SelectedYear = 2003
+                                                                  },
+                                                AwardedQuestion = new()
+                                                                  {
+                                                                      SelectedMonth = 8,
+                                                                      SelectedYear = 2004
+                                                                  }
+                                            }
+                        };
 
         // Act
         GetSut().SetHelpQualificationDetailsInCookie(enquiry, viewModel);
@@ -331,14 +345,15 @@ public class HelpServiceTests
     [DataRow(true, false, true, true, true)]
     [DataRow(true, true, false, true, true)]
     [DataRow(true, true, true, false, true)]
-    public void HasInvalidDates_Returns_Expected(bool sMonthValid, bool sYearValid, bool aMonthValid, bool aYearValid, bool expected)
+    public void HasInvalidDates_Returns_Expected(bool sMonthValid, bool sYearValid, bool aMonthValid, bool aYearValid,
+                                                 bool expected)
     {
         // Arrange
         var validationResult = new DatesValidationResult
-        {
-            StartedValidationResult = new() { MonthValid = sMonthValid, YearValid = sYearValid },
-            AwardedValidationResult = new() { MonthValid = aMonthValid, YearValid = aYearValid },
-        };
+                               {
+                                   StartedValidationResult = new() { MonthValid = sMonthValid, YearValid = sYearValid },
+                                   AwardedValidationResult = new() { MonthValid = aMonthValid, YearValid = aYearValid },
+                               };
 
         // Act
         var result = GetSut().HasInvalidDates(validationResult);
@@ -355,7 +370,7 @@ public class HelpServiceTests
         var content = new HelpQualificationDetailsPage();
 
         // Act
-        var result = GetSut().ValidateDates(questionModel, content);
+        GetSut().ValidateDates(questionModel, content);
 
         // Assert
         _mockDateQuestionModelValidator.Verify(o => o.IsValid(questionModel, content), Times.Once);
@@ -375,16 +390,20 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    public void MapProvideDetailsPageContentToViewModel_Calls_HelpProvideDetailsPageMapper_MapProvideDetailsPageContentToViewModel()
+    public void
+        MapProvideDetailsPageContentToViewModel_Calls_HelpProvideDetailsPageMapper_MapProvideDetailsPageContentToViewModel()
     {
         // Arrange
         var content = new HelpProvideDetailsPage();
 
         // Act
-        var result = GetSut().MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.IssueWithTheService);
+        GetSut()
+            .MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.IssueWithTheService);
 
         // Assert
-        _mockHelpProvideDetailsPageMapper.Verify(o => o.MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.IssueWithTheService), Times.Once);
+        _mockHelpProvideDetailsPageMapper.Verify(o =>
+                                                     o.MapProvideDetailsPageContentToViewModel(content,
+                                                      HelpFormEnquiryReasons.IssueWithTheService), Times.Once);
     }
 
     [TestMethod]
@@ -401,13 +420,14 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    public void MapEmailAddressPageContentToViewModel_Calls_HelpEmailAddressPageMapper_HelpEmailAddressPageMapper_MapEmailAddressPageContentToViewModel()
+    public void
+        MapEmailAddressPageContentToViewModel_Calls_HelpEmailAddressPageMapper_HelpEmailAddressPageMapper_MapEmailAddressPageContentToViewModel()
     {
         // Arrange
         var content = new HelpEmailAddressPage();
 
         // Act
-        var result = GetSut().MapEmailAddressPageContentToViewModel(content);
+        GetSut().MapEmailAddressPageContentToViewModel(content);
 
         // Assert
         _mockHelpEmailAddressPageMapper.Verify(o => o.MapEmailAddressPageContentToViewModel(content), Times.Once);
@@ -440,13 +460,14 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    public void MapConfirmationPageContentToViewModelAsync_Calls_HelpConfirmationPageMapper_MapConfirmationPageContentToViewModelAsync()
+    public void
+        MapConfirmationPageContentToViewModelAsync_Calls_HelpConfirmationPageMapper_MapConfirmationPageContentToViewModelAsync()
     {
         // Arrange
         var content = new HelpConfirmationPage();
 
         // Act
-        var result = GetSut().MapConfirmationPageContentToViewModelAsync(content);
+        GetSut().MapConfirmationPageContentToViewModelAsync(content);
 
         // Assert
         _mockHelpConfirmationPageMapper.Verify(o => o.MapConfirmationPageContentToViewModelAsync(content), Times.Once);
@@ -478,16 +499,16 @@ public class HelpServiceTests
     private HelpService GetSut()
     {
         return new HelpService(
-                                _mockLogger.Object,
-                                _mockContentService.Object,
-                                _mockUserJourneyCookieService.Object,
-                                _mockNotificationService.Object,
-                                _mockDateQuestionModelValidator.Object,
-                                _mockHelpGetHelpPageMapper.Object,
-                                _mockHelpQualificationDetailsPageMapper.Object,
-                                _mockHelpProvideDetailsPageMapper.Object,
-                                _mockHelpEmailAddressPageMapper.Object,
-                                _mockHelpConfirmationPageMapper.Object
-                                );
+                               _mockLogger.Object,
+                               _mockContentService.Object,
+                               _mockUserJourneyCookieService.Object,
+                               _mockNotificationService.Object,
+                               _mockDateQuestionModelValidator.Object,
+                               _mockHelpGetHelpPageMapper.Object,
+                               _mockHelpQualificationDetailsPageMapper.Object,
+                               _mockHelpProvideDetailsPageMapper.Object,
+                               _mockHelpEmailAddressPageMapper.Object,
+                               _mockHelpConfirmationPageMapper.Object
+                              );
     }
 }

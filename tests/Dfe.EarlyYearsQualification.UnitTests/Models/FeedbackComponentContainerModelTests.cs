@@ -1,6 +1,6 @@
 ﻿using Dfe.EarlyYearsQualification.Web.Models.Content;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
+namespace Dfe.EarlyYearsQualification.UnitTests.Models;
 
 [TestClass]
 public class FeedbackComponentContainerModelTests
@@ -10,8 +10,8 @@ public class FeedbackComponentContainerModelTests
     {
         var model = new FeedbackComponentContainerModel
                     {
-            FeedbackComponent = new()
-        };
+                        FeedbackComponent = new FeedbackComponentModel()
+                    };
 
         model.Should().NotBeNull();
         model.IsMobile.Should().BeFalse();
