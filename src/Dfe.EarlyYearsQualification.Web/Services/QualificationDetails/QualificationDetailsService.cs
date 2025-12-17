@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RatioRequirements;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
@@ -34,8 +35,9 @@ public class QualificationDetailsService(
                                                                              List<AdditionalRequirementAnswerModel>?
                                                                                  additionalRequirementAnswerModels)
     {
-        var getDegreeSpecificPage = qualification.IsTheQualificationADegree || IsQts(qualification, additionalRequirementAnswerModels);
-        return await contentService.GetQualificationDetailsPage(userIsCheckingOwnQualification, isFullAndRelevant, level, startMonth, startYear, getDegreeSpecificPage);
+        var isApprovedAtL6SpecificPage = IsQts(qualification, additionalRequirementAnswerModels);
+        var getDegreeSpecificPage = qualification.IsTheQualificationADegree;
+        return await contentService.GetQualificationDetailsPage(userIsCheckingOwnQualification, isFullAndRelevant, level, startMonth, startYear, getDegreeSpecificPage, isApprovedAtL6SpecificPage);
     }
 
     public bool HasStartDate()
@@ -578,7 +580,7 @@ public class QualificationDetailsService(
 
     public bool GetUserIsCheckingOwnQualification()
     {
-        return userJourneyCookieService.GetIsUserCheckingTheirOwnQualification() == Constants.Options.Yes;
+        return userJourneyCookieService.GetIsUserCheckingTheirOwnQualification() == Options.Yes;
     }
 
     public int? GetLevelOfQualification()

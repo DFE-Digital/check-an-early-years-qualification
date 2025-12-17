@@ -34,7 +34,7 @@ public class HelpService(
     }
 
     public async Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage content)
-    {   
+    {
         return await getHelpPageMapper.MapGetHelpPageContentToViewModelAsync(content);
     }
 
@@ -45,8 +45,13 @@ public class HelpService(
         if (enquiry is not null)
         {
             return
-                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification ? nameof(HelpFormEnquiryReasons.QuestionAboutAQualification) :
-                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.IssueWithTheService ? nameof(HelpFormEnquiryReasons.IssueWithTheService) : "";
+                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification
+                    ?
+                    nameof(HelpFormEnquiryReasons.QuestionAboutAQualification)
+                    :
+                    enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.IssueWithTheService
+                        ? nameof(HelpFormEnquiryReasons.IssueWithTheService)
+                        : "";
         }
 
         return "";
@@ -92,17 +97,17 @@ public class HelpService(
         var qualificationStart = userJourneyCookieService.GetWhenWasQualificationStarted();
         var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
 
-        viewModel.QuestionModel.StartedQuestion = new DateQuestionModel()
-        {
-            SelectedMonth = qualificationStart.startMonth,
-            SelectedYear = qualificationStart.startYear
-        };
+        viewModel.QuestionModel.StartedQuestion = new DateQuestionModel
+                                                  {
+                                                      SelectedMonth = qualificationStart.startMonth,
+                                                      SelectedYear = qualificationStart.startYear
+                                                  };
 
-        viewModel.QuestionModel.AwardedQuestion = new DateQuestionModel()
-        {
-            SelectedMonth = qualificationAwarded.startMonth,
-            SelectedYear = qualificationAwarded.startYear
-        };
+        viewModel.QuestionModel.AwardedQuestion = new DateQuestionModel
+                                                  {
+                                                      SelectedMonth = qualificationAwarded.startMonth,
+                                                      SelectedYear = qualificationAwarded.startYear
+                                                  };
 
         if (!string.IsNullOrEmpty(enquiry.QualificationStartDate))
         {
@@ -121,19 +126,26 @@ public class HelpService(
         }
     }
 
-    public QualificationDetailsPageViewModel MapHelpQualificationDetailsPageContentToViewModel(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content, DatesValidationResult? validationResult, ModelStateDictionary modelState)
+    public QualificationDetailsPageViewModel MapHelpQualificationDetailsPageContentToViewModel(
+        QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content,
+        DatesValidationResult? validationResult, ModelStateDictionary modelState)
     {
-        return helpQualificationDetailsPageMapper.MapQualificationDetailsContentToViewModel(viewModel, content, validationResult, modelState);
+        return helpQualificationDetailsPageMapper.MapQualificationDetailsContentToViewModel(viewModel, content,
+         validationResult, modelState);
     }
 
-    public void SetHelpQualificationDetailsInCookie(HelpFormEnquiry enquiry, QualificationDetailsPageViewModel viewModel)
+    public void SetHelpQualificationDetailsInCookie(HelpFormEnquiry enquiry,
+                                                    QualificationDetailsPageViewModel viewModel)
     {
         enquiry.QualificationName = viewModel.QualificationName;
         if (viewModel.QuestionModel.StartedQuestion is not null)
         {
-            enquiry.QualificationStartDate = $"{viewModel.QuestionModel.StartedQuestion?.SelectedMonth}/{viewModel.QuestionModel.StartedQuestion?.SelectedYear}";
+            enquiry.QualificationStartDate =
+                $"{viewModel.QuestionModel.StartedQuestion?.SelectedMonth}/{viewModel.QuestionModel.StartedQuestion?.SelectedYear}";
         }
-        enquiry.QualificationAwardedDate = $"{viewModel.QuestionModel.AwardedQuestion?.SelectedMonth}/{viewModel.QuestionModel.AwardedQuestion?.SelectedYear}";
+
+        enquiry.QualificationAwardedDate =
+            $"{viewModel.QuestionModel.AwardedQuestion?.SelectedMonth}/{viewModel.QuestionModel.AwardedQuestion?.SelectedYear}";
         enquiry.AwardingOrganisation = viewModel.AwardingOrganisation;
 
         SetHelpFormEnquiry(enquiry);
@@ -141,8 +153,11 @@ public class HelpService(
 
     public bool HasInvalidDates(DatesValidationResult datesValidationResult)
     {
-        return !datesValidationResult.AwardedValidationResult!.MonthValid || !datesValidationResult.AwardedValidationResult.YearValid ||
-            (datesValidationResult.StartedValidationResult is not null && (!datesValidationResult.StartedValidationResult.MonthValid || !datesValidationResult.StartedValidationResult.YearValid));
+        return !datesValidationResult.AwardedValidationResult!.MonthValid ||
+               !datesValidationResult.AwardedValidationResult.YearValid ||
+               (datesValidationResult.StartedValidationResult is not null &&
+                (!datesValidationResult.StartedValidationResult.MonthValid ||
+                 !datesValidationResult.StartedValidationResult.YearValid));
     }
 
     public DatesValidationResult ValidateDates(DatesQuestionModel questionModel, HelpQualificationDetailsPage content)
@@ -155,7 +170,8 @@ public class HelpService(
         return await contentService.GetHelpProvideDetailsPage();
     }
 
-    public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage content, string reasonForEnquiring)
+    public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(
+        HelpProvideDetailsPage content, string reasonForEnquiring)
     {
         return helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, reasonForEnquiring);
     }

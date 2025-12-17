@@ -10,8 +10,8 @@ runs:
     - name: Install dependencies
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: npm ci
+      run: npm ci --ignore-scripts
     - name: Install Playwright Browsers
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: npx playwright install chromium firefox --with-deps --no-shell
+      run: npx playwright install chromium firefox webkit --with-deps --no-shell

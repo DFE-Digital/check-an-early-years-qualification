@@ -11,21 +11,21 @@ public class HelpGetHelpPageMapper(IGovUkContentParser contentParser) : IHelpGet
 {
     public async Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage helpPageContent)
     {
-        var viewModel = new GetHelpPageViewModel()
-        {
-            BackButton = new()
-            {
-                DisplayText = helpPageContent.BackButton.DisplayText,
-                Href = helpPageContent.BackButton.Href
-            },
-            Heading = helpPageContent.Heading,
-            PostHeadingContent = await contentParser.ToHtml(helpPageContent.PostHeadingContent),
-            CtaButtonText = helpPageContent.CtaButtonText,
-            EnquiryReasons = MapEnquiryReasons(helpPageContent.EnquiryReasons),
-            NoEnquiryOptionSelectedErrorMessage = helpPageContent.NoEnquiryOptionSelectedErrorMessage,
-            ErrorBannerHeading = helpPageContent.ErrorBannerHeading,
-            ReasonForEnquiryHeading = helpPageContent.ReasonForEnquiryHeading,
-        };
+        var viewModel = new GetHelpPageViewModel
+                        {
+                            BackButton = new NavigationLinkModel
+                                         {
+                                             DisplayText = helpPageContent.BackButton.DisplayText,
+                                             Href = helpPageContent.BackButton.Href
+                                         },
+                            Heading = helpPageContent.Heading,
+                            PostHeadingContent = await contentParser.ToHtml(helpPageContent.PostHeadingContent),
+                            CtaButtonText = helpPageContent.CtaButtonText,
+                            EnquiryReasons = MapEnquiryReasons(helpPageContent.EnquiryReasons),
+                            NoEnquiryOptionSelectedErrorMessage = helpPageContent.NoEnquiryOptionSelectedErrorMessage,
+                            ErrorBannerHeading = helpPageContent.ErrorBannerHeading,
+                            ReasonForEnquiryHeading = helpPageContent.ReasonForEnquiryHeading,
+                        };
 
         return viewModel;
     }

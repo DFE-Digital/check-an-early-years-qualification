@@ -156,7 +156,8 @@ public class QualificationDetailsController(
             return await qualificationDetailsService.GetQualificationDetailsPage(
                         isUserCheckingTheirOwnQualification,
                         isFullAndRelevant,
-                        level.Value,
+                        // If the user selected not sure on the level page, use the qualification level instead
+                        level.Value == 0 ? qualification.QualificationLevel : level.Value,
                         startMonth.Value,
                         startYear.Value,
                         qualification,

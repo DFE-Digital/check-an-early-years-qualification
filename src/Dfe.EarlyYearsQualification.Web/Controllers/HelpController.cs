@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
+using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [Route("/help")]
 public class HelpController(
     ILogger<HelpController> logger,
-    Services.Help.IHelpService helpService
+    IHelpService helpService
     )
     : ServiceController
 {

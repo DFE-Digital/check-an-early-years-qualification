@@ -1,12 +1,13 @@
 using OwaspHeaders.Core.Enums;
 using OwaspHeaders.Core.Extensions;
+using OwaspHeaders.Core.Helpers;
 using OwaspHeaders.Core.Models;
 
 namespace Dfe.EarlyYearsQualification.Web.Security;
 
 public static class SecureHeaderConfiguration
 {
-    public static SecureHeadersMiddlewareConfiguration CustomConfiguration()
+    public static SecureHeadersMiddlewareConfiguration CustomConfiguration(bool upgradeInsecureRequests = true)
     {
         // These are the default ones, see here: https://github.com/GaProgMan/OwaspHeaders.Core
         var configuration = SecureHeadersMiddlewareBuilder
@@ -14,14 +15,26 @@ public static class SecureHeaderConfiguration
                             .UseHsts()
                             .UseXFrameOptions()
                             .UseContentTypeOptions()
-                            .UseDefaultContentSecurityPolicy()
                             .UsePermittedCrossDomainPolicies()
                             .UseReferrerPolicy()
                             .UseCacheControl()
                             .UseXssProtection()
                             .UseCrossOriginResourcePolicy()
-                            .SetUrlsToIgnore(["/favicon.ico"])
-                            .Build();
+                            .SetUrlsToIgnore(["/favicon.ico"]);
+
+        if (upgradeInsecureRequests)
+        {
+            configuration.UseDefaultContentSecurityPolicy();
+        }
+        else
+        {
+            configuration.UseContentSecurityPolicy(upgradeInsecureRequests: upgradeInsecureRequests);
+
+            configuration.SetCspUris([ContentSecurityPolicyHelpers.CreateSelfDirective()], CspUriType.Script);
+            configuration.SetCspUris([ContentSecurityPolicyHelpers.CreateSelfDirective()], CspUriType.Object);
+        }
+
+        configuration.Build();
 
         var govukFrontendSupportedElement = new ContentSecurityPolicyElement
                                             {

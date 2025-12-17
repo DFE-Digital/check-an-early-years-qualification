@@ -1,8 +1,8 @@
-using System.Text.Json;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Services.Cookies;
 using Dfe.EarlyYearsQualification.Web.Services.CookiesPreferenceService;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -175,6 +175,15 @@ public class CookieServiceTests
         mockManager.Setup(m => m.SetOutboundCookie(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CookieOptions>()))
                    .Callback((string key, string value, CookieOptions _) => cookies[key] = value)
                    .Verifiable();
+
+        mockManager.Setup(x => x.CreateCookieOptions(It.IsAny<DateTimeOffset>(), It.IsAny<bool>())).Returns(
+            new CookieOptions
+            {
+                Secure = true,
+                HttpOnly = true,
+                Expires = new DateTimeOffset(DateTime.Now.AddYears(1))
+            }
+        );
 
         return mockManager;
     }
