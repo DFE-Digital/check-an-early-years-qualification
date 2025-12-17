@@ -10,7 +10,7 @@ runs:
     - name: Install dependencies
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: npm ci
+      run: npm ci --ignore-scripts
     - name: Install Playwright Browsers
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
