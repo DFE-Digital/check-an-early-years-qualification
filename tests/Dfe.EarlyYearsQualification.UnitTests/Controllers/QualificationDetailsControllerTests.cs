@@ -60,7 +60,7 @@ public class QualificationDetailsControllerTests
         result.Should().BeOfType<BadRequestResult>();
         var resultType = result as BadRequestResult;
         resultType.Should().NotBeNull();
-        resultType!.StatusCode.Should().Be(400);
+        resultType.StatusCode.Should().Be(400);
     }
 
     [TestMethod]
@@ -74,7 +74,7 @@ public class QualificationDetailsControllerTests
         result.Should().BeOfType<BadRequestResult>();
         var resultType = result as BadRequestResult;
         resultType.Should().NotBeNull();
-        resultType!.StatusCode.Should().Be(400);
+        resultType.StatusCode.Should().Be(400);
     }
 
     [TestMethod]
@@ -124,6 +124,32 @@ public class QualificationDetailsControllerTests
         _ = await sut.Index(qualificationId);
 
         _mockQualificationDetailsService.Verify(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001,
+                                                 It.IsAny<Qualification>(),
+                                                 It.IsAny<List<AdditionalRequirementAnswerModel>>()), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task Index_Calls_QualificationDetailsService_LevelFromServiceIs0_CallsWithQualificationLevel()
+    {
+        const string qualificationId = "qualificationId";
+
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification(qualificationId, It.IsAny<string>(), It.IsAny<string>(),
+                                                   5)
+                             };
+
+        _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
+        _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications()).ReturnsAsync(qualifications);
+        _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(0);
+        _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
+        _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
+
+        var sut = GetSut();
+
+        _ = await sut.Index(qualificationId);
+
+        _mockQualificationDetailsService.Verify(o => o.GetQualificationDetailsPage(false, true, 5, 6, 2001,
                                                  It.IsAny<Qualification>(),
                                                  It.IsAny<List<AdditionalRequirementAnswerModel>>()), Times.Once);
     }
@@ -309,7 +335,7 @@ public class QualificationDetailsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as QualificationDetailsModel;
+        var model = resultType.Model as QualificationDetailsModel;
         model.Should().NotBeNull();
     }
 
@@ -384,7 +410,7 @@ public class QualificationDetailsControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as QualificationDetailsModel;
+        var model = resultType.Model as QualificationDetailsModel;
         model.Should().NotBeNull();
     }
 
@@ -423,7 +449,7 @@ public class QualificationDetailsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
         resultType.RouteValues.Should().Contain("qualificationId", qualificationId);
         resultType.RouteValues.Should().Contain("questionIndex", 1);
