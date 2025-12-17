@@ -9,6 +9,8 @@ public class QualificationDetailsPage
     public DetailsPageLabels Labels { get; init; } = new DetailsPageLabels();
 
     public bool IsPractitionerSpecificPage { get; init; }
+    
+    public bool IsAutomaticallyApprovedAtLevel6 { get; init; }
 
     public bool IsFullAndRelevant { get; init; }
 

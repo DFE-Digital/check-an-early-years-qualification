@@ -1,3 +1,4 @@
+using System.Net;
 using Contentful.Core;
 using Contentful.Core.Configuration;
 using Contentful.Core.Models;
@@ -12,7 +13,6 @@ using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using System.Net;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.Contentful;
 

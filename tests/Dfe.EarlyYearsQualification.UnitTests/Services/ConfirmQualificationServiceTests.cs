@@ -1,21 +1,10 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
-using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Web.Constants;
-using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
-using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
-using Dfe.EarlyYearsQualification.Web.Models.Content;
-using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
-using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
-using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.ConfirmQualification;
-using Dfe.EarlyYearsQualification.Web.Services.Help;
-using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -24,7 +13,10 @@ public class ConfirmQualificationServiceTests
 {
     private Mock<IContentService> _mockContentService = new Mock<IContentService>();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-    private Mock<IConfirmQualificationPageMapper> _mockConfirmQualificationPageMapper = new Mock<IConfirmQualificationPageMapper>();
+
+    private Mock<IConfirmQualificationPageMapper> _mockConfirmQualificationPageMapper =
+        new Mock<IConfirmQualificationPageMapper>();
+
     private Mock<IQualificationSearchService> _mockQualificationSearchService = new Mock<IQualificationSearchService>();
 
     [TestMethod]
@@ -129,7 +121,9 @@ public class ConfirmQualificationServiceTests
     [DataRow("Open University OU", AwardingOrganisations.Ncfe, "Open University OU")]
     [DataRow(null, AwardingOrganisations.Various, "")]
     [DataRow(null, AwardingOrganisations.Ncfe, AwardingOrganisations.Ncfe)]
-    public void SetHelpFormAwardingQualificationVariousOrganisationPrepopulates_HelpForm_WithSelectedAwardedOrganisation(string? awardingOrgDropdownValue, string pageTitle, string expected)
+    public void
+        SetHelpFormAwardingQualificationVariousOrganisationPrepopulates_HelpForm_WithSelectedAwardedOrganisation(
+            string? awardingOrgDropdownValue, string pageTitle, string expected)
     {
         // Arrange
         _mockUserJourneyCookieService.Setup(x => x.GetAwardingOrganisation()).Returns(awardingOrgDropdownValue);
@@ -144,10 +138,10 @@ public class ConfirmQualificationServiceTests
     private ConfirmQualificationService GetSut()
     {
         return new ConfirmQualificationService(
-                                _mockContentService.Object,
-                                _mockUserJourneyCookieService.Object,
-                                _mockConfirmQualificationPageMapper.Object,
-                                _mockQualificationSearchService.Object
-                                );
+                                               _mockContentService.Object,
+                                               _mockUserJourneyCookieService.Object,
+                                               _mockConfirmQualificationPageMapper.Object,
+                                               _mockQualificationSearchService.Object
+                                              );
     }
 }

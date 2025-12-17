@@ -1459,7 +1459,8 @@ public class UserJourneyCookieServiceTests
     [DataRow("7/2013")]
     [DataRow("1/2014")]
     [DataRow("8/2014")]
-    public void WasAwardedOnOrAfterSeptember2014_CookieHasValidValueNotOnOrAfterSeptember2014_ReturnsFalse(string awardedDate)
+    public void WasAwardedOnOrAfterSeptember2014_CookieHasValidValueNotOnOrAfterSeptember2014_ReturnsFalse(
+        string awardedDate)
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -1478,7 +1479,8 @@ public class UserJourneyCookieServiceTests
     [DataRow("9/2014")]
     [DataRow("12/2014")]
     [DataRow("1/2015")]
-    public void WasAwardedOnOrAfterSeptember2014_CookieHasValidValueOnOrAfterSeptember2014_ReturnsTrue(string awardedDate)
+    public void WasAwardedOnOrAfterSeptember2014_CookieHasValidValueOnOrAfterSeptember2014_ReturnsTrue(
+        string awardedDate)
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -1492,7 +1494,7 @@ public class UserJourneyCookieServiceTests
 
         service.WasAwardedOnOrAfterSeptember2014().Should().BeTrue();
     }
-    
+
     [TestMethod]
     [DataRow("")]
     [DataRow("4")]
@@ -1518,7 +1520,8 @@ public class UserJourneyCookieServiceTests
     [DataRow("8/2014")]
     [DataRow("6/2016")]
     [DataRow("1/2020")]
-    public void WasAwardedBetweenSeptember2014AndMay2016_CookieHasValidValueNotBetweenDates_ReturnsFalse(string awardedDate)
+    public void WasAwardedBetweenSeptember2014AndMay2016_CookieHasValidValueNotBetweenDates_ReturnsFalse(
+        string awardedDate)
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
@@ -1587,7 +1590,7 @@ public class UserJourneyCookieServiceTests
 
         modelValue.Should().BeTrue();
     }
-    
+
     [TestMethod]
     public void SetHasUserGotEverythingTheyNeededToday_SetsValue()
     {
@@ -1610,7 +1613,7 @@ public class UserJourneyCookieServiceTests
     [TestMethod]
     public void GetHasUserGotEverythingTheyNeededToday_ModelValueIsReturned()
     {
-        const string result = "yes"; 
+        const string result = "yes";
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
                                 HasUserGotEverythingTheyNeededToday = result
@@ -1625,22 +1628,21 @@ public class UserJourneyCookieServiceTests
         modelValue.Should().Be(result);
     }
 
-
     [TestMethod]
     public void GetHelpFormEnquiry_GetsValue()
     {
         var existingModel = new UserJourneyCookieService.UserJourneyModel
-        {
-            HelpFormEnquiry = new HelpFormEnquiry
-            {
-                ReasonForEnquiring = "some reason",
-                AdditionalInformation = "some info",
-                AwardingOrganisation = "some org",
-                QualificationStartDate = "2/2000",
-                QualificationAwardedDate = "1/2001",
-                QualificationName = "some qualification name"
-            }
-        };
+                            {
+                                HelpFormEnquiry = new HelpFormEnquiry
+                                                  {
+                                                      ReasonForEnquiring = "some reason",
+                                                      AdditionalInformation = "some info",
+                                                      AwardingOrganisation = "some org",
+                                                      QualificationStartDate = "2/2000",
+                                                      QualificationAwardedDate = "1/2001",
+                                                      QualificationName = "some qualification name"
+                                                  }
+                            };
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
 
@@ -1661,29 +1663,29 @@ public class UserJourneyCookieServiceTests
         var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
 
         var enquiry = new HelpFormEnquiry
-        {
-            ReasonForEnquiring = "some reason",
-            AdditionalInformation = "some info",
-            AwardingOrganisation = "some org",
-            QualificationStartDate = "2/2000",
-            QualificationAwardedDate = "1/2001",
-            QualificationName = "some qualification name"
-        };
-        
+                      {
+                          ReasonForEnquiring = "some reason",
+                          AdditionalInformation = "some info",
+                          AwardingOrganisation = "some org",
+                          QualificationStartDate = "2/2000",
+                          QualificationAwardedDate = "1/2001",
+                          QualificationName = "some qualification name"
+                      };
+
         service.SetHelpFormEnquiry(enquiry);
 
-        var model = new UserJourneyCookieService.UserJourneyModel()
-        {
-            HelpFormEnquiry = enquiry
-        };
+        var model = new UserJourneyCookieService.UserJourneyModel
+                    {
+                        HelpFormEnquiry = enquiry
+                    };
 
         CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
-    
+
     [TestMethod]
     public void SetIsUserCheckingTheirOwnQualification_SetsValue()
     {
-        const  string result = "yes";
+        const string result = "yes";
         var modelInCookie = new UserJourneyCookieService.UserJourneyModel();
         var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
         var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
@@ -1699,11 +1701,11 @@ public class UserJourneyCookieServiceTests
 
         CheckSerializedModelWasSet(mockHttpContextAccessor, model);
     }
-    
+
     [TestMethod]
     public void GetIsUserCheckingTheirOwnQualification_ModelValueIsReturned()
     {
-        const string result = "yes"; 
+        const string result = "yes";
         var existingModel = new UserJourneyCookieService.UserJourneyModel
                             {
                                 IsUserCheckingTheirOwnQualification = result
@@ -1742,7 +1744,7 @@ public class UserJourneyCookieServiceTests
                                               ),
                        Times.Once);
     }
-    
+
     private static (Mock<ICookieManager> cookieManager, Dictionary<string, string> cookies)
         SetCookieManagerWithExistingCookie(
             UserJourneyCookieService.UserJourneyModel? model)
@@ -1768,13 +1770,13 @@ public class UserJourneyCookieServiceTests
                    .Verifiable();
 
         mockManager.Setup(x => x.CreateCookieOptions(It.IsAny<DateTimeOffset>(), It.IsAny<bool>())).Returns(
-            new CookieOptions()
-            {
-                Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30)),
-                HttpOnly = true,
-                Secure = true
-            }
-        );
+             new CookieOptions()
+             {
+                 Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30)),
+                 HttpOnly = true,
+                 Secure = true
+             }
+            );
 
         return (mockManager, cookiesReturned);
     }

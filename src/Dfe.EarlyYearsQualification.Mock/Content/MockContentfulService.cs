@@ -114,7 +114,7 @@ public class MockContentfulService : IContentService
                                      });
     }
     
-    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage)
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage)
     {
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
@@ -177,6 +177,7 @@ public class MockContentfulService : IContentService
             {
                 IsPractitionerSpecificPage = false,
                 IsDegreeSpecificPage = false,
+                IsAutomaticallyApprovedAtLevel6 = false,
                 IsFullAndRelevant = true,
                 FromWhichYear = "Sep-14",
                 ToWhichYear = "Aug-19",
@@ -190,6 +191,7 @@ public class MockContentfulService : IContentService
             {
                 IsPractitionerSpecificPage = true,
                 IsDegreeSpecificPage = false,
+                IsAutomaticallyApprovedAtLevel6 = false,
                 IsFullAndRelevant = true,
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
@@ -203,6 +205,7 @@ public class MockContentfulService : IContentService
             {
                 IsPractitionerSpecificPage = true,
                 IsDegreeSpecificPage = false,
+                IsAutomaticallyApprovedAtLevel6 = false,
                 IsFullAndRelevant = false,
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
@@ -216,6 +219,7 @@ public class MockContentfulService : IContentService
             {
                 IsPractitionerSpecificPage = true,
                 IsDegreeSpecificPage = false,
+                IsAutomaticallyApprovedAtLevel6 = false,
                 IsFullAndRelevant = true,
                 FromWhichYear = "Sep-11",
                 ToWhichYear = "Aug-17",
@@ -234,7 +238,7 @@ public class MockContentfulService : IContentService
                 x.IsFullAndRelevant == isFullAndRelevant && x.Level == level.ToString()));
         }
 
-        return await Task.FromResult(qualificationDetailsPages.FirstOrDefault(x => x.IsPractitionerSpecificPage == false));
+        return await Task.FromResult(qualificationDetailsPages.FirstOrDefault(x => !x.IsPractitionerSpecificPage));
     }
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()
@@ -743,7 +747,7 @@ public class MockContentfulService : IContentService
     public async Task<GetHelpPage?> GetGetHelpPage()
     {
         return await Task.FromResult(
-            new GetHelpPage()
+            new GetHelpPage
             {
                 Heading = "Get help with the Check an early years qualification service",
                 PostHeadingContent = ContentfulContentHelper.Paragraph("Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n"),
@@ -771,7 +775,7 @@ public class MockContentfulService : IContentService
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()
     {
         return await Task.FromResult(
-            new HelpQualificationDetailsPage()
+            new HelpQualificationDetailsPage
             {
                 Heading = "What are the qualification details?",
                 PostHeadingContent = "We need to know the following qualification details to quickly and accurately respond to any questions you may have.",
@@ -833,7 +837,7 @@ public class MockContentfulService : IContentService
     public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage()
     {
         return await Task.FromResult(
-            new HelpProvideDetailsPage()
+            new HelpProvideDetailsPage
             {
                 Heading = "How can we help you?",
                 PostHeadingContent = "Give as much detail as you can. This helps us give you the right support.",
@@ -860,7 +864,7 @@ public class MockContentfulService : IContentService
     public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
     {
         return await Task.FromResult(
-            new HelpEmailAddressPage()
+            new HelpEmailAddressPage
             {
                 Heading = "What is your email address?",
                 InvalidEmailAddressErrorMessage = "Enter an email address in the correct format, for example name@example.com",
