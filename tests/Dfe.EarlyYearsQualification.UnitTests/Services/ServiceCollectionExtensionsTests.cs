@@ -11,6 +11,7 @@ using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Services.Contentful;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ServiceCollectionExtensions = Dfe.EarlyYearsQualification.Web.Services.ServiceCollection.ServiceCollectionExtensions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -24,7 +25,7 @@ public class ServiceCollectionExtensionsTests
         var services = new ServiceCollection();
 
         // Act
-        Web.Services.ServiceCollection.ServiceCollectionExtensions.AddMappers(services);
+        ServiceCollectionExtensions.AddMappers(services);
 
         // Assert
         services.Count.Should().Be(18);
@@ -73,7 +74,7 @@ public class ServiceCollectionExtensionsTests
         var services = new ServiceCollection();
 
         // Act
-        ServiceCollectionExtensions.SetupContentfulServices(services);
+        services.SetupContentfulServices();
 
         // Assert
         services.Count.Should().Be(4);
@@ -98,7 +99,7 @@ public class ServiceCollectionExtensionsTests
             .Build();
 
         // Act
-        var result = ServiceCollectionExtensions.AddContentful(services, configuration);
+        var result = services.AddContentful(configuration);
 
         // Assert
         VerifyService<HttpClientHandler, HttpClientHandler>(services, ServiceLifetime.Scoped);
