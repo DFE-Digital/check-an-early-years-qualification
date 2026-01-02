@@ -88,7 +88,7 @@ resource "azurerm_monitor_diagnostic_setting" "storage_account_diagnostics" {
     category_group = "audit"
   }
 
-  metric {
+  enabled_metric {
     category = "AllMetrics"
   }
 }
