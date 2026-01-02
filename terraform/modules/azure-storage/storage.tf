@@ -41,14 +41,12 @@ resource "azurerm_storage_account_queue_properties" "sa_queue_properties" {
   }
 
   hour_metrics {
-    enabled               = true
     include_apis          = true
     version               = "1.0"
     retention_policy_days = 10
   }
 
   minute_metrics {
-    enabled               = true
     include_apis          = true
     version               = "1.0"
     retention_policy_days = 10
