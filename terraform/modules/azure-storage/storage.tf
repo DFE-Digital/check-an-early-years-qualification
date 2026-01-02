@@ -3,33 +3,13 @@ resource "azurerm_storage_account" "sa" {
   resource_group_name              = var.resource_group
   location                         = var.location
   account_tier                     = "Standard"
-  min_tls_version                  = "TLS1_2"
   account_replication_type         = "LRS"
+  min_tls_version                  = "TLS1_2"
   allow_nested_items_to_be_public  = false
   cross_tenant_replication_enabled = false
   shared_access_key_enabled        = true
 
-  queue_properties {
-    logging {
-      delete                = true
-      read                  = true
-      write                 = true
-      version               = "1.0"
-      retention_policy_days = 10
-    }
-    hour_metrics {
-      enabled               = true
-      include_apis          = true
-      version               = "1.0"
-      retention_policy_days = 10
-    }
-    minute_metrics {
-      enabled               = true
-      include_apis          = true
-      version               = "1.0"
-      retention_policy_days = 10
-    }
-  }
+  tags = var.tags
 
   blob_properties {
     delete_retention_policy {
@@ -40,14 +20,38 @@ resource "azurerm_storage_account" "sa" {
     }
   }
 
-  tags = var.tags
-
   lifecycle {
     ignore_changes = [
       tags["Environment"],
       tags["Product"],
       tags["Service Offering"]
     ]
+  }
+}
+
+resource "azurerm_storage_account_queue_properties" "sa_queue_properties" {
+  storage_account_id      = azurerm_storage_account.sa.id
+
+  logging {
+    delete                = true
+    read                  = true
+    write                 = true
+    version               = "1.0"
+    retention_policy_days = 10
+  }
+
+  hour_metrics {
+    enabled               = true
+    include_apis          = true
+    version               = "1.0"
+    retention_policy_days = 10
+  }
+
+  minute_metrics {
+    enabled               = true
+    include_apis          = true
+    version               = "1.0"
+    retention_policy_days = 10
   }
 }
 
