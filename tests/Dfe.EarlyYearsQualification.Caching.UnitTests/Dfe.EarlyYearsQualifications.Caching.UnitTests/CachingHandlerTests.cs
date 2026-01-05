@@ -12,6 +12,8 @@ namespace Dfe.EarlyYearsQualifications.Caching.UnitTests;
 [TestClass]
 public class CachingHandlerTests(TestContext testContext)
 {
+    public TestContext TestContext { get; init; } = testContext;
+
     private static IDistributedCache GetCache()
     {
         return MockDistributedRepositoryHelper.GetMockDistributedCacheInstance();
@@ -55,7 +57,7 @@ public class CachingHandlerTests(TestContext testContext)
 
         byte[] value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         await distributedCache.SetAsync(key, value, new DistributedCacheEntryOptions(),
-                                        testContext.CancellationTokenSource.Token);
+                                        TestContext.CancellationTokenSource.Token);
 
         var handler = new TestCachingHandler(distributedCache,
                                              urlToKeyConverter.Object,
@@ -70,7 +72,7 @@ public class CachingHandlerTests(TestContext testContext)
         Mock.Get(distributedCache)
             .Verify(c => c.GetAsync(key, It.IsAny<CancellationToken>()), Times.Once);
 
-        response.Content.ReadAsByteArrayAsync(testContext.CancellationTokenSource.Token).Result.Should()
+        response.Content.ReadAsByteArrayAsync(TestContext.CancellationTokenSource.Token).Result.Should()
                 .ContainInOrder(value);
     }
 
@@ -116,7 +118,7 @@ public class CachingHandlerTests(TestContext testContext)
                                      It.IsAny<CancellationToken>()),
                      Times.Once);
 
-        var cached = await distributedCache.GetAsync(key, testContext.CancellationTokenSource.Token);
+        var cached = await distributedCache.GetAsync(key, TestContext.CancellationTokenSource.Token);
 
         cached.Should().NotBeNull();
     }
@@ -210,7 +212,7 @@ public class CachingHandlerTests(TestContext testContext)
                                          It.IsAny<CancellationToken>()),
                          Times.Once);
 
-        var cached = await distributedCache.GetAsync(key, testContext.CancellationTokenSource.Token);
+        var cached = await distributedCache.GetAsync(key, TestContext.CancellationTokenSource.Token);
 
         cached.Should().NotBeNull();
     }
@@ -256,7 +258,7 @@ public class CachingHandlerTests(TestContext testContext)
                                       CancellationToken.None);
 
         // Assert...
-        var cached = await distributedCache.GetAsync(key, testContext.CancellationTokenSource.Token);
+        var cached = await distributedCache.GetAsync(key, TestContext.CancellationTokenSource.Token);
 
         cached.Should().NotBeNull();
     }
