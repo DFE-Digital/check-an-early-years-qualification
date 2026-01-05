@@ -32,7 +32,7 @@ check-an-early-years-qualification/
 
 ## Dfe.EarlyYearsQualification.Web
 ### Requirements
-- .Net 8
+- .Net 10
 
 ### Development Setup
 
