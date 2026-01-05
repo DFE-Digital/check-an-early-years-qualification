@@ -29,7 +29,7 @@ using GovUk.Frontend.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Notify.Client;
 using Notify.Interfaces;
@@ -144,12 +144,21 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICookieManager, CookieManager>();
 builder.Services.AddTransient<ICookiesPreferenceService>(sp => ActivatorUtilities.CreateInstance<CookiesPreferenceService>(sp, upgradeInsecureRequests));
 builder.Services.AddScoped<IUserJourneyCookieService>(sp => ActivatorUtilities.CreateInstance<UserJourneyCookieService>(sp, upgradeInsecureRequests));
-builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
 builder.Services.AddScoped(x =>
                            {
-                               var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+                               var httpContext = x.GetRequiredService<IHttpContextAccessor>().HttpContext;
+                               var endpoint = httpContext?.GetEndpoint();
+                               var actionDescriptor = endpoint?.Metadata.GetMetadata<ActionDescriptor>();
+
+                               var actionContext = new ActionContext(
+                                   httpContext!,
+                                   httpContext!.GetRouteData(),
+                                   actionDescriptor!
+                               );
+
                                var factory = x.GetRequiredService<IUrlHelperFactory>();
-                               return factory.GetUrlHelper(actionContext!);
+                               return factory.GetUrlHelper(actionContext);
                            });
 
 builder.Services.AddSingleton<IFuzzyAdapter, FuzzyAdapter>();
