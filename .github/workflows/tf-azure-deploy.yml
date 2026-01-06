@@ -65,6 +65,7 @@ jobs:
 
       # Sets an environment variable to contain the current IP address
       - name: IP address env
+        if: ${{ inputs.action == 'Plan & Apply' }}
         run: echo "CURRENT_IP=$(curl https://api.ipify.org)" >> $GITHUB_ENV
 
       # Login to Azure using OIDC
@@ -77,6 +78,7 @@ jobs:
       
       # Allows the current IP address access to the storage account for later terraform steps in the workflow
       - name: Azure Storage IP access
+        if: ${{ inputs.action == 'Plan & Apply' }}
         run:  az storage account network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
 
       # Initialise a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
