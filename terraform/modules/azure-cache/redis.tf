@@ -42,7 +42,7 @@ resource "azurerm_monitor_diagnostic_setting" "redis_monitor" {
     category = "ConnectedClientList"
   }
 
-  metric {
+  enabled_metric {
     category = "AllMetrics"
   }
 }
