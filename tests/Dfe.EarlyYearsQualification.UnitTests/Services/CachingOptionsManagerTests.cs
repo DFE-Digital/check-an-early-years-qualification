@@ -145,10 +145,9 @@ public class CachingOptionsManagerTests
         // Arrange
         var logger = new Mock<ILogger<CachingOptionsManager>>();
         var cookieManager = new Mock<ICookieManager>();
-        var cachingOption = new CachingOption();
 
         // Act
-        await new CachingOptionsManager(logger.Object, cookieManager.Object).SetCachingOption(cachingOption);
+        await new CachingOptionsManager(logger.Object, cookieManager.Object).SetCachingOption(new CachingOption());
 
         // Assert
         cookieManager.Verify(x => x.SetOutboundCookie(It.IsAny<string>(), It.IsAny<string>(),
