@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
   
 env:
-  DOTNET_VERSION: 8
+  DOTNET_VERSION: 10
   SOLUTION_NAME: 'Dfe.EarlyYearsQualification.sln'
   URL: 'http://127.0.0.1:5000'
   
