@@ -2,7 +2,7 @@ using Dfe.EarlyYearsQualification.Caching.Services;
 using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace Dfe.EarlyYearsQualifications.Caching.UnitTests;
+namespace Dfe.EarlyYearsQualification.Caching.UnitTests;
 
 [TestClass]
 public class NoCacheTests

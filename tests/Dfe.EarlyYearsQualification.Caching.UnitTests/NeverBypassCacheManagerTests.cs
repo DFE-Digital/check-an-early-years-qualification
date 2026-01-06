@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Dfe.EarlyYearsQualifications.Caching.UnitTests;
+namespace Dfe.EarlyYearsQualification.Caching.UnitTests;
 
 [TestClass]
 public class RedisCacheInvalidatorTests

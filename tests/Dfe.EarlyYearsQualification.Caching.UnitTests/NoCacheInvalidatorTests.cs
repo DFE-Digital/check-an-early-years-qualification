@@ -1,7 +1,7 @@
 using Dfe.EarlyYearsQualification.Caching.Services;
 using FluentAssertions;
 
-namespace Dfe.EarlyYearsQualifications.Caching.UnitTests;
+namespace Dfe.EarlyYearsQualification.Caching.UnitTests;
 
 [TestClass]
 public class NoCacheInvalidatorTests

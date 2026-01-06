@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
-namespace Dfe.EarlyYearsQualifications.Caching.UnitTests;
+namespace Dfe.EarlyYearsQualification.Caching.UnitTests;
 
 [TestClass]
 public class CachingHandlerTests(TestContext testContext)
