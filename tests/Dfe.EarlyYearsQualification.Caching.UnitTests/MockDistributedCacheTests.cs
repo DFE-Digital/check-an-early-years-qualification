@@ -1,7 +1,8 @@
-using Dfe.EarlyYearsQualification.UnitTests.TestHelpers;
+using Dfe.EarlyYearsQualifications.Caching.UnitTests.TestHelpers;
+using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
+namespace Dfe.EarlyYearsQualification.Caching.UnitTests;
 
 [TestClass]
 public class MockDistributedCacheTests
