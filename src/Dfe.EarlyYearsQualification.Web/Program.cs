@@ -161,13 +161,11 @@ builder.Services.AddTransient<IPlaceholderUpdater, PlaceholderUpdater>();
 builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
 builder.Services.AddMappers();
 
-bool useMockNotificationService = builder.Configuration.GetValue("UseMockNotificationService", false);
-
-if (useMockContentful || useMockNotificationService)
+if (useMockContentful)
 {
     builder.Services.AddSingleton<INotificationService, MockNotificationService>();
 }
-else if(!useMockContentful)
+else
 {
     builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection("Notifications"));
     builder.Services.AddSingleton<INotificationClient, NotificationClient>
