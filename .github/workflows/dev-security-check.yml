@@ -1,6 +1,8 @@
 name: ZAP Check - Dev
 
 on:
+  workflow_dispatch:
+
   schedule:
     # Runs daily at 4am, Monday through Friday
     - cron: "0 4 * * 1-5"
