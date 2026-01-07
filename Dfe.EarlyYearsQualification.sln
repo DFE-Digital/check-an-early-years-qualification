@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.EarlyYearsQualification
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.EarlyYearsQualification.Caching", "src\Dfe.EarlyYearsQualification.Caching\Dfe.EarlyYearsQualification.Caching.csproj", "{BCFD0B42-7C15-459C-8742-EB4324A1B7A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.EarlyYearsQualification.Caching.UnitTests", "tests\Dfe.EarlyYearsQualification.Caching.UnitTests\Dfe.EarlyYearsQualification.Caching.UnitTests.csproj", "{8A0A99DB-EC04-463B-A788-8B156413B79E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{BCFD0B42-7C15-459C-8742-EB4324A1B7A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCFD0B42-7C15-459C-8742-EB4324A1B7A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCFD0B42-7C15-459C-8742-EB4324A1B7A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A0A99DB-EC04-463B-A788-8B156413B79E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A0A99DB-EC04-463B-A788-8B156413B79E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A0A99DB-EC04-463B-A788-8B156413B79E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0A99DB-EC04-463B-A788-8B156413B79E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{73200EBC-285A-499F-9489-AD3AB7D07D52} = {5ED920E6-E35D-4D6A-8CBE-C76D493EDEE4}
@@ -62,5 +68,6 @@ Global
 		{CEBFDCBC-939F-4FBC-8855-CA19B0D80CBD} = {5ED920E6-E35D-4D6A-8CBE-C76D493EDEE4}
 		{B8DBD46F-6268-4EF0-AD50-8CF63539CF8E} = {EBC44A9F-0F60-41AD-A255-BA5E80EB1A8F}
 		{BCFD0B42-7C15-459C-8742-EB4324A1B7A9} = {5ED920E6-E35D-4D6A-8CBE-C76D493EDEE4}
+		{8A0A99DB-EC04-463B-A788-8B156413B79E} = {CE49B579-76F7-4B4B-B61A-8059FE2F2BAB}
 	EndGlobalSection
 EndGlobal
