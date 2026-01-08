@@ -23,7 +23,7 @@ resource "azurerm_web_application_firewall_policy" "agw_wafp" {
 
     managed_rule_set {
       type    = "Microsoft_BotManagerRuleSet"
-      version = "0.1"
+      version = "1.1"
     }
 
     exclusion {
