@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Caching.Distributed;
+using Moq;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.TestHelpers;
+namespace Dfe.EarlyYearsQualifications.Caching.UnitTests.TestHelpers;
 
 public static class MockDistributedRepositoryHelper
 {
