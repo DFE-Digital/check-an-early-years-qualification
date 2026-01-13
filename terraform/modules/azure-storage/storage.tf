@@ -30,7 +30,7 @@ resource "azurerm_storage_account" "sa" {
 }
 
 resource "azurerm_storage_account_queue_properties" "sa_queue_properties" {
-  storage_account_id      = azurerm_storage_account.sa.id
+  storage_account_id = azurerm_storage_account.sa.id
 
   logging {
     delete                = true
