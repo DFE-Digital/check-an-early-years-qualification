@@ -22,6 +22,7 @@ public class LogAntiForgeryFailureAttributeTests
         attribute.OnResultExecuting(context);
         
         mockLogger.Invocations.Count.Should().Be(0);
+        context.Result.Should().BeOfType<AcceptedResult>();
     }
     
     [TestMethod]
@@ -35,6 +36,11 @@ public class LogAntiForgeryFailureAttributeTests
 
         mockLogger.Invocations.Count.Should().Be(1);
         mockLogger.VerifyError("The antiforgery token was not validated successfully.");
+        context.Result.Should().BeOfType<RedirectToActionResult>();
+        var actionResult = context.Result as RedirectToActionResult;
+        actionResult.Should().NotBeNull();
+        actionResult.ControllerName.Should().Be("Error");
+        actionResult.ActionName.Should().Be("Index");
     }
 
     private static ResultExecutingContext CreateContext(IActionResult actionResult)

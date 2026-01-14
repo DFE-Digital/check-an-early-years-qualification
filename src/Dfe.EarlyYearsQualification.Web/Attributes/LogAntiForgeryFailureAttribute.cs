@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Core.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Dfe.EarlyYearsQualification.Web.Attributes;
 
+[AttributeUsage(AttributeTargets.Class)]
 public class LogAntiForgeryFailureAttribute(ILogger<LogAntiForgeryFailureAttribute> logger) : Attribute, IAlwaysRunResultFilter
 {
     public void OnResultExecuting(ResultExecutingContext context)
@@ -10,6 +12,7 @@ public class LogAntiForgeryFailureAttribute(ILogger<LogAntiForgeryFailureAttribu
         if (context.Result is IAntiforgeryValidationFailedResult)
         {
             logger.LogError("The antiforgery token was not validated successfully.");
+            context.Result = new RedirectToActionResult("Index", "Error", null);
         }
     }
 
