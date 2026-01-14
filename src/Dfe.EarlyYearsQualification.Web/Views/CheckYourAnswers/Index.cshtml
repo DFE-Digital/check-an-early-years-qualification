@@ -13,25 +13,27 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <h1 class="govuk-heading-xl">@Model.PageHeading</h1>
-        <dl class="govuk-summary-list summary-list-action">
+        <govuk-summary-list class="summary-list-action">
             @foreach (var answer in Model.QuestionAnswerModels.Select((value, index) => new { index, value }))
             {
-                <div class="govuk-summary-list__row">
-                    <dt id="question-@(answer.index + 1)-question" class="govuk-summary-list__key">
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key id="question-@(answer.index + 1)-question">
                         @answer.value.Question
-                    </dt>
-                    <dd id="question-@(answer.index + 1)-answer" class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value id="question-@(answer.index + 1)-answer">
                         @for (var i = 0; i < answer.value.Answer.Length; i++)
                         {
                             <p style="margin-bottom: @(i + 1 < answer.value.Answer.Length ? "10px" : "0")">@answer.value.Answer[i]</p>
                         }
-                    </dd>
-                    <dd id="question-@(answer.index + 1)-change" class="govuk-summary-list__actions">
-                        <a href="@answer.value.ChangeAnswerHref" class="govuk-link">@Model.ChangeAnswerText<span id="question-@(answer.index + 1)-change-hidden" class="govuk-visually-hidden"> @answer.value.Question</span></a>
-                    </dd>
-                </div>
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions id="question-@(answer.index + 1)-change">
+                        <govuk-summary-list-row-action href="@answer.value.ChangeAnswerHref" visually-hidden-text="@answer.value.Question">
+                            @Model.ChangeAnswerText
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
             }
-        </dl>
+        </govuk-summary-list>
 
         <a id="cta-button" href="@Url.Action("Get", "QualificationSearch")" class="govuk-button"
            data-module="govuk-button">
