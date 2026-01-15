@@ -69,7 +69,7 @@ export async function inputText(page: Page, locator: string, text: string) {
 
 export async function checkError(page: Page, locator: string, expectedText: string) {
     await checkText(page, locator + " > span", "Error:");
-    await checkText(page, locator, `Error:${expectedText}`);
+    await checkText(page, locator, `Error: ${expectedText}`);
 }
 
 export async function checkDisclaimer(page: Page, expectedText: string) {
