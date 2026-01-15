@@ -40,7 +40,7 @@ public class LogAntiForgeryFailureAttributeTests
         var actionResult = context.Result as RedirectToActionResult;
         actionResult.Should().NotBeNull();
         actionResult.ControllerName.Should().Be("Error");
-        actionResult.ActionName.Should().Be("Index");
+        actionResult.ActionName.Should().Be("HttpStatusCodeHandler");
     }
 
     private static ResultExecutingContext CreateContext(IActionResult actionResult)

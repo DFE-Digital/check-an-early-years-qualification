@@ -12,7 +12,7 @@ public class LogAntiForgeryFailureAttribute(ILogger<LogAntiForgeryFailureAttribu
         if (context.Result is IAntiforgeryValidationFailedResult)
         {
             logger.LogError("The antiforgery token was not validated successfully.");
-            context.Result = new RedirectToActionResult("Index", "Error", null);
+            context.Result = new RedirectToActionResult("HttpStatusCodeHandler", "Error", new {statusCode = 400});
         }
     }
 
