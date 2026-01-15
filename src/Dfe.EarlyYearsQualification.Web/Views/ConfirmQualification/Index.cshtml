@@ -89,8 +89,7 @@
 
                     @if (Model.HasErrors)
                     {
-                        <p id="confirm-qualification-choice-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span>@Model.ErrorText</p>
+                        <govuk-error-message id="confirm-qualification-choice-error" visually-hidden-text="Error">@Model.ErrorText</govuk-error-message>
                     }
                     @foreach (var option in Model.Options)
                     {
