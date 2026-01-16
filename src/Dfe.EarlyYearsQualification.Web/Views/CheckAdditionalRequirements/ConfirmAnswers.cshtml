@@ -13,25 +13,24 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
         <h1 class="govuk-heading-xl">@Model.PageHeading</h1>
-        <dl class="govuk-summary-list summary-list-action">
+        <govuk-summary-list class="summary-list-action">
             @foreach (var answer in Model.Answers!.Select((value, index) => new { index, value }))
             {
-                <div class="govuk-summary-list__row">
-                    <dt id="question-@(answer.index + 1)-question" class="govuk-summary-list__key">
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key id="question-@(answer.index + 1)-question">
                         @answer.value.Key
-                    </dt>
-                    <dd id="question-@(answer.index + 1)-answer" class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value id="question-@(answer.index + 1)-answer">
                         @answer.value.Value
-                    </dd>
-                    <dd id="question-@(answer.index + 1)-change" class="govuk-summary-list__actions">
-                        <a href="@(Model.ChangeQuestionHref + (answer.index + 1))"
-                           class="govuk-link">
-                            @Model.ChangeAnswerText <span id="question-@(answer.index + 1)-change-hidden" class="govuk-visually-hidden">@answer.value.Key</span>
-                        </a>
-                    </dd>
-                </div>
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions id="question-@(answer.index + 1)-change">
+                        <govuk-summary-list-row-action  href="@(Model.ChangeQuestionHref + (answer.index + 1))" visually-hidden-text="@answer.value.Key">
+                            @Model.ChangeAnswerText
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
             }
-        </dl>
+        </govuk-summary-list>
 
         @{
             await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel{ WarningText = Model.AnswerDisclaimerText });
