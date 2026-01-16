@@ -50,8 +50,7 @@
                     </legend>
 
                     <div class="govuk-radios" data-module="govuk-radios">
-                        <p id="cookies-choice-error" class="govuk-error-message govuk-!-display-none">
-                            <span class="govuk-visually-hidden">Error:</span>@Model.ErrorText</p>
+                        <govuk-error-message id="cookies-choice-error" class="govuk-!-display-none" visually-hidden-text="Error">@Model.ErrorText</govuk-error-message>
                         @foreach (var option in Model.Options)
                         {
                             <div class="govuk-radios__item">
