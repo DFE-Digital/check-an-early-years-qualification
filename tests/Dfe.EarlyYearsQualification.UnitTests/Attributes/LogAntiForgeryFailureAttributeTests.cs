@@ -36,11 +36,11 @@ public class LogAntiForgeryFailureAttributeTests
 
         mockLogger.Invocations.Count.Should().Be(1);
         mockLogger.VerifyError("The antiforgery token was not validated successfully.");
-        context.Result.Should().BeOfType<RedirectToActionResult>();
-        var actionResult = context.Result as RedirectToActionResult;
+        context.Result.Should().BeOfType<ViewResult>();
+        var actionResult = context.Result as ViewResult;
         actionResult.Should().NotBeNull();
-        actionResult.ControllerName.Should().Be("Error");
-        actionResult.ActionName.Should().Be("HttpStatusCodeHandler");
+        actionResult.ViewName.Should().Be("ProblemWithTheService");
+        actionResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
     }
 
     private static ResultExecutingContext CreateContext(IActionResult actionResult)

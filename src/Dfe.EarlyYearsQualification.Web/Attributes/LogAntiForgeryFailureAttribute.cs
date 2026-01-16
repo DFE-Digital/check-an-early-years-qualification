@@ -9,11 +9,9 @@ public class LogAntiForgeryFailureAttribute(ILogger<LogAntiForgeryFailureAttribu
 {
     public void OnResultExecuting(ResultExecutingContext context)
     {
-        if (context.Result is IAntiforgeryValidationFailedResult)
-        {
-            logger.LogError("The antiforgery token was not validated successfully.");
-            context.Result = new RedirectToActionResult("HttpStatusCodeHandler", "Error", new {statusCode = 400});
-        }
+        if (context.Result is not IAntiforgeryValidationFailedResult) return;
+        logger.LogError("The antiforgery token was not validated successfully.");
+        context.Result = new ViewResult { ViewName = "ProblemWithTheService", StatusCode = 400 };
     }
 
     public void OnResultExecuted(ResultExecutedContext context) { }
