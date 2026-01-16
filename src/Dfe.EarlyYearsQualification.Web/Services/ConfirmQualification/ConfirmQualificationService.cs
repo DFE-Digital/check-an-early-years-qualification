@@ -20,9 +20,9 @@ public class ConfirmQualificationService(
         return await contentService.GetConfirmQualificationPage();
     }
 
-    public async Task<List<Qualification>> GetFilteredQualifications()
+    public async Task<List<Qualification>> GetFilteredQualifications(string ? searchCriteriaOverride = null)
     {
-        return await qualificationSearchService.GetFilteredQualifications();
+        return await qualificationSearchService.GetFilteredQualifications(searchCriteriaOverride);
     }
 
     public HelpFormEnquiry GetHelpFormEnquiry()
@@ -30,9 +30,9 @@ public class ConfirmQualificationService(
         return userJourneyCookieService.GetHelpFormEnquiry();
     }
 
-    public Qualification? GetQualificationById(List<Qualification> qualifications, string qualificationId)
+    public async Task<Qualification?> GetQualificationById(string qualificationId)
     {
-        return qualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId, StringComparison.OrdinalIgnoreCase));
+        return await qualificationSearchService.GetQualificationById(qualificationId);
     }
 
     public async Task<ConfirmQualificationPageModel> Map(ConfirmQualificationPage content, Qualification qualification, List<Qualification> qualifications)

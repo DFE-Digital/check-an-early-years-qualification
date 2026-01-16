@@ -22,12 +22,7 @@ public class QualificationDetailsController(
         if (!ModelState.IsValid || string.IsNullOrEmpty(qualificationId)) return BadRequest();
         if (!qualificationDetailsService.HasStartDate()) return RedirectToAction("Index", "Home");
 
-        var filteredQualifications = await qualificationDetailsService.GetFilteredQualifications();
-
-        var qualification =
-            filteredQualifications.SingleOrDefault(x => x.QualificationId.Equals(qualificationId,
-                                                    StringComparison.OrdinalIgnoreCase));
-
+        var qualification = await qualificationDetailsService.GetQualificationById(qualificationId);
         if (qualification is null)
         {
             logger.LogError($"Could not find details for qualification with ID: {qualificationId}");
@@ -41,6 +36,8 @@ public class QualificationDetailsController(
             logger.LogError("No content for the qualification details page");
             return RedirectToAction("Index", "Error");
         }
+
+        var filteredQualifications = await qualificationDetailsService.GetFilteredQualifications(qualification.QualificationName);
 
         var model = await qualificationDetailsService.MapDetails(qualification, content, filteredQualifications);
 

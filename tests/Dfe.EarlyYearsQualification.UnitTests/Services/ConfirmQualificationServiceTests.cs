@@ -38,6 +38,32 @@ public class ConfirmQualificationServiceTests
         // Assert
         _mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_CallsWithOverride_QualificationSearchService_GetFilteredQualifications()
+    {
+        // Arrange
+        const string searchCriteriaOverride = "override";
+        
+        // Act
+        _ = await GetSut().GetFilteredQualifications(searchCriteriaOverride);
+
+        // Assert
+        _mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(searchCriteriaOverride), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task GetQualificationById_Calls_QualificationSearchService_GetQualificationById()
+    {
+        // Arrange
+        const string qualificationId = "ABC-123";
+        
+        // Act
+        _ = await GetSut().GetQualificationById(qualificationId);
+
+        // Assert
+        _mockQualificationSearchService.Verify(o => o.GetQualificationById(qualificationId), Times.Once);
+    }
 
     [TestMethod]
     public void GetHelpFormEnquiry_Calls_UserJourneyCookieService_GetHelpFormEnquiry()
@@ -50,21 +76,19 @@ public class ConfirmQualificationServiceTests
     }
 
     [TestMethod]
-    public void GetQualificationById_Returns_Expected()
+    public async Task GetQualificationById_Returns_Expected()
     {
         // Arrange
-        var qualifications = new List<Qualification>
-                             {
-                                 new Qualification("1", "qualification name 1", "org title 1", 3),
-                                 new Qualification("2", "qualification name 2", "org title 2", 3),
-                             };
+        var qualificationResult = new Qualification("2", "qualification name 2", "org title 2", 3);
+        
+        _mockQualificationSearchService.Setup(x => x.GetQualificationById(It.IsAny<string>())).ReturnsAsync(qualificationResult);
 
         // Act
-        var qualification = GetSut().GetQualificationById(qualifications, "2");
+        var qualification = await GetSut().GetQualificationById("2");
 
         // Assert
         qualification.Should().NotBeNull();
-        qualification!.QualificationId.Should().Be("2");
+        qualification.QualificationId.Should().Be("2");
         qualification.QualificationName.Should().Be("qualification name 2");
         qualification.AwardingOrganisationTitle.Should().Be("org title 2");
         qualification.QualificationLevel.Should().Be(3);

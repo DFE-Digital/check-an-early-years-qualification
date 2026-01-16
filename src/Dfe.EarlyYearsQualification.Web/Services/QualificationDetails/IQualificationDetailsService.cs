@@ -5,7 +5,9 @@ namespace Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 
 public interface IQualificationDetailsService
 {
-    Task<List<Qualification>> GetFilteredQualifications();
+    Task<List<Qualification>> GetFilteredQualifications(string? searchCriteriaOverride = null);
+    
+    Task<Qualification?> GetQualificationById(string qualificationId);
 
     Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content,
                                                List<Qualification> qualifications);

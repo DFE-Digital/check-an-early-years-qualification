@@ -8,9 +8,9 @@ public interface IConfirmQualificationService
 {
     public Task<ConfirmQualificationPage?> GetConfirmQualificationPageAsync();
 
-    public Qualification? GetQualificationById(List<Qualification> qualifications, string qualificationId);
+    public Task<Qualification?> GetQualificationById(string qualificationId);
 
-    public Task<List<Qualification>> GetFilteredQualifications();
+    public Task<List<Qualification>> GetFilteredQualifications(string? searchCriteriaOverride = null);
 
     Task<ConfirmQualificationPageModel> Map(ConfirmQualificationPage content, Qualification qualification, List<Qualification> qualifications);
 
