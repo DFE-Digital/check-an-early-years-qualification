@@ -20,8 +20,12 @@ runs:
         
     - name: Install dependencies
       shell: bash
-      run: dotnet restore ${{ inputs.solution_filename }}
+      env:
+        SOLUTION_FILENAME: ${{ inputs.solution_filename }}
+      run: dotnet restore "${SOLUTION_FILENAME}"
 
     - name: Build
       shell: bash
-      run: dotnet build ${{ inputs.solution_filename }} --configuration Release --no-restore
+      env:
+        SOLUTION_FILENAME: ${{ inputs.solution_filename }}
+      run: dotnet build "${SOLUTION_FILENAME}" --configuration Release --no-restore

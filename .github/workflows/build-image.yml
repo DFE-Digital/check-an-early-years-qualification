@@ -46,8 +46,10 @@ jobs:
                 password: ${{ secrets.GITHUB_TOKEN }}
                 
             - name: Format branch name
+              env:
+                BRANCH_NAME: ${{ inputs.branch }}
               run: |
-                branchName=${{ inputs.branch }}
+                branchName="${BRANCH_NAME}"
                 echo FORMATTED_BRANCH_NAME="${branchName//\//-}" >> $GITHUB_ENV
 
             - name: Build Image & Publish To GCR

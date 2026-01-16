@@ -15,5 +15,8 @@ runs:
   steps:
     - name: Restart Service
       shell: bash
+      env:
+        RESOURCE_NAME_PREFIX: ${{ inputs.resource_name_prefix }}
+        WEBAPP_NAME: ${{ inputs.webapp_name }}
       run: |
-        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }}
+        az webapp restart --resource-group "${RESOURCE_NAME_PREFIX}-rg" --name "${WEBAPP_NAME}"
