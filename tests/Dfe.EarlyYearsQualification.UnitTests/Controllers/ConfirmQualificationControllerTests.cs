@@ -107,8 +107,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller =
             new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
@@ -162,8 +162,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 
@@ -208,8 +208,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 
@@ -256,7 +256,7 @@ public class ConfirmQualificationControllerTests
         var qualifications = new List<Qualification>();
 
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications()).ReturnsAsync(qualifications);
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, "someinvalidid")).Returns((Qualification?)null);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById("someinvalidid")).ReturnsAsync((Qualification?)null);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 
@@ -307,8 +307,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 
@@ -356,8 +356,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 
@@ -405,8 +405,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 
@@ -448,8 +448,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 
@@ -490,8 +490,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 
@@ -533,8 +533,8 @@ public class ConfirmQualificationControllerTests
         mockConfirmQualificationService.Setup(o => o.GetFilteredQualifications())
                                 .ReturnsAsync(qualifications);
 
-        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualifications, qualification.QualificationId))
-                                .Returns(qualification);
+        mockConfirmQualificationService.Setup(o => o.GetQualificationById(qualification.QualificationId))
+                                .ReturnsAsync(qualification);
 
         var controller = new ConfirmQualificationController(mockLogger.Object, mockConfirmQualificationService.Object);
 

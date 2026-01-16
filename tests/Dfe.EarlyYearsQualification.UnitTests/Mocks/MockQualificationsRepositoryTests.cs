@@ -187,7 +187,7 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
         result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetQualificationById_EYQ321_ReturnsExpectedDetails()
     {
@@ -293,7 +293,7 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
-        [TestMethod]
+    [TestMethod]
     public async Task GetQualificationById_EYQ241_ReturnsExpectedDetails()
     {
         var repository = new MockQualificationsRepository();
@@ -337,7 +337,7 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements.Should().NotBeNullOrEmpty();
         result.RatioRequirements!.Count.Should().Be(4);
         result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
- result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel2After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3After2014.Should().BeNull();
@@ -357,7 +357,70 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
-    
+    [TestMethod]
+    public async Task GetQualificationById_EYQ242_ReturnsExpectedDetails()
+    {
+        var repository = new MockQualificationsRepository();
+
+        var result = await repository.GetById("eyq-242");
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<Qualification>();
+        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
+        result.FromWhichYear.Should().NotBeNullOrEmpty();
+        result.QualificationId.Should().NotBeNullOrEmpty();
+        result.QualificationId.Should().Be("EYQ-242");
+        result.QualificationLevel.Should().BeGreaterThan(0);
+        result.QualificationName.Should().NotBeNullOrEmpty();
+        result.QualificationNumber.Should().NotBeNullOrEmpty();
+        result.ToWhichYear.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions.Should().NotBeNull();
+        result.AdditionalRequirementQuestions!.Count.Should().Be(2);
+        result.AdditionalRequirementQuestions[0].Question.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].HintTextContent.Should().NotBeNull();
+        result.AdditionalRequirementQuestions[0].ConfirmationStatement.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers.Should().NotBeNull();
+        result.AdditionalRequirementQuestions[0].Answers.Count.Should().Be(2);
+        result.AdditionalRequirementQuestions[0].Answers[0].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[0].Value.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[1].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[0].Answers[1].Value.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Question.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].HintTextContent.Should().NotBeNull();
+        result.AdditionalRequirementQuestions[1].ConfirmationStatement.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].DetailsHeading.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Answers.Should().NotBeNull();
+        result.AdditionalRequirementQuestions[1].Answers.Count.Should().Be(2);
+        result.AdditionalRequirementQuestions[1].Answers[0].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Answers[0].Value.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Answers[1].Label.Should().NotBeNullOrEmpty();
+        result.AdditionalRequirementQuestions[1].Answers[1].Value.Should().NotBeNullOrEmpty();
+        result.RatioRequirements.Should().NotBeNullOrEmpty();
+        result.RatioRequirements!.Count.Should().Be(4);
+        result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
+        result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel2After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel3Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel3After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel4Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel4After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel5Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel5After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel6Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel6After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel7Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel7After2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForQtsEtcBefore2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForQtsEtcAfter2014.Should().BeNull();
+        result.RatioRequirements[0].Level3EbrRouteAvailable.Should().BeNull();
+        result.RatioRequirements[0].RequirementForInJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
+        result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
+    }
+
     [TestMethod]
     public async Task GetQualificationById_EYQ250_ReturnsExpectedDetails()
     {
@@ -402,7 +465,7 @@ public class MockQualificationsRepositoryTests
         result.RatioRequirements.Should().NotBeNullOrEmpty();
         result.RatioRequirements!.Count.Should().Be(4);
         result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
-result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel2After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3After2014.Should().BeNull();
@@ -466,7 +529,7 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements.Should().NotBeNullOrEmpty();
         result.RatioRequirements!.Count.Should().Be(4);
         result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
- result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel2After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3After2014.Should().BeNull();
@@ -530,7 +593,7 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements.Should().NotBeNullOrEmpty();
         result.RatioRequirements!.Count.Should().Be(4);
         result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
- result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel2After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3After2014.Should().BeNull();
@@ -613,7 +676,7 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
 
-        [TestMethod]
+    [TestMethod]
     public async Task GetQualificationById_EYQ110_ReturnsExpectedDetails()
     {
         var repository = new MockQualificationsRepository();
@@ -657,7 +720,7 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements.Should().NotBeNullOrEmpty();
         result.RatioRequirements!.Count.Should().Be(4);
         result.RatioRequirements[0].RatioRequirementName.Should().Be(RatioRequirements.Level2RatioRequirementName);
- result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
+        result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel2After2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForLevel3After2014.Should().BeNull();
@@ -676,7 +739,7 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
         result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetQualificationById_EYQ111_ReturnsExpectedDetails()
     {
@@ -740,7 +803,7 @@ result.RatioRequirements[0].RequirementForLevel2Before2014.Should().BeNull();
         result.RatioRequirements[0].RequirementForAfterJune2016.Should().NotBeNull();
         result.RatioRequirements[0].RequirementForL3PlusBetweenSept14AndMay16.Should().BeNull();
     }
-    
+
     [TestMethod]
     public async Task GetQualifications_ReturnsAListOfQualifications()
     {
