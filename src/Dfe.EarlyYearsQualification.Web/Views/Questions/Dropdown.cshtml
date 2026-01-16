@@ -58,8 +58,7 @@
 
                     @if (Model.HasErrors)
                     {
-                        <p id="dropdown-error" class="govuk-error-message"><span
-                                class="govuk-visually-hidden">Error:</span>@Model.ErrorMessage</p>
+                        <govuk-error-message id="dropdown-error" visually-hidden-text="Error">@Model.ErrorMessage</govuk-error-message>
                     }
 
                     <div class="govuk-form-group">

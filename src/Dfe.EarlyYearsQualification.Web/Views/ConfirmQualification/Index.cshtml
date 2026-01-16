@@ -35,43 +35,43 @@
         <div id="post-heading" class="post-heading-wrapper">
             @Html.Raw(Model.PostHeadingContent)
         </div>
-        <dl class="govuk-summary-list">
-            <div id="qualification-name-row" class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+        <govuk-summary-list>
+            <govuk-summary-list-row id="qualification-name-row">
+                <govuk-summary-list-row-key>
                     @Model.QualificationLabel
-                </dt>
-                <dd class="govuk-summary-list__value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
                     @Model.QualificationName
-                </dd>
-            </div>
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
             @if (Model.IsQualificationNameDuplicate && !string.IsNullOrEmpty(Model.QualificationNumber))
             {
-                <div id="qualification-number-row" class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
+                <govuk-summary-list-row id="qualification-number-row">
+                    <govuk-summary-list-row-key>
                         @Model.QualificationNumberLabel
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
                         @Model.QualificationNumber
-                    </dd>
-                </div>
+                    </govuk-summary-list-row-value>
+                </govuk-summary-list-row>
             }
-            <div id="qualification-level-row" class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+            <govuk-summary-list-row id="qualification-level-row">
+                <govuk-summary-list-row-key>
                     @Model.LevelLabel
-                </dt>
-                <dd class="govuk-summary-list__value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
                     @Model.QualificationLevel
-                </dd>
-            </div>
-            <div id="qualification-org-row" class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+            <govuk-summary-list-row id="qualification-org-row">
+                <govuk-summary-list-row-key>
                     @Model.AwardingOrganisationLabel
-                </dt>
-                <dd class="govuk-summary-list__value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
                     @Model.QualificationAwardingOrganisation
-                </dd>
-            </div>
-        </dl>
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        </govuk-summary-list>
         @if (Model.QualificationAwardingOrganisation == AwardingOrganisations.Various)
         {
             <div id="various-ao-content" class="various-ao-content-wrapper">
@@ -89,8 +89,7 @@
 
                     @if (Model.HasErrors)
                     {
-                        <p id="confirm-qualification-choice-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span>@Model.ErrorText</p>
+                        <govuk-error-message id="confirm-qualification-choice-error" visually-hidden-text="Error">@Model.ErrorText</govuk-error-message>
                     }
                     @foreach (var option in Model.Options)
                     {

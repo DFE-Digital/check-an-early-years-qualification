@@ -54,10 +54,7 @@
                                             if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == radioButtonId))
                                             {
                                                 var errorId = $"{questionId}_error-message";
-                                                <p class="govuk-error-message" id="@errorId">
-                                                    <span
-                                                        class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
-                                                </p>
+                                                <govuk-error-message id="@errorId" visually-hidden-text="Error">@Model.QuestionList[questionIndex].ErrorMessage</govuk-error-message>
                                             }
 
                                             <div class="govuk-radios__item">
@@ -110,10 +107,7 @@
 
                                 @if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == textAreaId))
                                 {
-                                    <p class="govuk-error-message" id="@errorId">
-                                        <span
-                                            class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
-                                    </p>
+                                    <govuk-error-message id="@errorId" visually-hidden-text="Error">@Model.QuestionList[questionIndex].ErrorMessage</govuk-error-message>
                                 }
 
                                 @Html.TextAreaFor(x => x.QuestionList[questionIndex].Answer, 5, 1, textAreaAttributes)
@@ -141,10 +135,7 @@
                                             if (Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == radioButtonId))
                                             {
                                                 var errorId = $"{questionId}_error-message";
-                                                <p class="govuk-error-message" id="@errorId">
-                                                    <span
-                                                        class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
-                                                </p>
+                                                <govuk-error-message id="@errorId" visually-hidden-text="Error">@Model.QuestionList[questionIndex].ErrorMessage</govuk-error-message>
                                             }
 
                                             <div class="govuk-radios__item">
@@ -191,12 +182,7 @@
                                                             @if (additionalInfoHasError)
                                                             {
                                                                 var errorId = $"{questionId}_error-message-additional-info";
-                                                                <p class="govuk-error-message additional-info-error" id="@errorId">
-                                                                    <span
-                                                                        class="govuk-visually-hidden">Error:</span>@Model.QuestionList[questionIndex].ErrorMessage
-                                                                </p>
-                                                            }
-                                                            @{
+                                                                <govuk-error-message id="@errorId" class="additional-info-error" visually-hidden-text="Error">@Model.QuestionList[questionIndex].ErrorMessage</govuk-error-message>
                                                             }
                                                             @Html.TextBoxFor(x => x.QuestionList[questionIndex].AdditionalInfo, "", textInputAttributes)
                                                         </div>

@@ -35,6 +35,7 @@ using Notify.Client;
 using Notify.Interfaces;
 using OwaspHeaders.Core.Extensions;
 using System.Diagnostics.CodeAnalysis;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,7 +117,7 @@ builder.Services.AddControllersWithViews(options =>
     {
         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
     }
-
+    options.Filters.Add<LogAntiForgeryFailureAttribute>();
     options.Filters.Add<ApplicationInsightsActionFilterAttribute>();
 });
 

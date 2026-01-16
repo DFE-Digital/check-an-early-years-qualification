@@ -22,9 +22,7 @@
 
             @if (Model.MonthError || Model.YearError)
             {
-                <p id="@Model.Prefix-error" class="govuk-error-message"><span
-                        class="govuk-visually-hidden">Error:</span>@Html.Raw(Model.ErrorMessage)
-                </p>
+                <govuk-error-message id="@Model.Prefix-error" visually-hidden-text="Error">@Html.Raw(Model.ErrorMessage)</govuk-error-message>
             }
 
             <div class="govuk-date-input" id="@Model.QuestionId">

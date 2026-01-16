@@ -25,82 +25,81 @@
         </div>
         <h2 class="govuk-heading-l"
             id="qualification-details-header">@Model.Content.QualificationDetailsSummaryHeader</h2>
-        <dl class="govuk-summary-list govuk-!-static-margin-bottom-0">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="qualification-name-label">
+        <govuk-summary-list class="govuk-!-static-margin-bottom-0">
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key id="qualification-name-label">
                     @Model.Content.QualificationNameLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="qualification-name-value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value id="qualification-name-value">
                     @Model.QualificationName
-                </dd>
-            </div>
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
             @if (Model.IsQualificationNameDuplicate && !string.IsNullOrEmpty(Model.QualificationNumber))
             {
-                <div id="qualification-number-row" class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
+                <govuk-summary-list-row id="qualification-number-row">
+                    <govuk-summary-list-row-key id="qualification-name-label">
                         @Model.QualificationNumberLabel
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value id="qualification-name-value">
                         @Model.QualificationNumber
-                    </dd>
-                </div>
+                    </govuk-summary-list-row-value>
+                </govuk-summary-list-row>
             }
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="qualification-level-label">
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key id="qualification-level-label">
                     @Model.Content.LevelLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="qualification-level-value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value id="qualification-level-value">
                     @Model.QualificationLevel
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="awarding-organisation-label">
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key id="awarding-organisation-label">
                     @Model.Content.AwardingOrgLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="awarding-organisation-value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value id="awarding-organisation-value">
                     @Model.AwardingOrganisationTitle
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="date-started-date-label">
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key id="date-started-date-label">
                     @Model.Content.QualificationStartDateLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="date-started-date-value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value id="date-started-date-value">
                     @Model.DateStarted
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="date-awarded-date-label">
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key id="date-awarded-date-label">
                     @Model.Content.QualificationAwardedDateLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="date-awarded-date-value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value id="date-awarded-date-value">
                     @Model.DateAwarded
-                </dd>
-            </div>
-
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
             @if (Model.AdditionalRequirementAnswers != null)
             {
                 for (var count = 0; count < Model.AdditionalRequirementAnswers.Count; count++)
                 {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key" id="additional-requirement-@count-label">
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key id="additional-requirement-@count-label">
                             @Model.AdditionalRequirementAnswers[count].ConfirmationStatement
-                        </dt>
-                        <dd class="govuk-summary-list__value" id="additional-requirement-@count-value">
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value id="additional-requirement-@count-value">
                             @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.AdditionalRequirementAnswers[count].Answer!.ToLower())
-                        </dd>
-                    </div>
+                        </govuk-summary-list-row-value>
+                    </govuk-summary-list-row>
                 }
             }
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key" id="date-of-check-label">
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key id="date-of-check-label">
                     @Model.Content.DateOfCheckLabel
-                </dt>
-                <dd class="govuk-summary-list__value" id="date-of-check-value">
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value id="date-of-check-value">
                     @DateTime.UtcNow.ToString("dd MMMM yyyy")
-                </dd>
-            </div>
-        </dl>
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        </govuk-summary-list>
     </div>
 </div>
 <div class="govuk-grid-row">

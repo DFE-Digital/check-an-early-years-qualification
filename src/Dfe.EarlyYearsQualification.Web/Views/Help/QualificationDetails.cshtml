@@ -32,11 +32,7 @@
                 </h2>
                 @if (Model.HasQualificationNameError)
                 {
-                    <p id="qualification-name-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">
-                            Error:
-                        </span>@Model.QualificationNameErrorMessage
-                    </p>
+                    <govuk-error-message id="qualification-name-error" visually-hidden-text="Error">@Model.QualificationNameErrorMessage</govuk-error-message>
                 }
                 @Html.TextBoxFor(x => x.QualificationName, new { @class = "govuk-input", autocomplete = "off" })
             </div>
@@ -64,11 +60,7 @@
                 </h2>
                 @if (Model.HasAwardingOrganisationError)
                 {
-                    <p id="qualification-name-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">
-                            Error:
-                        </span>@Model.AwardingOrganisationErrorMessage
-                    </p>
+                    <govuk-error-message id="qualification-organisation-error" visually-hidden-text="Error">@Model.AwardingOrganisationErrorMessage</govuk-error-message>
                 }
                 @Html.TextBoxFor(x => x.AwardingOrganisation, new { @class = "govuk-input", autocomplete = "off" })
             </div>
