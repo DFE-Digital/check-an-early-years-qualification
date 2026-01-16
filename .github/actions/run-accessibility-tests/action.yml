@@ -18,7 +18,7 @@ runs:
       env:
         AUTH_SECRET: ${{ inputs.auth_secret }}
         URL: ${{ inputs.url }}
-      run: npm install -g pa11y-ci && export AUTH_SECRET="${AUTH_SECRET}" && pa11y-ci "${URL}" --config .pa11yci-ubuntu.js
+      run: npm install -g --ignore-scripts pa11y-ci && export AUTH_SECRET="${AUTH_SECRET}" && pa11y-ci "${URL}" --config .pa11yci-ubuntu.js
       working-directory: ./tests/Dfe.EarlyYearsQualification.AccessibilityTests/
       
     
