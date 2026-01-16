@@ -34,12 +34,7 @@
 
                     @if (Model.HasNoEnquiryOptionSelectedError)
                     {
-                        <p id="option-error" class="govuk-error-message">
-                            <span
-                                class="govuk-visually-hidden">
-                                Error:
-                            </span>@Model.NoEnquiryOptionSelectedErrorMessage
-                        </p>
+                        <govuk-error-message id="option-error" visually-hidden-text="Error">@Model.NoEnquiryOptionSelectedErrorMessage</govuk-error-message>
                     }
 
                     <div class="govuk-radios" data-module="govuk-radios">
