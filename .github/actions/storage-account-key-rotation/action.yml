@@ -30,29 +30,44 @@ runs:
     # Get the key2 connection, update KV and restart web app
     - name: Get the key2 connection string and update KeyVault secret
       shell: bash
+      env:
+        WEBAPP_STORAGE_ACCOUNT_NAME: ${{ inputs.webapp_storage_account_name }}
+        RESOURCE_NAME_PREFIX: ${{ inputs.resource_name_prefix }}
+        WEBAPP_NAME: ${{ inputs.webapp_name }}
       run: |
-        connectionString=$(az storage account show-connection-string --name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key2 --output tsv)
-        az keyvault secret set --name ${{ inputs.secret_name }} --vault-name ${{ inputs.resource_name_prefix }}-kv --value "$connectionString"
-        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }}
+        connectionString=$(az storage account show-connection-string --name "${WEBAPP_STORAGE_ACCOUNT_NAME}" --resource-group "${RESOURCE_NAME_PREFIX}-rg" --key key2 --output tsv)
+        az keyvault secret set --name ${{ inputs.secret_name }} --vault-name "${RESOURCE_NAME_PREFIX}-kv" --value "$connectionString"
+        az webapp restart --resource-group "${RESOURCE_NAME_PREFIX}-rg" --name "${WEBAPP_NAME}"
 
     # Update the key1 access key, update KV and restart
     - name: Update the key1 access key and update KeyVault secret
       shell: bash
+      env:
+        WEBAPP_STORAGE_ACCOUNT_NAME: ${{ inputs.webapp_storage_account_name }}
+        RESOURCE_NAME_PREFIX: ${{ inputs.resource_name_prefix }}
+        WEBAPP_NAME: ${{ inputs.webapp_name }}
       run: |
-        az storage account keys renew --account-name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key1
-        connectionString=$(az storage account show-connection-string --name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key1 --output tsv)
-        az keyvault secret set --name ${{ inputs.secret_name }} --vault-name ${{ inputs.resource_name_prefix }}-kv --value "$connectionString"
-        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }}
+        az storage account keys renew --account-name "${WEBAPP_STORAGE_ACCOUNT_NAME}" --resource-group "${RESOURCE_NAME_PREFIX}-rg" --key key1
+        connectionString=$(az storage account show-connection-string --name "${WEBAPP_STORAGE_ACCOUNT_NAME}" --resource-group "${RESOURCE_NAME_PREFIX}-rg" --key key1 --output tsv)
+        az keyvault secret set --name ${{ inputs.secret_name }} --vault-name "${RESOURCE_NAME_PREFIX}-kv" --value "$connectionString"
+        az webapp restart --resource-group "${RESOURCE_NAME_PREFIX}-rg" --name "${WEBAPP_NAME}"
 
     # Update the key2 access key
     - name: Update the key2 access key
       shell: bash
+      env:
+        WEBAPP_STORAGE_ACCOUNT_NAME: ${{ inputs.webapp_storage_account_name }}
+        RESOURCE_NAME_PREFIX: ${{ inputs.resource_name_prefix }}
       run: |
-        az storage account keys renew --account-name ${{ inputs.webapp_storage_account_name }} --resource-group ${{ inputs.resource_name_prefix }}-rg --key key2
+        az storage account keys renew --account-name "${WEBAPP_STORAGE_ACCOUNT_NAME}" --resource-group "${RESOURCE_NAME_PREFIX}-rg" --key key2
 
     # Restart the slot
     - name: Restart the slot
       if: ${{ inputs.restart_slot == 'true' }}
       shell: bash
+      env:
+        RESOURCE_NAME_PREFIX: ${{ inputs.resource_name_prefix }}
+        WEBAPP_NAME: ${{ inputs.webapp_name }}
+        SLOT_NAME: ${{ inputs.slot_name }}
       run: |
-        az webapp restart --resource-group ${{ inputs.resource_name_prefix }}-rg --name ${{ inputs.webapp_name }} --slot ${{ inputs.slot_name }}
+        az webapp restart --resource-group "${RESOURCE_NAME_PREFIX}-rg" --name "${WEBAPP_NAME}" --slot "${SLOT_NAME}"
