@@ -25,7 +25,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: $PR_REF
+        env:
+          PR_REF: ${{ github.event.pull_request.head.ref }}
       
       # Install the latest version of the Terraform CLI
       - name: Setup Terraform

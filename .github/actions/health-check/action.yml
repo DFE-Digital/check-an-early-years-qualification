@@ -12,12 +12,14 @@ runs:
   steps:
     - name: Make request to health check endpoint
       shell: bash
+      env:
+        WEBAPP_URL: ${{ inputs.webapp_url }}
       run: |
         attempt_counter=0
         max_attempts=5
 
         until [ ${attempt_counter} -eq ${max_attempts} ]; do
-          status_code=$(curl --output /dev/null --silent -i --fail -w '%{response_code}\n' https://${{ inputs.webapp_url }}.azurewebsites.net/health);
+          status_code=$(curl --output /dev/null --silent -i --fail -w '%{response_code}\n' "https://${WEBAPP_URL}.azurewebsites.net/health");
 
           echo "Response status code: $status_code"
             

@@ -16,8 +16,12 @@ runs:
   steps:
     - name: Run Playwright tests
       shell: bash
+      env:
+        WEBAPP_URL: ${{ inputs.webapp_url }}
+        AUTH_SECRET: ${{ inputs.auth_secret }}
+        TEST_TYPE: ${{ inputs.test_type }}
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL=https://${{ inputs.webapp_url }} DOMAIN=https://${{ inputs.webapp_url }} AUTH_SECRET=${{ inputs.auth_secret }} npx playwright test --grep "@${{ inputs.test_type }}"
+      run: WEBAPP_URL="https://${WEBAPP_URL}" DOMAIN="https://${WEBAPP_URL}" AUTH_SECRET="${AUTH_SECRET}" npx playwright test --grep "@${TEST_TYPE}"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

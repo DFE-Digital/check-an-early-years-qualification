@@ -16,7 +16,9 @@ runs:
 
     - name: Test
       shell: bash
-      run: dotnet test ${{ inputs.solution_filename }} --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings --results-directory ./coverage
+      env:
+        SOLUTION_FILENAME: ${{ inputs.solution_filename }}
+      run: dotnet test "${SOLUTION_FILENAME}" --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings --results-directory ./coverage
 
     - name: Merge Coverage
       shell: bash
