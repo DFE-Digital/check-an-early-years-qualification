@@ -24,9 +24,14 @@ public class QualificationDetailsService(
     IQualificationSearchService qualificationSearchService
 ) : IQualificationDetailsService
 {
-    public async Task<List<Qualification>> GetFilteredQualifications()
+    public async Task<List<Qualification>> GetFilteredQualifications(string? searchCriteriaOverride = null)
     {
-        return await qualificationSearchService.GetFilteredQualifications();
+        return await qualificationSearchService.GetFilteredQualifications(searchCriteriaOverride);
+    }
+
+    public async Task<Qualification?> GetQualificationById(string qualificationId)
+    {
+        return await qualificationSearchService.GetQualificationById(qualificationId);
     }
 
     public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification,

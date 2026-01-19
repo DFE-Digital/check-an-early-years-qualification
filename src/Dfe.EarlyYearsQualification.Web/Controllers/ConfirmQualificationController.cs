@@ -33,9 +33,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var filteredQualifications = await confirmQualificationService.GetFilteredQualifications();
-
-        var qualification = confirmQualificationService.GetQualificationById(filteredQualifications, qualificationId);
+        var qualification = await confirmQualificationService.GetQualificationById(qualificationId);
 
         if (qualification is null)
         {
@@ -43,6 +41,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
+        var filteredQualifications = await confirmQualificationService.GetFilteredQualifications(qualification.QualificationName);
         var model = await confirmQualificationService.Map(content, qualification, filteredQualifications);
             
         // Used to prepopulate help form
@@ -63,9 +62,7 @@ public class ConfirmQualificationController(
             return RedirectToAction("Index", "Error");
         }
 
-        var filteredQualifications = await confirmQualificationService.GetFilteredQualifications();
-
-        var qualification = confirmQualificationService.GetQualificationById(filteredQualifications, model.QualificationId);
+        var qualification = await confirmQualificationService.GetQualificationById(model.QualificationId);
 
         if (qualification is null)
         {
@@ -116,7 +113,8 @@ public class ConfirmQualificationController(
             logger.LogError("No content for the cookies page");
             return RedirectToAction("Index", "Error");
         }
-
+        
+        var filteredQualifications = await confirmQualificationService.GetFilteredQualifications(qualification.QualificationName);
         model = await confirmQualificationService.Map(content, qualification, filteredQualifications);
         model.HasErrors = true;
 
