@@ -8,18 +8,6 @@ let baseHeaders = {
     'sec-ch-ua-platform': '"Windows"',
 };
 
-export function getBootstrap(address) {
-    return http.get(
-        `${address}/lib/bootstrap/dist/css/bootstrap.min.css`,
-        {
-            headers: {
-                referer: '',
-                ...baseHeaders
-            },
-        }
-    );
-}
-
 export function getGovukMinCss(address) {
     return http.get(
         `${address}/govuk-frontend.min.css`,
@@ -47,18 +35,6 @@ export function getSiteCss(address) {
 export function getJqueryMinJs(address) {
     return http.get(
         `${address}/lib/jquery/dist/jquery.min.js`,
-        {
-            headers: {
-                referer: '',
-                ...baseHeaders
-            },
-        }
-    );
-}
-
-export function getBootstrapBundleMinJs(address) {
-    return http.get(
-        `${address}/lib/bootstrap/dist/js/bootstrap.bundle.min.js`,
         {
             headers: {
                 referer: '',
