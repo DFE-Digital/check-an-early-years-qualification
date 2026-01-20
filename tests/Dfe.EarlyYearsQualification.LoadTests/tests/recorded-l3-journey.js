@@ -6,11 +6,9 @@ import http from 'k6/http';
 
 import { getRequestVerificationTokenValue } from './support/requestVerificationToken.js';
 import {
-    getBootstrap,
     getGovukMinCss,
     getSiteCss,
     getJqueryMinJs,
-    getBootstrapBundleMinJs,
     getSiteJs,
     getGovukMinJs,
     getLightFont,
@@ -52,11 +50,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
                 'status 200': (r) => r.status == 200
             });
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -80,11 +76,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
                 'get request not challenged': (r) => !r.url.includes('challenge')
             })
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -111,11 +105,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
                 'get request not challenged': (r) => !r.url.includes('challenge')
             })
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -139,11 +131,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -169,11 +159,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -196,11 +184,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -224,11 +210,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -254,11 +238,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -287,11 +269,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -317,11 +297,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
@@ -346,11 +324,9 @@ export default function level3Journey(ENVIRONMENT, DATA) {
 
             requestVerificationToken = getRequestVerificationTokenValue(response);
 
-            response = getBootstrap(address);
             response = getGovukMinCss(address);
             response = getSiteCss(address);
             response = getJqueryMinJs(address);
-            response = getBootstrapBundleMinJs(address);
             response = getSiteJs(address);
             response = getGovukMinJs(address);
             response = getLightFont(address);
