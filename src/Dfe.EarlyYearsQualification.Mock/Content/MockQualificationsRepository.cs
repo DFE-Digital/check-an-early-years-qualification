@@ -34,6 +34,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                                                           AwardingOrganisations.Various, 3, false)),
                    "eyq-241" => await Task.FromResult(CreateQualification("EYQ-241", "BTEC",
                                                                           AwardingOrganisations.Various, 2)),
+                   "eyq-242" => await Task.FromResult(CreateQualification("EYQ-242", "BA (Hons) Early Childhood Studies", 
+                                                                          AwardingOrganisations.Ncfe, 2)),
                    "eyq-321" => await Task.FromResult(degreeQualification),
                    _ => await Task.FromResult(CreateQualification("EYQ-240",
                                                                   "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",

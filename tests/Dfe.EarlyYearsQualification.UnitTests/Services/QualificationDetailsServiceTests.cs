@@ -57,6 +57,24 @@ public class QualificationDetailsServiceTests
 
         _mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_CallsWithOverride_SearchService_GetFilteredQualifications()
+    {
+        const string searchCriteriaOverride = "override";
+        _ = await GetSut().GetFilteredQualifications(searchCriteriaOverride);
+
+        _mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(searchCriteriaOverride), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task GetQualificationById_Calls_SearchService_GetQualification()
+    {
+        const string qualificationId = "ABC-123";
+        _ = await GetSut().GetQualificationById(qualificationId);
+
+        _mockQualificationSearchService.Verify(o => o.GetQualificationById(qualificationId), Times.Once);
+    }
 
     [TestMethod]
     public async Task GetDetailsPage_QualificationIsADegree_GetDetailsPage()

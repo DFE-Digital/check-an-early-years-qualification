@@ -30,12 +30,12 @@ public class QualificationSearchService(
         return model;
     }
 
-    public async Task<List<Qualification>> GetFilteredQualifications()
+    public async Task<List<Qualification>> GetFilteredQualifications(string? searchCriteriaOverride = null)
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
-        var searchCriteria = userJourneyCookieService.GetSearchCriteria();
+        var searchCriteria = searchCriteriaOverride ?? userJourneyCookieService.GetSearchCriteria();
 
         return await qualificationsRepository.Get(
                                                   level,
@@ -44,6 +44,11 @@ public class QualificationSearchService(
                                                   awardingOrganisation,
                                                   searchCriteria
                                                  );
+    }
+
+    public async Task<Qualification?> GetQualificationById(string qualificationId)
+    {
+        return await qualificationsRepository.GetById(qualificationId);
     }
 
     public async Task<QualificationListModel> MapList(QualificationListPage content,
