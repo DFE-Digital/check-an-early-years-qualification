@@ -35,7 +35,9 @@ const expectedTexts: Record<string, string> = {
     onOrAfter2024Apr1: `on or after 1 April 2024.`,
 };
 
-const getLevelText = (level) => `You are seeing this page because you are checking a ${level == 0 ? "" : `level ${level}`} qualification that was started `;
+const getHeaderText = (scenario: Scenario) => {
+    return `You are seeing this page because you are checking a ${scenario.selectedLevel == 0 ? "" : `level ${scenario.selectedLevel}`} qualification that was started ${scenario.expectedText}`;
+}
 
 const createScenario = (overrides: Partial<Scenario>): Scenario => ({
     scenarioId: 0,
@@ -282,7 +284,7 @@ test.describe('A spec used to validate variants for qualification results and â€
             await selectNotOnTheListAsTheAwardingOrganisation(page);
             await checkYourAnswersPage(page);
             await selectICannotFindTheQualification(page);
-            await checkText(page, "#advice-page-body > div.govuk-inset-text > p", getLevelText(scenario.selectedLevel) + scenario.expectedText);
+            await checkText(page, "#advice-page-body > div.govuk-inset-text > p", getHeaderText(scenario));
 
             if (scenario.isCheckingOwnQualification) {
                 await expect(page.getByText('If you need more help')).toBeVisible();
