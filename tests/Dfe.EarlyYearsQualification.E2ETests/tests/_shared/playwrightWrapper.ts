@@ -311,6 +311,12 @@ export async function selectQualification(page: Page, qualificationId?: string) 
     await checkUrl(page, "/confirm-qualification/" + qualificationId);
 }
 
+export async function selectICannotFindTheQualification(page: Page) {
+    await checkUrl(page, "/select-a-qualification-to-check");
+    await page.click("a[href='/advice/qualification-not-on-the-list']");
+    await checkUrl(page, "/advice/qualification-not-on-the-list");
+}
+
 export async function checkNumberOfMatchingQualifications(page: Page, numberOfExpectedQualifications: number) {
     // qualifications page - click a qualification in the list to move us on
     await checkUrl(page, "/select-a-qualification-to-check");
