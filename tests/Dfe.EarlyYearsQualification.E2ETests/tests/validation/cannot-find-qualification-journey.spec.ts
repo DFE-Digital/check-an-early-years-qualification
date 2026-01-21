@@ -37,22 +37,22 @@ const expectedTexts: Record<string, string> = {
 
 const getLevelText = (level) => `You are seeing this page because you are checking a ${level == 0 ? "" : `level ${level}`} qualification that was started `;
 
+const createScenario = (overrides: Partial<Scenario>): Scenario => ({
+    scenarioId: 0,
+    isCheckingOwnQualification: false,
+    monthStarted: '01',
+    yearStarted: '2001',
+    monthAwarded: '02',
+    yearAwarded: '2002',
+    selectedLevel: 0,
+    expectedText: '',
+    expectedUrl: '',
+    ...overrides
+});
+
 test.describe('A spec used to validate variants for qualification results and “Cannot find qualification"', {tag: "@validation"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
-    });
-
-    const createScenario = (overrides: Partial<Scenario>): Scenario => ({
-        scenarioId: 0,
-        isCheckingOwnQualification: false,
-        monthStarted: '01',
-        yearStarted: '2001',
-        monthAwarded: '02',
-        yearAwarded: '2002',
-        selectedLevel: 0,
-        expectedText: '',
-        expectedUrl: '',
-        ...overrides
     });
 
     const managerScenarios: Scenario[] = [
@@ -289,7 +289,6 @@ test.describe('A spec used to validate variants for qualification results and �
                 await expect(page.getByText('Related content')).not.toBeAttached();
             }
             else {
-
                 await expect(page.getByText('Related content')).toBeVisible();
                 await expect(page.getByText('If you need more help')).not.toBeAttached();
             }
@@ -302,8 +301,8 @@ test.describe('A spec used to validate the static level 7 versions of the “Can
         await startJourney(page, context);
     });
 
-    var staticLevel7Scenario = [
-        {
+    const staticLevel7Scenario: Scenario[] = [
+        createScenario({
             scenarioId: 1,
             monthStarted: '09',
             yearStarted: '2014',
@@ -311,8 +310,8 @@ test.describe('A spec used to validate the static level 7 versions of the “Can
             yearAwarded: '2014',
             selectedLevel: 7,
             expectedUrl: "/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019",
-        } as Scenario,
-        {
+        }),
+        createScenario({
             scenarioId: 2,
             monthStarted: '09',
             yearStarted: '2019',
@@ -320,7 +319,7 @@ test.describe('A spec used to validate the static level 7 versions of the “Can
             yearAwarded: '2019',
             selectedLevel: 7,
             expectedUrl: "/advice/level-7-qualification-after-aug-2019",
-        } as Scenario
+        }),
     ];
 
     [...staticLevel7Scenario].forEach((scenario) => {
