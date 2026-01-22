@@ -40,7 +40,7 @@
 [ExcludeFromCodeCoverage]
 // ReSharper disable once UnusedType.Global
 // ...declared partial so we can exclude it from code coverage calculations
-class Program
+public static class Program
 {
     public static async Task Main(string[] args)
     {
