@@ -30,11 +30,7 @@
                 </div>
                 @if (Model.HasEmailAddressError)
                 {
-                    <p id="email-address-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">
-                            Error:
-                        </span>@Model.EmailAddressErrorMessage
-                    </p>
+                    <govuk-error-message id="email-address-error" class="additional-info-error" visually-hidden-text="Error">@Model.EmailAddressErrorMessage</govuk-error-message>
                 }
                 @Html.TextBoxFor(x => x.EmailAddress, new { @class = "govuk-input", aria_describedby = "email-address-heading", autocomplete = "on" })
             </div>

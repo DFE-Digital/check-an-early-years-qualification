@@ -28,8 +28,7 @@
                 <div class="govuk-form-group @(Model.ErrorSummaryModel != null ? "govuk-form-group--error" : "")">
                     @if (Model.ErrorSummaryModel != null)
                     {
-                        <p id="error-message" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span>@Model.ErrorSummaryModel.ErrorSummaryLinks.First().ErrorBannerLinkText</p>
+                        <govuk-error-message id="error-message" visually-hidden-text="Error">@Model.ErrorSummaryModel.ErrorSummaryLinks.First().ErrorBannerLinkText</govuk-error-message>
                     }
                     <label class="govuk-label" for="PasswordValue">@Model.InputHeading</label>
                     <input class="govuk-input" id="PasswordValue" name="PasswordValue" aria-label="Password challenge input" type="password" style="width: 85%"/>

@@ -69,7 +69,7 @@ export async function inputText(page: Page, locator: string, text: string) {
 
 export async function checkError(page: Page, locator: string, expectedText: string) {
     await checkText(page, locator + " > span", "Error:");
-    await checkText(page, locator, `Error:${expectedText}`);
+    await checkText(page, locator, `Error: ${expectedText}`);
 }
 
 export async function checkDisclaimer(page: Page, expectedText: string) {
@@ -309,6 +309,12 @@ export async function selectQualification(page: Page, qualificationId?: string) 
     if (qualificationId == null) return;
     await page.locator("a[href=\"/confirm-qualification/" + qualificationId + "\"]").click();
     await checkUrl(page, "/confirm-qualification/" + qualificationId);
+}
+
+export async function selectICannotFindTheQualification(page: Page) {
+    await checkUrl(page, "/select-a-qualification-to-check");
+    await page.click("a[href='/advice/qualification-not-on-the-list']");
+    await checkUrl(page, "/advice/qualification-not-on-the-list");
 }
 
 export async function checkNumberOfMatchingQualifications(page: Page, numberOfExpectedQualifications: number) {

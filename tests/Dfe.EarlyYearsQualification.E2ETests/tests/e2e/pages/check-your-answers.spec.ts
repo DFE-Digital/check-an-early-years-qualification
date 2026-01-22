@@ -34,7 +34,7 @@ test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, 
         await page.goto("/questions/check-your-answers");
 
         await checkText(page, "#question-1-change", "Change Where was the qualification awarded?");
-        await checkText(page, "#question-1-change-hidden", "Where was the qualification awarded?");
+        await checkText(page, "#question-1-change .govuk-visually-hidden", "Where was the qualification awarded?");
         
         await page.click("#question-1-change a");
         await checkUrl(page, "/questions/where-was-the-qualification-awarded");
@@ -44,7 +44,7 @@ test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, 
         await page.goto("/questions/check-your-answers");
 
         await checkText(page, "#question-2-change", "Change Test Dates Questions");
-        await checkText(page, "#question-2-change-hidden", "Test Dates Questions");
+        await checkText(page, "#question-2-change .govuk-visually-hidden", "Test Dates Questions");
         
         await page.click("#question-2-change a");
         await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
@@ -54,7 +54,7 @@ test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, 
         await page.goto("/questions/check-your-answers");
 
         await checkText(page, "#question-3-change", "Change What level is the qualification?");
-        await checkText(page, "#question-3-change-hidden", "What level is the qualification?");
+        await checkText(page, "#question-3-change .govuk-visually-hidden", "What level is the qualification?");
         
         await page.click("#question-3-change a");
         await checkUrl(page, "/questions/what-level-is-the-qualification");
@@ -64,7 +64,7 @@ test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, 
         await page.goto("/questions/check-your-answers");
 
         await checkText(page, "#question-4-change", "Change Test Dropdown Question");
-        await checkText(page, "#question-4-change-hidden", "Test Dropdown Question");
+        await checkText(page, "#question-4-change .govuk-visually-hidden", "Test Dropdown Question");
 
         await page.click("#question-4-change a");
         await checkUrl(page, "/questions/what-is-the-awarding-organisation");
