@@ -52,7 +52,7 @@ public class NoCacheTests(TestContext testContext)
     {
         var sut = new NoCache();
 
-        var action = () => sut.Refresh("any key", TestContext.CancellationToken);
+        var action = () => sut.Refresh("any key");
 
         action.Should().NotThrow();
     }
@@ -62,7 +62,7 @@ public class NoCacheTests(TestContext testContext)
     {
         var sut = new NoCache();
 
-        var action = async () => await sut.RefreshAsync("any key");
+        var action = async () => await sut.RefreshAsync("any key", TestContext.CancellationToken);
 
         await action.Should().NotThrowAsync();
     }
