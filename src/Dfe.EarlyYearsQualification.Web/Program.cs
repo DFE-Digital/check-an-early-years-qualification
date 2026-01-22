@@ -244,7 +244,10 @@ app.MapControllerRoute(
 
 await app.RunAsync();
 
-[ExcludeFromCodeCoverage]
+
+// todo temp removed as per ASP0027: Unnecessary public Program class declaration
+
+//[ExcludeFromCodeCoverage]
 // ReSharper disable once UnusedType.Global
 // ...declared partial so we can exclude it from code coverage calculations
-public static partial class Program;
+//public static partial class Program;

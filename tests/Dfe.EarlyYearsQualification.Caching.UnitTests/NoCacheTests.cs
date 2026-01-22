@@ -5,8 +5,10 @@ using Microsoft.Extensions.Caching.Distributed;
 namespace Dfe.EarlyYearsQualification.Caching.UnitTests;
 
 [TestClass]
-public class NoCacheTests
+public class NoCacheTests(TestContext testContext)
 {
+    public TestContext TestContext { get; init; } = testContext;
+
     [TestMethod]
     public void Get_Returns_Null()
     {
@@ -20,7 +22,7 @@ public class NoCacheTests
     {
         var sut = new NoCache();
 
-        var result = await sut.GetAsync("any key");
+        var result = await sut.GetAsync("any key", TestContext.CancellationToken);
 
         result.Should().BeNull();
     }
@@ -40,7 +42,7 @@ public class NoCacheTests
     {
         var sut = new NoCache();
 
-        var action = async () => await sut.SetAsync("any key", [0, 1, 2, 3], new DistributedCacheEntryOptions());
+        var action = async () => await sut.SetAsync("any key", [0, 1, 2, 3], new DistributedCacheEntryOptions(), TestContext.CancellationToken);
 
         await action.Should().NotThrowAsync();
     }
@@ -50,7 +52,7 @@ public class NoCacheTests
     {
         var sut = new NoCache();
 
-        var action = () => sut.Refresh("any key");
+        var action = () => sut.Refresh("any key", TestContext.CancellationToken);
 
         action.Should().NotThrow();
     }
@@ -80,7 +82,7 @@ public class NoCacheTests
     {
         var sut = new NoCache();
 
-        var action = async () => await sut.RemoveAsync("any key");
+        var action = async () => await sut.RemoveAsync("any key", TestContext.CancellationToken);
 
         await action.Should().NotThrowAsync();
     }
