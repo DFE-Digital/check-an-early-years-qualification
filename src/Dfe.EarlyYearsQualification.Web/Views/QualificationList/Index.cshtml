@@ -1,0 +1,75 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.EarlyYearsQualificationListModel
+
+@{
+    ViewData["Title"] = "Early Years Qualification List";
+}
+
+@section Scripts
+{
+    <!--<script src="~/js/pages/qualification-details-page.js" asp-append-version="true"></script> -->
+}
+
+@section BeforeMainContent
+{
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 id="heading" class="govuk-heading-xl">@Model.Heading</h1>
+        <div id="body" class="govuk-body">
+            <div class="govuk-!-margin-bottom-7" id="post-heading-content">
+                @Html.Raw(Model.PostHeadingContent)
+                <govuk-button class="govuk-button--secondary">@Model.DownloadButtonText</govuk-button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        Filters
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+        @{
+            foreach (var qualification in Model.Qualifications)
+            {
+                <govuk-summary-card>
+                    <govuk-summary-card-title>@qualification.QualificationName</govuk-summary-card-title>
+                    <govuk-summary-list>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Model.QualificationLevelLabel</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@qualification.QualificationLevel</govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Model.StaffChildRatioLabel</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>TODO</govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Model.FromWhichYearLabel</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>TODO</govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Model.AwardingOrganisationLabel</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@qualification.AwardingOrganisationTitle</govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        @{
+                            if (!string.IsNullOrEmpty(qualification.QualificationNumber))
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>@Model.QualificationNumberLabel</govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>@qualification.QualificationNumber</govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+                        }
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Model.NotesAdditionalRequirementsLabel</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>TODO</govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                    </govuk-summary-list>
+                </govuk-summary-card>
+            }
+        }
+    </div>
+</div>
