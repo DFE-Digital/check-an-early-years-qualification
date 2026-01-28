@@ -807,9 +807,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualifications_ReturnsAListOfQualifications()
     {
-        var repository = new MockQualificationsRepository();
-
-        var result = await repository.Get();
+        var result = await MockQualificationsRepository.Get();
 
         result.Count.Should().Be(5);
     }
@@ -817,9 +815,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualifications_ReturnsAQualificationWithAnAdditionalRequirementsQuestion()
     {
-        var repository = new MockQualificationsRepository();
-
-        var result = await repository.Get();
+        var result = await MockQualificationsRepository.Get();
 
         result.Count.Should().Be(5);
 
