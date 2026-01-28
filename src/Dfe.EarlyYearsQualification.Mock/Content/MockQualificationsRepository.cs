@@ -43,7 +43,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                };
     }
 
-    public Task<List<Qualification>> Get()
+    public static Task<List<Qualification>> Get()
     {
         return Task.FromResult(new List<Qualification>
                                {
