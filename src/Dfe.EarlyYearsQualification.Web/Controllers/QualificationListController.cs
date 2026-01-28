@@ -31,7 +31,8 @@ public class QualificationListController(ILogger<QualificationListController> lo
                         FromWhichYearLabel =  EarlyYearsQualificationListContent.FromWhichYearLabel,
                         AwardingOrganisationLabel = EarlyYearsQualificationListContent.AwardingOrganisationLabel,
                         QualificationNumberLabel = EarlyYearsQualificationListContent.QualificationNumberLabel,
-                        NotesAdditionalRequirementsLabel =  EarlyYearsQualificationListContent.NotesAdditionalRequirementsLabel
+                        NotesAdditionalRequirementsLabel = EarlyYearsQualificationListContent.NotesAdditionalRequirementsLabel,
+                        ShowingAllQualificationsLabel = EarlyYearsQualificationListContent.ShowingAllQualificationsLabel
                     };
         return View(model);
     }

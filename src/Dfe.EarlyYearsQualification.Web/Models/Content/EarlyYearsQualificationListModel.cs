@@ -22,5 +22,7 @@ public class EarlyYearsQualificationListModel
 
     public string NotesAdditionalRequirementsLabel { get; init; } = string.Empty;
 
+    public string ShowingAllQualificationsLabel { get; init; } =  string.Empty;
+
     public List<BasicQualificationModel> Qualifications { get; init; } = [];
 }

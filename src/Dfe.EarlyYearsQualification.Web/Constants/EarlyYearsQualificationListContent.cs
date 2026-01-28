@@ -33,4 +33,6 @@ public class EarlyYearsQualificationListContent
     public const string QualificationNumberLabel = "Qualification number";
     
     public const string NotesAdditionalRequirementsLabel = "Notes / Additional requirements";
+    
+    public const string ShowingAllQualificationsLabel = "Showing all the qualifications";
 }

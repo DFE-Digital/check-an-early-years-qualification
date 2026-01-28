@@ -29,9 +29,80 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-        Filters
+        <div class="filter">
+            <div class="filter__header">
+                <h2 class="govuk-heading-m">
+                    Filter
+                </h2>
+            </div>
+            <div class="filter__selected-filters">
+                <h2 class="govuk-heading-m">
+                    Selected filters
+                </h2>
+                <p class="govuk-body">
+                    No filters selected.
+                </p>
+            </div>
+            <div class="filter__filter-body">
+                <div class="filter__filter-body__section">
+                    <h2 class="govuk-heading-m">
+                        Keywords
+                    </h2>
+                    <input class="govuk-input" name="keyword"/>
+                </div>
+                <div class="filter__filter-body__section">
+                    <govuk-radios name="qualification-start-date">
+                        <govuk-radios-fieldset>
+                            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
+                                Qualification start date
+                            </govuk-radios-fieldset-legend>
+                            <govuk-radios-item value="BeforeSeptember2014">
+                                Before September 2014
+                            </govuk-radios-item>
+                            <govuk-radios-item value="OnOrAfterSeptember2014">
+                                On or after September 2014
+                            </govuk-radios-item>
+                            <govuk-radios-item value="OnOrAfterSeptember2024">
+                                On or after September 2024
+                            </govuk-radios-item>
+                        </govuk-radios-fieldset>
+                    </govuk-radios>
+                </div>
+                <div class="filter__filter-body__section">
+                    <govuk-radios name="qualification-level">
+                        <govuk-radios-fieldset>
+                            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
+                                Qualification level
+                            </govuk-radios-fieldset-legend>
+                            <govuk-radios-item value="2">
+                                Level 2
+                            </govuk-radios-item>
+                            <govuk-radios-item value="3">
+                                Level 3
+                            </govuk-radios-item>
+                            <govuk-radios-item value="4">
+                                Level 4
+                            </govuk-radios-item>
+                            <govuk-radios-item value="5">
+                                Level 5
+                            </govuk-radios-item>
+                            <govuk-radios-item value="6">
+                                Level 6
+                            </govuk-radios-item>
+                            <govuk-radios-item value="7">
+                                Level 7
+                            </govuk-radios-item>
+                        </govuk-radios-fieldset>
+                    </govuk-radios>
+                </div>
+                <govuk-button class="govuk-button govuk-!-margin-bottom-0">Apply filters</govuk-button>
+            </div>
+        </div>
     </div>
     <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">
+            @Model.ShowingAllQualificationsLabel
+        </h2>
         @{
             foreach (var qualification in Model.Qualifications)
             {
