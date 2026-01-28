@@ -33,13 +33,13 @@ public class MockContentfulSetupTests
         serviceList.Count.Should().Be(2);
 
         var service = serviceList[0];
-        service.ImplementationType.Should().Be(typeof(MockContentfulService));
-        service.ServiceType.Should().Be(typeof(IContentService));
+        service.ImplementationType.Should().Be<MockContentfulService>();
+        service.ServiceType.Should().Be<IContentService>();
         service.Lifetime.Should().Be(ServiceLifetime.Singleton);
 
         var filterService = serviceList[1];
-        filterService.ImplementationType.Should().Be(typeof(MockQualificationsRepository));
-        filterService.ServiceType.Should().Be(typeof(IQualificationsRepository));
+        filterService.ImplementationType.Should().Be<MockQualificationsRepository>();
+        filterService.ServiceType.Should().Be<IQualificationsRepository>();
         filterService.Lifetime.Should().Be(ServiceLifetime.Singleton);
     }
 }

@@ -84,7 +84,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                        ],
                                        QualificationNumber = "Q/22/2427"
                                    }
-                               });
+                               }.ToList());
     }
 
     public Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,

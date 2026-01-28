@@ -23,7 +23,7 @@ public class ConfirmQualificationControllerTests
         var result = await controller.Index(id);
 
         result.Should().NotBeNull();
-        result.Should().BeOfType(typeof(BadRequestResult));
+        result.Should().BeOfType<BadRequestResult>();
     }
 
     [TestMethod]

@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>Dfe.EarlyYearsQualification.Web</UserSecretsId>
+        <NoWarn>CA1873</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

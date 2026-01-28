@@ -182,7 +182,7 @@ public class MockContentfulService : IContentService
                 FromWhichYear = "Sep-14",
                 ToWhichYear = "Aug-19",
                 Level = "3",
-                Name = "Test name",
+                Name = "Manager page 1",
                 RequirementsHeading = "Test requirements heading",
                 RequirementsText = requirementsText,
                 Labels = labels
@@ -196,7 +196,7 @@ public class MockContentfulService : IContentService
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
                 Level = "3",
-                Name = "Test name",
+                Name = "Practitioner page 1",
                 RequirementsHeading = "This is F&R practitioner heading",
                 RequirementsText = ContentfulContentHelper.Paragraph("This is F&R practitioner text"),
                 Labels = labels
@@ -210,7 +210,7 @@ public class MockContentfulService : IContentService
                 FromWhichYear = "Sep-23",
                 ToWhichYear = "Aug-24",
                 Level = "3",
-                Name = "Test name",
+                Name = "Practitioner page 2",
                 RequirementsHeading = "This is NF&R practitioner heading",
                 RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
                 Labels = labels
@@ -224,7 +224,7 @@ public class MockContentfulService : IContentService
                 FromWhichYear = "Sep-11",
                 ToWhichYear = "Aug-17",
                 Level = "6",
-                Name = "Test name",
+                Name = "Practitioner page 3",
                 RequirementsHeading = "This is NF&R practitioner heading",
                 RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
                 Labels = labels
