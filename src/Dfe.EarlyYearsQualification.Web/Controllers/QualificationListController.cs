@@ -142,7 +142,7 @@ public class QualificationListController(
                 ToWhichYear = FormatYearContent(qualification.ToWhichYear),
                 AdditionalRequirements = string.IsNullOrEmpty(qualification.AdditionalRequirements) ? "None" : qualification.AdditionalRequirements,
                 StaffChildRatio = qualification.StaffChildRatio,
-                QualificationNumber = string.IsNullOrEmpty(qualification.QualificationNumber) ? "-" : qualification.QualificationNumber,
+                QualificationNumber = string.IsNullOrEmpty(qualification.QualificationNumber) ? "-" : StringFormattingHelper.FormatSlashedNumbers(qualification.QualificationNumber),
             };
 
             results.Add(qual);
@@ -197,7 +197,7 @@ public class QualificationListController(
             NoQualificationsFoundContent = EarlyYearsQualificationListContent.NoQualificationsFoundContent,
             CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent = EarlyYearsQualificationListContent.CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent
         };
-        model.ShowingAllQualificationsLabel = model.HasFilters ? $"{allQualifications.Count} qualifications found" : "Showing all the qualifications";
+        model.ShowingAllQualificationsLabel = model.HasFilters ? $"{allQualifications.Count} qualification{(allQualifications.Count == 1 ? "" : "s")} found" : EarlyYearsQualificationListContent.ShowingAllQualificationsLabel;
 
         return model;
     }
