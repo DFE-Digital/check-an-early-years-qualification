@@ -577,10 +577,20 @@ hr {
 
 .filter {
     border: 1px solid #b1b4b6;
+    margin-bottom: 20px;
 }
 
-.filter__header, .filter__selected-filters, .filter__filter-body {
-    padding: 10px;
+#qualification-webview-results .govuk-summary-list .govuk-summary-list__key {
+    width: 35%;
+}
+
+.filter__header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #b1b4b6;
+}
+
+.filter__selected-filters, .filter__filter-body {
+    padding: 20px;
     border-bottom: 1px solid #b1b4b6;
 }
 
@@ -601,5 +611,24 @@ hr {
 }
 
 .filter__filter-body__section {
-    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.filter__button-active {
+    border: 1px solid black;
+    background-color: #fff;
+    padding: 6px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.filter__button-active-text {
+    font-size: 16px;
+    vertical-align: text-bottom;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: 20px;
+    margin-left: 8px;
 }

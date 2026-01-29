@@ -35,78 +35,104 @@
                     Filter
                 </h2>
             </div>
-            <div class="filter__selected-filters">
-                <h2 class="govuk-heading-m">
-                    Selected filters
-                </h2>
-                <p class="govuk-body">
-                    No filters selected.
-                </p>
-            </div>
-            <div class="filter__filter-body">
-                <div class="filter__filter-body__section">
+            @using (Html.BeginForm("RemoveFilter", "QualificationList", FormMethod.Post))
+            {
+                <div class="filter__selected-filters">
                     <h2 class="govuk-heading-m">
-                        Keywords
+                        Selected filters
                     </h2>
-                    <input class="govuk-input" name="keyword"/>
+                    @if (Model.HasFilters)
+                    {
+                        @if (!string.IsNullOrEmpty(Model.SearchTermFilter))
+                        {
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Keywords</h3>
+                            <button class="filter__button-active" name="removeFilter" value="search-term-@Model.SearchTermFilter">
+                                <span class="filter__button-active-text">@Model.SearchTermFilter</span>
+                                <span class="close-btn">&times;</span>
+                            </button>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.QualificationStartDateFilter))
+                        {
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Qualification start date</h3>
+                            <button class="filter__button-active" name="removeFilter" value="start-date-@Model.QualificationStartDateFilter">
+                                <span class="filter__button-active-text">@Model.QualificationStartDateFilter</span>
+                                <span class="close-btn">&times;</span>
+                            </button>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.QualificationLevelFilter))
+                        {
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Qualification level</h3>
+                            <button class="filter__button-active" name="removeFilter" value="qualification-level-@Model.QualificationLevelFilter">
+                                <span class="filter__button-active-text">Level @Model.QualificationLevelFilter</span>
+                                <span class="close-btn">&times;</span>
+                            </button>
+                        }
+                        <div>
+                            <a class="govuk-link" href="/clear-filters">Clear filters</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="govuk-body govuk-!-margin-bottom-0">
+                            No filters selected.
+                        </p>
+                    }
                 </div>
-                <div class="filter__filter-body__section">
-                    <govuk-radios name="qualification-start-date">
-                        <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
-                                Qualification start date
-                            </govuk-radios-fieldset-legend>
-                            <govuk-radios-item value="BeforeSeptember2014">
-                                Before September 2014
-                            </govuk-radios-item>
-                            <govuk-radios-item value="OnOrAfterSeptember2014">
-                                On or after September 2014
-                            </govuk-radios-item>
-                            <govuk-radios-item value="OnOrAfterSeptember2024">
-                                On or after September 2024
-                            </govuk-radios-item>
-                        </govuk-radios-fieldset>
-                    </govuk-radios>
+            }
+
+            @using (Html.BeginForm("ApplyFilter", "QualificationList", FormMethod.Post))
+            {
+                <div class="filter__filter-body">
+                    <div class="filter__filter-body__section">
+                        <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+                            Keywords
+                        </h2>
+                        <input class="govuk-input" asp-for="SearchTermFilter" />
+                    </div>
+                    <div class="filter__filter-body__section">
+                        <govuk-radios for="QualificationStartDateFilter">
+                            <govuk-radios-fieldset class="govuk-radios govuk-radios--small">
+                                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
+                                    Qualification start date
+                                </govuk-radios-fieldset-legend>
+                                @foreach (var radio in Model.StartDateFilters)
+                                {
+                                    <govuk-radios-item value="@radio.Value">
+                                        @radio.Label
+                                    </govuk-radios-item>
+                                }
+                            </govuk-radios-fieldset>
+                        </govuk-radios>
+                    </div>
+                    <div class="filter__filter-body__section">
+                        <govuk-radios for="QualificationLevelFilter">
+                            <govuk-radios-fieldset class="govuk-radios govuk-radios--small">
+                                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
+                                    Qualification level
+                                </govuk-radios-fieldset-legend>
+                                @foreach (var radio in Model.LevelFilters)
+                                {
+                                    <govuk-radios-item value="@radio.Value">
+                                        @radio.Label
+                                    </govuk-radios-item>
+                                }
+                            </govuk-radios-fieldset>
+                        </govuk-radios>
+                    </div>
+                    <govuk-button class="govuk-button govuk-!-margin-bottom-0">Apply filters</govuk-button>
                 </div>
-                <div class="filter__filter-body__section">
-                    <govuk-radios name="qualification-level">
-                        <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
-                                Qualification level
-                            </govuk-radios-fieldset-legend>
-                            <govuk-radios-item value="2">
-                                Level 2
-                            </govuk-radios-item>
-                            <govuk-radios-item value="3">
-                                Level 3
-                            </govuk-radios-item>
-                            <govuk-radios-item value="4">
-                                Level 4
-                            </govuk-radios-item>
-                            <govuk-radios-item value="5">
-                                Level 5
-                            </govuk-radios-item>
-                            <govuk-radios-item value="6">
-                                Level 6
-                            </govuk-radios-item>
-                            <govuk-radios-item value="7">
-                                Level 7
-                            </govuk-radios-item>
-                        </govuk-radios-fieldset>
-                    </govuk-radios>
-                </div>
-                <govuk-button class="govuk-button govuk-!-margin-bottom-0">Apply filters</govuk-button>
-            </div>
+            }
         </div>
     </div>
     <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-7">
             @Model.ShowingAllQualificationsLabel
         </h2>
-        @{
+        @if (Model.Qualifications.Any())
+        {
             foreach (var qualification in Model.Qualifications)
             {
-                <govuk-summary-card>
+                <govuk-summary-card id="qualification-webview-results">
                     <govuk-summary-card-title>@qualification.QualificationName</govuk-summary-card-title>
                     <govuk-summary-list>
                         <govuk-summary-list-row>
@@ -115,32 +141,39 @@
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>@Model.StaffChildRatioLabel</govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>TODO</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-value>@qualification.StaffChildRatio</govuk-summary-list-row-value>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>@Model.FromWhichYearLabel</govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>TODO</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-value>@qualification.FromWhichYear</govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Model.ToWhichYearLabel</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@qualification.ToWhichYear</govuk-summary-list-row-value>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>@Model.AwardingOrganisationLabel</govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>@qualification.AwardingOrganisationTitle</govuk-summary-list-row-value>
                         </govuk-summary-list-row>
-                        @{
-                            if (!string.IsNullOrEmpty(qualification.QualificationNumber))
-                            {
-                                <govuk-summary-list-row>
-                                    <govuk-summary-list-row-key>@Model.QualificationNumberLabel</govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>@qualification.QualificationNumber</govuk-summary-list-row-value>
-                                </govuk-summary-list-row>
-                            }
-                        }
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>@Model.QualificationNumberLabel</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@qualification.QualificationNumber</govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>@Model.NotesAdditionalRequirementsLabel</govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>TODO</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-value>@qualification.AdditionalRequirements</govuk-summary-list-row-value>
                         </govuk-summary-list-row>
                     </govuk-summary-list>
                 </govuk-summary-card>
             }
         }
+        else
+        {
+            @Html.Raw(Model.NoQualificationsFoundContent)
+        }
+
+        <hr class='govuk-section-break govuk-section-break--xl govuk-section-break--visible' />
+
+        @Html.Raw(Model.CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent)
     </div>
 </div>

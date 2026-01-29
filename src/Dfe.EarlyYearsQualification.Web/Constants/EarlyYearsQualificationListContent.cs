@@ -27,7 +27,9 @@ public class EarlyYearsQualificationListContent
     public const string StaffChildRatioLabel = "Staff:child ratios";
 
     public const string FromWhichYearLabel = "From which year";
-    
+
+    public const string ToWhichYearLabel = "To which year";
+
     public const string AwardingOrganisationLabel = "Awarding organisation";
 
     public const string QualificationNumberLabel = "Qualification number";
@@ -35,4 +37,21 @@ public class EarlyYearsQualificationListContent
     public const string NotesAdditionalRequirementsLabel = "Notes / Additional requirements";
     
     public const string ShowingAllQualificationsLabel = "Showing all the qualifications";
+
+    public const string NoQualificationsFoundContent = @"<p class='govuk-body'>No qualifications match the filters you selected.</p>
+
+    <p class='govuk-body'>This may be because there are no full and relevant qualifications that meet those criteria.</p>
+    ";
+
+    public const string CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent = @"
+    <h2 class='govuk-heading-m'>Check if an early years qualification is full and relevant</h2>
+
+    <p class='govuk-body'>You can use the <a href='/' class='govuk-link'>Check an early years qualification service</a> to confirm:</p>
+
+    <ul class='govuk-list govuk-list--bullet'>
+        <li>if the qualification you are looking for is full and relevant</li>
+        <li>the staff:child ratios that the qualification holder can be counted in</li>
+        <li>what alternative routes are available and the next steps to take</li>
+    </ul>
+    ";
 }
