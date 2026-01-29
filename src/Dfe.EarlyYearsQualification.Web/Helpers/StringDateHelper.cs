@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
 public static class StringDateHelper
@@ -19,5 +21,28 @@ public static class StringDateHelper
         }
 
         return (month, year);
+    }
+
+    // date is in the format MMM-yy e.g Sep-19
+    public static (int startMonth, int startYear)? ConvertDate(string date)
+    {
+        if (DateTime.TryParseExact(
+                date,
+                "MMM-yy",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var converted))
+        {
+            return (converted.Month, converted.Year);
+        }
+
+        return null;
+    }
+
+    public static string ConvertToDateString(int? dateMonth, int? dateYear, string prefixValue)
+    {
+        if (dateMonth is null || dateYear is null) return string.Empty;
+        var date = new DateOnly(dateYear.Value, dateMonth.Value, 1);
+        return $"{prefixValue} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {dateYear.Value}";
     }
 }

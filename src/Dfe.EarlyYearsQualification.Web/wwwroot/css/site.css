@@ -572,3 +572,63 @@ hr {
     color: #505a5f !important;
     margin-top: 15px !important;
 }
+
+/* EYQL Filter specific styles */
+
+.filter {
+    border: 1px solid #b1b4b6;
+    margin-bottom: 20px;
+}
+
+#qualification-webview-results .govuk-summary-list .govuk-summary-list__key {
+    width: 35%;
+}
+
+.filter__header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #b1b4b6;
+}
+
+.filter__selected-filters, .filter__filter-body {
+    padding: 20px;
+    border-bottom: 1px solid #b1b4b6;
+}
+
+.filter__selected-filters {
+    background: #f3f2f1;
+}
+
+.filter__header {
+    background-color: #b1b4b6;
+}
+
+.filter__header .govuk-heading-m {
+    margin-bottom: 0;
+}
+
+.filter__filter-body {
+    border-bottom: none;
+}
+
+.filter__filter-body__section {
+    margin-bottom: 30px;
+}
+
+.filter__button-active {
+    border: 1px solid black;
+    background-color: #fff;
+    padding: 6px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.filter__button-active-text {
+    font-size: 16px;
+    vertical-align: text-bottom;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: 20px;
+    margin-left: 8px;
+}
