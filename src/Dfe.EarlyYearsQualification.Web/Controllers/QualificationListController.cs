@@ -2,7 +2,6 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +18,6 @@ public class QualificationListController(
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var contentModel = await contentService.GetChallengePage();
-
-        if (contentModel == null)
-        {
-            logger.LogError("No content for the challenge page");
-            return RedirectToAction("Index", "Error");
-        }
-
         var model = await SetUpEarlyYearsQualificationListModel();
 
         return View(model);
@@ -132,39 +123,10 @@ public class QualificationListController(
 
         foreach (var qualification in allQualifications)
         {
-            var qual = new QualificationWebViewModel()
-            {
-                QualificationId = qualification.QualificationId,
-                QualificationName = qualification.QualificationName,
-                AwardingOrganisationTitle = qualification.AwardingOrganisationTitle,
-                QualificationLevel = qualification.QualificationLevel,
-                FromWhichYear = FormatYearContent(qualification.FromWhichYear),
-                ToWhichYear = FormatYearContent(qualification.ToWhichYear),
-                AdditionalRequirements = string.IsNullOrEmpty(qualification.AdditionalRequirements) ? "None" : qualification.AdditionalRequirements,
-                StaffChildRatio = qualification.StaffChildRatio,
-                QualificationNumber = string.IsNullOrEmpty(qualification.QualificationNumber) ? "-" : StringFormattingHelper.FormatSlashedNumbers(qualification.QualificationNumber),
-            };
-
-            results.Add(qual);
+            results.Add(new QualificationWebViewModel(qualification));
         }
 
         return results;
-    }
-
-    private static string FormatYearContent(string? year)
-    {
-        var content = "-";
-
-        if (!string.IsNullOrEmpty(year) && year is not "null")
-        {
-            var convertedFromDate = StringDateHelper.ConvertDate(year);
-            if (convertedFromDate.HasValue)
-            {
-                content = StringDateHelper.ConvertToDateString(convertedFromDate.Value.startMonth, convertedFromDate.Value.startYear, "");
-            }
-        }
-
-        return content;
     }
 
     private async Task<EarlyYearsQualificationListModel> SetUpEarlyYearsQualificationListModel()
