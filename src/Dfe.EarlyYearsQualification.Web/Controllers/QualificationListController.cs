@@ -137,7 +137,15 @@ public class QualificationListController(
             QualificationStartDateFilter = filters.QualificationStartDate,
             SearchTermFilter = filters.SearchTerm,
             NoQualificationsFoundContent = EarlyYearsQualificationListContent.NoQualificationsFoundContent,
-            CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent = EarlyYearsQualificationListContent.CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent
+            CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent = EarlyYearsQualificationListContent.CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent,
+            ApplyFiltersButtonContent = EarlyYearsQualificationListContent.ApplyFiltersButtonContent,
+            ClearFiltersLink = EarlyYearsQualificationListContent.ClearFiltersLink,
+            FilterHeading = EarlyYearsQualificationListContent.FilterHeading,
+            SelectedFiltersHeading = EarlyYearsQualificationListContent.SelectedFiltersHeading,
+            KeywordHeading = EarlyYearsQualificationListContent.KeywordHeading,
+            QualificationStartDateHeading = EarlyYearsQualificationListContent.QualificationStartDateHeading,
+            QualificationLevelHeading = EarlyYearsQualificationListContent.QualificationLevelHeading,
+            NoFiltersSelectedContent = EarlyYearsQualificationListContent.NoFiltersSelectedContent,
         };
         model.ShowingAllQualificationsLabel = model.HasFilters ? $"{allQualifications.Count} qualification{(allQualifications.Count == 1 ? "" : "s")} found" : EarlyYearsQualificationListContent.ShowingAllQualificationsLabel;
 

@@ -32,6 +32,23 @@ public class EarlyYearsQualificationListModel
 
     public string CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent { get; init; } = string.Empty;
 
+    // Filters content
+    public string FilterHeading { get; init; } = string.Empty;
+
+    public string SelectedFiltersHeading { get; init; } = string.Empty;
+
+    public string KeywordHeading { get; init; } = string.Empty;
+
+    public string QualificationStartDateHeading { get; init; } = string.Empty;
+
+    public string QualificationLevelHeading { get; init; } = string.Empty;
+
+    public string ApplyFiltersButtonContent { get; init; } = string.Empty;
+
+    public string ClearFiltersLink { get; init; } = string.Empty;
+
+    public string NoFiltersSelectedContent { get; init; } = string.Empty;
+
     // Filters
     public List<EnquiryOptionModel> StartDateFilters { get; init; } =
     [
