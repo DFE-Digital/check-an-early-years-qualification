@@ -38,17 +38,17 @@ public class EarlyYearsQualificationListModel
         new()
         {
             Label = "Before September 2014",
-            Value = "Before September 2014"
+            Value = "Pre-September 2014"
         },
         new()
         {
             Label = "On or after September 2014",
-            Value = "On or after September 2014"
+            Value = "Post-September 2014"
         },
         new()
         {
             Label = "On or after September 2024",
-            Value = "On or after September 2024"
+            Value = "Post-September 2024"
         }
     ];
 

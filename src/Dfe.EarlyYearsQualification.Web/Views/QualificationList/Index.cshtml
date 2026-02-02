@@ -4,11 +4,6 @@
     ViewData["Title"] = "Early Years Qualification List";
 }
 
-@section Scripts
-{
-    <!--<script src="~/js/pages/qualification-details-page.js" asp-append-version="true"></script> -->
-}
-
 @section BeforeMainContent
 {
     @{
@@ -55,7 +50,7 @@
                         {
                             <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Qualification start date</h3>
                             <button class="filter__button-active" name="removeFilter" value="start-date-@Model.QualificationStartDateFilter" aria-description="Remove start date @Model.QualificationStartDateFilter filter">
-                                <span class="filter__button-active-text">@Model.QualificationStartDateFilter</span>
+                                <span class="filter__button-active-text">@Model.StartDateFilters.First(x => x.Value == Model.QualificationStartDateFilter).Label</span>
                                 <span class="close-btn">&times;</span>
                             </button>
                         }

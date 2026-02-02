@@ -10,10 +10,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 
 [Route("early-years-qualification-list")]
 public class QualificationListController(
-    ILogger<QualificationListController> logger, 
     IQualificationsRepository qualificationsRepository, 
-    IUserJourneyCookieService userJourneyCookieService,
-    IContentService contentService) : ServiceController
+    IUserJourneyCookieService userJourneyCookieService) : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -48,18 +46,18 @@ public class QualificationListController(
     {
         var filters = userJourneyCookieService.GetWebViewFilters();
 
-        if (removeFilter.Contains("qualification-level"))
-        {
-            filters.QualificationLevel = string.Empty;
-        }
-        if (removeFilter.Contains("start-date"))
-        {
-            filters.QualificationStartDate = string.Empty;
-        }
-        if (removeFilter.Contains("search-term"))
-        {
-            filters.SearchTerm = string.Empty;
-        }
+            if (removeFilter.Contains("qualification-level"))
+            {
+                filters.QualificationLevel = string.Empty;
+            }
+            if (removeFilter.Contains("start-date"))
+            {
+                filters.QualificationStartDate = string.Empty;
+            }
+            if (removeFilter.Contains("search-term"))
+            {
+                filters.SearchTerm = string.Empty;
+            }
 
         userJourneyCookieService.SetWebViewFilters(filters);
 
@@ -69,17 +67,21 @@ public class QualificationListController(
     private async Task<List<Qualification>> GetQualifications(WebViewFilters filters)
     {
         var searchCriteria = string.IsNullOrWhiteSpace(filters.SearchTerm) ? null : filters.SearchTerm;
-        var (startMonth, startYear) = GetQualificationStartDate(filters.QualificationStartDate);
         var qualificationLevel = GetQualificationLevel(filters.QualificationLevel);
 
-        return [..(await qualificationsRepository.Get(
+        var qualifications = await qualificationsRepository.Get(
                                                   qualificationLevel,
-                                                  startMonth,
-                                                  startYear,
+                                                  null,
+                                                  null,
                                                   null,
                                                   searchCriteria
-                                                 )).OrderBy(x => x.QualificationLevel)
-                                                   .ThenBy(x => x.QualificationName)];
+                                                 );
+
+        qualifications = FilterQualificationsByStartDate(qualifications, filters.QualificationStartDate);
+
+        return [..qualifications
+            .OrderBy(x => x.QualificationLevel)
+            .ThenBy(x => x.QualificationName)];
     }
 
     private static int GetQualificationLevel(string qualificationLevel) 
@@ -92,41 +94,19 @@ public class QualificationListController(
         return 0;
     }
 
-    private static (int?, int?) GetQualificationStartDate(string qualificationStartDate)
+    private static List<Qualification> FilterQualificationsByStartDate(List<Qualification> qualifications, string startDate)
     {
-        int? startMonth = null;
-        int? startYear = null;
-
-        // TODO check logic
-        if (qualificationStartDate == "Before September 2014")
+        if (!string.IsNullOrEmpty(startDate))
         {
-            startMonth = 9;
-            startYear = 2014;
-        }
-        if (qualificationStartDate == "On or after September 2014")
-        {
-            startMonth = 9;
-            startYear = 2014;
-        }
-        if (qualificationStartDate == "On or after September 2024")
-        {
-            startMonth = 9;
-            startYear = 2024;
+            return [.. qualifications.Where(q => q.EyqlTabs?.Select(t => t.Heading).Contains(startDate) == true)];
         }
 
-        return (startMonth, startYear);
+        return qualifications;
     }
 
     private static List<QualificationWebViewModel> MapToQualificationModels(List<Qualification> allQualifications)
     {
-        var results = new List<QualificationWebViewModel>();
-
-        foreach (var qualification in allQualifications)
-        {
-            results.Add(new QualificationWebViewModel(qualification));
-        }
-
-        return results;
+        return [..allQualifications.Select(qualification => new QualificationWebViewModel(qualification))];
     }
 
     private async Task<EarlyYearsQualificationListModel> SetUpEarlyYearsQualificationListModel()
