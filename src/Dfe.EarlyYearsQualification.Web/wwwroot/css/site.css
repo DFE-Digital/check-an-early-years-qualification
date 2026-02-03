@@ -619,16 +619,14 @@ hr {
     background-color: #fff;
     padding: 6px;
     cursor: pointer;
-    margin-bottom: 20px;
 }
 
 .filter__button-active-text {
     font-size: 16px;
-    vertical-align: text-bottom;
+    vertical-align: text-top;
 }
 
 .close-btn {
-    cursor: pointer;
     font-size: 20px;
     margin-left: 8px;
 }
