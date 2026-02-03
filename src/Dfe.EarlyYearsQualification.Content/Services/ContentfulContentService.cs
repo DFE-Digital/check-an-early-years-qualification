@@ -65,7 +65,7 @@ public class ContentfulContentService(
             return GetFilteredPractitionerQualificationDetailsPage(startMonth, startYear, qualificationDetailsPageEntries);
         }
 
-        return qualificationDetailsPageEntries.FirstOrDefault();
+        return qualificationDetailsPageEntries.First();
     }
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()

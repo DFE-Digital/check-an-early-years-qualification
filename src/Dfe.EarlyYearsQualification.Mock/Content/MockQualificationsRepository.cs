@@ -43,7 +43,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                };
     }
 
-    public Task<List<Qualification>> Get()
+    public static Task<List<Qualification>> Get()
     {
         return Task.FromResult(new List<Qualification>
                                {
@@ -84,7 +84,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                                        ],
                                        QualificationNumber = "Q/22/2427"
                                    }
-                               });
+                               }.ToList());
     }
 
     public Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
