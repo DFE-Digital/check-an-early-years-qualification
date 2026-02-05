@@ -45,7 +45,7 @@ public class EarlyYearsQualificationListContent
     ";
 
     public const string CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent = @"
-    <h2 class='govuk-heading-m'>Check if an early years qualification is full and relevant</h2>
+    <h2 class='govuk-heading-m'>Check if an early years qualification is approved as full and relevant</h2>
 
     <p class='govuk-body'>You can use the <a href='/' class='govuk-link'>Check an early years qualification service</a> to confirm:</p>
 
