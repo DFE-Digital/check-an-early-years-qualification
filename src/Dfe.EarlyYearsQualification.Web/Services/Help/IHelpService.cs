@@ -1,4 +1,5 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities.Help;
+﻿using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -15,7 +16,7 @@ public interface IHelpService
 
     Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage content);
 
-    public bool SelectedOptionIsValid(GetHelpPage content, GetHelpPageViewModel model);
+    public bool SelectedOptionIsValid(List<EnquiryOption> options, string value);
 
     RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model);
 

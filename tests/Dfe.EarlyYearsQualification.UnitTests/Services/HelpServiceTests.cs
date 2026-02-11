@@ -61,9 +61,9 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    [DataRow(HelpFormEnquiryReasons.QuestionAboutAQualification,
-                nameof(HelpFormEnquiryReasons.QuestionAboutAQualification))]
-    [DataRow(HelpFormEnquiryReasons.IssueWithTheService, nameof(HelpFormEnquiryReasons.IssueWithTheService))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
+                nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IssueWithTheService, nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService))]
     [DataRow(null, "")]
     public void GetSelectedOption_Returns_PreviouslySelectedRadioOption(string input, string expected)
     {
@@ -95,8 +95,8 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.IssueWithTheService), true)]
-    [DataRow(nameof(HelpFormEnquiryReasons.QuestionAboutAQualification), true)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), true)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), true)]
     [DataRow("random value", false)]
     public void SelectedOptionIsValid_Returns_Expected(string input, bool expected)
     {
@@ -107,13 +107,13 @@ public class HelpServiceTests
                                            {
                                                new EnquiryOption
                                                {
-                                                   Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification),
-                                                   Label = HelpFormEnquiryReasons.QuestionAboutAQualification
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                },
                                                new EnquiryOption
                                                {
-                                                   Value = nameof(HelpFormEnquiryReasons.IssueWithTheService),
-                                                   Label = HelpFormEnquiryReasons.IssueWithTheService
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
                                                }
                                            }
                       };
@@ -124,15 +124,15 @@ public class HelpServiceTests
                         };
 
         // Act
-        var result = GetSut().SelectedOptionIsValid(content, viewModel);
+        var result = GetSut().SelectedOptionIsValid(content.EnquiryReasons, viewModel.SelectedOption);
 
         // Assert
         result.Should().Be(expected);
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.QuestionAboutAQualification), nameof(HelpController.QualificationDetails))]
-    [DataRow(nameof(HelpFormEnquiryReasons.IssueWithTheService), nameof(HelpController.ProvideDetails))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), nameof(HelpController.QualificationDetails))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), nameof(HelpController.ProvideDetails))]
     public void SetHelpFormEnquiryReason_Returns_Expected(string input, string controllerActionToRedirectTo)
     {
         // Arrange
@@ -182,7 +182,7 @@ public class HelpServiceTests
         var result = GetSut().SetHelpFormEnquiryReason(
                                                        new GetHelpPageViewModel
                                                        {
-                                                           SelectedOption = nameof(HelpFormEnquiryReasons
+                                                           SelectedOption = nameof(HelpFormEnquiryReasons.GetHelp
                                                                .IssueWithTheService)
                                                        }
                                                       );
@@ -215,7 +215,7 @@ public class HelpServiceTests
 
         var enquiry = new HelpFormEnquiry
                       {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                           AwardingOrganisation = "Test Awarding Organisation",
                           QualificationName = "Test Qualification Name",
                       };
@@ -250,7 +250,7 @@ public class HelpServiceTests
 
         var enquiry = new HelpFormEnquiry
                       {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                           AwardingOrganisation = "Test Awarding Organisation",
                           QualificationName = "Test Qualification Name",
                           QualificationStartDate = "5/2004",
@@ -305,7 +305,7 @@ public class HelpServiceTests
         // Arrange
         var enquiry = new HelpFormEnquiry
                       {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                       };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -398,12 +398,12 @@ public class HelpServiceTests
 
         // Act
         GetSut()
-            .MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.IssueWithTheService);
+            .MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.GetHelp.IssueWithTheService);
 
         // Assert
         _mockHelpProvideDetailsPageMapper.Verify(o =>
                                                      o.MapProvideDetailsPageContentToViewModel(content,
-                                                      HelpFormEnquiryReasons.IssueWithTheService), Times.Once);
+                                                      HelpFormEnquiryReasons.GetHelp.IssueWithTheService), Times.Once);
     }
 
     [TestMethod]

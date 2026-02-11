@@ -39,16 +39,16 @@ public class HelpGetHelpPageMapperTests
             EnquiryReasons =
             [
                 new EnquiryOption
-                { Label = "I have a question about a qualification", Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification)},
+                { Label = "I have a question about a qualification", Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)},
                 new EnquiryOption
-                { Label = "I am experiencing an issue with the service", Value = nameof(HelpFormEnquiryReasons.IssueWithTheService) }
+                { Label = "I am experiencing an issue with the service", Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService) }
             ]
         };
 
         var enquiryReasons = new List<Option>
                              {
-                                 new() { Label = "I have a question about a qualification", Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification) },
-                                 new() { Label = "I am experiencing an issue with the service", Value = nameof(HelpFormEnquiryReasons.IssueWithTheService) },
+                                 new() { Label = "I have a question about a qualification", Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification) },
+                                 new() { Label = "I am experiencing an issue with the service", Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService) },
                              };
 
         var result = await new HelpGetHelpPageMapper(mockContentParser.Object).MapGetHelpPageContentToViewModelAsync(content);

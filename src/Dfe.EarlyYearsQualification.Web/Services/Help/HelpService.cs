@@ -1,4 +1,5 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities.Help;
+﻿using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -45,21 +46,21 @@ public class HelpService(
         if (enquiry is not null)
         {
             return
-                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification
+                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                     ?
-                    nameof(HelpFormEnquiryReasons.QuestionAboutAQualification)
+                    nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)
                     :
-                    enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.IssueWithTheService
-                        ? nameof(HelpFormEnquiryReasons.IssueWithTheService)
+                    enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+                        ? nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService)
                         : "";
         }
 
         return "";
     }
 
-    public bool SelectedOptionIsValid(GetHelpPage content, GetHelpPageViewModel model)
+    public bool SelectedOptionIsValid(List<EnquiryOption> options, string value)
     {
-        return content.EnquiryReasons.Select(x => x.Value).Contains(model.SelectedOption);
+        return options.Select(x => x.Value).Contains(value);
     }
 
     public RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model)
@@ -68,12 +69,18 @@ public class HelpService(
 
         switch (model.SelectedOption)
         {
-            case nameof(HelpFormEnquiryReasons.QuestionAboutAQualification):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification;
+            case nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript):
+                return RedirectToAction(nameof(HelpController.INeedACopyOfTheQualificationCertificateOrTranscript));
+            case nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs):
+                return RedirectToAction(nameof(HelpController.IDoNotKnowWhatLevelTheQualificationIs));
+            case nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol):
+                return RedirectToAction(nameof(HelpController.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol));
+            case nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification):
+                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification;
                 userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(HelpController.QualificationDetails));
-            case nameof(HelpFormEnquiryReasons.IssueWithTheService):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService;
+            case nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService):
+                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService;
                 userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(HelpController.ProvideDetails));
             default:

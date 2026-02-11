@@ -76,8 +76,8 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    [DataRow(HelpFormEnquiryReasons.QuestionAboutAQualification)]
-    [DataRow(HelpFormEnquiryReasons.IssueWithTheService)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IssueWithTheService)]
     public async Task GetHelp_ContentServiceReturnsGetHelpPage_EnquiryIsPrepopulated(string selectedOption)
     {
         // Arrange
@@ -89,12 +89,12 @@ public class HelpControllerTests
                                                new EnquiryOption
                                                {
                                                    Value = "QuestionAboutAQualification",
-                                                   Label = HelpFormEnquiryReasons.QuestionAboutAQualification
+                                                   Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                },
                                                new EnquiryOption
                                                {
                                                    Value = "IssueWithTheService",
-                                                   Label = HelpFormEnquiryReasons.IssueWithTheService
+                                                   Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
                                                }
                                            }
                       };
@@ -138,8 +138,8 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.QuestionAboutAQualification), "QualificationDetails")]
-    [DataRow(nameof(HelpFormEnquiryReasons.IssueWithTheService), "ProvideDetails")]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), "QualificationDetails")]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), "ProvideDetails")]
     public async Task Post_GetHelp_ValidModelStateRedirectsToExpectedPage(
         string selectedOption, string pageToRedirectTo)
     {
@@ -150,20 +150,20 @@ public class HelpControllerTests
                                            {
                                                new EnquiryOption
                                                {
-                                                   Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification),
-                                                   Label = HelpFormEnquiryReasons.QuestionAboutAQualification
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                },
                                                new EnquiryOption
                                                {
-                                                   Value = nameof(HelpFormEnquiryReasons.IssueWithTheService),
-                                                   Label = HelpFormEnquiryReasons.IssueWithTheService
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
                                                }
                                            }
                       };
 
         _mockHelpService.Setup(x => x.GetGetHelpPageAsync()).ReturnsAsync(content);
 
-        _mockHelpService.Setup(x => x.SelectedOptionIsValid(content, It.IsAny<GetHelpPageViewModel>()))
+        _mockHelpService.Setup(x => x.SelectedOptionIsValid(content.EnquiryReasons, It.IsAny<string>()))
                         .Returns(() => true);
 
         var submittedViewModel = new GetHelpPageViewModel
@@ -199,13 +199,13 @@ public class HelpControllerTests
                                                   new EnquiryOptionModel
                                                   {
                                                       Value =
-                                                          nameof(HelpFormEnquiryReasons.QuestionAboutAQualification),
-                                                      Label = HelpFormEnquiryReasons.QuestionAboutAQualification
+                                                          nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
+                                                      Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                   },
                                                   new EnquiryOptionModel
                                                   {
-                                                      Value = nameof(HelpFormEnquiryReasons.IssueWithTheService),
-                                                      Label = HelpFormEnquiryReasons.IssueWithTheService
+                                                      Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
+                                                      Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
                                                   }
                                               }
                          };
@@ -342,7 +342,7 @@ public class HelpControllerTests
 
         var enquiry = new HelpFormEnquiry
                       {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                           AwardingOrganisation = "Awarding organisation",
                           QualificationName = "Qualification name"
                       };
@@ -468,7 +468,7 @@ public class HelpControllerTests
 
         var helpForm = new HelpFormEnquiry
                        {
-                           ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                           ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                            QualificationStartDate = "1/2001",
                            QualificationAwardedDate = "2/2002",
                            QualificationName = "Some qualification name",
@@ -517,7 +517,7 @@ public class HelpControllerTests
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(
                                                                     new HelpFormEnquiry
                                                                     {
-                                                                        ReasonForEnquiring = HelpFormEnquiryReasons
+                                                                        ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp
                                                                             .QuestionAboutAQualification,
                                                                         QualificationName = "Qualification name",
                                                                         QualificationStartDate = "1/2000",
@@ -571,7 +571,7 @@ public class HelpControllerTests
         result.Should().NotBeNull();
         enquiry.Should().NotBeNull();
 
-        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.QuestionAboutAQualification);
+        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification);
 
         enquiry.QualificationName.Should().Be("Qualification name");
         enquiry.QualificationStartDate.Should().Be("1/2000");
@@ -698,7 +698,7 @@ public class HelpControllerTests
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(
                                                                     new HelpFormEnquiry
                                                                     {
-                                                                        ReasonForEnquiring = HelpFormEnquiryReasons
+                                                                        ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp
                                                                             .QuestionAboutAQualification,
                                                                         QualificationName = "Qualification name",
                                                                         QualificationAwardedDate = "5/2003",
@@ -743,7 +743,7 @@ public class HelpControllerTests
         result.Should().NotBeNull();
         enquiry.Should().NotBeNull();
 
-        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.QuestionAboutAQualification);
+        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification);
 
         enquiry.QualificationName.Should().Be("Qualification name");
         enquiry.QualificationStartDate.Should().BeNullOrEmpty();
@@ -777,7 +777,7 @@ public class HelpControllerTests
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(
                                                                     new HelpFormEnquiry
                                                                     {
-                                                                        ReasonForEnquiring = HelpFormEnquiryReasons
+                                                                        ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp
                                                                             .QuestionAboutAQualification,
                                                                     }
                                                                    );
@@ -845,7 +845,7 @@ public class HelpControllerTests
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(
                                                                     new HelpFormEnquiry
                                                                     {
-                                                                        ReasonForEnquiring = HelpFormEnquiryReasons
+                                                                        ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp
                                                                             .QuestionAboutAQualification,
                                                                     }
                                                                    );
@@ -912,7 +912,7 @@ public class HelpControllerTests
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(
                                                                     new HelpFormEnquiry
                                                                     {
-                                                                        ReasonForEnquiring = HelpFormEnquiryReasons
+                                                                        ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp
                                                                             .QuestionAboutAQualification,
                                                                     }
                                                                    );
@@ -983,7 +983,7 @@ public class HelpControllerTests
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(
                                                                     new HelpFormEnquiry
                                                                     {
-                                                                        ReasonForEnquiring = HelpFormEnquiryReasons
+                                                                        ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp
                                                                             .QuestionAboutAQualification,
                                                                     }
                                                                    );
@@ -1090,8 +1090,8 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    [DataRow(HelpFormEnquiryReasons.QuestionAboutAQualification, "QualificationDetails")]
-    [DataRow(HelpFormEnquiryReasons.IssueWithTheService, "GetHelp")]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification, "QualificationDetails")]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IssueWithTheService, "GetHelp")]
     public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_ReturnsProvideDetailsPageViewModel(
         string selectedOption, string pageToRedirectTo)
     {
@@ -1184,7 +1184,7 @@ public class HelpControllerTests
         // Arrange
         var helpForm = new HelpFormEnquiry
                        {
-                           ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
+                           ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
                        };
 
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
@@ -1248,7 +1248,7 @@ public class HelpControllerTests
         // Arrange
         var helpForm = new HelpFormEnquiry
                        {
-                           ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
+                           ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
                        };
 
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(helpForm);
@@ -1267,7 +1267,7 @@ public class HelpControllerTests
         result.Should().NotBeNull();
         enquiry.Should().NotBeNull();
 
-        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.IssueWithTheService);
+        enquiry.ReasonForEnquiring.Should().Be(HelpFormEnquiryReasons.GetHelp.IssueWithTheService);
         enquiry.AdditionalInformation.Should().Be("Some details about the issue");
 
         var resultType = result as RedirectToActionResult;
@@ -1283,7 +1283,7 @@ public class HelpControllerTests
         // Arrange
         var enquiry = new HelpFormEnquiry
                       {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
+                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
                       };
 
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
@@ -1396,7 +1396,7 @@ public class HelpControllerTests
 
         var helpForm = new HelpFormEnquiry
                        {
-                           ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                           ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                            AdditionalInformation = "Some details about the issue",
                            QualificationName = "A qualification name",
                            QualificationStartDate = "1/2000",
@@ -1427,7 +1427,7 @@ public class HelpControllerTests
         // Arrange
         var helpForm = new HelpFormEnquiry
                        {
-                           ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
+                           ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
                            AdditionalInformation = "Some details about the issue",
                        };
 

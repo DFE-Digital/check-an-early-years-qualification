@@ -773,12 +773,12 @@ public class MockContentfulServiceTests
                                  new()
                                  {
                                      Label = "I have a question about a qualification",
-                                     Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification)
+                                     Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)
                                  },
                                  new()
                                  {
                                      Label = "I am experiencing an issue with the service",
-                                     Value = nameof(HelpFormEnquiryReasons.IssueWithTheService)
+                                     Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService)
                                  },
                              };
 

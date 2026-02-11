@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Services.Help;
@@ -42,7 +43,7 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var submittedValueIsValid = helpService.SelectedOptionIsValid(content, model);
+        var submittedValueIsValid = helpService.SelectedOptionIsValid(content.EnquiryReasons, model.SelectedOption);
 
         if (!ModelState.IsValid || !submittedValueIsValid)
         {
@@ -53,6 +54,87 @@ public class HelpController(
         }
         
         return helpService.SetHelpFormEnquiryReason(model);
+    }
+
+    [HttpGet("I-need-a-copy-of-the-qualification-certificate-or-transcript")]
+    public async Task<IActionResult> INeedACopyOfTheQualificationCertificateOrTranscript()
+    {
+        // todo
+        return View("Advice");
+    }
+
+    [HttpGet("I-do-not-know-what-level-the-qualification-is")]
+    public async Task<IActionResult> IDoNotKnowWhatLevelTheQualificationIs()
+    {
+        // todo
+        return View("Advice");
+    }
+
+    [HttpGet("I-want-to-check-whether-a-course-is-approved-before-I-enrol")]
+    public async Task<IActionResult> IWantToCheckWhetherACourseIsApprovedBeforeIEnrol()
+    {
+        // todo
+        return View("Advice");
+    }
+
+    // todo rename url?
+    [HttpGet("proceed-with-qualification-query")]
+    public async Task<IActionResult> ProceedWithQualificationQuery()
+    {
+        var content = await helpService.GetHelpQualificationDetailsPageAsync();
+
+        if (content is null)
+        {
+            logger.LogError("'Proceed with qualification query page' content could not be found");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var viewModel = new ProceedWithQualificationQueryViewModel();
+
+        var enquiry = helpService.GetHelpFormEnquiry();
+
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
+        {
+            logger.LogError("Help form enquiry reason is empty");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
+        return View("ProceedWithQualificationQuery", viewModel);
+    }
+
+    // todo rename url?
+    [HttpPost("proceed-with-qualification-query")]
+    public async Task<IActionResult> ProceedWithQualificationQuery([FromForm] ProceedWithQualificationQueryViewModel model)
+    {
+        var content = await helpService.GetGetHelpPageAsync();
+
+        if (content is null)
+        {
+            logger.LogError("'Proceed with qualification query page' content could not be found");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var submittedValueIsValid = helpService.SelectedOptionIsValid(content.EnquiryReasons, model.SelectedOption);
+
+        if (!ModelState.IsValid || !submittedValueIsValid)
+        {
+            var viewModel = await helpService.MapGetHelpPageContentToViewModelAsync(content);
+            viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
+
+            return View("GetHelp", viewModel);
+        }
+
+        // todo Should we store the model.SelectedOption in the cookie? Is it useful?
+        switch (model.SelectedOption)
+        {
+            case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService):
+                return RedirectToAction(nameof(HomeController.Index));
+            case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam):
+                return RedirectToAction(nameof(QualificationDetails));
+            default:
+                logger.LogError("Unexpected enquiry option");
+                return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet("qualification-details")]

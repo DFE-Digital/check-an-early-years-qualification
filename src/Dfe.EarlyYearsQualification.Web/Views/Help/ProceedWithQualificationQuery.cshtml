@@ -1,0 +1,58 @@
+﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels.ProceedWithQualificationQueryViewModel
+
+@{
+    ViewData["Title"] = Model.Heading;
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        @if (Model.HasValidationErrors)
+        {
+            await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel);
+        }
+
+        <h1 class="govuk-heading-xl" id="help-page-heading">@Model.Heading</h1>
+        <div class="govuk-body govuk-!-margin-bottom-7" id="post-heading-content">
+            @Html.Raw(Model.PostHeadingContent)
+        </div>
+
+        @using (Html.BeginForm("ProceedWithQualificationQuery", "Help", FormMethod.Post, new { id = "proceed-with-qualification-enquiry-form" }))
+        {
+            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-0">
+                        <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="proceed-with-qualification-enquiry-heading">
+                            @Model.ReasonForEnquiryHeading
+                        </h2>
+                    </legend>
+
+                    @if (Model.HasNoEnquiryOptionSelectedError)
+                    {
+                        <govuk-error-message id="option-error" visually-hidden-text="Error">@Model.NoEnquiryOptionSelectedErrorMessage</govuk-error-message>
+                    }
+
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @foreach (var option in Model.EnquiryReasons)
+                        {
+                            <div class="govuk-radios__item">
+                                @Html.RadioButtonFor(x => x.SelectedOption, option.Value, new { @class = "govuk-radios__input", id = option.Value })
+                                <label class="govuk-label govuk-radios__label" for="@option.Value">
+                                    @option.Label
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+            <div class="govuk-form-group">
+                <govuk-button id="proceed-with-qualification-enquiry-form-submit" type="submit">@Model.CtaButtonText</govuk-button>
+            </div>
+        }
+    </div>
+</div>
