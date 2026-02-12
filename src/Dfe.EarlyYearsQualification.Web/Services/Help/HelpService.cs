@@ -23,6 +23,7 @@ public class HelpService(
     INotificationService notificationService,
     IDateQuestionModelValidator questionModelValidator,
     IHelpGetHelpPageMapper getHelpPageMapper,
+    IHelpProceedWithQualificationQueryPageMapper proceedWithQualificationQueryPageMapper,
     IHelpQualificationDetailsPageMapper helpQualificationDetailsPageMapper,
     IHelpProvideDetailsPageMapper helpProvideDetailsPageMapper,
     IHelpEmailAddressPageMapper helpEmailAddressPageMapper,
@@ -78,7 +79,7 @@ public class HelpService(
             case nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification):
                 enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification;
                 userJourneyCookieService.SetHelpFormEnquiry(enquiry);
-                return RedirectToAction(nameof(HelpController.QualificationDetails));
+                return RedirectToAction(nameof(HelpController.ProceedWithQualificationQuery));
             case nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService):
                 enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService;
                 userJourneyCookieService.SetHelpFormEnquiry(enquiry);
@@ -92,6 +93,16 @@ public class HelpService(
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPageAsync()
     {
         return await contentService.GetHelpQualificationDetailsPage();
+    }
+
+    public async Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPageAsync()
+    {
+        return await contentService.GetProceedWithQualificationQueryPage();
+    }
+
+    public async Task<ProceedWithQualificationQueryViewModel> MapProceedWithQualificationQueryPageContentToViewModelAsync(HelpProceedWithQualificationQueryPage content)
+    {
+        return await proceedWithQualificationQueryPageMapper.MapProceedWithQualificationQueryPageContentToViewModelAsync(content);
     }
 
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel)

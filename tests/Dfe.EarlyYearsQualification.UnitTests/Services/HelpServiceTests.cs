@@ -23,6 +23,7 @@ public class HelpServiceTests
     private Mock<INotificationService> _mockNotificationService = new Mock<INotificationService>();
     private Mock<IDateQuestionModelValidator> _mockDateQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
     private Mock<IHelpGetHelpPageMapper> _mockHelpGetHelpPageMapper = new Mock<IHelpGetHelpPageMapper>();
+    private Mock<IHelpProceedWithQualificationQueryPageMapper> _mockHelpProceedWithQualificationQueryPageMapper = new Mock<IHelpProceedWithQualificationQueryPageMapper>();
 
     private Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper =
         new Mock<IHelpQualificationDetailsPageMapper>();
@@ -505,6 +506,7 @@ public class HelpServiceTests
                                _mockNotificationService.Object,
                                _mockDateQuestionModelValidator.Object,
                                _mockHelpGetHelpPageMapper.Object,
+                               _mockHelpProceedWithQualificationQueryPageMapper.Object,
                                _mockHelpQualificationDetailsPageMapper.Object,
                                _mockHelpProvideDetailsPageMapper.Object,
                                _mockHelpEmailAddressPageMapper.Object,

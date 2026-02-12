@@ -51,6 +51,8 @@ public interface IContentService
 
     Task<GetHelpPage?> GetGetHelpPage();
 
+    Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPage();
+
     Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage();
 
     Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage();

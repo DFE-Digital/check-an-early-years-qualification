@@ -26,6 +26,7 @@ public static class ContentTypes
     public const string FeedbackFormPage = "feedbackPage";
     public const string FeedbackFormConfirmationPage = "feedbackFormConfirmationPage";
     public const string GetHelpPage = "getHelpPage";
+    public const string HelpProceedWithQualificationQueryPage = "helpProceedWithQualificationQueryPage";
     public const string HelpQualificationDetailsPage = "helpQualificationDetails";
     public const string HelpProvideDetailsPage = "helpProvideDetailsPage";
     public const string HelpEmailAddressPage = "helpEmailAddress";

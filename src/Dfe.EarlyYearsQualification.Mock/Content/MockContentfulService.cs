@@ -1120,4 +1120,10 @@ public class MockContentfulService : IContentService
                        ContentfulContentHelper.Paragraph("Your feedback matters and will help us improve the service.")
                };
     }
+
+    // todo
+    public Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPage()
+    {
+        throw new NotImplementedException();
+    }
 }

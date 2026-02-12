@@ -355,6 +355,20 @@ public class ContentfulContentService(
         return getHelpPage.First();
     }
 
+    public async Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPage()
+    {
+        var proceedWithQualificationQueryPage = await GetEntriesByType<HelpProceedWithQualificationQueryPage>();
+
+        // ReSharper disable once InvertIf
+        if (proceedWithQualificationQueryPage is null || !proceedWithQualificationQueryPage.Any())
+        {
+            Logger.LogWarning("No 'proceed with qualification query page' returned");
+            return null;
+        }
+
+        return proceedWithQualificationQueryPage.First();
+    }
+
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()
     {
         var helpQualificationDetailsPage = await GetEntriesByType<HelpQualificationDetailsPage>();

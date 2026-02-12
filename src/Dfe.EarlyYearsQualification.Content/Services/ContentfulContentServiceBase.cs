@@ -40,6 +40,7 @@ public abstract class ContentfulContentServiceBase
               { typeof(FeedbackFormPage), ContentTypes.FeedbackFormPage },
               { typeof(FeedbackFormConfirmationPage), ContentTypes.FeedbackFormConfirmationPage },
               { typeof(GetHelpPage), ContentTypes.GetHelpPage },
+              { typeof(HelpProceedWithQualificationQueryPage), ContentTypes.HelpProceedWithQualificationQueryPage },
               { typeof(HelpQualificationDetailsPage), ContentTypes.HelpQualificationDetailsPage },
               { typeof(HelpProvideDetailsPage), ContentTypes.HelpProvideDetailsPage },
               { typeof(HelpEmailAddressPage), ContentTypes.HelpEmailAddressPage },

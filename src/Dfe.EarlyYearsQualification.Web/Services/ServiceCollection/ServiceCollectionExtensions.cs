@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
     {
         serviceCollection.AddScoped<IAdvicePageMapper, AdvicePageMapper>();
         serviceCollection.AddScoped<IHelpGetHelpPageMapper, HelpGetHelpPageMapper>();
+        serviceCollection.AddScoped<IHelpProceedWithQualificationQueryPageMapper, HelpProceedWithQualificationQueryPageMapper>();
         serviceCollection.AddScoped<IHelpQualificationDetailsPageMapper, HelpQualificationDetailsPageMapper>();
         serviceCollection.AddScoped<IHelpProvideDetailsPageMapper, HelpProvideDetailsPageMapper>();
         serviceCollection.AddScoped<IHelpEmailAddressPageMapper, HelpEmailAddressPageMapper>();

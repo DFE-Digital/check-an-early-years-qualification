@@ -24,6 +24,10 @@ public interface IHelpService
 
     public Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPageAsync();
 
+    public Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPageAsync();
+
+    public Task<ProceedWithQualificationQueryViewModel> MapProceedWithQualificationQueryPageContentToViewModelAsync(HelpProceedWithQualificationQueryPage content);
+
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel);
 
     public QualificationDetailsPageViewModel MapHelpQualificationDetailsPageContentToViewModel(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content, DatesValidationResult? validationResult, ModelStateDictionary modelState);

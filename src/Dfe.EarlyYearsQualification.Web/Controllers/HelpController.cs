@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
@@ -77,11 +78,10 @@ public class HelpController(
         return View("Advice");
     }
 
-    // todo rename url?
     [HttpGet("proceed-with-qualification-query")]
     public async Task<IActionResult> ProceedWithQualificationQuery()
     {
-        var content = await helpService.GetHelpQualificationDetailsPageAsync();
+        var content = await helpService.GetProceedWithQualificationQueryPageAsync();
 
         if (content is null)
         {
@@ -89,7 +89,7 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = new ProceedWithQualificationQueryViewModel();
+        var viewModel = await helpService.MapProceedWithQualificationQueryPageContentToViewModelAsync(content);
 
         var enquiry = helpService.GetHelpFormEnquiry();
 
@@ -102,11 +102,10 @@ public class HelpController(
         return View("ProceedWithQualificationQuery", viewModel);
     }
 
-    // todo rename url?
     [HttpPost("proceed-with-qualification-query")]
     public async Task<IActionResult> ProceedWithQualificationQuery([FromForm] ProceedWithQualificationQueryViewModel model)
     {
-        var content = await helpService.GetGetHelpPageAsync();
+        var content = await helpService.GetProceedWithQualificationQueryPageAsync();
 
         if (content is null)
         {
@@ -118,17 +117,17 @@ public class HelpController(
 
         if (!ModelState.IsValid || !submittedValueIsValid)
         {
-            var viewModel = await helpService.MapGetHelpPageContentToViewModelAsync(content);
+            var viewModel = await helpService.MapProceedWithQualificationQueryPageContentToViewModelAsync(content);
             viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
 
-            return View("GetHelp", viewModel);
+            return View("ProceedWithQualificationQuery", viewModel);
         }
 
         // todo Should we store the model.SelectedOption in the cookie? Is it useful?
         switch (model.SelectedOption)
         {
             case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService):
-                return RedirectToAction(nameof(HomeController.Index));
+               return RedirectToAction(nameof(QuestionsController.PreCheck), "Questions");
             case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam):
                 return RedirectToAction(nameof(QualificationDetails));
             default:
