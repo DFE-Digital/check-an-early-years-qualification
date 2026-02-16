@@ -22,148 +22,148 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_QualificationsAchievedOutsideTheUk_ReturnsExpectedDetails()
+    public async Task GetStaticPage_QualificationsAchievedOutsideTheUk_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedOutsideTheUk);
+        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsAchievedOutsideTheUk);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().NotBeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_Level2SeptAndAug_ReturnsExpectedDetails()
+    public async Task GetStaticPage_Level2SeptAndAug_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsStartedBetweenSept2014AndAug2019);
+        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsStartedBetweenSept2014AndAug2019);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().BeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_QualificationsAchievedInScotland_ReturnsExpectedDetails()
+    public async Task GetStaticPage_QualificationsAchievedInScotland_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInScotland);
+        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsAchievedInScotland);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().Be("Qualifications achieved in Scotland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().NotBeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_QualificationsAchievedInWales_ReturnsExpectedDetails()
+    public async Task GetStaticPage_QualificationsAchievedInWales_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInWales);
+        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsAchievedInWales);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().Be("Qualifications achieved in Wales");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().NotBeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_QualificationsAchievedInNorthernIreland_ReturnsExpectedDetails()
+    public async Task GetStaticPage_QualificationsAchievedInNorthernIreland_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationsAchievedInNorthernIreland);
+        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsAchievedInNorthernIreland);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().Be("Qualifications achieved in Northern Ireland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().NotBeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_QualificationNotOnTheList_ReturnsExpectedDetails()
+    public async Task GetStaticPage_QualificationNotOnTheList_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetAdvicePage(AdvicePages.QualificationNotOnTheList);
+        var result = await contentfulService.GetStaticPage(StaticPages.QualificationNotOnTheList);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().Be("Qualification not on the list");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().NotBeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_Level7QualificationStartedBetweenSept2014AndAug2019_ReturnsExpectedDetails()
+    public async Task GetStaticPage_Level7QualificationStartedBetweenSept2014AndAug2019_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
         var result =
-            await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019);
+            await contentfulService.GetStaticPage(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().BeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_Level7QualificationAfterAug2019_ReturnsExpectedDetails()
+    public async Task GetStaticPage_Level7QualificationAfterAug2019_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetAdvicePage(AdvicePages.Level7QualificationAfterAug2019);
+        var result = await contentfulService.GetStaticPage(StaticPages.Level7QualificationAfterAug2019);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().BeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_Help_ReturnsExpectedDetails()
+    public async Task GetStaticPage_Help_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetAdvicePage(AdvicePages.Help);
+        var result = await contentfulService.GetStaticPage(StaticPages.Help);
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AdvicePage>();
+        result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
         result.Heading.Should().Be("Help");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().BeNull();
         result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
+    public async Task GetStaticPage_UnknownEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
 
-        var page = await contentfulService.GetAdvicePage("Invalid entry Id");
+        var page = await contentfulService.GetStaticPage("Invalid entry Id");
 
         page.Should().BeNull();
     }

@@ -1,8 +1,7 @@
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
-using Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
-using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +10,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [Route("/help")]
 public class HelpController(
     ILogger<HelpController> logger,
-    IHelpService helpService
+    Services.Help.IHelpService helpService
     )
     : ServiceController
 {
@@ -28,7 +27,7 @@ public class HelpController(
         }
 
         var viewModel = await helpService.MapGetHelpPageContentToViewModelAsync(content);
-        viewModel.SelectedOption = helpService.GetSelectedOption();
+        viewModel.SelectedOption = helpService.GetWhyAreYouContactingUsSelectedOption();
 
         return View("GetHelp", viewModel);
     } 
@@ -60,22 +59,19 @@ public class HelpController(
     [HttpGet("I-need-a-copy-of-the-qualification-certificate-or-transcript")]
     public async Task<IActionResult> INeedACopyOfTheQualificationCertificateOrTranscript()
     {
-        // todo
-        return View("Advice");
+        return await GetView(StaticPages.HowToGetACopyOfTheCertificateOrTranscript);
     }
 
     [HttpGet("I-do-not-know-what-level-the-qualification-is")]
     public async Task<IActionResult> IDoNotKnowWhatLevelTheQualificationIs()
     {
-        // todo
-        return View("Advice");
+        return await GetView(StaticPages.HowToFindTheLevelOfAQualification);
     }
 
     [HttpGet("I-want-to-check-whether-a-course-is-approved-before-I-enrol")]
     public async Task<IActionResult> IWantToCheckWhetherACourseIsApprovedBeforeIEnrol()
     {
-        // todo
-        return View("Advice");
+        return await GetView(StaticPages.HowToFindASuitableCourse);
     }
 
     [HttpGet("proceed-with-qualification-query")]
@@ -89,8 +85,6 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = await helpService.MapProceedWithQualificationQueryPageContentToViewModelAsync(content);
-
         var enquiry = helpService.GetHelpFormEnquiry();
 
         if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
@@ -98,6 +92,9 @@ public class HelpController(
             logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
         }
+
+        var viewModel = await helpService.MapProceedWithQualificationQueryPageContentToViewModelAsync(content);
+        viewModel.SelectedOption = helpService.GetWhatDoYouWantToDoNextSelectedOption();
 
         return View("ProceedWithQualificationQuery", viewModel);
     }
@@ -123,12 +120,14 @@ public class HelpController(
             return View("ProceedWithQualificationQuery", viewModel);
         }
 
-        // todo Should we store the model.SelectedOption in the cookie? Is it useful?
         switch (model.SelectedOption)
         {
             case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService):
-               return RedirectToAction(nameof(QuestionsController.PreCheck), "Questions");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam):
+                var enquiry = helpService.GetHelpFormEnquiry();
+                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam;
+                helpService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(QualificationDetails));
             default:
                 logger.LogError("Unexpected enquiry option");
@@ -354,5 +353,19 @@ public class HelpController(
         var viewModel = await helpService.MapConfirmationPageContentToViewModelAsync(content);
 
         return View("Confirmation", viewModel);
+    }
+
+    private async Task<IActionResult> GetView(string staticPageId)
+    {
+        var staticPage = await helpService.GetStaticPage(staticPageId);
+        if (staticPage is null)
+        {
+            logger.LogError("No content for the advice page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var model = await helpService.MapStaticPage(staticPage);
+
+        return View("../Static/Static", model);
     }
 }

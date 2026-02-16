@@ -28,9 +28,9 @@ public class ServiceCollectionExtensionsTests
         ServiceCollectionExtensions.AddMappers(services);
 
         // Assert
-        services.Count.Should().Be(18);
+        services.Count.Should().Be(19);
 
-        VerifyService<IAdvicePageMapper, AdvicePageMapper>(services, ServiceLifetime.Scoped);
+        VerifyService<IStaticPageMapper, StaticPageMapper>(services, ServiceLifetime.Scoped);
 
         VerifyService<IHelpGetHelpPageMapper, HelpQualificationDetailsPageMapper>(services, ServiceLifetime.Scoped);
 
@@ -65,6 +65,8 @@ public class ServiceCollectionExtensionsTests
         VerifyService<IFooterMapper, FooterMapper>(services, ServiceLifetime.Scoped);
 
         VerifyService<IQualificationDetailsMapper, QualificationDetailsMapper>(services, ServiceLifetime.Scoped);
+
+        VerifyService<IHelpProceedWithQualificationQueryPageMapper, HelpProceedWithQualificationQueryPageMapper>(services, ServiceLifetime.Scoped);
     }
 
     [TestMethod]

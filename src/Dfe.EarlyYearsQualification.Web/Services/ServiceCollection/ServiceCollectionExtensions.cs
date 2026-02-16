@@ -9,7 +9,7 @@ public static class ServiceCollectionExtensions
 {
     public static void AddMappers(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IAdvicePageMapper, AdvicePageMapper>();
+        serviceCollection.AddScoped<IStaticPageMapper, StaticPageMapper>();
         serviceCollection.AddScoped<IHelpGetHelpPageMapper, HelpGetHelpPageMapper>();
         serviceCollection.AddScoped<IHelpProceedWithQualificationQueryPageMapper, HelpProceedWithQualificationQueryPageMapper>();
         serviceCollection.AddScoped<IHelpQualificationDetailsPageMapper, HelpQualificationDetailsPageMapper>();

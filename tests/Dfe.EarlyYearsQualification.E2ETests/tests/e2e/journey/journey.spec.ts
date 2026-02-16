@@ -117,7 +117,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
 
         // qualification not on the list page
         await checkUrl(page, "/advice/qualification-not-on-the-list");
-        await checkText(page, "#advice-page-heading", "This is the level 3 page");
+        await checkText(page, "#static-page-heading", "This is the level 3 page");
 
         // check back button goes back to the qualifications list page
         await clickBackButton(page);

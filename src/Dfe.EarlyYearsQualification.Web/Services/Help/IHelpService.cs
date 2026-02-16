@@ -1,5 +1,6 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -20,7 +21,9 @@ public interface IHelpService
 
     RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model);
 
-    public string GetSelectedOption();
+    public string GetWhyAreYouContactingUsSelectedOption();
+
+    public string GetWhatDoYouWantToDoNextSelectedOption();
 
     public Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPageAsync();
 
@@ -55,4 +58,8 @@ public interface IHelpService
     public HelpFormEnquiry GetHelpFormEnquiry();
 
     public void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry);
+
+    public Task<StaticPage?> GetStaticPage(string entryId);
+
+    public Task<StaticPageModel?> MapStaticPage(StaticPage entryId);
 }

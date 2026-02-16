@@ -34,45 +34,45 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<AdvicePage?> GetAdvicePage(string entryId)
+    public async Task<StaticPage?> GetStaticPage(string entryId)
     {
-        var body = ContentfulContentHelper.Paragraph("Test Advice Page Body");
+        var body = ContentfulContentHelper.Paragraph("Test Static Page Body");
 
         return entryId switch
                {
-                   AdvicePages.QualificationsAchievedOutsideTheUk =>
-                       await Task.FromResult(CreateAdvicePage("Qualifications achieved outside the United Kingdom",
+                   StaticPages.QualificationsAchievedOutsideTheUk =>
+                       await Task.FromResult(CreateStaticPage("Qualifications achieved outside the United Kingdom",
                                                               body, WhereWasTheQualificationAwardedPath, true)),
-                   AdvicePages.QualificationsStartedBetweenSept2014AndAug2019 =>
+                   StaticPages.QualificationsStartedBetweenSept2014AndAug2019 =>
                        await
-                           Task.FromResult(CreateAdvicePage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
+                           Task.FromResult(CreateStaticPage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
                                                             body, WhatLevelIsTheQualificationPath, false)),
 
-                   AdvicePages.QualificationsAchievedInScotland =>
-                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Scotland",
+                   StaticPages.QualificationsAchievedInScotland =>
+                       await Task.FromResult(CreateStaticPage("Qualifications achieved in Scotland",
                                                               body, WhereWasTheQualificationAwardedPath, true)),
 
-                   AdvicePages.QualificationsAchievedInWales =>
-                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Wales",
+                   StaticPages.QualificationsAchievedInWales =>
+                       await Task.FromResult(CreateStaticPage("Qualifications achieved in Wales",
                                                               body, WhereWasTheQualificationAwardedPath, true)),
 
-                   AdvicePages.QualificationsAchievedInNorthernIreland =>
-                       await Task.FromResult(CreateAdvicePage("Qualifications achieved in Northern Ireland",
+                   StaticPages.QualificationsAchievedInNorthernIreland =>
+                       await Task.FromResult(CreateStaticPage("Qualifications achieved in Northern Ireland",
                                                               body, WhereWasTheQualificationAwardedPath, true)),
 
-                   AdvicePages.QualificationNotOnTheList =>
-                       await Task.FromResult(CreateAdvicePage("Qualification not on the list",
+                   StaticPages.QualificationNotOnTheList =>
+                       await Task.FromResult(CreateStaticPage("Qualification not on the list",
                                                               body, QualificationsPath, true)),
 
-                   AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
+                   StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await
-                           Task.FromResult(CreateAdvicePage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
+                           Task.FromResult(CreateStaticPage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
                                                             body, WhatLevelIsTheQualificationPath, false)),
-                   AdvicePages.Level7QualificationAfterAug2019 =>
-                       await Task.FromResult(CreateAdvicePage("Level 7 qualification after aug 2019",
+                   StaticPages.Level7QualificationAfterAug2019 =>
+                       await Task.FromResult(CreateStaticPage("Level 7 qualification after aug 2019",
                                                               body, WhatLevelIsTheQualificationPath, false)),
-                   AdvicePages.Help =>
-                       await Task.FromResult(CreateAdvicePage("Help",
+                   StaticPages.Help =>
+                       await Task.FromResult(CreateStaticPage("Help",
                                                               body, HomePath, false)),
                    _ => null
                };
@@ -1078,9 +1078,9 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static AdvicePage CreateAdvicePage(string heading, Document body, string backButtonUrl, bool hasUpDownFeedback)
+    private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl, bool hasUpDownFeedback)
     {
-        return new AdvicePage
+        return new StaticPage
                {
                    Body = body,
                    Heading = heading,
@@ -1122,8 +1122,31 @@ public class MockContentfulService : IContentService
     }
 
     // todo
-    public Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPage()
+    public async Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPage()
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(
+            new HelpProceedWithQualificationQueryPage
+            {
+                Heading = "Check the qualification before contacting us",
+                PostHeadingContent = ContentfulContentHelper.Paragraph("Use the check an early years qualification service to confirm if a qualification is approved as full and relevant by the Department for Education."),
+                ReasonForEnquiryHeading = "What do you want to do next?",
+                CtaButtonText = CtaButtonText,
+                BackButton = new NavigationLink
+                {
+                    DisplayText = "Back to get help with the Check an early years qualification service",
+                    Href = "/help/get-help",
+                    OpenInNewTab = false
+                },
+                ErrorBannerHeading = ThereIsAProblem,
+                NoEnquiryOptionSelectedErrorMessage = "Select one option",
+                EnquiryReasons =
+                [
+                    new EnquiryOption
+                    { Label = "Check the qualification using the service", Value = "CheckTheQualificationUsingTheService" },
+                    new EnquiryOption
+                    { Label = "Contact the early years qualification team", Value = "ContactTheEarlyYearsQualificationTeam" }
+                ]
+            }
+        );
     }
 }

@@ -5,7 +5,9 @@ using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -27,7 +29,8 @@ public class HelpService(
     IHelpQualificationDetailsPageMapper helpQualificationDetailsPageMapper,
     IHelpProvideDetailsPageMapper helpProvideDetailsPageMapper,
     IHelpEmailAddressPageMapper helpEmailAddressPageMapper,
-    IHelpConfirmationPageMapper helpConfirmationPageMapper
+    IHelpConfirmationPageMapper helpConfirmationPageMapper,
+    IStaticPageMapper staticPageMapper
 ) : ServiceController, IHelpService
 {
     public async Task<GetHelpPage?> GetGetHelpPageAsync()
@@ -40,20 +43,47 @@ public class HelpService(
         return await getHelpPageMapper.MapGetHelpPageContentToViewModelAsync(content);
     }
 
-    public string GetSelectedOption()
+    public string GetWhyAreYouContactingUsSelectedOption()
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
         if (enquiry is not null)
         {
-            return
-                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
-                    ?
-                    nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)
-                    :
-                    enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.GetHelp.IssueWithTheService
-                        ? nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService)
-                        : "";
+            switch (enquiry.ReasonForEnquiring)
+            {
+                case HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript);
+                case HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs);
+                case HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol);
+                case HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification);
+                case HelpFormEnquiryReasons.GetHelp.IssueWithTheService:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService);
+                default:
+                    return string.Empty;
+            }
+        }
+
+        return "";
+    }
+
+    public string GetWhatDoYouWantToDoNextSelectedOption()
+    {
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        if (enquiry is not null)
+        {
+            switch (enquiry.ReasonForEnquiring)
+            {
+                case HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService:
+                return nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService);
+                case HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam:
+                return nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam);
+                default:
+                return string.Empty;
+            }
         }
 
         return "";
@@ -71,10 +101,16 @@ public class HelpService(
         switch (model.SelectedOption)
         {
             case nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript):
+                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript;
+                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(HelpController.INeedACopyOfTheQualificationCertificateOrTranscript));
             case nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs):
+                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs;
+                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(HelpController.IDoNotKnowWhatLevelTheQualificationIs));
             case nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol):
+                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol;
+                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(HelpController.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol));
             case nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification):
                 enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification;
@@ -227,5 +263,15 @@ public class HelpService(
     public void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry)
     {
         userJourneyCookieService.SetHelpFormEnquiry(formEnquiry);
+    }
+
+    public async Task<StaticPage?> GetStaticPage(string entryId)
+    {
+        return await contentService.GetStaticPage(entryId);
+    }
+
+    public async Task<StaticPageModel> MapStaticPage(StaticPage page)
+    {
+        return await staticPageMapper.Map(page);
     }
 }

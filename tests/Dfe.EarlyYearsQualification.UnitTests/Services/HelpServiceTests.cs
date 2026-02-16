@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
@@ -33,6 +34,7 @@ public class HelpServiceTests
 
     private Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new Mock<IHelpEmailAddressPageMapper>();
     private Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new Mock<IHelpConfirmationPageMapper>();
+    private Mock<IStaticPageMapper> _mockStaticPageMapper = new Mock<IStaticPageMapper>();
 
     [TestMethod]
     public async Task GetGetHelpPageAsync_Calls_ContentService_GetGetHelpPage()
@@ -132,7 +134,7 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), nameof(HelpController.QualificationDetails))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), nameof(HelpController.ProceedWithQualificationQuery))]
     [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), nameof(HelpController.ProvideDetails))]
     public void SetHelpFormEnquiryReason_Returns_Expected(string input, string controllerActionToRedirectTo)
     {
@@ -510,7 +512,8 @@ public class HelpServiceTests
                                _mockHelpQualificationDetailsPageMapper.Object,
                                _mockHelpProvideDetailsPageMapper.Object,
                                _mockHelpEmailAddressPageMapper.Object,
-                               _mockHelpConfirmationPageMapper.Object
+                               _mockHelpConfirmationPageMapper.Object,
+                               _mockStaticPageMapper.Object
                               );
     }
 }
