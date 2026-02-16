@@ -1139,12 +1139,12 @@ public class MockContentfulService : IContentService
                 },
                 ErrorBannerHeading = ThereIsAProblem,
                 NoEnquiryOptionSelectedErrorMessage = "Select one option",
-                EnquiryReasons =
+                Options =
                 [
-                    new EnquiryOption
+                    new Option
                     { Label = "Check the qualification using the service", Value = "CheckTheQualificationUsingTheService" },
-                    new EnquiryOption
-                    { Label = "Contact the early years qualification team", Value = "ContactTheEarlyYearsQualificationTeam" }
+                    new Option
+                    { Label = "Contact the early years qualification team", Value = "ContactTheEarlyYearsQualificationTeam", Hint = "The team will not check individual qualifications so make sure your query is not related to that" }
                 ]
             }
         );

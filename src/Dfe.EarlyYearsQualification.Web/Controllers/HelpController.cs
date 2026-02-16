@@ -110,7 +110,7 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var submittedValueIsValid = helpService.SelectedOptionIsValid(content.EnquiryReasons, model.SelectedOption);
+        var submittedValueIsValid = helpService.SelectedOptionIsValid(content.Options, model.SelectedOption);
 
         if (!ModelState.IsValid || !submittedValueIsValid)
         {

@@ -19,6 +19,8 @@ public interface IHelpService
 
     public bool SelectedOptionIsValid(List<EnquiryOption> options, string value);
 
+    public bool SelectedOptionIsValid(List<Option> options, string value);
+
     RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model);
 
     public string GetWhyAreYouContactingUsSelectedOption();

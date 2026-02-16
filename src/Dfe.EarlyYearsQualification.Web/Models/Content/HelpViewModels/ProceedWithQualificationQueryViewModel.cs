@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Dfe.EarlyYearsQualification.Web.Attributes;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
@@ -16,7 +17,7 @@ public class ProceedWithQualificationQueryViewModel
 
     public string CtaButtonText { get; init; } = string.Empty;
 
-    public List<EnquiryOptionModel> EnquiryReasons { get; init; } = new List<EnquiryOptionModel>();
+    public List<OptionModel> Options { get; init; } = new List<OptionModel>();
 
     public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;
 
@@ -44,7 +45,7 @@ public class ProceedWithQualificationQueryViewModel
                     new ErrorSummaryLink
                     {
                         ErrorBannerLinkText = NoEnquiryOptionSelectedErrorMessage,
-                        ElementLinkId = EnquiryReasons[0].Value
+                        ElementLinkId = Options[0].Value
                     }
                 );
             }

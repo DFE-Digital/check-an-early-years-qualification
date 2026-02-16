@@ -94,6 +94,11 @@ public class HelpService(
         return options.Select(x => x.Value).Contains(value);
     }
 
+    public bool SelectedOptionIsValid(List<Option> options, string value)
+    {
+        return options.Select(x => x.Value).Contains(value);
+    }
+
     public RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model)
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry() ?? new();

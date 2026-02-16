@@ -1,4 +1,5 @@
-﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels.ProceedWithQualificationQueryViewModel
+﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
+@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels.ProceedWithQualificationQueryViewModel
 
 @{
     ViewData["Title"] = Model.Heading;
@@ -38,13 +39,20 @@
                     }
 
                     <div class="govuk-radios" data-module="govuk-radios">
-                        @foreach (var option in Model.EnquiryReasons)
+                        @foreach (var option in Model.Options)
                         {
                             <div class="govuk-radios__item">
                                 @Html.RadioButtonFor(x => x.SelectedOption, option.Value, new { @class = "govuk-radios__input", id = option.Value })
                                 <label class="govuk-label govuk-radios__label" for="@option.Value">
                                     @option.Label
                                 </label>
+                                @if (!string.IsNullOrEmpty(option.Hint))
+                                {
+                                    var hintId = $"{option.Value}_hint";
+                                    <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                        @option.Hint
+                                    </div>
+                                }
                             </div>
                         }
                     </div>

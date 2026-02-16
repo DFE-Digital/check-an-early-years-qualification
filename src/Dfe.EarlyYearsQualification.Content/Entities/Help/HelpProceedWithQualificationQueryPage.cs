@@ -14,7 +14,7 @@ public class HelpProceedWithQualificationQueryPage
 
     public string CtaButtonText { get; init; } = string.Empty;
 
-    public List<EnquiryOption> EnquiryReasons { get; init; } = [];
+    public List<Option> Options { get; init; } = [];
 
     public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;
 

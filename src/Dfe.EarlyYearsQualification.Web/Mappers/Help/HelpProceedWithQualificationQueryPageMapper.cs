@@ -21,7 +21,7 @@ public class HelpProceedWithQualificationQueryPageMapper(IGovUkContentParser con
             Heading = content.Heading,
             PostHeadingContent = await contentParser.ToHtml(content.PostHeadingContent),
             CtaButtonText = content.CtaButtonText,
-            EnquiryReasons = EnquiryReasonsMapper.Map(content.EnquiryReasons),
+            Options = EnquiryReasonsMapper.Map(content.Options),
             NoEnquiryOptionSelectedErrorMessage = content.NoEnquiryOptionSelectedErrorMessage,
             ErrorBannerHeading = content.ErrorBannerHeading,
             ReasonForEnquiryHeading = content.ReasonForEnquiryHeading,
