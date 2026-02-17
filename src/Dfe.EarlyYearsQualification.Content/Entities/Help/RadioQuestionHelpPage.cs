@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 
 namespace Dfe.EarlyYearsQualification.Content.Entities.Help;
 
-public class GetHelpPage
+public class RadioQuestionHelpPage
 {
     public NavigationLink BackButton { get; init; } = new NavigationLink();
 
@@ -14,7 +14,7 @@ public class GetHelpPage
 
     public string CtaButtonText { get; init; } = string.Empty;
 
-    public List<EnquiryOption> EnquiryReasons { get; init; } = [];
+    public List<Option> Options { get; init; } = [];
 
     public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;
 

@@ -1,4 +1,3 @@
-using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
@@ -7,11 +6,11 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers.Help;
 
-public class HelpProceedWithQualificationQueryPageMapper(IGovUkContentParser contentParser) : IHelpProceedWithQualificationQueryPageMapper
+public class RadioQuestionHelpPageMapper(IGovUkContentParser contentParser) : IRadioQuestionHelpPageMapper
 {
-    public async Task<ProceedWithQualificationQueryViewModel> MapProceedWithQualificationQueryPageContentToViewModelAsync(HelpProceedWithQualificationQueryPage content)
+    public async Task<RadioQuestionHelpPageViewModel> MapRadioQuestionHelpPageContentToViewModelAsync(RadioQuestionHelpPage content)
     {
-        var viewModel = new ProceedWithQualificationQueryViewModel
+        var viewModel = new RadioQuestionHelpPageViewModel
         {
             BackButton = new NavigationLinkModel
             {

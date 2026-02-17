@@ -1,5 +1,5 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
-@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels.ProceedWithQualificationQueryViewModel
+@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels.RadioQuestionHelpPageViewModel
 
 @{
     ViewData["Title"] = Model.Heading;
@@ -23,7 +23,7 @@
             @Html.Raw(Model.PostHeadingContent)
         </div>
 
-        @using (Html.BeginForm("ProceedWithQualificationQuery", "Help", FormMethod.Post, new { id = "proceed-with-qualification-enquiry-form" }))
+        @using (Html.BeginForm(Model.ActionName, "Help", FormMethod.Post, new { id = "help-enquiry-form" }))
         {
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
@@ -59,7 +59,7 @@
                 </fieldset>
             </div>
             <div class="govuk-form-group">
-                <govuk-button id="proceed-with-qualification-enquiry-form-submit" type="submit">@Model.CtaButtonText</govuk-button>
+                <govuk-button id="form-submit" type="submit">@Model.CtaButtonText</govuk-button>
             </div>
         }
     </div>

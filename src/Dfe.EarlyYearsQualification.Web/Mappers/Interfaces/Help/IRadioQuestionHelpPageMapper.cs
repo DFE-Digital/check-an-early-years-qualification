@@ -3,7 +3,7 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 
-public interface IHelpGetHelpPageMapper
+public interface IRadioQuestionHelpPageMapper
 {
-    Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage helpPageContent);
+    Task<RadioQuestionHelpPageViewModel> MapRadioQuestionHelpPageContentToViewModelAsync(RadioQuestionHelpPage content);
 }

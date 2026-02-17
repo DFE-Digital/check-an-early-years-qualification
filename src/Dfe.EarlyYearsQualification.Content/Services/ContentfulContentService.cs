@@ -341,32 +341,9 @@ public class ContentfulContentService(
         return feedbackFormConfirmationPage.First();
     }
 
-    public async Task<GetHelpPage?> GetGetHelpPage()
+    public async Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPage(string entryId)
     {
-        var getHelpPage = await GetEntriesByType<GetHelpPage>();
-
-        // ReSharper disable once InvertIf
-        if (getHelpPage is null || !getHelpPage.Any())
-        {
-            Logger.LogWarning("No 'help page' returned");
-            return null;
-        }
-
-        return getHelpPage.First();
-    }
-
-    public async Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPage()
-    {
-        var proceedWithQualificationQueryPage = await GetEntriesByType<HelpProceedWithQualificationQueryPage>();
-
-        // ReSharper disable once InvertIf
-        if (proceedWithQualificationQueryPage is null || !proceedWithQualificationQueryPage.Any())
-        {
-            Logger.LogWarning("No 'proceed with qualification query page' returned");
-            return null;
-        }
-
-        return proceedWithQualificationQueryPage.First();
+        return await GetEntryById<RadioQuestionHelpPage>(entryId);
     }
 
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()

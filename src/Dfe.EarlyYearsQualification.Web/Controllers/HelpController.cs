@@ -18,7 +18,7 @@ public class HelpController(
     [HttpGet("get-help")]
     public async Task<IActionResult> GetHelp() 
     {
-        var content = await helpService.GetGetHelpPageAsync();
+        var content = await helpService.GetRadioQuestionHelpPageAsync(RadioQuestionHelpPages.GetHelp);
 
         if (content is null)
         {
@@ -26,16 +26,17 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = await helpService.MapGetHelpPageContentToViewModelAsync(content);
+        var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
         viewModel.SelectedOption = helpService.GetWhyAreYouContactingUsSelectedOption();
+        viewModel.ActionName = nameof(GetHelp);
 
-        return View("GetHelp", viewModel);
+        return View("RadioQuestion", viewModel);
     } 
 
     [HttpPost("get-help")]
-    public async Task<IActionResult> GetHelp([FromForm] GetHelpPageViewModel model)
+    public async Task<IActionResult> GetHelp([FromForm] RadioQuestionHelpPageViewModel model)
     {
-        var content = await helpService.GetGetHelpPageAsync();
+        var content = await helpService.GetRadioQuestionHelpPageAsync(RadioQuestionHelpPages.GetHelp);
 
         if (content is null)
         {
@@ -43,14 +44,15 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var submittedValueIsValid = helpService.SelectedOptionIsValid(content.EnquiryReasons, model.SelectedOption);
+        var submittedValueIsValid = helpService.SelectedOptionIsValid(content.Options, model.SelectedOption);
 
         if (!ModelState.IsValid || !submittedValueIsValid)
         {
-            var viewModel = await helpService.MapGetHelpPageContentToViewModelAsync(content);
+            var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
             viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
+            viewModel.ActionName = nameof(GetHelp);
 
-            return View("GetHelp", viewModel);
+            return View("RadioQuestion", viewModel);
         }
         
         return helpService.SetHelpFormEnquiryReason(model);
@@ -77,7 +79,7 @@ public class HelpController(
     [HttpGet("proceed-with-qualification-query")]
     public async Task<IActionResult> ProceedWithQualificationQuery()
     {
-        var content = await helpService.GetProceedWithQualificationQueryPageAsync();
+        var content = await helpService.GetRadioQuestionHelpPageAsync(RadioQuestionHelpPages.ProceedWithQualificationQuery);
 
         if (content is null)
         {
@@ -93,16 +95,17 @@ public class HelpController(
             return RedirectToAction("GetHelp", "Help");
         }
 
-        var viewModel = await helpService.MapProceedWithQualificationQueryPageContentToViewModelAsync(content);
+        var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
         viewModel.SelectedOption = helpService.GetWhatDoYouWantToDoNextSelectedOption();
+        viewModel.ActionName = nameof(ProceedWithQualificationQuery);
 
-        return View("ProceedWithQualificationQuery", viewModel);
+        return View("RadioQuestion", viewModel);
     }
 
     [HttpPost("proceed-with-qualification-query")]
-    public async Task<IActionResult> ProceedWithQualificationQuery([FromForm] ProceedWithQualificationQueryViewModel model)
+    public async Task<IActionResult> ProceedWithQualificationQuery([FromForm] RadioQuestionHelpPageViewModel model)
     {
-        var content = await helpService.GetProceedWithQualificationQueryPageAsync();
+        var content = await helpService.GetRadioQuestionHelpPageAsync(RadioQuestionHelpPages.ProceedWithQualificationQuery);
 
         if (content is null)
         {
@@ -114,10 +117,11 @@ public class HelpController(
 
         if (!ModelState.IsValid || !submittedValueIsValid)
         {
-            var viewModel = await helpService.MapProceedWithQualificationQueryPageContentToViewModelAsync(content);
+            var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
             viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
+            viewModel.ActionName = nameof(ProceedWithQualificationQuery);
 
-            return View("ProceedWithQualificationQuery", viewModel);
+            return View("RadioQuestion", viewModel);
         }
 
         switch (model.SelectedOption)

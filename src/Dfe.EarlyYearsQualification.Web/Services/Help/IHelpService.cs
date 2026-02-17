@@ -13,15 +13,9 @@ namespace Dfe.EarlyYearsQualification.Web.Services.Help;
 
 public interface IHelpService
 {
-    public Task<GetHelpPage?> GetGetHelpPageAsync();
-
-    Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage content);
-
-    public bool SelectedOptionIsValid(List<EnquiryOption> options, string value);
-
     public bool SelectedOptionIsValid(List<Option> options, string value);
 
-    RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model);
+    RedirectToActionResult SetHelpFormEnquiryReason(RadioQuestionHelpPageViewModel model);
 
     public string GetWhyAreYouContactingUsSelectedOption();
 
@@ -29,9 +23,9 @@ public interface IHelpService
 
     public Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPageAsync();
 
-    public Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPageAsync();
+    public Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPageAsync(string entryId);
 
-    public Task<ProceedWithQualificationQueryViewModel> MapProceedWithQualificationQueryPageContentToViewModelAsync(HelpProceedWithQualificationQueryPage content);
+    public Task<RadioQuestionHelpPageViewModel> MapRadioQuestionHelpPageContentToViewModelAsync(RadioQuestionHelpPage content);
 
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel);
 

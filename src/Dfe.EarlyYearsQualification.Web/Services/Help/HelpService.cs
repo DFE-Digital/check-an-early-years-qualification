@@ -24,8 +24,7 @@ public class HelpService(
     IUserJourneyCookieService userJourneyCookieService,
     INotificationService notificationService,
     IDateQuestionModelValidator questionModelValidator,
-    IHelpGetHelpPageMapper getHelpPageMapper,
-    IHelpProceedWithQualificationQueryPageMapper proceedWithQualificationQueryPageMapper,
+    IRadioQuestionHelpPageMapper RadioQuestionHelpPageMapper,
     IHelpQualificationDetailsPageMapper helpQualificationDetailsPageMapper,
     IHelpProvideDetailsPageMapper helpProvideDetailsPageMapper,
     IHelpEmailAddressPageMapper helpEmailAddressPageMapper,
@@ -33,15 +32,6 @@ public class HelpService(
     IStaticPageMapper staticPageMapper
 ) : ServiceController, IHelpService
 {
-    public async Task<GetHelpPage?> GetGetHelpPageAsync()
-    {
-        return await contentService.GetGetHelpPage();
-    }
-
-    public async Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage content)
-    {
-        return await getHelpPageMapper.MapGetHelpPageContentToViewModelAsync(content);
-    }
 
     public string GetWhyAreYouContactingUsSelectedOption()
     {
@@ -89,17 +79,12 @@ public class HelpService(
         return "";
     }
 
-    public bool SelectedOptionIsValid(List<EnquiryOption> options, string value)
-    {
-        return options.Select(x => x.Value).Contains(value);
-    }
-
     public bool SelectedOptionIsValid(List<Option> options, string value)
     {
         return options.Select(x => x.Value).Contains(value);
     }
 
-    public RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model)
+    public RedirectToActionResult SetHelpFormEnquiryReason(RadioQuestionHelpPageViewModel model)
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry() ?? new();
 
@@ -136,14 +121,14 @@ public class HelpService(
         return await contentService.GetHelpQualificationDetailsPage();
     }
 
-    public async Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPageAsync()
+    public async Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPageAsync(string entryId)
     {
-        return await contentService.GetProceedWithQualificationQueryPage();
+        return await contentService.GetRadioQuestionHelpPage(entryId);
     }
 
-    public async Task<ProceedWithQualificationQueryViewModel> MapProceedWithQualificationQueryPageContentToViewModelAsync(HelpProceedWithQualificationQueryPage content)
+    public async Task<RadioQuestionHelpPageViewModel> MapRadioQuestionHelpPageContentToViewModelAsync(RadioQuestionHelpPage content)
     {
-        return await proceedWithQualificationQueryPageMapper.MapProceedWithQualificationQueryPageContentToViewModelAsync(content);
+        return await RadioQuestionHelpPageMapper.MapRadioQuestionHelpPageContentToViewModelAsync(content);
     }
 
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel)

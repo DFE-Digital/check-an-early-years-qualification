@@ -49,9 +49,7 @@ public interface IContentService
     
     Task<FeedbackFormConfirmationPage?> GetFeedbackFormConfirmationPage();
 
-    Task<GetHelpPage?> GetGetHelpPage();
-
-    Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPage();
+    Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPage(string entryId);
 
     Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage();
 

@@ -56,19 +56,4 @@ public static class StaticPages
     ///     Entry ID for the "How to find a suitable course" help page.
     /// </summary>
     public const string HowToFindASuitableCourse = "5mvKGvZhk1BYfGuIwJ41iW";
-
-
-
-
-
-
-
-
-
-
-    // todo can be deleted?
-    /// <summary>
-    ///     Entry ID for the "Help" advice page.
-    /// </summary>
-    public const string Help = "2zlEp4oHEJVItEZT7WCeoV";
 }

@@ -4,7 +4,7 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
-public class ProceedWithQualificationQueryViewModel
+public class RadioQuestionHelpPageViewModel
 {
     // Contentful fields
     public NavigationLinkModel BackButton { get; init; } = new NavigationLinkModel();
@@ -59,4 +59,6 @@ public class ProceedWithQualificationQueryViewModel
         ErrorBannerHeading = ErrorBannerHeading,
         ErrorSummaryLinks = Errors
     };
+
+    public string ActionName { get; set; } = string.Empty;
 }

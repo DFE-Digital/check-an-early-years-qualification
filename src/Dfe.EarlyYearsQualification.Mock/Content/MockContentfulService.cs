@@ -71,9 +71,6 @@ public class MockContentfulService : IContentService
                    StaticPages.Level7QualificationAfterAug2019 =>
                        await Task.FromResult(CreateStaticPage("Level 7 qualification after aug 2019",
                                                               body, WhatLevelIsTheQualificationPath, false)),
-                   StaticPages.Help =>
-                       await Task.FromResult(CreateStaticPage("Help",
-                                                              body, HomePath, false)),
                    _ => null
                };
     }
@@ -744,10 +741,10 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<GetHelpPage?> GetGetHelpPage()
+    public async Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPage(string entryId)
     {
         return await Task.FromResult(
-            new GetHelpPage
+            new RadioQuestionHelpPage
             {
                 Heading = "Get help with the Check an early years qualification service",
                 PostHeadingContent = ContentfulContentHelper.Paragraph("Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n"),
@@ -761,11 +758,11 @@ public class MockContentfulService : IContentService
                 },
                 ErrorBannerHeading = ThereIsAProblem,
                 NoEnquiryOptionSelectedErrorMessage = "Select one option",
-                EnquiryReasons =
+                Options =
                 [
-                    new EnquiryOption
+                    new Option
                     { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
-                    new EnquiryOption
+                    new Option
                     { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" }
                 ]
             }
@@ -1119,34 +1116,5 @@ public class MockContentfulService : IContentService
                    Body =
                        ContentfulContentHelper.Paragraph("Your feedback matters and will help us improve the service.")
                };
-    }
-
-    // todo
-    public async Task<HelpProceedWithQualificationQueryPage?> GetProceedWithQualificationQueryPage()
-    {
-        return await Task.FromResult(
-            new HelpProceedWithQualificationQueryPage
-            {
-                Heading = "Check the qualification before contacting us",
-                PostHeadingContent = ContentfulContentHelper.Paragraph("Use the check an early years qualification service to confirm if a qualification is approved as full and relevant by the Department for Education."),
-                ReasonForEnquiryHeading = "What do you want to do next?",
-                CtaButtonText = CtaButtonText,
-                BackButton = new NavigationLink
-                {
-                    DisplayText = "Back to get help with the Check an early years qualification service",
-                    Href = "/help/get-help",
-                    OpenInNewTab = false
-                },
-                ErrorBannerHeading = ThereIsAProblem,
-                NoEnquiryOptionSelectedErrorMessage = "Select one option",
-                Options =
-                [
-                    new Option
-                    { Label = "Check the qualification using the service", Value = "CheckTheQualificationUsingTheService" },
-                    new Option
-                    { Label = "Contact the early years qualification team", Value = "ContactTheEarlyYearsQualificationTeam", Hint = "The team will not check individual qualifications so make sure your query is not related to that" }
-                ]
-            }
-        );
     }
 }
