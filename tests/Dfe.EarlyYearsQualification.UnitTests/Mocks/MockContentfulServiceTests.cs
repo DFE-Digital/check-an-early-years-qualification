@@ -143,15 +143,44 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_Help_ReturnsExpectedDetails()
+    public async Task GetStaticPage_HowToGetACopyOfTheCertificateOrTranscript_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.Help);
+        var result = await contentfulService.GetStaticPage(StaticPages.HowToGetACopyOfTheCertificateOrTranscript);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
-        result.Heading.Should().Be("Help");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
+        result.UpDownFeedback.Should().BeNull();
+        result.RightHandSideContent.Should().NotBeNull();
+    }
+
+    [TestMethod]
+    public async Task GetStaticPage_HowToFindTheLevelOfAQualification_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetStaticPage(StaticPages.HowToFindTheLevelOfAQualification);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<StaticPage>();
+        result.Heading.Should().NotBeNullOrEmpty();
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
+        result.UpDownFeedback.Should().BeNull();
+        result.RightHandSideContent.Should().NotBeNull();
+    }
+
+    [TestMethod]
+    public async Task GetStaticPage_HowToFindASuitableCourse_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetStaticPage(StaticPages.HowToFindASuitableCourse);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<StaticPage>();
+        result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
         result.UpDownFeedback.Should().BeNull();
@@ -762,28 +791,14 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetGetHelpPage_ReturnsExpectedDetails()
+    public async Task GetRadioQuestionHelpPage_GetHelpPage_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetGetHelpPage();
-
-        var enquiryReasons = new List<Option>
-                             {
-                                 new()
-                                 {
-                                     Label = "I have a question about a qualification",
-                                     Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)
-                                 },
-                                 new()
-                                 {
-                                     Label = "I am experiencing an issue with the service",
-                                     Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService)
-                                 },
-                             };
+        var result = await contentfulService.GetRadioQuestionHelpPage("7dIrgZoX4qGgU9c225hXvr");
 
         result.Should().NotBeNull();
-        result.Should().BeAssignableTo<GetHelpPage>();
+        result.Should().BeAssignableTo<RadioQuestionHelpPage>();
         result.Heading.Should().Be("Get help with the Check an early years qualification service");
         result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
@@ -791,13 +806,8 @@ public class MockContentfulServiceTests
 
         result.ReasonForEnquiryHeading.Should().Be("Why are you contacting us?");
 
-        result.EnquiryReasons.Should().NotBeNull();
-        result.EnquiryReasons.Count.Should().Be(2);
-        result.EnquiryReasons.First().Label.Should().Be(enquiryReasons.First().Label);
-        result.EnquiryReasons.Last().Value.Should().Be(enquiryReasons.Last().Value);
-        result.EnquiryReasons.First().Label.Should().Be(enquiryReasons.First().Label);
-        result.EnquiryReasons.Last().Value.Should().Be(enquiryReasons.Last().Value);
-
+        result.Options.Should().NotBeNull();
+        result.Options.Count.Should().Be(5);
         result.CtaButtonText.Should().Be("Continue");
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
                                                   {
@@ -805,6 +815,30 @@ public class MockContentfulServiceTests
                                                       OpenInNewTab = false,
                                                       Href = "/"
                                                   });
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
+    }
+
+    [TestMethod]
+    public async Task GetRadioQuestionHelpPage_ProceedWithQueryPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetRadioQuestionHelpPage(It.IsAny<string>());
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<RadioQuestionHelpPage>();
+        result.Heading.Should().Be("Check the qualification before contacting us");
+        result.ReasonForEnquiryHeading.Should().Be("What do you want to do next?");
+        result.Options.Should().NotBeNull();
+        result.Options.Count.Should().Be(2);
+        result.CtaButtonText.Should().Be("Continue");
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+        {
+            DisplayText = "Back to get help",
+            OpenInNewTab = false,
+            Href = "help/get-help"
+        });
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.NoEnquiryOptionSelectedErrorMessage.Should().Be("Select one option");
     }

@@ -18,49 +18,43 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class HelpServiceTests
 {
-    private Mock<ILogger<HelpService>> _mockLogger = new Mock<ILogger<HelpService>>();
-    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
-    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-    private Mock<INotificationService> _mockNotificationService = new Mock<INotificationService>();
-    private Mock<IDateQuestionModelValidator> _mockDateQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
-    private Mock<IHelpGetHelpPageMapper> _mockHelpGetHelpPageMapper = new Mock<IHelpGetHelpPageMapper>();
-    private Mock<IHelpProceedWithQualificationQueryPageMapper> _mockHelpProceedWithQualificationQueryPageMapper = new Mock<IHelpProceedWithQualificationQueryPageMapper>();
-
-    private Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper =
-        new Mock<IHelpQualificationDetailsPageMapper>();
-
-    private Mock<IHelpProvideDetailsPageMapper> _mockHelpProvideDetailsPageMapper =
-        new Mock<IHelpProvideDetailsPageMapper>();
-
-    private Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new Mock<IHelpEmailAddressPageMapper>();
-    private Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new Mock<IHelpConfirmationPageMapper>();
-    private Mock<IStaticPageMapper> _mockStaticPageMapper = new Mock<IStaticPageMapper>();
+    private Mock<ILogger<HelpService>> _mockLogger = new();
+    private Mock<IContentService> _mockContentService = new();
+    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
+    private Mock<INotificationService> _mockNotificationService = new();
+    private Mock<IDateQuestionModelValidator> _mockDateQuestionModelValidator = new();
+    private Mock<IRadioQuestionHelpPageMapper> _mockHelpRadioQuestionHelpPageMapper = new();
+    private Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper = new();
+    private Mock<IHelpProvideDetailsPageMapper> _mockHelpProvideDetailsPageMapper = new();
+    private Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new();
+    private Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new();
+    private Mock<IStaticPageMapper> _mockStaticPageMapper = new();
 
     [TestMethod]
-    public async Task GetGetHelpPageAsync_Calls_ContentService_GetGetHelpPage()
+    public async Task GetRadioQuestionHelpPageAsync_Calls_ContentService_GetRadioQuestionHelpPage()
     {
         // Arrange
         var sut = GetSut();
 
         // Act
-        _ = await sut.GetGetHelpPageAsync();
+        _ = await sut.GetRadioQuestionHelpPageAsync(It.IsAny<string>());
 
         // Assert
-        _mockContentService.Verify(o => o.GetGetHelpPage(), Times.Once);
+        _mockContentService.Verify(o => o.GetRadioQuestionHelpPage(It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]
     public async Task
-        MapGetHelpPageContentToViewModelAsync_Calls_HelpGetHelpPageMapper_MapGetHelpPageContentToViewModelAsync()
+        MapRadioQuestionHelpPageContentToViewModelAsync_Calls_HelpGetHelpPageMapper_MapRadioQuestionHelpPageContentToViewModelAsync()
     {
         // Arrange
-        var content = new GetHelpPage();
+        var content = new RadioQuestionHelpPage();
 
         // Act
-        await GetSut().MapGetHelpPageContentToViewModelAsync(content);
+        await GetSut().MapRadioQuestionHelpPageContentToViewModelAsync(content);
 
         // Assert
-        _mockHelpGetHelpPageMapper.Verify(o => o.MapGetHelpPageContentToViewModelAsync(content), Times.Once);
+        _mockHelpRadioQuestionHelpPageMapper.Verify(o => o.MapRadioQuestionHelpPageContentToViewModelAsync(content), Times.Once);
     }
 
     [TestMethod]
@@ -79,7 +73,7 @@ public class HelpServiceTests
             );
 
         // Act
-        var result = GetSut().GetSelectedOption();
+        var result = GetSut().GetWhyAreYouContactingUsSelectedOption();
 
         // Assert
         result.Should().NotBeNull();
@@ -90,7 +84,7 @@ public class HelpServiceTests
     public void GetSelectedOption_EnquiryIsNull_Returns_EmptyString()
     {
         // Act
-        var result = GetSut().GetSelectedOption();
+        var result = GetSut().GetWhyAreYouContactingUsSelectedOption();
 
         // Assert
         result.Should().NotBeNull();
@@ -104,16 +98,16 @@ public class HelpServiceTests
     public void SelectedOptionIsValid_Returns_Expected(string input, bool expected)
     {
         // Arrange
-        var content = new GetHelpPage
+        var content = new RadioQuestionHelpPage
                       {
-                          EnquiryReasons = new List<EnquiryOption>
+                          Options = new List<Option>
                                            {
-                                               new EnquiryOption
+                                               new Option
                                                {
                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
                                                    Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                },
-                                               new EnquiryOption
+                                               new Option
                                                {
                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
                                                    Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
@@ -121,13 +115,13 @@ public class HelpServiceTests
                                            }
                       };
 
-        var viewModel = new GetHelpPageViewModel
+        var viewModel = new RadioQuestionHelpPageViewModel
                         {
                             SelectedOption = input
                         };
 
         // Act
-        var result = GetSut().SelectedOptionIsValid(content.EnquiryReasons, viewModel.SelectedOption);
+        var result = GetSut().SelectedOptionIsValid(content.Options, viewModel.SelectedOption);
 
         // Assert
         result.Should().Be(expected);
@@ -141,7 +135,7 @@ public class HelpServiceTests
         // Arrange
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
-        var viewModel = new GetHelpPageViewModel
+        var viewModel = new RadioQuestionHelpPageViewModel
                         {
                             SelectedOption = input
                         };
@@ -162,7 +156,7 @@ public class HelpServiceTests
         // Arrange
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
-        var viewModel = new GetHelpPageViewModel
+        var viewModel = new RadioQuestionHelpPageViewModel
                         {
                             SelectedOption = "invalid value"
                         };
@@ -183,7 +177,7 @@ public class HelpServiceTests
     {
         // Arrange
         var result = GetSut().SetHelpFormEnquiryReason(
-                                                       new GetHelpPageViewModel
+                                                       new RadioQuestionHelpPageViewModel
                                                        {
                                                            SelectedOption = nameof(HelpFormEnquiryReasons.GetHelp
                                                                .IssueWithTheService)
@@ -283,7 +277,7 @@ public class HelpServiceTests
 
     [TestMethod]
     public void
-        MapHelpQualificationDetailsPageContentToViewModel_Calls_HelpQualificationDetailsPageMapper_MapGetHelpPageContentToViewModelAsync()
+        MapHelpQualificationDetailsPageContentToViewModel_Calls_HelpQualificationDetailsPageMapper_MapRadioQuestionHelpPageContentToViewModelAsync()
     {
         // Arrange
         var content = new HelpQualificationDetailsPage();
@@ -507,8 +501,7 @@ public class HelpServiceTests
                                _mockUserJourneyCookieService.Object,
                                _mockNotificationService.Object,
                                _mockDateQuestionModelValidator.Object,
-                               _mockHelpGetHelpPageMapper.Object,
-                               _mockHelpProceedWithQualificationQueryPageMapper.Object,
+                               _mockHelpRadioQuestionHelpPageMapper.Object,
                                _mockHelpQualificationDetailsPageMapper.Object,
                                _mockHelpProvideDetailsPageMapper.Object,
                                _mockHelpEmailAddressPageMapper.Object,

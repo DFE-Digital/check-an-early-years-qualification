@@ -1211,17 +1211,17 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     [TestMethod]
     public async Task GetHelpPage_ReturnsData()
     {
-        var content = new GetHelpPage { Heading = "test heading" };
+        var content = new RadioQuestionHelpPage { Heading = "test heading" };
 
         ClientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<GetHelpPage>>(),
+                                                It.IsAny<QueryBuilder<RadioQuestionHelpPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<GetHelpPage> { Items = [content] });
+                  .ReturnsAsync(new ContentfulCollection<RadioQuestionHelpPage> { Items = [content] });
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetGetHelpPage();
+        var result = await service.GetRadioQuestionHelpPage(It.IsAny<string>());
 
         result.Should().Be(content);
     }
@@ -1231,13 +1231,13 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     {
         ClientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<GetHelpPage>>(),
+                                                It.IsAny<QueryBuilder<RadioQuestionHelpPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<GetHelpPage> { Items = [] });
+                  .ReturnsAsync(new ContentfulCollection<RadioQuestionHelpPage> { Items = [] });
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetGetHelpPage();
+        var result = await service.GetRadioQuestionHelpPage(It.IsAny<string>());
 
         result.Should().BeNull();
     }

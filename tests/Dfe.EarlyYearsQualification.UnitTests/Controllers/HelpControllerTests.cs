@@ -26,7 +26,7 @@ public class HelpControllerTests
     public async Task GetHelp_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
-        _mockHelpService.Setup(x => x.GetGetHelpPageAsync()).ReturnsAsync(() => null).Verifiable();
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(() => null).Verifiable();
 
         // Act
         var result = await GetSut().GetHelp();
@@ -45,14 +45,14 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task GetHelp_ContentServiceReturnsGetHelpPage_ReturnsGetHelpPageViewModel()
+    public async Task GetHelp_ContentServiceReturnsGetHelpPage_ReturnsRadioQuestionHelpPageViewModel()
     {
         // Arrange
-        var content = new GetHelpPage { Heading = "Heading" };
+        var content = new RadioQuestionHelpPage { Heading = "Heading" };
 
-        _mockHelpService.Setup(x => x.GetGetHelpPageAsync()).ReturnsAsync(content);
-        _mockHelpService.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(
-             new GetHelpPageViewModel
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
+        _mockHelpService.Setup(x => x.MapRadioQuestionHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(
+             new RadioQuestionHelpPageViewModel
              {
                  Heading = content.Heading,
                  PostHeadingContent = "Test html body"
@@ -68,7 +68,7 @@ public class HelpControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType.Model as GetHelpPageViewModel;
+        var model = resultType.Model as RadioQuestionHelpPageViewModel;
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(content.Heading);
@@ -76,30 +76,48 @@ public class HelpControllerTests
     }
 
     [TestMethod]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol)]
     [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)]
     [DataRow(HelpFormEnquiryReasons.GetHelp.IssueWithTheService)]
     public async Task GetHelp_ContentServiceReturnsGetHelpPage_EnquiryIsPrepopulated(string selectedOption)
     {
         // Arrange
-        var content = new GetHelpPage
+        var content = new RadioQuestionHelpPage
                       {
                           Heading = "Heading",
-                          EnquiryReasons = new List<EnquiryOption>
+                          Options = new List<Option>
                                            {
-                                               new EnquiryOption
+                                               new Option
                                                {
-                                                   Value = "QuestionAboutAQualification",
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript
+                                               },
+                                               new Option
+                                               {
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs
+                                               },
+                                               new Option
+                                               {
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol
+                                               },
+                                               new Option
+                                               {
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
                                                    Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                },
-                                               new EnquiryOption
+                                               new Option
                                                {
-                                                   Value = "IssueWithTheService",
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
                                                    Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
                                                }
                                            }
                       };
 
-        _mockHelpService.Setup(x => x.GetGetHelpPageAsync()).ReturnsAsync(content);
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
 
         var enquiry = new HelpFormEnquiry
                       {
@@ -108,11 +126,11 @@ public class HelpControllerTests
 
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
 
-        _mockHelpService.Setup(x => x.GetSelectedOption())
-                        .Returns(content.EnquiryReasons.First(x => x.Label == selectedOption).Value);
+        _mockHelpService.Setup(x => x.GetWhyAreYouContactingUsSelectedOption())
+                        .Returns(content.Options.First(x => x.Label == selectedOption).Value);
 
-        _mockHelpService.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(
-             new GetHelpPageViewModel
+        _mockHelpService.Setup(x => x.MapRadioQuestionHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(
+             new RadioQuestionHelpPageViewModel
              {
                  Heading = content.Heading,
                  PostHeadingContent = "Test html body"
@@ -128,13 +146,13 @@ public class HelpControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType.Model as GetHelpPageViewModel;
+        var model = resultType.Model as RadioQuestionHelpPageViewModel;
         model.Should().NotBeNull();
 
         model.Heading.Should().Be(content.Heading);
         model.PostHeadingContent.Should().Be("Test html body");
 
-        model.SelectedOption.Should().Be(content.EnquiryReasons.Where(x => x.Label == selectedOption).First().Value);
+        model.SelectedOption.Should().Be(content.Options.First(x => x.Label == selectedOption).Value);
     }
 
     [TestMethod]
@@ -144,16 +162,31 @@ public class HelpControllerTests
         string selectedOption, string pageToRedirectTo)
     {
         // Arrange
-        var content = new GetHelpPage
+        var content = new RadioQuestionHelpPage
                       {
-                          EnquiryReasons = new List<EnquiryOption>
+                          Options = new List<Option>
                                            {
-                                               new EnquiryOption
+                                               new Option
+                                               {
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript
+                                               },
+                                               new Option
+                                               {
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs
+                                               },
+                                               new Option
+                                               {
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol
+                                               },
+                                               new Option
                                                {
                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
                                                    Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                },
-                                               new EnquiryOption
+                                               new Option
                                                {
                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
                                                    Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
@@ -161,12 +194,12 @@ public class HelpControllerTests
                                            }
                       };
 
-        _mockHelpService.Setup(x => x.GetGetHelpPageAsync()).ReturnsAsync(content);
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
 
-        _mockHelpService.Setup(x => x.SelectedOptionIsValid(content.EnquiryReasons, It.IsAny<string>()))
+        _mockHelpService.Setup(x => x.SelectedOptionIsValid(content.Options, It.IsAny<string>()))
                         .Returns(() => true);
 
-        var submittedViewModel = new GetHelpPageViewModel
+        var submittedViewModel = new RadioQuestionHelpPageViewModel
                                  {
                                      SelectedOption = selectedOption,
                                  };
@@ -188,21 +221,40 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task Post_GetHelp_InvalidEnquiryOption_ReturnsGetHelpPageViewModel()
+    public async Task Post_GetHelp_InvalidEnquiryOption_ReturnsRadioQuestionHelpPageViewModel()
     {
         // Arrange
-        var submission = new GetHelpPageViewModel
+        var submission = new RadioQuestionHelpPageViewModel
                          {
                              SelectedOption = "invalid enquiry option",
-                             EnquiryReasons = new List<EnquiryOptionModel>
+                             Options = new List<OptionModel>
                                               {
-                                                  new EnquiryOptionModel
+                                                  new OptionModel
                                                   {
-                                                      Value =
-                                                          nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
+                                                      Value = nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript),
+                                                      Label = HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript
+                                                  },
+                                                  new OptionModel
+                                                  {
+                                                      Value = nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs),
+                                                      Label = HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs
+                                                  },
+                                                  new OptionModel
+                                                  {
+                                                      Value = nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol),
+                                                      Label = HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol
+                                                  },
+                                                  new OptionModel
+                                                  {
+                                                      Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
+                                                      Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+                                                  },
+                                                  new OptionModel
+                                                  {
+                                                      Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
                                                       Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                   },
-                                                  new EnquiryOptionModel
+                                                  new OptionModel
                                                   {
                                                       Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
                                                       Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
@@ -223,20 +275,20 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    public async Task Post_GetHelp_InvalidModelState_ReturnsGetHelpPageViewModel()
+    public async Task Post_GetHelp_InvalidModelState_ReturnsRadioQuestionHelpPageViewModel()
     {
         // Arrange
-        var content = new GetHelpPage
+        var content = new RadioQuestionHelpPage
                       {
                           NoEnquiryOptionSelectedErrorMessage = "Select reason for enquiring",
                           ErrorBannerHeading = "There is a problem"
                       };
 
-        var viewModel = new GetHelpPageViewModel
+        var viewModel = new RadioQuestionHelpPageViewModel
                         {
                             ErrorBannerHeading = content.ErrorBannerHeading,
                             NoEnquiryOptionSelectedErrorMessage = content.NoEnquiryOptionSelectedErrorMessage,
-                            EnquiryReasons = new()
+                            Options = new()
                                              {
                                                  new()
                                                  {
@@ -246,15 +298,15 @@ public class HelpControllerTests
                                              }
                         };
 
-        _mockHelpService.Setup(x => x.GetGetHelpPageAsync()).ReturnsAsync(content);
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
 
-        _mockHelpService.Setup(x => x.MapGetHelpPageContentToViewModelAsync(content))
+        _mockHelpService.Setup(x => x.MapRadioQuestionHelpPageContentToViewModelAsync(content))
                         .Returns(Task.FromResult(viewModel));
 
         var controller = GetSut();
 
         // force validation error
-        controller.ModelState.AddModelError(nameof(GetHelpPageViewModel.SelectedOption), "Invalid");
+        controller.ModelState.AddModelError(nameof(RadioQuestionHelpPageViewModel.SelectedOption), "Invalid");
 
         // Act
         var result = await controller.GetHelp(viewModel);
@@ -263,14 +315,14 @@ public class HelpControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType.Model as GetHelpPageViewModel;
+        var model = resultType.Model as RadioQuestionHelpPageViewModel;
         model.Should().NotBeNull();
 
         model.HasNoEnquiryOptionSelectedError.Should().BeTrue();
 
         model.ErrorSummaryModel.ErrorBannerHeading.Should().Be(content.ErrorBannerHeading);
         model.ErrorSummaryModel.ErrorSummaryLinks.First().ElementLinkId.Should()
-             .Be(viewModel.EnquiryReasons.First().Label);
+             .Be(viewModel.Options.First().Label);
         model.ErrorSummaryModel.ErrorSummaryLinks.First().ErrorBannerLinkText.Should()
              .Be(content.NoEnquiryOptionSelectedErrorMessage);
     }
