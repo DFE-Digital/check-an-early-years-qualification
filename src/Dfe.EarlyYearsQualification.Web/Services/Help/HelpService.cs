@@ -260,7 +260,7 @@ public class HelpService(
         return await contentService.GetStaticPage(entryId);
     }
 
-    public async Task<StaticPageModel> MapStaticPage(StaticPage page)
+    public async Task<StaticPageModel?> MapStaticPage(StaticPage page)
     {
         return await staticPageMapper.Map(page);
     }
