@@ -327,6 +327,353 @@ public class HelpControllerTests
              .Be(content.NoEnquiryOptionSelectedErrorMessage);
     }
 
+    // static page tests
+
+    [TestMethod]
+    public async Task Get_INeedACopyOfTheQualificationCertificateOrTranscript_ReturnsStaticPageModel()
+    {
+        // Arrange
+        SetupStaticPage();
+
+        // Act
+        var result = await GetSut().INeedACopyOfTheQualificationCertificateOrTranscript();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as StaticPageModel;
+        model.Should().NotBeNull();
+        model.Heading.Should().Be("Static page heading");
+    }
+
+    [TestMethod]
+    public async Task Get_IDoNotKnowWhatLevelTheQualificationIs_ReturnsStaticPageModel()
+    {
+        // Arrange
+        SetupStaticPage();
+
+        // Act
+        var result = await GetSut().IDoNotKnowWhatLevelTheQualificationIs();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as StaticPageModel;
+        model.Should().NotBeNull();
+        model.Heading.Should().Be("Static page heading");
+    }
+
+    [TestMethod]
+    public async Task Get_IWantToCheckWhetherACourseIsApprovedBeforeIEnrol_ReturnsStaticPageModel()
+    {
+        // Arrange
+        SetupStaticPage();
+
+        // Act
+        var result = await GetSut().IWantToCheckWhetherACourseIsApprovedBeforeIEnrol();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as StaticPageModel;
+        model.Should().NotBeNull();
+        model.Heading.Should().Be("Static page heading");
+    }
+
+    // proceed with qualification query tests
+    [TestMethod]
+    public async Task GetRadioQuestionHelpPageAsync_ContentServiceReturnsNull_RedirectsToErrorPage()
+    {
+        // Arrange
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(() => null).Verifiable();
+
+        // Act
+        var result = await GetSut().ProceedWithQualificationQuery();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+        _mockLogger.VerifyError("'Proceed with qualification query page' content could not be found");
+    }
+
+    [TestMethod]
+    public async Task GetRadioQuestionHelpPageAsync_ContentService_ReturnsRadioQuestionHelpPageViewModel()
+    {
+        // Arrange
+        var content = new RadioQuestionHelpPage { Heading = "Heading" };
+
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
+        _mockHelpService.Setup(x => x.MapRadioQuestionHelpPageContentToViewModelAsync(content)).Returns(Task.FromResult(
+             new RadioQuestionHelpPageViewModel
+             {
+                 Heading = content.Heading,
+                 PostHeadingContent = "Test html body"
+             }
+            ));
+
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+            new HelpFormEnquiry
+            {
+                ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
+            }
+        );
+
+        // Act
+        var result = await GetSut().ProceedWithQualificationQuery();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as RadioQuestionHelpPageViewModel;
+        model.Should().NotBeNull();
+
+        model.Heading.Should().Be(content.Heading);
+        model.PostHeadingContent.Should().Be("Test html body");
+    }
+
+    [TestMethod]
+    [DataRow(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService)]
+    [DataRow(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam)]
+    public async Task ProceedWithQualificationQuery_ContentServiceReturnsRadioQuestionHelpPage_EnquiryIsPrepopulated(string selectedOption)
+    {
+        // Arrange
+        var content = new RadioQuestionHelpPage
+        {
+            Heading = "Heading",
+            Options = 
+            new List<Option>
+            {
+                new Option
+                {
+                    Value = nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService),
+                    Label = HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService
+                },
+                new Option
+                {
+                    Value = nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam),
+                    Label = HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam
+                },
+            }
+        };
+
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
+
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(
+            new HelpFormEnquiry
+            {
+                ReasonForEnquiring = selectedOption
+            }
+        );
+
+        _mockHelpService.Setup(x => x.GetWhatDoYouWantToDoNextSelectedOption())
+                        .Returns(content.Options.First(x => x.Label == selectedOption).Value);
+
+        _mockHelpService.Setup(x => x.MapRadioQuestionHelpPageContentToViewModelAsync(content)).Returns(
+            Task.FromResult(
+                new RadioQuestionHelpPageViewModel
+                {
+                    Heading = content.Heading,
+                    PostHeadingContent = "Test html body"
+                }
+            )
+        );
+
+        // Act
+        var result = await GetSut().ProceedWithQualificationQuery();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as RadioQuestionHelpPageViewModel;
+        model.Should().NotBeNull();
+
+        model.Heading.Should().Be(content.Heading);
+        model.PostHeadingContent.Should().Be("Test html body");
+
+        model.SelectedOption.Should().Be(content.Options.First(x => x.Label == selectedOption).Value);
+    }
+
+    [TestMethod]
+    [DataRow(nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService), "CheckTheQualificationUsingTheService")]
+    [DataRow(nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam), "ContactTheEarlyYearsQualificationTeam")]
+    public async Task Post_ProceedWithQualificationQuery_ValidModelStateRedirectsToExpectedPage(
+        string selectedOption, string pageToRedirectTo)
+    {
+        // Arrange
+        var content = new RadioQuestionHelpPage
+        {
+            Options = 
+                new List<Option>
+                {
+                    new Option
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService),
+                        Label = HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService
+                    },
+                    new Option
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam),
+                        Label = HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam
+                    },
+                }
+        };
+
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
+
+        _mockHelpService.Setup(x => x.SelectedOptionIsValid(content.Options, It.IsAny<string>()))
+                        .Returns(() => true);
+
+        var submittedViewModel = new RadioQuestionHelpPageViewModel
+        {
+            SelectedOption = selectedOption,
+        };
+
+        _mockHelpService.Setup(x => x.SetHelpFormEnquiryReason(submittedViewModel))
+                        .Returns(new RedirectToActionResult(pageToRedirectTo, "b", null));
+
+        // Act
+        var result = await GetSut().GetHelp(submittedViewModel);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be(pageToRedirectTo);
+
+        _mockHelpService.Verify(x => x.SetHelpFormEnquiryReason(submittedViewModel), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task Post_ProceedWithQualificationQuery_InvalidEnquiryOption_ReturnsRadioQuestionHelpPageViewModel()
+    {
+        // Arrange
+        var submission = new RadioQuestionHelpPageViewModel
+        {
+            SelectedOption = "invalid enquiry option",
+            Options = 
+                new List<OptionModel>
+                {
+                    new OptionModel
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript),
+                        Label = HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript
+                    },
+                    new OptionModel
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs),
+                        Label = HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs
+                    },
+                    new OptionModel
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol),
+                        Label = HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol
+                    },
+                    new OptionModel
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
+                        Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+                    },
+                    new OptionModel
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
+                        Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
+                    },
+                    new OptionModel
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
+                        Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+                    }
+                }
+        };
+
+        // Act
+        var result = await GetSut().ProceedWithQualificationQuery(submission);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+    }
+
+    [TestMethod]
+    public async Task Post_ProceedWithQualificationQuery_InvalidModelState_ReturnsRadioQuestionHelpPageViewModel()
+    {
+        // Arrange
+        var content = new RadioQuestionHelpPage
+        {
+            NoEnquiryOptionSelectedErrorMessage = "Select reason for enquiring",
+            ErrorBannerHeading = "There is a problem"
+        };
+
+        var viewModel = new RadioQuestionHelpPageViewModel
+        {
+            ErrorBannerHeading = content.ErrorBannerHeading,
+            NoEnquiryOptionSelectedErrorMessage = content.NoEnquiryOptionSelectedErrorMessage,
+            Options = 
+                new()
+                {
+                    new()
+                    {
+                        Label = "option1",
+                        Value = "option1"
+                    }
+                }
+            };
+
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
+
+        _mockHelpService.Setup(x => x.MapRadioQuestionHelpPageContentToViewModelAsync(content))
+                        .Returns(Task.FromResult(viewModel));
+
+        var controller = GetSut();
+
+        // force validation error
+        controller.ModelState.AddModelError(nameof(RadioQuestionHelpPageViewModel.SelectedOption), "Invalid");
+
+        // Act
+        var result = await controller.ProceedWithQualificationQuery(viewModel);
+
+        // Assert
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as RadioQuestionHelpPageViewModel;
+        model.Should().NotBeNull();
+
+        model.HasNoEnquiryOptionSelectedError.Should().BeTrue();
+
+        model.ErrorSummaryModel.ErrorBannerHeading.Should().Be(content.ErrorBannerHeading);
+        model.ErrorSummaryModel.ErrorSummaryLinks.First().ElementLinkId.Should()
+             .Be(viewModel.Options.First().Label);
+        model.ErrorSummaryModel.ErrorSummaryLinks.First().ErrorBannerLinkText.Should()
+             .Be(content.NoEnquiryOptionSelectedErrorMessage);
+    }
+
     // Help qualification details tests
 
     [TestMethod]
@@ -1673,5 +2020,36 @@ public class HelpControllerTests
     private HelpController GetSut()
     {
         return new HelpController(_mockLogger.Object, _mockHelpService.Object);
+    }
+
+    private void SetupStaticPage()
+    {
+        var content = new StaticPage
+        {
+            Heading = "Static page heading",
+            RightHandSideContent = new(),
+            BackButton = new NavigationLink
+            {
+                DisplayText = "Back to get help",
+                Href = "/get-help"
+            },
+            Body = new()
+        };
+
+        _mockHelpService.Setup(x => x.GetStaticPage(It.IsAny<string>())).ReturnsAsync(content);
+
+        _mockHelpService.Setup(x => x.MapStaticPage(content)).ReturnsAsync(
+            new StaticPageModel
+            {
+                Heading = content.Heading,
+                BackButton = new NavigationLinkModel
+                {
+                    DisplayText = content.BackButton.DisplayText,
+                    Href = content.BackButton.Href
+                },
+                BodyContent = "content",
+                RightHandSideContent = null
+            }
+        );
     }
 }

@@ -20,7 +20,7 @@ public class RadioQuestionHelpPageMapper(IGovUkContentParser contentParser) : IR
             Heading = content.Heading,
             PostHeadingContent = await contentParser.ToHtml(content.PostHeadingContent),
             CtaButtonText = content.CtaButtonText,
-            Options = EnquiryReasonsMapper.Map(content.Options),
+            Options = OptionsMapper.Map(content.Options),
             NoEnquiryOptionSelectedErrorMessage = content.NoEnquiryOptionSelectedErrorMessage,
             ErrorBannerHeading = content.ErrorBannerHeading,
             ReasonForEnquiryHeading = content.ReasonForEnquiryHeading,
