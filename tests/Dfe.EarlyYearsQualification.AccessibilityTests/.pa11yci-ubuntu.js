@@ -107,14 +107,29 @@ function getUrls(authSecret, port) {
         `http://localhost:${port}/advice/level-6-qualification-post-2014`,
         `http://localhost:${port}/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019`,
         `http://localhost:${port}/advice/level-7-qualification-after-aug-2019`,
+        `http://localhost:${port}/help/I-need-a-copy-of-the-qualification-certificate-or-transcript`,
+        `http://localhost:${port}/help/I-do-not-know-what-level-the-qualification-is`,
+        `http://localhost:${port}/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol`,
         `http://localhost:${port}/help/get-help`,
+        {
+            url: `http://localhost:${port}/help/proceed-with-qualification-query`,
+            actions: [
+                ...basicActions,
+                `navigate to http://localhost:${port}/help/get-help`,
+                'click element #QuestionAboutAQualification',
+                'click element #form-submit',
+                `wait for url to be http://localhost:${port}/help/proceed-with-qualification-query`
+            ]
+        },
         {
             url: `http://localhost:${port}/help/qualification-details`,
             actions: [
                 ...basicActions,
                 `navigate to http://localhost:${port}/help/get-help`,
                 'click element #QuestionAboutAQualification',
-                'click element #reason-for-enquiring-form-submit',
+                'click element #form-submit',
+                'click element #ContactTheEarlyYearsQualificationTeam',
+                'click element #form-submit',
                 `wait for url to be http://localhost:${port}/help/qualification-details`
             ]
         },
@@ -124,7 +139,7 @@ function getUrls(authSecret, port) {
                 ...basicActions,
                 `navigate to http://localhost:${port}/help/get-help`,
                 'click element #QuestionAboutAQualification',
-                'click element #reason-for-enquiring-form-submit',
+                'click element #form-submit',
                 `wait for url to be http://localhost:${port}/help/qualification-details`,
                 'set field #QualificationName to Testing',
                 'set field #awarded-month-label+input to 9',
@@ -140,7 +155,7 @@ function getUrls(authSecret, port) {
                 ...basicActions,
                 `navigate to http://localhost:${port}/help/get-help`,
                 'click element #QuestionAboutAQualification',
-                'click element #reason-for-enquiring-form-submit',
+                'click element #form-submit',
                 `wait for url to be http://localhost:${port}/help/qualification-details`,
                 'set field #QualificationName to Testing',
                 'set field #awarded-month-label+input to 9',
