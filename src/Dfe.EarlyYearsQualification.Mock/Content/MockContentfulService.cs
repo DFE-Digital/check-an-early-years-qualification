@@ -67,10 +67,23 @@ public class MockContentfulService : IContentService
                    StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateStaticPage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
-                                                            body, WhatLevelIsTheQualificationPath, false)),
+                                                              body, WhatLevelIsTheQualificationPath, false)),
+
                    StaticPages.Level7QualificationAfterAug2019 =>
                        await Task.FromResult(CreateStaticPage("Level 7 qualification after aug 2019",
                                                               body, WhatLevelIsTheQualificationPath, false)),
+
+                    StaticPages.HowToGetACopyOfTheCertificateOrTranscript =>
+                       await Task.FromResult(CreateStaticPage("How to get a copy of the certificate or transcript",
+                                                              body, "/help/I-need-a-copy-of-the-qualification-certificate-or-transcript", false)),
+
+                   StaticPages.HowToFindTheLevelOfAQualification =>
+                        await Task.FromResult(CreateStaticPage("How to find the level of a qualification",
+                                                               body, "/help/I-do-not-know-what-level-the-qualification-is", false)),
+                   
+                   StaticPages.HowToFindASuitableCourse =>
+                       await Task.FromResult(CreateStaticPage("How to find a suitable course",
+                                                              body, "/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol", false)),
                    _ => null
                };
     }
@@ -743,17 +756,52 @@ public class MockContentfulService : IContentService
 
     public async Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPage(string entryId)
     {
+
+        if (entryId == RadioQuestionHelpPages.GetHelp)
+        {
+            return await Task.FromResult(
+                new RadioQuestionHelpPage
+                {
+                    Heading = "Get help with the Check an early years qualification service",
+                    PostHeadingContent = ContentfulContentHelper.Paragraph("Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n"),
+                    ReasonForEnquiryHeading = "Why are you contacting us?",
+                    CtaButtonText = CtaButtonText,
+                    BackButton = new NavigationLink
+                    {
+                        DisplayText = "Home",
+                        Href = HomePath,
+                        OpenInNewTab = false
+                    },
+                    ErrorBannerHeading = ThereIsAProblem,
+                    NoEnquiryOptionSelectedErrorMessage = "Select one option",
+                    Options =
+                    [
+                        new Option
+                        { Label = "I need a copy of the qualification certificate or transcript", Value = "INeedACopyOfTheQualificationCertificateOrTranscript" },
+                        new Option
+                        { Label = "I do not know what level the qualification is", Value = "IDoNotKnowWhatLevelTheQualificationIs" },
+                        new Option
+                        { Label = "I want to check whether a course is approved before I enrol", Value = "IWantToCheckWhetherACourseIsApprovedBeforeIEnrol" },
+                        new Option
+                        { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification", Hint = "Some hint text"},
+                        new Option
+                        { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" }
+                    ]
+                }
+            );
+        }
+
         return await Task.FromResult(
             new RadioQuestionHelpPage
             {
-                Heading = "Get help with the Check an early years qualification service",
-                PostHeadingContent = ContentfulContentHelper.Paragraph("Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n"),
-                ReasonForEnquiryHeading = "Why are you contacting us?",
+                Heading = "Check the qualification before contacting us",
+                PostHeadingContent = ContentfulContentHelper.Paragraph("<div class=\"govuk-body govuk-!-margin-bottom-7\" id=\"post-heading-content\">\r\n            <p class=\"govuk-body\">Use the <a href=\"/\" class=\"govuk-link\">check an early years qualification service</a> to confirm if a qualification is approved as full and relevant by the Department for Education.</p><p class=\"govuk-body\">This service may provide you with a quicker response, and you can be assured that the team will not give you an answer different from what is available in the service. </p>\r\n        </div>"),
+                ReasonForEnquiryHeading = "What do you want to do next?",
                 CtaButtonText = CtaButtonText,
                 BackButton = new NavigationLink
                 {
-                    DisplayText = "Home",
-                    Href = HomePath,
+                    DisplayText = "Back to get help",
+                    Href = "help/get-help",
                     OpenInNewTab = false
                 },
                 ErrorBannerHeading = ThereIsAProblem,
@@ -761,9 +809,9 @@ public class MockContentfulService : IContentService
                 Options =
                 [
                     new Option
-                    { Label = "I have a question about a qualification", Value = "QuestionAboutAQualification" },
+                    { Label = "Check the qualification using the service", Value = "CheckTheQualificationUsingTheService" },
                     new Option
-                    { Label = "I am experiencing an issue with the service", Value = "IssueWithTheService" }
+                    { Label = "Contact the early years qualification team", Value = "ContactTheEarlyYearsQualificationTeam" }
                 ]
             }
         );
