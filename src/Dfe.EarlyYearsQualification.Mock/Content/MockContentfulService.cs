@@ -795,7 +795,7 @@ public class MockContentfulService : IContentService
             new RadioQuestionHelpPage
             {
                 Heading = "Check the qualification before contacting us",
-                PostHeadingContent = ContentfulContentHelper.Paragraph("<div class=\"govuk-body govuk-!-margin-bottom-7\" id=\"post-heading-content\">\r\n            <p class=\"govuk-body\">Use the <a href=\"/\" class=\"govuk-link\">check an early years qualification service</a> to confirm if a qualification is approved as full and relevant by the Department for Education.</p><p class=\"govuk-body\">This service may provide you with a quicker response, and you can be assured that the team will not give you an answer different from what is available in the service. </p>\r\n        </div>"),
+                PostHeadingContent = ContentfulContentHelper.Paragraph("<p class=\"govuk-body\">Use the <a href=\"/\" class=\"govuk-link\">check an early years qualification service</a> to confirm if a qualification is approved as full and relevant by the Department for Education.</p><p class=\"govuk-body\">This service may provide you with a quicker response, and you can be assured that the team will not give you an answer different from what is available in the service. </p>\r\n"),
                 ReasonForEnquiryHeading = "What do you want to do next?",
                 CtaButtonText = CtaButtonText,
                 BackButton = new NavigationLink
