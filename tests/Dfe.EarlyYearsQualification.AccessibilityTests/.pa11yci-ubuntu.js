@@ -5,6 +5,7 @@ function getUrls(authSecret, port) {
         `set field #PasswordValue to ${authSecret}`,
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/`,
+        'click element h1',
         'click element #start-now-button',
         `wait for url to be http://localhost:${port}/questions/pre-check`,
         'click element #yes',
