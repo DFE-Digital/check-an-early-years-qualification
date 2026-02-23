@@ -364,7 +364,7 @@ public class HelpController(
         var staticPage = await helpService.GetStaticPage(staticPageId);
         if (staticPage is null)
         {
-            logger.LogError("No content for the advice page");
+            logger.LogError("No content for the static page");
             return RedirectToAction("Index", "Error");
         }
 

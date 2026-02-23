@@ -392,6 +392,28 @@ public class HelpControllerTests
         model.Heading.Should().Be("Static page heading");
     }
 
+    [TestMethod]
+    public async Task Get_IWantToCheckWhetherACourseIsApprovedBeforeIEnrol_NoContentReturned_RedirecToErrorPage()
+    {
+        // Arrange
+        _mockHelpService.Setup(x => x.GetStaticPage(It.IsAny<string>())).ReturnsAsync(() => null);
+
+        // Act
+        var result = await GetSut().IWantToCheckWhetherACourseIsApprovedBeforeIEnrol();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        _mockLogger.VerifyError("No content for the static page");
+    }
+
     // proceed with qualification query tests
     [TestMethod]
     public async Task GetRadioQuestionHelpPageAsync_ContentServiceReturnsNull_RedirectsToErrorPage()
@@ -450,6 +472,35 @@ public class HelpControllerTests
 
         model.Heading.Should().Be(content.Heading);
         model.PostHeadingContent.Should().Be("Test html body");
+    }
+
+    [TestMethod]
+    public async Task Get_ProceedWithQualificationQuery_EnquiryIsEmpty_RedirectsToGetHelpPage()
+    {
+        // Arrange
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(new RadioQuestionHelpPage());
+        _mockHelpService.Setup(x => x.MapRadioQuestionHelpPageContentToViewModelAsync(It.IsAny<RadioQuestionHelpPage>())).ReturnsAsync(It.IsAny<RadioQuestionHelpPageViewModel>());
+
+        var submittedViewModel = new RadioQuestionHelpPageViewModel
+        {
+            SelectedOption = HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam,
+        };
+
+        // Act
+        var result = await GetSut().ProceedWithQualificationQuery();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("GetHelp");
+        resultType.ControllerName.Should().Be("Help");
+
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
     }
 
     [TestMethod]
@@ -518,10 +569,56 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService), "CheckTheQualificationUsingTheService")]
-    [DataRow(nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam), "ContactTheEarlyYearsQualificationTeam")]
-    public async Task Post_ProceedWithQualificationQuery_ValidModelStateRedirectsToExpectedPage(
-        string selectedOption, string pageToRedirectTo)
+    public async Task Post_ProceedWithQualificationQuery_CheckTheQualificationUsingTheService_ValidModelStateRedirectsToExpectedPage()
+    {
+        // Arrange
+        var content = new RadioQuestionHelpPage
+        {
+            Options =
+                new List<Option>
+                {
+                    new Option
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService),
+                        Label = HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService
+                    },
+                    new Option
+                    {
+                        Value = nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam),
+                        Label = HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam
+                    },
+                }
+        };
+
+        _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
+
+        _mockHelpService.Setup(x => x.SelectedOptionIsValid(content.Options, It.IsAny<string>()))
+                        .Returns(() => true);
+
+        var submittedViewModel = new RadioQuestionHelpPageViewModel
+        {
+            SelectedOption = nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService),
+        };
+
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(It.IsAny<HelpFormEnquiry>());
+
+        _mockHelpService.Setup(x => x.SetHelpFormEnquiryReason(submittedViewModel))
+                        .Returns(new RedirectToActionResult("Index", "Home", null));
+
+        // Act
+        var result = await GetSut().ProceedWithQualificationQuery(submittedViewModel);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Home");
+    }
+
+    [TestMethod]
+    public async Task Post_ProceedWithQualificationQuery_ContactTheEarlyYearsQualificationTeam_ValidModelStateRedirectsToExpectedPage()
     {
         // Arrange
         var content = new RadioQuestionHelpPage
@@ -549,23 +646,23 @@ public class HelpControllerTests
 
         var submittedViewModel = new RadioQuestionHelpPageViewModel
         {
-            SelectedOption = selectedOption,
+            SelectedOption = nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam),
         };
 
-        _mockHelpService.Setup(x => x.SetHelpFormEnquiryReason(submittedViewModel))
-                        .Returns(new RedirectToActionResult(pageToRedirectTo, "b", null));
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         // Act
-        var result = await GetSut().GetHelp(submittedViewModel);
+        var result = await GetSut().ProceedWithQualificationQuery(submittedViewModel);
 
         // Assert
         result.Should().NotBeNull();
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType.ActionName.Should().Be(pageToRedirectTo);
+        resultType.ActionName.Should().Be("QualificationDetails");
 
-        _mockHelpService.Verify(x => x.SetHelpFormEnquiryReason(submittedViewModel), Times.Once);
+
+        _mockHelpService.Verify(x => x.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
