@@ -130,7 +130,7 @@ public class HelpController(
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam):
                 var enquiry = helpService.GetHelpFormEnquiry();
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam;
+                enquiry.WhatDoYouWantToDoNext = HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam;
                 helpService.SetHelpFormEnquiry(enquiry);
                 return RedirectToAction(nameof(QualificationDetails));
             default:

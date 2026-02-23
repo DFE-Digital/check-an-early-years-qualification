@@ -58,8 +58,10 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
-                nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript, nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs, nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol, nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification, nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification))]
     [DataRow(HelpFormEnquiryReasons.GetHelp.IssueWithTheService, nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService))]
     [DataRow(null, "")]
     public void GetSelectedOption_Returns_PreviouslySelectedRadioOption(string input, string expected)
@@ -85,6 +87,39 @@ public class HelpServiceTests
     {
         // Act
         var result = GetSut().GetWhyAreYouContactingUsSelectedOption();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().Be(string.Empty);
+    }
+
+    [TestMethod]
+    [DataRow(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService, nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService))]
+    [DataRow(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam, nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam))]
+    [DataRow(null, "")]
+    public void GetWhatDoYouWantToDoNextSelectedOption_Returns_PreviouslySelectedRadioOption(string input, string expected)
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(
+             new HelpFormEnquiry
+             {
+                 WhatDoYouWantToDoNext = input
+             }
+        );
+
+        // Act
+        var result = GetSut().GetWhatDoYouWantToDoNextSelectedOption();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().Be(expected);
+    }
+
+    [TestMethod]
+    public void GetWhatDoYouWantToDoNextSelectedOption_EnquiryIsNull_Returns_EmptyString()
+    {
+        // Act
+        var result = GetSut().GetWhatDoYouWantToDoNextSelectedOption();
 
         // Assert
         result.Should().NotBeNull();
@@ -189,6 +224,32 @@ public class HelpServiceTests
         result.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
 
         _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task GetStaticPage_Calls_ContentService_GetStaticPage()
+    {
+        // Arrange
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.GetStaticPage(It.IsAny<string>());
+
+        // Assert
+        _mockContentService.Verify(o => o.GetStaticPage(It.IsAny<string>()), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task MapStaticPage_Calls_StaticPageMapper_Map()
+    {
+        // Arrange
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.MapStaticPage(It.IsAny<StaticPage>());
+
+        // Assert
+        _mockStaticPageMapper.Verify(o => o.Map(It.IsAny<StaticPage>()), Times.Once);
     }
 
     [TestMethod]

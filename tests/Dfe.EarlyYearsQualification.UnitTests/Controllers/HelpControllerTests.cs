@@ -156,6 +156,9 @@ public class HelpControllerTests
     }
 
     [TestMethod]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript), "I-need-a-copy-of-the-qualification-certificate-or-transcript")]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs), "I-do-not-know-what-level-the-qualification-is")]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol), "I-want-to-check-whether-a-course-is-approved-before-I-enrol")]
     [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), "QualificationDetails")]
     [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), "ProvideDetails")]
     public async Task Post_GetHelp_ValidModelStateRedirectsToExpectedPage(

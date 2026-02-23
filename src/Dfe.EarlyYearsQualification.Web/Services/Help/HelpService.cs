@@ -65,7 +65,7 @@ public class HelpService(
 
         if (enquiry is not null)
         {
-            switch (enquiry.ReasonForEnquiring)
+            switch (enquiry.WhatDoYouWantToDoNext)
             {
                 case HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService:
                 return nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService);
