@@ -163,6 +163,9 @@ public class HelpServiceTests
     }
 
     [TestMethod]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript), nameof(HelpController.INeedACopyOfTheQualificationCertificateOrTranscript))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs), nameof(HelpController.IDoNotKnowWhatLevelTheQualificationIs))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol), nameof(HelpController.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol))]
     [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), nameof(HelpController.ProceedWithQualificationQuery))]
     [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), nameof(HelpController.ProvideDetails))]
     public void SetHelpFormEnquiryReason_Returns_Expected(string input, string controllerActionToRedirectTo)

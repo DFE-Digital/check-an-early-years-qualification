@@ -156,11 +156,11 @@ public class HelpControllerTests
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript), "I-need-a-copy-of-the-qualification-certificate-or-transcript")]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs), "I-do-not-know-what-level-the-qualification-is")]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol), "I-want-to-check-whether-a-course-is-approved-before-I-enrol")]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), "QualificationDetails")]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), "ProvideDetails")]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript), nameof(HelpController.INeedACopyOfTheQualificationCertificateOrTranscript))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs), nameof(HelpController.IDoNotKnowWhatLevelTheQualificationIs))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol), nameof(HelpController.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), nameof(HelpController.ProceedWithQualificationQuery))]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), nameof(HelpController.ProvideDetails))]
     public async Task Post_GetHelp_ValidModelStateRedirectsToExpectedPage(
         string selectedOption, string pageToRedirectTo)
     {
