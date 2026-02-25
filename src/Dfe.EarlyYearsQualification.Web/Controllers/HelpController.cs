@@ -29,6 +29,7 @@ public class HelpController(
         var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
         viewModel.SelectedOption = helpService.GetWhyAreYouContactingUsSelectedOption();
         viewModel.ActionName = nameof(GetHelp);
+        viewModel.FormId = "get-help-enquiry-form";
 
         return View("RadioQuestion", viewModel);
     } 
@@ -51,6 +52,7 @@ public class HelpController(
             var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
             viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
             viewModel.ActionName = nameof(GetHelp);
+            viewModel.FormId = "get-help-enquiry-form";
 
             return View("RadioQuestion", viewModel);
         }
@@ -115,6 +117,7 @@ public class HelpController(
         var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
         viewModel.SelectedOption = helpService.GetWhatDoYouWantToDoNextSelectedOption();
         viewModel.ActionName = nameof(ProceedWithQualificationQuery);
+        viewModel.FormId = "proceed-with-qualification-enquiry-form";
 
         return View("RadioQuestion", viewModel);
     }
@@ -137,6 +140,7 @@ public class HelpController(
             var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
             viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
             viewModel.ActionName = nameof(ProceedWithQualificationQuery);
+            viewModel.FormId = "proceed-with-qualification-enquiry-form";
 
             return View("RadioQuestion", viewModel);
         }

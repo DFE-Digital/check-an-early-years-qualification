@@ -2,7 +2,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
-using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
@@ -18,7 +17,6 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class HelpServiceTests
 {
-    private Mock<ILogger<HelpService>> _mockLogger = new();
     private Mock<IContentService> _mockContentService = new();
     private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
     private Mock<INotificationService> _mockNotificationService = new();
@@ -522,7 +520,6 @@ public class HelpServiceTests
     private HelpService GetSut()
     {
         return new HelpService(
-                               _mockLogger.Object,
                                _mockContentService.Object,
                                _mockUserJourneyCookieService.Object,
                                _mockNotificationService.Object,
