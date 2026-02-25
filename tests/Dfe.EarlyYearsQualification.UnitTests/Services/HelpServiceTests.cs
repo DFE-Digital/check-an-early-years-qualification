@@ -163,12 +163,13 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript), nameof(HelpController.INeedACopyOfTheQualificationCertificateOrTranscript))]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs), nameof(HelpController.IDoNotKnowWhatLevelTheQualificationIs))]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol), nameof(HelpController.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol))]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), nameof(HelpController.ProceedWithQualificationQuery))]
-    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), nameof(HelpController.ProvideDetails))]
-    public void SetHelpFormEnquiryReason_Returns_Expected(string input, string controllerActionToRedirectTo)
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript), HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs), HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol), HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), HelpFormEnquiryReasons.GetHelp.IssueWithTheService)]
+    [DataRow("invalid option", "")]
+    public void SetHelpFormEnquiryReason_Returns_Expected(string input, string expected)
     {
         // Arrange
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
@@ -179,52 +180,13 @@ public class HelpServiceTests
                         };
 
         // Act
-        var result = GetSut().SetHelpFormEnquiryReason(viewModel);
+        GetSut().SetHelpFormEnquiryReason(viewModel.SelectedOption);
+
+        var result = GetSut().GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
-        result.ActionName.Should().Be(controllerActionToRedirectTo);
-
-        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
-    }
-
-    [TestMethod]
-    public void SetHelpFormEnquiryReason_InvalidEnquiryReason_Returns_Expected()
-    {
-        // Arrange
-        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
-
-        var viewModel = new RadioQuestionHelpPageViewModel
-                        {
-                            SelectedOption = "invalid value"
-                        };
-
-        // Act
-        var result = GetSut().SetHelpFormEnquiryReason(viewModel);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.ActionName.Should().Be("Index");
-        result.ControllerName.Should().Be("Error");
-
-        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Never);
-    }
-
-    [TestMethod]
-    public void SetHelpFormEnquiryReason_Null_GetHelpFormEnquiry_InitialisesNew_Returns_Expected()
-    {
-        // Arrange
-        var result = GetSut().SetHelpFormEnquiryReason(
-                                                       new RadioQuestionHelpPageViewModel
-                                                       {
-                                                           SelectedOption = nameof(HelpFormEnquiryReasons.GetHelp
-                                                               .IssueWithTheService)
-                                                       }
-                                                      );
-
-        // Assert
-        result.Should().NotBeNull();
-        result.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
+        result.ReasonForEnquiring.Should().Be(expected);
 
         _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }

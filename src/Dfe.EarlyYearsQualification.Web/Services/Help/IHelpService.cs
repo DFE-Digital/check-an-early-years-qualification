@@ -15,7 +15,7 @@ public interface IHelpService
 {
     public bool SelectedOptionIsValid(List<Option> options, string value);
 
-    RedirectToActionResult SetHelpFormEnquiryReason(RadioQuestionHelpPageViewModel model);
+    public void SetHelpFormEnquiryReason(string selectedOption);
 
     public string GetWhyAreYouContactingUsSelectedOption();
 

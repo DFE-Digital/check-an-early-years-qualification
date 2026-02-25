@@ -168,33 +168,33 @@ public class HelpControllerTests
         var content = new RadioQuestionHelpPage
                       {
                           Options = new List<Option>
-                                           {
-                                               new Option
-                                               {
-                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript),
-                                                   Label = HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript
-                                               },
-                                               new Option
-                                               {
-                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs),
-                                                   Label = HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs
-                                               },
-                                               new Option
-                                               {
-                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol),
-                                                   Label = HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol
-                                               },
-                                               new Option
-                                               {
-                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
-                                                   Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
-                                               },
-                                               new Option
-                                               {
-                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
-                                                   Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
-                                               }
-                                           }
+                                            {
+                                                new Option
+                                                {
+                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript),
+                                                    Label = HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript
+                                                },
+                                                new Option
+                                                {
+                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs),
+                                                    Label = HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs
+                                                },
+                                                new Option
+                                                {
+                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol),
+                                                    Label = HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol
+                                                },
+                                                new Option
+                                                {
+                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
+                                                    Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
+                                                },
+                                                new Option
+                                                {
+                                                    Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
+                                                    Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+                                                }
+                                            }
                       };
 
         _mockHelpService.Setup(x => x.GetRadioQuestionHelpPageAsync(It.IsAny<string>())).ReturnsAsync(content);
@@ -207,9 +207,6 @@ public class HelpControllerTests
                                      SelectedOption = selectedOption,
                                  };
 
-        _mockHelpService.Setup(x => x.SetHelpFormEnquiryReason(submittedViewModel))
-                        .Returns(new RedirectToActionResult(pageToRedirectTo, "b", null));
-
         // Act
         var result = await GetSut().GetHelp(submittedViewModel);
 
@@ -220,7 +217,7 @@ public class HelpControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(pageToRedirectTo);
 
-        _mockHelpService.Verify(x => x.SetHelpFormEnquiryReason(submittedViewModel), Times.Once);
+        _mockHelpService.Verify(x => x.SetHelpFormEnquiryReason(submittedViewModel.SelectedOption), Times.Once);
     }
 
     [TestMethod]
@@ -601,9 +598,6 @@ public class HelpControllerTests
         };
 
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(It.IsAny<HelpFormEnquiry>());
-
-        _mockHelpService.Setup(x => x.SetHelpFormEnquiryReason(submittedViewModel))
-                        .Returns(new RedirectToActionResult("Index", "Home", null));
 
         // Act
         var result = await GetSut().ProceedWithQualificationQuery(submittedViewModel);

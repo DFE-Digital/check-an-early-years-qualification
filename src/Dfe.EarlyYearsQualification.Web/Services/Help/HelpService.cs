@@ -84,36 +84,21 @@ public class HelpService(
         return options.Select(x => x.Value).Contains(value);
     }
 
-    public RedirectToActionResult SetHelpFormEnquiryReason(RadioQuestionHelpPageViewModel model)
+    public void SetHelpFormEnquiryReason(string selectedOption)
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry() ?? new();
 
-        switch (model.SelectedOption)
+        enquiry.ReasonForEnquiring = selectedOption switch
         {
-            case nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript;
-                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
-                return RedirectToAction(nameof(HelpController.INeedACopyOfTheQualificationCertificateOrTranscript));
-            case nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs;
-                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
-                return RedirectToAction(nameof(HelpController.IDoNotKnowWhatLevelTheQualificationIs));
-            case nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol;
-                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
-                return RedirectToAction(nameof(HelpController.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol));
-            case nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification;
-                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
-                return RedirectToAction(nameof(HelpController.ProceedWithQualificationQuery));
-            case nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService;
-                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
-                return RedirectToAction(nameof(HelpController.ProvideDetails));
-            default:
-                logger.LogError("Unexpected enquiry option");
-                return RedirectToAction("Index", "Error");
-        }
+            nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript) => HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript,
+            nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs) => HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs,
+            nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol) => HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol,
+            nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification) => HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
+            nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService) => HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
+            _ => string.Empty,
+        };
+
+        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
     }
 
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPageAsync()

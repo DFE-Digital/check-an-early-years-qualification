@@ -54,8 +54,25 @@ public class HelpController(
 
             return View("RadioQuestion", viewModel);
         }
-        
-        return helpService.SetHelpFormEnquiryReason(model);
+
+        helpService.SetHelpFormEnquiryReason(model.SelectedOption);
+
+        switch (model.SelectedOption)
+        {
+            case nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript):
+                return RedirectToAction(nameof(INeedACopyOfTheQualificationCertificateOrTranscript));
+            case nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs):
+                return RedirectToAction(nameof(IDoNotKnowWhatLevelTheQualificationIs));
+            case nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol):
+                return RedirectToAction(nameof(IWantToCheckWhetherACourseIsApprovedBeforeIEnrol));
+            case nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification):
+                return RedirectToAction(nameof(ProceedWithQualificationQuery));
+            case nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService):
+                return RedirectToAction(nameof(ProvideDetails));
+            default:
+                logger.LogError("Unexpected enquiry option");
+                return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet("I-need-a-copy-of-the-qualification-certificate-or-transcript")]
