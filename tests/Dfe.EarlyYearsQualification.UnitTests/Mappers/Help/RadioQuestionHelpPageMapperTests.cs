@@ -20,7 +20,7 @@ public class RadioQuestionHelpPageMapperTests
 
         var postHeadingContent = "Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n";
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).Returns(() => Task.FromResult(postHeadingContent));
+        var postRadioButtonContent = "Use this form to ask a question about a qualification or report a problem with the service or the information it provides.\r\nWe aim to respond to all queries within 5 working days. Complex cases may take longer.\r\n";
 
         var content = new RadioQuestionHelpPage
         {
@@ -51,6 +51,12 @@ public class RadioQuestionHelpPageMapperTests
             ]
         };
 
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == content.PostHeadingContent)))
+                 .ReturnsAsync(postHeadingContent);
+
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == content.PostRadioButtonContent)))
+         .ReturnsAsync(postRadioButtonContent);
+
         var result = await new RadioQuestionHelpPageMapper(mockContentParser.Object).MapRadioQuestionHelpPageContentToViewModelAsync(content);
 
         result.Should().NotBeNull();
@@ -79,5 +85,6 @@ public class RadioQuestionHelpPageMapperTests
         result.ErrorBannerHeading.Should().Be(content.ErrorBannerHeading);
         result.HasNoEnquiryOptionSelectedError.Should().BeFalse();
         result.HasValidationErrors.Should().BeFalse();
+        result.PostRadioButtonContent.Should().Be(postRadioButtonContent);
     }
 }

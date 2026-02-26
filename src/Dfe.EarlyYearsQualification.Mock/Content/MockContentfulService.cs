@@ -812,7 +812,8 @@ public class MockContentfulService : IContentService
                     { Label = "Check the qualification using the service", Value = "CheckTheQualificationUsingTheService" },
                     new Option
                     { Label = "Contact the early years qualification team", Value = "ContactTheEarlyYearsQualificationTeam" }
-                ]
+                ],
+                PostRadioButtonContent = ContentfulContentHelper.Paragraph("Content after radio buttons"),
             }
         );
     }

@@ -24,6 +24,7 @@ public class RadioQuestionHelpPageMapper(IGovUkContentParser contentParser) : IR
             NoEnquiryOptionSelectedErrorMessage = content.NoEnquiryOptionSelectedErrorMessage,
             ErrorBannerHeading = content.ErrorBannerHeading,
             ReasonForEnquiryHeading = content.ReasonForEnquiryHeading,
+            PostRadioButtonContent = await contentParser.ToHtml(content.PostRadioButtonContent),
         };
 
         return viewModel;

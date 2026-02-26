@@ -58,6 +58,12 @@
                     </div>
                 </fieldset>
             </div>
+            @if (!string.IsNullOrEmpty(Model.PostRadioButtonContent))
+            {
+                <div class="govuk-body govuk-!-margin-bottom-7" id="post-radio-button-content">
+                    @Html.Raw(Model.PostRadioButtonContent)
+                </div>
+            }
             <div class="govuk-form-group">
                 <govuk-button id="form-submit" type="submit">@Model.CtaButtonText</govuk-button>
             </div>

@@ -23,6 +23,8 @@ public class RadioQuestionHelpPageViewModel
 
     public string ErrorBannerHeading { get; init; } = string.Empty;
 
+    public string PostRadioButtonContent { get; init; } = string.Empty;
+
     // values to bind
     [Required]
     [IncludeInTelemetry]

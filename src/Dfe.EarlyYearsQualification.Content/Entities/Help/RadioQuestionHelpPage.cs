@@ -19,4 +19,6 @@ public class RadioQuestionHelpPage
     public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;
 
     public string ErrorBannerHeading { get; init; } = string.Empty;
+
+    public Document PostRadioButtonContent { get; init; } = new();
 }
