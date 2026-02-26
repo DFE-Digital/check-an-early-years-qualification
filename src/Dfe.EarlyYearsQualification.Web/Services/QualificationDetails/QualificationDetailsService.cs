@@ -245,8 +245,7 @@ public class QualificationDetailsService(
     public async Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model, Qualification qualification)
     {
         var isQts = IsQts(qualification, model.AdditionalRequirementAnswers);
-        var isPractitioner = userJourneyCookieService.GetIsUserCheckingTheirOwnQualification();
-        if (isPractitioner == "yes" && model.RatioRequirements.ApprovedForLevel6 != QualificationApprovalStatus.Approved 
+        if (model.RatioRequirements.ApprovedForLevel6 != QualificationApprovalStatus.Approved 
                                     && qualification is { QualificationLevel: 6, IsTheQualificationADegree: true }
                                     && !isQts)
         {
