@@ -54,12 +54,6 @@ namespace Dfe.EarlyYearsQualification.Web
 
             builder.Services.AddTransient<CachingHandler>();
             builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToPathAndQueryCacheKeyConverter>();
-
-            if (!builder.Environment.IsDevelopment())
-            {
-                // V3 of the package requires a connection string which is only set in env variables on the servers. Not needed locally
-                builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
-            }
             
             builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
@@ -74,6 +68,8 @@ namespace Dfe.EarlyYearsQualification.Web
             {
                 if (!runValidationTests)
                 {
+                    builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
+                    
                     string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
                     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
