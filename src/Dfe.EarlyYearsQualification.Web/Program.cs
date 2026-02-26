@@ -52,15 +52,15 @@ namespace Dfe.EarlyYearsQualification.Web
 
             builder.Services.AddSingleton<IEnvironmentService, EnvironmentService>();
 
-            var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
-            {
-                EnableAdaptiveSampling = false
-            };
-
             builder.Services.AddTransient<CachingHandler>();
             builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToPathAndQueryCacheKeyConverter>();
 
-            builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
+            if (!builder.Environment.IsDevelopment())
+            {
+                // V3 of the package requires a connection string which is only set in env variables on the servers. Not needed locally
+                builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
+            }
+            
             builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
             bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
