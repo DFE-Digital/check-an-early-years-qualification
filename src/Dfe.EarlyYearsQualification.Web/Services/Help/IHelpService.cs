@@ -1,4 +1,6 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities.Help;
+﻿using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -11,17 +13,19 @@ namespace Dfe.EarlyYearsQualification.Web.Services.Help;
 
 public interface IHelpService
 {
-    public Task<GetHelpPage?> GetGetHelpPageAsync();
+    public bool SelectedOptionIsValid(List<Option> options, string value);
 
-    Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage content);
+    public void SetHelpFormEnquiryReason(string selectedOption);
 
-    public bool SelectedOptionIsValid(GetHelpPage content, GetHelpPageViewModel model);
+    public string GetWhyAreYouContactingUsSelectedOption();
 
-    RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model);
-
-    public string GetSelectedOption();
+    public string GetWhatDoYouWantToDoNextSelectedOption();
 
     public Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPageAsync();
+
+    public Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPageAsync(string entryId);
+
+    public Task<RadioQuestionHelpPageViewModel> MapRadioQuestionHelpPageContentToViewModelAsync(RadioQuestionHelpPage content);
 
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel);
 
@@ -50,4 +54,8 @@ public interface IHelpService
     public HelpFormEnquiry GetHelpFormEnquiry();
 
     public void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry);
+
+    public Task<StaticPage?> GetStaticPage(string entryId);
+
+    public Task<StaticPageModel?> MapStaticPage(StaticPage entryId);
 }

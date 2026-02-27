@@ -124,10 +124,18 @@ $("#give-feedback-form").on("submit", function () {
     });
 });
 
-$('#reason-for-enquiring-form').on("submit", function(){
+$('#get-help-enquiry-form').on("submit", function(){
     let selectedAnswer = $(`input[name='SelectedOption']:checked`).val();
     window.dataLayer.push({
         'event': 'reasonForEnquiringFormSubmission',
+        'answer': selectedAnswer
+    });
+})
+
+$('#proceed-with-qualification-enquiry-form').on("submit", function () {
+    let selectedAnswer = $(`input[name='SelectedOption']:checked`).val();
+    window.dataLayer.push({
+        'event': 'proceedWithQualificationEnquiryFormSubmission',
         'answer': selectedAnswer
     });
 })
