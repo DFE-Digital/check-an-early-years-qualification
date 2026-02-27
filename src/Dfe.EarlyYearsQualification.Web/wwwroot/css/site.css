@@ -109,8 +109,9 @@ hr {
 }
 
 /*  Overrides nested list items */
-ul.govuk-list ul, ol.govuk-list ol {
-    margin: 0 !important;
+ul.govuk-list.govuk-list--bullet ul.govuk-list.govuk-list--bullet,
+ol.govuk-list.govuk-list--number ol.govuk-list.govuk-list--number {
+    margin: 0;
 }
 
 @media (min-width: 768px) {
