@@ -108,6 +108,11 @@ hr {
     padding-right: 10px;
 }
 
+/*  Overrides nested list items */
+ul.govuk-list ul, ol.govuk-list ol {
+    margin: 0 !important;
+}
+
 @media (min-width: 768px) {
     .tag-padding-right {
         padding-right: 0 !important;
