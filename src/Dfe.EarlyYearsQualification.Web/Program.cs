@@ -52,15 +52,9 @@ namespace Dfe.EarlyYearsQualification.Web
 
             builder.Services.AddSingleton<IEnvironmentService, EnvironmentService>();
 
-            var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
-            {
-                EnableAdaptiveSampling = false
-            };
-
             builder.Services.AddTransient<CachingHandler>();
             builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToPathAndQueryCacheKeyConverter>();
-
-            builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
+            
             builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
             bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
@@ -74,6 +68,8 @@ namespace Dfe.EarlyYearsQualification.Web
             {
                 if (!runValidationTests)
                 {
+                    builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
+                    
                     string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
                     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 

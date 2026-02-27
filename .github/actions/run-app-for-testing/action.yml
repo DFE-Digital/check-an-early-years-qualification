@@ -30,4 +30,5 @@ runs:
       run: |
         dotnet run --urls "${URL}" --project="src/Dfe.EarlyYearsQualification.Web" \
         --UseMockContentful=${USE_MOCK_CONTENTFUL} \
-        --ServiceAccess:Keys:0="${AUTH_SECRET}" &
+        --ServiceAccess:Keys:0="${AUTH_SECRET}" \
+        --ENVIRONMENT="Development" &
