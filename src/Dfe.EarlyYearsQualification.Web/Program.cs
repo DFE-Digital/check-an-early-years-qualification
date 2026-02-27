@@ -62,14 +62,17 @@ namespace Dfe.EarlyYearsQualification.Web
             bool runValidationTests =
                 builder.Configuration.GetValue<bool>("RunValidationTests") && builder.Environment.IsDevelopment();
 
+            if (!builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
+            }
+
             bool upgradeInsecureRequests = (builder.Configuration.GetValue<bool?>("UpgradeInsecureRequests") ?? true) || !builder.Environment.IsDevelopment();
 
             if (!useMockContentful)
             {
                 if (!runValidationTests)
                 {
-                    builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
-                    
                     string? keyVaultEndpoint = builder.Configuration.GetSection("KeyVault").GetValue<string>("Endpoint");
                     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint!), new DefaultAzureCredential());
 
