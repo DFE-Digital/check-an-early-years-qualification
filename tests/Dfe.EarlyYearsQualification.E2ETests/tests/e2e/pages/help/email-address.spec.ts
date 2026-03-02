@@ -14,7 +14,7 @@ test.describe('A spec that tests the email address page', { tag: "@e2e" }, () =>
 
         await page.goto("/help/get-help");
         await page.click("#IssueWithTheService");
-        await page.click("#reason-for-enquiring-form-submit");
+        await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
         await inputText(page, "#ProvideAdditionalInformation", "This is some additional info the user has entered");
         await page.click("#question-submit");

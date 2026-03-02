@@ -1,4 +1,5 @@
-﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels.GetHelpPageViewModel
+﻿@using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
+@model Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels.RadioQuestionHelpPageViewModel
 
 @{
     ViewData["Title"] = Model.Heading;
@@ -17,17 +18,17 @@
             await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel);
         }
 
-        <h1 class="govuk-heading-xl" id="help-page-heading">@Model.Heading</h1>
+        <h1 class="govuk-heading-xl" id="enquiry-heading">@Model.Heading</h1>
         <div class="govuk-body govuk-!-margin-bottom-7" id="post-heading-content">
             @Html.Raw(Model.PostHeadingContent)
         </div>
 
-        @using (Html.BeginForm("GetHelp", "Help", FormMethod.Post, new { id = "reason-for-enquiring-form" }))
+        @using (Html.BeginForm(Model.ActionName, "Help", FormMethod.Post, new { id = Model.FormId }))
         {
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasNoEnquiryOptionSelectedError ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-0">
-                        <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="reason-for-enquiry-heading">
+                        <h2 class="govuk-heading-m govuk-!-margin-bottom-3" id="question-heading">
                             @Model.ReasonForEnquiryHeading
                         </h2>
                     </legend>
@@ -38,20 +39,33 @@
                     }
 
                     <div class="govuk-radios" data-module="govuk-radios">
-                        @foreach (var option in Model.EnquiryReasons)
+                        @foreach (var option in Model.Options)
                         {
                             <div class="govuk-radios__item">
                                 @Html.RadioButtonFor(x => x.SelectedOption, option.Value, new { @class = "govuk-radios__input", id = option.Value })
                                 <label class="govuk-label govuk-radios__label" for="@option.Value">
                                     @option.Label
                                 </label>
+                                @if (!string.IsNullOrEmpty(option.Hint))
+                                {
+                                    var hintId = $"{option.Value}_hint";
+                                    <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                        @option.Hint
+                                    </div>
+                                }
                             </div>
                         }
                     </div>
                 </fieldset>
             </div>
+            @if (!string.IsNullOrEmpty(Model.PostRadioButtonContent))
+            {
+                <div class="govuk-body govuk-!-margin-bottom-7" id="post-radio-button-content">
+                    @Html.Raw(Model.PostRadioButtonContent)
+                </div>
+            }
             <div class="govuk-form-group">
-                <govuk-button id="reason-for-enquiring-form-submit" type="submit">@Model.CtaButtonText</govuk-button>
+                <govuk-button id="form-submit" type="submit">@Model.CtaButtonText</govuk-button>
             </div>
         }
     </div>

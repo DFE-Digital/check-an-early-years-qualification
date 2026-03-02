@@ -21,12 +21,16 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
 
         await page.goto("/help/get-help");
         await page.click("#QuestionAboutAQualification");
-        await page.click("#reason-for-enquiring-form-submit");
+        await page.click("#form-submit");
+
+        await page.click("input#ContactTheEarlyYearsQualificationTeam");
+        await page.click("button#form-submit");
+
         await checkUrl(page, "/help/qualification-details");
     });
 
     test("Checks the content is on the page", async ({ page, context }) => {
-        await checkText(page, "#help-page-heading", "What are the qualification details?");
+        await checkText(page, "#enquiry-heading", "What are the qualification details?");
         await checkText(page, "#post-heading-content", "We need to know the following qualification details to quickly and accurately respond to any questions you may have.");
 
         await checkText(page, "#qualification-name-heading", "Qualification name");

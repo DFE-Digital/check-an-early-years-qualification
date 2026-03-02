@@ -1,0 +1,15 @@
+﻿@model Dfe.EarlyYearsQualification.Web.Models.Content.StaticPageModel
+
+@{
+    ViewData["Title"] = Model.Heading;
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+@{
+    await Html.RenderPartialAsync("Partials/BaseStaticPage", Model);
+}
