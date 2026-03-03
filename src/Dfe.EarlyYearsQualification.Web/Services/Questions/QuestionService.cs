@@ -69,7 +69,7 @@ public class QuestionService(
 
     public async Task<RadioQuestionModel> Map(RadioQuestionModel model, RadioQuestionPage questionPage, string actionName, string controllerName, string? selectedAnswer)
     {
-        return await radioQuestionMapper.Map(model, questionPage, actionName, controllerName, model.Option);
+        return await radioQuestionMapper.Map(model, questionPage, actionName, controllerName, selectedAnswer);
     }
 
     public IActionResult RedirectBasedOnQualificationLevelSelected(string option)
@@ -175,6 +175,11 @@ public class QuestionService(
         return await contentService.GetPreCheckPage();
     }
 
+    public DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question, DateValidationResult validationResult)
+    {
+        return MapDateModel(model, question, validationResult, model.SelectedMonth, model.SelectedYear);
+    }
+
     public DatesQuestionModel MapDatesModel(DatesQuestionModel model, DatesQuestionPage questionPage, string actionName,
                                              string controllerName, DatesValidationResult? validationResult)
     {
@@ -199,10 +204,25 @@ public class QuestionService(
         return questionModelValidator.IsValid(model, questionPage!);
     }
 
+    public DateValidationResult IsValid(DateQuestionModel model, DateQuestion content)
+    {
+        return questionModelValidator.IsValid(model, content);
+    }
+
     public void SetWhenWasQualificationStarted(DateQuestionModel question)
     {
         userJourneyCookieService.SetWhenWasQualificationStarted(question!.SelectedMonth.ToString() + '/' +
                                                                     question.SelectedYear);
+    }
+
+    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
+    {
+        return userJourneyCookieService.GetWhenWasQualificationStarted();
+    }
+
+    public bool WasStartedBeforeSeptember2014()
+    {
+        return userJourneyCookieService.WasStartedBeforeSeptember2014();
     }
 
     public void SetWhenWasQualificationAwarded(DateQuestionModel question)

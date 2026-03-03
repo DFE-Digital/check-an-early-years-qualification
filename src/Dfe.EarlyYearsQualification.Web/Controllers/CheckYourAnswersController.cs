@@ -24,7 +24,7 @@ public class CheckYourAnswersController(
         var whereWasQualificationAwardedQuestion =
             await contentService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
         var whenWasTheQualificationStartedAndAwardedQuestion =
-            await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
+            await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded);
         var whatLevelIsTheQualificationQuestion =
             await contentService.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification);
         var whatIsTheAwardingOrganisationQuestion =

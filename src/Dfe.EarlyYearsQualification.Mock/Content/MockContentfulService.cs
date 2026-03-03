@@ -278,7 +278,7 @@ public class MockContentfulService : IContentService
     {
         return entryId switch
                {
-                   QuestionPages.WhenWasTheQualificationStartedAndAwarded =>
+                   QuestionPages.WhenWasTheQualificationAwarded =>
                        await Task.FromResult(CreateDatesQuestionPage()),
                    _ => throw new NotImplementedException($"No date question page mock for entry {entryId}")
                };

@@ -3,6 +3,7 @@
 public class DateQuestion
 {
     public string QuestionHeader { get; init; } = string.Empty;
+
     public string QuestionHint { get; init; } = string.Empty;
 
     public string MonthLabel { get; init; } = string.Empty;

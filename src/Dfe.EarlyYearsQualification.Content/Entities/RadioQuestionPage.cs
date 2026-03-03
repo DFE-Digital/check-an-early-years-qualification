@@ -21,4 +21,10 @@ public class RadioQuestionPage
     public string ErrorBannerHeading { get; init; } = string.Empty;
 
     public string ErrorBannerLinkText { get; init; } = string.Empty;
+
+    public Document? PostHeadingContent { get; init; }
+
+    public string? InformationMessage { get; init; }
+
+    public Document? PostRadioButtonContent { get; init; }
 }

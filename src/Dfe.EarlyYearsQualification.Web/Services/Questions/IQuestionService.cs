@@ -17,6 +17,10 @@ public interface IQuestionService
 
     public string? GetWhereWasQualificationAwarded();
 
+    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
+
+    public bool WasStartedBeforeSeptember2014();
+
     public string? GetAwardingOrganisation();
 
     public bool GetAwardingOrganisationIsNotOnList();
@@ -51,9 +55,13 @@ public interface IQuestionService
     public DatesQuestionModel MapDatesModel(DatesQuestionModel model, DatesQuestionPage question, string actionName,
                                              string controllerName, DatesValidationResult? validationResult);
 
-    Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId);
+    public DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question, DateValidationResult validationResult);
 
-    DatesValidationResult IsValid(DatesQuestionModel model, DatesQuestionPage questionPage);
+    public Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId);
+
+    public DatesValidationResult IsValid(DatesQuestionModel model, DatesQuestionPage questionPage);
+
+    public DateValidationResult IsValid(DateQuestionModel model, DateQuestion content);
 
     public void SetWhenWasQualificationStarted(DateQuestionModel model);
 
