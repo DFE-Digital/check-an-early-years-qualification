@@ -130,6 +130,19 @@ $("#give-feedback-form").on("submit", function () {
         let baseSelector = "input[name='" + value + "']";
         let checkedSelector = baseSelector + ":checked";
         let selector = $(baseSelector).hasClass("govuk-radios__input") ? checkedSelector : baseSelector;
+        let isConditionalInput = $(baseSelector).hasClass("conditional-input");
+        
+        if (isConditionalInput) {
+            // get paired input name and get value to ensure checked value matches
+            let pairedInputName = $(baseSelector).parent().parent().parent().children("input:first").attr("name");
+            let pairedInputSelector = "input[name='" + pairedInputName + "']";
+            let pairedInputValue = $(pairedInputSelector).val();
+            
+            // Only check the conditional input if it's paired value has been selected
+            if (pairedInputValue !== $(pairedInputSelector+":checked").val()) {
+                return;
+            }
+        }
         
         if ($(selector).val() === undefined || $(selector).val().length <= 0) {
             hasRequiredElements = false;

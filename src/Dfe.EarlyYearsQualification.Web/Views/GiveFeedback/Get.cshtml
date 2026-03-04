@@ -156,7 +156,7 @@
                                                 {
                                                     var additionalInfoId = $"{questionIndex}_additionalInfo";
                                                     var additionalInfoHasError = Model.ErrorSummaryModel != null && Model.ErrorSummaryModel.ErrorSummaryLinks.Exists(x => x.ElementLinkId == additionalInfoId);
-                                                    var additionalInfoCss = additionalInfoHasError ? "govuk-input govuk-input--error" : "govuk-input";
+                                                    var additionalInfoCss = additionalInfoHasError ? "govuk-input conditional-input govuk-input--error" : "govuk-input conditional-input";
                                                     var hintId = $"{questionData.InputHeading.Replace(" ", "_")}_hint";
 
                                                     var textInputAttributes = new Dictionary<string, object>
