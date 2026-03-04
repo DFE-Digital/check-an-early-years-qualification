@@ -192,14 +192,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
     {
         var (startDateMonth, startDateYear) = GetWhenWasQualificationStarted();
 
-        if (startDateMonth is null || startDateYear is null)
-        {
-            throw new
-                InvalidOperationException("Unable to determine whether qualification was started before 09-2014");
-        }
-
-        var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-        return date < new DateOnly(2014, 9, 1);
+        return StringDateHelper.DateIsBeforeSeptember2014(startDateMonth, startDateYear);
     }
 
     public bool WasStartedOnOrAfterSeptember2019()

@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -49,7 +50,14 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.ErrorMessages.Add(question.YearOutOfBoundsErrorMessage);
             resultToReturn.BannerErrorMessages.Add(new BannerError(question.YearOutOfBoundsErrorLinkText, FieldId.Year));
         }
-
+        
+        if (StringDateHelper.DateIsBeforeSeptember2014(model.SelectedMonth, model.SelectedYear))
+        {
+            resultToReturn.YearValid = false;
+            resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
+        }
+        
         if (resultToReturn.ErrorMessages.Count != 0)
         {
             return resultToReturn;

@@ -19,16 +19,13 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @if (Model.HasErrors)
+        @if (Model.ErrorSummaryModel != null)
         {
-            @if (Model.ErrorSummaryModel != null)
-            {
-                await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel!);
-            }
+            await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel!);
         }
         @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "radio-question-form" }))
         {
-            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group @(Model is { HasErrors: true, HasNestedErrors: false } ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-heading-xl govuk-!-margin-bottom-1" id="question">
@@ -50,7 +47,7 @@
                         @Html.Raw(Model.PostHeadingContent)
                     }
 
-                    @if (Model.HasErrors && !Model.HasNestedErrors)
+                    @if (Model is { HasErrors: true, HasNestedErrors: false })
                     {
                         <govuk-error-message id="option-error" visually-hidden-text="Error">@Model.ErrorMessage</govuk-error-message>
                     }
@@ -76,25 +73,24 @@
                                     }
                                 </div>
                             }
-                            else if (option.GetType() == typeof(DividerModel))
+                            if (option.GetType() == typeof(DividerModel))
                             {
                                 var optionModel = option as DividerModel;
                                 <div class="govuk-radios__divider">@optionModel!.Text</div>
                             }
-                            else if (option.GetType() == typeof(RadioButtonAndDateInputModel))
+                            if (option.GetType() == typeof(RadioButtonAndDateInputModel))
                             {
                                 var questionData = option as RadioButtonAndDateInputModel;
 
                                 <div class="govuk-radios__item">
-                                    @Html.RadioButtonFor(x => x.Option, questionData.Value, new { @class = "govuk-radios__input", id = questionData.Value, nested="true" })
+                                    @Html.RadioButtonFor(x => x.Option, questionData!.Value, new { @class = $"govuk-radios__input {(Model.HasNestedErrors ? "has__conditional__element" : "has__no__conditional__element")}", id = questionData.Value, nested="true" })
 
                                     <label class="govuk-label govuk-radios__label" for="@questionData.Value">
                                         @questionData.Label
                                     </label>
                                     @if (!string.IsNullOrEmpty(questionData.Hint))
                                     {
-                                        var hintId = $"{questionData.Value}_hint";
-                                        <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                        <div id="@($"{questionData.Value}_hint")" class="govuk-hint govuk-radios__hint">
                                             @questionData.Hint
                                         </div>
                                     }

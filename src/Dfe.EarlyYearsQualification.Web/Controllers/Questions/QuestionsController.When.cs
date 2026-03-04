@@ -32,10 +32,12 @@ public partial class QuestionsController
                 radioQuestionContent.Options.OfType<Option>().First().Value :
                 radioQuestionContent.Options.OfType<RadioButtonAndDateInput>().First().Value;
 
-            var radioButtonAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().FirstOrDefault();
-
-            radioButtonAndDateInputModel.StartedQuestion.SelectedMonth = startMonth.Value;
-            radioButtonAndDateInputModel.StartedQuestion.SelectedYear = startYear.Value;
+            var radioButtonAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().First();
+            if (radioButtonAndDateInputModel.StartedQuestion is not null)
+            {
+                radioButtonAndDateInputModel.StartedQuestion.SelectedMonth = startMonth.Value;
+                radioButtonAndDateInputModel.StartedQuestion.SelectedYear = startYear.Value;
+            }
         }
 
         return View("Radio", model);
@@ -54,18 +56,21 @@ public partial class QuestionsController
         
         model = await questionService.Map(model, radioQuestionContent, nameof(WhenWasTheQualificationStarted), Questions, model.Option);
 
-        var optionModel = model.OptionsItems.OfType<OptionModel>().First();
+        var firstOption = model.OptionsItems.OfType<OptionModel>().First();
 
         var radioAndDateInputContent = radioQuestionContent.Options.Last() as RadioButtonAndDateInput;
         var radioAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().First();
 
-        // Check validation required attribute e.g an option has been selected
+        if (radioAndDateInputModel.StartedQuestion is null || radioAndDateInputContent is null)
+        {
+            logger.LogError("RadioAndDateInputModel StartedQuestion is null");
+            return RedirectToAction("Index", "Error");
+        }
+        
+        // Check validation required attribute e.g. an option has been selected
         if (!ModelState.IsValid)
         {
             model.HasErrors = true;
-
-            var elementLinkId = model.OptionsItems.First(x => x.GetType() == typeof(OptionModel)) as OptionModel;
-
             model.ErrorSummaryModel = new ErrorSummaryModel
             {
                 ErrorBannerHeading = model.ErrorBannerHeading,
@@ -74,7 +79,7 @@ public partial class QuestionsController
                         new ErrorSummaryLink
                         {
                             ErrorBannerLinkText = model.ErrorBannerLinkText,
-                            ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
+                            ElementLinkId = firstOption.Value
                         }
                     ]
             };
@@ -83,7 +88,7 @@ public partial class QuestionsController
         }
 
         // If the option selected is 'Before September 2014' then we can set a base date and skip the date input validation
-        if (model.Option == optionModel.Value)
+        if (model.Option == firstOption.Value)
         {
             // set a base date
             questionService.SetWhenWasQualificationStarted(
@@ -98,16 +103,16 @@ public partial class QuestionsController
         }
 
         // Get values from the nested date input
-        var monthValue = Request.Form["StartedQuestion.SelectedMonth"].FirstOrDefault();
-        var yearValue = Request.Form["StartedQuestion.SelectedYear"].FirstOrDefault();
+        var selectedMonth = Request.Form["StartedQuestion.SelectedMonth"].FirstOrDefault();
+        var selectedYear = Request.Form["StartedQuestion.SelectedYear"].FirstOrDefault();
 
         // Date input validation
-        if (int.TryParse(monthValue, out int parsedMonth))
+        if (int.TryParse(selectedMonth, out var parsedMonth))
         {
             radioAndDateInputModel.StartedQuestion.SelectedMonth = parsedMonth;
         }
 
-        if (int.TryParse(yearValue, out int parsedYear))
+        if (int.TryParse(selectedYear, out var parsedYear))
         {
             radioAndDateInputModel.StartedQuestion.SelectedYear = parsedYear;
         }
@@ -121,11 +126,11 @@ public partial class QuestionsController
             radioAndDateInputModel.StartedQuestion = questionService.MapDateModel(radioAndDateInputModel.StartedQuestion, radioAndDateInputContent.StartedQuestion, dateModelValidationResult);
 
             model.ErrorSummaryModel = new ErrorSummaryModel
-            {
-                ErrorBannerHeading = model.ErrorBannerHeading,
-                ErrorSummaryLinks = radioAndDateInputModel.StartedQuestion.ErrorSummaryLinks
-            };
-
+                                      {
+                                          ErrorBannerHeading = model.ErrorBannerHeading,
+                                          ErrorSummaryLinks = radioAndDateInputModel.StartedQuestion.ErrorSummaryLinks
+                                      };
+        
             return View("Radio", model);
         }
 
