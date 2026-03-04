@@ -116,12 +116,34 @@ $("#give-feedback-form").on("submit", function () {
         .attr("name");
     let inputSelector = "input[name='" + inputName + "']";
     let answer = $(inputSelector).val();
-
-    window.dataLayer.push({
-        'event': 'giveFeedbackFormSubmission',
-        'question': question,
-        'answer': answer
+    
+    // get all required fields and ensure they have a value
+    let requiredElements = $("input[isrequired='True']");
+    let requiredElementNames = [];
+    $.each(requiredElements, function(index, value) { requiredElementNames.push(value.name); });
+    let uniqueNames = requiredElementNames.filter((name, index, requiredElementNames) => {
+        return index === requiredElementNames.indexOf(name);
     });
+
+    let hasRequiredElements = true;
+    $.each(uniqueNames, function(index, value) {
+        let baseSelector = "input[name='" + value + "']";
+        let checkedSelector = baseSelector + ":checked";
+        let selector = $(baseSelector).hasClass("govuk-radios__input") ? checkedSelector : baseSelector;
+        
+        if ($(selector).val() === undefined || $(selector).val().length <= 0) {
+            hasRequiredElements = false;
+        }
+    });
+
+    // only submit the event if all the required inputs have values
+    if (hasRequiredElements) {
+        window.dataLayer.push({
+            'event': 'giveFeedbackFormSubmission',
+            'question': question,
+            'answer': answer
+        });
+    }
 });
 
 $('#reason-for-enquiring-form').on("submit", function(){

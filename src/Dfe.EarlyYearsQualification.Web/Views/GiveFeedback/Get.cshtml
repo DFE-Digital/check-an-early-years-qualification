@@ -58,7 +58,7 @@
                                             }
 
                                             <div class="govuk-radios__item">
-                                                @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = "govuk-radios__input", id = radioButtonId, @checked })
+                                                @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = "govuk-radios__input", id = radioButtonId, @checked, questionData.IsRequired })
                                                 <label class="govuk-label govuk-radios__label" for="@radioButtonId">
                                                     @optionModel.Label
                                                 </label>
@@ -85,10 +85,11 @@
                             var textAreaAttributes = new Dictionary<string, object>
                             {
                                 { "class", "govuk-textarea" },
-                                { "id", textAreaId }
+                                { "id", textAreaId },
+                                { "isRequired", questionData!.IsRequired }
                             };
 
-                            <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData!.Question"/>
+                            <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData.Question"/>
 
                             <div class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
                                 <h2 class="govuk-label-wrapper" id="@questionId">
@@ -139,7 +140,7 @@
                                             }
 
                                             <div class="govuk-radios__item">
-                                                @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = $"govuk-radios__input {conditionalElementClass}", id = radioButtonId, @checked })
+                                                @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = $"govuk-radios__input {conditionalElementClass}", id = radioButtonId, @checked, questionData.IsRequired })
                                                 <label class="govuk-label govuk-radios__label" for="@radioButtonId">
                                                     @optionModel.Label
                                                 </label>
@@ -162,7 +163,8 @@
                                                     {
                                                         { "class", additionalInfoCss },
                                                         { "id", additionalInfoId },
-                                                        { "autocomplete", "off" }
+                                                        { "autocomplete", "off" },
+                                                        { "IsRequired", questionData.IsRequired }
                                                     };
 
                                                     <div class="govuk-radios__conditional">
