@@ -16,4 +16,9 @@ public static partial class StringFormattingHelper
 
         return MatchSpacesAndSlashesRegex().Replace(input, " / ");
     }
+    
+    public static string ToHtmlId(string input)
+    {
+        return Regex.Replace(input, @"[^a-zA-Z0-9_-]", "-").ToLower();
+    }
 }

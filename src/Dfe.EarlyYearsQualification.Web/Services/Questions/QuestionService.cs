@@ -9,12 +9,14 @@ using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
+using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Dfe.EarlyYearsQualification.Web.Services.Help;
+namespace Dfe.EarlyYearsQualification.Web.Services.Questions;
 
 public class QuestionService(
     ILogger<QuestionsController> logger,
@@ -231,6 +233,25 @@ public class QuestionService(
                                                                 question.SelectedYear);
     }
 
+    public void SetPreviouslyEnteredDetails(RadioQuestionModel model, RadioQuestionPage radioQuestionContent)
+    {
+        var (startMonth, startYear) = GetWhenWasQualificationStarted();
+        
+        if (startMonth is not null && startYear is not null)
+        {
+            model.Option = WasStartedBeforeSeptember2014() ?
+                               radioQuestionContent.Options.OfType<Option>().First().Value :
+                               radioQuestionContent.Options.OfType<RadioButtonAndDateInput>().First().Value;
+
+            var radioButtonAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().First();
+            if (radioButtonAndDateInputModel.Question is not null)
+            {
+                radioButtonAndDateInputModel.Question.SelectedMonth = startMonth.Value;
+                radioButtonAndDateInputModel.Question.SelectedYear = startYear.Value;
+            }
+        }
+    }
+    
     private DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question,
                                             DateValidationResult? validationResult,
                                             int? selectedMonth,

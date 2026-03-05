@@ -97,9 +97,9 @@
                                 </div>
                                 <div class="govuk-radios__conditional govuk-!-display-none">
                                     <div class="govuk-form-group">
-                                        @if (questionData.StartedQuestion is not null)
+                                        @if (questionData.Question is not null)
                                         {
-                                            await Html.RenderPartialAsync("Partials/Date", questionData.StartedQuestion);
+                                            await Html.RenderPartialAsync("Partials/Date", questionData.Question);
                                         }
                                     </div>
                                 </div>

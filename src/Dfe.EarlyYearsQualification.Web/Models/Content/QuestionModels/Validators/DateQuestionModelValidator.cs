@@ -51,13 +51,6 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.BannerErrorMessages.Add(new BannerError(question.YearOutOfBoundsErrorLinkText, FieldId.Year));
         }
         
-        if (StringDateHelper.DateIsBeforeSeptember2014(model.SelectedMonth, model.SelectedYear))
-        {
-            resultToReturn.YearValid = false;
-            resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
-            resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
-        }
-        
         if (resultToReturn.ErrorMessages.Count != 0)
         {
             return resultToReturn;
@@ -71,6 +64,14 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.YearValid = false;
             resultToReturn.ErrorMessages.Add(question.FutureDateErrorMessage);
             resultToReturn.BannerErrorMessages.Add(new BannerError(question.FutureDateErrorBannerLinkText, FieldId.Month));
+        }
+        
+        if (selectedDate < new DateOnly(2014, 9, 1))
+        {
+            resultToReturn.MonthValid = false;
+            resultToReturn.YearValid = false;
+            resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
+            resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
         }
 
         return resultToReturn;

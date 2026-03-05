@@ -2,7 +2,7 @@ using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
-public class RadioButtonAndDateInputModel : OptionModel, IOptionItemModel
+public class RadioButtonAndDateInputModel : OptionModel
 {
-    public DateQuestionModel? StartedQuestion { get; set; }
+    public DateQuestionModel? Question { get; set; }
 }

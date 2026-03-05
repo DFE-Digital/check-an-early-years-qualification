@@ -66,4 +66,6 @@ public interface IQuestionService
     public void SetWhenWasQualificationStarted(DateQuestionModel model);
 
     public void SetWhenWasQualificationAwarded(DateQuestionModel model);
+    
+    public void SetPreviouslyEnteredDetails(RadioQuestionModel model, RadioQuestionPage radioQuestionContent);
 }
