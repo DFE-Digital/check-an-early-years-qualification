@@ -18,6 +18,7 @@
 
 <div class="govuk-grid-row">
     <div id="qualification-details-summary" class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop govuk-!-static-margin-bottom-8">
+        @Html.HiddenFor(x => x.UserType, new { id="hdnUserTypeValue" })
         <h1 class="govuk-heading-xl" id="page-header">@Model.Content!.MainHeader</h1>
         <div class="govuk-!-static-margin-bottom-7">
             <button id="print-button-top" class="govuk-link govuk-body-s print-button govuk-!-display-none-print"

@@ -1,6 +1,7 @@
 $(window).on('load', function() {
     let level = $("#hdnLevelValue").val();
     let dateStarted = $("#hdnStartDateValue").val();
+    let userType = $("#hdnUserTypeValue").val();
     
     let insetTextValue = $(".govuk-inset-text > .govuk-body").text();
     let splitInsetText = insetTextValue.split('started ');
@@ -12,6 +13,7 @@ $(window).on('load', function() {
         'event': 'cannot-find-qualification-page',
         'qualificationLevel': level,
         'dateStarted': dateStarted,
-        'summary': `${levelSummary} - ${summaryText}`
+        'summary': `${levelSummary} - ${summaryText}`,
+        'userType': userType
     });
 });
