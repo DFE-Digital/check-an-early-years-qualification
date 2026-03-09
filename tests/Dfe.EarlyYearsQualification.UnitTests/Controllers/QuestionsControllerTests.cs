@@ -163,19 +163,12 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task WhenWasTheQualificationStarted_ReturnsView()
+    public async Task WhenWasTheQualificationAwarded_ReturnsView()
     {
         var questionPage = new DatesQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
-                               StartedQuestion = new DateQuestion
-                                                 {
-                                                     ErrorMessage = "started- Test error message",
-                                                     MonthLabel = "started- Test month label",
-                                                     YearLabel = "started- Test year label",
-                                                     QuestionHint = "started- Test question hint"
-                                                 },
                                AwardedQuestion = new DateQuestion
                                                  {
                                                      ErrorMessage = "awarded- Test error message",
@@ -185,7 +178,7 @@ public class QuestionsControllerTests
                                                  }
                            };
 
-        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
                             .ReturnsAsync(questionPage);
 
         _mockQuestionService.Setup(x => x.MapDatesModel(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>(),
@@ -194,18 +187,7 @@ public class QuestionsControllerTests
                                      {
                                          Question = questionPage.Question,
                                          CtaButtonText = questionPage.CtaButtonText,
-                                         StartedQuestion = new DateQuestionModel
-                                                           {
-                                                               Prefix = "started",
-                                                               QuestionId = "date-started",
-                                                               MonthId = "StartedQuestion.SelectedMonth",
-                                                               YearId = "StartedQuestion.SelectedYear",
-                                                               MonthLabel = questionPage.StartedQuestion!.MonthLabel,
-                                                               YearLabel = questionPage.StartedQuestion!.YearLabel,
-                                                               QuestionHint =
-                                                                   questionPage.StartedQuestion!.QuestionHint,
-                                                               ErrorMessage = questionPage.StartedQuestion!.ErrorMessage
-                                                           },
+                                         StartedQuestion = new DateQuestionModel(),
                                          AwardedQuestion = new DateQuestionModel
                                                            {
                                                                Prefix = "awarded",
@@ -220,7 +202,7 @@ public class QuestionsControllerTests
                                                            },
                                      });
 
-        var result = await GetSut().WhenWasTheQualificationStarted();
+        var result = await GetSut().WhenWasTheQualificationAwarded();
 
         result.Should().NotBeNull();
 
@@ -239,12 +221,12 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task WhenWasTheQualificationStarted_CantFindContentfulPage_ReturnsErrorPage()
+    public async Task WhenWasTheQualificationAwarded_CantFindContentfulPage_ReturnsErrorPage()
     {
-        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
                             .ReturnsAsync((DatesQuestionPage?)null).Verifiable();
 
-        var result = await GetSut().WhenWasTheQualificationStarted();
+        var result = await GetSut().WhenWasTheQualificationAwarded();
 
         result.Should().NotBeNull();
 
@@ -257,20 +239,13 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task Post_WhenWasTheQualificationStarted_InvalidModel_ReturnsDatesQuestionPage()
+    public async Task Post_WhenWasTheQualificationAwarded_InvalidModel_ReturnsDatesQuestionPage()
     {
         var questionPage = new DatesQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
                                ErrorBannerHeading = "Error banner heading",
-                               StartedQuestion = new DateQuestion
-                                                 {
-                                                     ErrorMessage = "started- Test error message",
-                                                     MonthLabel = "started- Test month label",
-                                                     YearLabel = "started- Test year label",
-                                                     QuestionHint = "started- Test question hint"
-                                                 },
                                AwardedQuestion = new DateQuestion
                                                  {
                                                      ErrorMessage = "awarded- Test error message",
@@ -286,14 +261,6 @@ public class QuestionsControllerTests
                                                        {
                                                            SelectedMonth = null,
                                                            SelectedYear = null,
-                                                           Prefix = "started",
-                                                           QuestionId = "date-started",
-                                                           MonthId = "StartedQuestion.SelectedMonth",
-                                                           YearId = "StartedQuestion.SelectedYear",
-                                                           MonthLabel = questionPage.StartedQuestion!.MonthLabel,
-                                                           YearLabel = questionPage.StartedQuestion!.YearLabel,
-                                                           QuestionHint = questionPage.StartedQuestion!.QuestionHint,
-                                                           ErrorMessage = "Test error message"
                                                        },
                                      AwardedQuestion = new DateQuestionModel
                                                        {
@@ -345,7 +312,7 @@ public class QuestionsControllerTests
                                                              }
                                };
 
-        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
                             .ReturnsAsync(questionPage);
 
         _mockQuestionService.Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
@@ -356,7 +323,7 @@ public class QuestionsControllerTests
                                                         It.IsAny<DatesValidationResult>()))
                             .Returns(datesQuestionModel);
 
-        var result = await GetSut().WhenWasTheQualificationStarted(new DatesQuestionModel());
+        var result = await GetSut().WhenWasTheQualificationAwarded(new DatesQuestionModel());
 
         result.Should().NotBeNull();
 
@@ -371,14 +338,6 @@ public class QuestionsControllerTests
         model.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.Errors!.ErrorBannerHeading.Should().Be(questionPage.ErrorBannerHeading);
-        model.StartedQuestion!.Prefix.Should().Be("started");
-        model.StartedQuestion.QuestionId.Should().Be("date-started");
-        model.StartedQuestion.MonthId.Should().Be("StartedQuestion.SelectedMonth");
-        model.StartedQuestion.YearId.Should().Be("StartedQuestion.SelectedYear");
-        model.StartedQuestion.MonthLabel.Should().Be(questionPage.StartedQuestion.MonthLabel);
-        model.StartedQuestion.YearLabel.Should().Be(questionPage.StartedQuestion.YearLabel);
-        model.StartedQuestion.QuestionHint.Should().Be(questionPage.StartedQuestion.QuestionHint);
-        model.StartedQuestion.ErrorMessage.Should().Be(validationResult.StartedValidationResult.ErrorMessages[0]);
         model.AwardedQuestion!.Prefix.Should().Be("awarded");
         model.AwardedQuestion.QuestionId.Should().Be("date-awarded");
         model.AwardedQuestion.MonthId.Should().Be("AwardedQuestion.SelectedMonth");
@@ -393,8 +352,25 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task Post_WhenWasTheQualificationStarted_ValidModel_ReturnsRedirectResponse()
+    public async Task Post_WhenWasTheQualificationAwarded_ValidModel_ReturnsRedirectResponse()
     {
+        var questionPage = new DatesQuestionPage
+        {
+            Question = "Test question",
+            CtaButtonText = "Continue",
+            ErrorBannerHeading = "Error banner heading",
+            AwardedQuestion = new DateQuestion
+            {
+                ErrorMessage = "awarded- Test error message",
+                MonthLabel = "awarded- Test month label",
+                YearLabel = "awarded- Test year label",
+                QuestionHint = "awarded- Test question hint"
+            }
+        };
+
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
+                    .ReturnsAsync(questionPage);
+
         _mockQuestionService
             .Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
             .Returns(
@@ -424,7 +400,7 @@ public class QuestionsControllerTests
                                                        }
                                  };
 
-        var result = await GetSut().WhenWasTheQualificationStarted(datesQuestionModel);
+        var result = await GetSut().WhenWasTheQualificationAwarded(datesQuestionModel);
 
         result.Should().NotBeNull();
 

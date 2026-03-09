@@ -6,8 +6,6 @@ public class CheckYourAnswersPage
 
     public string ChangeAnswerText { get; init; } = string.Empty;
 
-    public string QualificationStartedText { get; init; } = string.Empty;
-
     public string AnyAwardingOrganisationText { get; init; } = string.Empty;
 
     public string AnyLevelText { get; init; } = string.Empty;

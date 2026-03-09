@@ -521,7 +521,6 @@ public class MockContentfulService : IContentService
                                                       },
                                          CtaButtonText = CtaButtonText,
                                          ChangeAnswerText = "Change",
-                                         QualificationStartedText = "Started in",
                                          AnyAwardingOrganisationText = "Various awarding organisations",
                                          AnyLevelText = "Any level"
                                      });

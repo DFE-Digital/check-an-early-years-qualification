@@ -373,8 +373,6 @@ public class DateQuestionModelValidatorTests
 
         var result = validator.IsValid(model, page);
 
-        result.StartedValidationResult!.MonthValid.Should().BeTrue();
-        result.StartedValidationResult.MonthValid.Should().BeTrue();
         result.AwardedValidationResult!.MonthValid.Should().BeFalse();
         result.AwardedValidationResult.MonthValid.Should().BeFalse();
         result.AwardedValidationResult.ErrorMessages.Count.Should().Be(1);
