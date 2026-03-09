@@ -3,6 +3,13 @@
 @{
     var monthClass = Model.MonthError ? "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-2";
     var yearClass = Model.YearError ? "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error" : "govuk-input govuk-date-input__input govuk-input--width-4";
+
+    var ariaDescribedBy = $"{Model.Prefix}-header ";
+
+    if (!string.IsNullOrEmpty(Model.QuestionHint))
+    {
+        ariaDescribedBy += $"{Model.Prefix}-hint";
+    }
 }
 
 <div class="govuk-form-group @(Model.MonthError || Model.YearError ? "govuk-form-group--error" : "")">
@@ -26,14 +33,14 @@
             <div class="govuk-form-group">
                 <label id="@Model.Prefix-month-label" class="govuk-label govuk-date-input__label"
                         for="@Model.MonthId">@Model.MonthLabel</label>
-                @Html.TextBox(Model.MonthId, Model.SelectedMonth, new { id = Model.MonthId, @class=monthClass, maxlength=2, name=Model.MonthId, type="text", inputmode="numeric", autocomplete="off" })
+                @Html.TextBox(Model.MonthId, Model.SelectedMonth, new { id = Model.MonthId, @class=monthClass, maxlength=2, name=Model.MonthId, type="text", inputmode="numeric", autocomplete="off", aria_describedby=ariaDescribedBy })
             </div>
         </div>
         <div class="govuk-date-input__item">
             <div class="govuk-form-group">
                 <label id="@Model.Prefix-year-label" class="govuk-label govuk-date-input__label"
                         for="@Model.YearId">@Model.YearLabel</label>
-                @Html.TextBox(Model.YearId, Model.SelectedYear, new { id = Model.YearId, @class=yearClass, maxlength=4, name=Model.YearId, type="text", inputmode="numeric", autocomplete="off" })
+                @Html.TextBox(Model.YearId, Model.SelectedYear, new { id = Model.YearId, @class=yearClass, maxlength=4, name=Model.YearId, type="text", inputmode="numeric", autocomplete="off", aria_describedby=ariaDescribedBy })
             </div>
         </div>
     </div>

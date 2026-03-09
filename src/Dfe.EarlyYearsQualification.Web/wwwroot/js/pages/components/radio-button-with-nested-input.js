@@ -23,6 +23,8 @@ $(document).ready(function () {
                 let hiddenContainer = radio.parentElement.nextElementSibling;
 
                 hiddenContainer.classList.remove('govuk-!-display-none');
+                //Focus on the first input within the revealed container
+                hiddenContainer.querySelector("input").focus();
             }
         });
     });
