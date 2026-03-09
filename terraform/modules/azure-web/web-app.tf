@@ -101,7 +101,8 @@ resource "azurerm_linux_web_app" "webapp" {
       tags["hidden-link: /app-insights-conn-string"],
       tags["hidden-link: /app-insights-instrumentation-key"],
       tags["hidden-link: /app-insights-resource-id"],
-      site_config.0.application_stack
+      site_config.0.application_stack,
+      worker_count
     ]
   }
 
