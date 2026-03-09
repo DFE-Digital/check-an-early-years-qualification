@@ -56,19 +56,7 @@ public partial class QuestionsController
         // Check validation required attribute e.g. an option has been selected
         if (!ModelState.IsValid)
         {
-            model.HasErrors = true;
-            model.ErrorSummaryModel = new ErrorSummaryModel
-            {
-                ErrorBannerHeading = model.ErrorBannerHeading,
-                ErrorSummaryLinks =
-                    [
-                        new ErrorSummaryLink
-                        {
-                            ErrorBannerLinkText = model.ErrorBannerLinkText,
-                            ElementLinkId = firstOption.Value
-                        }
-                    ]
-            };
+            model.ErrorSummaryModel = CreateErrorSummaryModel(model);
 
             return View("Radio", model);
         }

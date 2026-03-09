@@ -381,14 +381,14 @@ public class MockContentfulServiceTests
             await contentfulService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded);
 
         result.Should().NotBeNull();
-        result.Question.Should().Be("Test Dates Questions");
+        result.Question.Should().Be("When was the qualification awarded?");
         result.CtaButtonText.Should().Be("Continue");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.AwardedDateIsAfterStartedDateErrorText.Should().Be("Error- AwardedDateIsAfterStartedDateErrorText");
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
                                                   {
                                                       DisplayText = "TEST",
-                                                      Href = "/questions/where-was-the-qualification-awarded",
+                                                      Href = "/questions/when-was-the-qualification-started",
                                                       OpenInNewTab = false
                                                   });
         result.AwardedQuestion.Should().BeEquivalentTo(expectedAwardedQuestion);
