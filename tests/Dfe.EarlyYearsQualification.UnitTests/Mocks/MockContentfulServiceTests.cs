@@ -755,7 +755,6 @@ public class MockContentfulServiceTests
                                                   });
         result.CtaButtonText.Should().Be("Continue");
         result.ChangeAnswerText.Should().Be("Change");
-        result.QualificationAwardedText.Should().Be("Awarded in");
         result.QualificationStartedText.Should().Be("Started in");
         result.AnyAwardingOrganisationText.Should().Be("Various awarding organisations");
         result.AnyLevelText.Should().Be("Any level");

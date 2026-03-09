@@ -26,17 +26,6 @@
                 </h1>
             </legend>
 
-            @if (Model.StartedQuestion is not null)
-            {
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        @{
-                            await Html.RenderPartialAsync("Partials/Date", Model.StartedQuestion);
-                        }
-                    </div>
-                </div>
-            }
-
             @if (Model.AwardedQuestion is not null)
             {
                 <div class="govuk-grid-row">

@@ -7,6 +7,7 @@ public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCo
 {
     private const string ActualYearPlaceholder = "$[actual-year]$";
     private const string LevelForSept14ToAug19Placeholder = "$[level-for-Sept14-to-Aug19]$";
+    private const string StartDatePlaceholder = "$[start-date]$";
 
     public string Replace(string text)
     {
@@ -24,6 +25,16 @@ public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCo
             if (levelBeingChecked != null)
             {
                 result = result.Replace(LevelForSept14ToAug19Placeholder, levelBeingChecked <= 5 ? "level 3" : "level 3 or level 6");
+            }
+        }
+
+        if (text.Contains(StartDatePlaceholder))
+        {
+            var (startedMonth, startedYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
+
+            if (startedMonth is not null && startedYear is not null)
+            {
+                result = result.Replace(StartDatePlaceholder, new DateOnly(startedYear.Value, startedMonth.Value, 1).ToString("MM-yyyy"));
             }
         }
 

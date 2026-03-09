@@ -61,7 +61,7 @@ public interface IQuestionService
 
     public DatesValidationResult IsValid(DatesQuestionModel model, DatesQuestionPage questionPage);
 
-    public DateValidationResult IsValid(DateQuestionModel model, DateQuestion content);
+    public DateValidationResult StartDateIsValid(DateQuestionModel model, DateQuestion content);
 
     public void SetWhenWasQualificationStarted(DateQuestionModel model);
 

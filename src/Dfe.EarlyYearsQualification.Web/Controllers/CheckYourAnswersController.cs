@@ -23,7 +23,9 @@ public class CheckYourAnswersController(
     {
         var whereWasQualificationAwardedQuestion =
             await contentService.GetRadioQuestionPage(QuestionPages.WhereWasTheQualificationAwarded);
-        var whenWasTheQualificationStartedAndAwardedQuestion =
+        var whenWasTheQualificationStartedQuestion =
+            await contentService.GetRadioQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+        var whenWasTheQualificationAwardedQuestion =
             await contentService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded);
         var whatLevelIsTheQualificationQuestion =
             await contentService.GetRadioQuestionPage(QuestionPages.WhatLevelIsTheQualification);
@@ -31,8 +33,9 @@ public class CheckYourAnswersController(
             await contentService.GetDropdownQuestionPage(QuestionPages.WhatIsTheAwardingOrganisation);
         var pageContent = await contentService.GetCheckYourAnswersPage();
 
-        if (whereWasQualificationAwardedQuestion == null || whenWasTheQualificationStartedAndAwardedQuestion == null ||
-            whatLevelIsTheQualificationQuestion == null || whatIsTheAwardingOrganisationQuestion == null ||
+        if (whereWasQualificationAwardedQuestion == null || whenWasTheQualificationStartedQuestion == null ||
+            whenWasTheQualificationAwardedQuestion == null || whatLevelIsTheQualificationQuestion == null || 
+            whatIsTheAwardingOrganisationQuestion == null ||
             pageContent == null)
         {
             logger.LogError("No content for the check your answers page");
@@ -40,7 +43,8 @@ public class CheckYourAnswersController(
         }
 
         var model = MapModel(pageContent, whereWasQualificationAwardedQuestion,
-                             whenWasTheQualificationStartedAndAwardedQuestion,
+                             whenWasTheQualificationStartedQuestion,
+                             whenWasTheQualificationAwardedQuestion,
                              whatLevelIsTheQualificationQuestion, whatIsTheAwardingOrganisationQuestion);
 
         return View(model);
@@ -48,7 +52,8 @@ public class CheckYourAnswersController(
 
     private CheckYourAnswersPageModel MapModel(CheckYourAnswersPage pageContent,
                                                RadioQuestionPage whereWasQualificationAwardedQuestion,
-                                               DatesQuestionPage whenWasTheQualificationStartedAndAwardedQuestion,
+                                               RadioQuestionPage whenWasTheQualificationStartedQuestion,
+                                               DatesQuestionPage whenWasTheQualificationAwardedQuestion,
                                                RadioQuestionPage whatLevelIsTheQualificationQuestion,
                                                DropdownQuestionPage whatIsTheAwardingOrganisationQuestion)
     {
@@ -59,7 +64,8 @@ public class CheckYourAnswersController(
         var whatIsTheAwardingOrganisationAnswer = userJourneyCookieService.GetAwardingOrganisation();
 
         return CheckYourAnswersPageMapper.Map(pageContent, whereWasQualificationAwardedQuestion.Question,
-                                              whenWasTheQualificationStartedAndAwardedQuestion.Question,
+                                              whenWasTheQualificationStartedQuestion.Question,
+                                              whenWasTheQualificationAwardedQuestion.Question,
                                               whatLevelIsTheQualificationQuestion.Question,
                                               whatIsTheAwardingOrganisationQuestion.Question,
                                               whereWasQualificationAwardedAnswer,

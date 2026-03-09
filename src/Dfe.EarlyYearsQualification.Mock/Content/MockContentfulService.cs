@@ -521,7 +521,6 @@ public class MockContentfulService : IContentService
                                                       },
                                          CtaButtonText = CtaButtonText,
                                          ChangeAnswerText = "Change",
-                                         QualificationAwardedText = "Awarded in",
                                          QualificationStartedText = "Started in",
                                          AnyAwardingOrganisationText = "Various awarding organisations",
                                          AnyLevelText = "Any level"
@@ -1026,7 +1025,6 @@ public class MockContentfulService : IContentService
                    CtaButtonText = CtaButtonText,
                    ErrorBannerHeading = ThereIsAProblem,
                    AwardedDateIsAfterStartedDateErrorText = "Error- AwardedDateIsAfterStartedDateErrorText",
-                   StartedQuestion = CreateDatesQuestionPage("started- "),
                    AwardedQuestion = CreateDatesQuestionPage("awarded- ")
                };
     }

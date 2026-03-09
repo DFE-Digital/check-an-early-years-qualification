@@ -93,7 +93,8 @@ public partial class QuestionsController
         radioAndDateInputModel.Question.SelectedYear = ParseValueFromForm("Year");
 
         // Validate date input
-        var dateModelValidationResult = questionService.IsValid(radioAndDateInputModel.Question, radioAndDateInputContent.StartedQuestion);
+        var dateModelValidationResult = questionService.StartDateIsValid(radioAndDateInputModel.Question, radioAndDateInputContent.StartedQuestion);
+
         if (!dateModelValidationResult.MonthValid || !dateModelValidationResult.YearValid)
         {
             model.HasErrors = true;
@@ -113,7 +114,7 @@ public partial class QuestionsController
         questionService.SetWhenWasQualificationStarted(radioAndDateInputModel.Question);
         return RedirectToAction(nameof(WhenWasTheQualificationAwarded));
     }
-    
+
     [HttpGet("when-was-the-qualification-awarded")]
     public async Task<IActionResult> WhenWasTheQualificationAwarded()
     {
@@ -145,8 +146,16 @@ public partial class QuestionsController
             return RedirectToAction("Index", "Error");
         }
 
+        var (startMonth, startYear) = questionService.GetWhenWasQualificationStarted();
+
+        model.StartedQuestion = new DateQuestionModel
+        {
+            SelectedMonth = startMonth,
+            SelectedYear = startYear
+        };
+
         var dateModelValidationResult = questionService.IsValid(model, questionPage!);
-        if (!dateModelValidationResult.Valid)
+        if (!dateModelValidationResult.AwardedValidationResult!.MonthValid || !dateModelValidationResult.AwardedValidationResult.YearValid)
         {
             model.HasErrors = true;
 

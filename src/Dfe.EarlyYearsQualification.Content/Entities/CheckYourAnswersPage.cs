@@ -8,8 +8,6 @@ public class CheckYourAnswersPage
 
     public string QualificationStartedText { get; init; } = string.Empty;
 
-    public string QualificationAwardedText { get; init; } = string.Empty;
-
     public string AnyAwardingOrganisationText { get; init; } = string.Empty;
 
     public string AnyLevelText { get; init; } = string.Empty;

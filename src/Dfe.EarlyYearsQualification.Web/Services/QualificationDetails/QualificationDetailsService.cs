@@ -11,6 +11,8 @@ using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using System.Globalization;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 
@@ -422,7 +424,7 @@ public class QualificationDetailsService(
         if (startYear is not null && startMonth is not null)
         {
             var dateOnly = new DateOnly(startYear.Value, startMonth.Value, 1);
-            dateStarted = dateOnly.ToString("MMMM yyyy");
+            dateStarted = dateOnly < new DateOnly(2014, 9, 1) ? "Before 1 September 2014" : dateOnly.ToString("MMMM yyyy");
         }
 
         var dateAwarded = string.Empty;

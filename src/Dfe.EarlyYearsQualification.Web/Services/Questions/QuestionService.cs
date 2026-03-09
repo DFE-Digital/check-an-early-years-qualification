@@ -185,15 +185,11 @@ public class QuestionService(
     public DatesQuestionModel MapDatesModel(DatesQuestionModel model, DatesQuestionPage questionPage, string actionName,
                                              string controllerName, DatesValidationResult? validationResult)
     {
-        var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        var startedModel = MapDateModel(new DateQuestionModel(), questionPage.StartedQuestion!,
-                                        validationResult?.StartedValidationResult, startMonth, startYear);
-
         var (awardedMonth, awardedYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         var awardedModel = MapDateModel(new DateQuestionModel(), questionPage.AwardedQuestion!,
                                         validationResult?.AwardedValidationResult, awardedMonth, awardedYear);
 
-        return DatesQuestionMapper.Map(model, questionPage, actionName, controllerName, startedModel, awardedModel);
+        return DatesQuestionMapper.Map(model, questionPage, actionName, controllerName, awardedModel);
     }
 
     public async Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId)
@@ -206,9 +202,9 @@ public class QuestionService(
         return questionModelValidator.IsValid(model, questionPage!);
     }
 
-    public DateValidationResult IsValid(DateQuestionModel model, DateQuestion content)
+    public DateValidationResult StartDateIsValid(DateQuestionModel model, DateQuestion content)
     {
-        return questionModelValidator.IsValid(model, content);
+        return questionModelValidator.StartDateIsValid(model, content);
     }
 
     public void SetWhenWasQualificationStarted(DateQuestionModel question)
@@ -239,15 +235,20 @@ public class QuestionService(
         
         if (startMonth is not null && startYear is not null)
         {
-            model.Option = WasStartedBeforeSeptember2014() ?
-                               radioQuestionContent.Options.OfType<Option>().First().Value :
-                               radioQuestionContent.Options.OfType<RadioButtonAndDateInput>().First().Value;
-
-            var radioButtonAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().First();
-            if (radioButtonAndDateInputModel.Question is not null)
+            if (WasStartedBeforeSeptember2014())
             {
-                radioButtonAndDateInputModel.Question.SelectedMonth = startMonth.Value;
-                radioButtonAndDateInputModel.Question.SelectedYear = startYear.Value;
+                model.Option = radioQuestionContent.Options.OfType<Option>().First().Value;
+            }
+            else
+            {
+                model.Option = radioQuestionContent.Options.OfType<RadioButtonAndDateInput>().First().Value;
+
+                var radioButtonAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().First();
+                if (radioButtonAndDateInputModel.Question is not null)
+                {
+                    radioButtonAndDateInputModel.Question.SelectedMonth = startMonth.Value;
+                    radioButtonAndDateInputModel.Question.SelectedYear = startYear.Value;
+                }
             }
         }
     }

@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
 public static class StringDateHelper
@@ -19,5 +21,12 @@ public static class StringDateHelper
         }
 
         return (month, year);
+    }
+
+    public static string ConvertToDateString(int? dateMonth, int? dateYear)
+    {
+        if (dateMonth is null || dateYear is null) return string.Empty;
+        var date = new DateOnly(dateYear.Value, dateMonth.Value, 1);
+        return $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {dateYear.Value}";
     }
 }
