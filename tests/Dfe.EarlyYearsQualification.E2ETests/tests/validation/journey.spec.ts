@@ -3,7 +3,8 @@ import {
     startJourney,
     checkText,
     whereWasTheQualificationAwarded,
-    whenWasQualificationStarted,
+    whenWasQualificationAwarded,
+    ChooseStartDateOptionBasedOnDate,
     whatLevelIsTheQualification,
     whatIsTheAwardingOrganisationValue,
     selectNotOnTheListAsTheAwardingOrganisation,
@@ -115,7 +116,8 @@ test.describe('A spec used to validate changes to the journey against actual dat
         test(`Various AO qualification check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({page}) => {
             await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
-            await whenWasQualificationStarted(page, scenario.monthStarted, scenario.yearStarted, scenario.monthAwarded, scenario.yearAwarded);
+            await ChooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
+            await whenWasQualificationAwarded(page, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
             await selectNotOnTheListAsTheAwardingOrganisation(page);
             await checkYourAnswersPage(page);
@@ -226,7 +228,8 @@ test.describe('A spec used to validate changes to the journey against actual dat
         test(`Selected AO qualification check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({page}) => {
             await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
-            await whenWasQualificationStarted(page, scenario.monthStarted, scenario.yearStarted, scenario.monthAwarded, scenario.yearAwarded);
+            await ChooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
+            await whenWasQualificationAwarded(page, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
             await whatIsTheAwardingOrganisationValue(page, scenario.selectedAwardingOrganisation);
             await checkYourAnswersPage(page);
@@ -322,7 +325,8 @@ test.describe('A spec used to validate changes to the journey against actual dat
         test(`Various AO qualification with additional questions check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({page}) => {
             await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
-            await whenWasQualificationStarted(page, scenario.monthStarted, scenario.yearStarted, scenario.monthAwarded, scenario.yearAwarded);
+            await ChooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
+            await whenWasQualificationAwarded(page, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
             await selectNotOnTheListAsTheAwardingOrganisation(page);
             await checkYourAnswersPage(page);
@@ -446,7 +450,8 @@ test.describe('A spec used to validate changes to the journey against actual dat
                                                                                                                                                                            }) => {
             await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
-            await whenWasQualificationStarted(page, scenario.monthStarted, scenario.yearStarted, scenario.monthAwarded, scenario.yearAwarded);
+            await ChooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
+            await whenWasQualificationAwarded(page, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
             await whatIsTheAwardingOrganisationValue(page, scenario.selectedAwardingOrganisation);
             await checkYourAnswersPage(page);

@@ -20,13 +20,14 @@ test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, 
         await checkText(page, ".govuk-heading-xl", "Check your answers");
         await checkText(page, "#question-1-question", "Where was the qualification awarded?");
         await checkText(page, "#question-1-answer", "England");
-        await checkText(page, "#question-2-question", "Test Dates Questions");
-        await checkText(page, "#question-2-answer > p", "Started in July 2015", 0);
-        await checkText(page, "#question-2-answer > p", "Awarded in September 2017", 1);
-        await checkText(page, "#question-3-question", "What level is the qualification?");
-        await checkText(page, "#question-3-answer", "Level 3");
-        await checkText(page, "#question-4-question", "Test Dropdown Question");
-        await checkText(page, "#question-4-answer", "NCFE");
+        await checkText(page, "#question-2-question", "When was the qualification started?");
+        await checkText(page, "#question-2-answer > p", "July 2015", 0);
+        await checkText(page, "#question-3-question", "When was the qualification awarded?");
+        await checkText(page, "#question-3-answer > p", "September 2017", 0);
+        await checkText(page, "#question-4-question", "What level is the qualification?");
+        await checkText(page, "#question-4-answer", "Level 3");
+        await checkText(page, "#question-5-question", "Test Dropdown Question");
+        await checkText(page, "#question-5-answer", "NCFE");
         await checkText(page, "#cta-button", "Continue");
     });
 
@@ -43,30 +44,40 @@ test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, 
     test("Checks change link for question 2 is correct", async ({page}) => {
         await page.goto("/questions/check-your-answers");
 
-        await checkText(page, "#question-2-change", "Change Test Dates Questions");
-        await checkText(page, "#question-2-change .govuk-visually-hidden", "Test Dates Questions");
+        await checkText(page, "#question-2-change", "Change When was the qualification started?");
+        await checkText(page, "#question-2-change .govuk-visually-hidden", "When was the qualification started?");
         
         await page.click("#question-2-change a");
-        await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
+        await checkUrl(page, "/questions/when-was-the-qualification-started");
     });
 
-    test("Checks change link for question 3 is correct", async ({page}) => {
+    test("Checks change link for question 3 is correct", async ({ page }) => {
         await page.goto("/questions/check-your-answers");
 
-        await checkText(page, "#question-3-change", "Change What level is the qualification?");
-        await checkText(page, "#question-3-change .govuk-visually-hidden", "What level is the qualification?");
-        
+        await checkText(page, "#question-3-change", "Change When was the qualification awarded?");
+        await checkText(page, "#question-3-change .govuk-visually-hidden", "When was the qualification awarded?");
+
         await page.click("#question-3-change a");
-        await checkUrl(page, "/questions/what-level-is-the-qualification");
+        await checkUrl(page, "/questions/when-was-the-qualification-awarded");
     });
 
     test("Checks change link for question 4 is correct", async ({page}) => {
         await page.goto("/questions/check-your-answers");
 
-        await checkText(page, "#question-4-change", "Change Test Dropdown Question");
-        await checkText(page, "#question-4-change .govuk-visually-hidden", "Test Dropdown Question");
-
+        await checkText(page, "#question-4-change", "Change What level is the qualification?");
+        await checkText(page, "#question-4-change .govuk-visually-hidden", "What level is the qualification?");
+        
         await page.click("#question-4-change a");
+        await checkUrl(page, "/questions/what-level-is-the-qualification");
+    });
+
+    test("Checks change link for question 5 is correct", async ({page}) => {
+        await page.goto("/questions/check-your-answers");
+
+        await checkText(page, "#question-5-change", "Change Test Dropdown Question");
+        await checkText(page, "#question-5-change .govuk-visually-hidden", "Test Dropdown Question");
+
+        await page.click("#question-5-change a");
         await checkUrl(page, "/questions/what-is-the-awarding-organisation");
     });
 
@@ -77,9 +88,9 @@ test.describe('A spec used to test the check your answers page', {tag: "@e2e"}, 
         
         await page.goto("/questions/check-your-answers");
         
-        await checkText(page, "#question-3-question", "What level is the qualification?");
-        await checkText(page, "#question-3-answer", "Any level");
-        await checkText(page, "#question-4-question", "Test Dropdown Question");
-        await checkText(page, "#question-4-answer", "Various awarding organisations");
+        await checkText(page, "#question-4-question", "What level is the qualification?");
+        await checkText(page, "#question-4-answer", "Any level");
+        await checkText(page, "#question-5-question", "Test Dropdown Question");
+        await checkText(page, "#question-5-answer", "Various awarding organisations");
     });
 });
