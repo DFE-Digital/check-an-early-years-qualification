@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+using System.Globalization;
 
 namespace Dfe.EarlyYearsQualification.Web.Helpers;
 
@@ -34,7 +35,7 @@ public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCo
 
             if (startedMonth is not null && startedYear is not null)
             {
-                result = result.Replace(StartDatePlaceholder, new DateOnly(startedYear.Value, startedMonth.Value, 1).ToString("MM-yyyy"));
+                result = result.Replace(StartDatePlaceholder, new DateOnly(startedYear.Value, startedMonth.Value, 1).ToString("MMMM yyyy", CultureInfo.InvariantCulture));
             }
         }
 

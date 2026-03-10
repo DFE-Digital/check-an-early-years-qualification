@@ -146,14 +146,25 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
     {
         var resultToReturn = IsValid(model, question);
 
-        if (resultToReturn.MonthValid && resultToReturn.YearValid)
+        if (model.SelectedYear is null)
         {
-            var selectedDate = new DateOnly(model.SelectedYear!.Value, model.SelectedMonth!.Value, 1);
+            return resultToReturn;
+        }
+
+        if (model.SelectedMonth is null)
+        {
+            if (model.SelectedYear.Value < 2014)
+            {
+                resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
+                resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
+            }
+        }
+        else
+        {
+            var selectedDate = new DateOnly(model.SelectedYear.Value, model.SelectedMonth.Value, 1);
 
             if (selectedDate < new DateOnly(2014, 9, 1))
             {
-                resultToReturn.MonthValid = false;
-                resultToReturn.YearValid = false;
                 resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
                 resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
             }
