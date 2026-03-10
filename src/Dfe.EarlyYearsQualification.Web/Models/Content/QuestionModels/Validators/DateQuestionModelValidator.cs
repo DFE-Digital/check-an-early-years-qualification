@@ -146,28 +146,28 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
     {
         var resultToReturn = IsValid(model, question);
 
-        if (model.SelectedYear is null)
-        {
-            return resultToReturn;
-        }
-
-        if (model.SelectedMonth is null)
+        if (model.SelectedYear is not null)
         {
             if (model.SelectedYear.Value < 2014)
             {
+                resultToReturn.YearValid = false;
                 resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
                 resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
             }
-        }
-        else
-        {
-            var selectedDate = new DateOnly(model.SelectedYear.Value, model.SelectedMonth.Value, 1);
-
-            if (selectedDate < new DateOnly(2014, 9, 1))
+            else if (model.SelectedMonth is not null)
             {
-                resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
-                resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
+                var selectedDate = new DateOnly(model.SelectedYear.Value, model.SelectedMonth.Value, 1);
+
+                if (selectedDate < new DateOnly(2014, 9, 1))
+                {
+                    resultToReturn.MonthValid = false;
+                    resultToReturn.YearValid = false;
+                    resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
+                    resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
+                }
             }
+
+            return resultToReturn;
         }
 
         return resultToReturn;
