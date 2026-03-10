@@ -91,7 +91,8 @@ function buildCommand() {
         + `--RunValidationTests="${process.env.RUN_VALIDATION_TESTS ?? false}" `
         + `--ServiceAccess:Keys:0="${process.env.AUTH_SECRET}" `
         + `--ContentfulOptions:UsePreviewApi="${process.env.USE_MOCK_CONTENTFUL ?? false}" `
-        + `--UpgradeInsecureRequests="${process.env.UPGRADE_INSECURE_REQUESTS ?? true}" `;
+        + `--UpgradeInsecureRequests="${process.env.UPGRADE_INSECURE_REQUESTS ?? true}" `
+        + `--ENVIRONMENT="Development" `;
 
     if (process.env.CONTENTFUL_DELIVERY_API_KEY !== undefined) {
         command += `--ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" `;

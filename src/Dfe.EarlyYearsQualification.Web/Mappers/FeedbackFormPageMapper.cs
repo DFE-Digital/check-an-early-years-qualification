@@ -54,7 +54,8 @@ public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedba
                {
                    Question = question!.Question,
                    HintText = question.HintText,
-                   ErrorMessage = question.ErrorMessage
+                   ErrorMessage = question.ErrorMessage,
+                   IsRequired = question.IsTheQuestionMandatory
                };
     }
 
@@ -67,7 +68,8 @@ public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedba
                    ErrorMessage = question.ErrorMessage,
                    ErrorMessageForInput = question.ErrorMessageForInput,
                    InputHeading = question.InputHeading,
-                   InputHeadingHintText = question.InputHeadingHintText
+                   InputHeadingHintText = question.InputHeadingHintText,
+                   IsRequired = question.IsTheQuestionMandatory
                };
     }
 
@@ -77,7 +79,8 @@ public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedba
                {
                    Question = question!.Question,
                    ErrorMessage = question.ErrorMessage,
-                   OptionsItems = OptionItemMapper.Map(question.Options)
+                   OptionsItems = OptionItemMapper.Map(question.Options),
+                   IsRequired = question.IsTheQuestionMandatory
                };
     }
 }

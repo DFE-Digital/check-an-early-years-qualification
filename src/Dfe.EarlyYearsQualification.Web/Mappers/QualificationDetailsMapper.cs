@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -56,7 +57,8 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
                 QualificationDetailsSummaryHeader = content.Labels.QualificationDetailsSummaryHeader
             },
             UpDownFeedback = UpDownFeedbackMapper.Map(content.Labels.UpDownFeedback, improveServiceBodyHtml),
-            IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1
+            IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1,
+            UserType = content.IsPractitionerSpecificPage ? UserTypes.Practitioner : UserTypes.Manager
         };
     }
 }

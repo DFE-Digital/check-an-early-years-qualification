@@ -30,12 +30,14 @@ $(window).on('load', function() {
     let qualificationName = $("#qualification-name-value").text();
     let qualificationLevel = $("#qualification-level-value").text();
     let qualificationAO = $("#awarding-organisation-value").text();
+    let userType = $('#hdnUserTypeValue').val();
 
     window.dataLayer.push({
         'event': 'qualification-details',
         'fAndRValue': fAndRValue,
         'qualificationName': qualificationName,
         'qualificationLevel': qualificationLevel,
-        'qualificationAO': qualificationAO
+        'qualificationAO': qualificationAO,
+        'userType': userType
     });
 });
