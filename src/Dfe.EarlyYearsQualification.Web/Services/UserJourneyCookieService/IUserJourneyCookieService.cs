@@ -40,4 +40,6 @@ public interface IUserJourneyCookieService
     void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry);
     void SetIsUserCheckingTheirOwnQualification(string value);
     string GetIsUserCheckingTheirOwnQualification();
+    WebViewFilters GetWebViewFilters();
+    void SetWebViewFilters(WebViewFilters filters);
 }
