@@ -92,4 +92,14 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await isVisible(page, ".feedback-container.desktop-only");
         await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
     });
+
+    test("Checks the Nursing Qualifications details are on the page", async ({page}) => {
+
+        await page.goto("/advice/nursing-qualifications");
+        await checkText(page, "#advice-page-heading", "Nursing Qualifications");
+        await checkText(page, "#advice-page-body", "Test Advice Page Body");
+        await isVisible(page, ".feedback-container.desktop-only");
+        await checkTextContains(page, ".feedback-container.desktop-only", "Your feedback matters and will help us improve the service.");
+    });
+
 });
