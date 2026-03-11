@@ -95,7 +95,7 @@
                                         </div>
                                     }
                                 </div>
-                                <div class="govuk-radios__conditional govuk-!-display-none">
+                                <div class="govuk-radios__conditional govuk-!-margin-bottom-0 govuk-!-display-none">
                                     <div class="govuk-form-group">
                                         @if (questionData.Question is not null)
                                         {
@@ -114,10 +114,6 @@
                 await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.WarningText });
             }
 
-            @if (!string.IsNullOrEmpty(Model.PostRadioButtonContent))
-            {
-                @Html.Raw(Model.PostRadioButtonContent)
-            }
             <div class="govuk-form-group">
                 <govuk-button id="question-submit" type="submit">@Model.CtaButtonText</govuk-button>
             </div>

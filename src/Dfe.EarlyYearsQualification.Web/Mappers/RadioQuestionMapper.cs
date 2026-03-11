@@ -17,8 +17,6 @@ public class RadioQuestionMapper(IGovUkContentParser contentParser) : IRadioQues
 
         var postHeadingContent = await contentParser.ToHtml(question.PostHeadingContent);
 
-        var postRadioButtonContent = await contentParser.ToHtml(question.PostRadioButtonContent);
-
         model.Question = question.Question;
         model.OptionsItems = OptionItemMapper.Map(question.Options);
         model.CtaButtonText = question.CtaButtonText;
@@ -33,7 +31,6 @@ public class RadioQuestionMapper(IGovUkContentParser contentParser) : IRadioQues
         model.Option = selectedAnswer ?? string.Empty;
         model.PostHeadingContent = postHeadingContent;
         model.WarningText = question.InformationMessage;
-        model.PostRadioButtonContent = postRadioButtonContent;
 
         return model;
     }

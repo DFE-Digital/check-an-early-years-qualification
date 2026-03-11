@@ -25,6 +25,4 @@ public class RadioQuestionPage
     public Document? PostHeadingContent { get; init; }
 
     public string? InformationMessage { get; init; }
-
-    public Document? PostRadioButtonContent { get; init; }
 }

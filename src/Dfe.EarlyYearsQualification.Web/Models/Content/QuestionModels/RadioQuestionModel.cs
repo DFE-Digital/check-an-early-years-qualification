@@ -15,8 +15,6 @@ public class RadioQuestionModel : BaseQuestionModel
 
     public string? WarningText { get; set; } = string.Empty;
 
-    public string? PostRadioButtonContent { get; set; } = string.Empty;
-
     public ErrorSummaryModel? ErrorSummaryModel { get; set; }
 
     [Required]
