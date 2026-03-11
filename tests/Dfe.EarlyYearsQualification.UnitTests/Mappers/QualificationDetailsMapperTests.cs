@@ -2,6 +2,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
@@ -11,7 +12,9 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 public class QualificationDetailsMapperTests
 {
     [TestMethod]
-    public async Task Map_PassInParameters_ReturnsModel()
+    [DataRow(true, UserTypes.Practitioner)]
+    [DataRow(false, UserTypes.Manager)]
+    public async Task Map_PassInParameters_ReturnsModel(bool isPractitionerPage, string expectedUserType)
     {
         var qualification = new Qualification("TEST-123", "Test name", "awarding organisation title", 3)
                             {
@@ -58,7 +61,8 @@ public class QualificationDetailsMapperTests
                                                                                 .Paragraph(improveServiceBody)
                                                                     }
                                                             }
-                                       }
+                                       },
+                              IsPractitionerSpecificPage = isPractitionerPage
                           };
 
         var backNavLink = new NavigationLink
@@ -140,6 +144,7 @@ public class QualificationDetailsMapperTests
         result.IsQualificationNameDuplicate.Should().BeFalse();
         result.QualificationNumberLabel.Should().Be(detailsPage.Labels.QualificationNumberLabel);
         result.QualificationNumber.Should().Be(qualification.QualificationNumber);
+        result.UserType.Should().Be(expectedUserType);
     }
 
     [TestMethod]
