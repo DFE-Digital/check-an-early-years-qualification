@@ -159,6 +159,21 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetAdvicePage_NursingQualifications_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetAdvicePage(AdvicePages.NursingQualifications);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<AdvicePage>();
+        result.Heading.Should().Be("Nursing Qualifications");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Advice Page Body");
+        result.UpDownFeedback.Should().NotBeNull();
+        result.RightHandSideContent.Should().NotBeNull();
+    }
+
+    [TestMethod]
     public async Task GetAdvicePage_UnknownEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
