@@ -63,6 +63,10 @@ public class MockContentfulService : IContentService
                    AdvicePages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateAdvicePage("Qualification not on the list",
                                                               body, QualificationsPath, true)),
+                   
+                   AdvicePages.NursingQualifications =>
+                       await Task.FromResult(CreateAdvicePage("Nursing Qualifications",
+                                                              body, QualificationsPath, true)),
 
                    AdvicePages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await

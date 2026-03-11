@@ -26,6 +26,11 @@ public static class AdvicePages
     ///     Entry ID for the "Qualifications achieved in Northern Ireland" advice page.
     /// </summary>
     public const string QualificationsAchievedInWales = "1Xu4FPcZDxFb5yDCI6lLCj";
+    
+    /// <summary>
+    ///     Entry ID for the "Nursing Qualifications" advice page.
+    /// </summary>
+    public const string NursingQualifications = "4dla4VuE2VjKv1rEirLXL2\n";
 
     /// <summary>
     ///     Entry ID for the "Qualification not on the list" advice page.
