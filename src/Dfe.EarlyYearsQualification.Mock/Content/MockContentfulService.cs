@@ -979,7 +979,9 @@ public class MockContentfulService : IContentService
                                   MonthOutOfBoundsErrorLinkText = "The month the qualification was started must be between 1 and 12",
                                   MonthOutOfBoundsErrorMessage = "The month the qualification was started must be between 1 and 12",
                                   YearOutOfBoundsErrorLinkText = "The year the qualification was started must be between 1900 and $[actual-year]$",
-                                  YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$"
+                                  YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$",
+                                  DateAfterSeptember2014ErrorLinkText = "The date the qualification was started must be on or after 1 September 2014",
+                                  DateAfterSeptember2014ErrorMessage = "The date the qualification was started must be on or after 1 September 2014"
                               }
                           }
                       };

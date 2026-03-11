@@ -28,19 +28,14 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
     test("Checks the content is on the page", async ({ page, context }) => {
         await checkText(page, "#help-page-heading", "What are the qualification details?");
         await checkText(page, "#post-heading-content", "We need to know the following qualification details to quickly and accurately respond to any questions you may have.");
-
         await checkText(page, "#qualification-name-heading", "Qualification name");
-
         await checkText(page, "#started-header", "Start date (optional)");
         await checkText(page, "#started-month-label", "Month");
         await checkText(page, "#started-year-label", "Year");
-
         await checkText(page, "#awarded-header", "Award date");
         await checkText(page, "#awarded-month-label", "Month");
         await checkText(page, "#started-year-label", "Year");
-
         await checkText(page, "#awarding-organisation-heading", "Awarding organisation");
-
         await checkText(page, "#question-submit", "Continue")
     });
 
@@ -86,27 +81,6 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await checkUrl(page, "/help/provide-details");
     });
 
-
-/*    test("shows the started month and year missing error message when a user doesnt type a started date on the help qualification-details page", async ({ page }) => {
-        await doesNotExist(page, ".govuk-error-summary");
-        await doesNotExist(page, "#started-error");
-        await doesNotExist(page, "#awarded-error");
-        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await InputQualificationStartedAndAwardedDetailsOnHelpPage(page, "", "", "1", "2025");
-        await checkUrl(page, "/help/qualification-details");
-        await isVisible(page, ".govuk-error-summary");
-        await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link-QuestionModel\\.StartedQuestion\\.SelectedMonth", "started- Test error banner link text");
-        await exists(page, '#started-error');
-        await doesNotExist(page, "#awarded-error");
-        await checkError(page, '#started-error', "started- Test Error Message");
-        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await hasClass(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", /govuk-input--error/);
-        await hasClass(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", /govuk-input--error/);
-        await doesNotHaveClass(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", /govuk-input--error/);
-        await doesNotHaveClass(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", /govuk-input--error/);
-    });*/
-
     test("shows the awarded month and year missing error message when a user doesnt type an awarded date on the help qualification-details page", async ({ page }) => {
         await doesNotExist(page, ".govuk-error-summary");
         await doesNotExist(page, "#started-error");
@@ -127,29 +101,7 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await hasClass(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", /govuk-input--error/);
     });
 
-    /*test("shows the started and awarded month and year missing error message when a user doesnt type a date on the help qualification-details page", async ({ page }) => {
-        await doesNotExist(page, ".govuk-error-summary");
-        await doesNotExist(page, "#started-error");
-        await doesNotExist(page, "#awarded-error");
-        await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await clickSubmit(page);
-        await checkUrl(page, "/help/qualification-details");
-        await isVisible(page, ".govuk-error-summary");
-        await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, "#error-banner-link-QuestionModel\\.StartedQuestion\\.SelectedMonth", "started- Test error banner link text");
-        await checkText(page, "#error-banner-link-QuestionModel\\.AwardedQuestion\\.SelectedMonth", "awarded- Test error banner link text");
-        await exists(page, '#started-error');
-        await exists(page, "#awarded-error");
-        await checkError(page, '#started-error', "started- Test Error Message");
-        await checkError(page, '#awarded-error', "awarded- Test Error Message");
-        await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-        await hasClass(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", /govuk-input--error/);
-        await hasClass(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", /govuk-input--error/);
-        await hasClass(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", /govuk-input--error/);
-        await hasClass(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", /govuk-input--error/);
-    });*/
-
-/*    test("shows the started month missing error message when a user doesnt type a started month on the help qualification-details page", async ({ page }) => {
+    test("shows the started month missing error message when a user doesnt type a started month on the help qualification-details page", async ({ page }) => {
         await doesNotExist(page, ".govuk-error-summary");
         await doesNotExist(page, "#started-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
@@ -182,15 +134,6 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await doesNotHaveClass(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", /govuk-input--error/);
         await hasClass(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", /govuk-input--error/);
     });
-*/
-
-
-
-
-
-
-
-
 
     test("shows the awarded month missing error message when a user doesnt type an awarded month on the help qualification-details page", async ({ page }) => {
         await doesNotExist(page, ".govuk-error-summary");
@@ -231,9 +174,7 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await doesNotExist(page, "#started-error");
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-
         await InputQualificationStartedAndAwardedDetailsOnHelpPage(page, "1", "2025", "12", "2020");
-
         await checkUrl(page, "/help/qualification-details");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -253,9 +194,7 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await doesNotExist(page, "#started-error");
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-
         await InputQualificationStartedAndAwardedDetailsOnHelpPage(page, "1", "2025", "1", "2025");
-
         await checkUrl(page, "/help/qualification-details");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -275,9 +214,7 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await doesNotExist(page, "#started-error");
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-
         await InputQualificationStartedAndAwardedDetailsOnHelpPage(page, "", "2025", "12", "2020");
-
         await checkUrl(page, "/help/qualification-details");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
@@ -295,15 +232,12 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await hasClass(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", /govuk-input--error/);
     });
 
-
     test("shows the awarded year is before start year error message and missing month error when a user enters a later awarded year but missing awarded month on the help qualification-details page", async ({ page }) => {
         await doesNotExist(page, ".govuk-error-summary");
         await doesNotExist(page, "#started-error");
         await doesNotExist(page, "#awarded-error");
         await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
-
         await InputQualificationStartedAndAwardedDetailsOnHelpPage(page, "1", "2025", "", "2020");
-
         await checkUrl(page, "/help/qualification-details");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");

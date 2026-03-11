@@ -44,7 +44,6 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await isVisible(page, "#help-confirmation-body");
     });
 
-
     test("should redirect user to the help confirmation page when the question about a qualification help form is completed", async ({ page }) => {
         await page.goto("/help/get-help");
         await page.click("input#QuestionAboutAQualification");
@@ -137,7 +136,6 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await checkUrl(page, "/questions/what-level-is-the-qualification");
     });
 
-
     test("Selecting qualification level 7 started after 1 Sept 2019 should navigate to the level 7 post 2019 advice page", async ({page}) => {
 
         await checkUrl(page, "/questions/where-was-the-qualification-awarded");
@@ -149,7 +147,6 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await clickBackButton(page);
         await checkUrl(page, "/questions/what-level-is-the-qualification");
     })
-
 
     test("Should remove the search criteria when a user goes to the awarding organisation page and back again", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
