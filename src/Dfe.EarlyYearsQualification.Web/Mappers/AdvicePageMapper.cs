@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 
@@ -55,7 +56,8 @@ public class AdvicePageMapper(IGovUkContentParser contentParser) : IAdvicePageMa
                    BodyContent = bodyHtml,
                    BackButton = NavigationLinkMapper.Map(cannotFindQualificationPage.BackButton),
                    UpDownFeedback = UpDownFeedbackMapper.Map(cannotFindQualificationPage.UpDownFeedback, improveServiceBodyHtml),
-                   RightHandSideContent = rightHandSideContent
+                   RightHandSideContent = rightHandSideContent,
+                   UserType = cannotFindQualificationPage.IsPractitionerSpecificPage? UserTypes.Practitioner: UserTypes.Manager
                };
     }
 }
