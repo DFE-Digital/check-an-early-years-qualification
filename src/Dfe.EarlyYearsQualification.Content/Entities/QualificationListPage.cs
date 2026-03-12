@@ -44,6 +44,8 @@ public class QualificationListPage
 
     public string StartDatePrefixText { get; init; } = string.Empty;
 
+    public string StartDateBeforeSept2014PrefixText { get; init; } = string.Empty;
+
     public string AwardedDatePrefixText { get; init; } = string.Empty;
 
     public string LevelPrefixText { get; init; } = string.Empty;

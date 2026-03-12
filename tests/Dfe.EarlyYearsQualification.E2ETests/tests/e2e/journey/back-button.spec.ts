@@ -5,7 +5,8 @@ import {
     clickBackButton,
     checkingOwnQualificationOrSomeoneElsesPage,
     whereWasTheQualificationAwarded,
-    whenWasQualificationStarted,
+    startedOnOrAfterSeptember2014,
+    whenWasQualificationAwarded,
     whatLevelIsTheQualification,
     whatIsTheAwardingOrganisation,
     checkYourAnswersPage,
@@ -24,7 +25,8 @@ test.describe("A spec used to test the main back button route through the journe
     test("back buttons should all navigate to the appropriate pages in the main journey", async ({page}) => {
 
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "6", "2022", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "6", "2022");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -50,7 +52,9 @@ test.describe("A spec used to test the main back button route through the journe
         await clickBackButton(page);
         await checkUrl(page, "/questions/what-level-is-the-qualification");
         await clickBackButton(page);
-        await checkUrl(page, "/questions/when-was-the-qualification-started-and-awarded");
+        await checkUrl(page, "/questions/when-was-the-qualification-awarded");
+        await clickBackButton(page);
+        await checkUrl(page, "/questions/when-was-the-qualification-started");
         await clickBackButton(page);
         await checkUrl(page, "/questions/where-was-the-qualification-awarded");
         await clickBackButton(page);

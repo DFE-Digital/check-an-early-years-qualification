@@ -268,6 +268,8 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateWhatLevelIsTheQualificationPage()),
                    QuestionPages.WhereWasTheQualificationAwarded =>
                        await Task.FromResult(CreateWhereWasTheQualificationAwardedPage()),
+                   QuestionPages.WhenWasTheQualificationStarted =>
+                       await Task.FromResult(CreateWhenWasTheQualificationStartedPage()),
                    QuestionPages.AreYouCheckingYourOwnQualification =>
                        await Task.FromResult(CreateAreYouCheckingYourOwnQualificationPage()),
                    _ => throw new NotImplementedException($"No radio question page mock for entry {entryId}")
@@ -278,7 +280,7 @@ public class MockContentfulService : IContentService
     {
         return entryId switch
                {
-                   QuestionPages.WhenWasTheQualificationStartedAndAwarded =>
+                   QuestionPages.WhenWasTheQualificationAwarded =>
                        await Task.FromResult(CreateDatesQuestionPage()),
                    _ => throw new NotImplementedException($"No date question page mock for entry {entryId}")
                };
@@ -521,8 +523,6 @@ public class MockContentfulService : IContentService
                                                       },
                                          CtaButtonText = CtaButtonText,
                                          ChangeAnswerText = "Change",
-                                         QualificationAwardedText = "Awarded in",
-                                         QualificationStartedText = "Started in",
                                          AnyAwardingOrganisationText = "Various awarding organisations",
                                          AnyLevelText = "Any level"
                                      });
@@ -952,6 +952,43 @@ public class MockContentfulService : IContentService
         return CreateRadioQuestionPage("Where was the qualification awarded?", options, "/");
     }
 
+    private static RadioQuestionPage CreateWhenWasTheQualificationStartedPage()
+    {
+        var options = new List<IOptionItem>
+                      {
+                          new Option
+                          {
+                              Label = "Before 1 September 2014", Value = "Before1September2014"
+                          },
+                          new RadioButtonAndDateInput
+                          {
+                              Label = "On or after 1 September 2014", Value = "OnOrAfter1September2014", StartedQuestion = new DateQuestion
+                              {
+                                  MonthLabel = "Month",
+                                  YearLabel = "Year",
+                                  QuestionHeader = "When was the qualification started?",
+                                  QuestionHint = "Enter the month and year that the qualification was started. For example 9 2013.",
+                                  ErrorBannerLinkText = "Enter the month and year that the qualification was started",
+                                  ErrorMessage = "Enter the month and year that the qualification was started",
+                                  FutureDateErrorBannerLinkText = "The date the qualification was started must be in the past",
+                                  FutureDateErrorMessage = "The date the qualification was started must be in the past",
+                                  MissingMonthErrorMessage = "Enter the month that the qualification was started",
+                                  MissingYearErrorMessage = "Enter the year that the qualification was started",
+                                  MissingMonthBannerLinkText = "Enter the month that the qualification was started",
+                                  MissingYearBannerLinkText = "Enter the year that the qualification was started",
+                                  MonthOutOfBoundsErrorLinkText = "The month the qualification was started must be between 1 and 12",
+                                  MonthOutOfBoundsErrorMessage = "The month the qualification was started must be between 1 and 12",
+                                  YearOutOfBoundsErrorLinkText = "The year the qualification was started must be between 1900 and $[actual-year]$",
+                                  YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$",
+                                  DateAfterSeptember2014ErrorLinkText = "The date the qualification was started must be on or after 1 September 2014",
+                                  DateAfterSeptember2014ErrorMessage = "The date the qualification was started must be on or after 1 September 2014"
+                              }
+                          }
+                      };
+
+        return CreateRadioQuestionPage("When was the qualification started?", options, "/questions/where-was-the-qualification-awarded");
+    }
+
     private static RadioQuestionPage CreateWhatLevelIsTheQualificationPage()
     {
         var options = new List<IOptionItem>
@@ -986,7 +1023,7 @@ public class MockContentfulService : IContentService
                           }
                       };
         return CreateRadioQuestionPage("What level is the qualification?", options,
-                                       "/questions/when-was-the-qualification-started-and-awarded");
+                                       "/questions/when-was-the-qualification-awarded");
     }
 
     private static RadioQuestionPage CreateRadioQuestionPage(string question, List<IOptionItem> options,
@@ -1016,17 +1053,16 @@ public class MockContentfulService : IContentService
     {
         return new DatesQuestionPage
                {
-                   Question = "Test Dates Questions",
+                   Question = "When was the qualification awarded?",
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",
-                                    Href = WhereWasTheQualificationAwardedPath,
+                                    Href = "/questions/when-was-the-qualification-started",
                                     OpenInNewTab = false
                                 },
                    CtaButtonText = CtaButtonText,
                    ErrorBannerHeading = ThereIsAProblem,
                    AwardedDateIsAfterStartedDateErrorText = "Error- AwardedDateIsAfterStartedDateErrorText",
-                   StartedQuestion = CreateDatesQuestionPage("started- "),
                    AwardedQuestion = CreateDatesQuestionPage("awarded- ")
                };
     }

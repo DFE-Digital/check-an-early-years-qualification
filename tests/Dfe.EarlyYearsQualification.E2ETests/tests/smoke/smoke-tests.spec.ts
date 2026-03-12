@@ -3,7 +3,8 @@ import {
     startJourney,
     checkingOwnQualificationOrSomeoneElsesPage,
     whereWasTheQualificationAwarded,
-    whenWasQualificationStarted,
+    startedOnOrAfterSeptember2014,
+    whenWasQualificationAwarded,
     whatLevelIsTheQualification,
     selectNotOnTheListAsTheAwardingOrganisation,
     checkYourAnswersPage,
@@ -17,7 +18,8 @@ test.describe("A spec used to smoke test the environment once a deployment has h
         await startJourney(page, context);
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, '7', '2015', '9', '2019');
+        await startedOnOrAfterSeptember2014(page, "7", "2015");
+        await whenWasQualificationAwarded(page, "9", "2019");
         await whatLevelIsTheQualification(page, 0);
         await selectNotOnTheListAsTheAwardingOrganisation(page);
         await checkYourAnswersPage(page);

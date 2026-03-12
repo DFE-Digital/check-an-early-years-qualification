@@ -8,7 +8,7 @@ public static class DatesQuestionMapper
 {
     public static DatesQuestionModel Map(DatesQuestionModel model, DatesQuestionPage question,
                                          string actionName,
-                                         string controllerName, DateQuestionModel startedQuestion,
+                                         string controllerName,
                                          DateQuestionModel awardedQuestion)
     {
         var errorLinks = new List<ErrorSummaryLink>();
@@ -17,10 +17,6 @@ public static class DatesQuestionMapper
         model.ActionName = actionName;
         model.ControllerName = controllerName;
         model.BackButton = NavigationLinkMapper.Map(question.BackButton);
-
-        var (startedQuestionMapped, startedQuestionErrors) = MapDate(startedQuestion, "started", nameof(model.StartedQuestion));
-        model.StartedQuestion = startedQuestionMapped;
-        errorLinks.AddRange(startedQuestionErrors);
 
         var (awardedQuestionMapped, awardedQuestionErrors) = MapDate(awardedQuestion, "awarded", nameof(model.AwardedQuestion));
         model.AwardedQuestion = awardedQuestionMapped;

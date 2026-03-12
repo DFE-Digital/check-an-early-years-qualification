@@ -9,7 +9,7 @@ using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
-using Dfe.EarlyYearsQualification.Web.Services.Help;
+using Dfe.EarlyYearsQualification.Web.Services.Questions;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -396,10 +396,6 @@ public class QuestionServiceTests
         DatesQuestionModel model = new();
         DatesQuestionPage question = new()
                                      {
-                                         StartedQuestion = new DateQuestion
-                                                           {
-                                                               ErrorMessage = "Started Error Message"
-                                                           },
                                          AwardedQuestion = new DateQuestion
                                                            {
                                                                ErrorMessage = "Awarded Error Message"
@@ -418,14 +414,10 @@ public class QuestionServiceTests
         // Assert
         result.Should().NotBeNull();
 
-        result.StartedQuestion.Should().NotBeNull();
-        result.StartedQuestion.SelectedMonth.Should().Be(3);
-        result.StartedQuestion.SelectedYear.Should().Be(2002);
         result.AwardedQuestion.Should().NotBeNull();
         result.AwardedQuestion.SelectedMonth.Should().Be(5);
         result.AwardedQuestion.SelectedYear.Should().Be(2005);
 
-        _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationStarted(), Times.Once);
         _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationAwarded(), Times.Once);
     }
 
@@ -436,10 +428,6 @@ public class QuestionServiceTests
         DatesQuestionModel model = new();
         DatesQuestionPage question = new()
                                      {
-                                         StartedQuestion = new DateQuestion
-                                                           {
-                                                               ErrorMessage = "Started Error Message"
-                                                           },
                                          AwardedQuestion = new DateQuestion
                                                            {
                                                                ErrorMessage = "Awarded Error Message"
@@ -478,14 +466,10 @@ public class QuestionServiceTests
         // Assert
         result.Should().NotBeNull();
 
-        result.StartedQuestion.Should().NotBeNull();
-        result.StartedQuestion.SelectedMonth.Should().Be(3);
-        result.StartedQuestion.SelectedYear.Should().Be(2002);
         result.AwardedQuestion.Should().NotBeNull();
         result.AwardedQuestion.SelectedMonth.Should().Be(5);
         result.AwardedQuestion.SelectedYear.Should().Be(2005);
 
-        _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationStarted(), Times.Once);
         _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationAwarded(), Times.Once);
     }
 
