@@ -20,6 +20,7 @@ function getUrls(authSecret, port) {
         'click element #england',
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/questions/when-was-the-qualification-started`,
+        'click element #OnOrAfter1September2014',
         'set field #question-month-label+input to 7',
         'set field #question-year-label+input to 2015',
         'click element #question-submit',
