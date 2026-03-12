@@ -142,10 +142,27 @@ export default function level3Journey(ENVIRONMENT, DATA) {
             response = getGovukMinJs(address);
 
             response = pagePOST(
-                `${address}/questions/when-was-the-qualification-started-and-awarded`,
+                `${address}/questions/when-was-the-qualification-started`,
                 {
-                    "StartedQuestion.SelectedMonth": '9',
-                    "StartedQuestion.SelectedYear": '2014',
+                    "Month": '9',
+                    "Year": '2014',
+                    __RequestVerificationToken: requestVerificationToken,
+                }
+            );
+
+            response = getGovukMinCss(address);
+            response = getSiteCss(address);
+            response = getJqueryMinJs(address);
+            response = getSiteJs(address);
+            response = getGovukMinJs(address);
+            response = getLightFont(address);
+            response = getBoldFont(address);
+            response = getFavIcon(address);
+            response = getGovukMinJs(address);
+
+            response = pagePOST(
+                `${address}/questions/when-was-the-qualification-awarded`,
+                {
                     "AwardedQuestion.SelectedMonth": '6',
                     "AwardedQuestion.SelectedYear": '2016',
                     __RequestVerificationToken: requestVerificationToken,
