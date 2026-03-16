@@ -221,6 +221,87 @@ public class DateQuestionModelValidatorTests
     }
 
     [TestMethod]
+    public void StartDateIsValid_YearBeforeSeptember2014_Invalidates()
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now()).Returns(new DateTime(2025, 1, 1));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2013 };
+        var question = new DateQuestion
+                       {
+                           DateAfterSeptember2014ErrorMessage = "Date after sept 2014 error",
+                           DateAfterSeptember2014ErrorLinkText = "Date after sept 2014 link"
+                       };
+
+        var result = validator.StartDateIsValid(model, question);
+
+        result.YearValid.Should().BeFalse();
+        result.ErrorMessages.Should().ContainSingle(question.DateAfterSeptember2014ErrorMessage);
+        result.BannerErrorMessages.Should().ContainSingle(question.DateAfterSeptember2014ErrorLinkText);
+    }
+
+    [TestMethod]
+    public void StartDateIsValid_September2014MonthBeforeSeptember_Invalidates()
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now()).Returns(new DateTime(2025, 1, 1));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = 8, SelectedYear = 2014 };
+        var question = new DateQuestion
+                       {
+                           DateAfterSeptember2014ErrorMessage = "Date after sept 2014 error",
+                           DateAfterSeptember2014ErrorLinkText = "Date after sept 2014 link"
+                       };
+
+        var result = validator.StartDateIsValid(model, question);
+
+        result.MonthValid.Should().BeFalse();
+        result.YearValid.Should().BeFalse();
+        result.ErrorMessages.Should().ContainSingle(question.DateAfterSeptember2014ErrorMessage);
+        result.BannerErrorMessages.Should().ContainSingle(question.DateAfterSeptember2014ErrorLinkText);
+    }
+
+    [TestMethod]
+    public void StartDateIsValid_September2014MonthEqualsSeptember_ValidatesTrue()
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now()).Returns(new DateTime(2025, 1, 1));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = 9, SelectedYear = 2014 };
+        var question = new DateQuestion();
+
+        var result = validator.StartDateIsValid(model, question);
+
+        result.MonthValid.Should().BeTrue();
+        result.YearValid.Should().BeTrue();
+        result.ErrorMessages.Should().BeEmpty();
+        result.BannerErrorMessages.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void StartDateIsValid_YearAfter2014_ValidatesTrue()
+    {
+        var dateTimeAdapter = new Mock<IDateTimeAdapter>();
+        dateTimeAdapter.Setup(d => d.Now()).Returns(new DateTime(2025, 1, 1));
+
+        var validator = new DateQuestionModelValidator(dateTimeAdapter.Object);
+
+        var model = new DateQuestionModel { SelectedMonth = 10, SelectedYear = 2016 };
+        var question = new DateQuestion();
+
+        var result = validator.StartDateIsValid(model, question);
+
+        result.MonthValid.Should().BeTrue();
+        result.YearValid.Should().BeTrue();
+    }
+
+    [TestMethod]
     public void DateQuestionModelValidator_GivenDateEarlierThisMonth_ValidatesTrue()
     {
         const int thisYear = 2024;

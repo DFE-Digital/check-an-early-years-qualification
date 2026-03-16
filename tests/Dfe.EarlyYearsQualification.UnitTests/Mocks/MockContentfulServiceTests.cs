@@ -22,6 +22,37 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetRadioQuestionPage_PassInWhenWasTheQualificationStarted_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetRadioQuestionPage(QuestionPages.WhenWasTheQualificationStarted);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<RadioQuestionPage>();
+        result.Question.Should().Be("When was the qualification started?");
+        result.CtaButtonText.Should().NotBeNullOrEmpty();
+        result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.ErrorBannerHeading.Should().NotBeNull();
+        result.ErrorBannerLinkText.Should().NotBeNull();
+        result.Options.Should().NotBeNullOrEmpty();
+        result.Options.Count.Should().Be(2);
+
+        (result.Options[0] as Option)!.Label.Should().Be("Before 1 September 2014");
+        (result.Options[0] as Option)!.Value.Should().Be("Before1September2014");
+
+        var second = result.Options[1] as RadioButtonAndDateInput;
+        second.Should().NotBeNull();
+        second!.Label.Should().Be("On or after 1 September 2014");
+        second.Value.Should().Be("OnOrAfter1September2014");
+        second.StartedQuestion.Should().NotBeNull();
+        second.StartedQuestion.MonthLabel.Should().Be("Month");
+        second.StartedQuestion.YearLabel.Should().Be("Year");
+        second.StartedQuestion.QuestionHeader.Should().Be("When was the qualification started?");
+        second.StartedQuestion.QuestionHint.Should().Be("Enter the month and year that the qualification was started. For example 9 2013.");
+    }
+
+    [TestMethod]
     public async Task GetAdvicePage_QualificationsAchievedOutsideTheUk_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
