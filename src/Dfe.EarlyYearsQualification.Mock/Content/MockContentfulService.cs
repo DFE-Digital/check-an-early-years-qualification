@@ -16,6 +16,12 @@ public class MockContentfulService : IContentService
     private const string HomePath = "/";
     private const string ThereIsAProblem = "There is a problem";
     private const string CtaButtonText = "Continue";
+    private const string MissingMonthAndYearStartedError = "Enter the month and year that the qualification was started";
+    private const string MissingMonthStartedDateError = "Enter the month that the qualification was started";
+    private const string MissingYearStartedDateError = "Enter the year that the qualification was started";
+    private const string FutureStartedDateError = "The date the qualification was started must be in the past";
+    private const string MonthOutOfBoundsStartedDateError = "The month the qualification was started must be between 1 and 12";
+    private const string YearOutOfBoundsStartedDateError = "The year the qualification was started must be between 1900 and $[actual-year]$";
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
     {
@@ -798,18 +804,18 @@ public class MockContentfulService : IContentService
                     YearLabel = "Year",
                     QuestionHeader = "Start date (optional)",
                     QuestionHint = "Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.",
-                    ErrorBannerLinkText = "Enter the month and year that the qualification was started",
-                    ErrorMessage = "Enter the month and year that the qualification was started",
-                    FutureDateErrorBannerLinkText = "The date the qualification was started must be in the past",
-                    FutureDateErrorMessage = "The date the qualification was started must be in the past",
-                    MissingMonthErrorMessage = "Enter the month that the qualification was started",
-                    MissingYearErrorMessage = "Enter the year that the qualification was started",
-                    MissingMonthBannerLinkText = "Enter the month that the qualification was started",
-                    MissingYearBannerLinkText = "Enter the year that the qualification was started",
-                    MonthOutOfBoundsErrorLinkText = "The month the qualification was started must be between 1 and 12",
-                    MonthOutOfBoundsErrorMessage = "The month the qualification was started must be between 1 and 12",
-                    YearOutOfBoundsErrorLinkText = "The year the qualification was started must be between 1900 and $[actual-year]$",
-                    YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$"
+                    ErrorBannerLinkText = MissingMonthAndYearStartedError,
+                    ErrorMessage = MissingMonthAndYearStartedError,
+                    FutureDateErrorBannerLinkText = FutureStartedDateError,
+                    FutureDateErrorMessage = FutureStartedDateError,
+                    MissingMonthErrorMessage = MissingMonthStartedDateError,
+                    MissingYearErrorMessage = MissingYearStartedDateError,
+                    MissingMonthBannerLinkText = MissingMonthStartedDateError,
+                    MissingYearBannerLinkText = MissingYearStartedDateError,
+                    MonthOutOfBoundsErrorLinkText = MonthOutOfBoundsStartedDateError,
+                    MonthOutOfBoundsErrorMessage = MonthOutOfBoundsStartedDateError,
+                    YearOutOfBoundsErrorLinkText = YearOutOfBoundsStartedDateError,
+                    YearOutOfBoundsErrorMessage = YearOutOfBoundsStartedDateError
                 },
                 AwardedDateQuestion = new DateQuestion
                 {
@@ -968,18 +974,18 @@ public class MockContentfulService : IContentService
                                   YearLabel = "Year",
                                   QuestionHeader = "When was the qualification started?",
                                   QuestionHint = "Enter the month and year that the qualification was started. For example 9 2013.",
-                                  ErrorBannerLinkText = "Enter the month and year that the qualification was started",
-                                  ErrorMessage = "Enter the month and year that the qualification was started",
-                                  FutureDateErrorBannerLinkText = "The date the qualification was started must be in the past",
-                                  FutureDateErrorMessage = "The date the qualification was started must be in the past",
-                                  MissingMonthErrorMessage = "Enter the month that the qualification was started",
-                                  MissingYearErrorMessage = "Enter the year that the qualification was started",
-                                  MissingMonthBannerLinkText = "Enter the month that the qualification was started",
-                                  MissingYearBannerLinkText = "Enter the year that the qualification was started",
-                                  MonthOutOfBoundsErrorLinkText = "The month the qualification was started must be between 1 and 12",
-                                  MonthOutOfBoundsErrorMessage = "The month the qualification was started must be between 1 and 12",
-                                  YearOutOfBoundsErrorLinkText = "The year the qualification was started must be between 1900 and $[actual-year]$",
-                                  YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$",
+                                  ErrorBannerLinkText = MissingMonthAndYearStartedError,
+                                  ErrorMessage = MissingMonthAndYearStartedError,
+                                  FutureDateErrorBannerLinkText = FutureStartedDateError,
+                                  FutureDateErrorMessage = FutureStartedDateError,
+                                  MissingMonthErrorMessage = MissingMonthStartedDateError,
+                                  MissingYearErrorMessage = MissingYearStartedDateError,
+                                  MissingMonthBannerLinkText = MissingMonthStartedDateError,
+                                  MissingYearBannerLinkText = MissingYearStartedDateError,
+                                  MonthOutOfBoundsErrorLinkText = MonthOutOfBoundsStartedDateError,
+                                  MonthOutOfBoundsErrorMessage = MonthOutOfBoundsStartedDateError,
+                                  YearOutOfBoundsErrorLinkText = YearOutOfBoundsStartedDateError,
+                                  YearOutOfBoundsErrorMessage = YearOutOfBoundsStartedDateError,
                                   DateAfterSeptember2014ErrorLinkText = "The date the qualification was started must be on or after 1 September 2014",
                                   DateAfterSeptember2014ErrorMessage = "The date the qualification was started must be on or after 1 September 2014"
                               }
