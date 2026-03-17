@@ -254,20 +254,61 @@ export async function whereWasTheQualificationAwarded(page: Page, location: stri
     await clickSubmit(page);
 }
 
-export async function whenWasQualificationStarted(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
-    await checkUrl(page, '/questions/when-was-the-qualification-started-and-awarded');
+export async function chooseStartDateOptionBasedOnDate(page: Page, startedMonth: string, startedYear: string) {
+    const monthIndex = parseInt(startedMonth, 10) - 1;
+    const year = parseInt(startedYear, 10);
+    const inputDate = new Date(year, monthIndex);
+
+    const targetDate = new Date("September 2014");
+    if (inputDate < targetDate) {
+        await startedBeforeSeptember2014(page);
+    }
+    else {
+        await startedOnOrAfterSeptember2014(page, startedMonth, startedYear);
+    }
+}
+
+export async function startedBeforeSeptember2014(page: Page) {
+    await checkUrl(page, '/questions/when-was-the-qualification-started');
     await attributeContains(page, "#back-button", 'href', '/questions/where-was-the-qualification-awarded');
-    await page.locator("#StartedQuestion\\.SelectedMonth").fill(startedMonth);
-    await page.locator("#StartedQuestion\\.SelectedYear").fill(startedYear);
+
+    await page.locator("#Before1September2014").click();
+    await clickSubmit(page);
+}
+
+export async function startedOnOrAfterSeptember2014(page: Page, startedMonth: string, startedYear: string) {
+    await checkUrl(page, '/questions/when-was-the-qualification-started');
+    await attributeContains(page, "#back-button", 'href', '/questions/where-was-the-qualification-awarded');
+
+    await page.locator("#OnOrAfter1September2014").click();
+
+    await page.locator("#Month").fill(startedMonth);
+    await page.locator("#Year").fill(startedYear);
+    await clickSubmit(page);
+}
+
+export async function whenWasQualificationAwarded(page: Page, awardedMonth: string, awardedYear: string) {
+    await checkUrl(page, '/questions/when-was-the-qualification-awarded');
+    await attributeContains(page, "#back-button", 'href', '/questions/when-was-the-qualification-started');
     await page.locator("#AwardedQuestion\\.SelectedMonth").fill(awardedMonth);
     await page.locator("#AwardedQuestion\\.SelectedYear").fill(awardedYear);
+    await clickSubmit(page);
+}
+
+export async function InputQualificationStartedAndAwardedDetailsOnHelpPage(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
+    await checkUrl(page, '/help/qualification-details');
+    await attributeContains(page, "#back-button", 'href', '/help/get-help');
+    await page.locator("#QuestionModel\\.StartedQuestion\\.SelectedMonth").fill(startedMonth);
+    await page.locator("#QuestionModel\\.StartedQuestion\\.SelectedYear").fill(startedYear);
+    await page.locator("#QuestionModel\\.AwardedQuestion\\.SelectedMonth").fill(awardedMonth);
+    await page.locator("#QuestionModel\\.AwardedQuestion\\.SelectedYear").fill(awardedYear);
     await clickSubmit(page);
 }
 
 export async function whatLevelIsTheQualification(page: Page, level: number) {
     // what-level-is-the-qualification page - valid level moves us on
     await checkUrl(page, "/questions/what-level-is-the-qualification");
-    await attributeContains(page, "#back-button", 'href', '/questions/when-was-the-qualification-started-and-awarded');
+    await attributeContains(page, "#back-button", 'href', '/questions/when-was-the-qualification-awarded');
     await page.locator('input[id="' + level + '"]').click();
     await clickSubmit(page);
 }

@@ -82,6 +82,44 @@ public class OptionItemConverterTests
     }
 
     [TestMethod]
+    public void ReadJson_PassInObjectWithRadioButtonWithDateInputContentType_ReturnsRadioButtonAndDateInput()
+    {
+        var obj = new
+        {
+            label = "Radio button label",
+            value = "RadioButtonValue",
+            hint = "Some hint text",
+            sys = new
+            {
+                contentType = new
+                {
+                    sys = new
+                    {
+                        id = "radioButtonWithDateInput"
+                    }
+                }
+            }
+        };
+
+        var json = JsonConvert.SerializeObject(obj);
+        JsonReader reader = new JsonTextReader(new StringReader(json));
+        while (reader.TokenType == JsonToken.None)
+            if (!reader.Read())
+                break;
+
+        var result =
+            new OptionItemConverter().ReadJson(reader, typeof(IOptionItem), null, JsonSerializer.CreateDefault());
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<RadioButtonAndDateInput>();
+        var data = result as RadioButtonAndDateInput;
+        data!.Label.Should().Be(obj.label);
+        data.Value.Should().Be(obj.value);
+        data.Hint.Should().Be(obj.hint);
+        data.StartedQuestion.Should().NotBeNull();
+    }
+
+    [TestMethod]
     public void WriteJson_ShouldThrowException()
     {
         var action = () => new OptionItemConverter().WriteJson(new JsonTextWriter(new StringWriter()), null,

@@ -19,4 +19,15 @@ public class StringFormattingHelperTests
         // Assert
         result.Should().Be(expected);
     }
+
+    [TestMethod]
+    [DataRow("User_Name-Test", "user_name-test")]
+    [DataRow("123 ABC", "123-abc")]
+    [DataRow("Name/With/Slash", "name-with-slash")]
+    [DataRow("", "")]
+    public void ToHtmlId_ReturnsExpected(string input, string expected)
+    {
+        var result = StringFormattingHelper.ToHtmlId(input);
+        result.Should().Be(expected);
+    }
 }

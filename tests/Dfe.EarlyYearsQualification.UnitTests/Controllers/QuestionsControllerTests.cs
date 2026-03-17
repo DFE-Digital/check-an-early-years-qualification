@@ -4,9 +4,11 @@ using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.Help;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -31,6 +33,282 @@ public class QuestionsControllerTests
         resultType.Should().NotBeNull();
         resultType.ActionName.Should().Be(nameof(QuestionPages.AreYouCheckingYourOwnQualification));
         _mockQuestionService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task WhenWasTheQualificationStarted_ContentServiceReturnsNoQuestionPage_RedirectsToErrorPage()
+    {
+        // Arrange
+        RadioQuestionPage? questionPage = null;
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted))
+                            .ReturnsAsync(questionPage);
+
+        // Act
+        var result = await GetSut().WhenWasTheQualificationStarted();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        _mockLogger.VerifyError("No content for the question page");
+    }
+
+    [TestMethod]
+    public async Task WhenWasTheQualificationStarted_ContentServiceReturnsQuestionPage_ReturnsQuestionModel()
+    {
+        // Arrange
+        var questionPage = new RadioQuestionPage
+                           {
+                               Question = "When was the qualification started?",
+                               CtaButtonText = "Continue"
+                           };
+
+        var viewModel = new RadioQuestionModel
+                        {
+                            Question = questionPage.Question,
+                            CtaButtonText = questionPage.CtaButtonText
+                        };
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted))
+                            .ReturnsAsync(questionPage);
+
+        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), questionPage,
+                                              nameof(QuestionsController.WhenWasTheQualificationStarted), "Questions",
+                                              It.IsAny<string>()))
+                            .ReturnsAsync(viewModel);
+
+        // Act
+        var result = await GetSut().WhenWasTheQualificationStarted();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as RadioQuestionModel;
+        model.Should().NotBeNull();
+    }
+
+    [TestMethod]
+    public async Task Post_WhenWasTheQualificationStarted_InvalidModel_ReturnsQuestionPage()
+    {
+        var content = new RadioQuestionPage()
+        {
+            Options =
+            [
+                new Option(),
+                new RadioButtonAndDateInput()
+                {
+                    StartedQuestion = new()
+                }
+            ]
+        };
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted))
+                            .ReturnsAsync(content);
+
+        var controller = GetSut();
+
+        controller.ModelState.AddModelError("option", "test error");
+
+        var radioQuestionModel = 
+            new RadioQuestionModel()
+            {
+                OptionsItems =
+                [
+                    new OptionModel(),
+                    new RadioButtonAndDateInputModel()
+                    {
+                        Question = new()
+                    }
+                ]
+            };
+
+        _mockQuestionService
+            .Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(),
+                              It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(radioQuestionModel);
+
+        // Act
+        var result = await controller.WhenWasTheQualificationStarted(radioQuestionModel);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        resultType.ViewName.Should().Be("Radio");
+
+        var model = resultType.Model as RadioQuestionModel;
+
+        model.Should().NotBeNull();
+        model.HasErrors.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task Post_WhenWasTheQualificationStarted_OptionBeforeSept2014_SetsBaseDateAndRedirects()
+    {
+        // Arrange
+        var radioQuestionContent = new RadioQuestionPage
+                                   {
+                                       Options = new List<IOptionItem>
+                                                 {
+                                                     new Option { Label = "Before 1 September 2014", Value = "Before1September2014" },
+                                                     new RadioButtonAndDateInput { Label = "On or after 1 September 2014", Value = "OnOrAfter1September2014", StartedQuestion = new DateQuestion() }
+                                                 }
+                                   };
+
+        var model = new RadioQuestionModel
+                    {
+                        Option = "Before1September2014",
+                        OptionsItems = new List<IOptionItemModel>
+                                       {
+                                           new OptionModel { Value = "Before1September2014" },
+                                           new RadioButtonAndDateInputModel { Value = "OnOrAfter1September2014", Question = new DateQuestionModel() }
+                                       }
+                    };
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted))
+                            .ReturnsAsync(radioQuestionContent);
+
+        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                            .ReturnsAsync(model);
+
+        var controller = GetSut();
+
+        // Act
+        var result = await controller.WhenWasTheQualificationStarted(model);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be(nameof(QuestionsController.WhenWasTheQualificationAwarded));
+
+        _mockQuestionService.Verify(x => x.SetWhenWasQualificationStarted(It.Is<DateQuestionModel>(d => d.SelectedMonth == 1 && d.SelectedYear == 1900)), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task Post_WhenWasTheQualificationStarted_RadioAndDateInput_InvalidNestedDate_ReturnsQuestionPageWithErrors()
+    {
+        // Arrange
+        var radioQuestionContent = new RadioQuestionPage
+                                   {
+                                       Options = new List<IOptionItem>
+                                                 {
+                                                     new Option { Label = "Before 1 September 2014", Value = "Before1September2014" },
+                                                     new RadioButtonAndDateInput { Label = "On or after 1 September 2014", Value = "OnOrAfter1September2014", StartedQuestion = new DateQuestion() }
+                                                 }
+                                   };
+
+        var radioAndDateModel = new RadioButtonAndDateInputModel { Value = "OnOrAfter1September2014", Question = new DateQuestionModel() };
+
+        var model = new RadioQuestionModel
+                    {
+                        Option = "OnOrAfter1September2014",
+                        OptionsItems = new List<IOptionItemModel>
+                                       {
+                                           new OptionModel { Value = "Before1September2014" },
+                                           radioAndDateModel
+                                       }
+                    };
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted))
+                            .ReturnsAsync(radioQuestionContent);
+
+        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                            .ReturnsAsync(model);
+
+        _mockQuestionService.Setup(x => x.StartDateIsValid(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestion>()))
+                            .Returns(new DateValidationResult { MonthValid = false, YearValid = false });
+
+        _mockQuestionService.Setup(x => x.MapDateModel(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestion>(), It.IsAny<DateValidationResult>()))
+                            .Returns(new DateQuestionModel { SelectedMonth = null, SelectedYear = null });
+
+        var controller = GetSut();
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+        controller.ControllerContext.HttpContext.Request.Form = new FormCollection(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
+                                                                                 {
+                                                                                     ["Month"] = "notanumber",
+                                                                                     ["Year"] = "notanumber"
+                                                                                 });
+
+        // Act
+        var result = await controller.WhenWasTheQualificationStarted(model);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+        resultType.ViewName.Should().Be("Radio");
+
+        var returnedModel = resultType.Model as RadioQuestionModel;
+        returnedModel.Should().NotBeNull();
+        returnedModel.HasErrors.Should().BeTrue();
+        returnedModel.HasNestedErrors.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task Post_WhenWasTheQualificationStarted_RadioAndDateInput_ValidNestedDate_SetsStartDateAndRedirects()
+    {
+        // Arrange
+        var radioQuestionContent = new RadioQuestionPage
+                                   {
+                                       Options = new List<IOptionItem>
+                                                 {
+                                                     new Option { Label = "Before 1 September 2014", Value = "Before1September2014" },
+                                                     new RadioButtonAndDateInput { Label = "On or after 1 September 2014", Value = "OnOrAfter1September2014", StartedQuestion = new DateQuestion() }
+                                                 }
+                                   };
+
+        var radioAndDateModel = new RadioButtonAndDateInputModel { Value = "OnOrAfter1September2014", Question = new DateQuestionModel() };
+
+        var model = new RadioQuestionModel
+                    {
+                        Option = "OnOrAfter1September2014",
+                        OptionsItems = new List<IOptionItemModel>
+                                       {
+                                           new OptionModel { Value = "Before1September2014" },
+                                           radioAndDateModel
+                                       }
+                    };
+
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted))
+                            .ReturnsAsync(radioQuestionContent);
+
+        _mockQuestionService.Setup(x => x.Map(It.IsAny<RadioQuestionModel>(), It.IsAny<RadioQuestionPage>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                            .ReturnsAsync(model);
+
+        _mockQuestionService.Setup(x => x.StartDateIsValid(It.IsAny<DateQuestionModel>(), It.IsAny<DateQuestion>()))
+                            .Returns(new DateValidationResult { MonthValid = true, YearValid = true });
+
+        var controller = GetSut();
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+        controller.ControllerContext.HttpContext.Request.Form = new FormCollection(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
+                                                                                 {
+                                                                                     ["Month"] = "9",
+                                                                                     ["Year"] = "2014"
+                                                                                 });
+
+        // Act
+        var result = await controller.WhenWasTheQualificationStarted(model);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be(nameof(QuestionsController.WhenWasTheQualificationAwarded));
+
+        _mockQuestionService.Verify(x => x.SetWhenWasQualificationStarted(It.Is<DateQuestionModel>(d => d.SelectedMonth == 9 && d.SelectedYear == 2014)), Times.Once);
     }
 
     [TestMethod]
@@ -163,19 +441,12 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task WhenWasTheQualificationStarted_ReturnsView()
+    public async Task WhenWasTheQualificationAwarded_ReturnsView()
     {
         var questionPage = new DatesQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
-                               StartedQuestion = new DateQuestion
-                                                 {
-                                                     ErrorMessage = "started- Test error message",
-                                                     MonthLabel = "started- Test month label",
-                                                     YearLabel = "started- Test year label",
-                                                     QuestionHint = "started- Test question hint"
-                                                 },
                                AwardedQuestion = new DateQuestion
                                                  {
                                                      ErrorMessage = "awarded- Test error message",
@@ -185,7 +456,7 @@ public class QuestionsControllerTests
                                                  }
                            };
 
-        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
                             .ReturnsAsync(questionPage);
 
         _mockQuestionService.Setup(x => x.MapDatesModel(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>(),
@@ -194,18 +465,7 @@ public class QuestionsControllerTests
                                      {
                                          Question = questionPage.Question,
                                          CtaButtonText = questionPage.CtaButtonText,
-                                         StartedQuestion = new DateQuestionModel
-                                                           {
-                                                               Prefix = "started",
-                                                               QuestionId = "date-started",
-                                                               MonthId = "StartedQuestion.SelectedMonth",
-                                                               YearId = "StartedQuestion.SelectedYear",
-                                                               MonthLabel = questionPage.StartedQuestion!.MonthLabel,
-                                                               YearLabel = questionPage.StartedQuestion!.YearLabel,
-                                                               QuestionHint =
-                                                                   questionPage.StartedQuestion!.QuestionHint,
-                                                               ErrorMessage = questionPage.StartedQuestion!.ErrorMessage
-                                                           },
+                                         StartedQuestion = new DateQuestionModel(),
                                          AwardedQuestion = new DateQuestionModel
                                                            {
                                                                Prefix = "awarded",
@@ -220,7 +480,7 @@ public class QuestionsControllerTests
                                                            },
                                      });
 
-        var result = await GetSut().WhenWasTheQualificationStarted();
+        var result = await GetSut().WhenWasTheQualificationAwarded();
 
         result.Should().NotBeNull();
 
@@ -239,12 +499,12 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task WhenWasTheQualificationStarted_CantFindContentfulPage_ReturnsErrorPage()
+    public async Task WhenWasTheQualificationAwarded_CantFindContentfulPage_ReturnsErrorPage()
     {
-        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
                             .ReturnsAsync((DatesQuestionPage?)null).Verifiable();
 
-        var result = await GetSut().WhenWasTheQualificationStarted();
+        var result = await GetSut().WhenWasTheQualificationAwarded();
 
         result.Should().NotBeNull();
 
@@ -257,20 +517,13 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task Post_WhenWasTheQualificationStarted_InvalidModel_ReturnsDatesQuestionPage()
+    public async Task Post_WhenWasTheQualificationAwarded_InvalidModel_ReturnsDatesQuestionPage()
     {
         var questionPage = new DatesQuestionPage
                            {
                                Question = "Test question",
                                CtaButtonText = "Continue",
                                ErrorBannerHeading = "Error banner heading",
-                               StartedQuestion = new DateQuestion
-                                                 {
-                                                     ErrorMessage = "started- Test error message",
-                                                     MonthLabel = "started- Test month label",
-                                                     YearLabel = "started- Test year label",
-                                                     QuestionHint = "started- Test question hint"
-                                                 },
                                AwardedQuestion = new DateQuestion
                                                  {
                                                      ErrorMessage = "awarded- Test error message",
@@ -286,14 +539,6 @@ public class QuestionsControllerTests
                                                        {
                                                            SelectedMonth = null,
                                                            SelectedYear = null,
-                                                           Prefix = "started",
-                                                           QuestionId = "date-started",
-                                                           MonthId = "StartedQuestion.SelectedMonth",
-                                                           YearId = "StartedQuestion.SelectedYear",
-                                                           MonthLabel = questionPage.StartedQuestion!.MonthLabel,
-                                                           YearLabel = questionPage.StartedQuestion!.YearLabel,
-                                                           QuestionHint = questionPage.StartedQuestion!.QuestionHint,
-                                                           ErrorMessage = "Test error message"
                                                        },
                                      AwardedQuestion = new DateQuestionModel
                                                        {
@@ -345,7 +590,7 @@ public class QuestionsControllerTests
                                                              }
                                };
 
-        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded))
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
                             .ReturnsAsync(questionPage);
 
         _mockQuestionService.Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
@@ -356,7 +601,7 @@ public class QuestionsControllerTests
                                                         It.IsAny<DatesValidationResult>()))
                             .Returns(datesQuestionModel);
 
-        var result = await GetSut().WhenWasTheQualificationStarted(new DatesQuestionModel());
+        var result = await GetSut().WhenWasTheQualificationAwarded(new DatesQuestionModel());
 
         result.Should().NotBeNull();
 
@@ -371,14 +616,6 @@ public class QuestionsControllerTests
         model.Question.Should().Be(questionPage.Question);
         model.CtaButtonText.Should().Be(questionPage.CtaButtonText);
         model.Errors!.ErrorBannerHeading.Should().Be(questionPage.ErrorBannerHeading);
-        model.StartedQuestion!.Prefix.Should().Be("started");
-        model.StartedQuestion.QuestionId.Should().Be("date-started");
-        model.StartedQuestion.MonthId.Should().Be("StartedQuestion.SelectedMonth");
-        model.StartedQuestion.YearId.Should().Be("StartedQuestion.SelectedYear");
-        model.StartedQuestion.MonthLabel.Should().Be(questionPage.StartedQuestion.MonthLabel);
-        model.StartedQuestion.YearLabel.Should().Be(questionPage.StartedQuestion.YearLabel);
-        model.StartedQuestion.QuestionHint.Should().Be(questionPage.StartedQuestion.QuestionHint);
-        model.StartedQuestion.ErrorMessage.Should().Be(validationResult.StartedValidationResult.ErrorMessages[0]);
         model.AwardedQuestion!.Prefix.Should().Be("awarded");
         model.AwardedQuestion.QuestionId.Should().Be("date-awarded");
         model.AwardedQuestion.MonthId.Should().Be("AwardedQuestion.SelectedMonth");
@@ -393,8 +630,25 @@ public class QuestionsControllerTests
     }
 
     [TestMethod]
-    public async Task Post_WhenWasTheQualificationStarted_ValidModel_ReturnsRedirectResponse()
+    public async Task Post_WhenWasTheQualificationAwarded_ValidModel_ReturnsRedirectResponse()
     {
+        var questionPage = new DatesQuestionPage
+        {
+            Question = "Test question",
+            CtaButtonText = "Continue",
+            ErrorBannerHeading = "Error banner heading",
+            AwardedQuestion = new DateQuestion
+            {
+                ErrorMessage = "awarded- Test error message",
+                MonthLabel = "awarded- Test month label",
+                YearLabel = "awarded- Test year label",
+                QuestionHint = "awarded- Test question hint"
+            }
+        };
+
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
+                    .ReturnsAsync(questionPage);
+
         _mockQuestionService
             .Setup(x => x.IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>()))
             .Returns(
@@ -424,7 +678,7 @@ public class QuestionsControllerTests
                                                        }
                                  };
 
-        var result = await GetSut().WhenWasTheQualificationStarted(datesQuestionModel);
+        var result = await GetSut().WhenWasTheQualificationAwarded(datesQuestionModel);
 
         result.Should().NotBeNull();
 
@@ -439,6 +693,25 @@ public class QuestionsControllerTests
         _mockQuestionService
             .Verify(x => x.SetWhenWasQualificationAwarded(datesQuestionModel.AwardedQuestion),
                     Times.Once);
+    }
+
+    [TestMethod]
+    public async Task Post_WhenWasTheQualificationAwarded_CantFindContentfulPage_RedirectsToErrorPage()
+    {
+        _mockQuestionService.Setup(x => x.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded))
+                            .ReturnsAsync((DatesQuestionPage?)null).Verifiable();
+
+        var result = await GetSut().WhenWasTheQualificationAwarded(new DatesQuestionModel());
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+
+        resultType!.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        _mockLogger.VerifyError("No content for the question page");
     }
 
     [TestMethod]

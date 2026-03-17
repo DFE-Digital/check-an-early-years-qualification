@@ -729,6 +729,102 @@ public class QualificationDetailsServiceTests
     }
 
     [TestMethod]
+    public async Task MapDetails_StartDateBeforeSeptember2014_PassesBeforeString()
+    {
+        const string qualificationId = "qualificationId";
+        const string qualificationName = "qualificationName";
+        const string awardingOrganisationTitle = "awardingOrganisationTitle";
+        const int qualificationLevel = 1;
+        var backButton = new NavigationLink { Href = "backButton" };
+        var qualification =
+            new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
+            { FromWhichYear = "FromWhichYear" };
+        var detailsPage = new QualificationDetailsPage
+                          {
+                              RequirementsText = new Document(),
+                              Labels = new DetailsPageLabels
+                                       {
+                                           BackButton = backButton
+                                       }
+                          };
+
+        // Start date: August 2014 => before September 2014
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns(((int?)8, (int?)2014));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns(((int?)null, (int?)null));
+
+        _mockQualificationDetailsMapper
+            .Setup(x => x.Map(qualification, detailsPage, backButton,
+                              It.IsAny<List<AdditionalRequirementAnswerModel>>(), "Before 1 September 2014", string.Empty,
+                              It.IsAny<List<Qualification>>() ))
+            .ReturnsAsync(new QualificationDetailsModel());
+
+        var sut = GetSut();
+
+        var result = await sut.MapDetails(qualification, detailsPage, It.IsAny<List<Qualification>>());
+
+        result.Should().NotBeNull();
+        _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
+                                                          It.IsAny<List<AdditionalRequirementAnswerModel>>(),
+                                                          "Before 1 September 2014", string.Empty, It.IsAny<List<Qualification>>() ),
+                                               Times.Once);
+    }
+
+    [TestMethod]
+    public async Task MapDetails_PassesAdditionalRequirementAnswersToMapper()
+    {
+        const string qualificationId = "qualificationId";
+        const string qualificationName = "qualificationName";
+        const string awardingOrganisationTitle = "awardingOrganisationTitle";
+        const int qualificationLevel = 1;
+        var backButton = new NavigationLink { Href = "backButton" };
+
+        var q1 = new AdditionalRequirementQuestion
+                 {
+                     Question = "Q1",
+                     AnswerToBeFullAndRelevant = true,
+                     ConfirmationStatement = "confirm"
+                 };
+
+        var qualification = new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
+                            { AdditionalRequirementQuestions = [ q1 ] };
+
+        var detailsPage = new QualificationDetailsPage
+                          {
+                              RequirementsText = new Document(),
+                              Labels = new DetailsPageLabels
+                                       {
+                                           BackButton = backButton
+                                       }
+                          };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns(((int?)null, (int?)null));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns(((int?)null, (int?)null));
+
+        var userAnswers = new Dictionary<string, string> { { "Q1", "yes" } };
+        _mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers()).Returns(userAnswers);
+
+        _mockQualificationDetailsMapper
+            .Setup(x => x.Map(It.IsAny<Qualification>(), It.IsAny<QualificationDetailsPage>(), It.IsAny<NavigationLink?>(),
+                              It.IsAny<List<AdditionalRequirementAnswerModel>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<Qualification>>() ))
+            .ReturnsAsync(new QualificationDetailsModel());
+
+        var sut = GetSut();
+
+        var result = await sut.MapDetails(qualification, detailsPage, It.IsAny<List<Qualification>>());
+
+        result.Should().NotBeNull();
+
+        _mockQualificationDetailsMapper.Verify(x => x.Map(
+            qualification,
+            detailsPage,
+            backButton,
+            It.Is<List<AdditionalRequirementAnswerModel>>(list => list != null && list.Count == 1 && list[0].Question == "Q1" && list[0].Answer == "yes"),
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<List<Qualification>>() ), Times.Once);
+    }
+
+    [TestMethod]
     public async Task CheckRatioRequirements_Calls_Cookies_WasStartedBeforeSeptember2014()
     {
         const bool wasStartedBeforeSeptember2014 = true;
