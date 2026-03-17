@@ -156,6 +156,7 @@ module "webapp" {
   agw_pip_id                                            = module.network.agw_pip_id
   kv_id                                                 = module.network.kv_id
   kv_service_gov_uk_cert_secret_id                      = module.network.kv_service_gov_uk_cert_secret_id
+  kv_service_gov_uk_cert_versionless_secret_id          = module.network.kv_service_gov_uk_cert_versionless_secret_id
   kv_mi_id                                              = module.network.kv_mi_id
   redis_cache_id                                        = module.cache.redis_cache_id
   redis_cache_name                                      = module.cache.redis_cache_name

@@ -110,12 +110,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Run .Net Project
-        shell: bash
-        run: |
-          dotnet run --urls "http://localhost:5000" --project="src/Dfe.EarlyYearsQualification.Web" \
-          --UseMockContentful=true \
-          --ServiceAccess:IsPublic="true" &
+      - name: Run .NET App
+        uses: ./.github/actions/run-app-for-testing
+        with:
+          url: "http://localhost:5000"
+          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+          use_mock_contentful: "true"
 
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.15.0

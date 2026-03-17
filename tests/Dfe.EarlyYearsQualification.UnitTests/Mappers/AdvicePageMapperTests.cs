@@ -2,6 +2,7 @@ using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
@@ -66,7 +67,9 @@ public class AdvicePageMapperTests
     }
 
     [TestMethod]
-    public async Task Map_PassInCannotFindQualificationPage_ReturnsModel()
+    [DataRow(true, UserTypes.Practitioner)]
+    [DataRow(false, UserTypes.Manager)]
+    public async Task Map_PassInCannotFindQualificationPage_ReturnsModel(bool isPractitionerPage, string  expectedUserType)
     {
         const string body = "This is the body";
         const string improveServiceBody = "This is the improve service body";
@@ -95,7 +98,8 @@ public class AdvicePageMapperTests
                                                                      {
                                                                          Header = "Right hand side content header",
                                                                          Body = ContentfulContentHelper.Paragraph(rightHandSideContentBody)
-                                                                     }
+                                                                     },
+                                              IsPractitionerSpecificPage = isPractitionerPage
                                           };
 
         var mockContentParser = new Mock<IGovUkContentParser>();
@@ -120,5 +124,6 @@ public class AdvicePageMapperTests
         result.RightHandSideContent.Body.Should().Be(rightHandSideContentBody);
         result.RightHandSideContent.Header.Should()
               .BeSameAs(cannotFindQualificationPage.RightHandSideContent.Header);
+        result.UserType.Should().Be(expectedUserType);
     }
 }

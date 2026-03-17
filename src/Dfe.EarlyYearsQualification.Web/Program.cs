@@ -52,21 +52,20 @@ namespace Dfe.EarlyYearsQualification.Web
 
             builder.Services.AddSingleton<IEnvironmentService, EnvironmentService>();
 
-            var applicationInsightsServiceOptions = new ApplicationInsightsServiceOptions
-            {
-                EnableAdaptiveSampling = false
-            };
-
             builder.Services.AddTransient<CachingHandler>();
             builder.Services.AddSingleton<IUrlToKeyConverter, ContentfulUrlToPathAndQueryCacheKeyConverter>();
-
-            builder.Services.AddApplicationInsightsTelemetry(applicationInsightsServiceOptions);
+            
             builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
             bool useMockContentful = builder.Configuration.GetValue<bool>("UseMockContentful");
 
             bool runValidationTests =
                 builder.Configuration.GetValue<bool>("RunValidationTests") && builder.Environment.IsDevelopment();
+
+            if (!builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
+            }
 
             bool upgradeInsecureRequests = (builder.Configuration.GetValue<bool?>("UpgradeInsecureRequests") ?? true) || !builder.Environment.IsDevelopment();
 

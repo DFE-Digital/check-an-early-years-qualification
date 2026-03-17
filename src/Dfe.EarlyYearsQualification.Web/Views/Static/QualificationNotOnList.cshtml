@@ -17,6 +17,7 @@
 
 @Html.HiddenFor(x => x.Level, new { id="hdnLevelValue" })
 @Html.HiddenFor(x => x.StartedDate, new { id="hdnStartDateValue" })
+@Html.HiddenFor(x => x.UserType, new { id="hdnUserTypeValue" })
 
 @{
     await Html.RenderPartialAsync("Partials/BaseStaticPage", Model);
