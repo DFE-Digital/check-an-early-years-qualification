@@ -254,7 +254,7 @@ export async function whereWasTheQualificationAwarded(page: Page, location: stri
     await clickSubmit(page);
 }
 
-export async function ChooseStartDateOptionBasedOnDate(page: Page, startedMonth: string, startedYear: string) {
+export async function chooseStartDateOptionBasedOnDate(page: Page, startedMonth: string, startedYear: string) {
     const monthIndex = parseInt(startedMonth, 10) - 1;
     const year = parseInt(startedYear, 10);
     const inputDate = new Date(year, monthIndex);

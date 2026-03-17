@@ -5,7 +5,7 @@ import {
     checkText,
     checkUrl,
     whereWasTheQualificationAwarded,
-    ChooseStartDateOptionBasedOnDate,
+    chooseStartDateOptionBasedOnDate,
     whenWasQualificationAwarded,
     whatLevelIsTheQualification,
     selectNotOnTheListAsTheAwardingOrganisation,
@@ -280,7 +280,7 @@ test.describe('A spec used to validate variants for qualification results and â€
         test(`Check ${scenario.isCheckingOwnQualification ? "practitioner " : "manager"} scenario ${scenario.scenarioId}`, async ({ page }) => {
             await checkingOwnQualificationOrSomeoneElsesPage(page, scenario.isCheckingOwnQualification ? "#yes" : "#no");
             await whereWasTheQualificationAwarded(page, "#england");
-            await ChooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
+            await chooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
             await whenWasQualificationAwarded(page, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
             await selectNotOnTheListAsTheAwardingOrganisation(page);
@@ -330,7 +330,7 @@ test.describe('A spec used to validate the static level 7 versions of the â€œCan
         test(`Static level 7 versions for scenario ${scenario.scenarioId}`, async ({ page }) => {
             await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");
-            await ChooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
+            await chooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
             await whenWasQualificationAwarded(page, scenario.monthAwarded, scenario.yearAwarded);
             await whatLevelIsTheQualification(page, scenario.selectedLevel);
             await checkUrl(page, scenario.expectedUrl);
