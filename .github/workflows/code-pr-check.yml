@@ -99,6 +99,7 @@ jobs:
           use_mock_contentful: "false"
           run_validation_tests: "true"
           contentful_delivery_api_key: ${{ secrets.CONTENTFUL_DELIVERY_API_KEY }}
+          contentful_preview_api_key: ${{ secrets.CONTENTFUL_PREVIEW_API_KEY }}
           contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
 
   security-checks-local:

@@ -98,6 +98,10 @@ function buildCommand() {
         command += `--ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" `;
     }
 
+    if (process.env.CONTENTFUL_PREVIEW_API_KEY !== undefined) {
+        command += `--ContentfulOptions:PreviewApiKey="${process.env.CONTENTFUL_PREVIEW_API_KEY}" `;
+    }
+
     if (process.env.CONTENTFUL_SPACE_ID !== undefined) {
         command += `--ContentfulOptions:SpaceId="${process.env.CONTENTFUL_SPACE_ID}" `;
     }
