@@ -11,7 +11,7 @@ public class HelpProvideDetailsPageMapper : IHelpProvideDetailsPageMapper
     public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(
         HelpProvideDetailsPage content, string reasonForEnquiring)
     {
-        var backButton = reasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification
+        var backButton = reasonForEnquiring == HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                              ? content.BackButtonToQualificationDetailsPage
                              : content.BackButtonToGetHelpPage;
 

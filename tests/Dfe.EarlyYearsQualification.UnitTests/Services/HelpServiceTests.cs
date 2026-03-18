@@ -2,7 +2,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
-using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
@@ -17,53 +17,50 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class HelpServiceTests
 {
-    private Mock<ILogger<HelpService>> _mockLogger = new Mock<ILogger<HelpService>>();
-    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
-    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-    private Mock<INotificationService> _mockNotificationService = new Mock<INotificationService>();
-    private Mock<IDateQuestionModelValidator> _mockDateQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
-    private Mock<IHelpGetHelpPageMapper> _mockHelpGetHelpPageMapper = new Mock<IHelpGetHelpPageMapper>();
-
-    private Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper =
-        new Mock<IHelpQualificationDetailsPageMapper>();
-
-    private Mock<IHelpProvideDetailsPageMapper> _mockHelpProvideDetailsPageMapper =
-        new Mock<IHelpProvideDetailsPageMapper>();
-
-    private Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new Mock<IHelpEmailAddressPageMapper>();
-    private Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new Mock<IHelpConfirmationPageMapper>();
+    private Mock<IContentService> _mockContentService = new();
+    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
+    private Mock<INotificationService> _mockNotificationService = new();
+    private Mock<IDateQuestionModelValidator> _mockDateQuestionModelValidator = new();
+    private Mock<IRadioQuestionHelpPageMapper> _mockHelpRadioQuestionHelpPageMapper = new();
+    private Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper = new();
+    private Mock<IHelpProvideDetailsPageMapper> _mockHelpProvideDetailsPageMapper = new();
+    private Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new();
+    private Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new();
+    private Mock<IStaticPageMapper> _mockStaticPageMapper = new();
 
     [TestMethod]
-    public async Task GetGetHelpPageAsync_Calls_ContentService_GetGetHelpPage()
+    public async Task GetRadioQuestionHelpPageAsync_Calls_ContentService_GetRadioQuestionHelpPage()
     {
         // Arrange
         var sut = GetSut();
 
         // Act
-        _ = await sut.GetGetHelpPageAsync();
+        _ = await sut.GetRadioQuestionHelpPageAsync(It.IsAny<string>());
 
         // Assert
-        _mockContentService.Verify(o => o.GetGetHelpPage(), Times.Once);
+        _mockContentService.Verify(o => o.GetRadioQuestionHelpPage(It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]
     public async Task
-        MapGetHelpPageContentToViewModelAsync_Calls_HelpGetHelpPageMapper_MapGetHelpPageContentToViewModelAsync()
+        MapRadioQuestionHelpPageContentToViewModelAsync_Calls_HelpGetHelpPageMapper_MapRadioQuestionHelpPageContentToViewModelAsync()
     {
         // Arrange
-        var content = new GetHelpPage();
+        var content = new RadioQuestionHelpPage();
 
         // Act
-        await GetSut().MapGetHelpPageContentToViewModelAsync(content);
+        await GetSut().MapRadioQuestionHelpPageContentToViewModelAsync(content);
 
         // Assert
-        _mockHelpGetHelpPageMapper.Verify(o => o.MapGetHelpPageContentToViewModelAsync(content), Times.Once);
+        _mockHelpRadioQuestionHelpPageMapper.Verify(o => o.MapRadioQuestionHelpPageContentToViewModelAsync(content), Times.Once);
     }
 
     [TestMethod]
-    [DataRow(HelpFormEnquiryReasons.QuestionAboutAQualification,
-                nameof(HelpFormEnquiryReasons.QuestionAboutAQualification))]
-    [DataRow(HelpFormEnquiryReasons.IssueWithTheService, nameof(HelpFormEnquiryReasons.IssueWithTheService))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript, nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs, nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol, nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification, nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification))]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IssueWithTheService, nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService))]
     [DataRow(null, "")]
     public void GetSelectedOption_Returns_PreviouslySelectedRadioOption(string input, string expected)
     {
@@ -76,7 +73,7 @@ public class HelpServiceTests
             );
 
         // Act
-        var result = GetSut().GetSelectedOption();
+        var result = GetSut().GetWhyAreYouContactingUsSelectedOption();
 
         // Assert
         result.Should().NotBeNull();
@@ -87,7 +84,7 @@ public class HelpServiceTests
     public void GetSelectedOption_EnquiryIsNull_Returns_EmptyString()
     {
         // Act
-        var result = GetSut().GetSelectedOption();
+        var result = GetSut().GetWhyAreYouContactingUsSelectedOption();
 
         // Assert
         result.Should().NotBeNull();
@@ -95,103 +92,127 @@ public class HelpServiceTests
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.IssueWithTheService), true)]
-    [DataRow(nameof(HelpFormEnquiryReasons.QuestionAboutAQualification), true)]
+    [DataRow(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService, nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService))]
+    [DataRow(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam, nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam))]
+    [DataRow(null, "")]
+    public void GetWhatDoYouWantToDoNextSelectedOption_Returns_PreviouslySelectedRadioOption(string input, string expected)
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(
+             new HelpFormEnquiry
+             {
+                 WhatDoYouWantToDoNext = input
+             }
+        );
+
+        // Act
+        var result = GetSut().GetWhatDoYouWantToDoNextSelectedOption();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().Be(expected);
+    }
+
+    [TestMethod]
+    public void GetWhatDoYouWantToDoNextSelectedOption_EnquiryIsNull_Returns_EmptyString()
+    {
+        // Act
+        var result = GetSut().GetWhatDoYouWantToDoNextSelectedOption();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().Be(string.Empty);
+    }
+
+    [TestMethod]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), true)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), true)]
     [DataRow("random value", false)]
     public void SelectedOptionIsValid_Returns_Expected(string input, bool expected)
     {
         // Arrange
-        var content = new GetHelpPage
+        var content = new RadioQuestionHelpPage
                       {
-                          EnquiryReasons = new List<EnquiryOption>
+                          Options = new List<Option>
                                            {
-                                               new EnquiryOption
+                                               new Option
                                                {
-                                                   Value = nameof(HelpFormEnquiryReasons.QuestionAboutAQualification),
-                                                   Label = HelpFormEnquiryReasons.QuestionAboutAQualification
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
                                                },
-                                               new EnquiryOption
+                                               new Option
                                                {
-                                                   Value = nameof(HelpFormEnquiryReasons.IssueWithTheService),
-                                                   Label = HelpFormEnquiryReasons.IssueWithTheService
+                                                   Value = nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService),
+                                                   Label = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
                                                }
                                            }
                       };
 
-        var viewModel = new GetHelpPageViewModel
+        var viewModel = new RadioQuestionHelpPageViewModel
                         {
                             SelectedOption = input
                         };
 
         // Act
-        var result = GetSut().SelectedOptionIsValid(content, viewModel);
+        var result = GetSut().SelectedOptionIsValid(content.Options, viewModel.SelectedOption);
 
         // Assert
         result.Should().Be(expected);
     }
 
     [TestMethod]
-    [DataRow(nameof(HelpFormEnquiryReasons.QuestionAboutAQualification), nameof(HelpController.QualificationDetails))]
-    [DataRow(nameof(HelpFormEnquiryReasons.IssueWithTheService), nameof(HelpController.ProvideDetails))]
-    public void SetHelpFormEnquiryReason_Returns_Expected(string input, string controllerActionToRedirectTo)
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript), HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs), HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol), HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification), HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)]
+    [DataRow(nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService), HelpFormEnquiryReasons.GetHelp.IssueWithTheService)]
+    [DataRow("invalid option", "")]
+    public void SetHelpFormEnquiryReason_Returns_Expected(string input, string expected)
     {
         // Arrange
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
-        var viewModel = new GetHelpPageViewModel
+        var viewModel = new RadioQuestionHelpPageViewModel
                         {
                             SelectedOption = input
                         };
 
         // Act
-        var result = GetSut().SetHelpFormEnquiryReason(viewModel);
+        GetSut().SetHelpFormEnquiryReason(viewModel.SelectedOption);
+
+        var result = GetSut().GetHelpFormEnquiry();
 
         // Assert
         result.Should().NotBeNull();
-        result.ActionName.Should().Be(controllerActionToRedirectTo);
+        result.ReasonForEnquiring.Should().Be(expected);
 
         _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
     }
 
     [TestMethod]
-    public void SetHelpFormEnquiryReason_InvalidEnquiryReason_Returns_Expected()
+    public async Task GetStaticPage_Calls_ContentService_GetStaticPage()
     {
         // Arrange
-        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
-
-        var viewModel = new GetHelpPageViewModel
-                        {
-                            SelectedOption = "invalid value"
-                        };
+        var sut = GetSut();
 
         // Act
-        var result = GetSut().SetHelpFormEnquiryReason(viewModel);
+        _ = await sut.GetStaticPage(It.IsAny<string>());
 
         // Assert
-        result.Should().NotBeNull();
-        result.ActionName.Should().Be("Index");
-        result.ControllerName.Should().Be("Error");
-
-        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Never);
+        _mockContentService.Verify(o => o.GetStaticPage(It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]
-    public void SetHelpFormEnquiryReason_Null_GetHelpFormEnquiry_InitialisesNew_Returns_Expected()
+    public async Task MapStaticPage_Calls_StaticPageMapper_Map()
     {
         // Arrange
-        var result = GetSut().SetHelpFormEnquiryReason(
-                                                       new GetHelpPageViewModel
-                                                       {
-                                                           SelectedOption = nameof(HelpFormEnquiryReasons
-                                                               .IssueWithTheService)
-                                                       }
-                                                      );
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.MapStaticPage(It.IsAny<StaticPage>());
 
         // Assert
-        result.Should().NotBeNull();
-        result.ActionName.Should().Be(nameof(HelpController.ProvideDetails));
-
-        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.IsAny<HelpFormEnquiry>()), Times.Once);
+        _mockStaticPageMapper.Verify(o => o.Map(It.IsAny<StaticPage>()), Times.Once);
     }
 
     [TestMethod]
@@ -215,7 +236,7 @@ public class HelpServiceTests
 
         var enquiry = new HelpFormEnquiry
                       {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                           AwardingOrganisation = "Test Awarding Organisation",
                           QualificationName = "Test Qualification Name",
                       };
@@ -250,7 +271,7 @@ public class HelpServiceTests
 
         var enquiry = new HelpFormEnquiry
                       {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                           AwardingOrganisation = "Test Awarding Organisation",
                           QualificationName = "Test Qualification Name",
                           QualificationStartDate = "5/2004",
@@ -280,7 +301,7 @@ public class HelpServiceTests
 
     [TestMethod]
     public void
-        MapHelpQualificationDetailsPageContentToViewModel_Calls_HelpQualificationDetailsPageMapper_MapGetHelpPageContentToViewModelAsync()
+        MapHelpQualificationDetailsPageContentToViewModel_Calls_HelpQualificationDetailsPageMapper_MapRadioQuestionHelpPageContentToViewModelAsync()
     {
         // Arrange
         var content = new HelpQualificationDetailsPage();
@@ -305,7 +326,7 @@ public class HelpServiceTests
         // Arrange
         var enquiry = new HelpFormEnquiry
                       {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                       };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -398,12 +419,12 @@ public class HelpServiceTests
 
         // Act
         GetSut()
-            .MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.IssueWithTheService);
+            .MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.GetHelp.IssueWithTheService);
 
         // Assert
         _mockHelpProvideDetailsPageMapper.Verify(o =>
                                                      o.MapProvideDetailsPageContentToViewModel(content,
-                                                      HelpFormEnquiryReasons.IssueWithTheService), Times.Once);
+                                                      HelpFormEnquiryReasons.GetHelp.IssueWithTheService), Times.Once);
     }
 
     [TestMethod]
@@ -499,16 +520,16 @@ public class HelpServiceTests
     private HelpService GetSut()
     {
         return new HelpService(
-                               _mockLogger.Object,
                                _mockContentService.Object,
                                _mockUserJourneyCookieService.Object,
                                _mockNotificationService.Object,
                                _mockDateQuestionModelValidator.Object,
-                               _mockHelpGetHelpPageMapper.Object,
+                               _mockHelpRadioQuestionHelpPageMapper.Object,
                                _mockHelpQualificationDetailsPageMapper.Object,
                                _mockHelpProvideDetailsPageMapper.Object,
                                _mockHelpEmailAddressPageMapper.Object,
-                               _mockHelpConfirmationPageMapper.Object
+                               _mockHelpConfirmationPageMapper.Object,
+                               _mockStaticPageMapper.Object
                               );
     }
 }

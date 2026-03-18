@@ -1,6 +1,7 @@
+using Dfe.EarlyYearsQualification.Content.Constants;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
-using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [Route("/help")]
 public class HelpController(
     ILogger<HelpController> logger,
-    IHelpService helpService
+    Services.Help.IHelpService helpService
     )
     : ServiceController
 {
@@ -17,7 +18,7 @@ public class HelpController(
     [HttpGet("get-help")]
     public async Task<IActionResult> GetHelp() 
     {
-        var content = await helpService.GetGetHelpPageAsync();
+        var content = await helpService.GetRadioQuestionHelpPageAsync(RadioQuestionHelpPages.GetHelp);
 
         if (content is null)
         {
@@ -25,16 +26,18 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = await helpService.MapGetHelpPageContentToViewModelAsync(content);
-        viewModel.SelectedOption = helpService.GetSelectedOption();
+        var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
+        viewModel.SelectedOption = helpService.GetWhyAreYouContactingUsSelectedOption();
+        viewModel.ActionName = nameof(GetHelp);
+        viewModel.FormId = "get-help-enquiry-form";
 
-        return View("GetHelp", viewModel);
+        return View("RadioQuestion", viewModel);
     } 
 
     [HttpPost("get-help")]
-    public async Task<IActionResult> GetHelp([FromForm] GetHelpPageViewModel model)
+    public async Task<IActionResult> GetHelp([FromForm] RadioQuestionHelpPageViewModel model)
     {
-        var content = await helpService.GetGetHelpPageAsync();
+        var content = await helpService.GetRadioQuestionHelpPageAsync(RadioQuestionHelpPages.GetHelp);
 
         if (content is null)
         {
@@ -42,17 +45,119 @@ public class HelpController(
             return RedirectToAction("Index", "Error");
         }
 
-        var submittedValueIsValid = helpService.SelectedOptionIsValid(content, model);
+        var submittedValueIsValid = helpService.SelectedOptionIsValid(content.Options, model.SelectedOption);
 
         if (!ModelState.IsValid || !submittedValueIsValid)
         {
-            var viewModel = await helpService.MapGetHelpPageContentToViewModelAsync(content);
+            var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
             viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
+            viewModel.ActionName = nameof(GetHelp);
+            viewModel.FormId = "get-help-enquiry-form";
 
-            return View("GetHelp", viewModel);
+            return View("RadioQuestion", viewModel);
         }
-        
-        return helpService.SetHelpFormEnquiryReason(model);
+
+        helpService.SetHelpFormEnquiryReason(model.SelectedOption);
+
+        switch (model.SelectedOption)
+        {
+            case nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript):
+                return RedirectToAction(nameof(INeedACopyOfTheQualificationCertificateOrTranscript));
+            case nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs):
+                return RedirectToAction(nameof(IDoNotKnowWhatLevelTheQualificationIs));
+            case nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol):
+                return RedirectToAction(nameof(IWantToCheckWhetherACourseIsApprovedBeforeIEnrol));
+            case nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification):
+                return RedirectToAction(nameof(ProceedWithQualificationQuery));
+            case nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService):
+                return RedirectToAction(nameof(ProvideDetails));
+            default:
+                logger.LogError("Unexpected enquiry option");
+                return RedirectToAction("Index", "Error");
+        }
+    }
+
+    [HttpGet("I-need-a-copy-of-the-qualification-certificate-or-transcript")]
+    public async Task<IActionResult> INeedACopyOfTheQualificationCertificateOrTranscript()
+    {
+        return await GetView(StaticPages.HowToGetACopyOfTheCertificateOrTranscript);
+    }
+
+    [HttpGet("I-do-not-know-what-level-the-qualification-is")]
+    public async Task<IActionResult> IDoNotKnowWhatLevelTheQualificationIs()
+    {
+        return await GetView(StaticPages.HowToFindTheLevelOfAQualification);
+    }
+
+    [HttpGet("I-want-to-check-whether-a-course-is-approved-before-I-enrol")]
+    public async Task<IActionResult> IWantToCheckWhetherACourseIsApprovedBeforeIEnrol()
+    {
+        return await GetView(StaticPages.HowToFindASuitableCourse);
+    }
+
+    [HttpGet("proceed-with-qualification-query")]
+    public async Task<IActionResult> ProceedWithQualificationQuery()
+    {
+        var content = await helpService.GetRadioQuestionHelpPageAsync(RadioQuestionHelpPages.ProceedWithQualificationQuery);
+
+        if (content is null)
+        {
+            logger.LogError("'Proceed with qualification query page' content could not be found");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var enquiry = helpService.GetHelpFormEnquiry();
+
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
+        {
+            logger.LogError("Help form enquiry reason is empty");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
+        var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
+        viewModel.SelectedOption = helpService.GetWhatDoYouWantToDoNextSelectedOption();
+        viewModel.ActionName = nameof(ProceedWithQualificationQuery);
+        viewModel.FormId = "proceed-with-qualification-enquiry-form";
+
+        return View("RadioQuestion", viewModel);
+    }
+
+    [HttpPost("proceed-with-qualification-query")]
+    public async Task<IActionResult> ProceedWithQualificationQuery([FromForm] RadioQuestionHelpPageViewModel model)
+    {
+        var content = await helpService.GetRadioQuestionHelpPageAsync(RadioQuestionHelpPages.ProceedWithQualificationQuery);
+
+        if (content is null)
+        {
+            logger.LogError("'Proceed with qualification query page' content could not be found");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var submittedValueIsValid = helpService.SelectedOptionIsValid(content.Options, model.SelectedOption);
+
+        if (!ModelState.IsValid || !submittedValueIsValid)
+        {
+            var viewModel = await helpService.MapRadioQuestionHelpPageContentToViewModelAsync(content);
+            viewModel.HasNoEnquiryOptionSelectedError = ModelState.Keys.Any(_ => ModelState["SelectedOption"]?.Errors.Count > 0) || !submittedValueIsValid;
+            viewModel.ActionName = nameof(ProceedWithQualificationQuery);
+            viewModel.FormId = "proceed-with-qualification-enquiry-form";
+
+            return View("RadioQuestion", viewModel);
+        }
+
+        switch (model.SelectedOption)
+        {
+            case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService):
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            case nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam):
+                var enquiry = helpService.GetHelpFormEnquiry();
+                enquiry.WhatDoYouWantToDoNext = HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam;
+                helpService.SetHelpFormEnquiry(enquiry);
+                return RedirectToAction(nameof(QualificationDetails));
+            default:
+                logger.LogError("Unexpected enquiry option");
+                return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet("qualification-details")]
@@ -273,5 +378,19 @@ public class HelpController(
         var viewModel = await helpService.MapConfirmationPageContentToViewModelAsync(content);
 
         return View("Confirmation", viewModel);
+    }
+
+    private async Task<IActionResult> GetView(string staticPageId)
+    {
+        var staticPage = await helpService.GetStaticPage(staticPageId);
+        if (staticPage is null)
+        {
+            logger.LogError("No content for the static page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var model = await helpService.MapStaticPage(staticPage);
+
+        return View("../Static/Static", model);
     }
 }

@@ -840,9 +840,13 @@ public class QualificationDetailsControllerTests
                    .Should().BeInAscendingOrder(x => x.Level);
 
         orderedRows.ElementAt(0).ApprovalStatus.Should().Be(QualificationApprovalStatus.Approved);
+        orderedRows.ElementAt(0).RatioId.Should().Be("Unqualified");
         orderedRows.ElementAt(1).ApprovalStatus.Should().Be(QualificationApprovalStatus.FurtherActionRequired);
+        orderedRows.ElementAt(1).RatioId.Should().Be("Level2");
         orderedRows.ElementAt(2).ApprovalStatus.Should().Be(QualificationApprovalStatus.PossibleRouteAvailable);
+        orderedRows.ElementAt(2).RatioId.Should().Be("Level3");
         orderedRows.ElementAt(3).ApprovalStatus.Should().Be(QualificationApprovalStatus.NotApproved);
+        orderedRows.ElementAt(3).RatioId.Should().Be("Level6");
     }
 
     [TestMethod]

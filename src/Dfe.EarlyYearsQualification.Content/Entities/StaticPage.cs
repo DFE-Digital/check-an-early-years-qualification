@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 
 namespace Dfe.EarlyYearsQualification.Content.Entities;
 
-public class AdvicePage
+public class StaticPage
 {
     public string Heading { get; init; } = string.Empty;
 
@@ -11,5 +11,6 @@ public class AdvicePage
     public NavigationLink? BackButton { get; init; }
 
     public FeedbackComponent? RightHandSideContent { get; init; }
+
     public UpDownFeedback? UpDownFeedback { get; init; }
 }

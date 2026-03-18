@@ -26,7 +26,7 @@ public class HelpPageNotification
         message.AppendLine();
         message.AppendLine();
 
-        if (enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification)
+        if (enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)
         {
             message.AppendLine($"Qualification name: {enquiry.QualificationName}");
             message.AppendLine();
