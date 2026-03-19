@@ -64,6 +64,10 @@ public class MockContentfulService : IContentService
                        await Task.FromResult(CreateStaticPage("Qualification not on the list",
                                                               body, QualificationsPath, true)),
 
+                   StaticPages.NursingQualifications =>
+                       await Task.FromResult(CreateStaticPage("Nursing Qualifications",
+                                                              body, QualificationsPath, true)),
+
                    StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateStaticPage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",

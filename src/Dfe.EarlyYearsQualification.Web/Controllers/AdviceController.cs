@@ -57,6 +57,12 @@ public class AdviceController(
     {
         return await GetView(StaticPages.QualificationsAchievedInWales);
     }
+    
+    [HttpGet("nursing-qualifications")]
+    public async Task<IActionResult> NursingQualification()
+    {
+        return await GetView(StaticPages.NursingQualifications);
+    }
 
     [HttpGet("qualification-not-on-the-list")]
     [RedirectIfDateMissing]

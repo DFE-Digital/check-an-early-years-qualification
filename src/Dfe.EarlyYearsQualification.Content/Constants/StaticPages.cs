@@ -28,6 +28,11 @@ public static class StaticPages
     public const string QualificationsAchievedInWales = "uxUyDkly0jjtuq0ogOFsh";
 
     /// <summary>
+    ///     Entry ID for the "Nursing Qualifications" advice page.
+    /// </summary>
+    public const string NursingQualifications = "6jRsjWqlrcs5aiHtDz3ZKe";
+
+    /// <summary>
     ///     Entry ID for the "Qualification not on the list" advice page.
     /// </summary>
     public const string QualificationNotOnTheList = "3URC9PYoQAgauptAFEHuLo";
