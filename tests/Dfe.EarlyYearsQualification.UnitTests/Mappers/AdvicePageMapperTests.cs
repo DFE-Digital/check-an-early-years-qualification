@@ -16,7 +16,7 @@ public class AdvicePageMapperTests
         const string body = "This is the body";
         const string improveServiceBody = "This is the improve service body";
         const string rightHandSideContentBody = "This is the right hand side body content";
-        var advicePage = new AdvicePage
+        var advicePage = new StaticPage
                          {
                              Heading = "This is the heading",
                              Body = ContentfulContentHelper.Paragraph(body),
@@ -47,7 +47,7 @@ public class AdvicePageMapperTests
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.Body))).ReturnsAsync(body);
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.UpDownFeedback.FeedbackComponent.Body))).ReturnsAsync(improveServiceBody);
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.RightHandSideContent.Body))).ReturnsAsync(rightHandSideContentBody);
-        var mapper = new AdvicePageMapper(mockContentParser.Object);
+        var mapper = new StaticPageMapper(mockContentParser.Object);
         var result = await mapper.Map(advicePage);
 
         result.Should().NotBeNull();
@@ -106,7 +106,7 @@ public class AdvicePageMapperTests
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.Body))).ReturnsAsync(body);
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.UpDownFeedback.FeedbackComponent.Body))).ReturnsAsync(improveServiceBody);
         mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == cannotFindQualificationPage.RightHandSideContent.Body))).ReturnsAsync(rightHandSideContentBody);
-        var mapper = new AdvicePageMapper(mockContentParser.Object);
+        var mapper = new StaticPageMapper(mockContentParser.Object);
         var result = await mapper.Map(cannotFindQualificationPage);
 
         result.Should().NotBeNull();

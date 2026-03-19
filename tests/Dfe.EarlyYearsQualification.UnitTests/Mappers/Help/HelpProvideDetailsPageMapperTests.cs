@@ -11,8 +11,8 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mappers.Help;
 public class HelpProvideDetailsPageMapperTests
 {
     [TestMethod]
-    [DataRow(HelpFormEnquiryReasons.QuestionAboutAQualification)]
-    [DataRow(HelpFormEnquiryReasons.IssueWithTheService)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IssueWithTheService)]
     public void MapProvideDetailsPageContentToViewModel_MapsToViewModel(string reasonForEnquiring)
     {
         var content = new HelpProvideDetailsPage
@@ -50,7 +50,7 @@ public class HelpProvideDetailsPageMapperTests
         result.PostHeadingContent.Should().Be(content.PostHeadingContent);
         result.CtaButtonText.Should().Be("Continue");
 
-        if (reasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification)
+        if (reasonForEnquiring == HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)
         {
             result.BackButton.Should().BeEquivalentTo(
                                                       new NavigationLinkModel
@@ -62,7 +62,7 @@ public class HelpProvideDetailsPageMapperTests
                                                      );
         }
 
-        if (reasonForEnquiring == HelpFormEnquiryReasons.IssueWithTheService)
+        if (reasonForEnquiring == HelpFormEnquiryReasons.GetHelp.IssueWithTheService)
         {
             result.BackButton.Should().BeEquivalentTo(
                                                       new NavigationLinkModel

@@ -212,32 +212,32 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_Null_LogsAndReturnsDefault()
+    public async Task GetStaticPage_Null_LogsAndReturnsDefault()
     {
         ClientMock.Setup(client =>
                              client.GetEntriesByType(
                                                      It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<AdvicePage>>(),
+                                                     It.IsAny<QueryBuilder<StaticPage>>(),
                                                      It.IsAny<CancellationToken>()))
-                  .ReturnsAsync((ContentfulCollection<AdvicePage>)null!);
+                  .ReturnsAsync((ContentfulCollection<StaticPage>)null!);
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetAdvicePage("SomeId");
+        var result = await service.GetStaticPage("SomeId");
 
-        Logger.VerifyWarning("Advice page with SomeId could not be found");
+        Logger.VerifyWarning("Static page with SomeId could not be found");
 
         result.Should().BeNull();
     }
 
     [TestMethod]
-    public async Task GetAdvicePage_ReturnsContent_RendersHtmlAndReturns()
+    public async Task GetStaticPage_ReturnsContent_RendersHtmlAndReturns()
     {
-        var content = new ContentfulCollection<AdvicePage>
+        var content = new ContentfulCollection<StaticPage>
                       {
                           Items =
                           [
-                              new AdvicePage
+                              new StaticPage
                               {
                                   Heading = "Test Heading",
                                   Body = _testRichText
@@ -248,13 +248,13 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         ClientMock.Setup(client =>
                              client.GetEntriesByType(
                                                      It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<AdvicePage>>(),
+                                                     It.IsAny<QueryBuilder<StaticPage>>(),
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetAdvicePage("SomeId");
+        var result = await service.GetStaticPage("SomeId");
 
         result!.Heading.Should().Be("Test Heading");
         result.Body.Should().Be(_testRichText);
@@ -1211,17 +1211,17 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     [TestMethod]
     public async Task GetHelpPage_ReturnsData()
     {
-        var content = new GetHelpPage { Heading = "test heading" };
+        var content = new RadioQuestionHelpPage { Heading = "test heading" };
 
         ClientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<GetHelpPage>>(),
+                                                It.IsAny<QueryBuilder<RadioQuestionHelpPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<GetHelpPage> { Items = [content] });
+                  .ReturnsAsync(new ContentfulCollection<RadioQuestionHelpPage> { Items = [content] });
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetGetHelpPage();
+        var result = await service.GetRadioQuestionHelpPage(It.IsAny<string>());
 
         result.Should().Be(content);
     }
@@ -1231,13 +1231,13 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     {
         ClientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<GetHelpPage>>(),
+                                                It.IsAny<QueryBuilder<RadioQuestionHelpPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<GetHelpPage> { Items = [] });
+                  .ReturnsAsync(new ContentfulCollection<RadioQuestionHelpPage> { Items = [] });
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetGetHelpPage();
+        var result = await service.GetRadioQuestionHelpPage(It.IsAny<string>());
 
         result.Should().BeNull();
     }

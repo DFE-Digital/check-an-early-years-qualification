@@ -30,7 +30,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
     test("should redirect user to the help confirmation page when the issue with the service form is completed", async ({page}) => {
         await page.goto("/help/get-help");
         await page.click("input#IssueWithTheService");
-        await page.click("button#reason-for-enquiring-form-submit");
+        await page.click("button#form-submit");
 
         await inputText(page, "#ProvideAdditionalInformation", "This is the message");
         await page.click("#question-submit");
@@ -43,11 +43,13 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await isVisible(page, "#help-confirmation-body");
     });
 
-
     test("should redirect user to the help confirmation page when the question about a qualification help form is completed", async ({ page }) => {
         await page.goto("/help/get-help");
         await page.click("input#QuestionAboutAQualification");
-        await page.click("button#reason-for-enquiring-form-submit");
+        await page.click("button#form-submit");
+
+        await page.click("input#ContactTheEarlyYearsQualificationTeam");
+        await page.click("button#form-submit");
 
         await inputText(page, "#QualificationName", "QualificationName");
         await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", "1");
@@ -66,6 +68,30 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await checkUrl(page, "/help/confirmation");
         await isVisible(page, ".govuk-panel__title");
         await isVisible(page, "#help-confirmation-body");
+    });
+
+    test("should redirect user to the static help INeedACopyOfTheQualificationCertificateOrTranscript page", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("input#INeedACopyOfTheQualificationCertificateOrTranscript");
+        await page.click("button#form-submit");
+        await checkUrl(page, "/help/I-need-a-copy-of-the-qualification-certificate-or-transcript");
+        await isVisible(page, "#static-page-heading");
+    });
+
+    test("should redirect user to the static help IDoNotKnowWhatLevelTheQualificationIs page", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("input#IDoNotKnowWhatLevelTheQualificationIs");
+        await page.click("button#form-submit");
+        await checkUrl(page, "/help/I-do-not-know-what-level-the-qualification-is");
+        await isVisible(page, "#static-page-heading");
+    });
+
+    test("should redirect user to the static help IWantToCheckWhetherACourseIsApprovedBeforeIEnrol page", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("input#IWantToCheckWhetherACourseIsApprovedBeforeIEnrol");
+        await page.click("button#form-submit");
+        await checkUrl(page, "/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol");
+        await isVisible(page, "#static-page-heading");
     });
 
     test("should redirect the user when they select qualification was awarded outside the UK", async ({page}) => {
@@ -117,7 +143,7 @@ test.describe('A spec used to test the various routes through the journey', {tag
 
         // qualification not on the list page
         await checkUrl(page, "/advice/qualification-not-on-the-list");
-        await checkText(page, "#advice-page-heading", "This is the level 3 page");
+        await checkText(page, "#static-page-heading", "This is the level 3 page");
 
         // check back button goes back to the qualifications list page
         await clickBackButton(page);

@@ -1,9 +1,9 @@
 @using Dfe.EarlyYearsQualification.Web.Models.Content
-@model Dfe.EarlyYearsQualification.Web.Models.Content.AdvicePageModel
+@model Dfe.EarlyYearsQualification.Web.Models.Content.StaticPageModel
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-        <h1 class="govuk-heading-xl" id="advice-page-heading">@Model.Heading</h1>
+        <h1 class="govuk-heading-xl" id="static-page-heading">@Model.Heading</h1>
     </div>
 </div>
 <div class="govuk-grid-row">
@@ -13,7 +13,7 @@
             await Html.RenderPartialAsync("Partials/FeedbackComponentContainer", new FeedbackComponentContainerModel { FeedbackComponent = Model.RightHandSideContent, IsMobile = true });
         }
 
-        <div class="govuk-body govuk-!-margin-bottom-7" id="advice-page-body">@Html.Raw(Model.BodyContent)</div>
+        <div class="govuk-body govuk-!-margin-bottom-7" id="static-page-body">@Html.Raw(Model.BodyContent)</div>
     </div>
     @if (Model.RightHandSideContent != null)
     {
