@@ -1,6 +1,8 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Helpers
+@using Dfe.EarlyYearsQualification.Web.Services.Environments
 @inject TrackingConfiguration TrackingConfiguration
 @inject OpenGraphDataHelper OpenGraphDataHelper
+@inject IEnvironmentService EnvironmentService
 
 <!DOCTYPE html>
 <html class="govuk-template--rebranded" lang="en">
@@ -39,6 +41,11 @@
     <meta property="og:image" content="@imageUrl">
     <meta property="og:image:width" content="1200"/>
     <meta property="og:image:height" content="630"/>
+
+    @if (EnvironmentService.IsProduction())
+    {
+        <meta name="google-site-verification" content="ISSlOacEt19QY6vCxIjUqR1clAbU0X1rDfJ8JkJ9xqA" />
+    }
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">

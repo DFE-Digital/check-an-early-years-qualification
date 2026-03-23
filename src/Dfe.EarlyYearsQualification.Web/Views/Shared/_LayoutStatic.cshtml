@@ -1,5 +1,7 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Helpers
+@using Dfe.EarlyYearsQualification.Web.Services.Environments
 @inject TrackingConfiguration TrackingConfiguration
+@inject IEnvironmentService EnvironmentService
 
 <!DOCTYPE html>
 <html class="govuk-template--rebranded" lang="en">
@@ -13,6 +15,11 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="robots" content="noindex, nofollow"/>
+
+    @if (EnvironmentService.IsProduction())
+    {
+        <meta name="google-site-verification" content="ISSlOacEt19QY6vCxIjUqR1clAbU0X1rDfJ8JkJ9xqA" />
+    }
 
     <title>@ViewData["Title"] - Check an Early Years qualification</title>
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon_new.ico"/>
