@@ -167,6 +167,12 @@ variable "clarity_tag" {
   type        = string
 }
 
+variable "google_search_console_tag" {
+  default     = ""
+  description = "The Google Search Console tag"
+  type        = string
+}
+
 variable "govuk_notify_api_key" {
   description = "GovUK Notify API Key"
   type        = string
