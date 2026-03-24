@@ -41,10 +41,11 @@ public partial class QuestionsController
             return RedirectToAction("Index", "Error");
         }
 
+        var boundDateInput = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().FirstOrDefault();
+
         model = await questionService.Map(model, radioQuestionContent, nameof(WhenWasTheQualificationStarted), Questions, model.Option);
 
         var firstOption = model.OptionsItems.OfType<OptionModel>().First();
-
         var radioAndDateInputContent = radioQuestionContent.Options.Last() as RadioButtonAndDateInput;
         var radioAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().FirstOrDefault();
 
@@ -76,6 +77,9 @@ public partial class QuestionsController
 
             return RedirectToAction(nameof(WhenWasTheQualificationAwarded));
         }
+
+        radioAndDateInputModel.Question.SelectedMonth = boundDateInput?.Question?.SelectedMonth;
+        radioAndDateInputModel.Question.SelectedYear = boundDateInput?.Question?.SelectedYear;
 
         // Validate date input
         var dateModelValidationResult = questionService.StartDateIsValid(radioAndDateInputModel.Question, radioAndDateInputContent.StartedQuestion);
