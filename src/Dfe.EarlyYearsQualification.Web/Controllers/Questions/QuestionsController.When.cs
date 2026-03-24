@@ -1,5 +1,6 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Web.ModelBinding;
 using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
@@ -30,7 +31,7 @@ public partial class QuestionsController
     }
 
     [HttpPost("when-was-the-qualification-started")]
-    public async Task<IActionResult> WhenWasTheQualificationStarted([FromForm] RadioQuestionModel model)
+    public async Task<IActionResult> WhenWasTheQualificationStarted([ModelBinder(typeof(RadioQuestionModelBinder))] RadioQuestionModel model)
     {
         var radioQuestionContent = await questionService.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted);
 
@@ -39,20 +40,20 @@ public partial class QuestionsController
             logger.LogError("No content for the question page");
             return RedirectToAction("Index", "Error");
         }
-        
+
         model = await questionService.Map(model, radioQuestionContent, nameof(WhenWasTheQualificationStarted), Questions, model.Option);
 
         var firstOption = model.OptionsItems.OfType<OptionModel>().First();
 
         var radioAndDateInputContent = radioQuestionContent.Options.Last() as RadioButtonAndDateInput;
-        var radioAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().First();
+        var radioAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().FirstOrDefault();
 
-        if (radioAndDateInputModel.Question is null || radioAndDateInputContent is null)
+        if (radioAndDateInputModel?.Question is null || radioAndDateInputContent is null)
         {
             logger.LogError("RadioAndDateInputModel StartedQuestion is null");
             return RedirectToAction("Index", "Error");
         }
-        
+
         // Check validation required attribute e.g. an option has been selected
         if (!ModelState.IsValid)
         {
@@ -75,10 +76,6 @@ public partial class QuestionsController
 
             return RedirectToAction(nameof(WhenWasTheQualificationAwarded));
         }
-
-        // Get values from the nested date input
-        radioAndDateInputModel.Question.SelectedMonth = ParseValueFromForm("Month");
-        radioAndDateInputModel.Question.SelectedYear = ParseValueFromForm("Year");
 
         // Validate date input
         var dateModelValidationResult = questionService.StartDateIsValid(radioAndDateInputModel.Question, radioAndDateInputContent.StartedQuestion);
@@ -157,17 +154,5 @@ public partial class QuestionsController
         questionService.SetWhenWasQualificationAwarded(model.AwardedQuestion!);
 
         return RedirectToAction(nameof(WhatLevelIsTheQualification));
-    }
-    
-    private int? ParseValueFromForm(string key)
-    {
-        var submittedValue = Request.Form[key].FirstOrDefault();
-        
-        if (int.TryParse(submittedValue, out var parsedValue))
-        {
-            return parsedValue;
-        }
-
-        return null;
     }
 }

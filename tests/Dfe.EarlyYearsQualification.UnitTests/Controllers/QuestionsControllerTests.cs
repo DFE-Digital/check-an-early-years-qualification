@@ -233,12 +233,6 @@ public class QuestionsControllerTests
                             .Returns(new DateQuestionModel { SelectedMonth = null, SelectedYear = null });
 
         var controller = GetSut();
-        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
-        controller.ControllerContext.HttpContext.Request.Form = new FormCollection(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
-                                                                                 {
-                                                                                     ["Month"] = "notanumber",
-                                                                                     ["Year"] = "notanumber"
-                                                                                 });
 
         // Act
         var result = await controller.WhenWasTheQualificationStarted(model);
@@ -269,7 +263,7 @@ public class QuestionsControllerTests
                                                  }
                                    };
 
-        var radioAndDateModel = new RadioButtonAndDateInputModel { Value = "OnOrAfter1September2014", Question = new DateQuestionModel() };
+        var radioAndDateModel = new RadioButtonAndDateInputModel { Value = "OnOrAfter1September2014", Question = new DateQuestionModel { SelectedMonth = 9, SelectedYear = 2014 } };
 
         var model = new RadioQuestionModel
                     {
@@ -291,12 +285,6 @@ public class QuestionsControllerTests
                             .Returns(new DateValidationResult { MonthValid = true, YearValid = true });
 
         var controller = GetSut();
-        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
-        controller.ControllerContext.HttpContext.Request.Form = new FormCollection(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
-                                                                                 {
-                                                                                     ["Month"] = "9",
-                                                                                     ["Year"] = "2014"
-                                                                                 });
 
         // Act
         var result = await controller.WhenWasTheQualificationStarted(model);
