@@ -72,6 +72,7 @@ No modules.
 | <a name="output_kv_id"></a> [kv\_id](#output\_kv\_id) | ID of the Key Vault |
 | <a name="output_kv_mi_id"></a> [kv\_mi\_id](#output\_kv\_mi\_id) | ID of the Managed Identity for the Key Vault |
 | <a name="output_kv_service_gov_uk_cert_secret_id"></a> [kv\_service\_gov\_uk\_cert\_secret\_id](#output\_kv\_service\_gov\_uk\_cert\_secret\_id) | service.gov.uk SSL certificate Secret ID |
+| <a name="output_kv_service_gov_uk_cert_versionless_secret_id"></a> [kv\_service\_gov\_uk\_cert\_versionless\_secret\_id](#output\_kv\_service\_gov\_uk\_cert\_versionless\_secret\_id) | SSL certificate Secret ID |
 | <a name="output_vnet_id"></a> [vnet\_id](#output\_vnet\_id) | ID of the Virtual Network |
 | <a name="output_vnet_name"></a> [vnet\_name](#output\_vnet\_name) | Name of the Virtual Network |
 | <a name="output_webapp_subnet_id"></a> [webapp\_subnet\_id](#output\_webapp\_subnet\_id) | ID of the delegated Subnet for the Web Application |
