@@ -3,6 +3,8 @@ using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Primitives;
+using System.Globalization;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.ModelBinding;
 
@@ -217,7 +219,7 @@ public class RadioQuestionModelBinderTests
         var binder = new RadioQuestionModelBinder();
         var valueProvider = new Mock<IValueProvider>();
         valueProvider.Setup(x => x.GetValue("Option"))
-                     .Returns(new ValueProviderResult(new Microsoft.Extensions.Primitives.StringValues((string?)null)));
+                     .Returns(new ValueProviderResult(new StringValues((string?)null)));
         valueProvider.Setup(x => x.GetValue("Month")).Returns(ValueProviderResult.None);
         valueProvider.Setup(x => x.GetValue("Year")).Returns(ValueProviderResult.None);
 
@@ -243,14 +245,14 @@ public class RadioQuestionModelBinderTests
         var formCollection = new FormCollection(
             formValues.ToDictionary(
                 kvp => kvp.Key,
-                kvp => new Microsoft.Extensions.Primitives.StringValues(kvp.Value)
+                kvp => new StringValues(kvp.Value)
             )
         );
 
         var valueProvider = new FormValueProvider(
             BindingSource.Form,
             formCollection,
-            System.Globalization.CultureInfo.InvariantCulture
+            CultureInfo.InvariantCulture
         );
 
         return new DefaultModelBindingContext
