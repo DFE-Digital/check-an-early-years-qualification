@@ -22,6 +22,7 @@ env:
     DOCKER_IMAGE: early-years-qualification
     GITHUB_CONTAINER_REGISTRY: ghcr.io
     ORG_NAME: dfe-digital
+    CHECKED_OUT_SHA: ${{ inputs.checked-out-sha }}
 
 jobs:
 
@@ -59,9 +60,9 @@ jobs:
                 file: ./src/Dfe.EarlyYearsQualification.Web/Dockerfile
                 build-args: COMMIT_SHA=${{ inputs.checked-out-sha }}
                 tags: |
-                    ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${{ inputs.checked-out-sha }}
+                    ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${CHECKED_OUT_SHA}
                 push: true
 
             - name: Output Docker Image Tag
               id: image
-              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${{ inputs.checked-out-sha }}" >> $GITHUB_OUTPUT
+              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${CHECKED_OUT_SHA}" >> $GITHUB_OUTPUT
