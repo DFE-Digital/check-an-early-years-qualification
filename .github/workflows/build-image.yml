@@ -64,4 +64,6 @@ jobs:
 
             - name: Output Docker Image Tag
               id: image
-              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${{ inputs.checked-out-sha }}" >> $GITHUB_OUTPUT
+              env:
+                CHECKED_OUT_SHA: ${{ inputs.checked-out-sha }}
+              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${CHECKED_OUT_SHA}" >> $GITHUB_OUTPUT
