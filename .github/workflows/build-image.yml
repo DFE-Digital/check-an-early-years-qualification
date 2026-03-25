@@ -40,7 +40,7 @@ jobs:
                 ref: ${{ github.ref }}
 
             - name: GitHub Container Registry Login
-              uses: docker/login-action@v4
+              uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
               with:
                 registry: ${{ env.GITHUB_CONTAINER_REGISTRY }}
                 username: ${{ github.repository_owner }}
@@ -65,4 +65,4 @@ jobs:
 
             - name: Output Docker Image Tag
               id: image
-              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${{ env.CHECKED_OUT_SHA }}" >> $GITHUB_OUTPUT
+              run: echo "dockerImageTag=${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${env.CHECKED_OUT_SHA}" >> $GITHUB_OUTPUT
