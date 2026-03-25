@@ -54,7 +54,7 @@ jobs:
                 echo FORMATTED_BRANCH_NAME="${branchName//\//-}" >> $GITHUB_ENV
 
             - name: Build Image & Publish To GCR
-              uses: docker/build-push-action@v7
+              uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
               with:
                 context: ./
                 file: ./src/Dfe.EarlyYearsQualification.Web/Dockerfile
