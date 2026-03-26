@@ -28,12 +28,12 @@
                 <div id="additional-information-hint" class="govuk-hint">
                     @Model.PostHeadingContent
                 </div>
+                @{
+                    await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AdditionalInformationWarningText, ReduceMargin = true });
+                }
                 @if (Model.HasAdditionalInformationError)
                 {
                     <govuk-error-message id="additional-information-error" visually-hidden-text="Error">@Model.AdditionalInformationErrorMessage</govuk-error-message>
-                }
-                @{
-                    await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AdditionalInformationWarningText, ReduceMargin = true });
                 }
                 @Html.TextAreaFor(x => x.ProvideAdditionalInformation, 5, 1, new { @class = "govuk-textarea", aria_describedby = "additional-information-hint" })
             </div>
