@@ -1,6 +1,6 @@
-using System.Text;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing.Helpers;
+using System.Text;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 
@@ -22,13 +22,19 @@ public abstract class BaseListRenderer
 
         foreach (var contentValue in list.Content)
         {
-            if (contentValue is not ListItem listItem)
+            if (contentValue is ListItem listItem)
             {
-                continue;
-            }
+                var listItemParagraph = listItem.Content[0] as Paragraph;
+                sb.Append($"<li>{await NestedContentHelper.Render(listItemParagraph!.Content)}");
 
-            var listItemParagraph = listItem.Content[0] as Paragraph;
-            sb.Append($"<li>{await NestedContentHelper.Render(listItemParagraph!.Content)}</li>");
+                if (listItem.Content.Count > 1)
+                {
+                    // Skip the paragraph content as it has already been rendered and render the rest of the content which will be the nested list
+                    sb.Append($"{await NestedContentHelper.Render([.. listItem!.Content.Skip(1)])}");
+                }
+
+                sb.Append($"</li>");
+            }
         }
 
         sb.Append($"</{rendererType}>");

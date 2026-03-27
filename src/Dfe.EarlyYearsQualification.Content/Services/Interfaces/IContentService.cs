@@ -9,7 +9,7 @@ public interface IContentService
 
     Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage);
 
-    Task<AdvicePage?> GetAdvicePage(string entryId);
+    Task<StaticPage?> GetStaticPage(string entryId);
 
     Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId);
 
@@ -49,7 +49,7 @@ public interface IContentService
     
     Task<FeedbackFormConfirmationPage?> GetFeedbackFormConfirmationPage();
 
-    Task<GetHelpPage?> GetGetHelpPage();
+    Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPage(string entryId);
 
     Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage();
 

@@ -95,18 +95,18 @@ public class ContentfulContentService(
         return cookiesContent;
     }
 
-    public async Task<AdvicePage?> GetAdvicePage(string entryId)
+    public async Task<StaticPage?> GetStaticPage(string entryId)
     {
-        var advicePage = await GetEntryById<AdvicePage>(entryId);
+        var staticPage = await GetEntryById<StaticPage>(entryId);
 
         // ReSharper disable once InvertIf
-        if (advicePage is null)
+        if (staticPage is null)
         {
-            Logger.LogWarning("Advice page with {EntryID} could not be found", entryId);
+            Logger.LogWarning("Static page with {EntryID} could not be found", entryId);
             return null;
         }
 
-        return advicePage;
+        return staticPage;
     }
 
     public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
@@ -341,18 +341,9 @@ public class ContentfulContentService(
         return feedbackFormConfirmationPage.First();
     }
 
-    public async Task<GetHelpPage?> GetGetHelpPage()
+    public async Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPage(string entryId)
     {
-        var getHelpPage = await GetEntriesByType<GetHelpPage>();
-
-        // ReSharper disable once InvertIf
-        if (getHelpPage is null || !getHelpPage.Any())
-        {
-            Logger.LogWarning("No 'help page' returned");
-            return null;
-        }
-
-        return getHelpPage.First();
+        return await GetEntryById<RadioQuestionHelpPage>(entryId);
     }
 
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()
