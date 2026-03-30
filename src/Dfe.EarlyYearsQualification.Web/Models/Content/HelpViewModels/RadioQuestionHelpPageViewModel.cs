@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using Dfe.EarlyYearsQualification.Web.Attributes;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
-public class GetHelpPageViewModel
+public class RadioQuestionHelpPageViewModel
 {
     // Contentful fields
     public NavigationLinkModel BackButton { get; init; } = new NavigationLinkModel();
@@ -16,11 +17,13 @@ public class GetHelpPageViewModel
 
     public string CtaButtonText { get; init; } = string.Empty;
 
-    public List<EnquiryOptionModel> EnquiryReasons { get; init; } = new List<EnquiryOptionModel>();
+    public List<OptionModel> Options { get; init; } = new List<OptionModel>();
 
     public string NoEnquiryOptionSelectedErrorMessage { get; init; } = string.Empty;
 
     public string ErrorBannerHeading { get; init; } = string.Empty;
+
+    public string PostRadioButtonContent { get; init; } = string.Empty;
 
     // values to bind
     [Required]
@@ -44,7 +47,7 @@ public class GetHelpPageViewModel
                     new ErrorSummaryLink
                     {
                         ErrorBannerLinkText = NoEnquiryOptionSelectedErrorMessage,
-                        ElementLinkId = EnquiryReasons[0].Value
+                        ElementLinkId = Options[0].Value
                     }
                 );
             }
@@ -58,4 +61,8 @@ public class GetHelpPageViewModel
         ErrorBannerHeading = ErrorBannerHeading,
         ErrorSummaryLinks = Errors
     };
+
+    public string ActionName { get; set; } = string.Empty;
+
+    public string FormId { get; set; } = string.Empty;
 }

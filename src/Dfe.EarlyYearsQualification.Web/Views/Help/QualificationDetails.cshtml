@@ -19,14 +19,14 @@
                 await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel);
             }
 
-            <h1 class="govuk-heading-xl" id="help-page-heading">@Model.Heading</h1>
+            <h1 class="govuk-heading-xl" id="enquiry-heading">@Model.Heading</h1>
             <div class="govuk-body govuk-!-margin-bottom-7" id="post-heading-content">
                 @Html.Raw(Model.PostHeadingContent)
             </div>
 
             <div class="govuk-form-group govuk-!-margin-bottom-6  @(Model.HasQualificationNameError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="qualification-name-heading">
-                    <label class="govuk-label govuk-label--m" for="QualificationName">
+                    <label class="govuk-label govuk-label--s" for="QualificationName">
                         @Model.QualificationNameHeading
                     </label>
                 </h2>
@@ -54,7 +54,7 @@
 
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasAwardingOrganisationError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="awarding-organisation-heading">
-                    <label class="govuk-label govuk-label--m" for="AwardingOrganisation">
+                    <label class="govuk-label govuk-label--s" for="AwardingOrganisation">
                         @Model.AwardingOrganisationHeading
                     </label>
                 </h2>

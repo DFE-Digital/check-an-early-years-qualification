@@ -139,7 +139,7 @@ resource "azurerm_application_gateway" "agw" {
 
   ssl_certificate {
     name                = local.ssl_certificate_name
-    key_vault_secret_id = var.kv_service_gov_uk_cert_secret_id
+    key_vault_secret_id = var.kv_service_gov_uk_cert_versionless_secret_id
   }
 
   ssl_policy {

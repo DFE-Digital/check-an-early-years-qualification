@@ -9,8 +9,8 @@ public static class ServiceCollectionExtensions
 {
     public static void AddMappers(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IAdvicePageMapper, AdvicePageMapper>();
-        serviceCollection.AddScoped<IHelpGetHelpPageMapper, HelpGetHelpPageMapper>();
+        serviceCollection.AddScoped<IStaticPageMapper, StaticPageMapper>();
+        serviceCollection.AddScoped<IRadioQuestionHelpPageMapper, RadioQuestionHelpPageMapper>();
         serviceCollection.AddScoped<IHelpQualificationDetailsPageMapper, HelpQualificationDetailsPageMapper>();
         serviceCollection.AddScoped<IHelpProvideDetailsPageMapper, HelpProvideDetailsPageMapper>();
         serviceCollection.AddScoped<IHelpEmailAddressPageMapper, HelpEmailAddressPageMapper>();

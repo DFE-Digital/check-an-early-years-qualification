@@ -4,6 +4,8 @@
     {
         public string ReasonForEnquiring { get; set; } = string.Empty;
 
+        public string WhatDoYouWantToDoNext { get; set; } = string.Empty;
+
         public string QualificationName { get; set; } = string.Empty;
 
         public string QualificationStartDate { get; set; } = string.Empty;

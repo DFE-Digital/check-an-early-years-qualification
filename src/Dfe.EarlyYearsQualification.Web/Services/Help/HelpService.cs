@@ -1,90 +1,116 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities.Help;
+﻿using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
-using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.Help;
 
 public class HelpService(
-    ILogger<HelpService> logger,
     IContentService contentService,
     IUserJourneyCookieService userJourneyCookieService,
     INotificationService notificationService,
     IDateQuestionModelValidator questionModelValidator,
-    IHelpGetHelpPageMapper getHelpPageMapper,
+    IRadioQuestionHelpPageMapper RadioQuestionHelpPageMapper,
     IHelpQualificationDetailsPageMapper helpQualificationDetailsPageMapper,
     IHelpProvideDetailsPageMapper helpProvideDetailsPageMapper,
     IHelpEmailAddressPageMapper helpEmailAddressPageMapper,
-    IHelpConfirmationPageMapper helpConfirmationPageMapper
+    IHelpConfirmationPageMapper helpConfirmationPageMapper,
+    IStaticPageMapper staticPageMapper
 ) : ServiceController, IHelpService
 {
-    public async Task<GetHelpPage?> GetGetHelpPageAsync()
-    {
-        return await contentService.GetGetHelpPage();
-    }
 
-    public async Task<GetHelpPageViewModel> MapGetHelpPageContentToViewModelAsync(GetHelpPage content)
-    {
-        return await getHelpPageMapper.MapGetHelpPageContentToViewModelAsync(content);
-    }
-
-    public string GetSelectedOption()
+    public string GetWhyAreYouContactingUsSelectedOption()
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
 
         if (enquiry is not null)
         {
-            return
-                enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.QuestionAboutAQualification
-                    ?
-                    nameof(HelpFormEnquiryReasons.QuestionAboutAQualification)
-                    :
-                    enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.IssueWithTheService
-                        ? nameof(HelpFormEnquiryReasons.IssueWithTheService)
-                        : "";
+            switch (enquiry.ReasonForEnquiring)
+            {
+                case HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript);
+                case HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs);
+                case HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol);
+                case HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification);
+                case HelpFormEnquiryReasons.GetHelp.IssueWithTheService:
+                    return nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService);
+                default:
+                    return string.Empty;
+            }
         }
 
         return "";
     }
 
-    public bool SelectedOptionIsValid(GetHelpPage content, GetHelpPageViewModel model)
+    public string GetWhatDoYouWantToDoNextSelectedOption()
     {
-        return content.EnquiryReasons.Select(x => x.Value).Contains(model.SelectedOption);
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        if (enquiry is not null)
+        {
+            switch (enquiry.WhatDoYouWantToDoNext)
+            {
+                case HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService:
+                return nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.CheckTheQualificationUsingTheService);
+                case HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam:
+                return nameof(HelpFormEnquiryReasons.ProceedWithQualificationQuery.ContactTheEarlyYearsQualificationTeam);
+                default:
+                return string.Empty;
+            }
+        }
+
+        return "";
     }
 
-    public RedirectToActionResult SetHelpFormEnquiryReason(GetHelpPageViewModel model)
+    public bool SelectedOptionIsValid(List<Option> options, string value)
+    {
+        return options.Select(x => x.Value).Contains(value);
+    }
+
+    public void SetHelpFormEnquiryReason(string selectedOption)
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry() ?? new();
 
-        switch (model.SelectedOption)
+        enquiry.ReasonForEnquiring = selectedOption switch
         {
-            case nameof(HelpFormEnquiryReasons.QuestionAboutAQualification):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification;
-                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
-                return RedirectToAction(nameof(HelpController.QualificationDetails));
-            case nameof(HelpFormEnquiryReasons.IssueWithTheService):
-                enquiry.ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService;
-                userJourneyCookieService.SetHelpFormEnquiry(enquiry);
-                return RedirectToAction(nameof(HelpController.ProvideDetails));
-            default:
-                logger.LogError("Unexpected enquiry option");
-                return RedirectToAction("Index", "Error");
-        }
+            nameof(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript) => HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript,
+            nameof(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs) => HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs,
+            nameof(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol) => HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol,
+            nameof(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification) => HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
+            nameof(HelpFormEnquiryReasons.GetHelp.IssueWithTheService) => HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
+            _ => string.Empty,
+        };
+
+        userJourneyCookieService.SetHelpFormEnquiry(enquiry);
     }
 
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPageAsync()
     {
         return await contentService.GetHelpQualificationDetailsPage();
+    }
+
+    public async Task<RadioQuestionHelpPage?> GetRadioQuestionHelpPageAsync(string entryId)
+    {
+        return await contentService.GetRadioQuestionHelpPage(entryId);
+    }
+
+    public async Task<RadioQuestionHelpPageViewModel> MapRadioQuestionHelpPageContentToViewModelAsync(RadioQuestionHelpPage content)
+    {
+        return await RadioQuestionHelpPageMapper.MapRadioQuestionHelpPageContentToViewModelAsync(content);
     }
 
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel)
@@ -209,5 +235,15 @@ public class HelpService(
     public void SetHelpFormEnquiry(HelpFormEnquiry formEnquiry)
     {
         userJourneyCookieService.SetHelpFormEnquiry(formEnquiry);
+    }
+
+    public async Task<StaticPage?> GetStaticPage(string entryId)
+    {
+        return await contentService.GetStaticPage(entryId);
+    }
+
+    public async Task<StaticPageModel?> MapStaticPage(StaticPage page)
+    {
+        return await staticPageMapper.Map(page);
     }
 }
