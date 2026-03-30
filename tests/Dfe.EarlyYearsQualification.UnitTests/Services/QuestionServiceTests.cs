@@ -7,9 +7,10 @@ using Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
-using Dfe.EarlyYearsQualification.Web.Services.Help;
+using Dfe.EarlyYearsQualification.Web.Services.Questions;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
@@ -396,10 +397,6 @@ public class QuestionServiceTests
         DatesQuestionModel model = new();
         DatesQuestionPage question = new()
                                      {
-                                         StartedQuestion = new DateQuestion
-                                                           {
-                                                               ErrorMessage = "Started Error Message"
-                                                           },
                                          AwardedQuestion = new DateQuestion
                                                            {
                                                                ErrorMessage = "Awarded Error Message"
@@ -418,14 +415,10 @@ public class QuestionServiceTests
         // Assert
         result.Should().NotBeNull();
 
-        result.StartedQuestion.Should().NotBeNull();
-        result.StartedQuestion.SelectedMonth.Should().Be(3);
-        result.StartedQuestion.SelectedYear.Should().Be(2002);
         result.AwardedQuestion.Should().NotBeNull();
         result.AwardedQuestion.SelectedMonth.Should().Be(5);
         result.AwardedQuestion.SelectedYear.Should().Be(2005);
 
-        _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationStarted(), Times.Once);
         _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationAwarded(), Times.Once);
     }
 
@@ -436,10 +429,6 @@ public class QuestionServiceTests
         DatesQuestionModel model = new();
         DatesQuestionPage question = new()
                                      {
-                                         StartedQuestion = new DateQuestion
-                                                           {
-                                                               ErrorMessage = "Started Error Message"
-                                                           },
                                          AwardedQuestion = new DateQuestion
                                                            {
                                                                ErrorMessage = "Awarded Error Message"
@@ -478,14 +467,10 @@ public class QuestionServiceTests
         // Assert
         result.Should().NotBeNull();
 
-        result.StartedQuestion.Should().NotBeNull();
-        result.StartedQuestion.SelectedMonth.Should().Be(3);
-        result.StartedQuestion.SelectedYear.Should().Be(2002);
         result.AwardedQuestion.Should().NotBeNull();
         result.AwardedQuestion.SelectedMonth.Should().Be(5);
         result.AwardedQuestion.SelectedYear.Should().Be(2005);
 
-        _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationStarted(), Times.Once);
         _mockUserJourneyCookieService.Verify(x => x.GetWhenWasQualificationAwarded(), Times.Once);
     }
 
@@ -542,6 +527,128 @@ public class QuestionServiceTests
 
         // Assert
         _mockUserJourneyCookieService.Verify(x => x.SetWhenWasQualificationAwarded(It.IsAny<string>()), Times.Once);
+    }
+
+    [TestMethod]
+    public void SetPreviouslyEnteredDetails_NoStartDate_DoesNotChangeModel()
+    {
+        // Arrange
+        var radioQuestionContent = new RadioQuestionPage
+                                   {
+                                       Options = new List<IOptionItem>
+                                                 {
+                                                     new Option { Label = "Before 1 September 2014", Value = "Before1September2014" },
+                                                     new RadioButtonAndDateInput { Label = "On or after 1 September 2014", Value = "OnOrAfter1September2014", StartedQuestion = new DateQuestion() }
+                                                 }
+                                   };
+
+        var radioAndDateModel = new RadioButtonAndDateInputModel { Value = "OnOrAfter1September2014", Question = new DateQuestionModel() };
+
+        var model = new RadioQuestionModel
+                    {
+                        Option = string.Empty,
+                        OptionsItems = new List<IOptionItemModel>
+                                       {
+                                           new OptionModel { Value = "Before1September2014" },
+                                           radioAndDateModel
+                                       }
+                    };
+
+        _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(( (int?)null, (int?)null ));
+
+        var sut = GetSut();
+
+        // Act
+        sut.SetPreviouslyEnteredDetails(model, radioQuestionContent);
+
+        // Assert
+        model.Option.Should().Be(string.Empty);
+        radioAndDateModel.Question.Should().NotBeNull();
+        radioAndDateModel.Question!.SelectedMonth.Should().BeNull();
+        radioAndDateModel.Question.SelectedYear.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void SetPreviouslyEnteredDetails_StartDateBeforeSept2014_SetsOptionToBefore()
+    {
+        // Arrange
+        var radioQuestionContent = new RadioQuestionPage
+                                   {
+                                       Options = new List<IOptionItem>
+                                                 {
+                                                     new Option { Label = "Before 1 September 2014", Value = "Before1September2014" },
+                                                     new RadioButtonAndDateInput { Label = "On or after 1 September 2014", Value = "OnOrAfter1September2014", StartedQuestion = new DateQuestion() }
+                                                 }
+                                   };
+
+        var radioAndDateModel = new RadioButtonAndDateInputModel { Value = "OnOrAfter1September2014", Question = new DateQuestionModel() };
+
+        var model = new RadioQuestionModel
+                    {
+                        Option = string.Empty,
+                        OptionsItems = new List<IOptionItemModel>
+                                       {
+                                           new OptionModel { Value = "Before1September2014" },
+                                           radioAndDateModel
+                                       }
+                    };
+
+        // Start date: August 2014 => before Sept 2014
+        _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((8, 2014));
+        _mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014()).Returns(true);
+
+        var sut = GetSut();
+
+        // Act
+        sut.SetPreviouslyEnteredDetails(model, radioQuestionContent);
+
+        // Assert
+        model.Option.Should().Be("Before1September2014");
+        // Ensure the nested date was not set in this case
+        radioAndDateModel.Question.Should().NotBeNull();
+        radioAndDateModel.Question!.SelectedMonth.Should().BeNull();
+        radioAndDateModel.Question.SelectedYear.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void SetPreviouslyEnteredDetails_StartDateOnOrAfter_SetsOptionToRadioAndSetsDate()
+    {
+        // Arrange
+        var radioQuestionContent = new RadioQuestionPage
+                                   {
+                                       Options = new List<IOptionItem>
+                                                 {
+                                                     new Option { Label = "Before 1 September 2014", Value = "Before1September2014" },
+                                                     new RadioButtonAndDateInput { Label = "On or after 1 September 2014", Value = "OnOrAfter1September2014", StartedQuestion = new DateQuestion() }
+                                                 }
+                                   };
+
+        var radioAndDateModel = new RadioButtonAndDateInputModel { Value = "OnOrAfter1September2014", Question = new DateQuestionModel() };
+
+        var model = new RadioQuestionModel
+                    {
+                        Option = string.Empty,
+                        OptionsItems = new List<IOptionItemModel>
+                                       {
+                                           new OptionModel { Value = "Before1September2014" },
+                                           radioAndDateModel
+                                       }
+                    };
+
+        // Start date: September 2014 => on or after Sept 2014
+        _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, 2014));
+        _mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014()).Returns(false);
+
+        var sut = GetSut();
+
+        // Act
+        sut.SetPreviouslyEnteredDetails(model, radioQuestionContent);
+
+        // Assert
+        model.Option.Should().Be("OnOrAfter1September2014");
+        radioAndDateModel.Question.Should().NotBeNull();
+        radioAndDateModel.Question!.SelectedMonth.Should().Be(9);
+        radioAndDateModel.Question.SelectedYear.Should().Be(2014);
     }
 
     private QuestionService GetSut()

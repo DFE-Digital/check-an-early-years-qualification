@@ -49,7 +49,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.ErrorMessages.Add(question.YearOutOfBoundsErrorMessage);
             resultToReturn.BannerErrorMessages.Add(new BannerError(question.YearOutOfBoundsErrorLinkText, FieldId.Year));
         }
-
+        
         if (resultToReturn.ErrorMessages.Count != 0)
         {
             return resultToReturn;
@@ -64,7 +64,7 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             resultToReturn.ErrorMessages.Add(question.FutureDateErrorMessage);
             resultToReturn.BannerErrorMessages.Add(new BannerError(question.FutureDateErrorBannerLinkText, FieldId.Month));
         }
-
+        
         return resultToReturn;
     }
 
@@ -76,7 +76,6 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
         {
             if (startedQuestion is null || awardedQuestion is null)
                 throw new NullReferenceException("Started question or awarded question is null");
-            var startedValidationResult = IsValid(startedQuestion, questionPage.StartedQuestion!);
             var awardedValidationResult = IsValid(awardedQuestion, questionPage.AwardedQuestion!);
 
             if (awardedValidationResult.YearValid &&
@@ -90,7 +89,6 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
 
             return new DatesValidationResult
                    {
-                       StartedValidationResult = startedValidationResult,
                        AwardedValidationResult = awardedValidationResult
                    };
         }
@@ -142,6 +140,37 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
             string message = $"Failed to validate dates (startedMonth:'{model.StartedQuestion?.SelectedMonth}'|startedYear:'{model.StartedQuestion?.SelectedYear}'|awardedMonth:'{model.AwardedQuestion?.SelectedMonth}'|awardedYear:'{model.AwardedQuestion?.SelectedYear}')";
             throw new ArgumentException(message, e);
         }
+    }
+
+    public DateValidationResult StartDateIsValid(DateQuestionModel model, DateQuestion question)
+    {
+        var resultToReturn = IsValid(model, question);
+
+        if (resultToReturn.YearValid && model.SelectedYear is not null)
+        {
+            if (model.SelectedYear.Value < 2014)
+            {
+                resultToReturn.YearValid = false;
+                resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
+                resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
+            }
+            else if (resultToReturn.MonthValid && model.SelectedMonth is not null)
+            {
+                var selectedDate = new DateOnly(model.SelectedYear.Value, model.SelectedMonth.Value, 1);
+
+                if (selectedDate < new DateOnly(2014, 9, 1))
+                {
+                    resultToReturn.MonthValid = false;
+                    resultToReturn.YearValid = false;
+                    resultToReturn.ErrorMessages.Add(question.DateAfterSeptember2014ErrorMessage);
+                    resultToReturn.BannerErrorMessages.Add(new BannerError(question.DateAfterSeptember2014ErrorLinkText, FieldId.Year));
+                }
+            }
+
+            return resultToReturn;
+        }
+
+        return resultToReturn;
     }
 
     public bool DisplayAwardedDateBeforeStartDateError(DateQuestionModel startedQuestion,

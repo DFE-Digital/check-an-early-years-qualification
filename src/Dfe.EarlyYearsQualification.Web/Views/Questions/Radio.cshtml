@@ -1,8 +1,14 @@
+@using Dfe.EarlyYearsQualification.Web.Models.Content
 @using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
 @model Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.RadioQuestionModel
 
 @{
     ViewData["Title"] = Model.Question;
+}
+
+@section Scripts
+{
+    <script src="~/js/pages/components/radio-button-with-nested-input.js" asp-append-version="true"></script>
 }
 
 @section BeforeMainContent {
@@ -13,32 +19,19 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @if (Model.HasErrors)
+        @if (Model.ErrorSummaryModel != null)
         {
-            var elementLinkId = Model.OptionsItems.First(x => x.GetType() == typeof(OptionModel)) as OptionModel;
-            await Html.RenderPartialAsync("Partials/ErrorSummary", new ErrorSummaryModel
-                                                                   {
-                                                                       ErrorBannerHeading = Model.ErrorBannerHeading,
-                                                                       ErrorSummaryLinks =
-                                                                       [
-                                                                           new ErrorSummaryLink
-                                                                           {
-                                                                               ErrorBannerLinkText = Model.ErrorBannerLinkText,
-                                                                               ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
-                                                                           }
-                                                                       ]
-                                                                   });
+            await Html.RenderPartialAsync("Partials/ErrorSummary", Model.ErrorSummaryModel!);
         }
         @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "radio-question-form" }))
         {
-            <div class="govuk-form-group @(Model.HasErrors ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group @(Model is { HasErrors: true, HasNestedErrors: false } ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-heading-xl govuk-!-margin-bottom-1" id="question">
                             @Model.Question
                         </h1>
                     </legend>
-
 
                     @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
                     {
@@ -49,7 +42,12 @@
                                                                                         });
                     }
 
-                    @if (Model.HasErrors)
+                    @if (!string.IsNullOrEmpty(Model.PostHeadingContent))
+                    {
+                        @Html.Raw(Model.PostHeadingContent)
+                    }
+
+                    @if (Model is { HasErrors: true, HasNestedErrors: false })
                     {
                         <govuk-error-message id="option-error" visually-hidden-text="Error">@Model.ErrorMessage</govuk-error-message>
                     }
@@ -75,15 +73,46 @@
                                     }
                                 </div>
                             }
-                            else if (option.GetType() == typeof(DividerModel))
+                            if (option.GetType() == typeof(DividerModel))
                             {
                                 var optionModel = option as DividerModel;
                                 <div class="govuk-radios__divider">@optionModel!.Text</div>
+                            }
+                            if (option.GetType() == typeof(RadioButtonAndDateInputModel))
+                            {
+                                var questionData = option as RadioButtonAndDateInputModel;
+
+                                <div class="govuk-radios__item">
+                                    @Html.RadioButtonFor(x => x.Option, questionData!.Value, new { @class = $"govuk-radios__input {(Model.HasNestedErrors ? "has__conditional__element" : "has__no__conditional__element")}", id = questionData.Value, nested="true" })
+
+                                    <label class="govuk-label govuk-radios__label" for="@questionData.Value">
+                                        @questionData.Label
+                                    </label>
+                                    @if (!string.IsNullOrEmpty(questionData.Hint))
+                                    {
+                                        <div id="@($"{questionData.Value}_hint")" class="govuk-hint govuk-radios__hint">
+                                            @questionData.Hint
+                                        </div>
+                                    }
+                                </div>
+                                <div class="govuk-radios__conditional govuk-!-margin-bottom-0 govuk-!-display-none">
+                                    <div class="govuk-form-group">
+                                        @if (questionData.Question is not null)
+                                        {
+                                            await Html.RenderPartialAsync("Partials/Date", questionData.Question);
+                                        }
+                                    </div>
+                                </div>
                             }
                         }
                     </div>
                 </fieldset>
             </div>
+
+            @if (!string.IsNullOrEmpty(Model.WarningText))
+            {
+                await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.WarningText });
+            }
 
             <div class="govuk-form-group">
                 <govuk-button id="question-submit" type="submit">@Model.CtaButtonText</govuk-button>

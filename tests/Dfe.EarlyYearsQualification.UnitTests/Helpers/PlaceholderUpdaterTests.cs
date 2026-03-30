@@ -96,4 +96,33 @@ public class PlaceholderUpdaterTests
         var result = placeholderUpdater.Replace("This should be $[level-for-Sept14-to-Aug19]$");
         result.Should().Be("This should be level 3 or level 6");
     }
+
+    [TestMethod]
+    public void Replace_TextContainsStartDatePlaceholderAndCookieHasDate_ReturnsFormattedStartDate()
+    {
+        var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, 2013));
+
+        var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
+
+        var result = placeholderUpdater.Replace("The qualification started on $[start-date]$");
+
+        result.Should().Be("The qualification started on September 2013");
+    }
+
+    [TestMethod]
+    public void Replace_TextContainsStartDatePlaceholderAndCookieMissingDate_ReturnsOriginalString()
+    {
+        var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((null, null));
+
+        var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
+
+        var original = "The qualification started on $[start-date]$";
+        var result = placeholderUpdater.Replace(original);
+
+        result.Should().Be(original);
+    }
 }

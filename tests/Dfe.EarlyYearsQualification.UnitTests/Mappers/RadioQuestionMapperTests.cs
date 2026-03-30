@@ -17,7 +17,8 @@ public class RadioQuestionMapperTests
         const string actionName = "action";
         const string controllerName = "controller";
         const string additionalInformationBodyHtml = "additional info body";
-        
+        const string PostHeadingContentHtml = "post heading content";
+
         var question = new RadioQuestionPage
                        {
                            Question = "Question",
@@ -37,11 +38,15 @@ public class RadioQuestionMapperTests
                                         },
                            ErrorBannerHeading = "Error banner heading",
                            ErrorBannerLinkText = "Error banner link text",
-                           AdditionalInformationBody = ContentfulContentHelper.Paragraph(additionalInformationBodyHtml)
-                       };
+                           AdditionalInformationBody = ContentfulContentHelper.Paragraph(additionalInformationBodyHtml),
+                           InformationMessage = "Warning text",
+                           PostHeadingContent = ContentfulContentHelper.Paragraph(PostHeadingContentHtml)
+        };
 
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(question.AdditionalInformationBody)).ReturnsAsync(additionalInformationBodyHtml);
+        mockContentParser.Setup(x => x.ToHtml(question.PostHeadingContent)).ReturnsAsync(PostHeadingContentHtml);
+
         var mapper = new RadioQuestionMapper(mockContentParser.Object);
         var result = await mapper.Map(new RadioQuestionModel(), question, actionName, controllerName,
                                              selectedAnswer);
@@ -63,5 +68,7 @@ public class RadioQuestionMapperTests
         result.ErrorBannerHeading.Should().BeSameAs(question.ErrorBannerHeading);
         result.ErrorBannerLinkText.Should().BeSameAs(question.ErrorBannerLinkText);
         result.Option.Should().Be(expected);
+        result.PostHeadingContent.Should().BeSameAs(PostHeadingContentHtml);
+        result.WarningText.Should().BeSameAs(question.InformationMessage);
     }
 }

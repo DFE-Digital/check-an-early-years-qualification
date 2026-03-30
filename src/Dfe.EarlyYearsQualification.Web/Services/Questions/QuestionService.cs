@@ -9,12 +9,14 @@ using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
+using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Dfe.EarlyYearsQualification.Web.Services.Help;
+namespace Dfe.EarlyYearsQualification.Web.Services.Questions;
 
 public class QuestionService(
     ILogger<QuestionsController> logger,
@@ -69,7 +71,7 @@ public class QuestionService(
 
     public async Task<RadioQuestionModel> Map(RadioQuestionModel model, RadioQuestionPage questionPage, string actionName, string controllerName, string? selectedAnswer)
     {
-        return await radioQuestionMapper.Map(model, questionPage, actionName, controllerName, model.Option);
+        return await radioQuestionMapper.Map(model, questionPage, actionName, controllerName, selectedAnswer);
     }
 
     public IActionResult RedirectBasedOnQualificationLevelSelected(string option)
@@ -175,18 +177,19 @@ public class QuestionService(
         return await contentService.GetPreCheckPage();
     }
 
+    public DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question, DateValidationResult validationResult)
+    {
+        return MapDateModel(model, question, validationResult, model.SelectedMonth, model.SelectedYear);
+    }
+
     public DatesQuestionModel MapDatesModel(DatesQuestionModel model, DatesQuestionPage questionPage, string actionName,
                                              string controllerName, DatesValidationResult? validationResult)
     {
-        var (startMonth, startYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        var startedModel = MapDateModel(new DateQuestionModel(), questionPage.StartedQuestion!,
-                                        validationResult?.StartedValidationResult, startMonth, startYear);
-
         var (awardedMonth, awardedYear) = userJourneyCookieService.GetWhenWasQualificationAwarded();
         var awardedModel = MapDateModel(new DateQuestionModel(), questionPage.AwardedQuestion!,
                                         validationResult?.AwardedValidationResult, awardedMonth, awardedYear);
 
-        return DatesQuestionMapper.Map(model, questionPage, actionName, controllerName, startedModel, awardedModel);
+        return DatesQuestionMapper.Map(model, questionPage, actionName, controllerName, awardedModel);
     }
 
     public async Task<DatesQuestionPage?> GetDatesQuestionPage(string entryId)
@@ -199,10 +202,25 @@ public class QuestionService(
         return questionModelValidator.IsValid(model, questionPage!);
     }
 
+    public DateValidationResult StartDateIsValid(DateQuestionModel model, DateQuestion content)
+    {
+        return questionModelValidator.StartDateIsValid(model, content);
+    }
+
     public void SetWhenWasQualificationStarted(DateQuestionModel question)
     {
         userJourneyCookieService.SetWhenWasQualificationStarted(question!.SelectedMonth.ToString() + '/' +
                                                                     question.SelectedYear);
+    }
+
+    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
+    {
+        return userJourneyCookieService.GetWhenWasQualificationStarted();
+    }
+
+    public bool WasStartedBeforeSeptember2014()
+    {
+        return userJourneyCookieService.WasStartedBeforeSeptember2014();
     }
 
     public void SetWhenWasQualificationAwarded(DateQuestionModel question)
@@ -211,6 +229,30 @@ public class QuestionService(
                                                                 question.SelectedYear);
     }
 
+    public void SetPreviouslyEnteredDetails(RadioQuestionModel model, RadioQuestionPage radioQuestionContent)
+    {
+        var (startMonth, startYear) = GetWhenWasQualificationStarted();
+        
+        if (startMonth is not null && startYear is not null)
+        {
+            if (WasStartedBeforeSeptember2014())
+            {
+                model.Option = radioQuestionContent.Options.OfType<Option>().First().Value;
+            }
+            else
+            {
+                model.Option = radioQuestionContent.Options.OfType<RadioButtonAndDateInput>().First().Value;
+
+                var radioButtonAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().First();
+                if (radioButtonAndDateInputModel.Question is not null)
+                {
+                    radioButtonAndDateInputModel.Question.SelectedMonth = startMonth.Value;
+                    radioButtonAndDateInputModel.Question.SelectedYear = startYear.Value;
+                }
+            }
+        }
+    }
+    
     private DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question,
                                             DateValidationResult? validationResult,
                                             int? selectedMonth,

@@ -2,15 +2,7 @@
 
 public class DatesValidationResult
 {
-    public bool Valid
-    {
-        get
-        {
-            return StartedValidationResult is { YearValid: true, MonthValid: true } &&
-                   AwardedValidationResult is { YearValid: true, MonthValid: true };
-        }
-    }
-
     public DateValidationResult? StartedValidationResult { get; set; }
+
     public DateValidationResult? AwardedValidationResult { get; set; }
 }

@@ -25,7 +25,8 @@ public partial class QuestionsController
             {
                 model = await questionService.Map(model, questionPage, nameof(this.WhereWasTheQualificationAwarded),
                                             Questions, model.Option);
-                model.HasErrors = true;
+
+                model.ErrorSummaryModel = CreateErrorSummaryModel(model);
             }
 
             return View("Radio", model);

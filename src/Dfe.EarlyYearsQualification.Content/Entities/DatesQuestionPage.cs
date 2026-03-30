@@ -7,6 +7,5 @@ public class DatesQuestionPage
     public string ErrorBannerHeading { get; init; } = string.Empty;
     public string AwardedDateIsAfterStartedDateErrorText { get; init; } = string.Empty;
     public NavigationLink? BackButton { get; init; }
-    public DateQuestion? StartedQuestion { get; init; }
     public DateQuestion? AwardedQuestion { get; init; }
 }

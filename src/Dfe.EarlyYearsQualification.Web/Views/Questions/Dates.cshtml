@@ -11,17 +11,11 @@
     }
 }
 
-@{
-    var awardingQuestion = Model.AwardedQuestion;
-    var startingQuestion = Model.StartedQuestion;
-}
-
 <div>
     @if (Model is { HasErrors: true, Errors: not null })
     {
         await Html.RenderPartialAsync("Partials/ErrorSummary", Model.Errors);
     }
-
 
     @using (Html.BeginForm(Model.ActionName, Model.ControllerName, FormMethod.Post, new { id = "date-question-form" }))
     {
@@ -32,14 +26,15 @@
                 </h1>
             </legend>
 
-            @if (startingQuestion is not null)
+            @if (Model.AwardedQuestion is not null)
             {
-                await Html.RenderPartialAsync("Partials/Date", startingQuestion);
-            }
-
-            @if (awardingQuestion is not null)
-            {
-                await Html.RenderPartialAsync("Partials/Date", awardingQuestion);
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        @{
+                            await Html.RenderPartialAsync("Partials/Date", Model.AwardedQuestion);
+                        }
+                    </div>
+                </div>
             }
 
             <div class="govuk-form-group">
@@ -48,4 +43,3 @@
         </fieldset>
     }
 </div>
-

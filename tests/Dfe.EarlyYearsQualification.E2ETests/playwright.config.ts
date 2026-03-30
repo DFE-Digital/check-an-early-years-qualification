@@ -90,12 +90,16 @@ function buildCommand() {
         + `--UseMockContentful="${process.env.USE_MOCK_CONTENTFUL ?? true}" `
         + `--RunValidationTests="${process.env.RUN_VALIDATION_TESTS ?? false}" `
         + `--ServiceAccess:Keys:0="${process.env.AUTH_SECRET}" `
-        + `--ContentfulOptions:UsePreviewApi="${process.env.USE_MOCK_CONTENTFUL ?? false}" `
+        + `--ContentfulOptions:UsePreviewApi="${true}" `
         + `--UpgradeInsecureRequests="${process.env.UPGRADE_INSECURE_REQUESTS ?? true}" `
         + `--ENVIRONMENT="Development" `;
 
     if (process.env.CONTENTFUL_DELIVERY_API_KEY !== undefined) {
         command += `--ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" `;
+    }
+
+    if (process.env.CONTENTFUL_PREVIEW_API_KEY !== undefined) {
+        command += `--ContentfulOptions:PreviewApiKey="${process.env.CONTENTFUL_PREVIEW_API_KEY}" `;
     }
 
     if (process.env.CONTENTFUL_SPACE_ID !== undefined) {
