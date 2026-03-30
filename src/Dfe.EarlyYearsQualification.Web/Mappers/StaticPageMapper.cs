@@ -6,30 +6,30 @@ using Dfe.EarlyYearsQualification.Web.Models.Content;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
 
-public class AdvicePageMapper(IGovUkContentParser contentParser) : IAdvicePageMapper
+public class StaticPageMapper(IGovUkContentParser contentParser) : IStaticPageMapper
 {
-    public async Task<AdvicePageModel> Map(AdvicePage advicePage)
+    public async Task<StaticPageModel> Map(StaticPage page)
     {
-        var bodyHtml = await contentParser.ToHtml(advicePage.Body);
-        var improveServiceBodyHtml = advicePage.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(advicePage.UpDownFeedback.FeedbackComponent!.Body)
+        var bodyHtml = await contentParser.ToHtml(page.Body);
+        var improveServiceBodyHtml = page.UpDownFeedback is not null
+                                         ? await contentParser.ToHtml(page.UpDownFeedback.FeedbackComponent!.Body)
                                          : null;
-        var rightHandSideContentHtml = advicePage.RightHandSideContent is not null
-                                           ? await contentParser.ToHtml(advicePage.RightHandSideContent.Body)
+        var rightHandSideContentHtml = page.RightHandSideContent is not null
+                                           ? await contentParser.ToHtml(page.RightHandSideContent.Body)
                                            : null;
         
         FeedbackComponentModel? rightHandSideContent = null;
-        if (advicePage.RightHandSideContent != null && !string.IsNullOrEmpty(rightHandSideContentHtml))
+        if (page.RightHandSideContent != null && !string.IsNullOrEmpty(rightHandSideContentHtml))
         {
             rightHandSideContent =
-                FeedbackComponentModelMapper.Map(advicePage.RightHandSideContent.Header, rightHandSideContentHtml);
+                FeedbackComponentModelMapper.Map(page.RightHandSideContent.Header, rightHandSideContentHtml);
         }
-        return new AdvicePageModel
+        return new StaticPageModel
                {
-                   Heading = advicePage.Heading,
+                   Heading = page.Heading,
                    BodyContent = bodyHtml,
-                   BackButton = NavigationLinkMapper.Map(advicePage.BackButton),
-                   UpDownFeedback = UpDownFeedbackMapper.Map(advicePage.UpDownFeedback, improveServiceBodyHtml),
+                   BackButton = NavigationLinkMapper.Map(page.BackButton),
+                   UpDownFeedback = UpDownFeedbackMapper.Map(page.UpDownFeedback, improveServiceBodyHtml),
                    RightHandSideContent = rightHandSideContent
                };
     }

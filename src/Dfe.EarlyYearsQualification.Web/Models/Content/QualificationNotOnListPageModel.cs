@@ -1,6 +1,6 @@
 ﻿namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
-public class QualificationNotOnListPageModel : AdvicePageModel
+public class QualificationNotOnListPageModel : StaticPageModel
 {
     public string? Level { get; set; } = string.Empty;
 

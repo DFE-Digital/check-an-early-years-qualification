@@ -5,7 +5,7 @@ public static class ContentTypes
     public const string StartPage = "startPage";
     public const string Qualification = "Qualification";
     public const string QualificationDetailsPage = "qualificationDetailsPage";
-    public const string AdvicePage = "advicePage";
+    public const string StaticPage = "staticPage";
     public const string RadioQuestionPage = "radioQuestionPage";
     public const string AccessibilityStatementPage = "accessibilityStatementPage";
     public const string CookiesPage = "cookiesPage";
@@ -25,7 +25,7 @@ public static class ContentTypes
     public const string Footer = "footer";
     public const string FeedbackFormPage = "feedbackPage";
     public const string FeedbackFormConfirmationPage = "feedbackFormConfirmationPage";
-    public const string GetHelpPage = "getHelpPage";
+    public const string RadioQuestionHelpPage = "radioQuestionHelpPage";
     public const string HelpQualificationDetailsPage = "helpQualificationDetails";
     public const string HelpProvideDetailsPage = "helpProvideDetailsPage";
     public const string HelpEmailAddressPage = "helpEmailAddress";

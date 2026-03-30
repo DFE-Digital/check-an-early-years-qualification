@@ -212,10 +212,21 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await checkSnapshot(page);
     });
 
+    test("Help proceed with query page", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("#QuestionAboutAQualification");
+        await page.click("#form-submit");
+        await checkUrl(page, "/help/proceed-with-qualification-query");
+
+        await checkSnapshot(page);
+    });
+
     test("Help qualification details", async ({ page }) => {
         await page.goto("/help/get-help");
         await page.click("#QuestionAboutAQualification");
-        await page.click("#reason-for-enquiring-form-submit");
+        await page.click("#form-submit");
+        await page.click("input#ContactTheEarlyYearsQualificationTeam");
+        await page.click("button#form-submit");
         await checkUrl(page, "/help/qualification-details");
 
         await checkSnapshot(page);
@@ -224,7 +235,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Help provide details", async ({ page }) => {
         await page.goto("/help/get-help");
         await page.click("#IssueWithTheService");
-        await page.click("#reason-for-enquiring-form-submit");
+        await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
 
         await checkSnapshot(page);
@@ -233,7 +244,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Help email address", async ({ page }) => {
         await page.goto("/help/get-help");
         await page.click("#IssueWithTheService");
-        await page.click("#reason-for-enquiring-form-submit");
+        await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
         await inputText(page, "#ProvideAdditionalInformation", "This is some additional info the user has entered");
         await page.click("#question-submit");
@@ -245,7 +256,7 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
     test("Help confirmation page", async ({ page }) => {
         await page.goto("/help/get-help");
         await page.click("#IssueWithTheService");
-        await page.click("#reason-for-enquiring-form-submit");
+        await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
         await inputText(page, "#ProvideAdditionalInformation", "This is some additional info the user has entered");
         await page.click("#question-submit");

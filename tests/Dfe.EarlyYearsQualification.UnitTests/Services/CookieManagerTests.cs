@@ -68,6 +68,22 @@ public class CookieManagerTests
         mockContext.VerifyAll();
     }
 
+    [TestMethod]
+    public void CookieManager_CreateCookieOptions_()
+    {
+        var mockContext = new Mock<IHttpContextAccessor>();
+        var service = new CookieManager(mockContext.Object);
+
+        var expiration = DateTimeOffset.UtcNow.AddMinutes(30);
+
+        var cookie = service.CreateCookieOptions(expiration, true);
+
+        mockContext.VerifyAll();
+        cookie.Secure.Should().BeTrue();
+        cookie.Expires.Should().Be(expiration);
+        cookie.HttpOnly.Should().BeTrue();
+    }
+
     private class CookieCollection : Dictionary<string, string>, IRequestCookieCollection
     {
         private readonly Dictionary<string, string> _store;

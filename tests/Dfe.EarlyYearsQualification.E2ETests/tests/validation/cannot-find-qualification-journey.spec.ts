@@ -286,7 +286,7 @@ test.describe('A spec used to validate variants for qualification results and â€
             await selectNotOnTheListAsTheAwardingOrganisation(page);
             await checkYourAnswersPage(page);
             await selectICannotFindTheQualification(page);
-            await checkText(page, "#advice-page-body > div.govuk-inset-text > p", getHeaderText(scenario));
+            await checkText(page, "#static-page-body > div.govuk-inset-text > p", getHeaderText(scenario));
 
             if (scenario.isCheckingOwnQualification) {
                 await expect(page.getByText('If you need more help')).toBeVisible();

@@ -45,8 +45,8 @@ test.describe('A spec used to test the various routes through the practitioner j
 
         // qualification not on the list page
         await checkUrl(page, "/advice/qualification-not-on-the-list");
-        await checkText(page, "#advice-page-heading", "This is the practitioner level 3 page");
-        await checkText(page, "#advice-page-body", "This is the practitioner body text");
+        await checkText(page, "#static-page-heading", "This is the practitioner level 3 page");
+        await checkText(page, "#static-page-body", "This is the practitioner body text");
 
         // check back button goes back to the qualifications list page
         await clickBackButton(page);

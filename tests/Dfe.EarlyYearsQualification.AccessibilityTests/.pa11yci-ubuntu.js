@@ -5,6 +5,7 @@ function getUrls(authSecret, port) {
         `set field #PasswordValue to ${authSecret}`,
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/`,
+        'click element h1',
         'click element #start-now-button',
         `wait for url to be http://localhost:${port}/questions/pre-check`,
         'click element #yes',
@@ -57,8 +58,14 @@ function getUrls(authSecret, port) {
             url: `http://localhost:${port}/`,
             actions: basicActions.concat(`navigate to http://localhost:${port}/`)
         },
-        `http://localhost:${port}/accessibility-statement`,
-        `http://localhost:${port}/cookies`,
+        {
+            url: `http://localhost:${port}/accessibility-statement`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/accessibility-statement`)
+        },
+        {
+            url: `http://localhost:${port}/cookies`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/cookies`)
+        },
         {
             url: `http://localhost:${port}/questions/are-you-checking-your-own-qualification`,
             actions: basicActions.concat(`navigate to http://localhost:${port}/questions/are-you-checking-your-own-qualification`)
@@ -103,25 +110,91 @@ function getUrls(authSecret, port) {
             url: `http://localhost:${port}/qualifications/check-additional-questions/EYQ-240/1`,
             actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/qualifications/check-additional-questions/EYQ-240/1`)
         },
-        `http://localhost:${port}/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019`,
-        `http://localhost:${port}/advice/qualification-outside-the-united-kingdom`,
-        `http://localhost:${port}/advice/qualifications-achieved-in-scotland`,
-        `http://localhost:${port}/advice/qualifications-achieved-in-wales`,
-        `http://localhost:${port}/advice/qualifications-achieved-in-northern-ireland`,
-        `http://localhost:${port}/advice/qualification-not-on-the-list`,
-        `http://localhost:${port}/advice/qualification-level-7`,
-        `http://localhost:${port}/advice/level-6-qualification-pre-2014`,
-        `http://localhost:${port}/advice/level-6-qualification-post-2014`,
-        `http://localhost:${port}/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019`,
+        {
+            url: `http://localhost:${port}/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019`)
+        },
+        {
+            url: `http://localhost:${port}/advice/qualification-outside-the-united-kingdom`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/qualification-outside-the-united-kingdom`)
+        },
+        {
+            url: `http://localhost:${port}/advice/qualifications-achieved-in-scotland`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/qualifications-achieved-in-scotland`)
+        },
+        {
+            url: `http://localhost:${port}/advice/qualifications-achieved-in-wales`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/qualifications-achieved-in-wales`)
+        },
+        {
+            url: `http://localhost:${port}/advice/qualifications-achieved-in-northern-ireland`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/qualifications-achieved-in-northern-ireland`)
+        },
+        {
+            url: `http://localhost:${port}/advice/qualification-not-on-the-list`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/qualification-not-on-the-list`)
+        },
+        {
+            url: `http://localhost:${port}/advice/qualification-level-7`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/qualification-level-7`)
+        },
+        {
+            url: `http://localhost:${port}/advice/level-6-qualification-pre-2014`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/level-6-qualification-pre-2014`)
+        },
+        {
+            url: `http://localhost:${port}/advice/level-6-qualification-post-2014`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/level-6-qualification-post-2014`)
+        },
+        {
+            url: `http://localhost:${port}/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019`)
+        },
+        {
+            url: `http://localhost:${port}/advice/level-7-qualification-after-aug-2019`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/level-7-qualification-after-aug-2019`)
+        },
         `http://localhost:${port}/advice/level-7-qualification-after-aug-2019`,
-        `http://localhost:${port}/help/get-help`,
+        {
+            url: `http://localhost:${port}/advice/nursing-qualifications`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/nursing-qualifications`)
+        },
+        {
+            url: `http://localhost:${port}/help/I-need-a-copy-of-the-qualification-certificate-or-transcript`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/help/I-need-a-copy-of-the-qualification-certificate-or-transcript`)
+        },
+        {
+            url: `http://localhost:${port}/help/I-do-not-know-what-level-the-qualification-is`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/help/I-do-not-know-what-level-the-qualification-is`)
+        },
+        {
+            url: `http://localhost:${port}/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol`)
+        },
+        {
+            url: `http://localhost:${port}/help/get-help`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/help/get-help`)
+        },
+        {
+            url: `http://localhost:${port}/help/proceed-with-qualification-query`,
+            actions: [
+                ...basicActions,
+                `navigate to http://localhost:${port}/help/get-help`,
+                'click element #QuestionAboutAQualification',
+                'click element #form-submit',
+                `wait for url to be http://localhost:${port}/help/proceed-with-qualification-query`
+            ]
+        },
         {
             url: `http://localhost:${port}/help/qualification-details`,
             actions: [
                 ...basicActions,
                 `navigate to http://localhost:${port}/help/get-help`,
                 'click element #QuestionAboutAQualification',
-                'click element #reason-for-enquiring-form-submit',
+                'click element #form-submit',
+                `wait for url to be http://localhost:${port}/help/proceed-with-qualification-query`,
+                'click element #ContactTheEarlyYearsQualificationTeam',
+                'click element #form-submit',
                 `wait for url to be http://localhost:${port}/help/qualification-details`
             ]
         },
@@ -131,8 +204,12 @@ function getUrls(authSecret, port) {
                 ...basicActions,
                 `navigate to http://localhost:${port}/help/get-help`,
                 'click element #QuestionAboutAQualification',
-                'click element #reason-for-enquiring-form-submit',
+                'click element #form-submit',
+                `wait for url to be http://localhost:${port}/help/proceed-with-qualification-query`,
+                'click element #ContactTheEarlyYearsQualificationTeam',
+                'click element #form-submit',
                 `wait for url to be http://localhost:${port}/help/qualification-details`,
+                'click element #QualificationName',
                 'set field #QualificationName to Testing',
                 'set field #awarded-month-label+input to 9',
                 'set field #awarded-year-label+input to 2015',
@@ -147,22 +224,36 @@ function getUrls(authSecret, port) {
                 ...basicActions,
                 `navigate to http://localhost:${port}/help/get-help`,
                 'click element #QuestionAboutAQualification',
-                'click element #reason-for-enquiring-form-submit',
+                'click element #form-submit',
+                `wait for url to be http://localhost:${port}/help/proceed-with-qualification-query`,
+                'click element #ContactTheEarlyYearsQualificationTeam',
+                'click element #form-submit',
                 `wait for url to be http://localhost:${port}/help/qualification-details`,
+                'click element #QualificationName',
                 'set field #QualificationName to Testing',
                 'set field #awarded-month-label+input to 9',
                 'set field #awarded-year-label+input to 2015',
                 'set field #AwardingOrganisation to Testing',
                 'click element #question-submit',
                 `wait for url to be http://localhost:${port}/help/provide-details`,
+                'click element #ProvideAdditionalInformation',
                 'set field #ProvideAdditionalInformation to Test',
                 'click element #question-submit',
                 `wait for url to be http://localhost:${port}/help/email-address`,
             ]
         },
-        `http://localhost:${port}/help/confirmation`,
-        `http://localhost:${port}/give-feedback`,
-        `http://localhost:${port}/give-feedback/confirmation`
+        {
+            url: `http://localhost:${port}/help/confirmation`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/help/confirmation`)
+        },
+        {
+            url: `http://localhost:${port}/give-feedback`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/give-feedback`)
+        },
+        {
+            url: `http://localhost:${port}/give-feedback/confirmation`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/give-feedback/confirmation`)
+        }
     ];
 }
 
