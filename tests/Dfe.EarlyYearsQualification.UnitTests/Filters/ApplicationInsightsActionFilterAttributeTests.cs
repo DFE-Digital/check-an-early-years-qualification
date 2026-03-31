@@ -245,7 +245,7 @@ public class ApplicationInsightsActionFilterAttributeTests
                                              );
 
         var actionArguments = new Dictionary<string, object?>
-                              { { FromFormParameterName, new GetHelpPageViewModel
+                              { { FromFormParameterName, new RadioQuestionHelpPageViewModel
                                                          {
                                                              SelectedOption = "This is the selected option"
                                                          } } };

@@ -32,7 +32,7 @@ public class GovUkNotifyServiceTests
 
         var form = new HelpFormEnquiry
                    {
-                       ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
+                       ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
                        AdditionalInformation = "Some additional information",
                    };
 
@@ -76,7 +76,7 @@ public class GovUkNotifyServiceTests
         var service = new GovUkNotifyService(mockLogger.Object, options, mockNotificationClient.Object);
         var form = new HelpFormEnquiry
                    {
-                       ReasonForEnquiring = HelpFormEnquiryReasons.QuestionAboutAQualification,
+                       ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
                        AdditionalInformation = "Some additional information",
                        AwardingOrganisation = "Awarding organisation",
                        QualificationAwardedDate = "10/2025",
@@ -128,7 +128,7 @@ public class GovUkNotifyServiceTests
 
         var form = new HelpFormEnquiry
                    {
-                       ReasonForEnquiring = HelpFormEnquiryReasons.IssueWithTheService,
+                       ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
                        AdditionalInformation = "Some additional information",
                    };
 

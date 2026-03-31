@@ -20,4 +20,9 @@ public class TrackingConfiguration(ICookiesPreferenceService cookiesPreferenceSe
     {
         get { return configuration.GetValue<string>("Clarity:Tag") ?? ""; }
     }
+
+    public string GoogleSearchConsoleTag
+    {
+        get { return configuration.GetValue<string>("GoogleSearchConsole:Tag") ?? ""; }
+    }
 }

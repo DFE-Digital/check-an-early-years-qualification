@@ -54,6 +54,7 @@ No modules.
 | <a name="input_kv_id"></a> [kv\_id](#input\_kv\_id) | ID of the Key Vault | `string` | n/a | yes |
 | <a name="input_kv_mi_id"></a> [kv\_mi\_id](#input\_kv\_mi\_id) | ID of the Managed Identity for the Key Vault | `string` | n/a | yes |
 | <a name="input_kv_service_gov_uk_cert_secret_id"></a> [kv\_service\_gov\_uk\_cert\_secret\_id](#input\_kv\_service\_gov\_uk\_cert\_secret\_id) | service.gov.uk SSL certificate Secret ID | `string` | n/a | yes |
+| <a name="input_kv_service_gov_uk_cert_versionless_secret_id"></a> [kv\_service\_gov\_uk\_cert\_versionless\_secret\_id](#input\_kv\_service\_gov\_uk\_cert\_versionless\_secret\_id) | service.gov.uk SSL certificate versionless Secret ID | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Name of the Azure region to deploy resources | `string` | n/a | yes |
 | <a name="input_logs_id"></a> [logs\_id](#input\_logs\_id) | Log Analytics workspace ID | `string` | n/a | yes |
 | <a name="input_redis_cache_id"></a> [redis\_cache\_id](#input\_redis\_cache\_id) | ID of the Redis cache | `string` | n/a | yes |
