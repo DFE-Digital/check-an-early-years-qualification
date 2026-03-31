@@ -44,7 +44,8 @@ public abstract class ContentfulContentServiceBase
               { typeof(HelpProvideDetailsPage), ContentTypes.HelpProvideDetailsPage },
               { typeof(HelpEmailAddressPage), ContentTypes.HelpEmailAddressPage },
               { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage },
-              { typeof(RatioRequirement), ContentTypes.RatioRequirement }
+              { typeof(RatioRequirement), ContentTypes.RatioRequirement },
+              { typeof(WebViewPage), ContentTypes.WebViewPage }
           };
 
     protected readonly ILogger Logger;

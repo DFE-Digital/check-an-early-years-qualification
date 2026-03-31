@@ -43,6 +43,12 @@ public static class StringDateHelper
     {
         if (dateMonth is null || dateYear is null) return string.Empty;
         var date = new DateOnly(dateYear.Value, dateMonth.Value, 1);
-        return $"{prefixValue} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {dateYear.Value}";
+
+        if (prefixValue != string.Empty)
+        {
+            return $"{prefixValue} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {dateYear.Value}";
+        }
+
+        return $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {dateYear.Value}";
     }
 }

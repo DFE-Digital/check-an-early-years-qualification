@@ -1,3 +1,5 @@
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
+
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class EarlyYearsQualificationListModel
@@ -45,63 +47,14 @@ public class EarlyYearsQualificationListModel
 
     public string ApplyFiltersButtonContent { get; init; } = string.Empty;
 
-    public string ClearFiltersLink { get; init; } = string.Empty;
+    public string ClearFiltersLinkLabel { get; init; } = string.Empty;
 
     public string NoFiltersSelectedContent { get; init; } = string.Empty;
 
     // Filters
-    public List<EnquiryOptionModel> StartDateFilters { get; init; } =
-    [
-        new()
-        {
-            Label = "Before September 2014",
-            Value = "Pre-September 2014"
-        },
-        new()
-        {
-            Label = "On or after September 2014",
-            Value = "Post-September 2014"
-        },
-        new()
-        {
-            Label = "On or after September 2024",
-            Value = "Post-September 2024"
-        }
-    ];
+    public List<IOptionItemModel> StartDateFilters { get; set; } = [];
 
-    public List<EnquiryOptionModel> LevelFilters { get; init; } =
-    [
-        new()
-        {
-            Label = "Level 2",
-            Value = "2"
-        },
-        new()
-        {
-            Label = "Level 3",
-            Value = "3"
-        },
-        new()
-        {
-            Label = "Level 4",
-            Value = "4"
-        },
-        new()
-        {
-            Label = "Level 5",
-            Value = "5"
-        },
-        new()
-        {
-            Label = "Level 6",
-            Value = "6"
-        },
-        new()
-        {
-            Label = "Level 7",
-            Value = "7"
-        }
-    ];
+    public List<IOptionItemModel> LevelFilters { get; set; } = [];
 
     public string QualificationLevelFilter { get; init; } = string.Empty;
 

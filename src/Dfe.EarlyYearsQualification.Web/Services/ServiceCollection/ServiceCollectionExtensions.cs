@@ -27,5 +27,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IPreCheckPageMapper, PreCheckPageMapper>();
         serviceCollection.AddScoped<IFooterMapper, FooterMapper>();
         serviceCollection.AddScoped<IQualificationDetailsMapper, QualificationDetailsMapper>();
+        serviceCollection.AddScoped<IWebViewPageMapper, WebViewMapper>();
     }
 }
