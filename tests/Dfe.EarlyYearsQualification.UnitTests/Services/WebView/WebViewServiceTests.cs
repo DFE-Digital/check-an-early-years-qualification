@@ -134,7 +134,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -149,7 +149,7 @@ public class WebViewServiceTests
         // Assert
         result.Should().HaveCount(1);
         result[0].Should().Be(qualifications[0]);
-        mockQualificationsRepository.Verify(x => x.Get(0, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
@@ -173,7 +173,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -187,7 +187,7 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(0, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
@@ -211,7 +211,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, "test search"))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, "test search"))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -225,7 +225,7 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(0, null, null, null, "test search"), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, "test search"), Times.Once);
     }
 
     [TestMethod]
@@ -287,7 +287,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -301,7 +301,7 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(0, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
@@ -345,7 +345,7 @@ public class WebViewServiceTests
             }
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -386,7 +386,7 @@ public class WebViewServiceTests
             new("Q2", "Qualification 2", "Org 2", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -426,7 +426,7 @@ public class WebViewServiceTests
             new("Q4", "A Qualification", "Org 4", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -690,7 +690,7 @@ public class WebViewServiceTests
             }
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -730,7 +730,7 @@ public class WebViewServiceTests
         var expectedModel = new EarlyYearsQualificationListModel();
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
-        mockQualificationsRepository.Setup(x => x.Get(0, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
             .ReturnsAsync(qualifications);
         mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>()))
             .ReturnsAsync(expectedModel);
@@ -747,7 +747,7 @@ public class WebViewServiceTests
         // Assert
         result.Should().Be(expectedModel);
         mockUserJourneyCookieService.Verify(x => x.GetWebViewFilters(), Times.Once);
-        mockQualificationsRepository.Verify(x => x.Get(0, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
