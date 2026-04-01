@@ -88,14 +88,14 @@ public class WebViewService(
         return userJourneyCookieService.GetWebViewFilters();
     }
 
-    private static int GetQualificationLevel(string qualificationLevel)
+    private static int? GetQualificationLevel(string qualificationLevel)
     {
         if (!string.IsNullOrWhiteSpace(qualificationLevel) && int.TryParse(qualificationLevel, out var parsedQualificationLevel))
         {
             return parsedQualificationLevel;
         }
 
-        return 0;
+        return null;
     }
 
     private static List<Qualification> FilterQualificationsByStartDate(List<Qualification> qualifications, string startDate)

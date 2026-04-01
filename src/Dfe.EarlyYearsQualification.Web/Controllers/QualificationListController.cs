@@ -44,9 +44,9 @@ public class QualificationListController(
     }
 
     [HttpPost("RemoveFilter")]
-    public IActionResult RemoveFilter(string filter)
+    public IActionResult RemoveFilter(string removeFilter)
     {
-        webViewService.RemoveFilter(filter);
+        webViewService.RemoveFilter(removeFilter);
 
         return RedirectToAction(nameof(Index));
     }

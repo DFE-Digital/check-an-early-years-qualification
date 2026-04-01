@@ -134,10 +134,96 @@ public class MockQualificationsRepository : IQualificationsRepository
                 degreeQualification,
                 CreateQualificationWithAdditionalRequirements("EYQ-909", AwardingOrganisations.Ncfe, 3, startDate,
                                                               endDate),
+            
+                new Qualification("EYQ-301", "Qualification 301", AwardingOrganisations.Ncfe, 2)
+                {
+                    StaffChildRatio = 1,
+                    FromWhichYear = "Sep-10",
+                    ToWhichYear = "Sep-11",
+                    QualificationNumber = "123/456/789",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Pre-September 2014"
+                        }
+                    ]
+                },
+                new Qualification("EYQ-302", "Qualification 302", AwardingOrganisations.Pearson, 3)
+                {
+                    StaffChildRatio = 3,
+                    FromWhichYear = "Sep-10",
+                    ToWhichYear = "Sep-11",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Pre-September 2014"
+                        }
+                    ]
+                },
+                new Qualification("EYQ-303", "Qualification 303", AwardingOrganisations.Edexcel, 4)
+                {
+                    StaffChildRatio = 4,
+                    FromWhichYear = "Sep-15",
+                    ToWhichYear = "Sep-16",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Post-September 2014"
+                        }
+                    ]
+                },
+                new Qualification("EYQ-304", "Qualification 304", AwardingOrganisations.Various, 5)
+                {
+                    StaffChildRatio = 6,
+                    FromWhichYear = "Sep-16",
+                    ToWhichYear = "Sep-18",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Post-September 2014"
+                        }
+                    ]
+                },
+                new Qualification("EYQ-305", "Qualification 305", AwardingOrganisations.Edexcel, 6)
+                {
+                    StaffChildRatio = 2,
+                    FromWhichYear = "Sep-16",
+                    ToWhichYear = "Sep-18",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Pre-September 2014"
+                        }
+
+                    ]
+                },
+                new Qualification("EYQ-306", "Qualification 306", AwardingOrganisations.Various, 7)
+                {
+                    StaffChildRatio = 3,
+                    FromWhichYear = "Sep-25",
+                    ToWhichYear = null,
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Post-September 2024"
+                        }
+                    ]
+                }
             };
 
         // For now, inbound parameters startDateMonth and startDateYear are ignored
-        return Task.FromResult(qualifications.Where(x => x.QualificationLevel == level).ToList());
+        if (level is not null)
+        {
+            return Task.FromResult(qualifications.Where(x => x.QualificationLevel == level).ToList());
+        }
+
+        return Task.FromResult(qualifications);
     }
 
     private static Qualification CreateQualificationWithAdditionalRequirements(

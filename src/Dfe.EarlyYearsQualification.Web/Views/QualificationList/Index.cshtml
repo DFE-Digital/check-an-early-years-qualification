@@ -6,6 +6,11 @@
     ViewData["Title"] = Model.Heading;
 }
 
+@section Scripts
+{
+    <script src="~/js/pages/web-view-page.js" asp-append-version="true"></script>
+}
+
 @section BeforeMainContent
 {
     @{
@@ -31,7 +36,7 @@
                     @Model.FilterHeading
                 </h2>
             </div>
-            @using (Html.BeginForm("RemoveFilter", "QualificationList", FormMethod.Post))
+            @using (Html.BeginForm("RemoveFilter", "QualificationList", FormMethod.Post, new { id = "remove-filter-form" }))
             {
                 <div class="filter__selected-filters">
                     <h2 class="govuk-heading-m">
@@ -76,7 +81,7 @@
                 </div>
             }
 
-            @using (Html.BeginForm("ApplyFilter", "QualificationList", FormMethod.Post))
+            @using (Html.BeginForm("ApplyFilter", "QualificationList", FormMethod.Post, new { id = "apply-filter-form" }))
             {
                 <div class="filter__filter-body">
                     <div class="filter__filter-body__section">

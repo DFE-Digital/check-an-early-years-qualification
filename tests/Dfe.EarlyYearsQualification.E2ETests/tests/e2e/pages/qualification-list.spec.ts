@@ -25,7 +25,7 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await checkText(page, "#filter-level", "level 3");
         await checkText(page, "#filter-org", "awarded by NCFE");
         await checkText(page, "#heading", "Test Header");
-        await checkText(page, "#found-heading", "We found 6 matching qualifications");
+        await checkText(page, "#found-heading", "We found 7 matching qualifications");
         await checkText(page, "#pre-search-content", "Pre search box content");
         await checkText(page, "#post-list-heading", "Post qualification list header");
         await checkTextContains(page, "#post-list-content", "Link to not on list advice page");
