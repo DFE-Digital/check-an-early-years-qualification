@@ -197,7 +197,7 @@ public class MockQualificationsRepository : IQualificationsRepository
                     [
                         new Tab
                         {
-                            Heading = "Pre-September 2014"
+                            Heading = "Post-September 2014"
                         }
 
                     ]
