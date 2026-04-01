@@ -1,14 +1,14 @@
 $(window).on('load', function () {
     let totalQualifications = $('.govuk-summary-card').length;
-    let filterKeyword = $('[value^="search-term"] span').first().text();
+    let searchTerm = $('[value^="search-term"] span').first().text();
     let filterStartDate = $('[value^="start-date"] span').first().text();
-    let filterQualificationLevel = $('[value^="qualification-level"] span').first().text();
+    let filterLevel = $('[value^="qualification-level"] span').first().text();
 
     window.dataLayer.push({
         'event': "webview-results-returned",
-        'filterKeyword': filterKeyword,
+        'searchTerm': searchTerm,
         'filterStartDate': filterStartDate,
-        'filterQualificationLevel': filterQualificationLevel,
+        'filterLevel': filterLevel,
         'totalQualifications': totalQualifications
     });
 });
