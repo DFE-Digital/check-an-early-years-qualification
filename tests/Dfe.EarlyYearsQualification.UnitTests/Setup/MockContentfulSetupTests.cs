@@ -1,4 +1,6 @@
+using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Validators;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using Dfe.EarlyYearsQualification.Mock.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,16 +32,26 @@ public class MockContentfulSetupTests
         // ReSharper disable once InvokeAsExtensionMethod
         _ = ServiceCollectionExtensions.AddMockContentfulServices(services.Object);
 
-        serviceList.Count.Should().Be(2);
+        serviceList.Count.Should().Be(4);
 
-        var service = serviceList[0];
-        service.ImplementationType.Should().Be<MockContentfulService>();
-        service.ServiceType.Should().Be<IContentService>();
-        service.Lifetime.Should().Be(ServiceLifetime.Singleton);
+        var dateValidatorService = serviceList[0];
+        dateValidatorService.ImplementationType.Should().Be<DateValidator>();
+        dateValidatorService.ServiceType.Should().Be<IDateValidator>();
+        dateValidatorService.Lifetime.Should().Be(ServiceLifetime.Singleton);
 
-        var filterService = serviceList[1];
-        filterService.ImplementationType.Should().Be<MockQualificationsRepository>();
-        filterService.ServiceType.Should().Be<IQualificationsRepository>();
-        filterService.Lifetime.Should().Be(ServiceLifetime.Singleton);
+        var qualificationListFilterService = serviceList[1];
+        qualificationListFilterService.ImplementationType.Should().Be<QualificationListFilter>();
+        qualificationListFilterService.ServiceType.Should().Be<IQualificationListFilter>();
+        qualificationListFilterService.Lifetime.Should().Be(ServiceLifetime.Singleton);
+
+        var mockContentfulService = serviceList[2];
+        mockContentfulService.ImplementationType.Should().Be<MockContentfulService>();
+        mockContentfulService.ServiceType.Should().Be<IContentService>();
+        mockContentfulService.Lifetime.Should().Be(ServiceLifetime.Singleton);
+
+        var repositoryService = serviceList[3];
+        repositoryService.ImplementationType.Should().Be<MockQualificationsRepository>();
+        repositoryService.ServiceType.Should().Be<IQualificationsRepository>();
+        repositoryService.Lifetime.Should().Be(ServiceLifetime.Singleton);
     }
 }
