@@ -1232,7 +1232,7 @@ public class MockContentfulServiceTests
                 new Option
                     { Label = "Level 6", Value = "6" },
                 new Option
-                    { Label = "Level 7", Value = "7 " },
+                    { Label = "Level 7", Value = "7" },
             ]);
         result.ClearFiltersLinkLabel.Should().Be("Clear filters");
         result.NoQualificationsFoundContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."));

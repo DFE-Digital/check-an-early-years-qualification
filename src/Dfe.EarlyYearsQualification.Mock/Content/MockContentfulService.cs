@@ -1001,7 +1001,7 @@ public class MockContentfulService : IContentService
                     new Option
                     { Label = "Level 6", Value = "6" },
                     new Option
-                    { Label = "Level 7", Value = "7 " },
+                    { Label = "Level 7", Value = "7" },
                 ],
                 ClearFiltersLinkLabel = "Clear filters",
                 NoQualificationsFoundContent = ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."),
