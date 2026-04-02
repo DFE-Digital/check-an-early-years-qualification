@@ -1,12 +1,13 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Mock.Content;
 
-public class MockQualificationsRepository : IQualificationsRepository
+public class MockQualificationsRepository(IQualificationListFilter qualificationListFilter) : IQualificationsRepository
 {
     public async Task<Qualification?> GetById(string qualificationId)
     {
@@ -113,13 +114,13 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQtsQualification("EYQ-111", "BTEC", AwardingOrganisations.Various, 7),
                 CreateQualification("EYQ-112", AwardingOrganisations.Pearson, 8, startDate, endDate),
                 CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate),
-                new Qualification("EYQ-114", "dupe qualification name", AwardingOrganisations.Various, 3)
+                new Qualification("EYQ-114", "dupe qualification name", AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
                     QualificationNumber = "123/345/678"
                 },
-                new Qualification("EYQ-115", "dupe qualification name", AwardingOrganisations.Various, 3)
+                new Qualification("EYQ-115", "dupe qualification name", AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
@@ -217,13 +218,9 @@ public class MockQualificationsRepository : IQualificationsRepository
                 }
             };
 
-        // For now, inbound parameters startDateMonth and startDateYear are ignored
-        if (level is not null)
-        {
-            return Task.FromResult(qualifications.Where(x => x.QualificationLevel == level).ToList());
-        }
+        var results = qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear, awardingOrganisation, qualificationName);
 
-        return Task.FromResult(qualifications);
+        return Task.FromResult(results);
     }
 
     private static Qualification CreateQualificationWithAdditionalRequirements(
@@ -328,8 +325,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                  awardingOrganisation,
                                  qualificationLevel)
                {
-                   FromWhichYear = "2020",
-                   ToWhichYear = "2021",
+                   FromWhichYear = "Jan-20",
+                   ToWhichYear = "Jan-21",
                    QualificationNumber = "603/5829/4",
                    AdditionalRequirements =
                        "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
@@ -395,8 +392,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                  awardingOrganisation,
                                  qualificationLevel)
                {
-                   FromWhichYear = "2020",
-                   ToWhichYear = "2021",
+                   FromWhichYear = "Sep-14",
+                   ToWhichYear = "Aug-19",
                    QualificationNumber = "603/5829/4",
                    AdditionalRequirements =
                        "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",

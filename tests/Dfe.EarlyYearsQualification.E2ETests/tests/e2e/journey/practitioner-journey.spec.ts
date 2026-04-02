@@ -29,7 +29,7 @@ test.describe('A spec used to test the various routes through the practitioner j
 
     test("Selecting the 'Qualification is not on the list' link on the qualification list page should navigate to the correct advice page", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "6", "2022", "1", "2025");
+        await whenWasQualificationStarted(page, "2", "2015", "3", "2018");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -52,7 +52,7 @@ test.describe('A spec used to test the various routes through the practitioner j
 
     test("Checking own qualification, qualification is not full and relevant returns expected content", async ({ page }) => {
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "3", "2022", "1", "2025");
+        await whenWasQualificationStarted(page, "2", "2020", "3", "2021");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -68,7 +68,7 @@ test.describe('A spec used to test the various routes through the practitioner j
 
     test("Checking own qualification, qualification is full and relevant returns expected content", async ({ page }) => {
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "3", "2022", "1", "2025");
+        await whenWasQualificationStarted(page, "2", "2020", "3", "2021");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -88,7 +88,7 @@ test.describe('A spec used to test the various routes through the practitioner j
                                                                           }) => {
 
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "1", "2012", "7", "2016");
+        await whenWasQualificationStarted(page, "2", "2015", "3", "2018");
         await whatLevelIsTheQualification(page, 6);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);

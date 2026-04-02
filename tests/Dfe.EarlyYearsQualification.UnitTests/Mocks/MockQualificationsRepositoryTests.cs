@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Mock.Content;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
@@ -7,6 +8,23 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 [TestClass]
 public class MockQualificationsRepositoryTests
 {
+    private static MockQualificationsRepository CreateRepository()
+    {
+        var mockFilter = new Mock<IQualificationListFilter>();
+        mockFilter.Setup(f => f.ApplyFilters(It.IsAny<List<Qualification>>(),
+                                             It.IsAny<int?>(),
+                                             It.IsAny<int?>(),
+                                             It.IsAny<int?>(),
+                                             It.IsAny<string?>(),
+                                             It.IsAny<string?>()))
+                 .Returns((List<Qualification> q, int? level, int? m, int? y, string? ao, string? name) =>
+                              level is > 0
+                                  ? q.Where(x => x.QualificationLevel == level).ToList()
+                                  : q);
+
+        return new MockQualificationsRepository(mockFilter.Object);
+    }
+
     [TestMethod]
 #pragma warning disable CA1861
     // An attribute argument must be a constant expression, 'typeof()' expression or array creation
@@ -22,7 +40,7 @@ public class MockQualificationsRepositoryTests
     public async Task GetFilteredQualifications_PassInLevel_ReturnsExpectedQualifications(
         int level, string[] expectedQualificationIds)
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var results =
             await repository.Get(level,
@@ -39,7 +57,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetFilteredQualifications_PassInLevel3_ReturnsQualificationWithAdditionalRequirementQuestions()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
         var results = await repository.Get(3, null, null, null, null);
 
         var qualificationWithAdditionalRequirements =
@@ -65,7 +83,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("test_id");
         result.Should().NotBeNull();
@@ -128,7 +146,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ108_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-108");
         result.Should().NotBeNull();
@@ -191,7 +209,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ321_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-321");
         result.Should().NotBeNull();
@@ -255,7 +273,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ115_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-115");
         result.Should().NotBeNull();
@@ -296,7 +314,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ241_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-241");
         result.Should().NotBeNull();
@@ -360,7 +378,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ242_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-242");
         result.Should().NotBeNull();
@@ -424,7 +442,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ250_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-250");
         result.Should().NotBeNull();
@@ -488,7 +506,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ107_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-107");
         result.Should().NotBeNull();
@@ -552,7 +570,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ105_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-105");
         result.Should().NotBeNull();
@@ -616,7 +634,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ109_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-109");
         result.Should().NotBeNull();
@@ -679,7 +697,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ110_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-110");
         result.Should().NotBeNull();
@@ -743,7 +761,7 @@ public class MockQualificationsRepositoryTests
     [TestMethod]
     public async Task GetQualificationById_EYQ111_ReturnsExpectedDetails()
     {
-        var repository = new MockQualificationsRepository();
+        var repository = CreateRepository();
 
         var result = await repository.GetById("eyq-111");
         result.Should().NotBeNull();
