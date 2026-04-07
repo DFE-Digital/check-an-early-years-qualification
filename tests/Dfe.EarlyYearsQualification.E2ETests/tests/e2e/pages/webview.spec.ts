@@ -21,8 +21,8 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await checkTextContains(page, "#post-heading-content > p", "This list shows all the qualifications that are approved by the Department for Education as full and relevant");
         await checkText(page, "#qualification-webview-results > h2", "Showing all the qualifications");
         await checkText(page, ".filter__header > h2", "Filter");
-        await checkText(page, "#remove-filter-form h2.govuk-heading-m", "Selected filters");
-        await checkText(page, "#remove-filter-form h2.govuk-heading-m ~ p", "No filters selected.");
+        await checkText(page, ".filter__selected-filters h2.govuk-heading-m", "Selected filters");
+        await checkText(page, ".filter__selected-filters h2.govuk-heading-m ~ p", "No filters selected.");
         await checkText(page, "#apply-filter-form label[for='SearchTermFilter']", "Keywords");
         await checkText(page, "#apply-filter-form div:nth-child(2) legend", "Qualification start date");
         await checkText(page, "input[value='Pre-September 2014'] ~ label", "Before September 2014");
