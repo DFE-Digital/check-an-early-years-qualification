@@ -36,13 +36,13 @@
                     @Model.FilterHeading
                 </h2>
             </div>
-            @using (Html.BeginForm("RemoveFilter", "QualificationList", FormMethod.Post, new { id = "remove-filter-form" }))
-            {
-                <div class="filter__selected-filters">
-                    <h2 class="govuk-heading-m">
-                        @Model.SelectedFiltersHeading
-                    </h2>
-                    @if (Model.HasFilters)
+            <div class="filter__selected-filters">
+                <h2 class="govuk-heading-m">
+                    @Model.SelectedFiltersHeading
+                </h2>
+                @if (Model.HasFilters)
+                {
+                    using (Html.BeginForm("RemoveFilter", "QualificationList", FormMethod.Post, new { id = "remove-filter-form" }))
                     {
                         @if (!string.IsNullOrEmpty(Model.SearchTermFilter))
                         {
@@ -72,14 +72,14 @@
                             <a class='govuk-link' href='/clear-filters'>@Model.ClearFiltersLinkLabel</a>
                         </p>
                     }
-                    else
-                    {
-                        <p class="govuk-body govuk-!-margin-bottom-0">
-                            @Model.NoFiltersSelectedContent
-                        </p>
-                    }
-                </div>
-            }
+                }
+                else
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        @Model.NoFiltersSelectedContent
+                    </p>
+                }
+            </div>
 
             @using (Html.BeginForm("ApplyFilter", "QualificationList", FormMethod.Post, new { id = "apply-filter-form" }))
             {
