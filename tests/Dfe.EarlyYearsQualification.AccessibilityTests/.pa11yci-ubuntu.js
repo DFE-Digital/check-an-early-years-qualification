@@ -169,6 +169,10 @@ function getUrls(authSecret, port) {
             actions: basicActions.concat(`navigate to http://localhost:${port}/help/get-help`)
         },
         {
+            url: `http://localhost:${port}/early-years-qualification-list`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/early-years-qualification-list`)
+        },
+        {
             url: `http://localhost:${port}/help/proceed-with-qualification-query`,
             actions: [
                 ...basicActions,
