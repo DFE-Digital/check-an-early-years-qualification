@@ -1006,7 +1006,9 @@ public class MockContentfulService : IContentService
                 ClearFiltersLinkLabel = "Clear filters",
                 NoQualificationsFoundContent = ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."),
                 PostHeadingContent = ContentfulContentHelper.Paragraph("This list shows all the qualifications that are approved by the Department for Education as full and relevant."),
-                QualificationIsFullAndRelevantContent = ContentfulContentHelper.Paragraph("Check if an early years qualification is approved as full and relevant")
+                QualificationIsFullAndRelevantContent = ContentfulContentHelper.Paragraph("Check if an early years qualification is approved as full and relevant"),
+                SingleQualificationFoundText = "qualification found",
+                MultipleQualificationsFoundText = "qualifications found"
             }
         );
     }

@@ -1238,5 +1238,7 @@ public class MockContentfulServiceTests
         result.NoQualificationsFoundContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."));
         result.PostHeadingContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("This list shows all the qualifications that are approved by the Department for Education as full and relevant."));
         result.QualificationIsFullAndRelevantContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("Check if an early years qualification is approved as full and relevant"));
+        result.SingleQualificationFoundText.Should().Be("qualification found");
+        result.MultipleQualificationsFoundText.Should().Be("qualifications found");
     }
 }

@@ -51,4 +51,8 @@ public class WebViewPage
     public List<IOptionItem> StartDateFilters { get; init; } = [];
 
     public List<IOptionItem> LevelFilters { get; init; } = [];
+
+    public string MultipleQualificationsFoundText { get; init; } = string.Empty;
+
+    public string SingleQualificationFoundText { get; init; } = string.Empty;
 }

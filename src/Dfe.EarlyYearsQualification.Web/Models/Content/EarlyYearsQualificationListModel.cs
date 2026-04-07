@@ -34,6 +34,10 @@ public class EarlyYearsQualificationListModel
 
     public string CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent { get; init; } = string.Empty;
 
+    public string MultipleQualificationsFoundText { get; init; } = string.Empty;
+
+    public string SingleQualificationFoundText { get; init; } = string.Empty;
+
     // Filters content
     public string FilterHeading { get; init; } = string.Empty;
 

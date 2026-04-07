@@ -41,7 +41,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             LevelFilters = OptionItemMapper.Map(content.LevelFilters)
         };
 
-        model.ShowingAllQualificationsLabel = model.HasFilters ? $"{qualifications.Count} qualification{(qualifications.Count == 1 ? "" : "s")} found" : content.ShowingAllQualificationsLabel;
+        model.ShowingAllQualificationsLabel = model.HasFilters ? $"{qualifications.Count} {(qualifications.Count == 1 ? content.SingleQualificationFoundText : content.MultipleQualificationsFoundText)}" : content.ShowingAllQualificationsLabel;
 
         return model;
     }
