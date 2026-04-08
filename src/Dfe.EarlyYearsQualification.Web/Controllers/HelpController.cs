@@ -239,20 +239,20 @@ public class HelpController(
     [HttpGet("provide-details")]
     public async Task<IActionResult> ProvideDetails()
     {
-        var content = await helpService.GetHelpProvideDetailsPage();
-
-        if (content is null)
-        {
-            logger.LogError("'Help provide details page' content could not be found");
-            return RedirectToAction("Index", "Error");
-        }
-
         var enquiry = helpService.GetHelpFormEnquiry();
 
         if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
         {
             logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
+        }
+
+        var content = await helpService.GetHelpProvideDetailsPage();
+
+        if (content is null)
+        {
+            logger.LogError("'Help provide details page' content could not be found");
+            return RedirectToAction("Index", "Error");
         }
 
         var viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring);
@@ -301,20 +301,20 @@ public class HelpController(
     [HttpGet("email-address")]
     public async Task<IActionResult> EmailAddress()
     {
-        var content = await helpService.GetHelpEmailAddressPage();
-
-        if (content is null)
-        {
-            logger.LogError("'Help email address page' content could not be found");
-            return RedirectToAction("Index", "Error");
-        }
-
         var enquiry = helpService.GetHelpFormEnquiry();
 
         if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring) || string.IsNullOrEmpty(enquiry.AdditionalInformation))
         {
             logger.LogError("Help form enquiry reason is empty");
             return RedirectToAction("GetHelp", "Help");
+        }
+
+        var content = await helpService.GetHelpEmailAddressPage();
+
+        if (content is null)
+        {
+            logger.LogError("'Help email address page' content could not be found");
+            return RedirectToAction("Index", "Error");
         }
 
         var viewModel = helpService.MapEmailAddressPageContentToViewModel(content);
@@ -325,6 +325,14 @@ public class HelpController(
     [HttpPost("email-address")]
     public async Task<IActionResult> EmailAddress([FromForm] EmailAddressPageViewModel model)
     {
+        var enquiry = helpService.GetHelpFormEnquiry();
+
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring) || string.IsNullOrEmpty(enquiry.AdditionalInformation))
+        {
+            logger.LogError("Help form enquiry reason is empty");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
         if (!ModelState.IsValid)
         {
             var content = await helpService.GetHelpEmailAddressPage();
@@ -345,21 +353,16 @@ public class HelpController(
             return View("EmailAddress", viewModel);
         }
 
-        var enquiry = helpService.GetHelpFormEnquiry();
-
-        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring) || string.IsNullOrEmpty(enquiry.AdditionalInformation))
-        {
-            logger.LogError("Help form enquiry reason is empty");
-            return RedirectToAction("GetHelp", "Help");
-        }
-
         // send help form email
         helpService.SendHelpPageNotification(
             new HelpPageNotification(model.EmailAddress, enquiry)
         );
 
-        // clear data collected from help form on successful submit
-        helpService.SetHelpFormEnquiry(new());
+        // clear data collected from help form on successful submit except for enquiry reason which is needed to determine which confirmation page to show
+        helpService.SetHelpFormEnquiry(new()
+        {
+            ReasonForEnquiring = enquiry.ReasonForEnquiring
+        });
 
         return RedirectToAction(nameof(Confirmation));
     }
@@ -367,6 +370,14 @@ public class HelpController(
     [HttpGet("confirmation")]
     public async Task<IActionResult> Confirmation()
     {
+        var enquiry = helpService.GetHelpFormEnquiry();
+
+        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
+        {
+            logger.LogError("Help form enquiry reason is empty");
+            return RedirectToAction("GetHelp", "Help");
+        }
+
         var content = await helpService.GetHelpConfirmationPage();
 
         if (content is null)

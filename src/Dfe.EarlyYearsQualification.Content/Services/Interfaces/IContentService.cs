@@ -53,9 +53,9 @@ public interface IContentService
 
     Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage();
 
-    Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage();
+    Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage(string entryId);
 
-    Task<HelpEmailAddressPage?> GetHelpEmailAddressPage();
+    Task<HelpEmailAddressPage?> GetHelpEmailAddressPage(string entryId);
 
-    Task<HelpConfirmationPage?> GetHelpConfirmationPage();
+    Task<HelpConfirmationPage?> GetHelpConfirmationPage(string entryId);
 }

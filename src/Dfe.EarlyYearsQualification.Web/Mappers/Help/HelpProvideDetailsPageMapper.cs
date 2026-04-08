@@ -1,5 +1,4 @@
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
-using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
@@ -11,16 +10,12 @@ public class HelpProvideDetailsPageMapper : IHelpProvideDetailsPageMapper
     public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(
         HelpProvideDetailsPage content, string reasonForEnquiring)
     {
-        var backButton = reasonForEnquiring == HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification
-                             ? content.BackButtonToQualificationDetailsPage
-                             : content.BackButtonToGetHelpPage;
-
         var viewModel = new ProvideDetailsPageViewModel
                         {
                             BackButton = new NavigationLinkModel
                                          {
-                                             DisplayText = backButton.DisplayText,
-                                             Href = backButton.Href
+                                             DisplayText = content.BackButton.DisplayText,
+                                             Href = content.BackButton.Href
                                          },
                             Heading = content.Heading,
                             PostHeadingContent = content.PostHeadingContent,

@@ -360,49 +360,20 @@ public class ContentfulContentService(
         return helpQualificationDetailsPage.First();
     }
 
-    public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage()
+    public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage(string entryId)
     {
-        var helpProvideDetailsPage = await GetEntriesByType<HelpProvideDetailsPage>();
-
-        // ReSharper disable once InvertIf
-        if (helpProvideDetailsPage is null || !helpProvideDetailsPage.Any())
-        {
-            Logger.LogWarning("No 'help provide details page' returned");
-            return null;
-        }
-
-        return helpProvideDetailsPage.First();
+        return await GetEntryById<HelpProvideDetailsPage>(entryId);
     }
 
-    public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
+    public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage(string entryId)
     {
-        var emailAddressContent = await GetEntriesByType<HelpEmailAddressPage>();
-
-        // ReSharper disable once InvertIf
-        if (emailAddressContent is null || !emailAddressContent.Any())
-        {
-            Logger.LogWarning("No 'help email address page' returned");
-            return null;
-        }
-
-        return emailAddressContent.First();
+        return await GetEntryById<HelpEmailAddressPage>(entryId);
     }
 
-    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
+    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage(string entryId)
     {
-        var helpConfirmationPageType = ContentTypeLookup[typeof(HelpConfirmationPage)];
-        var queryBuilder = new QueryBuilder<HelpConfirmationPage>().ContentTypeIs(helpConfirmationPageType)
-                                                                   .Include(2);
-        var helpConfirmationPage = await GetEntriesByType(queryBuilder);
 
-        // ReSharper disable once InvertIf
-        if (helpConfirmationPage is null || !helpConfirmationPage.Any())
-        {
-            Logger.LogWarning("No 'Help Confirmation Page' returned");
-            return null;
-        }
-
-        return helpConfirmationPage.First();
+        return await GetEntryById<HelpConfirmationPage>(entryId);
     }
     
     private QualificationDetailsPage? GetFilteredPractitionerQualificationDetailsPage(
