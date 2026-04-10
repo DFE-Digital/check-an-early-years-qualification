@@ -956,7 +956,69 @@ public class MockContentfulService : IContentService
             }
         );
     }
-    
+
+    public async Task<WebViewPage?> GetWebViewPage()
+    {
+        return await Task.FromResult(
+            new WebViewPage
+            {
+                Heading = "Early Years Qualification List",
+                DownloadButtonText = "Download qualification list",
+                QualificationLevelLabel = "Qualification level",
+                StaffChildRatioLabel = "Staff:child ratios",
+                FromWhichYearLabel = "From which year",
+                ToWhichYearLabel = "To which year",
+                AwardingOrganisationLabel = "Awarding organisation",
+                QualificationNumberLabel = "Qualification number",
+                NotesAdditionalRequirementsLabel = "Notes / Additional requirements",
+                ShowingAllQualificationsLabel = "Showing all the qualifications",
+                FilterHeading = "Filter",
+                SelectedFiltersHeading = "Selected filters",
+                KeywordHeading = "Keywords",
+                QualificationStartDateHeading = "Qualification start date",
+                QualificationLevelHeading = "Qualification level",
+                ApplyFiltersButtonContent = "Apply filters",
+                NoFiltersSelectedContent = "No filters selected.",
+                BackButton = new NavigationLink
+                {
+                    DisplayText = "Home",
+                    Href = "/",
+                    OpenInNewTab = false
+                },
+                StartDateFilters =
+                [
+                    new Option
+                    { Label = "Before September 2014", Value = "Pre-September 2014" },
+                    new Option
+                    { Label = "On or after September 2014", Value = "Post-September 2014" },
+                    new Option
+                    { Label = "On or after September 2024", Value = "Post-September 2024" }
+                ],
+                LevelFilters =
+                [
+                    new Option
+                    { Label = "Level 2", Value = "2" },
+                    new Option
+                    { Label = "Level 3", Value = "3" },
+                    new Option
+                    { Label = "Level 4", Value = "4" },
+                    new Option
+                    { Label = "Level 5", Value = "5" },
+                    new Option
+                    { Label = "Level 6", Value = "6" },
+                    new Option
+                    { Label = "Level 7", Value = "7" },
+                ],
+                ClearFiltersLinkLabel = "Clear filters",
+                NoQualificationsFoundContent = ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."),
+                PostHeadingContent = ContentfulContentHelper.Paragraph("This list shows all the qualifications that are approved by the Department for Education as full and relevant."),
+                QualificationIsFullAndRelevantContent = ContentfulContentHelper.Paragraph("Check if an early years qualification is approved as full and relevant"),
+                SingleQualificationFoundText = "qualification found",
+                MultipleQualificationsFoundText = "qualifications found"
+            }
+        );
+    }
+
     private static RadioQuestionPage CreateAreYouCheckingYourOwnQualificationPage()
     {
         var options = new List<IOptionItem>

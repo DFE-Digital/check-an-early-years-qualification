@@ -1720,6 +1720,99 @@ public class UserJourneyCookieServiceTests
         modelValue.Should().Be(result);
     }
 
+    [TestMethod]
+    public void GetWebViewFilters_NoCookiePresent_ReturnsDefaultFilters()
+    {
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(null);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var result = service.GetWebViewFilters();
+
+        result.Should().NotBeNull();
+        result.SearchTerm.Should().Be(string.Empty);
+        result.QualificationStartDate.Should().Be(string.Empty);
+        result.QualificationLevel.Should().Be(string.Empty);
+    }
+
+    [TestMethod]
+    public void GetWebViewFilters_ModelWithFilters_ReturnsFilters()
+    {
+        var filters = new WebViewFilters
+                      {
+                          SearchTerm = "test search",
+                          QualificationStartDate = "Pre-September 2014",
+                          QualificationLevel = "3"
+                      };
+        var existingModel = new UserJourneyCookieService.UserJourneyModel
+                            {
+                                WebViewFilters = filters
+                            };
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(existingModel);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var result = service.GetWebViewFilters();
+
+        result.Should().NotBeNull();
+        result.SearchTerm.Should().Be("test search");
+        result.QualificationStartDate.Should().Be("Pre-September 2014");
+        result.QualificationLevel.Should().Be("3");
+    }
+
+    [TestMethod]
+    public void SetWebViewFilters_FiltersProvided_SetsCookieCorrectly()
+    {
+        var modelInCookie = new UserJourneyCookieService.UserJourneyModel();
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(modelInCookie);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var filters = new WebViewFilters
+                      {
+                          SearchTerm = "test search",
+                          QualificationStartDate = "Pre-September 2014",
+                          QualificationLevel = "3"
+                      };
+
+        service.SetWebViewFilters(filters);
+
+        var model = new UserJourneyCookieService.UserJourneyModel
+                    {
+                        WebViewFilters = filters
+                    };
+
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
+    }
+
+    [TestMethod]
+    public void SetWebViewFilters_NoCookiePresent_CreatesNewModelAndSetsFilters()
+    {
+        var mockHttpContextAccessor = SetCookieManagerWithExistingCookie(null);
+        var mockLogger = new Mock<ILogger<UserJourneyCookieService>>();
+
+        var service = new UserJourneyCookieService(mockLogger.Object, mockHttpContextAccessor.cookieManager.Object);
+
+        var filters = new WebViewFilters
+                      {
+                          SearchTerm = "test search",
+                          QualificationStartDate = "Pre-September 2014",
+                          QualificationLevel = "3"
+                      };
+
+        service.SetWebViewFilters(filters);
+
+        var model = new UserJourneyCookieService.UserJourneyModel
+                    {
+                        WebViewFilters = filters
+                    };
+
+        CheckSerializedModelWasSet(mockHttpContextAccessor, model);
+    }
+
     private static void CheckSerializedModelWasSet(
         (Mock<ICookieManager> mockContext, Dictionary<string, string> cookies) cookies,
         UserJourneyCookieService.UserJourneyModel expectedModel)

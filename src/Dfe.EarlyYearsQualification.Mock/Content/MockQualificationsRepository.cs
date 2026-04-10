@@ -1,12 +1,13 @@
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Mock.Content;
 
-public class MockQualificationsRepository : IQualificationsRepository
+public class MockQualificationsRepository(IQualificationListFilter qualificationListFilter) : IQualificationsRepository
 {
     public async Task<Qualification?> GetById(string qualificationId)
     {
@@ -113,13 +114,13 @@ public class MockQualificationsRepository : IQualificationsRepository
                 CreateQtsQualification("EYQ-111", "BTEC", AwardingOrganisations.Various, 7),
                 CreateQualification("EYQ-112", AwardingOrganisations.Pearson, 8, startDate, endDate),
                 CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate),
-                new Qualification("EYQ-114", "dupe qualification name", AwardingOrganisations.Various, 3)
+                new Qualification("EYQ-114", "dupe qualification name", AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
                     QualificationNumber = "123/345/678"
                 },
-                new Qualification("EYQ-115", "dupe qualification name", AwardingOrganisations.Various, 3)
+                new Qualification("EYQ-115", "dupe qualification name", AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
@@ -134,10 +135,92 @@ public class MockQualificationsRepository : IQualificationsRepository
                 degreeQualification,
                 CreateQualificationWithAdditionalRequirements("EYQ-909", AwardingOrganisations.Ncfe, 3, startDate,
                                                               endDate),
+            
+                new Qualification("EYQ-301", "Qualification 301", AwardingOrganisations.Ncfe, 2)
+                {
+                    StaffChildRatio = 1,
+                    FromWhichYear = "Sep-10",
+                    ToWhichYear = "Sep-11",
+                    QualificationNumber = "123/456/789",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Pre-September 2014"
+                        }
+                    ]
+                },
+                new Qualification("EYQ-302", "Qualification 302", AwardingOrganisations.Pearson, 3)
+                {
+                    StaffChildRatio = 3,
+                    FromWhichYear = "Sep-10",
+                    ToWhichYear = "Sep-11",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Pre-September 2014"
+                        }
+                    ]
+                },
+                new Qualification("EYQ-303", "Qualification 303", AwardingOrganisations.Edexcel, 4)
+                {
+                    StaffChildRatio = 4,
+                    FromWhichYear = "Sep-15",
+                    ToWhichYear = "Sep-16",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Post-September 2014"
+                        }
+                    ]
+                },
+                new Qualification("EYQ-304", "Qualification 304", AwardingOrganisations.Various, 5)
+                {
+                    StaffChildRatio = 6,
+                    FromWhichYear = "Sep-16",
+                    ToWhichYear = "Sep-18",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Post-September 2014"
+                        }
+                    ]
+                },
+                new Qualification("EYQ-305", "Qualification 305", AwardingOrganisations.Edexcel, 6)
+                {
+                    StaffChildRatio = 2,
+                    FromWhichYear = "Sep-16",
+                    ToWhichYear = "Sep-18",
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Post-September 2014"
+                        }
+
+                    ]
+                },
+                new Qualification("EYQ-306", "Qualification 306", AwardingOrganisations.Various, 7)
+                {
+                    StaffChildRatio = 3,
+                    FromWhichYear = "Sep-25",
+                    ToWhichYear = null,
+                    EyqlTabs =
+                    [
+                        new Tab
+                        {
+                            Heading = "Post-September 2024"
+                        }
+                    ]
+                }
             };
 
-        // For now, inbound parameters startDateMonth and startDateYear are ignored
-        return Task.FromResult(qualifications.Where(x => x.QualificationLevel == level).ToList());
+        var results = qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear, awardingOrganisation, qualificationName);
+
+        return Task.FromResult(results);
     }
 
     private static Qualification CreateQualificationWithAdditionalRequirements(
@@ -242,8 +325,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                  awardingOrganisation,
                                  qualificationLevel)
                {
-                   FromWhichYear = "2020",
-                   ToWhichYear = "2021",
+                   FromWhichYear = "Jan-20",
+                   ToWhichYear = "Jan-21",
                    QualificationNumber = "603/5829/4",
                    AdditionalRequirements =
                        "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
@@ -309,8 +392,8 @@ public class MockQualificationsRepository : IQualificationsRepository
                                  awardingOrganisation,
                                  qualificationLevel)
                {
-                   FromWhichYear = "2020",
-                   ToWhichYear = "2021",
+                   FromWhichYear = "Sep-14",
+                   ToWhichYear = "Aug-19",
                    QualificationNumber = "603/5829/4",
                    AdditionalRequirements =
                        "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",

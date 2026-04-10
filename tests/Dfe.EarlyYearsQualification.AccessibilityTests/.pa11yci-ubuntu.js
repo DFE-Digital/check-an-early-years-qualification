@@ -23,11 +23,11 @@ function getUrls(authSecret, port) {
         `wait for url to be http://localhost:${port}/questions/when-was-the-qualification-started`,
         'click element #OnOrAfter1September2014',
         'set field #question-month-label+input to 7',
-        'set field #question-year-label+input to 2015',
+        'set field #question-year-label+input to 2020',
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/questions/when-was-the-qualification-awarded`,
         'set field #awarded-month-label+input to 9',
-        'set field #awarded-year-label+input to 2017',
+        'set field #awarded-year-label+input to 2020',
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/questions/what-level-is-the-qualification`,
         'click element input[id="3"]',
@@ -174,6 +174,10 @@ function getUrls(authSecret, port) {
         {
             url: `http://localhost:${port}/help/get-help`,
             actions: basicActions.concat(`navigate to http://localhost:${port}/help/get-help`)
+        },
+        {
+            url: `http://localhost:${port}/early-years-qualification-list`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/early-years-qualification-list`)
         },
         {
             url: `http://localhost:${port}/help/proceed-with-qualification-query`,

@@ -11,11 +11,11 @@ public class StringDateHelperTests
     public void SplitDate_IntoMonthAndYear_ReturnsInts(string date)
     {
         // Act
-        var split = StringDateHelper.SplitDate(date);
+        var (startMonth, startYear) = StringDateHelper.SplitDate(date);
 
         // Assert
-        split.startMonth.Should().Be(int.Parse(date.Split('/')[0]));
-        split.startYear.Should().Be(int.Parse(date.Split('/')[1]));
+        startMonth.Should().Be(int.Parse(date.Split('/')[0]));
+        startYear.Should().Be(int.Parse(date.Split('/')[1]));
     }
 
     [TestMethod]
@@ -25,11 +25,41 @@ public class StringDateHelperTests
     public void SplitDate_IntoMonthAndYear_ReturnsNull(string date)
     {
         // Act
-        var split = StringDateHelper.SplitDate(date);
+        var (startMonth, startYear) = StringDateHelper.SplitDate(date);
 
         // Assert
-        split.startMonth.Should().BeNull();
-        split.startYear.Should().BeNull();
+        startMonth.Should().BeNull();
+        startYear.Should().BeNull();
+    }
+
+    [TestMethod]
+    [DataRow("Sep-19", 9, 2019)]
+    [DataRow("Jan-23", 1, 2023)]
+    [DataRow("Dec-99", 12, 1999)]
+    public void ConvertDate_ValidFormat_ReturnsMonthAndYear(string date, int expectedMonth, int expectedYear)
+    {
+        // Act
+        var result = StringDateHelper.ConvertDate(date);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Value.startMonth.Should().Be(expectedMonth);
+        result.Value.startYear.Should().Be(expectedYear);
+    }
+
+    [TestMethod]
+    [DataRow("InvalidDate")]
+    [DataRow("25")]
+    [DataRow("12/2022")]
+    [DataRow("")]
+    [DataRow("Text-Text")]
+    public void ConvertDate_InvalidFormat_ReturnsNull(string date)
+    {
+        // Act
+        var result = StringDateHelper.ConvertDate(date);
+
+        // Assert
+        result.Should().BeNull();
     }
 
     [TestMethod]

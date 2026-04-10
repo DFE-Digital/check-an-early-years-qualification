@@ -32,4 +32,5 @@ public static class ContentTypes
     public const string HelpConfirmationPage = "helpConfirmationPage";
     public const string RatioRequirement =  "ratioRequirement";
     public const string RadioButtonAndDateInput = "radioButtonAndDateInput";
+    public const string WebViewPage = "webViewPage";
 }
