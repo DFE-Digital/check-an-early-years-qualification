@@ -20,9 +20,12 @@ function getUrls(authSecret, port) {
         ...basicActions,
         'click element #england',
         'click element #question-submit',
-        `wait for url to be http://localhost:${port}/questions/when-was-the-qualification-started-and-awarded`,
-        'set field #started-month-label+input to 7',
-        'set field #started-year-label+input to 2020',
+        `wait for url to be http://localhost:${port}/questions/when-was-the-qualification-started`,
+        'click element #OnOrAfter1September2014',
+        'set field #question-month-label+input to 7',
+        'set field #question-year-label+input to 2020',
+        'click element #question-submit',
+        `wait for url to be http://localhost:${port}/questions/when-was-the-qualification-awarded`,
         'set field #awarded-month-label+input to 9',
         'set field #awarded-year-label+input to 2020',
         'click element #question-submit',
@@ -72,8 +75,12 @@ function getUrls(authSecret, port) {
             actions: basicActions.concat(`navigate to http://localhost:${port}/questions/where-was-the-qualification-awarded`)
         },
         {
-            url: `http://localhost:${port}/questions/when-was-the-qualification-started-and-awarded`,
-            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/questions/when-was-the-qualification-started-and-awarded`)
+            url: `http://localhost:${port}/questions/when-was-the-qualification-started`,
+            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/questions/when-was-the-qualification-started`)
+        },
+        {
+            url: `http://localhost:${port}/questions/when-was-the-qualification-awarded`,
+            actions: fullJourneyActions.concat(`navigate to http://localhost:${port}/questions/when-was-the-qualification-awarded`)
         },
         {
             url: `http://localhost:${port}/questions/what-level-is-the-qualification`,

@@ -3,6 +3,7 @@
 public class DateQuestion
 {
     public string QuestionHeader { get; init; } = string.Empty;
+
     public string QuestionHint { get; init; } = string.Empty;
 
     public string MonthLabel { get; init; } = string.Empty;
@@ -32,4 +33,8 @@ public class DateQuestion
     public string YearOutOfBoundsErrorMessage { get; init; } = string.Empty;
 
     public string YearOutOfBoundsErrorLinkText { get; init; } = string.Empty;
+
+    public string DateAfterSeptember2014ErrorMessage { get; init; } = string.Empty;
+
+    public string DateAfterSeptember2014ErrorLinkText { get; init; } = string.Empty;
 }

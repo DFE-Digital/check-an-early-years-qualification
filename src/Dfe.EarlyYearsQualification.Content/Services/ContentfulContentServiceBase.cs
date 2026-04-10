@@ -45,6 +45,7 @@ public abstract class ContentfulContentServiceBase
               { typeof(HelpEmailAddressPage), ContentTypes.HelpEmailAddressPage },
               { typeof(HelpConfirmationPage), ContentTypes.HelpConfirmationPage },
               { typeof(RatioRequirement), ContentTypes.RatioRequirement },
+              { typeof(RadioButtonAndDateInput), ContentTypes.RadioButtonAndDateInput },
               { typeof(WebViewPage), ContentTypes.WebViewPage }
           };
 

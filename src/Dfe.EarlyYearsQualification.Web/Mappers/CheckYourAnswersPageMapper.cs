@@ -9,7 +9,8 @@ public static class CheckYourAnswersPageMapper
 {
     public static CheckYourAnswersPageModel Map(CheckYourAnswersPage pageContent,
                                                 string whereWasQualificationAwardedQuestion,
-                                                string whenWasTheQualificationStartedAndAwardedQuestion,
+                                                string whenWasTheQualificationStartedQuestion,
+                                                string whenWasTheQualificationAwardedQuestion,
                                                 string whatLevelIsTheQualificationQuestion,
                                                 string whatIsTheAwardingOrganisationQuestion,
                                                 string? whereWasQualificationAwardedAnswer,
@@ -27,21 +28,27 @@ public static class CheckYourAnswersPageMapper
                         ChangeAnswerText = pageContent.ChangeAnswerText
                     };
 
-        var startedDateString = StringDateHelper.ConvertToDateString(whenWasTheQualificationStartedAnswer.startMonth,
-                                                    whenWasTheQualificationStartedAnswer.startYear,
-                                                    pageContent.QualificationStartedText);
-
-        var awardedDateString = StringDateHelper.ConvertToDateString(whenWasTheQualificationAwardedAnswer.awardedMonth,
-                                                    whenWasTheQualificationAwardedAnswer.awardedYear,
-                                                    pageContent.QualificationAwardedText);
-
         model.QuestionAnswerModels.Add(MapQuestionAnswerModel(whereWasQualificationAwardedQuestion,
                                                               [whereWasQualificationAwardedAnswer!],
                                                               QuestionUrls.WhereWasQualificationAwarded));
+
+        var selectedDate = new DateOnly(whenWasTheQualificationStartedAnswer.startYear!.Value, whenWasTheQualificationStartedAnswer.startMonth!.Value, 1);
+        var startedDateString = StringDateHelper.ConvertToDateString(whenWasTheQualificationStartedAnswer.startMonth,
+                                                    whenWasTheQualificationStartedAnswer.startYear);
+
         model.QuestionAnswerModels.Add(MapQuestionAnswerModel(
-                                                              whenWasTheQualificationStartedAndAwardedQuestion,
-                                                              [startedDateString, awardedDateString],
-                                                              QuestionUrls.WhenWasTheQualificationStartedAndAwarded));
+                                                     whenWasTheQualificationStartedQuestion,
+                                                     [selectedDate < new DateOnly(2014, 9, 1) ? "Before 1 September 2014" : startedDateString],
+                                                     QuestionUrls.WhenWasTheQualificationStarted));
+
+        var awardedDateString = StringDateHelper.ConvertToDateString(whenWasTheQualificationAwardedAnswer.awardedMonth,
+                                            whenWasTheQualificationAwardedAnswer.awardedYear);
+
+        model.QuestionAnswerModels.Add(MapQuestionAnswerModel(
+                                                      whenWasTheQualificationAwardedQuestion,
+                                                      [awardedDateString],
+                                                      QuestionUrls.WhenWasTheQualificationAwarded));
+
         model.QuestionAnswerModels.Add(MapQuestionAnswerModel(whatLevelIsTheQualificationQuestion,
                                                               whatLevelIsTheQualificationAnswer > 0
                                                                   ? [$"Level {whatLevelIsTheQualificationAnswer}"]

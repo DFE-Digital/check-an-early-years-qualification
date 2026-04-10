@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +36,25 @@ public partial class QuestionsController(
         var model = await questionService.Map(new RadioQuestionModel(), questionPage, actionName, controllerName, selectedAnswer);
 
         return View("Radio", model);
+    }
+
+    private static ErrorSummaryModel CreateErrorSummaryModel(RadioQuestionModel model)
+    {
+        var elementLinkId = model.OptionsItems.FirstOrDefault(x => x.GetType() == typeof(OptionModel)) as OptionModel;
+
+        model.HasErrors = true;
+
+        return new ErrorSummaryModel
+        {
+            ErrorBannerHeading = model.ErrorBannerHeading,
+            ErrorSummaryLinks =
+            [
+                new ErrorSummaryLink
+                        {
+                            ErrorBannerLinkText = model.ErrorBannerLinkText,
+                            ElementLinkId = elementLinkId != null ? elementLinkId.Value : ""
+                        }
+            ]
+        };
     }
 }

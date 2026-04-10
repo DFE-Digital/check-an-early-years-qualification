@@ -19,7 +19,6 @@ inputs:
     default: "false"
   contentful_delivery_api_key:
     description: "Contentful delivery api key"
-    required: true
   contentful_space_id:
     description: "Contentful space id"
     required: true

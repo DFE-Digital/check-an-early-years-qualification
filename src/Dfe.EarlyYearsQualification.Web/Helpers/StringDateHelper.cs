@@ -39,15 +39,10 @@ public static class StringDateHelper
         return null;
     }
 
-    public static string ConvertToDateString(int? dateMonth, int? dateYear, string prefixValue)
+    public static string ConvertToDateString(int? dateMonth, int? dateYear)
     {
         if (dateMonth is null || dateYear is null) return string.Empty;
         var date = new DateOnly(dateYear.Value, dateMonth.Value, 1);
-
-        if (prefixValue != string.Empty)
-        {
-            return $"{prefixValue} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {dateYear.Value}";
-        }
 
         return $"{date.ToString("MMMM", CultureInfo.InvariantCulture)} {dateYear.Value}";
     }

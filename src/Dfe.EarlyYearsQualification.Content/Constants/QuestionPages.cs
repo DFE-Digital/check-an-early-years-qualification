@@ -12,14 +12,19 @@ public static class QuestionPages
     /// <summary>
     ///     Entry ID for the "What level is the qualification" question page.
     /// </summary>
-    public const string WhatLevelIsTheQualification = "9qBgm4x3OWouGvcjxuONA";
+    public const string WhatLevelIsTheQualification = "1kVHZwUaXiyGYHO4ipovYV";
+
+    /// <summary>
+    ///     Entry ID for the When was the qualification started page
+    /// </summary>
+    public const string WhenWasTheQualificationStarted = "1xW6cTTGAQgDouidnENGFU";
 
     //// Date Pages
 
     /// <summary>
-    ///     Entry ID for the When was the qualification started and awarded page
+    ///     Entry ID for the When was the qualification awarded page
     /// </summary>
-    public const string WhenWasTheQualificationStartedAndAwarded = "chiZA3BjtPW4t4ou3YEeF";
+    public const string WhenWasTheQualificationAwarded = "3qIbSmIMKeg2vjQNP64ysS";
 
     //// Dropdown Pages
 

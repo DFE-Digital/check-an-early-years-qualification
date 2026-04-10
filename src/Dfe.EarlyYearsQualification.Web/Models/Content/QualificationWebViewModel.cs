@@ -36,7 +36,7 @@ public class QualificationWebViewModel : BasicQualificationModel
         var converted = StringDateHelper.ConvertDate(year);
         if (converted.HasValue)
         {
-            return StringDateHelper.ConvertToDateString(converted.Value.startMonth, converted.Value.startYear, string.Empty);
+            return StringDateHelper.ConvertToDateString(converted.Value.startMonth, converted.Value.startYear);
         }
 
         return year;
