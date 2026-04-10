@@ -31,4 +31,35 @@ public class StringDateHelperTests
         split.startMonth.Should().BeNull();
         split.startYear.Should().BeNull();
     }
+
+    [TestMethod]
+    public void ConvertToDateString_NullMonthAndYear_ReturnsEmptyString()
+    {
+        var result = StringDateHelper.ConvertToDateString(null, null);
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void ConvertToDateString_NullYear_ReturnsEmptyString()
+    {
+        var result = StringDateHelper.ConvertToDateString(5, null);
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void ConvertToDateString_NullMonth_ReturnsEmptyString()
+    {
+        var result = StringDateHelper.ConvertToDateString(null, 2020);
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    [DataRow(9, 2013, "September 2013")]
+    [DataRow(1, 2000, "January 2000")]
+    [DataRow(12, 2024, "December 2024")]
+    public void ConvertToDateString_ValidMonthAndYear_ReturnsFormattedString(int month, int year, string expected)
+    {
+        var result = StringDateHelper.ConvertToDateString(month, year);
+        result.Should().Be(expected);
+    }
 }

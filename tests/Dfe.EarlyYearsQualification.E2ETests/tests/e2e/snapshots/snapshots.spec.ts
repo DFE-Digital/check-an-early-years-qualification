@@ -1,7 +1,6 @@
 ﻿import {test} from '@playwright/test';
 import {
     whereWasTheQualificationAwarded,
-    whenWasQualificationStarted,
     whatLevelIsTheQualification,
     whatIsTheAwardingOrganisation,
     checkYourAnswersPage,
@@ -15,7 +14,9 @@ import {
     precheckPage,
     inputText,
     checkUrl,
-    checkingOwnQualificationOrSomeoneElsesPage
+    checkingOwnQualificationOrSomeoneElsesPage,
+    startedOnOrAfterSeptember2014,
+    whenWasQualificationAwarded
 } from '../../_shared/playwrightWrapper';
 
 test.describe('Snapshots', {tag: "@snapshot"}, () => {
@@ -60,14 +61,24 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         });
     });
 
-    test("When page", async ({page}) => {
+    test("When was the qualification started page", async ({ page }) => {
         await page.locator('#start-now-button').click();
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
         await checkSnapshot(page);
         await clickSubmitAndCheckSnapshot(page);
-        await whenWasQualificationStarted(page, "0", "2020", "", "2019");
+    });
+
+    test("When was the qualification awarded page", async ({ page }) => {
+        await page.locator('#start-now-button').click();
+        await precheckPage(page, '#yes');
+        await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
+        await whereWasTheQualificationAwarded(page, "#england");
+        await checkSnapshot(page);
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await checkSnapshot(page);
+        await whenWasQualificationAwarded(page, "", "");
         await checkSnapshot(page);
     });
 
@@ -76,7 +87,8 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await checkSnapshot(page);
         await clickSubmitAndCheckSnapshot(page);
     });
@@ -86,7 +98,8 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await checkSnapshot(page);
         await clickSubmitAndCheckSnapshot(page);
@@ -97,7 +110,8 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkSnapshot(page);
@@ -108,7 +122,8 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -120,7 +135,8 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -133,7 +149,8 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -146,7 +163,8 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -166,7 +184,8 @@ test.describe('Snapshots', {tag: "@snapshot"}, () => {
         await precheckPage(page, '#yes');
         await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
         await whereWasTheQualificationAwarded(page, "#england");
-        await whenWasQualificationStarted(page, "12", "2020", "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "12", "2020");
+        await whenWasQualificationAwarded(page, "1", "2025");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);

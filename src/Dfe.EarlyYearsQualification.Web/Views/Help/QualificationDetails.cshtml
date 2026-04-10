@@ -41,12 +41,24 @@
 
     @if (Model.QuestionModel.StartedQuestion is not null)
     {
-        await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.StartedQuestion);
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                @{ 
+                    await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.StartedQuestion); 
+                }
+            </div>
+        </div>
     }
 
     @if (Model.QuestionModel.AwardedQuestion is not null)
     {
-        await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.AwardedQuestion);
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                @{
+                    await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.AwardedQuestion);
+                }
+            </div>
+        </div>
     }
 
     <div class="govuk-grid-row">

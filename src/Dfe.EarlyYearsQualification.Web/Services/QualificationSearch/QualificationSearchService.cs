@@ -115,8 +115,8 @@ public class QualificationSearchService(
         if (startDateMonth is not null && startDateYear is not null)
         {
             var date = new DateOnly(startDateYear.Value, startDateMonth.Value, 1);
-            filterModel.StartDate =
-                $"{content.StartDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
+
+            filterModel.StartDate = date < new DateOnly(2014, 9, 1) ? content.StartDateBeforeSept2014PrefixText : $"{content.StartDatePrefixText} {date.ToString("MMMM", CultureInfo.InvariantCulture)} {startDateYear.Value}";
         }
 
         if (awardedDateMonth is not null && awardedDateYear is not null)

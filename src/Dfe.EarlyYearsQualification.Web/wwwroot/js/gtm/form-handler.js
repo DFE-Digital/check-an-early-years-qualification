@@ -2,11 +2,23 @@ window.dataLayer = window.dataLayer || [];
 $("#radio-question-form").on("submit", function(){
     let question = $("#question").text();
     let answer = $("input[name='Option']:checked").val();
-    window.dataLayer.push({
-        'event': 'radioQuestionFormSubmission',
-        'question': question,
-        'answer': answer
-    });
+    let startedMonth = $('#Month').val();
+    let startedYear = $('#Year').val();
+    if (startedMonth !== undefined && startedYear !== undefined) {
+        window.dataLayer.push({
+            'event': 'nestedRadioQuestionFormSubmission',
+            'question': question,
+            'answer': answer,
+            'dateStarted': `${startedMonth}-${startedYear}`,
+        });
+    }
+    else {
+        window.dataLayer.push({
+            'event': 'radioQuestionFormSubmission',
+            'question': question,
+            'answer': answer
+        });
+    }
 });
 
 $("#pre-check-question-form").on("submit", function() {
@@ -21,14 +33,11 @@ $("#pre-check-question-form").on("submit", function() {
 
 $("#date-question-form").on("submit", function () {
     let question = $("#question").text();
-    let startedMonth = $('#StartedQuestion\\.SelectedMonth').val();
-    let startedYear = $('#StartedQuestion\\.SelectedYear').val();
     let awardedMonth = $('#AwardedQuestion\\.SelectedMonth').val();
     let awardedYear = $('#AwardedQuestion\\.SelectedYear').val();
     window.dataLayer.push({
         'event': 'dateQuestionFormSubmission',
         'question': question,
-        'dateStarted': `${startedMonth}-${startedYear}`,
         'dateAwarded': `${awardedMonth}-${awardedYear}`,
     });
 });

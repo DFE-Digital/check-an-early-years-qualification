@@ -263,6 +263,26 @@ public class QualificationSearchServiceTests
     }
 
     [TestMethod]
+    public void GetFilterModel_StartDateBeforeSeptember2014_UsesBeforeText()
+    {
+        const int startDateMonth = 8;
+        const int startDateYear = 2014;
+        var qualificationListPage = new QualificationListPage
+                                    {
+                                        StartDatePrefixText = "started",
+                                        StartDateBeforeSept2014PrefixText = "Before 1 September 2014"
+                                    };
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
+                                     .Returns((startDateMonth, startDateYear));
+
+        var sut = GetSut();
+
+        var result = sut.GetFilterModel(qualificationListPage);
+
+        result.StartDate.Should().Be(qualificationListPage.StartDateBeforeSept2014PrefixText);
+    }
+
+    [TestMethod]
     public void GetFilterModel_GotAwardedDates_Sets_AwardedDate()
     {
         const int awardedDateMonth = 3;

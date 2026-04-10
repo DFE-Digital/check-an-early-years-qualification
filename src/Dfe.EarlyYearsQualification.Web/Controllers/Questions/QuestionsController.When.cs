@@ -1,4 +1,8 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Constants;
+using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Web.ModelBinding;
+using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,11 +10,105 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 
 public partial class QuestionsController
 {
-    [HttpGet("when-was-the-qualification-started-and-awarded")]
+    [HttpGet("when-was-the-qualification-started")]
     public async Task<IActionResult> WhenWasTheQualificationStarted()
     {
-        var questionPage =
-            await questionService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
+        var radioQuestionContent = await questionService.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted);
+
+        if (radioQuestionContent is null)
+        {
+            logger.LogError("No content for the question page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var model = new RadioQuestionModel();
+
+        model = await questionService.Map(model, radioQuestionContent, nameof(this.WhenWasTheQualificationStarted), Questions, model.Option);
+
+        questionService.SetPreviouslyEnteredDetails(model, radioQuestionContent);
+
+        return View("Radio", model);
+    }
+
+    [HttpPost("when-was-the-qualification-started")]
+    public async Task<IActionResult> WhenWasTheQualificationStarted([ModelBinder(typeof(RadioQuestionModelBinder))] RadioQuestionModel model)
+    {
+        var radioQuestionContent = await questionService.GetRadioQuestionPageContent(QuestionPages.WhenWasTheQualificationStarted);
+
+        if (radioQuestionContent is null)
+        {
+            logger.LogError("No content for the question page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var boundDateInput = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().FirstOrDefault();
+
+        model = await questionService.Map(model, radioQuestionContent, nameof(WhenWasTheQualificationStarted), Questions, model.Option);
+
+        var firstOption = model.OptionsItems.OfType<OptionModel>().First();
+        var radioAndDateInputContent = radioQuestionContent.Options.Last() as RadioButtonAndDateInput;
+        var radioAndDateInputModel = model.OptionsItems.OfType<RadioButtonAndDateInputModel>().FirstOrDefault();
+
+        if (radioAndDateInputModel?.Question is null || radioAndDateInputContent is null)
+        {
+            logger.LogError("RadioAndDateInputModel StartedQuestion is null");
+            return RedirectToAction("Index", "Error");
+        }
+
+        // Check validation required attribute e.g. an option has been selected
+        if (!ModelState.IsValid)
+        {
+            model.ErrorSummaryModel = CreateErrorSummaryModel(model);
+
+            return View("Radio", model);
+        }
+
+        // If the option selected is 'Before September 2014' then we can set a base date and skip the date input validation
+        if (model.Option == firstOption.Value)
+        {
+            // set a base date
+            questionService.SetWhenWasQualificationStarted(
+                new DateQuestionModel()
+                {
+                    SelectedMonth = 1,
+                    SelectedYear = 1900
+                }
+            );
+
+            return RedirectToAction(nameof(WhenWasTheQualificationAwarded));
+        }
+
+        radioAndDateInputModel.Question.SelectedMonth = boundDateInput?.Question?.SelectedMonth;
+        radioAndDateInputModel.Question.SelectedYear = boundDateInput?.Question?.SelectedYear;
+
+        // Validate date input
+        var dateModelValidationResult = questionService.StartDateIsValid(radioAndDateInputModel.Question, radioAndDateInputContent.StartedQuestion);
+
+        if (!dateModelValidationResult.MonthValid || !dateModelValidationResult.YearValid)
+        {
+            model.HasErrors = true;
+            model.HasNestedErrors = true;
+
+            radioAndDateInputModel.Question = questionService.MapDateModel(radioAndDateInputModel.Question, radioAndDateInputContent.StartedQuestion, dateModelValidationResult);
+
+            model.ErrorSummaryModel = new ErrorSummaryModel
+                                      {
+                                          ErrorBannerHeading = model.ErrorBannerHeading,
+                                          ErrorSummaryLinks = radioAndDateInputModel.Question.ErrorSummaryLinks
+                                      };
+        
+            return View("Radio", model);
+        }
+
+        questionService.SetWhenWasQualificationStarted(radioAndDateInputModel.Question);
+        return RedirectToAction(nameof(WhenWasTheQualificationAwarded));
+    }
+
+    [HttpGet("when-was-the-qualification-awarded")]
+    public async Task<IActionResult> WhenWasTheQualificationAwarded()
+    {
+        var questionPage = await questionService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded);
+        
         if (questionPage is null)
         {
             logger.LogError("No content for the question page");
@@ -18,7 +116,7 @@ public partial class QuestionsController
         }
 
         var model = questionService.MapDatesModel(new DatesQuestionModel(), questionPage,
-                                  nameof(this.WhenWasTheQualificationStarted),
+                                  nameof(WhenWasTheQualificationAwarded),
                                   Questions,
                                   null
                                  );
@@ -26,23 +124,32 @@ public partial class QuestionsController
         return View("Dates", model);
     }
 
-    [HttpPost("when-was-the-qualification-started-and-awarded")]
-#pragma warning disable S6967
-    public async Task<IActionResult> WhenWasTheQualificationStarted([FromForm] DatesQuestionModel model)
-#pragma warning restore S6967
+    [HttpPost("when-was-the-qualification-awarded")]
+    public async Task<IActionResult> WhenWasTheQualificationAwarded([FromForm] DatesQuestionModel model)
     {
-        var questionPage =
-            await questionService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationStartedAndAwarded);
+        var questionPage = await questionService.GetDatesQuestionPage(QuestionPages.WhenWasTheQualificationAwarded);
+
+        if (questionPage is null)
+        {
+            logger.LogError("No content for the question page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var (startMonth, startYear) = questionService.GetWhenWasQualificationStarted();
+
+        model.StartedQuestion = new DateQuestionModel
+        {
+            SelectedMonth = startMonth,
+            SelectedYear = startYear
+        };
+
         var dateModelValidationResult = questionService.IsValid(model, questionPage!);
-        if (!dateModelValidationResult.Valid)
+        if (!dateModelValidationResult.AwardedValidationResult!.MonthValid || !dateModelValidationResult.AwardedValidationResult.YearValid)
         {
             model.HasErrors = true;
 
-            if (questionPage is not null)
-            {
-                model = questionService.MapDatesModel(model, questionPage, nameof(this.WhenWasTheQualificationStarted), Questions,
-                                      dateModelValidationResult);
-            }
+            model = questionService.MapDatesModel(model, questionPage, nameof(WhenWasTheQualificationAwarded), Questions,
+                                    dateModelValidationResult);
 
             return View("Dates", model);
         }
@@ -50,8 +157,6 @@ public partial class QuestionsController
         questionService.SetWhenWasQualificationStarted(model.StartedQuestion!);
         questionService.SetWhenWasQualificationAwarded(model.AwardedQuestion!);
 
-        return RedirectToAction(nameof(this.WhatLevelIsTheQualification));
+        return RedirectToAction(nameof(WhatLevelIsTheQualification));
     }
-
-    
 }

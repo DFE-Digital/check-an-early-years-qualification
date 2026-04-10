@@ -11,5 +11,7 @@ public interface IDateQuestionModelValidator
 
     DatesValidationResult IsValid(DatesQuestionModel model, HelpQualificationDetailsPage questionPage);
 
+    DateValidationResult StartDateIsValid(DateQuestionModel model, DateQuestion question);
+
     bool DisplayAwardedDateBeforeStartDateError(DateQuestionModel startedQuestion, DateQuestionModel awardedQuestion);
 }
