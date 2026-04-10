@@ -1099,6 +1099,36 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetHelpProvideDetailsPage_InvalidEntryId_ReturnsNull()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpProvideDetailsPage("Invalid_entry_id");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_InvalidEntryId_ReturnsNull()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpEmailAddressPage("Invalid_entry_id");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_InvalidEntryId_ReturnsNull()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpConfirmationPage("Invalid_entry_id");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
     public async Task GetPreCheckPage_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
@@ -1237,10 +1267,34 @@ public class MockContentfulServiceTests
               .ContainSingle(x => ((Text)x).Value ==
                                   "As you agreed to be contacted about future research, someone from our research team may contact you by email.");
         result.ReturnToHomepageLink.Should().BeEquivalentTo(new NavigationLink
-                                                            {
-                                                                DisplayText = "Home",
-                                                                OpenInNewTab = false,
-                                                                Href = "/"
-                                                            });
+                                                             {
+                                                                 DisplayText = "Home",
+                                                                 OpenInNewTab = false,
+                                                                 Href = "/"
+                                                             });
+    }
+
+    [TestMethod]
+    public async Task GetChallengePage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetChallengePage();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<ChallengePage>();
+        result.MainHeading.Should().Be("Test Main Heading");
+        result.InputHeading.Should().Be("Test Input Heading");
+        result.ErrorHeading.Should().Be("Test Error Heading");
+        result.MainContent.Should().NotBeNull();
+        result.MainContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Main Content");
+        result.FooterContent.Should().NotBeNull();
+        result.FooterContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Footer Content");
+        result.IncorrectPasswordText.Should().Be("Test Incorrect Password Text");
+        result.MissingPasswordText.Should().Be("Test Missing Password Text");
+        result.SubmitButtonText.Should().Be("Test Submit Button Text");
+        result.ShowPasswordButtonText.Should().Be("Test Show Password Button Text");
     }
 }
