@@ -21,20 +21,13 @@ public class HelpProvideDetailsPageMapperTests
                           PostHeadingContent =
                               "Give as much detail as you can. This helps us give you the right support.",
                           CtaButtonText = "Continue",
-                          BackButtonToGetHelpPage = new NavigationLink
+                          BackButton = new NavigationLink
                                                     {
                                                         DisplayText =
                                                             "Back to get help with the Check an early years qualification service",
                                                         Href = "/help/get-help",
                                                         OpenInNewTab = false
                                                     },
-                          BackButtonToQualificationDetailsPage = new NavigationLink
-                                                                 {
-                                                                     DisplayText =
-                                                                         "Back to what are the qualification details",
-                                                                     Href = "/help/qualification-details",
-                                                                     OpenInNewTab = false
-                                                                 },
                           AdditionalInformationWarningText = "Do not include any personal information",
                           AdditionalInformationErrorMessage = "Provide information about how we can help you",
                           ErrorBannerHeading = "There is a problem"
@@ -50,30 +43,15 @@ public class HelpProvideDetailsPageMapperTests
         result.PostHeadingContent.Should().Be(content.PostHeadingContent);
         result.CtaButtonText.Should().Be("Continue");
 
-        if (reasonForEnquiring == HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)
-        {
-            result.BackButton.Should().BeEquivalentTo(
-                                                      new NavigationLinkModel
-                                                      {
-                                                          DisplayText = "Back to what are the qualification details",
-                                                          Href = "/help/qualification-details",
-                                                          OpenInNewTab = false
-                                                      }
-                                                     );
-        }
-
-        if (reasonForEnquiring == HelpFormEnquiryReasons.GetHelp.IssueWithTheService)
-        {
-            result.BackButton.Should().BeEquivalentTo(
-                                                      new NavigationLinkModel
-                                                      {
-                                                          DisplayText =
-                                                              "Back to get help with the Check an early years qualification service",
-                                                          Href = "/help/get-help",
-                                                          OpenInNewTab = false
-                                                      }
-                                                     );
-        }
+        result.BackButton.Should().BeEquivalentTo(
+                                                    new NavigationLinkModel
+                                                    {
+                                                        DisplayText =
+                                                            "Back to get help with the Check an early years qualification service",
+                                                        Href = "/help/get-help",
+                                                        OpenInNewTab = false
+                                                    }
+                                                );
 
         result.ErrorBannerHeading.Should().Be(content.ErrorBannerHeading);
         result.AdditionalInformationErrorMessage.Should().Be(content.AdditionalInformationErrorMessage);

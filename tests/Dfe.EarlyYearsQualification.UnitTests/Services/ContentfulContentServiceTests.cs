@@ -1289,7 +1289,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpProvideDetailsPage();
+        var result = await service.GetHelpProvideDetailsPage("test-entry-id");
 
         result.Should().Be(content);
     }
@@ -1305,7 +1305,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpProvideDetailsPage();
+        var result = await service.GetHelpProvideDetailsPage("test-entry-id");
 
         result.Should().BeNull();
     }
@@ -1323,7 +1323,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpEmailAddressPage();
+        var result = await service.GetHelpEmailAddressPage("test-entry-id");
 
         result.Should().Be(content);
     }
@@ -1339,7 +1339,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpEmailAddressPage();
+        var result = await service.GetHelpEmailAddressPage("test-entry-id");
 
         result.Should().BeNull();
     }
@@ -1357,7 +1357,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpConfirmationPage();
+        var result = await service.GetHelpConfirmationPage("test-entry-id");
 
         result.Should().Be(data);
     }
@@ -1373,7 +1373,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetHelpConfirmationPage();
+        var result = await service.GetHelpConfirmationPage("test-entry-id");
 
         result.Should().BeNull();
     }

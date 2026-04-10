@@ -1,4 +1,5 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities;
+﻿using Dfe.EarlyYearsQualification.Content.Constants;
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
@@ -401,13 +402,97 @@ public class HelpServiceTests
     public async Task GetHelpProvideDetailsPage_Calls_ContentService_GetHelpProvideDetailsPage()
     {
         // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
         var sut = GetSut();
 
         // Act
         _ = await sut.GetHelpProvideDetailsPage();
 
         // Assert
-        _mockContentService.Verify(o => o.GetHelpProvideDetailsPage(), Times.Once);
+        _mockContentService.Verify(o => o.GetHelpProvideDetailsPage(It.IsAny<string>()), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task GetHelpProvideDetailsPage_ReasonIsIssueWithTheService_CallsContentServiceWithTechnicalIssueEntryId()
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+        });
+
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.GetHelpProvideDetailsPage();
+
+        // Assert
+        _mockContentService.Verify(o => o.GetHelpProvideDetailsPage(HelpPages.TechnicalIssueProvideDetails), Times.Once);
+    }
+
+    [TestMethod]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol)]
+    [DataRow(null)]
+    [DataRow("")]
+    public async Task GetHelpProvideDetailsPage_ReasonIsNotIssueWithTheService_CallsContentServiceWithHowCanWeHelpYouEntryId(string reason)
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = reason
+        });
+
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.GetHelpProvideDetailsPage();
+
+        // Assert
+        _mockContentService.Verify(o => o.GetHelpProvideDetailsPage(HelpPages.HowCanWeHelpYouProvideDetails), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task GetHelpProvideDetailsPage_ContentServiceReturnsContent_ReturnsContent()
+    {
+        // Arrange
+        var expectedContent = new HelpProvideDetailsPage
+        {
+            Heading = "Test Heading",
+            CtaButtonText = "Continue"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockContentService.Setup(o => o.GetHelpProvideDetailsPage(It.IsAny<string>()))
+                           .ReturnsAsync(expectedContent);
+
+        var sut = GetSut();
+
+        // Act
+        var result = await sut.GetHelpProvideDetailsPage();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(expectedContent);
+    }
+
+    [TestMethod]
+    public async Task GetHelpProvideDetailsPage_ContentServiceReturnsNull_ReturnsNull()
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockContentService.Setup(o => o.GetHelpProvideDetailsPage(It.IsAny<string>()))
+                           .ReturnsAsync((HelpProvideDetailsPage?)null);
+
+        var sut = GetSut();
+
+        // Act
+        var result = await sut.GetHelpProvideDetailsPage();
+
+        // Assert
+        result.Should().BeNull();
     }
 
     [TestMethod]
@@ -431,13 +516,97 @@ public class HelpServiceTests
     public async Task GetHelpEmailAddressPage_Calls_ContentService_GetHelpEmailAddressPage()
     {
         // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
         var sut = GetSut();
 
         // Act
         _ = await sut.GetHelpEmailAddressPage();
 
         // Assert
-        _mockContentService.Verify(o => o.GetHelpEmailAddressPage(), Times.Once);
+        _mockContentService.Verify(o => o.GetHelpEmailAddressPage(It.IsAny<string>()), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_ReasonIsIssueWithTheService_CallsContentServiceWithTechnicalIssueEntryId()
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+        });
+
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.GetHelpEmailAddressPage();
+
+        // Assert
+        _mockContentService.Verify(o => o.GetHelpEmailAddressPage(HelpPages.TechnicalIssueEmailAddress), Times.Once);
+    }
+
+    [TestMethod]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol)]
+    [DataRow(null)]
+    [DataRow("")]
+    public async Task GetHelpEmailAddressPage_ReasonIsNotIssueWithTheService_CallsContentServiceWithQualificationQueryEntryId(string reason)
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = reason
+        });
+
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.GetHelpEmailAddressPage();
+
+        // Assert
+        _mockContentService.Verify(o => o.GetHelpEmailAddressPage(HelpPages.QualificationQueryEmailAddress), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_ContentServiceReturnsContent_ReturnsContent()
+    {
+        // Arrange
+        var expectedContent = new HelpEmailAddressPage
+        {
+            Heading = "Test Heading",
+            CtaButtonText = "Continue"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockContentService.Setup(o => o.GetHelpEmailAddressPage(It.IsAny<string>()))
+                           .ReturnsAsync(expectedContent);
+
+        var sut = GetSut();
+
+        // Act
+        var result = await sut.GetHelpEmailAddressPage();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(expectedContent);
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_ContentServiceReturnsNull_ReturnsNull()
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockContentService.Setup(o => o.GetHelpEmailAddressPage(It.IsAny<string>()))
+                           .ReturnsAsync((HelpEmailAddressPage?)null);
+
+        var sut = GetSut();
+
+        // Act
+        var result = await sut.GetHelpEmailAddressPage();
+
+        // Assert
+        result.Should().BeNull();
     }
 
     [TestMethod]
@@ -471,13 +640,96 @@ public class HelpServiceTests
     public async Task GetHelpConfirmationPage_Calls_ContentService_GetHelpConfirmationPage()
     {
         // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
         var sut = GetSut();
 
         // Act
         _ = await sut.GetHelpConfirmationPage();
 
         // Assert
-        _mockContentService.Verify(o => o.GetHelpConfirmationPage(), Times.Once);
+        _mockContentService.Verify(o => o.GetHelpConfirmationPage(It.IsAny<string>()), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReasonIsIssueWithTheService_CallsContentServiceWithTechnicalIssueEntryId()
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+        });
+
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.GetHelpConfirmationPage();
+
+        // Assert
+        _mockContentService.Verify(o => o.GetHelpConfirmationPage(HelpPages.TechnicalIssueConfirmation), Times.Once);
+    }
+
+    [TestMethod]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.INeedACopyOfTheQualificationCertificateOrTranscript)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IDoNotKnowWhatLevelTheQualificationIs)]
+    [DataRow(HelpFormEnquiryReasons.GetHelp.IWantToCheckWhetherACourseIsApprovedBeforeIEnrol)]
+    [DataRow(null)]
+    [DataRow("")]
+    public async Task GetHelpConfirmationPage_ReasonIsNotIssueWithTheService_CallsContentServiceWithQualificationQueryEntryId(string reason)
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = reason
+        });
+
+        var sut = GetSut();
+
+        // Act
+        _ = await sut.GetHelpConfirmationPage();
+
+        // Assert
+        _mockContentService.Verify(o => o.GetHelpConfirmationPage(HelpPages.QualificationQueryConfirmation), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ContentServiceReturnsContent_ReturnsContent()
+    {
+        // Arrange
+        var expectedContent = new HelpConfirmationPage
+        {
+            SuccessMessage = "Test Success Message"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockContentService.Setup(o => o.GetHelpConfirmationPage(It.IsAny<string>()))
+                           .ReturnsAsync(expectedContent);
+
+        var sut = GetSut();
+
+        // Act
+        var result = await sut.GetHelpConfirmationPage();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(expectedContent);
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ContentServiceReturnsNull_ReturnsNull()
+    {
+        // Arrange
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockContentService.Setup(o => o.GetHelpConfirmationPage(It.IsAny<string>()))
+                           .ReturnsAsync((HelpConfirmationPage?)null);
+
+        var sut = GetSut();
+
+        // Act
+        var result = await sut.GetHelpConfirmationPage();
+
+        // Assert
+        result.Should().BeNull();
     }
 
     [TestMethod]

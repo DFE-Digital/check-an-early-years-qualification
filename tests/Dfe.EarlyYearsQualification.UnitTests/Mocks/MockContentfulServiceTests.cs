@@ -957,11 +957,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetHelpProvideDetailsPage_ReturnsExpectedDetails()
+    public async Task GetHelpProvideDetailsPage_ReturnsHowCanWeHelpYouProvideDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetHelpProvideDetailsPage();
+        var result = await contentfulService.GetHelpProvideDetailsPage(HelpPages.HowCanWeHelpYouProvideDetails);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpProvideDetailsPage>();
@@ -970,35 +970,54 @@ public class MockContentfulServiceTests
         result.PostHeadingContent.Should()
               .Be("Give as much detail as you can. This helps us give you the right support.");
         result.CtaButtonText.Should().Be("Continue");
-        result.BackButtonToGetHelpPage.Should().BeEquivalentTo(
-                                                               new NavigationLink
-                                                               {
-                                                                   DisplayText =
-                                                                       "Back to get help with the Check an early years qualification service",
-                                                                   Href = "/help/get-help",
-                                                                   OpenInNewTab = false
-                                                               }
-                                                              );
-        result.BackButtonToQualificationDetailsPage.Should().BeEquivalentTo(
-                                                                            new NavigationLink
-                                                                            {
-                                                                                DisplayText =
-                                                                                    "Back to what are the qualification details",
-                                                                                Href = "/help/qualification-details",
-                                                                                OpenInNewTab = false
-                                                                            }
-                                                                           );
+        result.BackButton.Should().BeEquivalentTo(
+                                                   new NavigationLink
+                                                   {
+                                                       DisplayText =
+                                                           "Back to what are the qualification details",
+                                                       Href = "/help/qualification-details",
+                                                       OpenInNewTab = false
+                                                   }
+                                                  );
         result.AdditionalInformationWarningText.Should().Be("Do not include any personal information");
         result.AdditionalInformationErrorMessage.Should().Be("Provide information about how we can help you");
         result.ErrorBannerHeading.Should().Be("There is a problem");
     }
 
     [TestMethod]
-    public async Task GetHelpEmailAddressPage_ReturnsExpectedDetails()
+    public async Task GetHelpProvideDetailsPage_ReturnsTechnicalIssueProvideDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetHelpEmailAddressPage();
+        var result = await contentfulService.GetHelpProvideDetailsPage(HelpPages.TechnicalIssueProvideDetails);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpProvideDetailsPage>();
+
+        result.Heading.Should().Be("Tell us about the technical issue");
+        result.PostHeadingContent.Should()
+              .Be("Give as much detail as you can about the technical issue you are experiencing");
+        result.CtaButtonText.Should().Be("Continue");
+        result.BackButton.Should().BeEquivalentTo(
+                                                   new NavigationLink
+                                                   {
+                                                       DisplayText =
+                                                           "Back to get help with the Check an early years qualification service",
+                                                       Href = "/help/get-help",
+                                                       OpenInNewTab = false
+                                                   }
+                                                  );
+        result.AdditionalInformationWarningText.Should().Be("Do not include any personal information");
+        result.AdditionalInformationErrorMessage.Should().Be("Provide information about how we can help you");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_ReturnsQualificationQueryEmailAddress()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpEmailAddressPage(HelpPages.QualificationQueryEmailAddress);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpEmailAddressPage>();
@@ -1021,11 +1040,38 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetHelpConfirmationPage_ReturnsExpectedDetails()
+    public async Task GetHelpEmailAddressPage_ReturnsTechnicalIssueEmailAddress()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetHelpConfirmationPage();
+        var result = await contentfulService.GetHelpEmailAddressPage(HelpPages.TechnicalIssueEmailAddress);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpEmailAddressPage>();
+
+        result.BackButton.Should().BeEquivalentTo(
+                                                  new NavigationLink
+                                                  {
+                                                      DisplayText = "Back to tell us about the technical issue",
+                                                      Href = "/help/provide-details",
+                                                      OpenInNewTab = false
+                                                  }
+                                                 );
+        result.Heading.Should().Be("What is your email address?");
+        result.PostHeadingContent.Should().Be("We will only use this email address if we need more information about the technical issue you are experiencing");
+        result.CtaButtonText.Should().Be("Send message");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.NoEmailAddressEnteredErrorMessage.Should().Be("Enter an email address");
+        result.InvalidEmailAddressErrorMessage.Should()
+              .Be("Enter an email address in the correct format, for example name@example.com");
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReturnsQualificationQueryConfirmation()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpConfirmationPage(HelpPages.QualificationQueryConfirmation);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpConfirmationPage>();
         result.SuccessMessage.Should().Be("Message sent");
@@ -1034,6 +1080,52 @@ public class MockContentfulServiceTests
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
                                                          "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n");
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReturnsTechnicalIssueConfirmation()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpConfirmationPage(HelpPages.TechnicalIssueConfirmation);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpConfirmationPage>();
+        result.SuccessMessage.Should().Be("Message sent");
+        result.BodyHeading.Should().Be("What happens next");
+        result.Body.Should().NotBeNull();
+        result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
+                                                         "We may need to contact you for more information about the issue you are experiencing with the service.");
+    }
+
+    [TestMethod]
+    public async Task GetHelpProvideDetailsPage_InvalidEntryId_ReturnsNull()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpProvideDetailsPage("Invalid_entry_id");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_InvalidEntryId_ReturnsNull()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpEmailAddressPage("Invalid_entry_id");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_InvalidEntryId_ReturnsNull()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpConfirmationPage("Invalid_entry_id");
+
+        result.Should().BeNull();
     }
 
     [TestMethod]
@@ -1175,10 +1267,34 @@ public class MockContentfulServiceTests
               .ContainSingle(x => ((Text)x).Value ==
                                   "As you agreed to be contacted about future research, someone from our research team may contact you by email.");
         result.ReturnToHomepageLink.Should().BeEquivalentTo(new NavigationLink
-                                                            {
-                                                                DisplayText = "Home",
-                                                                OpenInNewTab = false,
-                                                                Href = "/"
-                                                            });
+                                                             {
+                                                                 DisplayText = "Home",
+                                                                 OpenInNewTab = false,
+                                                                 Href = "/"
+                                                             });
+    }
+
+    [TestMethod]
+    public async Task GetChallengePage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetChallengePage();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<ChallengePage>();
+        result.MainHeading.Should().Be("Test Main Heading");
+        result.InputHeading.Should().Be("Test Input Heading");
+        result.ErrorHeading.Should().Be("Test Error Heading");
+        result.MainContent.Should().NotBeNull();
+        result.MainContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Main Content");
+        result.FooterContent.Should().NotBeNull();
+        result.FooterContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Footer Content");
+        result.IncorrectPasswordText.Should().Be("Test Incorrect Password Text");
+        result.MissingPasswordText.Should().Be("Test Missing Password Text");
+        result.SubmitButtonText.Should().Be("Test Submit Button Text");
+        result.ShowPasswordButtonText.Should().Be("Test Show Password Button Text");
     }
 }

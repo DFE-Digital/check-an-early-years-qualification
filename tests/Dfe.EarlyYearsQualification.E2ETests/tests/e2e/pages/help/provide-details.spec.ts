@@ -12,13 +12,35 @@ test.describe('A spec that tests the get help page', { tag: "@e2e" }, () => {
         await startJourney(page, context);
     });
 
-    test("Checks the content is on the page", async ({ page, context }) => {
+    test("Checks the technical content is on the page", async ({ page, context }) => {
         await page.goto("/help/get-help");
         await page.click("#IssueWithTheService");
         await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
 
         await checkText(page, "#back-button", "Back to get help with the Check an early years qualification service");
+        await checkText(page, "#additional-information-heading", "Tell us about the technical issue");
+        await checkText(page, "#additional-information-hint", "Give as much detail as you can about the technical issue you are experiencing");
+        await checkText(page, "#warning-text-container > strong", "Warning Do not include any personal information");
+        await checkText(page, "#question-submit", "Continue");
+    });
+
+    test("Checks the qualification query content is on the page", async ({ page }) => {
+        await page.goto("/help/get-help");
+        await page.click("#QuestionAboutAQualification");
+        await page.click("#form-submit");
+        await page.click("input#ContactTheEarlyYearsQualificationTeam");
+        await page.click("button#form-submit");
+        await inputText(page, "#QualificationName", "Entered qualification name");
+        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", "1");
+        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", "2001");
+        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", "2");
+        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", "2002");
+        await inputText(page, "#AwardingOrganisation", "Entered awarding organisation");
+
+        await page.click("#question-submit");
+        await checkUrl(page, "/help/provide-details");
+        await checkText(page, "#back-button", "Back to what are the qualification details");
         await checkText(page, "#additional-information-heading", "How can we help you?");
         await checkText(page, "#additional-information-hint", "Give as much detail as you can. This helps us give you the right support.");
         await checkText(page, "#warning-text-container > strong", "Warning Do not include any personal information");

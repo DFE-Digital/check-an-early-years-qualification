@@ -1,4 +1,5 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities;
+﻿using Dfe.EarlyYearsQualification.Content.Constants;
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
@@ -193,7 +194,13 @@ public class HelpService(
 
     public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage()
     {
-        return await contentService.GetHelpProvideDetailsPage();
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        var entryId = enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+            ? HelpPages.TechnicalIssueProvideDetails
+            : HelpPages.HowCanWeHelpYouProvideDetails;
+
+        return await contentService.GetHelpProvideDetailsPage(entryId);
     }
 
     public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(
@@ -204,7 +211,13 @@ public class HelpService(
 
     public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
     {
-        return await contentService.GetHelpEmailAddressPage();
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        var entryId = enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+            ? HelpPages.TechnicalIssueEmailAddress
+            : HelpPages.QualificationQueryEmailAddress;
+
+        return await contentService.GetHelpEmailAddressPage(entryId);
     }
 
     public EmailAddressPageViewModel MapEmailAddressPageContentToViewModel(HelpEmailAddressPage content)
@@ -219,7 +232,13 @@ public class HelpService(
 
     public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
     {
-        return await contentService.GetHelpConfirmationPage();
+        var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
+
+        var entryId = enquiry.ReasonForEnquiring == HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+            ? HelpPages.TechnicalIssueConfirmation
+            : HelpPages.QualificationQueryConfirmation;
+
+        return await contentService.GetHelpConfirmationPage(entryId);
     }
 
     public Task<ConfirmationPageViewModel> MapConfirmationPageContentToViewModelAsync(HelpConfirmationPage content)

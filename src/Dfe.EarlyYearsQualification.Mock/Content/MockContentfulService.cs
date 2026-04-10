@@ -890,71 +890,131 @@ public class MockContentfulService : IContentService
         );
     }
 
-    public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage()
+    public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage(string entryId)
     {
-        return await Task.FromResult(
-            new HelpProvideDetailsPage
-            {
-                Heading = "How can we help you?",
-                PostHeadingContent = "Give as much detail as you can. This helps us give you the right support.",
-                CtaButtonText = CtaButtonText,
-                BackButtonToGetHelpPage = new NavigationLink
-                {
-                    DisplayText = "Back to get help with the Check an early years qualification service",
-                    Href = "/help/get-help",
-                    OpenInNewTab = false
-                },
-                BackButtonToQualificationDetailsPage = new NavigationLink
-                {
-                    DisplayText = "Back to what are the qualification details",
-                    Href = "/help/qualification-details",
-                    OpenInNewTab = false
-                },
-                AdditionalInformationWarningText = "Do not include any personal information",
-                AdditionalInformationErrorMessage = "Provide information about how we can help you",
-                ErrorBannerHeading = ThereIsAProblem
-            }
-        );
-    }
 
-    public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
-    {
-        return await Task.FromResult(
-            new HelpEmailAddressPage
-            {
-                Heading = "What is your email address?",
-                InvalidEmailAddressErrorMessage = "Enter an email address in the correct format, for example name@example.com",
-                NoEmailAddressEnteredErrorMessage = "Enter an email address",
-                BackButton = new NavigationLink
+        return entryId switch
+        {
+            HelpPages.HowCanWeHelpYouProvideDetails => await Task.FromResult(
+                new HelpProvideDetailsPage
                 {
-                    DisplayText = "Back to how can we help you",
-                    Href = "/help/provide-details",
-                    OpenInNewTab = false
-                },
-                CtaButtonText = "Send message",
-                ErrorBannerHeading = ThereIsAProblem,
-                PostHeadingContent = "We will only use this email address to reply to your message"
-            }
-        );
-    }
-
-    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage()
-    {
-        return await Task.FromResult(
-            new HelpConfirmationPage
-            {
-                SuccessMessage = "Message sent",
-                BodyHeading = "What happens next",
-                Body = ContentfulContentHelper.Paragraph("The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n"),
-                FeedbackComponent = GetFeedbackComponent(),
-                SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
-                ReturnToHomepageLink = new NavigationLink
-                {
-                    DisplayText = "Return to the homepage",
-                    Href = "/"
+                    Heading = "How can we help you?",
+                    PostHeadingContent = "Give as much detail as you can. This helps us give you the right support.",
+                    CtaButtonText = CtaButtonText,
+                    BackButton = new NavigationLink
+                    {
+                        DisplayText = "Back to what are the qualification details",
+                        Href = "/help/qualification-details",
+                        OpenInNewTab = false
+                    },
+                    AdditionalInformationWarningText = "Do not include any personal information",
+                    AdditionalInformationErrorMessage = "Provide information about how we can help you",
+                    ErrorBannerHeading = ThereIsAProblem
                 }
-            }
-        );
+            ),
+            HelpPages.TechnicalIssueProvideDetails => await Task.FromResult(
+                new HelpProvideDetailsPage
+                {
+                    Heading = "Tell us about the technical issue",
+                    PostHeadingContent = "Give as much detail as you can about the technical issue you are experiencing",
+                    CtaButtonText = CtaButtonText,
+                    BackButton = new NavigationLink
+                    {
+                        DisplayText = "Back to get help with the Check an early years qualification service",
+                        Href = "/help/get-help",
+                        OpenInNewTab = false
+                    },
+                    AdditionalInformationWarningText = "Do not include any personal information",
+                    AdditionalInformationErrorMessage = "Provide information about how we can help you",
+                    ErrorBannerHeading = ThereIsAProblem
+                }
+            ),
+            _ => null
+        };
+    }
+
+    public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage(string entryId)
+    {
+        return entryId switch
+        {
+            HelpPages.QualificationQueryEmailAddress =>
+                await Task.FromResult(
+                    new HelpEmailAddressPage
+                    {
+                        Heading = "What is your email address?",
+                        InvalidEmailAddressErrorMessage = "Enter an email address in the correct format, for example name@example.com",
+                        NoEmailAddressEnteredErrorMessage = "Enter an email address",
+                        BackButton = new NavigationLink
+                        {
+                            DisplayText = "Back to how can we help you",
+                            Href = "/help/provide-details",
+                            OpenInNewTab = false
+                        },
+                        CtaButtonText = "Send message",
+                        ErrorBannerHeading = ThereIsAProblem,
+                        PostHeadingContent = "We will only use this email address to reply to your message"
+                    }
+                ),
+            HelpPages.TechnicalIssueEmailAddress =>
+                await Task.FromResult(
+                    new HelpEmailAddressPage
+                    {
+                        Heading = "What is your email address?",
+                        InvalidEmailAddressErrorMessage = "Enter an email address in the correct format, for example name@example.com",
+                        NoEmailAddressEnteredErrorMessage = "Enter an email address",
+                        BackButton = new NavigationLink
+                        {
+                            DisplayText = "Back to tell us about the technical issue",
+                            Href = "/help/provide-details",
+                            OpenInNewTab = false
+                        },
+                        CtaButtonText = "Send message",
+                        ErrorBannerHeading = ThereIsAProblem,
+                        PostHeadingContent = "We will only use this email address if we need more information about the technical issue you are experiencing"
+                    }
+                ),
+            _ => null
+        };
+    }
+
+    public async Task<HelpConfirmationPage?> GetHelpConfirmationPage(string entryId)
+    {
+        return entryId switch
+        {
+            HelpPages.QualificationQueryConfirmation =>
+                await Task.FromResult(
+                    new HelpConfirmationPage
+                    {
+                        SuccessMessage = "Message sent",
+                        BodyHeading = "What happens next",
+                        Body = ContentfulContentHelper.Paragraph("The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n"),
+                        FeedbackComponent = GetFeedbackComponent(),
+                        SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
+                        ReturnToHomepageLink = new NavigationLink
+                        {
+                            DisplayText = "Return to the homepage",
+                            Href = "/"
+                        }
+                    }
+                ),
+            HelpPages.TechnicalIssueConfirmation =>
+                await Task.FromResult(
+                    new HelpConfirmationPage
+                    {
+                        SuccessMessage = "Message sent",
+                        BodyHeading = "What happens next",
+                        Body = ContentfulContentHelper.Paragraph("We may need to contact you for more information about the issue you are experiencing with the service."),
+                        FeedbackComponent = GetFeedbackComponent(),
+                        SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
+                        ReturnToHomepageLink = new NavigationLink
+                        {
+                            DisplayText = "Return to the homepage",
+                            Href = "/"
+                        }
+                    }
+                ),
+            _ => null
+        };
     }
     
     private static RadioQuestionPage CreateAreYouCheckingYourOwnQualificationPage()
