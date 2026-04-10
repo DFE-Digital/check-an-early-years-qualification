@@ -2,7 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Constants;
-using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Controllers.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
@@ -1540,6 +1540,10 @@ public class HelpControllerTests
     public async Task ProvideDetails_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+        });
         _mockHelpService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(() => null).Verifiable();
 
         // Act
@@ -1581,96 +1585,60 @@ public class HelpControllerTests
 
         _mockLogger.VerifyError("Help form enquiry reason is empty");
     }
+[TestMethod]
+public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_ReturnsProvideDetailsPageViewModel()
+{
+    // Arrange
+    var content = new HelpProvideDetailsPage
+                  {
+                      Heading = "Heading",
+                      BackButton = new NavigationLink
+                                   {
+                                       Href = "/get-help",
+                                       DisplayText = "Back to get help"
+                                   },
+                  };
 
-    [TestMethod]
-    [DataRow(HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification, "QualificationDetails")]
-    [DataRow(HelpFormEnquiryReasons.GetHelp.IssueWithTheService, "GetHelp")]
-    public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_ReturnsProvideDetailsPageViewModel(
-        string selectedOption, string pageToRedirectTo)
-    {
-        // Arrange
-        var content = new HelpProvideDetailsPage
-                      {
-                          Heading = "Heading",
-                          BackButtonToGetHelpPage = new NavigationLink
-                                                    {
-                                                        Href = "/get-help",
-                                                        DisplayText = "Back to get help"
-                                                    },
-                          BackButtonToQualificationDetailsPage = new NavigationLink
-                                                                 {
-                                                                     Href = "/qualification-details",
-                                                                     DisplayText = "Back to qualification details page"
-                                                                 }
-                      };
+    _mockHelpService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(content);
 
-        _mockHelpService.Setup(x => x.GetHelpProvideDetailsPage()).ReturnsAsync(content);
+    var enquiry = new HelpFormEnquiry
+                  {
+                      ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
+                      AdditionalInformation = "Previously entered details",
+                  };
 
-        var enquiry = new HelpFormEnquiry
-                      {
-                          ReasonForEnquiring = selectedOption,
-                      };
+    _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
 
-        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
+    var viewModel = new ProvideDetailsPageViewModel
+                    {
+                        Heading = content.Heading,
+                        BackButton = new NavigationLinkModel
+                                     {
+                                         DisplayText = content.BackButton.DisplayText,
+                                         Href = content.BackButton.Href
+                                     }
+                    };
 
-        var viewModel = new ProvideDetailsPageViewModel();
+    _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring))
+                    .Returns(viewModel);
 
-        if (pageToRedirectTo == "GetHelp")
-        {
-            viewModel = new ProvideDetailsPageViewModel
-                        {
-                            Heading = content.Heading,
-                            BackButton = new()
-                                         {
-                                             DisplayText = content.BackButtonToGetHelpPage.DisplayText,
-                                             Href = content.BackButtonToGetHelpPage.Href
-                                         }
-                        };
-        }
+    // Act
+    var result = await GetSut().ProvideDetails();
 
-        if (pageToRedirectTo == "QualificationDetails")
-        {
-            viewModel = new ProvideDetailsPageViewModel
-                        {
-                            Heading = content.Heading,
-                            BackButton = new()
-                                         {
-                                             DisplayText = content.BackButtonToQualificationDetailsPage.DisplayText,
-                                             Href = content.BackButtonToQualificationDetailsPage.Href
-                                         }
-                        };
-        }
+    // Assert
+    result.Should().NotBeNull();
 
-        _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring))
-                        .Returns(viewModel);
+    var resultType = result as ViewResult;
+    resultType.Should().NotBeNull();
 
-        // Act
-        var result = await GetSut().ProvideDetails();
-
-        // Assert
-        result.Should().NotBeNull();
-
-        var resultType = result as ViewResult;
-        resultType.Should().NotBeNull();
-
-        var model = resultType.Model as ProvideDetailsPageViewModel;
-        model.Should().NotBeNull();
-        model.BackButton.Should().NotBeNull();
-        model.Heading.Should().Be(content.Heading);
-
-        if (pageToRedirectTo == "GetHelp")
-        {
-            model.BackButton.DisplayText.Should().Be(content.BackButtonToGetHelpPage.DisplayText);
-            model.BackButton.Href.Should().Be(content.BackButtonToGetHelpPage.Href);
-        }
-
-        if (pageToRedirectTo == "QualificationDetails")
-        {
-            model.BackButton.DisplayText.Should().Be(content.BackButtonToQualificationDetailsPage.DisplayText);
-            model.BackButton.Href.Should().Be(content.BackButtonToQualificationDetailsPage.Href);
-        }
-    }
-
+    var model = resultType.Model as ProvideDetailsPageViewModel;
+    model.Should().NotBeNull();
+    model.BackButton.Should().NotBeNull();
+    model.Heading.Should().Be(content.Heading);
+    model.BackButton.DisplayText.Should().Be(content.BackButton.DisplayText);
+    model.BackButton.Href.Should().Be(content.BackButton.Href);
+    model.ProvideAdditionalInformation.Should().Be(enquiry.AdditionalInformation);
+}
     [TestMethod]
     public async Task Post_ProvideDetails_ValidModelState_ContentReturnsNull_RedirectsToError()
     {
@@ -1828,6 +1796,11 @@ public class HelpControllerTests
     public async Task EmailAddress_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
+            AdditionalInformation = "Some details"
+        });
         _mockHelpService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(() => null).Verifiable();
 
         // Act
@@ -1853,6 +1826,31 @@ public class HelpControllerTests
         _mockHelpService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(() => new()).Verifiable();
 
         _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+
+        // Act
+        var result = await GetSut().EmailAddress();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("GetHelp");
+        resultType.ControllerName.Should().Be("Help");
+
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
+    }
+
+    [TestMethod]
+    public async Task EmailAddress_EnquiryHasReasonButNoAdditionalInformation_RedirectsToGetHelpPage()
+    {
+        // Arrange
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+        });
 
         // Act
         var result = await GetSut().EmailAddress();
@@ -1975,9 +1973,45 @@ public class HelpControllerTests
     }
 
     [TestMethod]
+    public async Task Post_EmailAddress_EnquiryHasReasonButNoAdditionalInformation_RedirectsToGetHelpPage()
+    {
+        // Arrange
+        var submittedViewModel = new EmailAddressPageViewModel
+                                 {
+                                     EmailAddress = "test@test.com"
+                                 };
+
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+        });
+
+        // Act
+        var result = await GetSut().EmailAddress(submittedViewModel);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("GetHelp");
+        resultType.ControllerName.Should().Be("Help");
+
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
+    }
+
+    [TestMethod]
     public async Task Post_EmailAddress_ValidModelState_ContentReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
+            AdditionalInformation = "Some details"
+        });
+
         var submittedViewModel = new EmailAddressPageViewModel();
 
         var controller = GetSut();
@@ -2023,7 +2057,11 @@ public class HelpControllerTests
 
         _mockHelpService.Setup(x => x.MapEmailAddressPageContentToViewModel(content)).Returns(viewModel);
 
-        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
+            AdditionalInformation = "Some details"
+        });
 
         var controller = GetSut();
 
@@ -2050,12 +2088,92 @@ public class HelpControllerTests
              .Be(content.NoEmailAddressEnteredErrorMessage);
     }
 
+    [TestMethod]
+    public async Task Post_EmailAddress_InvalidEmailFormat_ReturnsEmailAddressPageViewModelWithInvalidEmailErrorMessage()
+    {
+        // Arrange
+        var content = new HelpEmailAddressPage
+                      {
+                          ErrorBannerHeading = "There is a problem",
+                          NoEmailAddressEnteredErrorMessage = "Enter an email address",
+                          InvalidEmailAddressErrorMessage = "Enter an email address in the correct format"
+                      };
+
+        _mockHelpService.Setup(x => x.GetHelpEmailAddressPage()).ReturnsAsync(content);
+
+        var viewModel = new EmailAddressPageViewModel
+                        {
+                            EmailAddressErrorMessage = content.InvalidEmailAddressErrorMessage,
+                            ErrorBannerHeading = content.ErrorBannerHeading,
+                            EmailAddress = "not-a-valid-email"
+                        };
+
+        _mockHelpService.Setup(x => x.MapEmailAddressPageContentToViewModel(content)).Returns(viewModel);
+
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService,
+            AdditionalInformation = "Some details"
+        });
+
+        var controller = GetSut();
+
+        // force validation error for invalid email format
+        controller.ModelState.AddModelError(nameof(EmailAddressPageViewModel.EmailAddress), "Invalid email format");
+
+        // Act
+        var result = await controller.EmailAddress(viewModel);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as EmailAddressPageViewModel;
+        model.Should().NotBeNull();
+        model.HasEmailAddressError.Should().BeTrue();
+
+        model.EmailAddressErrorMessage.Should().Be(content.InvalidEmailAddressErrorMessage);
+        model.ErrorSummaryModel.ErrorBannerHeading.Should().Be(content.ErrorBannerHeading);
+        model.ErrorSummaryModel.ErrorSummaryLinks.First().ElementLinkId.Should()
+             .Be(nameof(EmailAddressPageViewModel.EmailAddress));
+        model.ErrorSummaryModel.ErrorSummaryLinks.First().ErrorBannerLinkText.Should()
+             .Be(content.InvalidEmailAddressErrorMessage);
+    }
+
     // Help confirmation tests
+
+    [TestMethod]
+    public async Task Confirmation_EnquiryIsEmpty_RedirectsToGetHelpPage()
+    {
+        // Arrange
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+
+        // Act
+        var result = await GetSut().Confirmation();
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("GetHelp");
+        resultType.ControllerName.Should().Be("Help");
+
+        _mockLogger.VerifyError("Help form enquiry reason is empty");
+    }
 
     [TestMethod]
     public async Task Confirmation_ContentServiceReturnsNull_RedirectsToErrorPage()
     {
         // Arrange
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+        });
         _mockHelpService.Setup(x => x.GetHelpConfirmationPage()).ReturnsAsync(() => null).Verifiable();
 
         // Act
@@ -2078,6 +2196,11 @@ public class HelpControllerTests
     public async Task Confirmation_ContentServiceReturnsHelpConfirmationPage_ReturnsConfirmationPageViewModel()
     {
         // Arrange
+        _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.IssueWithTheService
+        });
+
         var content = new HelpConfirmationPage
                       {
                           SuccessMessage = "Message sent",

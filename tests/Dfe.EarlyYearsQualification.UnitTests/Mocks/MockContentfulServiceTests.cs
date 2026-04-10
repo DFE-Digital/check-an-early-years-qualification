@@ -957,11 +957,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetHelpProvideDetailsPage_ReturnsExpectedDetails()
+    public async Task GetHelpProvideDetailsPage_ReturnsHowCanWeHelpYouProvideDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetHelpProvideDetailsPage();
+        var result = await contentfulService.GetHelpProvideDetailsPage(HelpPages.HowCanWeHelpYouProvideDetails);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpProvideDetailsPage>();
@@ -970,35 +970,54 @@ public class MockContentfulServiceTests
         result.PostHeadingContent.Should()
               .Be("Give as much detail as you can. This helps us give you the right support.");
         result.CtaButtonText.Should().Be("Continue");
-        result.BackButtonToGetHelpPage.Should().BeEquivalentTo(
-                                                               new NavigationLink
-                                                               {
-                                                                   DisplayText =
-                                                                       "Back to get help with the Check an early years qualification service",
-                                                                   Href = "/help/get-help",
-                                                                   OpenInNewTab = false
-                                                               }
-                                                              );
-        result.BackButtonToQualificationDetailsPage.Should().BeEquivalentTo(
-                                                                            new NavigationLink
-                                                                            {
-                                                                                DisplayText =
-                                                                                    "Back to what are the qualification details",
-                                                                                Href = "/help/qualification-details",
-                                                                                OpenInNewTab = false
-                                                                            }
-                                                                           );
+        result.BackButton.Should().BeEquivalentTo(
+                                                   new NavigationLink
+                                                   {
+                                                       DisplayText =
+                                                           "Back to what are the qualification details",
+                                                       Href = "/help/qualification-details",
+                                                       OpenInNewTab = false
+                                                   }
+                                                  );
         result.AdditionalInformationWarningText.Should().Be("Do not include any personal information");
         result.AdditionalInformationErrorMessage.Should().Be("Provide information about how we can help you");
         result.ErrorBannerHeading.Should().Be("There is a problem");
     }
 
     [TestMethod]
-    public async Task GetHelpEmailAddressPage_ReturnsExpectedDetails()
+    public async Task GetHelpProvideDetailsPage_ReturnsTechnicalIssueProvideDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetHelpEmailAddressPage();
+        var result = await contentfulService.GetHelpProvideDetailsPage(HelpPages.TechnicalIssueProvideDetails);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpProvideDetailsPage>();
+
+        result.Heading.Should().Be("Tell us about the technical issue");
+        result.PostHeadingContent.Should()
+              .Be("Give as much detail as you can about the technical issue you are experiencing");
+        result.CtaButtonText.Should().Be("Continue");
+        result.BackButton.Should().BeEquivalentTo(
+                                                   new NavigationLink
+                                                   {
+                                                       DisplayText =
+                                                           "Back to get help with the Check an early years qualification service",
+                                                       Href = "/help/get-help",
+                                                       OpenInNewTab = false
+                                                   }
+                                                  );
+        result.AdditionalInformationWarningText.Should().Be("Do not include any personal information");
+        result.AdditionalInformationErrorMessage.Should().Be("Provide information about how we can help you");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+    }
+
+    [TestMethod]
+    public async Task GetHelpEmailAddressPage_ReturnsQualificationQueryEmailAddress()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpEmailAddressPage(HelpPages.QualificationQueryEmailAddress);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpEmailAddressPage>();
@@ -1021,11 +1040,38 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetHelpConfirmationPage_ReturnsExpectedDetails()
+    public async Task GetHelpEmailAddressPage_ReturnsTechnicalIssueEmailAddress()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetHelpConfirmationPage();
+        var result = await contentfulService.GetHelpEmailAddressPage(HelpPages.TechnicalIssueEmailAddress);
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpEmailAddressPage>();
+
+        result.BackButton.Should().BeEquivalentTo(
+                                                  new NavigationLink
+                                                  {
+                                                      DisplayText = "Back to tell us about the technical issue",
+                                                      Href = "/help/provide-details",
+                                                      OpenInNewTab = false
+                                                  }
+                                                 );
+        result.Heading.Should().Be("What is your email address?");
+        result.PostHeadingContent.Should().Be("We will only use this email address if we need more information about the technical issue you are experiencing");
+        result.CtaButtonText.Should().Be("Send message");
+        result.ErrorBannerHeading.Should().Be("There is a problem");
+        result.NoEmailAddressEnteredErrorMessage.Should().Be("Enter an email address");
+        result.InvalidEmailAddressErrorMessage.Should()
+              .Be("Enter an email address in the correct format, for example name@example.com");
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReturnsQualificationQueryConfirmation()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpConfirmationPage(HelpPages.QualificationQueryConfirmation);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpConfirmationPage>();
         result.SuccessMessage.Should().Be("Message sent");
@@ -1034,6 +1080,22 @@ public class MockContentfulServiceTests
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
                                                          "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n");
+    }
+
+    [TestMethod]
+    public async Task GetHelpConfirmationPage_ReturnsTechnicalIssueConfirmation()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetHelpConfirmationPage(HelpPages.TechnicalIssueConfirmation);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<HelpConfirmationPage>();
+        result.SuccessMessage.Should().Be("Message sent");
+        result.BodyHeading.Should().Be("What happens next");
+        result.Body.Should().NotBeNull();
+        result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
+                                                         "We may need to contact you for more information about the issue you are experiencing with the service.");
     }
 
     [TestMethod]
