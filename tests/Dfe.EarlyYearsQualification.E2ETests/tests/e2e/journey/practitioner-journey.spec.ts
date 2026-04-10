@@ -93,8 +93,8 @@ test.describe('A spec used to test the various routes through the practitioner j
                                                                           }) => {
 
         await whereWasTheQualificationAwarded(page, "#england");
-        await startedBeforeSeptember2014(page);
-        await whenWasQualificationAwarded(page, "3", "2018");
+        await startedOnOrAfterSeptember2014(page, "2", "2016");
+        await whenWasQualificationAwarded(page, "2", "2017");
         await whatLevelIsTheQualification(page, 6);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
