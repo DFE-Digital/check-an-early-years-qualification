@@ -132,7 +132,7 @@ namespace Dfe.EarlyYearsQualification.Web
 
             builder.Services
                     .AddContentful(builder.Configuration)
-                    .AddGovUkFrontend(options => options.Rebrand = true);
+                    .AddGovUkFrontend();
 
             if (useMockContentful)
             {
