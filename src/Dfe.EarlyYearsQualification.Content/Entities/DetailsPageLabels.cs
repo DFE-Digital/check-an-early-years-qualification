@@ -59,6 +59,4 @@ public class DetailsPageLabels
     public string QualificationResultNotFrL3OrL6MessageHeading { get; init; } = string.Empty;
 
     public string QualificationResultNotFrL3OrL6MessageBody { get; init; } = string.Empty;
-
-    public UpDownFeedback? UpDownFeedback { get; init; }
 }

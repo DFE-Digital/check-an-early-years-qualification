@@ -2244,7 +2244,6 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
         var content = new StaticPage
         {
             Heading = "Static page heading",
-            RightHandSideContent = new(),
             BackButton = new NavigationLink
             {
                 DisplayText = "Back to get help",
@@ -2264,8 +2263,7 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
                     DisplayText = content.BackButton.DisplayText,
                     Href = content.BackButton.Href
                 },
-                BodyContent = "content",
-                RightHandSideContent = null
+                BodyContent = "content"
             }
         );
     }

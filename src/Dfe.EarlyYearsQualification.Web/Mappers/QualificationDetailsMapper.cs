@@ -19,9 +19,6 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
         List<Qualification> qualifications)
     {
         var requirementsTextHtml = await contentParser.ToHtml(content.RequirementsText);
-        var improveServiceBodyHtml = content.Labels.UpDownFeedback is not null
-                                         ? await contentParser.ToHtml(content.Labels.UpDownFeedback.FeedbackComponent!.Body)
-                                         : null;
         var printInformationBody = await contentParser.ToHtml(content.Labels.PrintInformationBody);
 
         return new QualificationDetailsModel
@@ -56,7 +53,6 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
                 QualificationAwardedDateLabel = content.Labels.QualificationAwardedDateLabel,
                 QualificationDetailsSummaryHeader = content.Labels.QualificationDetailsSummaryHeader
             },
-            UpDownFeedback = UpDownFeedbackMapper.Map(content.Labels.UpDownFeedback, improveServiceBodyHtml),
             IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1,
             UserType = content.IsPractitionerSpecificPage ? UserTypes.Practitioner : UserTypes.Manager
         };

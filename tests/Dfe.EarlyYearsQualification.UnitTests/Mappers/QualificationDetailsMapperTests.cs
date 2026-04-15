@@ -21,8 +21,7 @@ public class QualificationDetailsMapperTests
                                 QualificationNumber = "Qualification number",
                                 FromWhichYear = "Sep-16"
                             };
-
-        const string improveServiceBody = "This is the improve service body";
+        
         const string requirementsText = "Requirements text";
         const string printInformationBody = "Printing information body";
         var detailsPage = new QualificationDetailsPage
@@ -50,17 +49,7 @@ public class QualificationDetailsMapperTests
                                            QualificationNameLabel = "Qualification name label",
                                            QualificationStartDateLabel = "Qualifications start date label",
                                            QualificationAwardedDateLabel = "Qualifications awarded date label",
-                                           QualificationDetailsSummaryHeader = "Qualification details summary label",
-                                           UpDownFeedback = new UpDownFeedback
-                                                            {
-                                                                FeedbackComponent = new FeedbackComponent
-                                                                    {
-                                                                        Header = "Feedback header",
-                                                                        Body =
-                                                                            ContentfulContentHelper
-                                                                                .Paragraph(improveServiceBody)
-                                                                    }
-                                                            }
+                                           QualificationDetailsSummaryHeader = "Qualification details summary label"
                                        },
                               IsPractitionerSpecificPage = isPractitionerPage
                           };
@@ -87,8 +76,6 @@ public class QualificationDetailsMapperTests
 
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(detailsPage.RequirementsText)).ReturnsAsync(requirementsText);
-        mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.UpDownFeedback.FeedbackComponent!.Body))
-                         .ReturnsAsync(improveServiceBody);
         mockContentParser.Setup(x => x.ToHtml(detailsPage.Labels.PrintInformationBody))
                          .ReturnsAsync(printInformationBody);
 
@@ -136,11 +123,6 @@ public class QualificationDetailsMapperTests
               .BeSameAs(detailsPage.Labels.QualificationAwardedDateLabel);
         result.Content.QualificationDetailsSummaryHeader.Should()
               .BeSameAs(detailsPage.Labels.QualificationDetailsSummaryHeader);
-        result.UpDownFeedback.Should().BeEquivalentTo(detailsPage.Labels.UpDownFeedback,
-                                                      options => options.Excluding(x => x.FeedbackComponent));
-        result.UpDownFeedback.FeedbackComponent!.Body.Should().Be(improveServiceBody);
-        result.UpDownFeedback.FeedbackComponent.Header.Should()
-              .BeSameAs(detailsPage.Labels.UpDownFeedback.FeedbackComponent!.Header);
         result.IsQualificationNameDuplicate.Should().BeFalse();
         result.QualificationNumberLabel.Should().Be(detailsPage.Labels.QualificationNumberLabel);
         result.QualificationNumber.Should().Be(qualification.QualificationNumber);

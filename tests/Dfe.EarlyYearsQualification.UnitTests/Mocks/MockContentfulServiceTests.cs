@@ -43,7 +43,7 @@ public class MockContentfulServiceTests
 
         var second = result.Options[1] as RadioButtonAndDateInput;
         second.Should().NotBeNull();
-        second!.Label.Should().Be("On or after 1 September 2014");
+        second.Label.Should().Be("On or after 1 September 2014");
         second.Value.Should().Be("OnOrAfter1September2014");
         second.StartedQuestion.Should().NotBeNull();
         second.StartedQuestion.MonthLabel.Should().Be("Month");
@@ -63,8 +63,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -78,8 +76,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -93,8 +89,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Qualifications achieved in Scotland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -108,8 +102,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Qualifications achieved in Wales");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -123,8 +115,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Qualifications achieved in Northern Ireland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -138,8 +128,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Qualification not on the list");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -154,8 +142,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -169,8 +155,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -184,8 +168,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -199,8 +181,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -214,8 +194,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -229,8 +207,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Nursing Qualifications");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
