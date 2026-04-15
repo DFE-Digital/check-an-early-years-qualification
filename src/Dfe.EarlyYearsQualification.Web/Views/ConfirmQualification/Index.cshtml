@@ -53,7 +53,7 @@
                     <govuk-summary-list-row-value>
                         @Model.QualificationNumber
                     </govuk-summary-list-row-value>
-                </govuk-summary-list-row>
+                    </govuk-summary-list-row>
             }
             <govuk-summary-list-row id="qualification-level-row">
                 <govuk-summary-list-row-key>
@@ -76,6 +76,12 @@
         {
             <div id="various-ao-content" class="various-ao-content-wrapper">
                 @Html.Raw(Model.VariousAwardingOrganisationsExplanation)
+            </div>
+        }
+        @if (Model.HasAnyAdditionalRequirementQuestions)
+        {
+            <div id="qualification-additional-requirement-content">
+                @Html.Raw(Model.QualificationAdditionalRequirements)
             </div>
         }
         <form id="confirm-qualification" asp-controller="ConfirmQualification" asp-action="Confirm" method="post">
