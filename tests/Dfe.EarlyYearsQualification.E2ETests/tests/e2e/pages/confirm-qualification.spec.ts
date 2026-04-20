@@ -52,8 +52,8 @@ test.describe('A spec that tests the confirm qualification page', {tag: "@e2e"},
         await checkText(page, "#confirm-qualification-button", "Get result");
     });
 
-    test("Check that the additional requirement explaination content shows when a qualification has additional requirements", async ({page}) => {
-        await page.goto("/confirm-qualification/eyq-206");
+    test("Check that the additional requirement explanation content shows when a qualification has additional requirements", async ({page}) => {
+        await page.goto("/confirm-qualification/eyq-909");
         
         await exists(page, '#qualification-additional-requirement-content');
         await checkText(page, '#qualification-additional-requirement-content', "Additional Requirement Explanation");
