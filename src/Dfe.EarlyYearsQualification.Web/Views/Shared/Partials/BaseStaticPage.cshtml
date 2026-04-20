@@ -1,4 +1,3 @@
-@using Dfe.EarlyYearsQualification.Web.Models.Content
 @model Dfe.EarlyYearsQualification.Web.Models.Content.StaticPageModel
 
 <div class="govuk-grid-row">
@@ -8,23 +7,6 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-        @if (Model.RightHandSideContent != null)
-        {
-            await Html.RenderPartialAsync("Partials/FeedbackComponentContainer", new FeedbackComponentContainerModel { FeedbackComponent = Model.RightHandSideContent, IsMobile = true });
-        }
-
         <div class="govuk-body govuk-!-margin-bottom-7" id="static-page-body">@Html.Raw(Model.BodyContent)</div>
     </div>
-    @if (Model.RightHandSideContent != null)
-    {
-        <div class="govuk-grid-column-one-third-from-desktop">
-            @{ await Html.RenderPartialAsync("Partials/FeedbackComponentContainer", new FeedbackComponentContainerModel { FeedbackComponent = Model.RightHandSideContent }); }
-        </div>
-    }
-</div>
-<div class="govuk-grid-row">
-    @if (Model.UpDownFeedback is not null)
-    {
-        await Html.RenderPartialAsync("Partials/UpDownFeedback", Model.UpDownFeedback);
-    }
 </div>

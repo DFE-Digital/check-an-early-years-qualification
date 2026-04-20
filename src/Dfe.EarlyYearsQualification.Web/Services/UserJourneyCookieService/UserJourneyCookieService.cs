@@ -475,6 +475,28 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         }
     }
 
+    public WebViewFilters GetWebViewFilters()
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            return _model!.WebViewFilters;
+        }
+    }
+
+    public void SetWebViewFilters(WebViewFilters filters)
+    {
+        lock (_lockObject)
+        {
+            EnsureModelLoaded();
+
+            _model!.WebViewFilters = filters;
+
+            SetJourneyCookie();
+        }
+    }
+
     private void EnsureModelLoaded()
     {
         if (_model != null)
@@ -574,5 +596,7 @@ public class UserJourneyCookieService(ILogger<UserJourneyCookieService> logger, 
         public HelpFormEnquiry HelpFormEnquiry { get; set; } = new();
         
         public string IsUserCheckingTheirOwnQualification { get; set; } = string.Empty;
+
+        public WebViewFilters WebViewFilters { get; set; } = new();
     }
 }

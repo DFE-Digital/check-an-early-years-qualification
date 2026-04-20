@@ -7,8 +7,4 @@ public class StaticPageModel
     public string BodyContent { get; init; } = string.Empty;
 
     public NavigationLinkModel? BackButton { get; init; }
-
-    public UpDownFeedbackModel? UpDownFeedback { get; init; }
-    
-    public FeedbackComponentModel? RightHandSideContent { get; init; }
 }

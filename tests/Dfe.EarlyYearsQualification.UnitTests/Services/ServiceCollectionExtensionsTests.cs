@@ -28,7 +28,7 @@ public class ServiceCollectionExtensionsTests
         ServiceCollectionExtensions.AddMappers(services);
 
         // Assert
-        services.Count.Should().Be(18);
+        services.Count.Should().Be(19);
 
         VerifyService<IStaticPageMapper, StaticPageMapper>(services, ServiceLifetime.Scoped);
 
@@ -65,6 +65,8 @@ public class ServiceCollectionExtensionsTests
         VerifyService<IQualificationDetailsMapper, QualificationDetailsMapper>(services, ServiceLifetime.Scoped);
 
         VerifyService<IRadioQuestionHelpPageMapper, RadioQuestionHelpPageMapper>(services, ServiceLifetime.Scoped);
+
+        VerifyService<IWebViewPageMapper, WebViewMapper>(services, ServiceLifetime.Scoped);
     }
 
     [TestMethod]

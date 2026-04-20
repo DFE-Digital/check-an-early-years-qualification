@@ -404,6 +404,20 @@ public class ContentfulContentService(
         return null;
     }
 
+    public async Task<WebViewPage?> GetWebViewPage()
+    {
+        ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
+
+        var webViewPage = await GetEntriesByType<WebViewPage>();
+        if (webViewPage is null || !webViewPage.Any())
+        {
+            Logger.LogWarning("No web view page entry returned");
+            return null;
+        }
+
+        return webViewPage.First();
+    }
+
     private List<CannotFindQualificationPage> FilterCannotFindQualificationPagesByDate(
         int startDateMonth, int startDateYear,
         List<CannotFindQualificationPage> cannotFindQualificationPages)

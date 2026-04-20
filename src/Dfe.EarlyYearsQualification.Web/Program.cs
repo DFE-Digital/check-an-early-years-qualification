@@ -26,6 +26,7 @@ using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Dfe.EarlyYearsQualification.Web.Services.ServiceCollection;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+using Dfe.EarlyYearsQualification.Web.Services.WebView;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.DataProtection;
@@ -148,6 +149,7 @@ namespace Dfe.EarlyYearsQualification.Web
             builder.Services.AddTransient<IQualificationSearchService, QualificationSearchService>();
             builder.Services.AddTransient<IConfirmQualificationService, ConfirmQualificationService>();
             builder.Services.AddTransient<IHelpService, HelpService>();
+            builder.Services.AddTransient<IWebViewService, WebViewService>();
             builder.Services.AddTransient<IQuestionService, QuestionService>();
             builder.Services.AddModelRenderers();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

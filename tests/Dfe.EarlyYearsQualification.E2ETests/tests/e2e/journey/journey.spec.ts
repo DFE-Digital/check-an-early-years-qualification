@@ -117,8 +117,8 @@ test.describe('A spec used to test the various routes through the journey', {tag
 
     test("should redirect the user when they select qualification was awarded in England", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
-        await startedOnOrAfterSeptember2014(page, "6", "2022");
-        await whenWasQualificationAwarded(page, "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "10", "2020");
+        await whenWasQualificationAwarded(page, "1", "2021");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -132,8 +132,8 @@ test.describe('A spec used to test the various routes through the journey', {tag
 
     test("Selecting the 'Qualification is not on the list' link on the qualification list page should navigate to the correct advice page", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
-        await startedOnOrAfterSeptember2014(page, "6", "2022");
-        await whenWasQualificationAwarded(page, "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "10", "2020");
+        await whenWasQualificationAwarded(page, "1", "2021");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -177,8 +177,8 @@ test.describe('A spec used to test the various routes through the journey', {tag
 
     test("Should remove the search criteria when a user goes to the awarding organisation page and back again", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
-        await startedOnOrAfterSeptember2014(page, "6", "2022");
-        await whenWasQualificationAwarded(page, "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "10", "2020");
+        await whenWasQualificationAwarded(page, "1", "2021");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -211,8 +211,8 @@ test.describe('A spec used to test the various routes through the journey', {tag
 
     test("should bypass remaining additional requirement question when answering yes to the Qts question", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
-        await startedOnOrAfterSeptember2014(page, "6", "2022");
-        await whenWasQualificationAwarded(page, "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "2", "2015");
+        await whenWasQualificationAwarded(page, "3", "2018");
         await whatLevelIsTheQualification(page, 6);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
@@ -225,8 +225,8 @@ test.describe('A spec used to test the various routes through the journey', {tag
 
     test("should not bypass remaining additional requirement question when answering no to the Qts question", async ({page}) => {
         await whereWasTheQualificationAwarded(page, "#england");
-        await startedOnOrAfterSeptember2014(page, "6", "2022");
-        await whenWasQualificationAwarded(page, "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "2", "2015");
+        await whenWasQualificationAwarded(page, "3", "2018");
         await whatLevelIsTheQualification(page, 6);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);

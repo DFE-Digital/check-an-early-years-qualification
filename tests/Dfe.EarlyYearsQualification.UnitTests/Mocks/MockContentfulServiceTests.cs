@@ -3,7 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Mock.Content;
-using Dfe.EarlyYearsQualification.Web.Constants;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 
@@ -43,7 +43,7 @@ public class MockContentfulServiceTests
 
         var second = result.Options[1] as RadioButtonAndDateInput;
         second.Should().NotBeNull();
-        second!.Label.Should().Be("On or after 1 September 2014");
+        second.Label.Should().Be("On or after 1 September 2014");
         second.Value.Should().Be("OnOrAfter1September2014");
         second.StartedQuestion.Should().NotBeNull();
         second.StartedQuestion.MonthLabel.Should().Be("Month");
@@ -63,8 +63,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -78,8 +76,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -93,8 +89,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Qualifications achieved in Scotland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -108,8 +102,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Qualifications achieved in Wales");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -123,8 +115,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Qualifications achieved in Northern Ireland");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -138,8 +128,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Qualification not on the list");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -154,8 +142,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -169,8 +155,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -184,8 +168,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -199,8 +181,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -214,8 +194,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().NotBeNullOrEmpty();
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().BeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -229,8 +207,6 @@ public class MockContentfulServiceTests
         result.Heading.Should().Be("Nursing Qualifications");
         result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-        result.UpDownFeedback.Should().NotBeNull();
-        result.RightHandSideContent.Should().NotBeNull();
     }
 
     [TestMethod]
@@ -1075,7 +1051,6 @@ public class MockContentfulServiceTests
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<HelpConfirmationPage>();
         result.SuccessMessage.Should().Be("Message sent");
-        result.BodyHeading.Should().Be("What happens next");
         result.Body.Should().NotBeNull();
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
@@ -1296,5 +1271,73 @@ public class MockContentfulServiceTests
         result.MissingPasswordText.Should().Be("Test Missing Password Text");
         result.SubmitButtonText.Should().Be("Test Submit Button Text");
         result.ShowPasswordButtonText.Should().Be("Test Show Password Button Text");
+    }
+
+    [TestMethod]
+    public async Task GetWebViewPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetWebViewPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<WebViewPage>();
+        result.Heading.Should().NotBeNullOrEmpty();
+        result.Heading.Should().Be("Early Years Qualification List");
+        result.DownloadButtonText.Should().Be("Download qualification list");
+        result.QualificationLevelLabel.Should().Be("Qualification level");
+        result.StaffChildRatioLabel.Should().Be("Staff:child ratios");
+        result.FromWhichYearLabel.Should().Be("From which year");
+        result.ToWhichYearLabel.Should().Be("To which year");
+        result.AwardingOrganisationLabel.Should().Be("Awarding organisation");
+        result.QualificationNumberLabel.Should().Be("Qualification number");
+        result.NotesAdditionalRequirementsLabel.Should().Be("Notes / Additional requirements");
+        result.ShowingAllQualificationsLabel.Should().Be("Showing all the qualifications");
+        result.FilterHeading.Should().Be("Filter");
+        result.SelectedFiltersHeading.Should().Be("Selected filters");
+        result.KeywordHeading.Should().Be("Keywords");
+        result.QualificationStartDateHeading.Should().Be("Qualification start date");
+        result.QualificationLevelHeading.Should().Be("Qualification level");
+        result.ApplyFiltersButtonContent.Should().Be("Apply filters");
+        result.NoFiltersSelectedContent.Should().Be("No filters selected.");
+        result.BackButton.Should().BeEquivalentTo(
+            new NavigationLink
+            {
+                DisplayText = "Home",
+                Href = "/",
+                OpenInNewTab = false
+            }
+        );
+        result.StartDateFilters.Should().BeEquivalentTo(
+            [
+                new Option
+                    { Label = "Before September 2014", Value = "Pre-September 2014" },
+                new Option
+                    { Label = "On or after September 2014", Value = "Post-September 2014" },
+                new Option
+                    { Label = "On or after September 2024", Value = "Post-September 2024" }
+            ]
+        );
+        result.LevelFilters.Should().BeEquivalentTo(
+            [
+                new Option
+                    { Label = "Level 2", Value = "2" },
+                new Option
+                    { Label = "Level 3", Value = "3" },
+                new Option
+                    { Label = "Level 4", Value = "4" },
+                new Option
+                    { Label = "Level 5", Value = "5" },
+                new Option
+                    { Label = "Level 6", Value = "6" },
+                new Option
+                    { Label = "Level 7", Value = "7" },
+            ]);
+        result.ClearFiltersLinkLabel.Should().Be("Clear filters");
+        result.NoQualificationsFoundContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."));
+        result.PostHeadingContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("This list shows all the qualifications that are approved by the Department for Education as full and relevant."));
+        result.QualificationIsFullAndRelevantContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("Check if an early years qualification is approved as full and relevant"));
+        result.SingleQualificationFoundText.Should().Be("qualification found");
+        result.MultipleQualificationsFoundText.Should().Be("qualifications found");
     }
 }

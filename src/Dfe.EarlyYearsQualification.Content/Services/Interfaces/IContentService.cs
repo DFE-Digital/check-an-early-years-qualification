@@ -58,4 +58,6 @@ public interface IContentService
     Task<HelpEmailAddressPage?> GetHelpEmailAddressPage(string entryId);
 
     Task<HelpConfirmationPage?> GetHelpConfirmationPage(string entryId);
+
+    Task<WebViewPage?> GetWebViewPage();
 }

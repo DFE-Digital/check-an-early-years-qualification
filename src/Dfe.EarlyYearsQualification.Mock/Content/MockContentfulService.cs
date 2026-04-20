@@ -48,52 +48,52 @@ public class MockContentfulService : IContentService
                {
                    StaticPages.QualificationsAchievedOutsideTheUk =>
                        await Task.FromResult(CreateStaticPage("Qualifications achieved outside the United Kingdom",
-                                                              body, WhereWasTheQualificationAwardedPath, true)),
+                                                              body, WhereWasTheQualificationAwardedPath)),
                    StaticPages.QualificationsStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateStaticPage("Level 2 qualifications started between 1 September 2014 and 31 August 2019",
-                                                            body, WhatLevelIsTheQualificationPath, false)),
+                                                            body, WhatLevelIsTheQualificationPath)),
 
                    StaticPages.QualificationsAchievedInScotland =>
                        await Task.FromResult(CreateStaticPage("Qualifications achieved in Scotland",
-                                                              body, WhereWasTheQualificationAwardedPath, true)),
+                                                              body, WhereWasTheQualificationAwardedPath)),
 
                    StaticPages.QualificationsAchievedInWales =>
                        await Task.FromResult(CreateStaticPage("Qualifications achieved in Wales",
-                                                              body, WhereWasTheQualificationAwardedPath, true)),
+                                                              body, WhereWasTheQualificationAwardedPath)),
 
                    StaticPages.QualificationsAchievedInNorthernIreland =>
                        await Task.FromResult(CreateStaticPage("Qualifications achieved in Northern Ireland",
-                                                              body, WhereWasTheQualificationAwardedPath, true)),
+                                                              body, WhereWasTheQualificationAwardedPath)),
 
                    StaticPages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateStaticPage("Qualification not on the list",
-                                                              body, QualificationsPath, true)),
+                                                              body, QualificationsPath)),
 
                    StaticPages.NursingQualifications =>
                        await Task.FromResult(CreateStaticPage("Nursing Qualifications",
-                                                              body, QualificationsPath, true)),
+                                                              body, QualificationsPath)),
 
                    StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await
                            Task.FromResult(CreateStaticPage("Level 7 qualifications started between 1 September 2014 and 31 August 2019",
-                                                              body, WhatLevelIsTheQualificationPath, false)),
+                                                              body, WhatLevelIsTheQualificationPath)),
 
                    StaticPages.Level7QualificationAfterAug2019 =>
                        await Task.FromResult(CreateStaticPage("Level 7 qualification after aug 2019",
-                                                              body, WhatLevelIsTheQualificationPath, false)),
+                                                              body, WhatLevelIsTheQualificationPath)),
 
                     StaticPages.HowToGetACopyOfTheCertificateOrTranscript =>
                        await Task.FromResult(CreateStaticPage("How to get a copy of the certificate or transcript",
-                                                              body, "/help/I-need-a-copy-of-the-qualification-certificate-or-transcript", false)),
+                                                              body, "/help/I-need-a-copy-of-the-qualification-certificate-or-transcript")),
 
                    StaticPages.HowToFindTheLevelOfAQualification =>
                         await Task.FromResult(CreateStaticPage("How to find the level of a qualification",
-                                                               body, "/help/I-do-not-know-what-level-the-qualification-is", false)),
+                                                               body, "/help/I-do-not-know-what-level-the-qualification-is")),
                    
                    StaticPages.HowToFindASuitableCourse =>
                        await Task.FromResult(CreateStaticPage("How to find a suitable course",
-                                                              body, "/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol", false)),
+                                                              body, "/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol")),
                    _ => null
                };
     }
@@ -184,7 +184,6 @@ public class MockContentfulService : IContentService
             QualificationResultNotFrL3MessageBody = "Not full and relevant L3 body",
             QualificationResultNotFrL3OrL6MessageHeading = "Not full and relevant L3 or L6",
             QualificationResultNotFrL3OrL6MessageBody = "Not full and relevant L3 or L6 body",
-            UpDownFeedback = GetUpDownFeedback(),
             PrintButtonText = "Print this page",
             PrintInformationBody = ContentfulContentHelper.Paragraph("Print information body"),
             PrintInformationHeading = "Print information heading",
@@ -455,8 +454,6 @@ public class MockContentfulService : IContentService
                              OpenInNewTab = false
                          };
 
-        var upDownFeedback = GetUpDownFeedback();
-
         return (level switch
                 {
                     3 when isUserCheckingTheirOwnQualification => Task.FromResult(new CannotFindQualificationPage
@@ -466,8 +463,6 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-14",
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
-                                             UpDownFeedback = upDownFeedback,
-                                             RightHandSideContent = GetFeedbackComponent(),
                                              IsPractitionerSpecificPage = true
                                          }),
                     3 => Task.FromResult(new CannotFindQualificationPage
@@ -477,8 +472,6 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-14",
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
-                                             UpDownFeedback = upDownFeedback,
-                                             RightHandSideContent = GetFeedbackComponent(),
                                              IsPractitionerSpecificPage = false
                                          }),
                     4 => Task.FromResult(new CannotFindQualificationPage
@@ -488,8 +481,6 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-19",
                                              ToWhichYear = string.Empty,
                                              BackButton = backButton,
-                                             UpDownFeedback = upDownFeedback,
-                                             RightHandSideContent = GetFeedbackComponent(),
                                              IsPractitionerSpecificPage = false
                                          }),
                     _ => Task.FromResult<CannotFindQualificationPage>(null!)
@@ -1016,7 +1007,69 @@ public class MockContentfulService : IContentService
             _ => null
         };
     }
-    
+
+    public async Task<WebViewPage?> GetWebViewPage()
+    {
+        return await Task.FromResult(
+            new WebViewPage
+            {
+                Heading = "Early Years Qualification List",
+                DownloadButtonText = "Download qualification list",
+                QualificationLevelLabel = "Qualification level",
+                StaffChildRatioLabel = "Staff:child ratios",
+                FromWhichYearLabel = "From which year",
+                ToWhichYearLabel = "To which year",
+                AwardingOrganisationLabel = "Awarding organisation",
+                QualificationNumberLabel = "Qualification number",
+                NotesAdditionalRequirementsLabel = "Notes / Additional requirements",
+                ShowingAllQualificationsLabel = "Showing all the qualifications",
+                FilterHeading = "Filter",
+                SelectedFiltersHeading = "Selected filters",
+                KeywordHeading = "Keywords",
+                QualificationStartDateHeading = "Qualification start date",
+                QualificationLevelHeading = "Qualification level",
+                ApplyFiltersButtonContent = "Apply filters",
+                NoFiltersSelectedContent = "No filters selected.",
+                BackButton = new NavigationLink
+                {
+                    DisplayText = "Home",
+                    Href = "/",
+                    OpenInNewTab = false
+                },
+                StartDateFilters =
+                [
+                    new Option
+                    { Label = "Before September 2014", Value = "Pre-September 2014" },
+                    new Option
+                    { Label = "On or after September 2014", Value = "Post-September 2014" },
+                    new Option
+                    { Label = "On or after September 2024", Value = "Post-September 2024" }
+                ],
+                LevelFilters =
+                [
+                    new Option
+                    { Label = "Level 2", Value = "2" },
+                    new Option
+                    { Label = "Level 3", Value = "3" },
+                    new Option
+                    { Label = "Level 4", Value = "4" },
+                    new Option
+                    { Label = "Level 5", Value = "5" },
+                    new Option
+                    { Label = "Level 6", Value = "6" },
+                    new Option
+                    { Label = "Level 7", Value = "7" },
+                ],
+                ClearFiltersLinkLabel = "Clear filters",
+                NoQualificationsFoundContent = ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."),
+                PostHeadingContent = ContentfulContentHelper.Paragraph("This list shows all the qualifications that are approved by the Department for Education as full and relevant."),
+                QualificationIsFullAndRelevantContent = ContentfulContentHelper.Paragraph("Check if an early years qualification is approved as full and relevant"),
+                SingleQualificationFoundText = "qualification found",
+                MultipleQualificationsFoundText = "qualifications found"
+            }
+        );
+    }
+
     private static RadioQuestionPage CreateAreYouCheckingYourOwnQualificationPage()
     {
         var options = new List<IOptionItem>
@@ -1230,7 +1283,7 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl, bool hasUpDownFeedback)
+    private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl)
     {
         return new StaticPage
                {
@@ -1241,9 +1294,7 @@ public class MockContentfulService : IContentService
                                     DisplayText = "TEST",
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
-                                },
-                   RightHandSideContent = GetFeedbackComponent(),
-                   UpDownFeedback = hasUpDownFeedback ? GetUpDownFeedback() : null
+                                }
                };
     }
 

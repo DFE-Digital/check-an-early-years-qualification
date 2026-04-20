@@ -502,8 +502,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                AwardingOrgLabel = "Test Awarding Org Label",
                                                DateOfCheckLabel = "Test date of check label",
                                                LevelLabel = "Test level label",
-                                               MainHeader = "Test main header",
-                                               UpDownFeedback = new UpDownFeedback()
+                                               MainHeader = "Test main header"
                                            }
                               }
                           ]
@@ -584,8 +583,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                AwardingOrgLabel = "Test Awarding Org Label",
                                                DateOfCheckLabel = "Test date of check label",
                                                LevelLabel = "Test level label",
-                                               MainHeader = "Test main header",
-                                               UpDownFeedback = new UpDownFeedback()
+                                               MainHeader = "Test main header"
                                            }
                               },
                               new QualificationDetailsPage
@@ -603,8 +601,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                AwardingOrgLabel = "Test Awarding Org Label",
                                                DateOfCheckLabel = "Test date of check label",
                                                LevelLabel = "Test level label",
-                                               MainHeader = "Test main header",
-                                               UpDownFeedback = new UpDownFeedback()
+                                               MainHeader = "Test main header"
                                            }
                               },
                               new QualificationDetailsPage
@@ -622,8 +619,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                AwardingOrgLabel = "Test Awarding Org Label",
                                                DateOfCheckLabel = "Test date of check label",
                                                LevelLabel = "Test level label",
-                                               MainHeader = "Test main header",
-                                               UpDownFeedback = new UpDownFeedback()
+                                               MainHeader = "Test main header"
                                            }
                               }
                           ]
@@ -673,8 +669,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                AwardingOrgLabel = "Test Awarding Org Label",
                                                DateOfCheckLabel = "Test date of check label",
                                                LevelLabel = "Test level label",
-                                               MainHeader = "Test main header",
-                                               UpDownFeedback = new UpDownFeedback()
+                                               MainHeader = "Test main header"
                                            }
                               },
                               new QualificationDetailsPage
@@ -684,8 +679,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                AwardingOrgLabel = "Test Awarding Org Label",
                                                DateOfCheckLabel = "Test date of check label",
                                                LevelLabel = "Test level label",
-                                               MainHeader = "Test main header",
-                                               UpDownFeedback = new UpDownFeedback()
+                                               MainHeader = "Test main header"
                                            }
                               }
                           ]
@@ -723,8 +717,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                AwardingOrgLabel = "Test Awarding Org Label",
                                                DateOfCheckLabel = "Test date of check label",
                                                LevelLabel = "Test level label",
-                                               MainHeader = "Test main header",
-                                               UpDownFeedback = new UpDownFeedback()
+                                               MainHeader = "Test main header"
                                            }
                               }
                           ]
@@ -1124,8 +1117,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                         {
                                             Heading = "Test heading sep 15 to aug 19",
                                             FromWhichYear = "Sep-15",
-                                            ToWhichYear = "Aug-19",
-                                            UpDownFeedback = new UpDownFeedback()
+                                            ToWhichYear = "Aug-19"
                                         }
                                     ]
                                 });
@@ -1517,12 +1509,74 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().BeNull();
     }
+
+    [TestMethod]
+    public async Task GetWebViewPage_PageFound_ReturnsExpectedResult()
+    {
+        var webViewPage = new WebViewPage { Heading = "Test Heading" };
+
+        var pages = new ContentfulCollection<WebViewPage> { Items = [webViewPage] };
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<WebViewPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetWebViewPage();
+
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(webViewPage);
+    }
+
+    [TestMethod]
+    public async Task GetWebViewPage_NoContent_ReturnsNull()
+    {
+        var pages = new ContentfulCollection<WebViewPage> { Items = new List<WebViewPage>() };
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<WebViewPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(pages);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetWebViewPage();
+
+        Logger.VerifyWarning("No web view page entry returned");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetWebViewPage_NullPages_ReturnsNull()
+    {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<WebViewPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<WebViewPage>)null!);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetWebViewPage();
+
+        Logger.VerifyWarning("No web view page entry returned");
+
+        result.Should().BeNull();
+    }
 }
 
 public class ContentfulContentServiceTestsBase<T>
 {
-    protected Mock<IContentfulClient> ClientMock = new();
-    protected Mock<ILogger<T>> Logger = new();
+    protected Mock<IContentfulClient> ClientMock = new Mock<IContentfulClient>();
+    protected Mock<ILogger<T>> Logger = new Mock<ILogger<T>>();
 
     [TestInitialize]
     public void BeforeEachTest()

@@ -13,10 +13,6 @@ public class CannotFindQualificationPage
     public Document? Body { get; init; }
 
     public NavigationLink? BackButton { get; init; }
-    
-    public FeedbackComponent? RightHandSideContent { get; init; }
-    
-    public UpDownFeedback? UpDownFeedback { get; init; }
 
     public bool IsPractitionerSpecificPage { get; init; }
 }

@@ -25,8 +25,8 @@ test.describe("A spec used to test the main back button route through the journe
     test("back buttons should all navigate to the appropriate pages in the main journey", async ({page}) => {
 
         await whereWasTheQualificationAwarded(page, "#england");
-        await startedOnOrAfterSeptember2014(page, "6", "2022");
-        await whenWasQualificationAwarded(page, "1", "2025");
+        await startedOnOrAfterSeptember2014(page, "10", "2020");
+        await whenWasQualificationAwarded(page, "1", "2021");
         await whatLevelIsTheQualification(page, 3);
         await whatIsTheAwardingOrganisation(page, 1);
         await checkYourAnswersPage(page);
