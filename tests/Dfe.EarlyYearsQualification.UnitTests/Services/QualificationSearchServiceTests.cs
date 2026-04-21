@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -77,6 +78,8 @@ public class QualificationSearchServiceTests
     public async Task GetQualifications_GotList_Calls_Repository_Get()
     {
         _mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync(new QualificationListPage());
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+                       .ReturnsAsync([]);
         var sut = GetSut();
         await sut.GetQualifications();
 
@@ -92,6 +95,8 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_GetsDetails_From_CookieService()
     {
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+                       .ReturnsAsync([]);
         var sut = GetSut();
         await sut.GetFilteredQualifications();
 
@@ -373,5 +378,121 @@ public class QualificationSearchServiceTests
         const string expectedResult = $"{awardedBy} {awardingOrganisation}";
 
         result.AwardingOrganisation.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_AwardingOrganisationIsNull_FiltersToVariousOnly()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new("qual-1", "Qualification A", AwardingOrganisations.Various, 3),
+                                 new("qual-2", "Qualification B", "Pearson Education Ltd", 3),
+                                 new("qual-3", "Qualification C", AwardingOrganisations.Various, 3)
+                             };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+                       .ReturnsAsync(qualifications);
+
+        var sut = GetSut();
+        var result = await sut.GetFilteredQualifications();
+
+        result.Should().HaveCount(2);
+        result.Should().OnlyContain(q => q.AwardingOrganisationTitle == AwardingOrganisations.Various);
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_AwardingOrganisationIsNull_CaseInsensitiveMatch()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new("qual-1", "Qualification A", "various awarding organisations", 3),
+                                 new("qual-2", "Qualification B", "VARIOUS AWARDING ORGANISATIONS", 3),
+                                 new("qual-3", "Qualification C", "Pearson Education Ltd", 3)
+                             };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+                       .ReturnsAsync(qualifications);
+
+        var sut = GetSut();
+        var result = await sut.GetFilteredQualifications();
+
+        result.Should().HaveCount(2);
+        result.Should().OnlyContain(q => q.AwardingOrganisationTitle.Equals(AwardingOrganisations.Various, StringComparison.OrdinalIgnoreCase));
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_AwardingOrganisationIsNotNull_ReturnsAllQualifications()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new("qual-1", "Qualification A", "Pearson Education Ltd", 3),
+                                 new("qual-2", "Qualification B", "Pearson Education Ltd", 3),
+                                 new("qual-3", "Qualification C", AwardingOrganisations.Various, 3)
+                             };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("Pearson Education Ltd");
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+                       .ReturnsAsync(qualifications);
+
+        var sut = GetSut();
+        var result = await sut.GetFilteredQualifications();
+
+        result.Should().HaveCount(3);
+        result.Should().BeEquivalentTo(qualifications);
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_AwardingOrganisationIsNull_NoVariousQualifications_ReturnsEmpty()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new("qual-1", "Qualification A", "Pearson Education Ltd", 3),
+                                 new("qual-2", "Qualification B", "NCFE", 3)
+                             };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+                       .ReturnsAsync(qualifications);
+
+        var sut = GetSut();
+        var result = await sut.GetFilteredQualifications();
+
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_SearchCriteriaOverride_UsesOverrideInsteadOfCookie()
+    {
+        const string overrideSearch = "override search";
+        var qualifications = new List<Qualification>();
+
+        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("some org");
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), overrideSearch))
+                       .ReturnsAsync(qualifications);
+
+        var sut = GetSut();
+        await sut.GetFilteredQualifications(overrideSearch);
+
+        _mockRepository.Verify(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), overrideSearch), Times.Once);
+        _mockUserJourneyCookieService.Verify(o => o.GetSearchCriteria(), Times.Never);
+    }
+
+    [TestMethod]
+    public async Task GetFilteredQualifications_SearchCriteriaOverrideIsNull_UsesCookieSearchCriteria()
+    {
+        const string cookieSearch = "cookie search";
+        var qualifications = new List<Qualification>();
+
+        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("some org");
+        _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(cookieSearch);
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), cookieSearch))
+                       .ReturnsAsync(qualifications);
+
+        var sut = GetSut();
+        await sut.GetFilteredQualifications();
+
+        _mockRepository.Verify(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), cookieSearch), Times.Once);
     }
 }

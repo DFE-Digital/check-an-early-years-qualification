@@ -361,7 +361,14 @@ export async function selectICannotFindTheQualification(page: Page) {
 export async function checkNumberOfMatchingQualifications(page: Page, numberOfExpectedQualifications: number) {
     // qualifications page - click a qualification in the list to move us on
     await checkUrl(page, "/select-a-qualification-to-check");
-    await checkText(page, "#found-heading", `We found ${numberOfExpectedQualifications} matching qualifications`);
+
+    if (numberOfExpectedQualifications === 1) {
+        await checkText(page, "#found-heading", `We found ${numberOfExpectedQualifications} matching qualification`);
+
+    }
+    else if (numberOfExpectedQualifications > 1) {
+        await checkText(page, "#found-heading", `We found ${numberOfExpectedQualifications} matching qualifications`);
+    }
 }
 
 export async function confirmQualification(page: Page, answer: string) {
