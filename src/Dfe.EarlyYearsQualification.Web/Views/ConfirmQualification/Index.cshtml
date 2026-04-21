@@ -53,7 +53,7 @@
                     <govuk-summary-list-row-value>
                         @Model.QualificationNumber
                     </govuk-summary-list-row-value>
-                    </govuk-summary-list-row>
+                </govuk-summary-list-row>
             }
             <govuk-summary-list-row id="qualification-level-row">
                 <govuk-summary-list-row-key>
@@ -95,7 +95,8 @@
 
                     @if (Model.HasErrors)
                     {
-                        <govuk-error-message id="confirm-qualification-choice-error" visually-hidden-text="Error">@Model.ErrorText</govuk-error-message>
+                        <govuk-error-message id="confirm-qualification-choice-error"
+                                             visually-hidden-text="Error">@Model.ErrorText</govuk-error-message>
                     }
                     @foreach (var option in Model.Options)
                     {
@@ -118,7 +119,7 @@
 
             @if (Model.ShowAnswerDisclaimerText)
             {
-                await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel{ WarningText = Model.AnswerDisclaimerText });
+                await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AnswerDisclaimerText });
             }
 
             <div class="govuk-form-group">
