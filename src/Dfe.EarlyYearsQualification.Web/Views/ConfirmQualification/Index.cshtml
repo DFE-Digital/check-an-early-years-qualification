@@ -72,15 +72,12 @@
                 </govuk-summary-list-row-value>
             </govuk-summary-list-row>
         </govuk-summary-list>
-        @* @if (Model.QualificationAwardingOrganisation == AwardingOrganisations.Various) *@
-        @* { *@
-        @*     <div id="various-ao-content" class="various-ao-content-wrapper"> *@
-        @*         @Html.Raw(Model.VariousAwardingOrganisationsExplanation) *@
-        @*     </div> *@
-        @* } *@
-        <div id="various-ao-content" class="various-ao-content-wrapper">
-            @Html.Raw(Model.VariousAwardingOrganisationsExplanation)
-        </div>
+        @if (Model.QualificationAwardingOrganisation == AwardingOrganisations.Various)
+        {
+            <div id="various-ao-content" class="various-ao-content-wrapper">
+                @Html.Raw(Model.VariousAwardingOrganisationsExplanation)
+            </div>
+        }
         @if (Model.HasAnyAdditionalRequirementQuestions)
         {
             <div id="qualification-additional-requirement-content">
