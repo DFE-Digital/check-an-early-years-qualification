@@ -30,7 +30,7 @@
                                         <div class="govuk-radios" data-module="govuk-radios">
                                             @if (questionData.OptionsItems != null)
                                             {
-                                                @foreach (var option in questionData.OptionsItems)
+                                                foreach (var option in questionData.OptionsItems)
                                                 {
                                                     var optionModel = option as OptionModel;
                                                     @if (optionModel != null)
@@ -53,10 +53,9 @@
                                                     }
                                                 }
                                             }
-                                        }
-                                    </div>
-                                </fieldset>
-                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
                             }
                         }
                         else if (question.GetType() == typeof(FeedbackFormQuestionTextAreaModel))
