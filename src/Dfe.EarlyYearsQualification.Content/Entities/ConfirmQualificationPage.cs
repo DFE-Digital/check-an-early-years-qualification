@@ -12,6 +12,7 @@ public class ConfirmQualificationPage
     public string DateAddedLabel { get; init; } = string.Empty;
     public string QualificationNumberLabel { get; init; } = string.Empty;
     public Document? VariousAwardingOrganisationsExplanation { get; init; }
+    public Document? AdditionalRequirementExplanation { get; init; }
     public string RadioHeading { get; init; } = string.Empty;
     public List<Option> Options { get; init; } = [];
     public string ErrorBannerHeading { get; init; } = string.Empty;

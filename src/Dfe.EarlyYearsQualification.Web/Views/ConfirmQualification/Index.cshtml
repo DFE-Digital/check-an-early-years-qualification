@@ -32,7 +32,7 @@
             </div>
         }
         <h1 id="heading" class="govuk-heading-xl">@Model.Heading</h1>
-        <div id="post-heading" class="post-heading-wrapper">
+        <div id="post-heading" class="govuk-!-margin-bottom-6">
             @Html.Raw(Model.PostHeadingContent)
         </div>
         <govuk-summary-list>
@@ -74,8 +74,14 @@
         </govuk-summary-list>
         @if (Model.QualificationAwardingOrganisation == AwardingOrganisations.Various)
         {
-            <div id="various-ao-content" class="various-ao-content-wrapper">
+            <div id="various-ao-content" class="govuk-!-margin-bottom-6">
                 @Html.Raw(Model.VariousAwardingOrganisationsExplanation)
+            </div>
+        }
+        @if (Model.HasAnyAdditionalRequirementQuestions)
+        {
+            <div id="qualification-additional-requirement-content" class="govuk-!-margin-bottom-6">
+                @Html.Raw(Model.QualificationAdditionalRequirements)
             </div>
         }
         <form id="confirm-qualification" asp-controller="ConfirmQualification" asp-action="Confirm" method="post">
@@ -89,7 +95,8 @@
 
                     @if (Model.HasErrors)
                     {
-                        <govuk-error-message id="confirm-qualification-choice-error" visually-hidden-text="Error">@Model.ErrorText</govuk-error-message>
+                        <govuk-error-message id="confirm-qualification-choice-error"
+                                             visually-hidden-text="Error">@Model.ErrorText</govuk-error-message>
                     }
                     @foreach (var option in Model.Options)
                     {
@@ -112,7 +119,7 @@
 
             @if (Model.ShowAnswerDisclaimerText)
             {
-                await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel{ WarningText = Model.AnswerDisclaimerText });
+                await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AnswerDisclaimerText });
             }
 
             <div class="govuk-form-group">

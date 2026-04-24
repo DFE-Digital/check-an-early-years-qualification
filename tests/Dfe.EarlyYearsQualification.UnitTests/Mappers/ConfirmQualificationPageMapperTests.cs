@@ -65,6 +65,7 @@ public class ConfirmQualificationPageMapperTests
     {
         const string postHeadingContentHtml = "Post heading content";
         const string variousAwardingOrganisationsExplanationHtml = "Various awarding organisations explanation";
+        const string additionalRequirementExplanationHtml = "Additional requirement explanation";
         var content =
             GetConfirmQualificationPageContent(postHeadingContentHtml, variousAwardingOrganisationsExplanationHtml);
 
@@ -80,6 +81,9 @@ public class ConfirmQualificationPageMapperTests
         mockContentParser
             .Setup(x => x.ToHtml(It.Is<Document>(d => d == content.VariousAwardingOrganisationsExplanation)))
             .ReturnsAsync(variousAwardingOrganisationsExplanationHtml);
+        mockContentParser
+            .Setup(x => x.ToHtml(It.Is<Document>(d => d == content.AdditionalRequirementExplanation)))
+            .ReturnsAsync(additionalRequirementExplanationHtml);
 
         var mapper = new ConfirmQualificationPageMapper(mockContentParser.Object);
         var result = await mapper.Map(content, qualification, new List<Qualification> { qualification });
@@ -109,6 +113,8 @@ public class ConfirmQualificationPageMapperTests
         result.ShowAnswerDisclaimerText.Should().BeFalse();
         result.AnswerDisclaimerText.Should().BeSameAs(content.AnswerDisclaimerText);
         result.IsQualificationNameDuplicate.Should().BeFalse();
+        result.QualificationAdditionalRequirements.Should().Be(additionalRequirementExplanationHtml);
+        result.HasAnyAdditionalRequirementQuestions.Should().BeTrue();
     }
 
     [TestMethod]

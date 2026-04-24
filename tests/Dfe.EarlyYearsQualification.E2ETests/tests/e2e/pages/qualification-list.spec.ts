@@ -6,7 +6,8 @@ import {
     journeyCookieName,
     doesNotExist,
     exists,
-    checkTextContains
+    checkTextContains,
+    hasCount
 } from '../../_shared/playwrightWrapper';
 
 test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, () => {
@@ -122,5 +123,20 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
 
         await checkText(page, "#l6-or-not-sure-heading", "Post 2014 L6 or not sure heading");
         await checkTextContains(page, "#l6-or-not-sure-content", "Post 2014 L6 or not sure content");
+    });
+
+    test("Not on the list selected, returns qualifications which have various awarding organisations", async ({
+        page,
+        context
+    }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2018%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
+        await page.goto("/select-a-qualification-to-check");
+
+        await hasCount(page, "#main-content a.govuk-link.govuk-heading-m", 5);
+        await checkText(page, "#main-content > div > div > div:nth-child(6) a.govuk-link.govuk-heading-m", "BTEC");
+        await checkText(page, "#main-content > div > div > div:nth-child(7) a.govuk-link.govuk-heading-m", "BTEC");
+        await checkText(page, "#main-content > div > div > div:nth-child(8) a.govuk-link.govuk-heading-m", "EYQ-106-test");
+        await checkText(page, "#main-content > div > div > div:nth-child(9) a.govuk-link.govuk-heading-m", "EYQ-110-test");
+        await checkText(page, "#main-content > div > div > div:nth-child(10) a.govuk-link.govuk-heading-m", "Qualification 304");
     });
 });

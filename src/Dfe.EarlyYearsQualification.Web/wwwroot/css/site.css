@@ -142,14 +142,6 @@ ol.govuk-list.govuk-list--number ol.govuk-list.govuk-list--number {
     -webkit-box-decoration-break: clone !important;
 }
 
-.post-heading-wrapper {
-    margin-bottom: 40px;
-}
-
-.various-ao-content-wrapper {
-    margin: 40px 0;
-}
-
 /* Resize  3 column summary list */
 .summary-list-action .govuk-summary-list__row .govuk-summary-list__key {
     width: 56%;
