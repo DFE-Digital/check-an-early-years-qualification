@@ -15,6 +15,7 @@ public class ConfirmQualificationPageMapper(IGovUkContentParser contentParser) :
         var postHeadingContent = await contentParser.ToHtml(content.PostHeadingContent);
         var variousAwardingOrganisationsExplanation =
             await contentParser.ToHtml(content.VariousAwardingOrganisationsExplanation);
+        var qualificationAdditionalRequirementsContent = await contentParser.ToHtml(content.AdditionalRequirementExplanation);
         var hasAnyAdditionalRequirementQuestions = qualification.AdditionalRequirementQuestions is { Count: > 0 };
 
         return new ConfirmQualificationPageModel
@@ -44,6 +45,8 @@ public class ConfirmQualificationPageMapper(IGovUkContentParser contentParser) :
             PostHeadingContent = postHeadingContent,
             VariousAwardingOrganisationsExplanation =
                        variousAwardingOrganisationsExplanation,
+            HasAnyAdditionalRequirementQuestions = hasAnyAdditionalRequirementQuestions,
+            QualificationAdditionalRequirements = qualificationAdditionalRequirementsContent,
             ShowAnswerDisclaimerText = !hasAnyAdditionalRequirementQuestions,
             AnswerDisclaimerText = content.AnswerDisclaimerText,
             IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1

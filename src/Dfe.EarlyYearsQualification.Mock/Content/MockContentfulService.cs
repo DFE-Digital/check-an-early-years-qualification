@@ -395,7 +395,8 @@ public class MockContentfulService : IContentService
                                                  .Paragraph("Various awarding organisation explanation text"),
                                          AnswerDisclaimerText = "Answer disclaimer text",
                                          NoAdditionalRequirementsButtonText = "Get result",
-                                         QualificationNumberLabel = "Qualification Number (QN)"
+                                         QualificationNumberLabel = "Qualification Number (QN)",
+                                         AdditionalRequirementExplanation = ContentfulContentHelper.Paragraph("Additional Requirement Explanation")
         });
     }
 

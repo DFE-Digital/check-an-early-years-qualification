@@ -92,7 +92,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                                          string? awardingOrganisation, string? qualificationName)
     {
         var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
-                                                         AwardingOrganisations.Various, 6);
+                                                         AwardingOrganisations.Ncfe, 6);
         degreeQualification.IsTheQualificationADegree = true;
 
         const string startDate = "Sep-14";

@@ -31,10 +31,12 @@ public class ConfirmQualificationPageModel
     public string QualificationName { get; init; } = string.Empty;
     public string QualificationLevel { get; init; } = string.Empty;
     public string QualificationAwardingOrganisation { get; init; } = string.Empty;
+    public string QualificationAdditionalRequirements { get; init; } = string.Empty;
     public string QualificationDateAdded { get; init; } = string.Empty;
     public NavigationLinkModel? BackButton { get; init; }
     public string PostHeadingContent { get; init; } = string.Empty;
-    public string VariousAwardingOrganisationsExplanation { get; init; } = string.Empty;
+    public string VariousAwardingOrganisationsExplanation { get; init; } = string.Empty; 
+    public bool HasAnyAdditionalRequirementQuestions { get; init; }
     public bool ShowAnswerDisclaimerText { get; init; }
     public string AnswerDisclaimerText { get; init; } = string.Empty;
     public string QualificationNumberLabel { get; init; } = string.Empty;

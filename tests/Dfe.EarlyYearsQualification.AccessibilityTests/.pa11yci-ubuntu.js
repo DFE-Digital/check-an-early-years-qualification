@@ -33,7 +33,7 @@ function getUrls(authSecret, port) {
         'click element input[id="3"]',
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/questions/what-is-the-awarding-organisation`,
-        'click element #awarding-organisation-not-in-list',
+        'set field #awarding-organisation-select to NCFE',
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/questions/check-your-answers`,
         'click element #cta-button',
