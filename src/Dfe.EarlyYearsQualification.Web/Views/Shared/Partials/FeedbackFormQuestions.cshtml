@@ -19,35 +19,45 @@
                         @if (question.GetType() == typeof(FeedbackFormQuestionRadioModel))
                         {
                             var questionData = question as FeedbackFormQuestionRadioModel;
-                            <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData!.Question" />
-                            <div class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
-                                <fieldset class="govuk-fieldset">
-                                    <legend class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">
-                                        @questionData.Question
-                                    </legend>
-                                    <div class="govuk-radios" data-module="govuk-radios">
-                                        @foreach (var option in questionData.OptionsItems)
-                                        {
-                                            var optionModel = option as OptionModel;
-                                            var @checked = optionModel!.Value == Model.QuestionList[questionIndex].Answer ? "checked" : "";
-                                            var radioButtonId = $"{questionIndex}_{optionModel.Value}";
-                                            <div class="govuk-radios__item">
-                                                @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = "govuk-radios__input", id = radioButtonId, @checked })
-                                                <label class="govuk-label govuk-radios__label" for="@radioButtonId">
-                                                    @optionModel.Label
-                                                </label>
-                                                @if (!string.IsNullOrEmpty(optionModel.Hint))
+                            @if (questionData != null)
+                            {
+                                <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData.Question" />
+                                <div class="govuk-form-group @(Model.QuestionList[questionIndex]?.HasError == true ? "govuk-form-group--error" : "")">
+                                    <fieldset class="govuk-fieldset">
+                                        <legend class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">
+                                            @questionData.Question
+                                        </legend>
+                                        <div class="govuk-radios" data-module="govuk-radios">
+                                            @if (questionData.OptionsItems != null)
+                                            {
+                                                @foreach (var option in questionData.OptionsItems)
                                                 {
-                                                    var hintId = $"{optionModel.Value}_hint";
-                                                    <div id="@hintId" class="govuk-hint govuk-radios__hint">
-                                                        @optionModel.Hint
-                                                    </div>
+                                                    var optionModel = option as OptionModel;
+                                                    @if (optionModel != null)
+                                                    {
+                                                        var @checked = optionModel.Value == Model.QuestionList[questionIndex]?.Answer ? "checked" : "";
+                                                        var radioButtonId = $"{questionIndex}_{optionModel.Value.Replace(" ", "_")}";
+                                                        <div class="govuk-radios__item">
+                                                            @Html.RadioButtonFor(x => x.QuestionList[questionIndex].Answer, optionModel.Value, new { @class = "govuk-radios__input", id = radioButtonId, @checked })
+                                                            <label class="govuk-label govuk-radios__label" for="@radioButtonId">
+                                                                @optionModel.Label
+                                                            </label>
+                                                            @if (!string.IsNullOrEmpty(optionModel.Hint))
+                                                            {
+                                                                var hintId = $"{optionModel.Value}_hint";
+                                                                <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                                                    @optionModel.Hint
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
                                                 }
-                                            </div>
+                                            }
                                         }
                                     </div>
                                 </fieldset>
                             </div>
+                            }
                         }
                         else if (question.GetType() == typeof(FeedbackFormQuestionTextAreaModel))
                         {
@@ -56,31 +66,35 @@
                             var errorId = $"{questionId}_error-message";
                             var questionData = question as FeedbackFormQuestionTextAreaModel;
 
-                            var textAreaAttributes = new Dictionary<string, object>
+                            @if (questionData != null)
                             {
-                                { "class", "govuk-textarea" },
-                                { "id", textAreaId }
-                            };
-
-                            <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData.Question" />
-
-                            <div class="govuk-form-group @(Model.QuestionList[questionIndex].HasError ? "govuk-form-group--error" : "")">
-                                <h2 class="govuk-label-wrapper" id="@questionId">
-                                    <label class="govuk-heading-m govuk-!-margin-bottom-3" for="@textAreaId">
-                                        @questionData.Question
-                                    </label>
-                                </h2>
-
-                                @if (!string.IsNullOrEmpty(questionData.HintText))
+                                var textAreaAttributes = new Dictionary<string, object>
                                 {
-                                    textAreaAttributes.Add("aria-describedby", hintId);
-                                    <div class="govuk-hint" id="@hintId">
-                                        @questionData.HintText
-                                    </div>
-                                }
+                                    { "class", "govuk-textarea" },
+                                    { "id", textAreaId },
+                                    { "autocomplete", "off" }
+                                };
 
-                                @Html.TextAreaFor(x => x.QuestionList[questionIndex].Answer, 5, 1, textAreaAttributes)
-                            </div>
+                                <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData.Question" />
+
+                                <div class="govuk-form-group @(Model.QuestionList[questionIndex]?.HasError == true ? "govuk-form-group--error" : "")">
+                                    <h2 class="govuk-label-wrapper" id="@questionId">
+                                        <label class="govuk-heading-m govuk-!-margin-bottom-3" for="@textAreaId">
+                                            @questionData.Question
+                                        </label>
+                                    </h2>
+
+                                    @if (!string.IsNullOrEmpty(questionData.HintText))
+                                    {
+                                        textAreaAttributes.Add("aria-describedby", hintId);
+                                        <div class="govuk-hint" id="@hintId">
+                                            @questionData.HintText
+                                        </div>
+                                    }
+
+                                    @Html.TextAreaFor(x => x.QuestionList[questionIndex].Answer, 5, 1, textAreaAttributes)
+                                </div>
+                            }
                         }
                     </div>
                 }
