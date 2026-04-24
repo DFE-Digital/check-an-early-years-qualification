@@ -1308,22 +1308,6 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static UpDownFeedback GetUpDownFeedback()
-    {
-        return new UpDownFeedback
-               {
-                   Question = "Did you get everything you needed today?",
-                   YesButtonText = "Yes",
-                   YesButtonSubText = "this service is useful",
-                   NoButtonText = "No",
-                   NoButtonSubText = " this service is not useful",
-                   HelpButtonText = "Get help with this page",
-                   HelpButtonLink = "/help/get-help",
-                   CancelButtonText = "Cancel",
-                   FeedbackComponent = GetFeedbackComponent()
-               };
-    }
-
     private static FeedbackComponent GetFeedbackComponent()
     {
         return new FeedbackComponent
