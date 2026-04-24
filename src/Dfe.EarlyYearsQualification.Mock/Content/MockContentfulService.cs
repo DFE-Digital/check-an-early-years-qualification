@@ -610,6 +610,8 @@ public class MockContentfulService : IContentService
 
     public async Task<FeedbackFormPage?> GetFeedbackFormPage()
     {
+        const string neutralOption = "Neutral";
+
         return await Task.FromResult(new FeedbackFormPage
                                      {
                                          Heading = "Give feedback",
@@ -641,8 +643,8 @@ public class MockContentfulService : IContentService
                                                      },
                                                      new Option
                                                      {
-                                                         Label = "Neutral",
-                                                         Value = "Neutral"
+                                                         Label = neutralOption,
+                                                         Value = neutralOption
                                                      },
                                                      new Option
                                                      {
@@ -673,8 +675,8 @@ public class MockContentfulService : IContentService
                                                      },
                                                      new Option
                                                      {
-                                                         Label = "Neutral",
-                                                         Value = "Neutral"
+                                                         Label = neutralOption,
+                                                         Value = neutralOption
                                                      },
                                                      new Option
                                                      {
