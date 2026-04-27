@@ -395,7 +395,8 @@ public class MockContentfulService : IContentService
                                                  .Paragraph("Various awarding organisation explanation text"),
                                          AnswerDisclaimerText = "Answer disclaimer text",
                                          NoAdditionalRequirementsButtonText = "Get result",
-                                         QualificationNumberLabel = "Qualification Number (QN)"
+                                         QualificationNumberLabel = "Qualification Number (QN)",
+                                         AdditionalRequirementExplanation = ContentfulContentHelper.Paragraph("Additional Requirement Explanation")
         });
     }
 
@@ -1295,22 +1296,6 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 }
-               };
-    }
-
-    private static UpDownFeedback GetUpDownFeedback()
-    {
-        return new UpDownFeedback
-               {
-                   Question = "Did you get everything you needed today?",
-                   YesButtonText = "Yes",
-                   YesButtonSubText = "this service is useful",
-                   NoButtonText = "No",
-                   NoButtonSubText = " this service is not useful",
-                   HelpButtonText = "Get help with this page",
-                   HelpButtonLink = "/help/get-help",
-                   CancelButtonText = "Cancel",
-                   FeedbackComponent = GetFeedbackComponent()
                };
     }
 

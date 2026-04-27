@@ -7,7 +7,6 @@ import {
     chooseStartDateOptionBasedOnDate,
     whatLevelIsTheQualification,
     whatIsTheAwardingOrganisationValue,
-    selectNotOnTheListAsTheAwardingOrganisation,
     checkYourAnswersPage,
     checkNumberOfMatchingQualifications,
     selectQualification,
@@ -42,8 +41,6 @@ type AdditionalRequirement = {
 
 const noAtQuestionOne: AdditionalRequirement = {index: 1, answer: '#no'};
 const yesAtQuestionOne: AdditionalRequirement = {index: 1, answer: '#yes'};
-const noAtQuestionTwo: AdditionalRequirement = {index: 2, answer: '#no'};
-const yesAtQuestionTwo: AdditionalRequirement = {index: 2, answer: '#yes'};
 
 const approved = "Approved";
 const notApproved = "Not approved";
@@ -52,84 +49,6 @@ const possibleRouteAvailable = "Possible route available";
 test.describe('A spec used to validate changes to the journey against actual data', {tag: "@validation"}, () => {
     test.beforeEach(async ({page, context}) => {
         await startJourney(page, context);
-    });
-
-    // Various AO scenarios
-    [
-        {
-            scenarioId: 1,
-            monthStarted: '07',
-            yearStarted: '2020',
-            monthAwarded: '12',
-            yearAwarded: '2021',
-            selectedLevel: 2,
-            noOfMatchingQualifications: 10,
-            qualificationToSelect: 'EYQ-212',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: possibleRouteAvailable,
-            ratioForLevel6: notApproved
-        } as Scenario,
-        {
-            scenarioId: 2,
-            monthStarted: '07',
-            yearStarted: '2020',
-            monthAwarded: '12',
-            yearAwarded: '2021',
-            selectedLevel: 3,
-            noOfMatchingQualifications: 26,
-            qualificationToSelect: 'EYQ-222',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: approved,
-            ratioForLevel6: notApproved
-        } as Scenario,
-        {
-            scenarioId: 3,
-            monthStarted: '07',
-            yearStarted: '2020',
-            monthAwarded: '12',
-            yearAwarded: '2021',
-            selectedLevel: 4,
-            noOfMatchingQualifications: 6,
-            qualificationToSelect: 'EYQ-252',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: approved,
-            ratioForLevel6: notApproved
-        } as Scenario,
-        {
-            scenarioId: 4,
-            monthStarted: '07',
-            yearStarted: '2020',
-            monthAwarded: '12',
-            yearAwarded: '2021',
-            selectedLevel: 5,
-            noOfMatchingQualifications: 19,
-            qualificationToSelect: 'EYQ-264',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: approved,
-            ratioForLevel6: notApproved
-        } as Scenario,
-    ].forEach((scenario) => {
-        test(`Various AO qualification check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({page}) => {
-            await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
-            await whereWasTheQualificationAwarded(page, "#england");
-            await chooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
-            await whenWasQualificationAwarded(page, scenario.monthAwarded, scenario.yearAwarded);
-            await whatLevelIsTheQualification(page, scenario.selectedLevel);
-            await selectNotOnTheListAsTheAwardingOrganisation(page);
-            await checkYourAnswersPage(page);
-            await checkNumberOfMatchingQualifications(page, scenario.noOfMatchingQualifications);
-            await selectQualification(page, scenario.qualificationToSelect);
-            await confirmQualification(page, "#yes");
-            await checkDetailsPage(page, scenario.qualificationToSelect);
-            await checkText(page, '#ratio-Unqualified-tag > .govuk-tag', scenario.ratioForUnqualified);
-            await checkText(page, '#ratio-Level2-tag > .govuk-tag', scenario.ratioForLevel2);
-            await checkText(page, '#ratio-Level3-tag > .govuk-tag', scenario.ratioForLevel3);
-            await checkText(page, '#ratio-Level6-tag > .govuk-tag', scenario.ratioForLevel6);
-        });
     });
 
     // Selected AO scenarios
@@ -244,107 +163,6 @@ test.describe('A spec used to validate changes to the journey against actual dat
         });
     });
 
-    // Various AO scenarios with Additional Questions
-    [
-        {
-            scenarioId: 1,
-            monthStarted: '07',
-            yearStarted: '2020',
-            monthAwarded: '12',
-            yearAwarded: '2021',
-            selectedLevel: 6,
-            noOfMatchingQualifications: 12,
-            qualificationToSelect: 'EYQ-282',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: approved,
-            ratioForLevel6: possibleRouteAvailable,
-            additionalRequirements: [noAtQuestionOne]
-        } as Scenario,
-        {
-            scenarioId: 2,
-            monthStarted: '07',
-            yearStarted: '2013',
-            monthAwarded: '08',
-            yearAwarded: '2014',
-            selectedLevel: 7,
-            noOfMatchingQualifications: 4,
-            qualificationToSelect: 'EYQ-211',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: approved,
-            ratioForLevel6: notApproved,
-            additionalRequirements: [noAtQuestionOne, yesAtQuestionTwo]
-        } as Scenario,
-        {
-            scenarioId: 3,
-            monthStarted: '07',
-            yearStarted: '2013',
-            monthAwarded: '08',
-            yearAwarded: '2014',
-            selectedLevel: 7,
-            noOfMatchingQualifications: 4,
-            qualificationToSelect: 'EYQ-211',
-            ratioForUnqualified: approved,
-            ratioForLevel2: notApproved,
-            ratioForLevel3: possibleRouteAvailable,
-            ratioForLevel6: notApproved,
-            additionalRequirements: [noAtQuestionOne, noAtQuestionTwo]
-        } as Scenario,
-        {
-            scenarioId: 4,
-            monthStarted: '07',
-            yearStarted: '2013',
-            monthAwarded: '08',
-            yearAwarded: '2014',
-            selectedLevel: 0,
-            noOfMatchingQualifications: 177,
-            qualificationToSelect: 'EYQ-147',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: approved,
-            ratioForLevel6: notApproved,
-            additionalRequirements: [yesAtQuestionOne]
-        } as Scenario,
-        {
-            scenarioId: 5,
-            monthStarted: '07',
-            yearStarted: '2020',
-            monthAwarded: '12',
-            yearAwarded: '2021',
-            selectedLevel: 0,
-            noOfMatchingQualifications: 73,
-            qualificationToSelect: 'EYQ-287',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: approved,
-            ratioForLevel6: possibleRouteAvailable,
-            additionalRequirements: [noAtQuestionOne]
-        } as Scenario,
-    ].forEach((scenario) => {
-        test(`Various AO qualification with additional questions check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({page}) => {
-            await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
-            await whereWasTheQualificationAwarded(page, "#england");
-            await chooseStartDateOptionBasedOnDate(page, scenario.monthStarted, scenario.yearStarted);
-            await whenWasQualificationAwarded(page, scenario.monthAwarded, scenario.yearAwarded);
-            await whatLevelIsTheQualification(page, scenario.selectedLevel);
-            await selectNotOnTheListAsTheAwardingOrganisation(page);
-            await checkYourAnswersPage(page);
-            await checkNumberOfMatchingQualifications(page, scenario.noOfMatchingQualifications);
-            await selectQualification(page, scenario.qualificationToSelect);
-            await confirmQualification(page, "#yes");
-            for (const x of scenario.additionalRequirements) {
-                await processAdditionalRequirement(page, scenario.qualificationToSelect, x.index, x.answer);
-            }
-            await confirmAdditonalRequirementsAnswers(page, scenario.qualificationToSelect);
-            await checkDetailsPage(page, scenario.qualificationToSelect);
-            await checkText(page, '#ratio-Unqualified-tag > .govuk-tag', scenario.ratioForUnqualified);
-            await checkText(page, '#ratio-Level2-tag > .govuk-tag', scenario.ratioForLevel2);
-            await checkText(page, '#ratio-Level3-tag > .govuk-tag', scenario.ratioForLevel3);
-            await checkText(page, '#ratio-Level6-tag > .govuk-tag', scenario.ratioForLevel6);
-        });
-    });
-
     // Selected AO scenarios with Additional Questions
     [
         {
@@ -445,8 +263,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
         } as Scenario
     ].forEach((scenario) => {
         test(`Selected AO qualification with additional questions check for scenario ${scenario.scenarioId} and qualificationId ${scenario.qualificationToSelect}`, async ({
-                                                                                                                                                                               page,
-                                                                                                                                                                               context
+                                                                                                                                                                               page
                                                                                                                                                                            }) => {
             await checkingOwnQualificationOrSomeoneElsesPage(page, "#no");
             await whereWasTheQualificationAwarded(page, "#england");

@@ -1,10 +1,11 @@
-﻿using System.Globalization;
+﻿using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+using System.Globalization;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 
@@ -37,13 +38,22 @@ public class QualificationSearchService(
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
         var searchCriteria = searchCriteriaOverride ?? userJourneyCookieService.GetSearchCriteria();
 
-        return await qualificationsRepository.Get(
+        var qualifications = await qualificationsRepository.Get(
                                                   level,
                                                   startDateMonth,
                                                   startDateYear,
                                                   awardingOrganisation,
                                                   searchCriteria
                                                  );
+
+        // Not in list has been selected so we need to filter out qualifications with specific awarding organisations
+        if (awardingOrganisation is null)
+        {
+            qualifications = qualifications.Where(q => q.AwardingOrganisationTitle.Equals(AwardingOrganisations.Various, StringComparison.OrdinalIgnoreCase) 
+                                                       || q.AwardingOrganisationTitle.Equals(AwardingOrganisations.AllHigherEducation, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return qualifications;
     }
 
     public async Task<Qualification?> GetQualificationById(string qualificationId)
