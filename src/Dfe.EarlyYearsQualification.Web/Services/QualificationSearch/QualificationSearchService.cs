@@ -49,7 +49,8 @@ public class QualificationSearchService(
         // Not in list has been selected so we need to filter out qualifications with specific awarding organisations
         if (awardingOrganisation is null)
         {
-            qualifications = qualifications.Where(q => q.AwardingOrganisationTitle.Equals(AwardingOrganisations.Various, StringComparison.OrdinalIgnoreCase)).ToList();
+            qualifications = qualifications.Where(q => q.AwardingOrganisationTitle.Equals(AwardingOrganisations.Various, StringComparison.OrdinalIgnoreCase) 
+                                                       || q.AwardingOrganisationTitle.Equals(AwardingOrganisations.AllHigherEducation, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         return qualifications;
