@@ -17,7 +17,6 @@ public class FeedbackFormPageMapperTests
                        {
                            Heading = "Heading",
                            CtaButtonText = "Continue",
-                           ErrorBannerHeading = "Error",
                            BackButton = new NavigationLink
                                         {
                                             Href = "/"
@@ -34,37 +33,22 @@ public class FeedbackFormPageMapperTests
         result.Should().NotBeNull();
         result.Heading.Should().Be(pageData.Heading);
         result.CtaButtonText.Should().Be(pageData.CtaButtonText);
-        result.ErrorBannerHeading.Should().Be(pageData.ErrorBannerHeading);
         result.BackButton.Should().NotBeNull();
         result.BackButton.Href.Should().Be(pageData.BackButton.Href);
-        result.Questions.Should().HaveCount(3);
+        result.Questions.Should().HaveCount(2);
         result.Questions[0].Should().NotBeNull();
-        
+
         var question0 = result.Questions[0] as FeedbackFormQuestionRadioModel;
         question0.Should().NotBeNull();
         question0.Question.Should().Match((pageData.Questions[0] as FeedbackFormQuestionRadio)!.Question);
-        question0.ErrorMessage.Should().Match((pageData.Questions[0] as FeedbackFormQuestionRadio)!.ErrorMessage);
         question0.OptionsItems.Count.Should().Be((pageData.Questions[0] as FeedbackFormQuestionRadio)!.Options.Count);
-        question0.IsRequired.Should().BeTrue();
-        
+
         var question1 = result.Questions[1] as FeedbackFormQuestionTextAreaModel;
         question1.Should().NotBeNull();
         question1.Question.Should().Match((pageData.Questions[1] as FeedbackFormQuestionTextArea)!.Question);
-        question1.ErrorMessage.Should().Match((pageData.Questions[1] as FeedbackFormQuestionTextArea)!.ErrorMessage);
         question1.HintText.Should().Be((pageData.Questions[1] as FeedbackFormQuestionTextArea)!.HintText);
-        question1.IsRequired.Should().BeTrue();
-        
-        var question2 = result.Questions[2] as FeedbackFormQuestionRadioAndInputModel;
-        question2.Should().NotBeNull();
-        question2.Question.Should().Match((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.Question);
-        question2.ErrorMessage.Should().Match((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.ErrorMessage);
-        question2.ErrorMessageForInput.Should().Match((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.ErrorMessageForInput);
-        question2.InputHeading.Should().Match((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.InputHeading);
-        question2.InputHeadingHintText.Should().Match((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.InputHeadingHintText);
-        question2.OptionsItems.Count.Should().Be((pageData.Questions[2] as FeedbackFormQuestionRadioAndInput)!.Options.Count);
-        question2.IsRequired.Should().BeTrue();
-        
-        result.QuestionList.Should().HaveCount(3);
+
+        result.QuestionList.Should().HaveCount(2);
     }
 
     private static List<IFeedbackFormQuestion> AddQuestions()
@@ -74,26 +58,12 @@ public class FeedbackFormPageMapperTests
                             new FeedbackFormQuestionRadio
                             {
                                 Question = "Radio question",
-                                ErrorMessage = "Radio question Error",
-                                Options = AddOptions(),
-                                IsTheQuestionMandatory = true
+                                Options = AddOptions()
                             },
                             new FeedbackFormQuestionTextArea
                             {
                                 Question = "Text area question",
-                                ErrorMessage = "Text area question Error",
-                                HintText = "Text area hint",
-                                IsTheQuestionMandatory = true
-                            },
-                            new FeedbackFormQuestionRadioAndInput
-                            {
-                                Question = "Radio and input question",
-                                ErrorMessage = "Radio and input question Error",
-                                ErrorMessageForInput = "Radio and input question Error for input",
-                                Options = AddOptions(),
-                                InputHeading = "Input heading",
-                                InputHeadingHintText = "Input heading hint text",
-                                IsTheQuestionMandatory = true
+                                HintText = "Text area hint"
                             }
                         };
 

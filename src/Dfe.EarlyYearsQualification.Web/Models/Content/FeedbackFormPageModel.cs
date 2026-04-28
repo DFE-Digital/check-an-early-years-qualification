@@ -10,14 +10,9 @@ public class FeedbackFormPageModel
 
     public NavigationLinkModel? BackButton { get; init; }
 
-    public ErrorSummaryModel? ErrorSummaryModel { get; set; }
-
     public required string CtaButtonText { get; init; }
-
-    public required string ErrorBannerHeading { get; init; }
 
     public List<FeedbackFormQuestionListModel> QuestionList { get; set; } = [];
 
-    public bool HasError { get; set; }
-    
+    public string SubmittedFrom { get; init; } = string.Empty;
 }

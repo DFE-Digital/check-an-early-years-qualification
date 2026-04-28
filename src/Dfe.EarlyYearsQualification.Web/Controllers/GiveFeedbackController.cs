@@ -26,36 +26,22 @@ public class GiveFeedbackController(
         if (feedbackFormPage == null) return RedirectToAction("Index", "Error");
 
         var model = await feedbackFormPageMapper.Map(feedbackFormPage);
-        feedbackFormService.SetDefaultAnswers(feedbackFormPage, model);
         return View(model);
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(FeedbackFormPageModel model)
     {
-        // Get the page content
-        var feedbackFormPage = await contentService.GetFeedbackFormPage();
-        if (feedbackFormPage == null) return RedirectToAction("Index", "Error");
-
-        // Ensure that mandatory questions have been answered
-        var errorSummaryModel = feedbackFormService.ValidateQuestions(feedbackFormPage, model);
-
-        if (errorSummaryModel.ErrorSummaryLinks.Count != 0)
+        if (model.QuestionList.Any(x => x.Answer is not null))
         {
-            var mappedModel = await feedbackFormPageMapper.Map(feedbackFormPage);
-            mappedModel.HasError = true;
-            mappedModel.ErrorSummaryModel = errorSummaryModel;
-            mappedModel.QuestionList = model.QuestionList;
-            return View("Get", mappedModel);
-        }
-        
-        var message = feedbackFormService.ConvertQuestionListToString(model);
-        notificationService.SendEmbeddedFeedbackFormNotification(new EmbeddedFeedbackFormNotification{ Message = message });
-        userJourneyCookieService.SetHasUserGotEverythingTheyNeededToday(string.Empty);
+            var message = feedbackFormService.ConvertQuestionListToString(model, "/give-feedback");
 
-        return RedirectToAction("Confirmation");
+            notificationService.SendEmbeddedFeedbackFormNotification(new EmbeddedFeedbackFormNotification{ Message = message });
+        }
+
+        return RedirectToAction(nameof(Confirmation));
     }
-    
+
     [HttpGet("confirmation")]
     public async Task<IActionResult> Confirmation()
     {
@@ -66,13 +52,5 @@ public class GiveFeedbackController(
         
         model.ShowOptionalSection = userJourneyCookieService.GetHasSubmittedEmailAddressInFeedbackFormQuestion();
         return View(model);
-    }
-    
-    [HttpPost("/api/setHasUserGotWhatTheyNeededToday")]
-    [IgnoreAntiforgeryToken]
-    public IActionResult HasUserGotWhatTheyNeededToday([FromForm] bool hasUserGotWhatTheyNeededToday)
-    {
-        userJourneyCookieService.SetHasUserGotEverythingTheyNeededToday(hasUserGotWhatTheyNeededToday ? "yes" : "no");
-        return Ok();
     }
 }

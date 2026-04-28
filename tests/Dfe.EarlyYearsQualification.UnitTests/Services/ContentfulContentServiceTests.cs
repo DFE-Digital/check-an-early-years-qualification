@@ -1444,7 +1444,6 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var data = new FeedbackFormPage
                    {
                        Heading = "Heading", BackButton = new NavigationLink(), CtaButtonText = "Submit",
-                       ErrorBannerHeading = "There is an error"
                    };
 
         ClientMock.Setup(c =>

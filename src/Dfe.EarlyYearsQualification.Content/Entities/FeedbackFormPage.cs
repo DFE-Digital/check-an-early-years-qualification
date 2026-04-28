@@ -13,6 +13,4 @@ public class FeedbackFormPage
     public required NavigationLink BackButton { get; set; }
 
     public required string CtaButtonText { get; set; }
-
-    public required string ErrorBannerHeading { get; set; }
 }
