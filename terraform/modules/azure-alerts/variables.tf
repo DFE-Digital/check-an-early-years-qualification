@@ -13,6 +13,11 @@ variable "app_service_webapp_id" {
   type        = string
 }
 
+variable "key_vault_id" {
+  description = "Id of the Key Vault"
+  type        = string
+}
+
 variable "tags" {
   description = "Resource tags"
   type        = map(string)

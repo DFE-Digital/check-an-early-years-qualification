@@ -193,3 +193,31 @@ resource "azurerm_monitor_activity_log_alert" "instance_count_decrease" {
     ]
   }
 }
+
+# Alert for certificates updates (create, update & auto-renewal)
+resource "azurerm_monitor_activity_log_alert" "certificate-write-suceeded-alert" {
+  name                = "certificate-write-suceeded-alert"
+  resource_group_name = var.resource_group
+  location            = "global"
+  scopes              = [var.key_vault_id]
+  description         = "Action will be triggered when a certificate is successfully created or updated in Key Vault."
+  tags                = var.tags
+
+  criteria {
+    category       = "Administrative"
+    operation_name = "Microsoft.KeyVault/vaults/certificates/write"
+    status         = "Succeeded"
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.dev_team.id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
+}

@@ -172,6 +172,8 @@ module "alerts" {
   resource_group        = azurerm_resource_group.rg.name
   app_service_plan_id   = module.webapp.app_service_plan_id
   app_service_webapp_id = module.webapp.app_service_webapp_id
+  key_vault_id          = module.network.kv_id
   tags                  = local.common_tags
+  environment           = var.environment
   depends_on            = [module.webapp]
 }
