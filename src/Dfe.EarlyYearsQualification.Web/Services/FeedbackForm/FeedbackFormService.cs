@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
 
-public class FeedbackFormService() : IFeedbackFormService
+public class FeedbackFormService : IFeedbackFormService
 {
     public string ConvertQuestionListToString(FeedbackFormPageModel model, string url)
     {
