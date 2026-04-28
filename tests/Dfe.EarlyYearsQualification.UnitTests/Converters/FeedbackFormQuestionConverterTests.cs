@@ -22,25 +22,6 @@ public class FeedbackFormQuestionConverterTests
     }
 
     [TestMethod]
-    public void ReadJson_PassInObjectContainingInputHeading_ReturnsFeedbackFormQuestionRadioAndInput()
-    {
-        var question = new FeedbackFormQuestionRadioAndInput { InputHeading = "Test" };
-        var json = JsonConvert.SerializeObject(question);
-        JsonReader reader = new JsonTextReader(new StringReader(json));
-        while (reader.TokenType == JsonToken.None)
-            if (!reader.Read())
-                break;
-
-        var result =
-            new FeedbackFormQuestionConverter().ReadJson(reader, typeof(IFeedbackFormQuestion), null, JsonSerializer.CreateDefault());
-
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<FeedbackFormQuestionRadioAndInput>();
-        var data = result as FeedbackFormQuestionRadioAndInput;
-        data!.InputHeading.Should().Match(question.InputHeading);
-    }
-    
-    [TestMethod]
     public void ReadJson_PassInObjectContainingOptions_ReturnsFeedbackFormQuestionRadio()
     {
         var question = new FeedbackFormQuestionRadio();

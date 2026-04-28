@@ -15,12 +15,8 @@ public class FeedbackFormQuestionConverter : JsonConverter
     {
         var jo = JObject.Load(reader);
         IFeedbackFormQuestion model;
-        
-        if (jo.ContainsKey("inputHeading") || jo.ContainsKey("InputHeading"))
-        {
-            model = new FeedbackFormQuestionRadioAndInput();
-        }
-        else if (jo.ContainsKey("options") || jo.ContainsKey("Options"))
+
+        if (jo.ContainsKey("options") || jo.ContainsKey("Options"))
         {
             model = new FeedbackFormQuestionRadio();
         }
@@ -28,7 +24,7 @@ public class FeedbackFormQuestionConverter : JsonConverter
         {
             model = new FeedbackFormQuestionTextArea();
         }
-        
+
         serializer.Populate(jo.CreateReader(), model);
         return model;
     }

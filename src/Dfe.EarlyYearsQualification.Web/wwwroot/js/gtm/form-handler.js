@@ -109,66 +109,53 @@ $("#refine-search-form").on("submit", function(){
     });
 });
 
-$("#clear-search-form").on("submit", function(){
+$("#clear-search-form").on("submit", function() {
     window.dataLayer.push({
         'event': 'clearSearchFormSubmission'
     });
 });
 
 $("#give-feedback-form").on("submit", function () {
-    // get first radio question container
-    let firstRadioQuestionParent = $("div[class='govuk-radios']").first().parent();
-    let question = $(firstRadioQuestionParent).children("h2:first").text();
-    let inputName = $(firstRadioQuestionParent).children(".govuk-radios")
-        .children(".govuk-radios__item")
-        .children("input:first")
-        .attr("name");
-    let inputSelector = "input[name='" + inputName + "']";
-    let answer = $(inputSelector).val();
-    
-    // get all required fields and ensure they have a value
-    let requiredElements = $("input[isrequired='True']");
-    let requiredElementNames = [];
-    $.each(requiredElements, function(index, value) { requiredElementNames.push(value.name); });
-    let uniqueNames = requiredElementNames.filter((name, index, requiredElementNames) => {
-        return index === requiredElementNames.indexOf(name);
-    });
+    const questionGroups = document.querySelectorAll('#give-feedback-form .govuk-form-group');
+    let answeredCount = 0;
+    let details = [];
 
-    let hasRequiredElements = true;
-    $.each(uniqueNames, function(index, value) {
-        let baseSelector = "input[name='" + value + "']";
-        let checkedSelector = baseSelector + ":checked";
-        let selector = $(baseSelector).hasClass("govuk-radios__input") ? checkedSelector : baseSelector;
-        let isConditionalInput = $(baseSelector).hasClass("conditional-input");
-        
-        if (isConditionalInput) {
-            // get paired input name and get value to ensure checked value matches
-            let pairedInputName = $(baseSelector).parent().parent().parent().children("input:first").attr("name");
-            let pairedInputSelector = "input[name='" + pairedInputName + "']";
-            let pairedInputValue = $(pairedInputSelector).val();
-            
-            // Only check the conditional input if it's paired value has been selected
-            if (pairedInputValue !== $(pairedInputSelector+":checked").val()) {
-                return;
-            }
-        }
-        
-        if ($(selector).val() === undefined || $(selector).val().length <= 0) {
-            hasRequiredElements = false;
+    questionGroups.forEach((group, index) => {
+        const questionText = group.querySelector('legend, label')?.innerText.trim() || `Question ${index + 1}`;
+
+        // Check for checked radio buttons or checkboxes
+        const hasSelection = group.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').length > 0;
+
+        // Check for text inputs or textareas that are not empty
+        const textInputs = group.querySelectorAll('input[type="text"], textarea');
+        const hasText = Array.from(textInputs).some(input => input.value.trim() !== "");
+
+        if (hasSelection || hasText) {
+            answeredCount++;
+            details.push({ question: questionText, status: 'Answered' });
+        } else {
+            details.push({ question: questionText, status: 'Unanswered' });
         }
     });
 
-    // only submit the event if all the required inputs have values
-    if (hasRequiredElements) {
-        window.dataLayer.push({
-            'event': 'giveFeedbackFormSubmission',
-            'question': question,
-            'answer': answer
+    let payload = {};
+
+    if (answeredCount > 0) {
+        payload.event = 'giveFeedbackFormSubmission';
+        // Add each question and its status to the payload
+        details.forEach((detail, index) => {
+            payload[`question_${index + 1}`] = detail.question;
+            payload[`answer_${index + 1}`] = detail.status;
         });
     }
+    else {
+        payload.event = 'emptyFeedbackFormSubmission';
+    }
+
+    window.dataLayer.push(payload);
 });
 
-$('#get-help-enquiry-form').on("submit", function(){
+$('#get-help-enquiry-form').on("submit", function() {
     let selectedAnswer = $(`input[name='SelectedOption']:checked`).val();
     window.dataLayer.push({
         'event': 'reasonForEnquiringFormSubmission',

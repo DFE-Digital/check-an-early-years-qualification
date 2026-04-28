@@ -15,10 +15,9 @@ public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedba
                    Heading = feedbackFormPage.Heading,
                    BackButton = NavigationLinkMapper.Map(feedbackFormPage.BackButton),
                    CtaButtonText = feedbackFormPage.CtaButtonText,
-                   ErrorBannerHeading = feedbackFormPage.ErrorBannerHeading,
                    PostHeadingContent = postHeadingContent,
                    Questions = MapQuestions(feedbackFormPage.Questions)
-               };
+        };
         
         model.Questions.ForEach(x => model.QuestionList.Add(new FeedbackFormQuestionListModel { Question = (x as BaseFeedbackFormQuestionModel)!.Question}));
 
@@ -35,11 +34,6 @@ public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedba
                 results.Add(MapRadioQuestion(question as FeedbackFormQuestionRadio));
                 continue;
             }
-            if (question.GetType() == typeof(FeedbackFormQuestionRadioAndInput))
-            {
-                results.Add(MapRadioAndInputQuestion(question as FeedbackFormQuestionRadioAndInput));
-                continue;
-            }
             if (question.GetType() == typeof(FeedbackFormQuestionTextArea))
             {
                 results.Add(MapTextAreaQuestion(question as FeedbackFormQuestionTextArea));
@@ -53,23 +47,7 @@ public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedba
         return new FeedbackFormQuestionTextAreaModel
                {
                    Question = question!.Question,
-                   HintText = question.HintText,
-                   ErrorMessage = question.ErrorMessage,
-                   IsRequired = question.IsTheQuestionMandatory
-               };
-    }
-
-    private static FeedbackFormQuestionRadioAndInputModel MapRadioAndInputQuestion(FeedbackFormQuestionRadioAndInput? question)
-    {
-        return new FeedbackFormQuestionRadioAndInputModel
-               {
-                   Question = question!.Question,
-                   OptionsItems = OptionItemMapper.Map(question.Options),
-                   ErrorMessage = question.ErrorMessage,
-                   ErrorMessageForInput = question.ErrorMessageForInput,
-                   InputHeading = question.InputHeading,
-                   InputHeadingHintText = question.InputHeadingHintText,
-                   IsRequired = question.IsTheQuestionMandatory
+                   HintText = question.HintText
                };
     }
 
@@ -78,9 +56,7 @@ public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedba
         return new FeedbackFormQuestionRadioModel
                {
                    Question = question!.Question,
-                   ErrorMessage = question.ErrorMessage,
-                   OptionsItems = OptionItemMapper.Map(question.Options),
-                   IsRequired = question.IsTheQuestionMandatory
+                   OptionsItems = OptionItemMapper.Map(question.Options)
                };
     }
 }
