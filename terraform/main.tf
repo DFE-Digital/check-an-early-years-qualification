@@ -174,6 +174,5 @@ module "alerts" {
   app_service_webapp_id = module.webapp.app_service_webapp_id
   key_vault_id          = module.network.kv_id
   tags                  = local.common_tags
-  environment           = var.environment
   depends_on            = [module.webapp]
 }
