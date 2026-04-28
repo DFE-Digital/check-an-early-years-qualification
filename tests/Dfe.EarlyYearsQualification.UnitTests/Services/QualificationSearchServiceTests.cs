@@ -132,6 +132,41 @@ public class QualificationSearchServiceTests
                                           qualificationName
                                          ), Times.Once);
     }
+    
+    [TestMethod]
+    public async Task GetFilteredQualifications_NullAwardingOrganisation_ReturnsCorrectQualifications()
+    {
+        const int levelOfQualification = 123;
+        const int startDateMonth = 3;
+        const int startDateYear = 2016;
+        const string qualificationName = "qualification name";
+
+        _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(levelOfQualification);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
+                                     .Returns((startDateMonth, startDateYear));
+        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+        _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(qualificationName);
+        
+        _mockRepository.Setup(x => x.Get(
+                                         levelOfQualification,
+                                         startDateMonth,
+                                         startDateYear,
+                                         null,
+                                         qualificationName
+                                        )).ReturnsAsync([new Qualification("123", qualificationName, "Wrong awarding organisation", 3),
+                                                            new Qualification("456", qualificationName, AwardingOrganisations.Various, 3),
+                                                            new Qualification("789", qualificationName, AwardingOrganisations.AllHigherEducation, 3)]);
+
+        var sut = GetSut();
+        var results = await sut.GetFilteredQualifications();
+
+        results.Should().NotBeNull();
+        results.Count.Should().Be(2);
+        results[0].QualificationId.Should().Be("456");
+        results[0].AwardingOrganisationTitle.Should().Be(AwardingOrganisations.Various);
+        results[1].QualificationId.Should().Be("789");
+        results[1].AwardingOrganisationTitle.Should().Be(AwardingOrganisations.AllHigherEducation);
+    }
 
     [TestMethod]
     public async Task MapList_Qualifications_Returns_Correct_List()
