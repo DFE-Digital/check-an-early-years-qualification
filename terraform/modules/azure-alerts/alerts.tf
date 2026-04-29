@@ -195,22 +195,36 @@ resource "azurerm_monitor_activity_log_alert" "instance_count_decrease" {
 }
 
 # Alert for certificates updates (create, update & auto-renewal)
-resource "azurerm_monitor_activity_log_alert" "certificate-write-suceeded-alert" {
-  name                = "certificate-write-suceeded-alert"
-  resource_group_name = var.resource_group
-  location            = "global"
-  scopes              = [var.key_vault_id]
-  description         = "Action will be triggered when a certificate is successfully created or updated in Key Vault."
-  tags                = var.tags
+resource "azurerm_monitor_scheduled_query_rules_alert_v2" "certificate-write-suceeded-alert" {
+  name                 = "certificate-write-suceeded-alert"
+  resource_group_name  = var.resource_group
+  location             = "global"
+  scopes               = [var.log_analytics_workspace_id]
+  evaluation_frequency = "PT1H" # Checks every 1 hour
+  window_duration      = "PT1H"
+  severity             = 3 # informational
 
   criteria {
-    category       = "Administrative"
-    operation_name = "Microsoft.KeyVault/vaults/certificates/write"
-    status         = "Succeeded"
+    query = <<-KQL
+      AzureDiagnostics
+      | where ResourceProvider == "MICROSOFT.KEYVAULT"
+      | where OperationName == "CertificateNewVersionCreated"
+      | project TimeGenerated, Resource, OperationName, ResultSignature
+    KQL
+
+    time_aggregation_method = "Count"
+    threshold               = 0
+    operator                = "GreaterThan"
+
+    dimension {
+      name     = "Resource"
+      operator = "Include"
+      values   = ["*"]
+    }
   }
 
   action {
-    action_group_id = azurerm_monitor_action_group.dev_team.id
+    action_groups = [azurerm_monitor_action_group.main.id]
   }
 
   lifecycle {

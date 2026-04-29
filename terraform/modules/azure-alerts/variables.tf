@@ -13,8 +13,8 @@ variable "app_service_webapp_id" {
   type        = string
 }
 
-variable "key_vault_id" {
-  description = "Id of the Key Vault"
+variable "log_analytics_workspace_id" {
+  description = "The log analytics workspace ID"
   type        = string
 }
 

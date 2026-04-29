@@ -91,6 +91,8 @@ module "network" {
   contentful_preview_api_key                = var.contentful_preview_api_key
   contentful_space_id                       = var.contentful_space_id
   govuk_notify_api_key                      = var.govuk_notify_api_key
+  log_analytics_workspace_id                = module.monitor.logs_id
+  depends_on                                = [module.monitor]
 }
 
 # Create storage account for web app

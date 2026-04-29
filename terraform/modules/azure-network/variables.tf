@@ -87,3 +87,8 @@ variable "govuk_notify_api_key" {
   description = "GovUK Notify API Key"
   type        = string
 }
+
+variable "log_analytics_workspace_id" {
+  description = "The log analytics workspace ID"
+  type        = string
+}

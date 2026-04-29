@@ -20,6 +20,21 @@ resource "azurerm_key_vault" "kv" {
   }
 }
 
+# enable logging for KeyVault to write to the log analytics workspace
+resource "azurerm_monitor_diagnostic_setting" "kv_logs" {
+  name                       = "key-vault-to-log-analytics-workspace"
+  target_resource_id         = azurerm_key_vault.kv.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  enabled_log {
+    category = "AuditEvent"
+  }
+
+  metric {
+    category = "AllMetrics"
+  }
+}
+
 resource "azurerm_user_assigned_identity" "kv_mi" {
   # Identity for App Gateway, only deployed to the Test and Production subscription
   count = var.environment != "development" ? 1 : 0
