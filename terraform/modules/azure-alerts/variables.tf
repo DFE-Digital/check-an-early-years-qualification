@@ -18,6 +18,11 @@ variable "log_analytics_workspace_id" {
   type        = string
 }
 
+variable "location" {
+  description = "Name of the Azure region to deploy resources"
+  type        = string
+}
+
 variable "tags" {
   description = "Resource tags"
   type        = map(string)

@@ -198,7 +198,7 @@ resource "azurerm_monitor_activity_log_alert" "instance_count_decrease" {
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "certificate-write-suceeded-alert" {
   name                 = "certificate-write-suceeded-alert"
   resource_group_name  = var.resource_group
-  location             = "global"
+  location             = var.location
   scopes               = [var.log_analytics_workspace_id]
   evaluation_frequency = "PT1H" # Checks every 1 hour
   window_duration      = "PT1H"

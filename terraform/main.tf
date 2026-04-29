@@ -175,6 +175,7 @@ module "alerts" {
   app_service_plan_id        = module.webapp.app_service_plan_id
   app_service_webapp_id      = module.webapp.app_service_webapp_id
   log_analytics_workspace_id = module.monitor.logs_id
+  location                   = var.azure_region
   tags                       = local.common_tags
   depends_on                 = [module.webapp]
 }
