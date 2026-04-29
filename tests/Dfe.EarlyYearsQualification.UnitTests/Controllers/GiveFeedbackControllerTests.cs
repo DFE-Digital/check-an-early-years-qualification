@@ -1,8 +1,8 @@
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
-using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
@@ -28,7 +28,7 @@ public class GiveFeedbackControllerTests
                                                     mockFeedbackFormPageMapper.Object,
                                                     mockFeedbackFormConfirmationPageMapper.Object);
 
-        mockContentService.Setup(x => x.GetFeedbackFormPage()).ReturnsAsync((FeedbackFormPage?)null);
+        mockContentService.Setup(x => x.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)).ReturnsAsync((FeedbackFormPage?)null);
 
         var result = await controller.Get();
 
@@ -58,7 +58,7 @@ public class GiveFeedbackControllerTests
                                                     mockFeedbackFormConfirmationPageMapper.Object);
 
         var feedbackFormPage = GetFeedbackFormPage();
-        mockContentService.Setup(x => x.GetFeedbackFormPage()).ReturnsAsync(feedbackFormPage);
+        mockContentService.Setup(x => x.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)).ReturnsAsync(feedbackFormPage);
 
         var expectedModel = GetFeedbackFormPageModel();
         mockFeedbackFormPageMapper.Setup(x => x.Map(feedbackFormPage)).ReturnsAsync(expectedModel);
@@ -91,7 +91,7 @@ public class GiveFeedbackControllerTests
                                                     mockFeedbackFormPageMapper.Object,
                                                     mockFeedbackFormConfirmationPageMapper.Object);
 
-        mockFeedbackFormService.Setup(x => x.ConvertQuestionListToString(It.IsAny<FeedbackFormPageModel>(), It.IsAny<string>()))
+        mockFeedbackFormService.Setup(x => x.ConvertQuestionListToString(It.IsAny<FeedbackFormPageModel>()))
                                .Returns("Message");
 
         var model = GetFeedbackFormPageModel();
@@ -199,7 +199,7 @@ public class GiveFeedbackControllerTests
                                                     mockFeedbackFormPageMapper.Object,
                                                     mockFeedbackFormConfirmationPageMapper.Object);
 
-        mockFeedbackFormService.Setup(x => x.ConvertQuestionListToString(It.IsAny<FeedbackFormPageModel>(), It.IsAny<string>()))
+        mockFeedbackFormService.Setup(x => x.ConvertQuestionListToString(It.IsAny<FeedbackFormPageModel>()))
                                .Returns("Message");
 
         var model = GetFeedbackFormPageModel();
@@ -301,7 +301,8 @@ public class GiveFeedbackControllerTests
                {
                    Heading = "Heading",
                    CtaButtonText = "Continue",
-                   BackButton = new NavigationLink()
+                   BackButton = new NavigationLink(),
+                   PageSubmittedOn = "Give feedback"
                };
     }
 

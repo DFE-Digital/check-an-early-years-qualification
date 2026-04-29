@@ -48,7 +48,7 @@ test.describe('A spec that tests the give feedback pages', {tag: "@e2e"}, () => 
         await checkText(page, "#return-button", "Home");
     });
 
-    test("Checks the details are on the feedback confirmation page when an email was supplied", async ({page, context}) => {
+    test("Checks the details are on the feedback confirmation page", async ({page, context}) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22%22%2C%22WhenWasQualificationStarted%22%3A%22%22%2C%22WhenWasQualificationAwarded%22%3A%22%22%2C%22LevelOfQualification%22%3A%22%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%2C%22SelectedAwardingOrganisationNotOnTheList%22%3Afalse%2C%22SearchCriteria%22%3A%22%22%2C%22AdditionalQuestionsAnswers%22%3A%7B%7D%2C%22QualificationWasSelectedFromList%22%3A0%2C%22HasSubmittedEmailAddressInFeedbackFormQuestion%22%3Atrue%7D', journeyCookieName);
         await page.goto("/give-feedback/confirmation");
 

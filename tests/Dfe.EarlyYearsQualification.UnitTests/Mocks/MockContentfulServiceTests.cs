@@ -1163,7 +1163,7 @@ public class MockContentfulServiceTests
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetFeedbackFormPage();
+        var result = await contentfulService.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage);
 
         result.Should().NotBeNull();
         result.Heading.Should().Be("Give feedback");

@@ -4,7 +4,7 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class FeedbackFormPage
 {
-    public required string Heading { get; set; }
+    public string? Heading { get; set; }
 
     public Document? PostHeadingContent { get; set; }
 
@@ -13,4 +13,6 @@ public class FeedbackFormPage
     public required NavigationLink BackButton { get; set; }
 
     public required string CtaButtonText { get; set; }
+
+    public required string PageSubmittedOn { get; set; }
 }

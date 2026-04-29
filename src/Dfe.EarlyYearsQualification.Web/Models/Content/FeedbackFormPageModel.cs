@@ -2,7 +2,7 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class FeedbackFormPageModel
 {
-    public required string Heading { get; init; }
+    public string? Heading { get; init; }
 
     public string PostHeadingContent { get; init; } = string.Empty;
 
@@ -14,5 +14,5 @@ public class FeedbackFormPageModel
 
     public List<FeedbackFormQuestionListModel> QuestionList { get; set; } = [];
 
-    public string SubmittedFrom { get; init; } = string.Empty;
+    public string PageSubmittedOn { get; init; } = string.Empty;
 }

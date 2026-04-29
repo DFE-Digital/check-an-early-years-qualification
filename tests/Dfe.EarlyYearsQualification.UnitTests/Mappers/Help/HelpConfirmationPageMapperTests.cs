@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Help;
+using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers.Help;
@@ -16,6 +17,8 @@ public class HelpConfirmationPageMapperTests
     {
         var mockContentParser = new Mock<IGovUkContentParser>();
 
+        var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
+
         var docContent = "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n";
 
         mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).Returns(() => Task.FromResult(docContent));
@@ -25,11 +28,6 @@ public class HelpConfirmationPageMapperTests
             SuccessMessage = "Message sent",
             BodyHeading = "What happens next",
             Body = ContentfulContentHelper.Paragraph(docContent),
-            FeedbackComponent = new FeedbackComponent
-            {
-                Header = "Give feedback",
-                Body = ContentfulContentHelper.Paragraph("Your feedback matters and will help us improve the service.")
-            },
             SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
             ReturnToHomepageLink = new NavigationLink
             {
@@ -38,7 +36,7 @@ public class HelpConfirmationPageMapperTests
             }
         };
 
-        var result = await new HelpConfirmationPageMapper(mockContentParser.Object).MapConfirmationPageContentToViewModelAsync(content);
+        var result = await new HelpConfirmationPageMapper(mockContentParser.Object, mockFeedbackFormPageMapper.Object).MapConfirmationPageContentToViewModelAsync(content);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<ConfirmationPageViewModel>();

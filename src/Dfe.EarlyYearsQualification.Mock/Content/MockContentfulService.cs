@@ -609,96 +609,192 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<FeedbackFormPage?> GetFeedbackFormPage()
+    public async Task<FeedbackFormPage?> GetFeedbackFormPage(string entryId)
     {
         const string neutralOption = "Neutral";
 
-        return await Task.FromResult(new FeedbackFormPage
-                                     {
-                                         Heading = "Give feedback",
-                                         PostHeadingContent =
-                                             ContentfulContentHelper.Paragraph("This is the post heading content"),
-                                         BackButton = new NavigationLink
-                                                      {
-                                                          DisplayText = "Home",
-                                                          Href = "/",
-                                                          OpenInNewTab = false
-                                                      },
-                                         CtaButtonText = "Submit feedback",
-                                         Questions =
-                                         [
-                                             new FeedbackFormQuestionRadio
-                                             {
-                                                 Question = "Overall, how satisfied are you with this service?",
-                                                 Options =
-                                                 [
-                                                     new Option
-                                                     {
-                                                         Label = "Very satisfied",
-                                                         Value = "VerySatisfied"
-                                                     },
-                                                     new Option
-                                                     {
-                                                         Label = "Satisfied",
-                                                         Value = "Satisfied"
-                                                     },
-                                                     new Option
-                                                     {
-                                                         Label = neutralOption,
-                                                         Value = neutralOption
-                                                     },
-                                                     new Option
-                                                     {
-                                                         Label = "Dissatisfied",
-                                                         Value = "Dissatisfied"
-                                                     },
-                                                     new Option
-                                                     {
-                                                         Label = "Very dissatisfied",
-                                                         Value = "VeryDissatisfied"
-                                                     }
-                                                 ]
-                                             },
-                                             new FeedbackFormQuestionRadio
-                                             {
-                                                 Question = "How confident are you with the information you received from the service?",
-                                                 Options =
-                                                 [
-                                                     new Option
-                                                     {
-                                                         Label = "Very confident",
-                                                         Value = "VeryConfident"
-                                                     },
-                                                     new Option
-                                                     {
-                                                         Label = "Confident",
-                                                         Value = "Confident"
-                                                     },
-                                                     new Option
-                                                     {
-                                                         Label = neutralOption,
-                                                         Value = neutralOption
-                                                     },
-                                                     new Option
-                                                     {
-                                                         Label = "Slightly confident",
-                                                         Value = "SlightlyConfident"
-                                                     },
-                                                     new Option
-                                                     {
-                                                         Label = "Not at all confident",
-                                                         Value = "NotAtAllConfident"
-                                                     }
-                                                 ]
-                                             },
-                                             new FeedbackFormQuestionTextArea
-                                             {
-                                                 Question = "Share any feedback about your experience, including suggestions for how we could improve the service",
-                                                 HintText =
-                                                     "Do not include personal information, for example the name of the qualification holder"
-                                             }
-                                         ]
-                                     });
+        return entryId switch
+        {
+            FeedbackFormPages.FeedbackFormPage =>
+                await Task.FromResult(
+                    new FeedbackFormPage
+                    {
+                        Heading = "Give feedback",
+                        PostHeadingContent = ContentfulContentHelper.Paragraph("This is the post heading content"),
+                        BackButton = new NavigationLink
+                        {
+                            DisplayText = "Home",
+                            Href = "/",
+                            OpenInNewTab = false
+                        },
+                        CtaButtonText = "Submit feedback",
+                        Questions =
+                        [
+                            new FeedbackFormQuestionRadio
+                            {
+                                Question = "Overall, how satisfied are you with this service?",
+                                Options =
+                                [
+                                    new Option
+                                    {
+                                        Label = "Very satisfied",
+                                        Value = "VerySatisfied"
+                                    },
+                                    new Option
+                                    {
+                                        Label = "Satisfied",
+                                        Value = "Satisfied"
+                                    },
+                                    new Option
+                                    {
+                                        Label = neutralOption,
+                                        Value = neutralOption
+                                    },
+                                    new Option
+                                    {
+                                        Label = "Dissatisfied",
+                                        Value = "Dissatisfied"
+                                    },
+                                    new Option
+                                    {
+                                        Label = "Very dissatisfied",
+                                        Value = "VeryDissatisfied"
+                                    }
+                                ]
+                            },
+                            new FeedbackFormQuestionRadio
+                            {
+                                Question = "How confident are you with the information you received from the service?",
+                                Options =
+                                [
+                                    new Option
+                                    {
+                                        Label = "Very confident",
+                                        Value = "VeryConfident"
+                                    },
+                                    new Option
+                                    {
+                                        Label = "Confident",
+                                        Value = "Confident"
+                                    },
+                                    new Option
+                                    {
+                                        Label = neutralOption,
+                                        Value = neutralOption
+                                    },
+                                    new Option
+                                    {
+                                        Label = "Slightly confident",
+                                        Value = "SlightlyConfident"
+                                    },
+                                    new Option
+                                    {
+                                        Label = "Not at all confident",
+                                        Value = "NotAtAllConfident"
+                                    }
+                                ]
+                            },
+                            new FeedbackFormQuestionTextArea
+                            {
+                                Question = "Share any feedback about your experience, including suggestions for how we could improve the service",
+                                HintText =
+                                    "Do not include personal information, for example the name of the qualification holder"
+                            }
+                        ],
+                        PageSubmittedOn = "Give feedback"
+                    }
+                ),
+            FeedbackFormPages.FeedbackFormHelpConfirmationPage =>
+                await Task.FromResult(
+                    new FeedbackFormPage
+                    {
+                        Heading = null,
+                        PostHeadingContent = ContentfulContentHelper.Paragraph("This is the post heading content"),
+                        BackButton = new NavigationLink
+                        {
+                            DisplayText = "Home",
+                            Href = "/",
+                            OpenInNewTab = false
+                        },
+                        CtaButtonText = "Submit feedback",
+                        Questions =
+                        [
+                            new FeedbackFormQuestionRadio
+                                {
+                                    Question = "Overall, how satisfied are you with this service?",
+                                    Options =
+                                    [
+                                        new Option
+                                        {
+                                            Label = "Very satisfied",
+                                            Value = "VerySatisfied"
+                                        },
+                                        new Option
+                                        {
+                                            Label = "Satisfied",
+                                            Value = "Satisfied"
+                                        },
+                                        new Option
+                                        {
+                                            Label = neutralOption,
+                                            Value = neutralOption
+                                        },
+                                        new Option
+                                        {
+                                            Label = "Dissatisfied",
+                                            Value = "Dissatisfied"
+                                        },
+                                        new Option
+                                        {
+                                            Label = "Very dissatisfied",
+                                            Value = "VeryDissatisfied"
+                                        }
+                                    ]
+                                },
+                                new FeedbackFormQuestionRadio
+                                {
+                                    Question = "How confident are you with the information you received from the service?",
+                                    Options =
+                                    [
+                                        new Option
+                                        {
+                                            Label = "Very confident",
+                                            Value = "VeryConfident"
+                                        },
+                                        new Option
+                                        {
+                                            Label = "Confident",
+                                            Value = "Confident"
+                                        },
+                                        new Option
+                                        {
+                                            Label = neutralOption,
+                                            Value = neutralOption
+                                        },
+                                        new Option
+                                        {
+                                            Label = "Slightly confident",
+                                            Value = "SlightlyConfident"
+                                        },
+                                        new Option
+                                        {
+                                            Label = "Not at all confident",
+                                            Value = "NotAtAllConfident"
+                                        }
+                                    ]
+                                },
+                                new FeedbackFormQuestionTextArea
+                                {
+                                    Question = "Share any feedback about your experience, including suggestions for how we could improve the service",
+                                    HintText =
+                                        "Do not include personal information, for example the name of the qualification holder"
+                                }
+                        ],
+                        PageSubmittedOn = "Help confirmation page"
+                    }
+                ),
+            _ => throw new NotImplementedException($"No feedback page mock for entry {entryId}")
+        };
     }
 
     public async Task<FeedbackFormConfirmationPage?> GetFeedbackFormConfirmationPage()
@@ -992,13 +1088,13 @@ public class MockContentfulService : IContentService
                         SuccessMessage = "Message sent",
                         BodyHeading = "What happens next",
                         Body = ContentfulContentHelper.Paragraph("The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n"),
-                        FeedbackComponent = GetFeedbackComponent(),
                         SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
                         ReturnToHomepageLink = new NavigationLink
                         {
                             DisplayText = "Return to the homepage",
                             Href = "/"
-                        }
+                        },
+                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)
                     }
                 ),
             HelpPages.TechnicalIssueConfirmation =>
@@ -1008,13 +1104,13 @@ public class MockContentfulService : IContentService
                         SuccessMessage = "Message sent",
                         BodyHeading = "What happens next",
                         Body = ContentfulContentHelper.Paragraph("We may need to contact you for more information about the issue you are experiencing with the service."),
-                        FeedbackComponent = GetFeedbackComponent(),
                         SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
                         ReturnToHomepageLink = new NavigationLink
                         {
                             DisplayText = "Return to the homepage",
                             Href = "/"
-                        }
+                        },
+                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)
                     }
                 ),
             _ => null

@@ -41,7 +41,7 @@ public class FeedbackFormServiceTests
                         ]
                     };
         var service = new FeedbackFormService();
-        var result = service.ConvertQuestionListToString(model, "/give-feedback");
+        var result = service.ConvertQuestionListToString(model);
         result.Should().NotBeNull();
         result.Should().Be(expectedResult);
     }
@@ -75,7 +75,7 @@ public class FeedbackFormServiceTests
                         ]
                     };
         var service = new FeedbackFormService();
-        var result = service.ConvertQuestionListToString(model, "/give-feedback");
+        var result = service.ConvertQuestionListToString(model);
         result.Should().NotBeNull();
         result.Should().Be(expectedResult);
     }

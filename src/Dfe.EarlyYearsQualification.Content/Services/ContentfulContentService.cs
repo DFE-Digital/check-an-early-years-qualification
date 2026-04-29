@@ -308,23 +308,12 @@ public class ContentfulContentService(
         return footer.First();
     }
 
-    public async Task<FeedbackFormPage?> GetFeedbackFormPage()
+    public async Task<FeedbackFormPage?> GetFeedbackFormPage(string entryId)
     {
         ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
         ContentfulClient.SerializerSettings.Converters.Add(new FeedbackFormQuestionConverter());
-        var feedbackFormPageType = ContentTypeLookup[typeof(FeedbackFormPage)];
-        var queryBuilder = new QueryBuilder<FeedbackFormPage>().ContentTypeIs(feedbackFormPageType)
-                                                               .Include(3);
-        var feedbackFormPages = await GetEntriesByType(queryBuilder);
 
-        // ReSharper disable once InvertIf
-        if (feedbackFormPages is null || !feedbackFormPages.Any())
-        {
-            Logger.LogWarning("No 'Feedback Form Page' returned");
-            return null;
-        }
-
-        return feedbackFormPages.First();
+        return await GetEntryById<FeedbackFormPage>(entryId);
     }
 
     public async Task<FeedbackFormConfirmationPage?> GetFeedbackFormConfirmationPage()
@@ -372,6 +361,8 @@ public class ContentfulContentService(
 
     public async Task<HelpConfirmationPage?> GetHelpConfirmationPage(string entryId)
     {
+        ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
+        ContentfulClient.SerializerSettings.Converters.Add(new FeedbackFormQuestionConverter());
 
         return await GetEntryById<HelpConfirmationPage>(entryId);
     }

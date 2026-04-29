@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
@@ -22,7 +23,7 @@ public class GiveFeedbackController(
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var feedbackFormPage = await contentService.GetFeedbackFormPage();
+        var feedbackFormPage = await contentService.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage);
         if (feedbackFormPage == null) return RedirectToAction("Index", "Error");
 
         var model = await feedbackFormPageMapper.Map(feedbackFormPage);
@@ -34,7 +35,7 @@ public class GiveFeedbackController(
     {
         if (model.QuestionList.Any(x => x.Answer is not null))
         {
-            var message = feedbackFormService.ConvertQuestionListToString(model, "/give-feedback");
+            var message = feedbackFormService.ConvertQuestionListToString(model);
 
             notificationService.SendEmbeddedFeedbackFormNotification(new EmbeddedFeedbackFormNotification{ Message = message });
         }
