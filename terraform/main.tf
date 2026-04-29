@@ -171,10 +171,10 @@ module "webapp" {
 module "alerts" {
   source = "./modules/azure-alerts"
 
-  resource_group        = azurerm_resource_group.rg.name
-  app_service_plan_id   = module.webapp.app_service_plan_id
-  app_service_webapp_id = module.webapp.app_service_webapp_id
-  key_vault_id          = module.network.kv_id
-  tags                  = local.common_tags
-  depends_on            = [module.webapp]
+  resource_group             = azurerm_resource_group.rg.name
+  app_service_plan_id        = module.webapp.app_service_plan_id
+  app_service_webapp_id      = module.webapp.app_service_webapp_id
+  log_analytics_workspace_id = module.monitor.logs_id
+  tags                       = local.common_tags
+  depends_on                 = [module.webapp]
 }
