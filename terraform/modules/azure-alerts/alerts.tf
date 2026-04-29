@@ -224,7 +224,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "certificate-write-suc
   }
 
   action {
-    action_groups = azurerm_monitor_action_group.dev_team.id
+    action_group_id = azurerm_monitor_action_group.dev_team.id
   }
 
   lifecycle {
