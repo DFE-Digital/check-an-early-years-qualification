@@ -200,7 +200,8 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "certificate-write-suc
   resource_group_name  = var.resource_group
   location             = var.location
   scopes               = [var.log_analytics_workspace_id]
-  evaluation_frequency = "PT1H" # Checks every 1 hour
+  evaluation_frequency = "PT6H" # Checks every 6 hours
+   
   window_duration      = "PT1H"
   severity             = 3 # informational
 
