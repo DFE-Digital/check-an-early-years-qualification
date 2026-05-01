@@ -91,6 +91,8 @@ module "network" {
   contentful_preview_api_key                = var.contentful_preview_api_key
   contentful_space_id                       = var.contentful_space_id
   govuk_notify_api_key                      = var.govuk_notify_api_key
+  log_analytics_workspace_id                = module.monitor.logs_id
+  depends_on                                = [module.monitor]
 }
 
 # Create storage account for web app
@@ -169,9 +171,11 @@ module "webapp" {
 module "alerts" {
   source = "./modules/azure-alerts"
 
-  resource_group        = azurerm_resource_group.rg.name
-  app_service_plan_id   = module.webapp.app_service_plan_id
-  app_service_webapp_id = module.webapp.app_service_webapp_id
-  tags                  = local.common_tags
-  depends_on            = [module.webapp]
+  resource_group             = azurerm_resource_group.rg.name
+  app_service_plan_id        = module.webapp.app_service_plan_id
+  app_service_webapp_id      = module.webapp.app_service_webapp_id
+  log_analytics_workspace_id = module.monitor.logs_id
+  location                   = var.azure_region
+  tags                       = local.common_tags
+  depends_on                 = [module.webapp]
 }

@@ -193,3 +193,45 @@ resource "azurerm_monitor_activity_log_alert" "instance_count_decrease" {
     ]
   }
 }
+
+# Alert for certificates updates (create, update & auto-renewal)
+resource "azurerm_monitor_scheduled_query_rules_alert_v2" "certificate-write-suceeded-alert" {
+  name                 = "certificate-write-suceeded-alert"
+  resource_group_name  = var.resource_group
+  location             = var.location
+  scopes               = [var.log_analytics_workspace_id]
+  evaluation_frequency = "PT6H" # Checks every 6 hours
+  window_duration      = "PT6H"
+  severity             = 3 # informational
+
+  criteria {
+    query = <<-KQL
+      AzureDiagnostics
+      | where ResourceProvider == "MICROSOFT.KEYVAULT"
+      | where OperationName == "CertificateNewVersionCreated"
+      | project TimeGenerated, Resource, OperationName, ResultSignature
+    KQL
+
+    time_aggregation_method = "Count"
+    threshold               = 0
+    operator                = "GreaterThan"
+
+    dimension {
+      name     = "Resource"
+      operator = "Include"
+      values   = ["*"]
+    }
+  }
+
+  action {
+    action_groups = [azurerm_monitor_action_group.dev_team.id]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      tags["Environment"],
+      tags["Product"],
+      tags["Service Offering"]
+    ]
+  }
+}
