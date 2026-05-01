@@ -4,5 +4,5 @@ namespace Dfe.EarlyYearsQualification.Web.Services.FeedbackForm;
 
 public interface IFeedbackFormService
 {
-    string ConvertQuestionListToString(FeedbackFormPageModel model, string url);
+    string ConvertQuestionListToString(FeedbackFormPageModel model);
 }

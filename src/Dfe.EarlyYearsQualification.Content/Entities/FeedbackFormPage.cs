@@ -13,4 +13,6 @@ public class FeedbackFormPage
     public required NavigationLink BackButton { get; set; }
 
     public required string CtaButtonText { get; set; }
+
+    public required string PageSubmittedOn { get; set; }
 }

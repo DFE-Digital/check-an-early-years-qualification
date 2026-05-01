@@ -14,4 +14,6 @@ public class ConfirmationPageViewModel
     public FeedbackComponentModel? FeedbackComponent { get; init; }
 
     public NavigationLinkModel? ReturnToTheHomepageLink { get; init; }
+
+    public FeedbackFormPageModel? FeedbackFormPageModel { get; init; }
 }
