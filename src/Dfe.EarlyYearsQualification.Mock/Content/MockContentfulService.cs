@@ -611,7 +611,10 @@ public class MockContentfulService : IContentService
 
     public async Task<FeedbackFormPage?> GetFeedbackFormPage(string entryId)
     {
+        const string satisfiedOption = "Satisfied";
         const string neutralOption = "Neutral";
+        const string confidentOption = "Confident";
+        const string dissatisfiedOption = "Dissatisfied";
 
         return entryId switch
         {
@@ -642,8 +645,8 @@ public class MockContentfulService : IContentService
                                     },
                                     new Option
                                     {
-                                        Label = "Satisfied",
-                                        Value = "Satisfied"
+                                        Label = satisfiedOption,
+                                        Value = satisfiedOption
                                     },
                                     new Option
                                     {
@@ -652,8 +655,8 @@ public class MockContentfulService : IContentService
                                     },
                                     new Option
                                     {
-                                        Label = "Dissatisfied",
-                                        Value = "Dissatisfied"
+                                        Label = dissatisfiedOption,
+                                        Value = dissatisfiedOption
                                     },
                                     new Option
                                     {
@@ -674,8 +677,8 @@ public class MockContentfulService : IContentService
                                     },
                                     new Option
                                     {
-                                        Label = "Confident",
-                                        Value = "Confident"
+                                        Label = confidentOption,
+                                        Value = confidentOption
                                     },
                                     new Option
                                     {
@@ -1404,16 +1407,6 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 }
-               };
-    }
-
-    private static FeedbackComponent GetFeedbackComponent()
-    {
-        return new FeedbackComponent
-               {
-                   Header = "Give feedback",
-                   Body =
-                       ContentfulContentHelper.Paragraph("Your feedback matters and will help us improve the service.")
                };
     }
 }
