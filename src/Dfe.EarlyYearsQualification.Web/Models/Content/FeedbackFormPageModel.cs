@@ -1,8 +1,10 @@
+using Dfe.EarlyYearsQualification.Web.Constants;
+
 namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class FeedbackFormPageModel
 {
-    public string? Heading { get; init; }
+    public required string? Heading { get; init; }
 
     public string PostHeadingContent { get; init; } = string.Empty;
 
@@ -15,4 +17,10 @@ public class FeedbackFormPageModel
     public List<FeedbackFormQuestionListModel> QuestionList { get; set; } = [];
 
     public string PageSubmittedOn { get; init; } = string.Empty;
+
+    public bool IsFeedbackPageEmbeded => PageSubmittedOn == PageNames.HelpConfirmation;
+
+    public string HeaderClass => IsFeedbackPageEmbeded ? "govuk-heading-m" : "govuk-heading-l";
+
+    public string QuestionClass => IsFeedbackPageEmbeded ? "govuk-heading-s" : "govuk-heading-m";
 }

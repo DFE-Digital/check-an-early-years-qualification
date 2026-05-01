@@ -2,9 +2,13 @@
 @using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
 @model Dfe.EarlyYearsQualification.Web.Models.Content.FeedbackFormPageModel
 
-@if (!string.IsNullOrEmpty(Model.Heading))
+@if (!Model.IsFeedbackPageEmbeded)
 {
     <h1 id="feedback-page-heading" class="govuk-heading-xl">@Model.Heading</h1>
+}
+else
+{
+    <h2 id="feedback-page-heading" class="govuk-heading-m">@Model.Heading</h2>
 }
 
 <div id="feedback-page-body" class="govuk-body">
@@ -28,7 +32,7 @@
                         <input type="hidden" name="QuestionList[@questionIndex].Question" value="@questionData.Question" />
                         <div class="govuk-form-group @(Model.QuestionList[questionIndex]?.HasError == true ? "govuk-form-group--error" : "")">
                             <fieldset class="govuk-fieldset">
-                                <legend class="govuk-heading-m govuk-!-margin-bottom-3" id="@questionId">
+                                <legend class="@Model.QuestionClass govuk-!-margin-bottom-3" id="@questionId">
                                     @questionData.Question
                                 </legend>
                                 <div class="govuk-radios" data-module="govuk-radios">
@@ -82,7 +86,7 @@
 
                         <div class="govuk-form-group @(Model.QuestionList[questionIndex]?.HasError == true ? "govuk-form-group--error" : "")">
                             <h2 class="govuk-label-wrapper" id="@questionId">
-                                <label class="govuk-heading-m govuk-!-margin-bottom-3" for="@textAreaId">
+                                <label class="@Model.QuestionClass govuk-!-margin-bottom-3" for="@textAreaId">
                                     @questionData.Question
                                 </label>
                             </h2>
