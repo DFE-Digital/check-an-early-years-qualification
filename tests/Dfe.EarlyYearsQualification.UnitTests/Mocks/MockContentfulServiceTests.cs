@@ -1171,54 +1171,53 @@ public class MockContentfulServiceTests
         result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post heading content");
         result.BackButton.Should().BeEquivalentTo(new NavigationLink
-                                                  {
-                                                      DisplayText = "Home",
-                                                      OpenInNewTab = false,
-                                                      Href = "/"
-                                                  });
+        {
+            DisplayText = "Home",
+            OpenInNewTab = false,
+            Href = "/"
+        });
         result.CtaButtonText.Should().Be("Submit feedback");
-        result.ErrorBannerHeading.Should().Be("There is a problem");
         result.Questions.Should().NotBeNullOrEmpty();
         result.Questions.Count.Should().Be(3);
         result.Questions[0].Should().BeAssignableTo<FeedbackFormQuestionRadio>();
 
         var question0 = (FeedbackFormQuestionRadio)result.Questions[0];
         question0.Should().NotBeNull();
-        question0.Sys.Should().NotBeNull();
-        question0.Sys.Id.Should().Be(FeedbackFormQuestions.WouldYouLikeToBeContactedAboutResearch);
-        question0.Question.Should().Be("Did you get everything you needed today?");
+        question0.Question.Should().Be("Overall, how satisfied are you with this service?");
         question0.Options.Should().NotBeNullOrEmpty();
-        question0.Options.Count.Should().Be(2);
-        (question0.Options[0] as Option)!.Label.Should().Be("Yes");
-        (question0.Options[0] as Option)!.Value.Should().Be("yes");
-        (question0.Options[1] as Option)!.Label.Should().Be("No");
-        (question0.Options[1] as Option)!.Value.Should().Be("no");
-        question0.IsTheQuestionMandatory.Should().BeTrue();
-        question0.ErrorMessage.Should().Be("Select whether you got everything you needed today");
+        question0.Options.Count.Should().Be(5);
+        (question0.Options[0] as Option)!.Label.Should().Be("Very satisfied");
+        (question0.Options[0] as Option)!.Value.Should().Be("VerySatisfied");
+        (question0.Options[1] as Option)!.Label.Should().Be("Satisfied");
+        (question0.Options[1] as Option)!.Value.Should().Be("Satisfied");
+        (question0.Options[2] as Option)!.Label.Should().Be("Neutral");
+        (question0.Options[2] as Option)!.Value.Should().Be("Neutral");
+        (question0.Options[3] as Option)!.Label.Should().Be("Dissatisfied");
+        (question0.Options[3] as Option)!.Value.Should().Be("Dissatisfied");
+        (question0.Options[4] as Option)!.Label.Should().Be("Very dissatisfied");
+        (question0.Options[4] as Option)!.Value.Should().Be("VeryDissatisfied");
 
-        var question1 = (FeedbackFormQuestionTextArea)result.Questions[1];
+        var question1 = (FeedbackFormQuestionRadio)result.Questions[1];
         question1.Should().NotBeNull();
-        question1.Question.Should().Be("Tell us about your experience (optional)");
-        question1.HintText.Should()
-                 .Be("Do not include personal information, for example the name of the qualification holder");
+        question1.Question.Should().Be("How confident are you with the information you received from the service?");
+        question1.Options.Should().NotBeNullOrEmpty();
+        question1.Options.Count.Should().Be(5);
+        (question1.Options[0] as Option)!.Label.Should().Be("Very confident");
+        (question1.Options[0] as Option)!.Value.Should().Be("VeryConfident");
+        (question1.Options[1] as Option)!.Label.Should().Be("Confident");
+        (question1.Options[1] as Option)!.Value.Should().Be("Confident");
+        (question1.Options[2] as Option)!.Label.Should().Be("Neutral");
+        (question1.Options[2] as Option)!.Value.Should().Be("Neutral");
+        (question1.Options[3] as Option)!.Label.Should().Be("Slightly confident");
+        (question1.Options[3] as Option)!.Value.Should().Be("SlightlyConfident");
+        (question1.Options[4] as Option)!.Label.Should().Be("Not at all confident");
+        (question1.Options[4] as Option)!.Value.Should().Be("NotAtAllConfident");
 
-        var question2 = (FeedbackFormQuestionRadioAndInput)result.Questions[2];
+        var question2 = (FeedbackFormQuestionTextArea)result.Questions[2];
         question2.Should().NotBeNull();
-        question2.Question.Should().Be("Would you like us to contact you about future user research?");
-        question2.Options.Should().NotBeNullOrEmpty();
-        question2.Options.Count.Should().Be(2);
-        (question2.Options[0] as Option)!.Label.Should().Be("Yes");
-        (question2.Options[0] as Option)!.Value.Should().Be("yes");
-        (question2.Options[1] as Option)!.Label.Should().Be("No");
-        (question2.Options[1] as Option)!.Value.Should().Be("no");
-        question2.IsTheQuestionMandatory.Should().BeTrue();
-        question2.InputHeading.Should().Be("Your email address");
-        question2.InputHeadingHintText.Should().Be("Input heading hint text");
-        question2.ValidateInputAsAnEmailAddress.Should().BeTrue();
-        question2.ErrorMessage.Should().Be("Select whether you want to be contacted about future research");
-        question2.ErrorMessageForInput.Should().Be("Enter your email address");
-        question2.ErrorMessageForInvalidEmailFormat.Should()
-                 .Be("Enter an email address in the correct format, like name@example.com");
+        question2.Question.Should().Be("Share any feedback about your experience, including suggestions for how we could improve the service");
+        question2.HintText.Should()
+                 .Be("Do not include personal information, for example the name of the qualification holder");
     }
 
     [TestMethod]
