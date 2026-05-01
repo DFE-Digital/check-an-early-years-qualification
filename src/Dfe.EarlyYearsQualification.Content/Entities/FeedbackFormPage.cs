@@ -4,7 +4,7 @@ namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class FeedbackFormPage
 {
-    public string? Heading { get; set; }
+    public required string Heading { get; set; }
 
     public Document? PostHeadingContent { get; set; }
 
