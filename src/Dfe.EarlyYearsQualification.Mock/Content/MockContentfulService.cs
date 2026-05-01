@@ -711,7 +711,7 @@ public class MockContentfulService : IContentService
                 await Task.FromResult(
                     new FeedbackFormPage
                     {
-                        Heading = null,
+                        Heading = "Give feedback",
                         PostHeadingContent = ContentfulContentHelper.Paragraph("This is the post heading content"),
                         BackButton = new NavigationLink
                         {

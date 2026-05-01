@@ -1231,7 +1231,7 @@ public class MockContentfulServiceTests
         var result = await contentfulService.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormHelpConfirmationPage);
 
         result.Should().NotBeNull();
-        result.Heading.Should().BeNull();
+        result.Heading.Should().Be("Give feedback");
         result.PostHeadingContent.Should().NotBeNull();
         result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post heading content");
