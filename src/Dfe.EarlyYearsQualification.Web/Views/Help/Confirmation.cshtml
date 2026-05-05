@@ -19,6 +19,14 @@
   
         <hr class='govuk-section-break govuk-section-break--xl govuk-section-break--visible' />
 
-        @{ await Html.RenderPartialAsync("Partials/FeedbackFormQuestions", Model.FeedbackFormPageModel); }
+        @{ 
+            await Html.RenderPartialAsync("Partials/FeedbackFormQuestions", Model.FeedbackFormPageModel); 
+
+            var link = Model.ReturnToTheHomepageLink;
+            <div class="govuk-body">
+                <a id="return-button" href="@link!.Href" class="govuk-link"
+                   target=@(link.OpenInNewTab ? "_blank" : "")>@link.DisplayText</a>
+            </div>
+        }
     </div>
 </div>
