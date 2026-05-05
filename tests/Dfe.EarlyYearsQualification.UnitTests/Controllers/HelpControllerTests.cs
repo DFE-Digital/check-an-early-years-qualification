@@ -2204,11 +2204,6 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
         var content = new HelpConfirmationPage
                       {
                           SuccessMessage = "Message sent",
-                          FeedbackComponent = new FeedbackComponent
-                                              {
-                                                  Body = ContentfulContentHelper.Text("Feedback body"),
-                                                  Header = "Feedback heading"
-                                              }
                       };
 
         _mockHelpService.Setup(x => x.GetHelpConfirmationPage()).ReturnsAsync(content);

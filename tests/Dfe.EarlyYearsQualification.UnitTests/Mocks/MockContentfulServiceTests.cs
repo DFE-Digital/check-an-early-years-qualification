@@ -1163,7 +1163,7 @@ public class MockContentfulServiceTests
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetFeedbackFormPage();
+        var result = await contentfulService.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage);
 
         result.Should().NotBeNull();
         result.Heading.Should().Be("Give feedback");
@@ -1218,6 +1218,84 @@ public class MockContentfulServiceTests
         question2.Question.Should().Be("Share any feedback about your experience, including suggestions for how we could improve the service");
         question2.HintText.Should()
                  .Be("Do not include personal information, for example the name of the qualification holder");
+
+        result.PageSubmittedOn.Should().Be("Give feedback");
+    }
+
+
+    [TestMethod]
+    public async Task GetFeedbackForm_HelpConfirmationPage_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormHelpConfirmationPage);
+
+        result.Should().NotBeNull();
+        result.Heading.Should().Be("Give feedback");
+        result.PostHeadingContent.Should().NotBeNull();
+        result.PostHeadingContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the post heading content");
+        result.BackButton.Should().BeEquivalentTo(new NavigationLink
+        {
+            DisplayText = "Home",
+            OpenInNewTab = false,
+            Href = "/"
+        });
+        result.CtaButtonText.Should().Be("Submit feedback");
+        result.Questions.Should().NotBeNullOrEmpty();
+        result.Questions.Count.Should().Be(3);
+        result.Questions[0].Should().BeAssignableTo<FeedbackFormQuestionRadio>();
+
+        var question0 = (FeedbackFormQuestionRadio)result.Questions[0];
+        question0.Should().NotBeNull();
+        question0.Question.Should().Be("Overall, how satisfied are you with this service?");
+        question0.Options.Should().NotBeNullOrEmpty();
+        question0.Options.Count.Should().Be(5);
+        (question0.Options[0] as Option)!.Label.Should().Be("Very satisfied");
+        (question0.Options[0] as Option)!.Value.Should().Be("VerySatisfied");
+        (question0.Options[1] as Option)!.Label.Should().Be("Satisfied");
+        (question0.Options[1] as Option)!.Value.Should().Be("Satisfied");
+        (question0.Options[2] as Option)!.Label.Should().Be("Neutral");
+        (question0.Options[2] as Option)!.Value.Should().Be("Neutral");
+        (question0.Options[3] as Option)!.Label.Should().Be("Dissatisfied");
+        (question0.Options[3] as Option)!.Value.Should().Be("Dissatisfied");
+        (question0.Options[4] as Option)!.Label.Should().Be("Very dissatisfied");
+        (question0.Options[4] as Option)!.Value.Should().Be("VeryDissatisfied");
+
+        var question1 = (FeedbackFormQuestionRadio)result.Questions[1];
+        question1.Should().NotBeNull();
+        question1.Question.Should().Be("How confident are you with the information you received from the service?");
+        question1.Options.Should().NotBeNullOrEmpty();
+        question1.Options.Count.Should().Be(5);
+        (question1.Options[0] as Option)!.Label.Should().Be("Very confident");
+        (question1.Options[0] as Option)!.Value.Should().Be("VeryConfident");
+        (question1.Options[1] as Option)!.Label.Should().Be("Confident");
+        (question1.Options[1] as Option)!.Value.Should().Be("Confident");
+        (question1.Options[2] as Option)!.Label.Should().Be("Neutral");
+        (question1.Options[2] as Option)!.Value.Should().Be("Neutral");
+        (question1.Options[3] as Option)!.Label.Should().Be("Slightly confident");
+        (question1.Options[3] as Option)!.Value.Should().Be("SlightlyConfident");
+        (question1.Options[4] as Option)!.Label.Should().Be("Not at all confident");
+        (question1.Options[4] as Option)!.Value.Should().Be("NotAtAllConfident");
+
+        var question2 = (FeedbackFormQuestionTextArea)result.Questions[2];
+        question2.Should().NotBeNull();
+        question2.Question.Should().Be("Share any feedback about your experience, including suggestions for how we could improve the service");
+        question2.HintText.Should()
+                 .Be("Do not include personal information, for example the name of the qualification holder");
+
+        result.PageSubmittedOn.Should().Be("Help confirmation page");
+    }
+
+    [TestMethod]
+    public async Task GetFeedbackFormPage_PassInvalidEntryId_ThrowsNotImplementedException()
+    {
+        var contentfulService = new MockContentfulService();
+
+        Func<Task> act = () => contentfulService.GetFeedbackFormPage("Fake_entry_id");
+
+        await act.Should().ThrowAsync<NotImplementedException>()
+                 .WithMessage("No feedback page mock for entry Fake_entry_id");
     }
 
     [TestMethod]

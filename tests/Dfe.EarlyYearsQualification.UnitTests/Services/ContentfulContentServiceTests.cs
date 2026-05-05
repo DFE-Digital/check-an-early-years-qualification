@@ -1,6 +1,7 @@
 using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services;
@@ -1444,6 +1445,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var data = new FeedbackFormPage
                    {
                        Heading = "Heading", BackButton = new NavigationLink(), CtaButtonText = "Submit",
+                       PageSubmittedOn = "Give feedback"
                    };
 
         ClientMock.Setup(c =>
@@ -1454,7 +1456,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetFeedbackFormPage();
+        var result = await service.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage);
 
         result.Should().Be(data);
     }
@@ -1470,7 +1472,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetFeedbackFormPage();
+        var result = await service.GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage);
 
         result.Should().BeNull();
     }

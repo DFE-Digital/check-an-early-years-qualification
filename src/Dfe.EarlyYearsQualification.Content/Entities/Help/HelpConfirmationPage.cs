@@ -12,7 +12,7 @@ public class HelpConfirmationPage
 
     public Document? Body { get; init; }
 
-    public FeedbackComponent? FeedbackComponent { get; init; }
-
     public NavigationLink? ReturnToHomepageLink { get; init; }
+
+    public FeedbackFormPage? FeedbackFormPage { get; init; }
 }

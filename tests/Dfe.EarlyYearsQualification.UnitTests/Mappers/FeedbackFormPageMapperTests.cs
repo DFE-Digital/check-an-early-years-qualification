@@ -22,7 +22,8 @@ public class FeedbackFormPageMapperTests
                                             Href = "/"
                                         },
                            Questions = AddQuestions(),
-                           PostHeadingContent = ContentfulContentHelper.Paragraph(postHeadingContent)
+                           PostHeadingContent = ContentfulContentHelper.Paragraph(postHeadingContent),
+                           PageSubmittedOn = "Give feedback"
                        };
 
         var mockContentParser = new Mock<IGovUkContentParser>();

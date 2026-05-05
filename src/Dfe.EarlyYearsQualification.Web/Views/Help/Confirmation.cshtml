@@ -16,8 +16,12 @@
 
         <h2 class="govuk-heading-m" id="help-confirmation-body-heading">@Model.BodyHeading</h2>
         <div class="govuk-body" id="help-confirmation-body">@Html.Raw(Model.Body)</div>
-        @{
-            await Html.RenderPartialAsync("Partials/FeedbackComponent", Model.FeedbackComponent);
+  
+        <hr class='govuk-section-break govuk-section-break--xl govuk-section-break--visible' />
+
+        @{ 
+            await Html.RenderPartialAsync("Partials/FeedbackFormQuestions", Model.FeedbackFormPageModel); 
+
             var link = Model.ReturnToTheHomepageLink;
             <div class="govuk-body">
                 <a id="return-button" href="@link!.Href" class="govuk-link"

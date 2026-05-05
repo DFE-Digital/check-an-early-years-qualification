@@ -10,6 +10,8 @@
     }
 }
 
-@{
-    await Html.RenderPartialAsync("Partials/FeedbackFormQuestions", Model);
-}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+        @{ await Html.RenderPartialAsync("Partials/FeedbackFormQuestions", Model); }
+    </div>
+</div>

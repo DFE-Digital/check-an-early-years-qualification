@@ -11,12 +11,13 @@ public class FeedbackFormPageMapper(IGovUkContentParser contentParser) : IFeedba
     {
         var postHeadingContent = await contentParser.ToHtml(feedbackFormPage.PostHeadingContent);
         var model = new FeedbackFormPageModel
-               {
-                   Heading = feedbackFormPage.Heading,
-                   BackButton = NavigationLinkMapper.Map(feedbackFormPage.BackButton),
-                   CtaButtonText = feedbackFormPage.CtaButtonText,
-                   PostHeadingContent = postHeadingContent,
-                   Questions = MapQuestions(feedbackFormPage.Questions)
+        {
+            Heading = feedbackFormPage.Heading,
+            BackButton = NavigationLinkMapper.Map(feedbackFormPage.BackButton),
+            CtaButtonText = feedbackFormPage.CtaButtonText,
+            PostHeadingContent = postHeadingContent,
+            Questions = MapQuestions(feedbackFormPage.Questions),
+            PageSubmittedOn = feedbackFormPage.PageSubmittedOn
         };
         
         model.Questions.ForEach(x => model.QuestionList.Add(new FeedbackFormQuestionListModel { Question = (x as BaseFeedbackFormQuestionModel)!.Question}));

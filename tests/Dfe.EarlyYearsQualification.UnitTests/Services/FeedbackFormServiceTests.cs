@@ -22,7 +22,7 @@ public class FeedbackFormServiceTests
             {additionalInfo}
 
             ---
-            Submitted from: /give-feedback
+            Submitted on: Give Feedback
 
             """;
 
@@ -38,10 +38,11 @@ public class FeedbackFormServiceTests
                                 Answer = answer,
                                 AdditionalInfo = additionalInfo
                             }
-                        ]
+                        ],
+                        PageSubmittedOn =  "Give Feedback"
                     };
         var service = new FeedbackFormService();
-        var result = service.ConvertQuestionListToString(model, "/give-feedback");
+        var result = service.ConvertQuestionListToString(model);
         result.Should().NotBeNull();
         result.Should().Be(expectedResult);
     }
@@ -57,7 +58,7 @@ public class FeedbackFormServiceTests
             {answer}
 
             ---
-            Submitted from: /give-feedback
+            Submitted on: Give Feedback
 
             """;
 
@@ -72,10 +73,11 @@ public class FeedbackFormServiceTests
                                 Question = question,
                                 Answer = answer
                             }
-                        ]
+                        ],
+                        PageSubmittedOn = "Give Feedback"
                     };
         var service = new FeedbackFormService();
-        var result = service.ConvertQuestionListToString(model, "/give-feedback");
+        var result = service.ConvertQuestionListToString(model);
         result.Should().NotBeNull();
         result.Should().Be(expectedResult);
     }
