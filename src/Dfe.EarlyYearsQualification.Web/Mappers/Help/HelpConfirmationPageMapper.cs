@@ -11,6 +11,7 @@ public class HelpConfirmationPageMapper(IGovUkContentParser contentParser, IFeed
     public async Task<ConfirmationPageViewModel> MapConfirmationPageContentToViewModelAsync(HelpConfirmationPage helpConfirmationPage)
     {
         var bodyHtml = await contentParser.ToHtml(helpConfirmationPage.Body);
+        var postFeedbackFormContentHtml = await contentParser.ToHtml(helpConfirmationPage.PostFeedbackFormContent);
 
         return new ConfirmationPageViewModel
         {
@@ -19,7 +20,8 @@ public class HelpConfirmationPageMapper(IGovUkContentParser contentParser, IFeed
             Body = bodyHtml,
             ReturnToTheHomepageLink = NavigationLinkMapper.Map(helpConfirmationPage.ReturnToHomepageLink),
             SuccessMessageFollowingText = helpConfirmationPage.SuccessMessageFollowingText,
-            FeedbackFormPageModel = await feedbackFormPageMapper.Map(helpConfirmationPage.FeedbackFormPage!)
+            FeedbackFormPageModel = await feedbackFormPageMapper.Map(helpConfirmationPage.FeedbackFormPage!),
+            PostFeedbackFormContent = postFeedbackFormContentHtml,
         };
     }
 }
