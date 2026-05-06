@@ -1,5 +1,6 @@
 using System.Reflection;
 using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Controllers.Api;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
@@ -16,7 +17,8 @@ public class ControllerAccessTests
                     .Where(c =>
                                c.IsSubclassOf(typeof(Controller))
                                && !c.IsSubclassOf(typeof(ServiceController))
-                               && c != typeof(ServiceController));
+                               && c != typeof(ServiceController)
+                               && c != typeof(BaseApiController<>));
 
         unguardedControllerTypes
             .Should().HaveCount(4)
