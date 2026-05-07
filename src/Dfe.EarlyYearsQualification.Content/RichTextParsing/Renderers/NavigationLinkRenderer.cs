@@ -15,6 +15,11 @@ public class NavigationLinkRenderer : IContentRenderer
             return false;
         }
 
+        if (entryStructure.Data.Target is NavigationLink)
+        {
+            return true;
+        }
+
         if (entryStructure.Data?.Target is not CustomNode model)
         {
             return false;
@@ -33,9 +38,17 @@ public class NavigationLinkRenderer : IContentRenderer
 
     public async Task<string> RenderAsync(IContent content)
     {
-        var model = (content as EntryStructure)!.Data.Target as CustomNode;
+        NavigationLink? navigationLinkModel;
 
-        var navigationLinkModel = (model!.JObject as JObject)!.ToObject<NavigationLink>();
+        if ((content as EntryStructure)!.Data.Target is NavigationLink)
+        {
+            navigationLinkModel = (content as EntryStructure)!.Data.Target as NavigationLink;
+        }
+        else
+        {
+            var model = (content as EntryStructure)!.Data.Target as CustomNode;
+            navigationLinkModel = (model!.JObject as JObject)!.ToObject<NavigationLink>();
+        }
 
         return
             await

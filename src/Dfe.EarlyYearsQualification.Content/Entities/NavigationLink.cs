@@ -2,7 +2,7 @@ using Contentful.Core.Models;
 
 namespace Dfe.EarlyYearsQualification.Content.Entities;
 
-public class NavigationLink
+public class NavigationLink : IContent
 {
     /// <summary>
     ///     Contentful system properties

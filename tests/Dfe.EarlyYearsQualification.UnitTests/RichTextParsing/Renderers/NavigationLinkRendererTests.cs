@@ -114,9 +114,37 @@ public class NavigationLinkRendererTests
 
         new NavigationLinkRenderer().SupportsContent(content).Should().BeTrue();
     }
+    
+    [TestMethod]
+    public void SupportsContent_DataTargetIsNavigationLink_IsSupported()
+    {
+        var navigationLink = new NavigationLink
+                             {
+                                 Sys =
+                                 {
+                                     ContentType = new ContentType
+                                                   {
+                                                       SystemProperties = new SystemProperties
+                                                                          {
+                                                                              Id = "navigationLink"
+                                                                          }
+                                                   }
+                                 }
+                             };
+
+        var content = new EntryStructure
+                      {
+                          Data = new EntryStructureData
+                                 {
+                                     Target = navigationLink
+                                 }
+                      };
+
+        new NavigationLinkRenderer().SupportsContent(content).Should().BeTrue();
+    }
 
     [TestMethod]
-    public async Task RenderAsync_IncludesTarget()
+    public async Task RenderAsync_CustomNode_IncludesTarget()
     {
         var navigationLink = new NavigationLink
                              {
@@ -147,6 +175,40 @@ public class NavigationLinkRendererTests
                           Data = new EntryStructureData
                                  {
                                      Target = customNode
+                                 }
+                      };
+
+        var renderer = new NavigationLinkRenderer();
+        var result = await renderer.RenderAsync(content);
+
+        result.Should().Be("<a href='/' target='_blank' class='govuk-link'>Display text</a>");
+    }
+    
+    [TestMethod]
+    public async Task RenderAsync_NavigationLink_IncludesTarget()
+    {
+        var navigationLink = new NavigationLink
+                             {
+                                 Sys =
+                                 {
+                                     ContentType = new ContentType
+                                                   {
+                                                       SystemProperties = new SystemProperties
+                                                                          {
+                                                                              Id = "navigationLink"
+                                                                          }
+                                                   }
+                                 },
+                                 Href = "/",
+                                 DisplayText = "Display text",
+                                 OpenInNewTab = true
+                             };
+
+        var content = new EntryStructure
+                      {
+                          Data = new EntryStructureData
+                                 {
+                                     Target = navigationLink
                                  }
                       };
 
