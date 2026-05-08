@@ -21,12 +21,13 @@ public class ControllerAccessTests
                                && c != typeof(BaseApiController<>));
 
         unguardedControllerTypes
-            .Should().HaveCount(4)
+            .Should().HaveCount(5)
             .And.Contain([
                              typeof(ChallengeController),
                              typeof(ErrorController),
                              typeof(HealthController),
-                             typeof(CacheController) // CacheController implements its own auth
+                             typeof(CacheController), // CacheController implements its own auth
+                             typeof(GenerateDownloadController) // GenerateDownloadController implements its own auth
                          ],
                          $"To enable guarding access to the service, most controllers should inherit {typeof(ServiceController).FullName}"
                         );

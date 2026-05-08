@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Primitives;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
+namespace Dfe.EarlyYearsQualification.UnitTests.Controllers.Api;
 
 [TestClass]
 public class CacheControllerTests

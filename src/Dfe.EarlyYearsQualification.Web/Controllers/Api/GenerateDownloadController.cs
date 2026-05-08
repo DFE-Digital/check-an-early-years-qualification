@@ -24,7 +24,7 @@ public class GenerateDownloadController(
             return new UnauthorizedResult();
         }
 
-        //await cacheInvalidator.ClearCacheAsync(ContentfulUrlToPathAndQueryCacheKeyConverter.KeyPrefix);
+        await qualificationDownloadService.GenerateEyqlDownload();
 
         return new NoContentResult();
     }
