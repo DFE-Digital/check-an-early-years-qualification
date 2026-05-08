@@ -148,8 +148,8 @@ public class QualificationSearchService(
                                                 {
                                                     Qualification = q,
                                                     SearchResultContents = content.SearchResultsContent?.SingleOrDefault(x => x.QualificationId == q.QualificationId)?.AdditionalInformation
-                                                                           ?? (q.IsQualificationNameDuplicate 
-                                                                                   ? (string.IsNullOrEmpty(q.QualificationNumber) ? $"({q.AwardingOrganisationTitle})" : $"{content.QualificationNumberLabel} {q.QualificationNumber}") 
+                                                                           ?? (q.IsQualificationNameDuplicate && !string.IsNullOrEmpty(q.QualificationNumber) 
+                                                                                   ? $"{content.QualificationNumberLabel} {q.QualificationNumber}" 
                                                                                    : null)
                                                 }).ToList();
     }
