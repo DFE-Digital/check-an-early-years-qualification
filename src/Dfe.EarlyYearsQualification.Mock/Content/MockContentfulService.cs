@@ -333,10 +333,6 @@ public class MockContentfulService : IContentService
                                          SingleQualificationFoundText = "matching qualification",
                                          PreSearchBoxContent =
                                              ContentfulContentHelper.Paragraph("Pre search box content"),
-                                         Pre2014L6OrNotSureContentHeading = "Pre 2014 L6 or not sure heading",
-                                         Pre2014L6OrNotSureContent = ContentfulContentHelper.Paragraph("Pre 2014 L6 or not sure content"),
-                                         Post2014L6OrNotSureContentHeading = "Post 2014 L6 or not sure heading",
-                                         Post2014L6OrNotSureContent = ContentfulContentHelper.Paragraph("Post 2014 L6 or not sure content"),
                                          PostQualificationListContentHeading = "Post qualification list header",
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
@@ -351,7 +347,15 @@ public class MockContentfulService : IContentService
                                          AwardedDatePrefixText = "awarded in",
                                          LevelPrefixText = "level",
                                          AwardedByPrefixText = "awarded by",
-                                         QualificationNumberLabel = "Qualification Number (QN)"
+                                         QualificationNumberLabel = "Qualification Number (QN)",
+                                         SearchResultsContent =
+                                         [
+                                             new SearchResultContent
+                                             {
+                                                 QualificationId = "todo",
+                                                 AdditionalInformation = "todo"
+                                             }
+                                         ]
                                      });
     }
 

@@ -510,12 +510,6 @@ public class MockContentfulServiceTests
         result.SingleQualificationFoundText.Should().Be("matching qualification");
         result.PreSearchBoxContent!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Pre search box content");
-        result.Pre2014L6OrNotSureContentHeading.Should().Be("Pre 2014 L6 or not sure heading");
-        result.Pre2014L6OrNotSureContent!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Pre 2014 L6 or not sure content");
-        result.Post2014L6OrNotSureContentHeading.Should().Be("Post 2014 L6 or not sure heading");
-        result.Post2014L6OrNotSureContent!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Post 2014 L6 or not sure content");
         result.PostQualificationListContentHeading.Should().Be("Post qualification list header");
         result.PostQualificationListContent!.Content[0].Should().BeAssignableTo<Hyperlink>()
               .Which.Content.Should().Contain(x => ((Text)x).Value == "Link to not on list advice page");
@@ -530,6 +524,14 @@ public class MockContentfulServiceTests
         result.LevelPrefixText.Should().Be("level");
         result.AwardedByPrefixText.Should().Be("awarded by");
         result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+        result.SearchResultsContent.Should().BeEquivalentTo(new List<SearchResultContent>()
+                                                             {
+                                                                 new SearchResultContent
+                                                                 {
+                                                                     QualificationId = "todo",
+                                                                     AdditionalInformation = "Additional information",
+                                                                 }
+                                                             });
     }
 
     [TestMethod]
