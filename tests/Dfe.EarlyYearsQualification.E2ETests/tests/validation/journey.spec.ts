@@ -136,7 +136,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             yearAwarded: '2021',
             selectedLevel: 0,
             selectedAwardingOrganisation: 'City & Guilds',
-            noOfMatchingQualifications: 12,
+            noOfMatchingQualifications: 13,
             qualificationToSelect: 'EYQ-230',
             ratioForUnqualified: approved,
             ratioForLevel2: approved,
