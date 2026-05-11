@@ -524,14 +524,29 @@ public class MockContentfulServiceTests
         result.LevelPrefixText.Should().Be("level");
         result.AwardedByPrefixText.Should().Be("awarded by");
         result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
-        result.SearchResultsContent.Should().BeEquivalentTo(new List<SearchResultContent>()
-                                                             {
+        result.SearchResultsContent.Should().BeEquivalentTo(
+                                                             [
                                                                  new SearchResultContent
                                                                  {
-                                                                     QualificationId = "todo",
-                                                                     AdditionalInformation = "Additional information",
+                                                                     QualificationId = "EYQ-307",
+                                                                     AdditionalInformation = "Select this if the degree covers just one subject, for example a BA (Hons) Early Childhood Studies."
+                                                                 },
+                                                                 new SearchResultContent
+                                                                 {
+                                                                     QualificationId = "EYQ-308",
+                                                                     AdditionalInformation = "Select this if the degree covers 2 or more subjects, for example BA (Hons) Early Childhood Studies and Psychology."
+                                                                 },
+                                                                 new SearchResultContent
+                                                                 {
+                                                                     QualificationId = "EYQ-309",
+                                                                     AdditionalInformation = "Content which replaces QN number"
+                                                                 },
+                                                                 new SearchResultContent
+                                                                 {
+                                                                     QualificationId = "EYQ-310",
+                                                                     AdditionalInformation = "Content which replaces QN number"
                                                                  }
-                                                             });
+                                                             ]);
     }
 
     [TestMethod]

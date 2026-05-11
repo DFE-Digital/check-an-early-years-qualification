@@ -215,7 +215,31 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Post-September 2024"
                         }
                     ]
-                }
+                },
+                new Qualification("EYQ-307", "Degrees at level 6", AwardingOrganisations.Ncfe, 3)
+                {
+                    FromWhichYear = startDate,
+                    ToWhichYear = endDate,
+                    QualificationNumber = "123/345/679"
+                },
+                new Qualification("EYQ-308", "Joint degrees at level 6", AwardingOrganisations.Ncfe, 3)
+                {
+                    FromWhichYear = startDate,
+                    ToWhichYear = endDate,
+                    QualificationNumber = "123/345/670"
+                },
+                new Qualification("EYQ-309", "dupe qualification name", AwardingOrganisations.Ncfe, 3)
+                {
+                    FromWhichYear = startDate,
+                    ToWhichYear = endDate,
+                    QualificationNumber = "321/345/679"
+                },
+                new Qualification("EYQ-310", "dupe qualification name", AwardingOrganisations.Ncfe, 3)
+                {
+                    FromWhichYear = startDate,
+                    ToWhichYear = endDate,
+                    QualificationNumber = "231/345/670"
+                },
             };
 
         var results = qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear, awardingOrganisation, qualificationName);

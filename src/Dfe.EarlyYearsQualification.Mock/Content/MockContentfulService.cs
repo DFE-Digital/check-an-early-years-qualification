@@ -352,8 +352,23 @@ public class MockContentfulService : IContentService
                                          [
                                              new SearchResultContent
                                              {
-                                                 QualificationId = "todo",
-                                                 AdditionalInformation = "todo"
+                                                 QualificationId = "EYQ-307",
+                                                 AdditionalInformation = "Select this if the degree covers just one subject, for example a BA (Hons) Early Childhood Studies."
+                                             },
+                                             new SearchResultContent
+                                             {
+                                                 QualificationId = "EYQ-308",
+                                                 AdditionalInformation = "Select this if the degree covers 2 or more subjects, for example BA (Hons) Early Childhood Studies and Psychology."
+                                             },
+                                             new SearchResultContent
+                                             {
+                                                 QualificationId = "EYQ-309",
+                                                 AdditionalInformation = "Content which replaces QN number"
+                                             },
+                                             new SearchResultContent
+                                             {
+                                                 QualificationId = "EYQ-310",
+                                                 AdditionalInformation = "Content which replaces QN number"
                                              }
                                          ]
                                      });

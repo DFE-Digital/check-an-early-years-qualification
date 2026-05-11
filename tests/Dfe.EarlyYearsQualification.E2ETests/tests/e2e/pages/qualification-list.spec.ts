@@ -26,7 +26,7 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await checkText(page, "#filter-level", "level 3");
         await checkText(page, "#filter-org", "awarded by NCFE");
         await checkText(page, "#heading", "Test Header");
-        await checkText(page, "#found-heading", "We found 4 matching qualifications");
+        await checkText(page, "#found-heading", "We found 8 matching qualifications");
         await checkText(page, "#pre-search-content", "Pre search box content");
         await checkText(page, "#post-list-heading", "Post qualification list header");
         await checkTextContains(page, "#post-list-content", "Link to not on list advice page");
@@ -57,19 +57,6 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await doesNotExist(page, "#ao-text-EYQ-103");
     });
 
-    test("Shows the awarding organisation next to the qualification name when multiple qualifications share the same name", async ({
-                                                                                                       page,
-                                                                                                       context
-                                                                                                   }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%2210%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
-        await page.goto("/select-a-qualification-to-check");
-
-        await exists(page, "#ao-text-EYQ-114");
-        await checkText(page, "#ao-text-EYQ-114", "Qualification Number (QN) 123 / 345 / 678");
-        await exists(page, "#ao-text-EYQ-115");
-        await checkText(page, "#ao-text-EYQ-115", "Qualification Number (QN) 233 / 420 / 12");
-    });
-
     test("Shows the correct no results content when there are no results in the search", async ({
                                                                                                     page,
                                                                                                     context
@@ -81,48 +68,32 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await checkText(page, "#no-result-content", "Test no qualifications text");
     });
 
-    test("Shows pre 2014 content when there when the user searched for L6 which started before Sept 2014", async ({
+    test("Shows additional information content next to qualification link", async ({
                                                                                                     page,
                                                                                                     context
                                                                                                 }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2014%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%2210%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
         await page.goto("/select-a-qualification-to-check");
 
-        await checkText(page, "#l6-or-not-sure-heading", "Pre 2014 L6 or not sure heading");
-        await checkTextContains(page, "#l6-or-not-sure-content", "Pre 2014 L6 or not sure content");
+        await exists(page, "#ao-text-EYQ-307");
+        await checkText(page, "#ao-text-EYQ-307", "Select this if the degree covers just one subject, for example a BA (Hons) Early Childhood Studies.");
+        await exists(page, "#ao-text-EYQ-308");
+        await checkText(page, "#ao-text-EYQ-308", "Select this if the degree covers 2 or more subjects, for example BA (Hons) Early Childhood Studies and Psychology.");
+
     });
 
-    test("Shows post 2014 content when there when the user searched for L6 which started after Sept 2014", async ({
-                                                                                                                      page,
-                                                                                                                      context
-                                                                                                                  }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2018%22%2C%22LevelOfQualification%22%3A%226%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
+    test("Qualification is a duplicate, override the QN number and shows additional information next to qualification link", async ({
+        page,
+        context
+    }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%2210%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
         await page.goto("/select-a-qualification-to-check");
 
-        await checkText(page, "#l6-or-not-sure-heading", "Post 2014 L6 or not sure heading");
-        await checkTextContains(page, "#l6-or-not-sure-content", "Post 2014 L6 or not sure content");
-    });
+        await exists(page, "#ao-text-EYQ-309");
+        await checkText(page, "#ao-text-EYQ-309", "Content which replaces QN number");
+        await exists(page, "#ao-text-EYQ-310");
+        await checkText(page, "#ao-text-EYQ-310", "Content which replaces QN number");
 
-    test("Shows pre 2014 content when there when the user selected not sure for the level and started before Sept 2014", async ({
-                                                                                                                      page,
-                                                                                                                      context
-                                                                                                                  }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2014%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
-        await page.goto("/select-a-qualification-to-check");
-
-        await checkText(page, "#l6-or-not-sure-heading", "Pre 2014 L6 or not sure heading");
-        await checkTextContains(page, "#l6-or-not-sure-content", "Pre 2014 L6 or not sure content");
-    });
-
-    test("Shows post 2014 content when there when the user selected not sure for the level and started after Sept 2014", async ({
-                                                                                                                      page,
-                                                                                                                      context
-                                                                                                                  }) => {
-        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2018%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
-        await page.goto("/select-a-qualification-to-check");
-
-        await checkText(page, "#l6-or-not-sure-heading", "Post 2014 L6 or not sure heading");
-        await checkTextContains(page, "#l6-or-not-sure-content", "Post 2014 L6 or not sure content");
     });
 
     test("Not on the list selected, returns qualifications which have various awarding organisations", async ({
