@@ -69,4 +69,9 @@ test.describe('A spec that tests the get help page', { tag: "@e2e" }, () => {
 
         await checkText(page, "#question-heading", "Why are you contacting us?");
     });
+    test("Return to homepage link shows on page", async ({ page }) => {
+        await page.goto("/help/confirmation");
+        
+        await checkUrl(page, "/");
+    });
 });
