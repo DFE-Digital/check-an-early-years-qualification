@@ -89,6 +89,8 @@
         {
             var qualification = result.Qualification;
             
+            var additionalInfoAttribute = (result.SearchResultContents is not null ? $"aria-describedby=ao-text-{qualification.QualificationId}" : "");
+
             var linkDisplayType = qualification.IsQualificationNameDuplicate ? "govuk-!-display-inline" : "govuk-!-display-block";
 
             <div class="govuk-grid-row">
@@ -96,14 +98,13 @@
                     <div class="chevron-card__wrapper">
                         <div class="chevron-card-link__wrapper">
                             <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })"
-                               class="govuk-link govuk-heading-m chevron-card__link"
-                               style="@linkDisplayType">
+                               class="govuk-link govuk-heading-m chevron-card__link @linkDisplayType"
+                                @additionalInfoAttribute>
                                 @qualification.QualificationName
                             </a>
                             @if (result.SearchResultContents != null)
                             {
-                                var style = "govuk-body govuk-!-margin-0 " + (string.IsNullOrEmpty(qualification.QualificationNumber) ? "govuk-!-display-inline" : "");
-                                <div id="ao-text-@qualification.QualificationId" class="@style">
+                                <div id="ao-text-@qualification.QualificationId" class="govuk-body govuk-!-margin-0">
                                     @result.SearchResultContents
                                 </div>
                             }
