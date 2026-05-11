@@ -91,14 +91,12 @@
             
             var additionalInfoAttribute = (result.SearchResultContents is not null ? $"aria-describedby=ao-text-{qualification.QualificationId}" : "");
 
-            var linkDisplayType = qualification.IsQualificationNameDuplicate ? "govuk-!-display-inline" : "govuk-!-display-block";
-
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
                     <div class="chevron-card__wrapper">
                         <div class="chevron-card-link__wrapper">
                             <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })"
-                               class="govuk-link govuk-heading-m chevron-card__link @linkDisplayType"
+                               class="govuk-link govuk-heading-m chevron-card__link govuk-!-display-block"
                                 @additionalInfoAttribute>
                                 @qualification.QualificationName
                             </a>
