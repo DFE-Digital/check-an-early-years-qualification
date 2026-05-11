@@ -182,7 +182,7 @@ public class QualificationSearchServiceTests
 
         var result = await sut.MapList(new QualificationListPage(), qualifications);
 
-        var resultQualifications = result.Qualifications;
+        var resultQualifications = result.SearchResults.Select(x => x.Qualification).ToList();
         resultQualifications.Count.Should().Be(qualifications.Count);
 
         for (var i = 0; i < resultQualifications.Count; i++)
@@ -196,49 +196,33 @@ public class QualificationSearchServiceTests
             thisResult.QualificationLevel.Should().Be(expectedResult.QualificationLevel);
         }
     }
-
+    
     [TestMethod]
-    [DataRow(6, true, Pre2014Heading, Pre2014Body, true)]
-    [DataRow(6, false, Post2014Heading, Post2014Body, true)]
-    [DataRow(0, true, Pre2014Heading, Pre2014Body, true)]
-    [DataRow(0, false, Post2014Heading, Post2014Body, true)]
-    [DataRow(3, true, "", "", false)]
-    [DataRow(3, false, "", "", false)]
-    public async Task MapList_UserSearchedForLevel_IsPreOrPost2014(int level, bool isPre2014, string expectedHeading, string expectedBody, bool showL6OrNotSureContent)
+    public async Task MapList_Qualifications_Has_AdditionalInformation_Returns_Correct_List()
     {
         var qualifications = new List<Qualification>
                              {
-                                 new("qual-1", "qual-name-1", "org-1", 1)
+                                 new("qual-1", "qual-name-1", "org-1", 1),
                              };
-        
-        _mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level).Verifiable();
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014()).Returns(isPre2014).Verifiable();
 
-        var sut = GetSut();
+        var content = new QualificationListPage()
+                      {
+                          SearchResultsContent =
+                          [
+                              new SearchResultContent
+                              {
+                                  QualificationId = "qual-1",
+                                  AdditionalInformation = "Additional information",
+                              }
+                          ]
+                      };
+     
+        var result = await GetSut().MapList(content, qualifications);
 
-        var qualificationListPage = new QualificationListPage
-                                    {
-                                        Pre2014L6OrNotSureContentHeading = Pre2014Heading,
-                                        Pre2014L6OrNotSureContent = ContentfulContentHelper.Paragraph(Pre2014Body),
-                                        Post2014L6OrNotSureContentHeading = Post2014Heading,
-                                        Post2014L6OrNotSureContent = ContentfulContentHelper.Paragraph(Post2014Body)
-                                    };
-        
-        _mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == qualificationListPage.Pre2014L6OrNotSureContent)))
-                          .ReturnsAsync(Pre2014Body);
-        
-        _mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == qualificationListPage.Post2014L6OrNotSureContent)))
-                          .ReturnsAsync(Post2014Body);
-        
-        var result = await sut.MapList(qualificationListPage, qualifications);
-
-        _mockUserJourneyCookieService.VerifyAll();
-        var resultQualifications = result.Qualifications;
-        resultQualifications.Count.Should().Be(qualifications.Count);
-        result.L6OrNotSureContentHeading.Should().Be(expectedHeading);
-        result.L6OrNotSureContent.Should().Be(expectedBody);
+        var searchResult = result.SearchResults.First();
+        searchResult.SearchResultContents.Should().Be(content.SearchResultsContent.First().AdditionalInformation);
     }
-
+    
     [TestMethod]
     public void GetFilterModel_Calls_CookieService()
     {
