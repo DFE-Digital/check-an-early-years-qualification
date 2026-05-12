@@ -30,7 +30,7 @@ public class MockQualificationsRepositoryTests
     // An attribute argument must be a constant expression, 'typeof()' expression or array creation
     // expression of an attribute parameter type
     [DataRow(2, new[] { "EYQ-100", "EYQ-101", "EYQ-241", "EYQ-242", "EYQ-301" })]
-    [DataRow(3, new[] { "EYQ-103", "EYQ-114", "EYQ-115", "EYQ-240", "EYQ-250", "EYQ-909", "EYQ-302" })]
+    [DataRow(3, new[] { "EYQ-103", "EYQ-114", "EYQ-115", "EYQ-240", "EYQ-250", "EYQ-909", "EYQ-302", "EYQ-307", "EYQ-308", "EYQ-309", "EYQ-310" })]
     [DataRow(4, new[] { "EYQ-104", "EYQ-105", "EYQ-303" })]
     [DataRow(5, new[] { "EYQ-106", "EYQ-107", "EYQ-304" })]
     [DataRow(6, new[] { "EYQ-108", "EYQ-109", "EYQ-321" , "EYQ-305" })]

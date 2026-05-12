@@ -66,43 +66,24 @@ public class QualificationSearchService(
     {
         var basicQualificationsModels = qualifications == null ? [] : GetBasicQualificationsModels(qualifications);
 
-        var filterModel = GetFilterModel(content);
-        
-        var level = userJourneyCookieService.GetLevelOfQualification();
-        var wasStartedBeforeSept2014 = userJourneyCookieService.WasStartedBeforeSeptember2014();
-        
-        var l6OrNotSureHeading = string.Empty;
-        var l6OrNotSureContent = string.Empty;
-        var showL6OrNotSureContent = false;
-
-        if (level is 6 or 0)
-        {
-            l6OrNotSureHeading = wasStartedBeforeSept2014 ? content.Pre2014L6OrNotSureContentHeading : content.Post2014L6OrNotSureContentHeading;
-            l6OrNotSureContent = wasStartedBeforeSept2014 ? await contentParser.ToHtml(content.Pre2014L6OrNotSureContent) : await contentParser.ToHtml(content.Post2014L6OrNotSureContent);
-            showL6OrNotSureContent = true;
-        }
-
         return new QualificationListModel
                {
                    BackButton = NavigationLinkMapper.Map(content.BackButton),
-                   Filters = filterModel,
+                   Filters = GetFilterModel(content),
                    Header = content.Header,
                    QualificationFoundPrefixText = content.QualificationFoundPrefix,
                    SingleQualificationFoundText = content.SingleQualificationFoundText,
                    MultipleQualificationsFoundText = content.MultipleQualificationsFoundText,
                    PreSearchBoxContent = await contentParser.ToHtml(content.PreSearchBoxContent),
                    SearchButtonText = content.SearchButtonText,
-                   ShowL6OrNotSureContent = showL6OrNotSureContent,
-                   L6OrNotSureContentHeading = l6OrNotSureHeading,
-                   L6OrNotSureContent = l6OrNotSureContent,
                    PostQualificationListContentHeading = content.PostQualificationListContentHeading,
                    PostQualificationListContent = await contentParser.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
                    SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
-                   Qualifications = basicQualificationsModels,
                    NoResultText = await contentParser.ToHtml(content.NoResultsText),
                    ClearSearchText = content.ClearSearchText,
-                   QualificationNumberLabel = content.QualificationNumberLabel
+                   QualificationNumberLabel = content.QualificationNumberLabel,
+                   SearchResults = MapQualificationsAndContentToSearchResultContentModel(basicQualificationsModels, content),
         };
     }
 
@@ -159,5 +140,17 @@ public class QualificationSearchService(
         )
         .OrderBy(qualification => qualification.QualificationName)
         .ToList();
+    }
+    
+    private static List<SearchResultContentModel> MapQualificationsAndContentToSearchResultContentModel(List<BasicQualificationModel> qualifications, QualificationListPage content)
+    {
+        return qualifications.Select(q => new SearchResultContentModel
+                                                {
+                                                    Qualification = q,
+                                                    SearchResultContents = content.SearchResultsContent?.SingleOrDefault(x => x.QualificationId == q.QualificationId)?.AdditionalInformation
+                                                                           ?? (q.IsQualificationNameDuplicate && !string.IsNullOrEmpty(q.QualificationNumber) 
+                                                                                   ? $"{content.QualificationNumberLabel} {q.QualificationNumber}" 
+                                                                                   : null)
+                                                }).ToList();
     }
 }
