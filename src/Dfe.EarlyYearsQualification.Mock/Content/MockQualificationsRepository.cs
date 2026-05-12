@@ -85,7 +85,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                                        ],
                                        QualificationNumber = "Q/22/2427"
                                    }
-                               }.ToList());
+                               });
     }
 
     public Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
@@ -146,7 +146,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Tab
                         {
-                            Heading = "Pre-September 2014"
+                            Heading = "Pre-September 2014",
+                            Order = 1
                         }
                     ]
                 },
@@ -159,7 +160,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Tab
                         {
-                            Heading = "Pre-September 2014"
+                            Heading = "Pre-September 2014",
+                            Order = 1
                         }
                     ]
                 },
@@ -172,7 +174,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Tab
                         {
-                            Heading = "Post-September 2014"
+                            Heading = "Post-September 2014",
+                            Order = 1
                         }
                     ]
                 },
@@ -185,7 +188,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Tab
                         {
-                            Heading = "Post-September 2014"
+                            Heading = "Post-September 2014",
+                            Order = 1
                         }
                     ]
                 },
@@ -198,7 +202,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Tab
                         {
-                            Heading = "Post-September 2014"
+                            Heading = "Post-September 2014",
+                            Order = 1
                         }
 
                     ]
@@ -212,7 +217,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Tab
                         {
-                            Heading = "Post-September 2024"
+                            Heading = "Post-September 2024",
+                            Order = 1
                         }
                     ]
                 }
@@ -525,27 +531,9 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                };
     }
 
-    private static Document Level3Ebr
-    {
-        get
-        {
-            return ContentfulContentHelper.Paragraph("Level 3 EBR");
-        }
-    }
+    private static Document Level3Ebr => ContentfulContentHelper.Paragraph("Level 3 EBR");
 
-    private static Document Level6MustQts
-    {
-        get
-        {
-            return ContentfulContentHelper.Paragraph("Level 6 must QTS");
-        }
-    }
+    private static Document Level6MustQts => ContentfulContentHelper.Paragraph("Level 6 must QTS");
 
-    private static Document SummaryCardDefaultContent
-    {
-        get
-        {
-            return ContentfulContentHelper.Paragraph("Summary card default content");
-        }
-    }
+    private static Document SummaryCardDefaultContent => ContentfulContentHelper.Paragraph("Summary card default content");
 }

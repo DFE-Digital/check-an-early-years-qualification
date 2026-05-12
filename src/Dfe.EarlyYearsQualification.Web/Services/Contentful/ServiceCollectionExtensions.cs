@@ -39,6 +39,16 @@ public static class ServiceCollectionExtensions
 
         SetupContentOptionsManagement(services, configuration);
 
+        services.TryAddTransient<IContentfulManagementClient>(sp =>
+                                                              {
+                                                                  var options =
+                                                                      sp.GetService<IOptions<ContentfulOptions>>()!
+                                                                        .Value;
+                                                                  var client = sp.GetService<HttpClient>();
+                                                                  return
+                                                                      new ContentfulManagementClient(client, options);
+                                                              });
+
         return services;
     }
 
@@ -71,6 +81,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IQualificationListFilter, QualificationListFilter>();
         serviceCollection.AddScoped<IContentService, ContentfulContentService>();
         serviceCollection.AddScoped<IQualificationsRepository, QualificationsRepository>();
+        serviceCollection.AddSingleton<IQualificationDownloadService, ContentfulQualificationDownloadService>();
     }
     
     private static HttpMessageHandler ConfigureHttpMessageHandler(IServiceProvider serviceProvider)

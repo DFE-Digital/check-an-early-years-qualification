@@ -79,7 +79,7 @@ public class ServiceCollectionExtensionsTests
         services.SetupContentfulServices();
 
         // Assert
-        services.Count.Should().Be(4);
+        services.Count.Should().Be(5);
 
         VerifyService<IDateValidator, DateValidator>(services, ServiceLifetime.Scoped);
 
@@ -88,6 +88,8 @@ public class ServiceCollectionExtensionsTests
         VerifyService<IContentService, ContentfulContentService>(services, ServiceLifetime.Scoped);
 
         VerifyService<IQualificationsRepository, QualificationsRepository>(services, ServiceLifetime.Scoped);
+        
+        VerifyService<IQualificationDownloadService, ContentfulQualificationDownloadService>(services, ServiceLifetime.Singleton);
     }
 
     [TestMethod]
@@ -101,7 +103,7 @@ public class ServiceCollectionExtensionsTests
             .Build();
 
         // Act
-        var result = services.AddContentful(configuration);
+        services.AddContentful(configuration);
 
         // Assert
         VerifyService<HttpClientHandler, HttpClientHandler>(services, ServiceLifetime.Scoped);
@@ -111,6 +113,8 @@ public class ServiceCollectionExtensionsTests
         VerifyService<IContentfulClient, ContentfulClient>(services, ServiceLifetime.Scoped);
 
         VerifyService<HtmlRenderer, HtmlRenderer>(services, ServiceLifetime.Transient);
+        
+        VerifyService<IContentfulManagementClient, ContentfulManagementClient>(services, ServiceLifetime.Transient);
     }
 
     /// <summary>
