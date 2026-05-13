@@ -4,6 +4,7 @@ using Contentful.Core.Configuration;
 using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Options;
 using Dfe.EarlyYearsQualification.Content.Services;
@@ -39,11 +40,22 @@ public static class ServiceCollectionExtensions
 
         SetupContentOptionsManagement(services, configuration);
 
+        services.AddKeyedTransient<IContentfulClient, ContentfulClient>(Clients.ContentfulDeliveryClientNoCache, (sp, _) =>
+                                                      {
+                                                          var options =
+                                                              sp.GetService<IOptions<ContentfulOptions>>()!
+                                                                .Value;
+                                                          options.UsePreviewApi = false;
+                                                          var client = sp.GetService<HttpClient>();
+                                                          return new ContentfulClient(client, options);
+                                                      });
+        
         services.TryAddTransient<IContentfulManagementClient>(sp =>
                                                               {
                                                                   var options =
                                                                       sp.GetService<IOptions<ContentfulOptions>>()!
                                                                         .Value;
+                                                                  options.UsePreviewApi = false;
                                                                   var client = sp.GetService<HttpClient>();
                                                                   return
                                                                       new ContentfulManagementClient(client, options);
@@ -81,7 +93,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IQualificationListFilter, QualificationListFilter>();
         serviceCollection.AddScoped<IContentService, ContentfulContentService>();
         serviceCollection.AddScoped<IQualificationsRepository, QualificationsRepository>();
-        serviceCollection.AddSingleton<IQualificationDownloadService, ContentfulQualificationDownloadService>();
+        serviceCollection.AddScoped<IQualificationDownloadService, ContentfulQualificationDownloadService>();
     }
     
     private static HttpMessageHandler ConfigureHttpMessageHandler(IServiceProvider serviceProvider)

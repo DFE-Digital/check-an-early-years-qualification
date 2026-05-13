@@ -1,6 +1,6 @@
 namespace Dfe.EarlyYearsQualification.Content.Constants;
 
-public class Assets
+public static class Assets
 {
-    public const string EarlyYearsQualificationList = "4ZOdaVlhdZ6LiitoRT2ux7";
+    public const string EarlyYearsQualificationList = "5A2daVlhdD3LietoRT9ld2";
 }
