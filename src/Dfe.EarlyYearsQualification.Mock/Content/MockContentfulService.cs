@@ -1097,7 +1097,8 @@ public class MockContentfulService : IContentService
                             DisplayText = "Return to the homepage",
                             Href = "/"
                         },
-                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)
+                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage),
+                        PostFeedbackFormContent = ContentfulContentHelper.Paragraph("Post Feedback Form Content")
                     }
                 ),
             HelpPages.TechnicalIssueConfirmation =>
@@ -1113,7 +1114,8 @@ public class MockContentfulService : IContentService
                             DisplayText = "Return to the homepage",
                             Href = "/"
                         },
-                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)
+                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage),
+                        PostFeedbackFormContent = ContentfulContentHelper.Paragraph("Post Feedback Form Content")
                     }
                 ),
             _ => null

@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
@@ -2204,11 +2207,6 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
         var content = new HelpConfirmationPage
                       {
                           SuccessMessage = "Message sent",
-                          BackButton = new NavigationLink
-                                       {
-                                           DisplayText = "Back to homepage",
-                                           Href = "/"
-                                       },
                       };
 
         _mockHelpService.Setup(x => x.GetHelpConfirmationPage()).ReturnsAsync(content);
@@ -2216,11 +2214,6 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
              new ConfirmationPageViewModel
              {
                  SuccessMessage = content.SuccessMessage,
-                 BackButton = new NavigationLinkModel
-                              {
-                                  DisplayText = content.BackButton.DisplayText,
-                                  Href = content.BackButton.Href
-                              },
              }
             ));
 
@@ -2237,8 +2230,6 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
         model.Should().NotBeNull();
 
         model.SuccessMessage.Should().Be(content.SuccessMessage);
-        model.BackButton.DisplayText.Should().Be(content.BackButton.DisplayText);
-        model.BackButton.Href.Should().Be(content.BackButton.Href);
     }
 
     private HelpController GetSut()
