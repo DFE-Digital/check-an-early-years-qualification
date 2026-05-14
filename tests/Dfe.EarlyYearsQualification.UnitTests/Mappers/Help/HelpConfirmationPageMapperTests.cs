@@ -19,21 +19,27 @@ public class HelpConfirmationPageMapperTests
 
         var mockFeedbackFormPageMapper = new Mock<IFeedbackFormPageMapper>();
 
-        var docContent = "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n";
+        const string docContent = "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n";
+        
+        var docContentHtml = ContentfulContentHelper.Paragraph(docContent);
+        
+        const string postFeedbackFormContent = "Post Feedback Form Content";
 
-        mockContentParser.Setup(x => x.ToHtml(It.IsAny<Document>())).Returns(() => Task.FromResult(docContent));
-
+        var postFeedbackFormContentHtml = ContentfulContentHelper.Paragraph(postFeedbackFormContent);
+        
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == docContentHtml)))
+                         .ReturnsAsync(docContent);
+        
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == postFeedbackFormContentHtml)))
+                         .ReturnsAsync(postFeedbackFormContent);
+        
         var content = new HelpConfirmationPage
         {
             SuccessMessage = "Message sent",
             BodyHeading = "What happens next",
-            Body = ContentfulContentHelper.Paragraph(docContent),
+            Body = docContentHtml,
             SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
-            ReturnToHomepageLink = new NavigationLink
-            {
-                DisplayText = "Return to the homepage",
-                Href = "/"
-            }
+            PostFeedbackFormContent = postFeedbackFormContentHtml,
         };
 
         var result = await new HelpConfirmationPageMapper(mockContentParser.Object, mockFeedbackFormPageMapper.Object).MapConfirmationPageContentToViewModelAsync(content);
@@ -44,5 +50,6 @@ public class HelpConfirmationPageMapperTests
         result.SuccessMessage.Should().Be(content.SuccessMessage);
         result.BodyHeading.Should().Be(content.BodyHeading);
         result.Body.Should().Be(docContent);
+        result.PostFeedbackFormContent.Should().Be(postFeedbackFormContent);
     }
 }

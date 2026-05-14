@@ -52,7 +52,9 @@ test.describe('A spec that tests the confirmation page', { tag: "@e2e" }, () => 
         await exists(page, "[id='1_NotAtAllConfident']");
         await checkText(page, "[id='2_question']", "Share any feedback about your experience, including suggestions for how we could improve the service");
         await checkText(page, "#textarea_2_hint", "Do not include personal information, for example the name of the qualification holder");
-        await checkText(page, "#feedback-form-submit", "Submit feedback")
+        await checkText(page, "#feedback-form-submit", "Submit feedback");
+        await checkText(page, "#post-heading-form-content", "Post Feedback Form Content");
+        
     });
 
     test("Checks the technical content is on the page", async ({ page }) => {
@@ -84,7 +86,8 @@ test.describe('A spec that tests the confirmation page', { tag: "@e2e" }, () => 
         await exists(page, "[id='1_NotAtAllConfident']");
         await checkText(page, "[id='2_question']", "Share any feedback about your experience, including suggestions for how we could improve the service");
         await checkText(page, "#textarea_2_hint", "Do not include personal information, for example the name of the qualification holder");
-        await checkText(page, "#feedback-form-submit", "Submit feedback")
+        await checkText(page, "#feedback-form-submit", "Submit feedback");
+        await checkText(page, "#post-heading-form-content", "Post Feedback Form Content");
     });
 
     test("Press submit on feedback form without entering details progresses to confirmation page", async ({ page, context }) => {

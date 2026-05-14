@@ -16,4 +16,6 @@ public class ConfirmationPageViewModel
     public NavigationLinkModel? ReturnToTheHomepageLink { get; init; }
 
     public FeedbackFormPageModel? FeedbackFormPageModel { get; init; }
+    
+    public string PostFeedbackFormContent { get; init; } = string.Empty;
 }
