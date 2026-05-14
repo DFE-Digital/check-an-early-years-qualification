@@ -1055,6 +1055,7 @@ public class MockContentfulServiceTests
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
                                                          "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n");
+        result.PostFeedbackFormContent.Should().NotBeNull();
         result.PostFeedbackFormContent.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
                                                          "Post Feedback Form Content");
@@ -1074,6 +1075,7 @@ public class MockContentfulServiceTests
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
                                                          "We may need to contact you for more information about the issue you are experiencing with the service.");
+        result.PostFeedbackFormContent.Should().NotBeNull();
         result.PostFeedbackFormContent.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
                                                          "Post Feedback Form Content");
