@@ -40,9 +40,9 @@ public class NavigationLinkRenderer : IContentRenderer
     {
         NavigationLink? navigationLinkModel;
 
-        if ((content as EntryStructure)!.Data.Target is NavigationLink)
+        if ((content as EntryStructure)!.Data.Target is NavigationLink link)
         {
-            navigationLinkModel = (content as EntryStructure)!.Data.Target as NavigationLink;
+            navigationLinkModel = link;
         }
         else
         {

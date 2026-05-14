@@ -20,14 +20,13 @@
         <hr class='govuk-section-break govuk-section-break--xl govuk-section-break--visible' />
 
         @{ 
-            await Html.RenderPartialAsync("Partials/FeedbackFormQuestions", Model.FeedbackFormPageModel); 
-
-            var link = Model.ReturnToTheHomepageLink;
-            <div class="govuk-body">
-                <a id="return-button" href="@link!.Href" class="govuk-link"
-                   target=@(link.OpenInNewTab ? "_blank" : "")>@link.DisplayText</a>
-            </div>
+            await Html.RenderPartialAsync("Partials/FeedbackFormQuestions", Model.FeedbackFormPageModel);
+            
+            if (!string.IsNullOrEmpty(Model.PostFeedbackFormContent))
+            {
+                <div class="govuk-body" id="post-heading-form-content">@Html.Raw(Model.PostFeedbackFormContent)</div>
+            }
         }
-        <div class="govuk-body" id="post-heading-form-content">@Html.Raw(Model.PostFeedbackFormContent)</div>
+        
     </div>
 </div>

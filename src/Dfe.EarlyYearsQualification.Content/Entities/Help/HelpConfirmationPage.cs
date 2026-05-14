@@ -12,8 +12,6 @@ public class HelpConfirmationPage
 
     public Document? Body { get; init; }
 
-    public NavigationLink? ReturnToHomepageLink { get; init; }
-
     public FeedbackFormPage? FeedbackFormPage { get; init; }
     
     public Document? PostFeedbackFormContent { get; init; }

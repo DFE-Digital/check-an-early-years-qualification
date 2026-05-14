@@ -18,7 +18,6 @@ public class HelpConfirmationPageMapper(IGovUkContentParser contentParser, IFeed
             SuccessMessage = helpConfirmationPage.SuccessMessage,
             BodyHeading = helpConfirmationPage.BodyHeading,
             Body = bodyHtml,
-            ReturnToTheHomepageLink = NavigationLinkMapper.Map(helpConfirmationPage.ReturnToHomepageLink),
             SuccessMessageFollowingText = helpConfirmationPage.SuccessMessageFollowingText,
             FeedbackFormPageModel = await feedbackFormPageMapper.Map(helpConfirmationPage.FeedbackFormPage!),
             PostFeedbackFormContent = postFeedbackFormContentHtml,
