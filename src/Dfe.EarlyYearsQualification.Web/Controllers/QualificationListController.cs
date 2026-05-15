@@ -1,3 +1,4 @@
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -9,7 +10,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [Route("early-years-qualification-list")]
 public class QualificationListController(
     ILogger<QualificationListController> logger,
-    IWebViewService webViewService) : ServiceController
+    IWebViewService webViewService
+    /*IQualificationDownloadService qualificationDownloadService*/) : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -26,6 +28,13 @@ public class QualificationListController(
 
         return View(model);
     }
+
+    // [HttpGet("/download")]
+    // public async Task<IActionResult> Download()
+    // {
+    //     var fileContent = await qualificationDownloadService.GetEyqlDownloadAsByteArray();
+    //     return File(fileContent, "text/csv", "Early-Years-Qualifications-List.csv");
+    // }
 
     [HttpGet("/clear-filters")]
     public IActionResult ClearFilters()

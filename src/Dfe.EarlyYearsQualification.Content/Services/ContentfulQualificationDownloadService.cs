@@ -39,9 +39,11 @@ public class ContentfulQualificationDownloadService(
             }
 
             // delete the old file and upload new file to Contentful
-            await contentfulManagementClient.DeleteAsset(Assets.EarlyYearsQualificationList, Version);
+            await DeletePreviousFile();
             var managementAsset = CreateManagementAsset();
-            await contentfulManagementClient.UploadFileAndCreateAsset(managementAsset, Encoding.UTF8.GetBytes(content));
+            var uploadedAsset = await contentfulManagementClient.UploadFileAndCreateAsset(managementAsset, Encoding.UTF8.GetBytes(content));
+            var currentVersion = uploadedAsset?.SystemProperties.Version ?? Version;
+            await contentfulManagementClient.PublishAsset(Assets.EarlyYearsQualificationList, currentVersion + 1);
         }
         catch (Exception e)
         {
@@ -49,9 +51,49 @@ public class ContentfulQualificationDownloadService(
         }
     }
 
-    public async Task<string> GetEyqlDownloadLink()
+    public async Task<byte[]> GetEyqlDownloadAsByteArray()
     {
+        // var existingAsset = await GetManagementAsset();
+        // if (existingAsset != null)
+        // {
+        //     var url = existingAsset.Files[Locale].Url;
+        //     url = "https:" + url;
+        //     using var client = new HttpClient();
+        //     using (HttpResponseMessage response = await client.GetAsync(url))
+        //     {
+        //         byte[] fileContents = await response.Content.ReadAsByteArrayAsync();
+        //         return fileContents;
+        //     }
+        // }
+
         throw new NotImplementedException();
+    }
+    
+    private async Task DeletePreviousFile()
+    {
+        var existingAsset = await GetManagementAsset();
+        if (existingAsset != null)
+        {
+            if (existingAsset.SystemProperties.FieldStatus.Status.ContainsValue(FieldStatusType.Published))
+            {
+                // Assets must be unpublished before they can be deleted
+                await contentfulManagementClient.UnpublishAsset(Assets.EarlyYearsQualificationList,
+                                                                existingAsset.SystemProperties.PublishedVersion ?? Version);
+            }
+            await contentfulManagementClient.DeleteAsset(Assets.EarlyYearsQualificationList, existingAsset.SystemProperties.Version ?? Version);
+        }
+    }
+
+    private async Task<ManagementAsset?> GetManagementAsset()
+    {
+        var assetQueryBuilder = QueryBuilder<ManagementAsset>.New.Limit(100);
+        var existingAssets = await contentfulManagementClient.GetAssetsCollection(assetQueryBuilder);
+        if (existingAssets is { Items: not null } && existingAssets.Items.Any(x => x.SystemProperties.Id == Assets.EarlyYearsQualificationList))
+        {
+            return existingAssets.Items.Single(x => x.SystemProperties.Id == Assets.EarlyYearsQualificationList);
+        }
+
+        return null;
     }
     
     private static ManagementAsset CreateManagementAsset()
@@ -60,8 +102,7 @@ public class ContentfulQualificationDownloadService(
                {
                    SystemProperties = new SystemProperties
                                       {
-                                          Id = Assets.EarlyYearsQualificationList,
-                                          Version = Version
+                                          Id = Assets.EarlyYearsQualificationList
                                       },
                    Description = new Dictionary<string, string>
                                  {

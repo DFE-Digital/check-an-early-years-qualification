@@ -6,5 +6,5 @@ public interface IQualificationDownloadService
     Task GenerateEyqlDownload();
     
     // ReSharper disable once IdentifierTypo
-    Task<string> GetEyqlDownloadLink();
+    Task<byte[]> GetEyqlDownloadAsByteArray();
 }

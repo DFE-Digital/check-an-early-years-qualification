@@ -6,6 +6,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Download;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -53,6 +54,25 @@ public class ContentfulQualificationDownloadServiceTests
         mockDownloadGenerator.Setup(x => x.GenerateQualificationListContent(It.IsAny<List<Qualification>>()))
                              .Returns("Some content");
         
+        mockContentfulManagementClient.Setup(x => x.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()))
+                                      .ReturnsAsync(new ContentfulCollection<ManagementAsset>{ Items = new List<ManagementAsset>
+                                                        {
+                                                            new ManagementAsset
+                                                            {
+                                                                SystemProperties =  new SystemProperties
+                                                                    {
+                                                                        Id = Assets.EarlyYearsQualificationList,
+                                                                        FieldStatus = new FieldStatus
+                                                                            {
+                                                                                Status = new Dictionary<string, FieldStatusType>
+                                                                                    {
+                                                                                        { "Status", FieldStatusType.Published }
+                                                                                    }
+                                                                            }
+                                                                    }
+                                                            }
+                                                        } });
+        
         var service = new ContentfulQualificationDownloadService(mockContentfulClient.Object, mockContentfulManagementClient.Object, mockDownloadGenerator.Object, mockLogger.Object);
 
         await service.GenerateEyqlDownload();
@@ -61,6 +81,8 @@ public class ContentfulQualificationDownloadServiceTests
         mockDownloadGenerator.Verify(x => x.GenerateQualificationListContent(It.IsAny<List<Qualification>>()), Times.Once);
         mockContentfulManagementClient.Verify(x => x.UploadFileAndCreateAsset(It.Is<ManagementAsset>(ma => ma.SystemProperties.Id == Assets.EarlyYearsQualificationList), It.IsAny<byte[]>()), Times.Once);
         mockContentfulManagementClient.Verify(x => x.DeleteAsset(Assets.EarlyYearsQualificationList, 1), Times.Once);
+        mockContentfulManagementClient.Verify(x => x.UnpublishAsset(Assets.EarlyYearsQualificationList, 1), Times.Once);
+        mockContentfulManagementClient.Verify(x => x.PublishAsset(Assets.EarlyYearsQualificationList, 2), Times.Once);
     }
     
     [TestMethod]

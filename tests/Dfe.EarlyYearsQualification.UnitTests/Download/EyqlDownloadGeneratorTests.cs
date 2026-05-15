@@ -61,17 +61,37 @@ public class EyqlDownloadGeneratorTests
                                          new Tab { Heading = "Pre-September 2014", Order = 1 }
                                      ],
                                      StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
-                                     ToWhichYear = "2015", FromWhichYear = "2014",
+                                     FromWhichYear = "2014", ToWhichYear = "2015", 
                                      QualificationNumber = "ABC-123-DEF"
                                  },
                                  new Qualification("TST-002", "New Qualification", "AO 2", 4)
                                  {
                                      EyqlTabs =
                                      [
-                                         new Tab { Heading = "Pre-September 2014", Order = 1 }
+                                         new Tab { Heading = "Post-September 2014", Order = 2 }
                                      ],
                                      StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
-                                     ToWhichYear = "2015", FromWhichYear = "2014",
+                                     FromWhichYear = "2015", ToWhichYear = "2016",
+                                     QualificationNumber = "ABC-123-DEF"
+                                 },
+                                 new Qualification("TST-003", "Qualification 2", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Post-September 2024", Order = 3 }
+                                     ],
+                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
+                                     FromWhichYear = "2015", ToWhichYear = "2024",
+                                     QualificationNumber = "ABC-123-DEF"
+                                 },
+                                 new Qualification("TST-004", "New Qualification", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Post-September 2024", Order = 3 }
+                                     ],
+                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
+                                     FromWhichYear = "2015", ToWhichYear = "2024",
                                      QualificationNumber = "ABC-123-DEF"
                                  }
                              };
@@ -84,8 +104,10 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should()
                        .Be("""
                            Tab,QualificationName,QualificationLevel,StaffChildRatio,AwardingOrganisation,FromWhichYear,ToWhichYear,QualificationNumber,AdditionalRequirements
-                           Pre-September 2014,New Qualification,4,3,AO 2,2014,2015,ABC-123-DEF,No additional requirements
                            Pre-September 2014,Qualification 1,3,3,AO 1,2014,2015,ABC-123-DEF,No additional requirements
+                           Post-September 2014,New Qualification,4,3,AO 2,2015,2016,ABC-123-DEF,No additional requirements
+                           Post-September 2024,New Qualification,3,3,AO 1,2015,2024,ABC-123-DEF,No additional requirements
+                           Post-September 2024,Qualification 2,3,3,AO 1,2015,2024,ABC-123-DEF,No additional requirements
                            """);
     }
     
