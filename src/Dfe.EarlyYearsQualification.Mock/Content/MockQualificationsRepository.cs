@@ -91,6 +91,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
     public Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
                                          string? awardingOrganisation, string? qualificationName)
     {
+        const string dupeQualificationName = "dupe qualification name";
+
         var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
                                                          AwardingOrganisations.Ncfe, 6);
         degreeQualification.IsTheQualificationADegree = true;
@@ -114,13 +116,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                 CreateQtsQualification("EYQ-111", "BTEC", AwardingOrganisations.Various, 7),
                 CreateQualification("EYQ-112", AwardingOrganisations.Pearson, 8, startDate, endDate),
                 CreateQualification("EYQ-113", AwardingOrganisations.Cache, 8, startDate, endDate),
-                new Qualification("EYQ-114", "dupe qualification name", AwardingOrganisations.Ncfe, 3)
+                new Qualification("EYQ-114", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
                     QualificationNumber = "123/345/678"
                 },
-                new Qualification("EYQ-115", "dupe qualification name", AwardingOrganisations.Ncfe, 3)
+                new Qualification("EYQ-115", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
@@ -221,7 +223,31 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Order = 1
                         }
                     ]
-                }
+                },
+                new Qualification("EYQ-307", "Degrees at level 6", AwardingOrganisations.Ncfe, 3)
+                {
+                    FromWhichYear = startDate,
+                    ToWhichYear = endDate,
+                    QualificationNumber = "123/345/679"
+                },
+                new Qualification("EYQ-308", "Joint degrees at level 6", AwardingOrganisations.Ncfe, 3)
+                {
+                    FromWhichYear = startDate,
+                    ToWhichYear = endDate,
+                    QualificationNumber = "123/345/670"
+                },
+                new Qualification("EYQ-309", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
+                {
+                    FromWhichYear = startDate,
+                    ToWhichYear = endDate,
+                    QualificationNumber = "321/345/679"
+                },
+                new Qualification("EYQ-310", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
+                {
+                    FromWhichYear = startDate,
+                    ToWhichYear = endDate,
+                    QualificationNumber = "231/345/670"
+                },
             };
 
         var results = qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear, awardingOrganisation, qualificationName);

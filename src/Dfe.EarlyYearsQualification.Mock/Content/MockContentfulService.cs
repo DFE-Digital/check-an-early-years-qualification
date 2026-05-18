@@ -333,10 +333,6 @@ public class MockContentfulService : IContentService
                                          SingleQualificationFoundText = "matching qualification",
                                          PreSearchBoxContent =
                                              ContentfulContentHelper.Paragraph("Pre search box content"),
-                                         Pre2014L6OrNotSureContentHeading = "Pre 2014 L6 or not sure heading",
-                                         Pre2014L6OrNotSureContent = ContentfulContentHelper.Paragraph("Pre 2014 L6 or not sure content"),
-                                         Post2014L6OrNotSureContentHeading = "Post 2014 L6 or not sure heading",
-                                         Post2014L6OrNotSureContent = ContentfulContentHelper.Paragraph("Post 2014 L6 or not sure content"),
                                          PostQualificationListContentHeading = "Post qualification list header",
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
@@ -351,7 +347,30 @@ public class MockContentfulService : IContentService
                                          AwardedDatePrefixText = "awarded in",
                                          LevelPrefixText = "level",
                                          AwardedByPrefixText = "awarded by",
-                                         QualificationNumberLabel = "Qualification Number (QN)"
+                                         QualificationNumberLabel = "Qualification Number (QN)",
+                                         SearchResultsContent =
+                                         [
+                                             new SearchResultContent
+                                             {
+                                                 QualificationId = "EYQ-307",
+                                                 AdditionalInformation = "Select this if the degree covers just one subject, for example a BA (Hons) Early Childhood Studies."
+                                             },
+                                             new SearchResultContent
+                                             {
+                                                 QualificationId = "EYQ-308",
+                                                 AdditionalInformation = "Select this if the degree covers 2 or more subjects, for example BA (Hons) Early Childhood Studies and Psychology."
+                                             },
+                                             new SearchResultContent
+                                             {
+                                                 QualificationId = "EYQ-309",
+                                                 AdditionalInformation = "Content which replaces QN number"
+                                             },
+                                             new SearchResultContent
+                                             {
+                                                 QualificationId = "EYQ-310",
+                                                 AdditionalInformation = "Content which replaces QN number"
+                                             }
+                                         ]
                                      });
     }
 
@@ -1092,12 +1111,8 @@ public class MockContentfulService : IContentService
                         BodyHeading = "What happens next",
                         Body = ContentfulContentHelper.Paragraph("The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n"),
                         SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
-                        ReturnToHomepageLink = new NavigationLink
-                        {
-                            DisplayText = "Return to the homepage",
-                            Href = "/"
-                        },
-                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)
+                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage),
+                        PostFeedbackFormContent = ContentfulContentHelper.Paragraph("Post Feedback Form Content")
                     }
                 ),
             HelpPages.TechnicalIssueConfirmation =>
@@ -1108,12 +1123,8 @@ public class MockContentfulService : IContentService
                         BodyHeading = "What happens next",
                         Body = ContentfulContentHelper.Paragraph("We may need to contact you for more information about the issue you are experiencing with the service."),
                         SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
-                        ReturnToHomepageLink = new NavigationLink
-                        {
-                            DisplayText = "Return to the homepage",
-                            Href = "/"
-                        },
-                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)
+                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage),
+                        PostFeedbackFormContent = ContentfulContentHelper.Paragraph("Post Feedback Form Content")
                     }
                 ),
             _ => null

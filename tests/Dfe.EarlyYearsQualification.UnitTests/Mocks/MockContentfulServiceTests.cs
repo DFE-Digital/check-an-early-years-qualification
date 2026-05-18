@@ -510,12 +510,6 @@ public class MockContentfulServiceTests
         result.SingleQualificationFoundText.Should().Be("matching qualification");
         result.PreSearchBoxContent!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Pre search box content");
-        result.Pre2014L6OrNotSureContentHeading.Should().Be("Pre 2014 L6 or not sure heading");
-        result.Pre2014L6OrNotSureContent!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Pre 2014 L6 or not sure content");
-        result.Post2014L6OrNotSureContentHeading.Should().Be("Post 2014 L6 or not sure heading");
-        result.Post2014L6OrNotSureContent!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Post 2014 L6 or not sure content");
         result.PostQualificationListContentHeading.Should().Be("Post qualification list header");
         result.PostQualificationListContent!.Content[0].Should().BeAssignableTo<Hyperlink>()
               .Which.Content.Should().Contain(x => ((Text)x).Value == "Link to not on list advice page");
@@ -530,6 +524,29 @@ public class MockContentfulServiceTests
         result.LevelPrefixText.Should().Be("level");
         result.AwardedByPrefixText.Should().Be("awarded by");
         result.QualificationNumberLabel.Should().Be("Qualification Number (QN)");
+        result.SearchResultsContent.Should().BeEquivalentTo(
+                                                             [
+                                                                 new SearchResultContent
+                                                                 {
+                                                                     QualificationId = "EYQ-307",
+                                                                     AdditionalInformation = "Select this if the degree covers just one subject, for example a BA (Hons) Early Childhood Studies."
+                                                                 },
+                                                                 new SearchResultContent
+                                                                 {
+                                                                     QualificationId = "EYQ-308",
+                                                                     AdditionalInformation = "Select this if the degree covers 2 or more subjects, for example BA (Hons) Early Childhood Studies and Psychology."
+                                                                 },
+                                                                 new SearchResultContent
+                                                                 {
+                                                                     QualificationId = "EYQ-309",
+                                                                     AdditionalInformation = "Content which replaces QN number"
+                                                                 },
+                                                                 new SearchResultContent
+                                                                 {
+                                                                     QualificationId = "EYQ-310",
+                                                                     AdditionalInformation = "Content which replaces QN number"
+                                                                 }
+                                                             ]);
     }
 
     [TestMethod]
@@ -1055,6 +1072,10 @@ public class MockContentfulServiceTests
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
                                                          "The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n");
+        result.PostFeedbackFormContent.Should().NotBeNull();
+        result.PostFeedbackFormContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
+                                                         "Post Feedback Form Content");
     }
 
     [TestMethod]
@@ -1071,6 +1092,10 @@ public class MockContentfulServiceTests
         result.Body.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
                                                          "We may need to contact you for more information about the issue you are experiencing with the service.");
+        result.PostFeedbackFormContent.Should().NotBeNull();
+        result.PostFeedbackFormContent.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value ==
+                                                         "Post Feedback Form Content");
     }
 
     [TestMethod]

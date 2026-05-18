@@ -17,13 +17,9 @@ public class QualificationListModel
     public string PreSearchBoxContent { get; init; } = string.Empty;
 
     public string SearchButtonText { get; init; } = string.Empty;
-
-    public bool ShowL6OrNotSureContent { get; init; }
     
-    public string L6OrNotSureContentHeading { get; init; } = string.Empty;
-
-    public string L6OrNotSureContent { get; init; } = string.Empty;
-
+    public List<SearchResultContentModel> SearchResults { get; init; } = [];
+    
     public string PostQualificationListContentHeading { get; init; } = string.Empty;
 
     public string PostQualificationListContent { get; init; } = string.Empty;
@@ -31,8 +27,6 @@ public class QualificationListModel
     public string SearchCriteriaHeading { get; init; } = string.Empty;
 
     public string? SearchCriteria { get; init; } = string.Empty;
-
-    public List<BasicQualificationModel> Qualifications { get; init; } = [];
 
     public string NoResultText { get; init; } = string.Empty;
 

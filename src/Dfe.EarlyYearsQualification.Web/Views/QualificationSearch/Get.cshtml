@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Qualifications";
+
+    var numberOfQualifications = Model.SearchResults.Select(x => x.Qualification).Count();
 }
 
 @section BeforeMainContent {
@@ -15,7 +17,7 @@
     <script src="~/js/pages/search-results-page.js" asp-append-version="true"></script>
 }
 
-@Html.HiddenFor(x => x.Qualifications.Count, new { id="hdnQualificationCount" })
+@Html.Hidden("hdnQualificationCount", numberOfQualifications, new { id = "hdnQualificationCount" })
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
@@ -41,7 +43,7 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 <h2 id="found-heading" class="govuk-heading-m govuk-!-static-margin-bottom-8">
-                        @(Model.QualificationFoundPrefixText + " " + Model.Qualifications.Count + " " + (Model.Qualifications.Count == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText))
+                        @(Model.QualificationFoundPrefixText + " " + numberOfQualifications + " " + (numberOfQualifications == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText))
                 </h2>
             </div>
         </div>
@@ -71,7 +73,7 @@
             </div>
         </div>
 
-        @if (Model.Qualifications.Count == 0)
+        @if (numberOfQualifications == 0)
         {
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
@@ -82,47 +84,30 @@
                 </div>
             </div>
         }
-
-        @foreach (var qualification in Model.Qualifications)
+    
+        @foreach (var result in Model.SearchResults)
         {
-            var linkDisplayType = qualification.IsQualificationNameDuplicate ? "inline-block" : "block";
+            var qualification = result.Qualification;
+            
+            var additionalInfoAttribute = (result.SearchResultContents is not null ? $"aria-describedby=ao-text-{qualification.QualificationId}" : "");
 
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
                     <div class="chevron-card__wrapper">
                         <div class="chevron-card-link__wrapper">
                             <a href="@Url.Action("Index", "ConfirmQualification", new { qualificationId = qualification.QualificationId })"
-                               class="govuk-link govuk-heading-m chevron-card__link"
-                               style="display: @linkDisplayType;">
+                               class="govuk-link govuk-heading-m chevron-card__link govuk-!-display-block"
+                                @additionalInfoAttribute>
                                 @qualification.QualificationName
                             </a>
-                            
-                            @if (qualification.IsQualificationNameDuplicate)
+                            @if (result.SearchResultContents != null)
                             {
-                                if (string.IsNullOrEmpty(qualification.QualificationNumber))
-                                {
-                                    <span id="ao-text-@qualification.QualificationId" class="govuk-body govuk-!-margin-0">(@qualification.AwardingOrganisationTitle)</span>
-                                }
-                                else
-                                {
-                                    <div id="ao-text-@qualification.QualificationId" class="govuk-body govuk-!-margin-0">@Model.QualificationNumberLabel @qualification.QualificationNumber</div>
-                                }
+                                <div id="ao-text-@qualification.QualificationId" class="govuk-body govuk-!-margin-0">
+                                    @result.SearchResultContents
+                                </div>
                             }
                         </div>
                         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Model.ShowL6OrNotSureContent)
-        {
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    <div id="l6-or-not-sure-content" class="govuk-!-static-margin-top-4">
-                        <h2 id="l6-or-not-sure-heading" class="govuk-heading-m">
-                            @Model.L6OrNotSureContentHeading
-                        </h2>
-                        @Html.Raw(Model.L6OrNotSureContent)
                     </div>
                 </div>
             </div>
