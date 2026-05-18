@@ -1111,12 +1111,8 @@ public class MockContentfulService : IContentService
                         BodyHeading = "What happens next",
                         Body = ContentfulContentHelper.Paragraph("The Check an early years qualification team will reply to your message within 5 working days. Complex cases may take longer.\r\nWe may need to contact you for more information before we can respond.\r\n"),
                         SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
-                        ReturnToHomepageLink = new NavigationLink
-                        {
-                            DisplayText = "Return to the homepage",
-                            Href = "/"
-                        },
-                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)
+                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage),
+                        PostFeedbackFormContent = ContentfulContentHelper.Paragraph("Post Feedback Form Content")
                     }
                 ),
             HelpPages.TechnicalIssueConfirmation =>
@@ -1127,12 +1123,8 @@ public class MockContentfulService : IContentService
                         BodyHeading = "What happens next",
                         Body = ContentfulContentHelper.Paragraph("We may need to contact you for more information about the issue you are experiencing with the service."),
                         SuccessMessageFollowingText = "Your message was successfully sent to the Check an early years qualification team.",
-                        ReturnToHomepageLink = new NavigationLink
-                        {
-                            DisplayText = "Return to the homepage",
-                            Href = "/"
-                        },
-                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage)
+                        FeedbackFormPage = await GetFeedbackFormPage(FeedbackFormPages.FeedbackFormPage),
+                        PostFeedbackFormContent = ContentfulContentHelper.Paragraph("Post Feedback Form Content")
                     }
                 ),
             _ => null
