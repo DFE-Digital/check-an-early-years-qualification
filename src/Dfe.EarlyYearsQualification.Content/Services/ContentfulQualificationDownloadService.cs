@@ -18,7 +18,8 @@ public class ContentfulQualificationDownloadService(
     [FromKeyedServices(Clients.ContentfulDeliveryClientNoCache)]IContentfulClient client,
     IContentfulManagementClient contentfulManagementClient,
     IDownloadGenerator downloadGenerator,
-    ILogger<ContentfulQualificationDownloadService> logger) : IQualificationDownloadService
+    ILogger<ContentfulQualificationDownloadService> logger,
+    IHttpClientFactory httpClientFactory) : IQualificationDownloadService
 {
     private const int Version = 1;
     private const string Locale = "en-GB";
@@ -53,20 +54,19 @@ public class ContentfulQualificationDownloadService(
 
     public async Task<byte[]> GetEyqlDownloadAsByteArray()
     {
-        // var existingAsset = await GetManagementAsset();
-        // if (existingAsset != null)
-        // {
-        //     var url = existingAsset.Files[Locale].Url;
-        //     url = "https:" + url;
-        //     using var client = new HttpClient();
-        //     using (HttpResponseMessage response = await client.GetAsync(url))
-        //     {
-        //         byte[] fileContents = await response.Content.ReadAsByteArrayAsync();
-        //         return fileContents;
-        //     }
-        // }
-
-        throw new NotImplementedException();
+        var existingAsset = await GetManagementAsset();
+        if (existingAsset == null)
+        {
+            logger.LogWarning("EYQL not found.");
+            return [];
+        }
+        
+        var url = existingAsset.Files[Locale].Url;
+        url = "https:" + url;
+        using var httpClient = httpClientFactory.CreateClient();
+        using var response = await httpClient.GetAsync(url);
+        var fileContents = await response.Content.ReadAsByteArrayAsync();
+        return fileContents;
     }
     
     private async Task DeletePreviousFile()

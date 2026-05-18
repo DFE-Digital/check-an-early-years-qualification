@@ -1,4 +1,6 @@
-﻿using Dfe.EarlyYearsQualification.Content.Entities;
+﻿using System.Text;
+using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -14,8 +16,10 @@ public class QualificationListControllerTests
     {
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
 
-        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object);
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object);
 
         mockWebViewService.Setup(x => x.GetWebViewPage()).ReturnsAsync((WebViewPage?)null);
 
@@ -25,7 +29,7 @@ public class QualificationListControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("Web view page content could not be found");
@@ -36,8 +40,10 @@ public class QualificationListControllerTests
     {
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
 
-        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object);
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object);
 
         var webViewPage = new WebViewPage();
         var expectedModel = new EarlyYearsQualificationListModel();
@@ -52,7 +58,7 @@ public class QualificationListControllerTests
         var resultType = result as ViewResult;
         resultType.Should().NotBeNull();
 
-        var model = resultType!.Model as EarlyYearsQualificationListModel;
+        var model = resultType.Model as EarlyYearsQualificationListModel;
         model.Should().NotBeNull();
         model.Should().BeSameAs(expectedModel);
 
@@ -65,8 +71,10 @@ public class QualificationListControllerTests
     {
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
 
-        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object);
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object);
 
         var result = controller.ClearFilters();
 
@@ -74,7 +82,7 @@ public class QualificationListControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
 
         mockWebViewService.Verify(x => x.SetWebViewFilters(It.IsAny<WebViewFilters>()), Times.Once);
     }
@@ -84,8 +92,10 @@ public class QualificationListControllerTests
     {
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
 
-        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object);
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object);
 
         var model = new EarlyYearsQualificationListModel();
 
@@ -95,7 +105,7 @@ public class QualificationListControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
 
         mockWebViewService.Verify(x => x.ApplyFilters(model), Times.Once);
     }
@@ -105,10 +115,12 @@ public class QualificationListControllerTests
     {
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
 
-        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object);
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object);
 
-        var filter = "test-filter";
+        const string filter = "test-filter";
 
         var result = controller.RemoveFilter(filter);
 
@@ -116,8 +128,60 @@ public class QualificationListControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType!.ActionName.Should().Be("Index");
+        resultType.ActionName.Should().Be("Index");
 
         mockWebViewService.Verify(x => x.RemoveFilter(filter), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task Download_CallsQualificationDownloadService_ReturnsFileContent()
+    {
+        var mockLogger = new Mock<ILogger<QualificationListController>>();
+        var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object);
+        
+        var returnedArray = Encoding.UTF8.GetBytes("test");
+        mockQualificationDownloadService.Setup(x => x.GetEyqlDownloadAsByteArray())
+                                        .ReturnsAsync(returnedArray);
+
+        var result = await controller.Download();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as FileContentResult;
+        resultType.Should().NotBeNull();
+        resultType.FileContents.Should().NotBeEmpty();
+        resultType.FileContents.Should().Equal(returnedArray);
+
+        mockQualificationDownloadService.Verify(x => x.GetEyqlDownloadAsByteArray(), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task Download_QualificationDownloadServiceReturnsEmptyArray_RedirectsToError()
+    {
+        var mockLogger = new Mock<ILogger<QualificationListController>>();
+        var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object);
+        
+        mockQualificationDownloadService.Setup(x => x.GetEyqlDownloadAsByteArray())
+                                        .ReturnsAsync([]);
+
+        var result = await controller.Download();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("Null or empty EYQL content returned");
+        mockQualificationDownloadService.Verify(x => x.GetEyqlDownloadAsByteArray(), Times.Once);
     }
 }

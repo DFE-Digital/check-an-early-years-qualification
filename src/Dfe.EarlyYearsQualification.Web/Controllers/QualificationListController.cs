@@ -10,8 +10,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 [Route("early-years-qualification-list")]
 public class QualificationListController(
     ILogger<QualificationListController> logger,
-    IWebViewService webViewService
-    /*IQualificationDownloadService qualificationDownloadService*/) : ServiceController
+    IWebViewService webViewService,
+    IQualificationDownloadService qualificationDownloadService) : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -29,12 +29,16 @@ public class QualificationListController(
         return View(model);
     }
 
-    // [HttpGet("/download")]
-    // public async Task<IActionResult> Download()
-    // {
-    //     var fileContent = await qualificationDownloadService.GetEyqlDownloadAsByteArray();
-    //     return File(fileContent, "text/csv", "Early-Years-Qualifications-List.csv");
-    // }
+    [HttpGet("/download")]
+    public async Task<IActionResult> Download()
+    {
+        var fileContent = await qualificationDownloadService.GetEyqlDownloadAsByteArray();
+        if (fileContent.Length != 0) 
+            return File(fileContent, "text/csv", "Early-Years-Qualifications-List.csv");
+        
+        logger.LogError("Null or empty EYQL content returned");
+        return RedirectToAction("Index", "Error");
+    }
 
     [HttpGet("/clear-filters")]
     public IActionResult ClearFilters()
