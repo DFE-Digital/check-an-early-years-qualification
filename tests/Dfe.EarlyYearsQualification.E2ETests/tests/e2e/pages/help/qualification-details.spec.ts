@@ -33,34 +33,46 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await checkText(page, "#enquiry-heading", "What are the qualification details?");
         await checkText(page, "#post-heading-content", "We need to know the following qualification details to quickly and accurately respond to any questions you may have.");
         await checkText(page, "#qualification-name-heading", "Qualification name");
-        await checkText(page, "#started-header", "Start date (optional)");
+        await checkText(page, "legend h2[for=\"question\"]", "Start date");
         await checkText(page, "#started-month-label", "Month");
         await checkText(page, "#started-year-label", "Year");
         await checkText(page, "#awarded-header", "Award date");
         await checkText(page, "#awarded-month-label", "Month");
         await checkText(page, "#started-year-label", "Year");
         await checkText(page, "#awarding-organisation-heading", "Awarding organisation");
-        await checkText(page, "#question-submit", "Continue")
+        await checkText(page, "#question-submit", "Continue");
+        await checkText(page, "label[for=\"Before1September2014\"]", "Before 1 September 2014");
+        await checkText(page, "label[for=\"OnOrAfter1September2014\"]", "On or after 1 September 2014");
+        await checkText(page, "#started-hint", "Enter the specific start date. For example 9 2014.");
     });
 
-    test("All details entered navigates to correct page", async ({ page, context }) => {
+    test("All details entered navigates to correct page - before the 1st September", async ({ page, context }) => {
         await inputText(page, "#QualificationName", "Entered qualification name");
-        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", "1");
-        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", "2001");
-        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", "2");
-        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", "2002");
+        await page.click("#Before1September2014");
+        await inputText(page, "#AwardedDate\\.SelectedMonth", "2");
+        await inputText(page, "#AwardedDate\\.SelectedYear", "2002");
         await inputText(page, "#AwardingOrganisation", "Entered awarding organisation");
         await page.click("#question-submit");
-
         await checkUrl(page, "/help/provide-details");
     });
 
-    test("Navigates to next page, returns to original page their selection is pre-populated", async ({ page, context }) => {
+    test("All details entered navigates to correct page - after the 1st September", async ({ page, context }) => {
         await inputText(page, "#QualificationName", "Entered qualification name");
-        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", "1");
-        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", "2001");
-        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", "2");
-        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", "2002");
+        await page.click("#OnOrAfter1September2014");
+        await inputText(page, "#AwardedDate\\.SelectedMonth", "2");
+        await inputText(page, "#AwardedDate\\.SelectedYear", "2017");
+        await inputText(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth", "02");
+        await inputText(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedYear", "2015");
+        await inputText(page, "#AwardingOrganisation", "Entered awarding organisation");
+        await page.click("#question-submit");
+        await checkUrl(page, "/help/provide-details");
+    });
+
+    test("Navigates to next page, returns to original page their selection is pre-populated - before the 1st September", async ({ page, context }) => {
+        await inputText(page, "#QualificationName", "Entered qualification name");
+        await page.click("#Before1September2014");
+        await inputText(page, "#AwardedDate\\.SelectedMonth", "2");
+        await inputText(page, "#AwardedDate\\.SelectedYear", "2002");
         await inputText(page, "#AwardingOrganisation", "Entered awarding organisation");
         await page.click("#question-submit");
 
@@ -68,10 +80,29 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
 
         await checkUrl(page, "/help/qualification-details");
         await checkValue(page, "#QualificationName", "Entered qualification name");
-        await checkValue(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", "1");
-        await checkValue(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", "2001");
-        await checkValue(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", "2");
-        await checkValue(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", "2002");
+        await checkValue(page, "#AwardedDate\\.SelectedMonth", "2");
+        await checkValue(page, "#AwardedDate\\.SelectedYear", "2002");
+        await checkValue(page, "#AwardingOrganisation", "Entered awarding organisation");
+    });
+
+    test("Navigates to next page, returns to original page their selection is pre-populated - on or after 1st September", async ({ page, context }) => {
+        await inputText(page, "#QualificationName", "Entered qualification name");
+        await page.click("#OnOrAfter1September2014");
+        await inputText(page, "#AwardedDate\\.SelectedMonth", "02");
+        await inputText(page, "#AwardedDate\\.SelectedYear", "2012");
+        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", "2");
+        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", "2015");
+        await inputText(page, "#AwardingOrganisation", "Entered awarding organisation");
+        await page.click("#question-submit");
+
+        await page.goBack();
+
+        await checkUrl(page, "/help/qualification-details");
+        await checkValue(page, "#QualificationName", "Entered qualification name");
+        await checkValue(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth", "02");
+        await checkValue(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedYear", "2012");
+        await checkValue(page, "#AwardedDate\\.SelectedMonth", "2");
+        await checkValue(page, "#AwardedDate\\.SelectedYear", "2015");
         await checkValue(page, "#AwardingOrganisation", "Entered awarding organisation");
     });
 
@@ -454,4 +485,5 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
         await hasClass(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", /govuk-input--error/);
         await hasClass(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", /govuk-input--error/);
     });
+    
 });
