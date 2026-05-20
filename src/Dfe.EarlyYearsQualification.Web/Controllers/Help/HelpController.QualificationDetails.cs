@@ -46,7 +46,7 @@ public partial class HelpController
 
         helpService.AddQualificationDetailsValidationErrors(model, content, ModelState);
 
-        if (!ModelState.IsValid || model.Errors.Any())
+        if (!ModelState.IsValid || model.Errors.Count != 0)
         {
             return View("QualificationDetails", model);
         }

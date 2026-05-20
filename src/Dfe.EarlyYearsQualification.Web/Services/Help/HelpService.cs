@@ -289,7 +289,7 @@ public class HelpService(
 
     private (List<BannerError> banners, string errorMessage) MapValidationResultToBanners(DateQuestion question, DateValidationResult validationResult)
     {
-        var errorMessageText = validationResult.ErrorMessages.Any()
+        var errorMessageText = validationResult.ErrorMessages.Count != 0
                                    ? string.Join("<br />", validationResult.ErrorMessages)
                                    : null;
 
