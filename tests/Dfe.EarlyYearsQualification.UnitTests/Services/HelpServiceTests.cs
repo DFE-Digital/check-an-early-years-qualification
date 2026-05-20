@@ -3,8 +3,11 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
+using Dfe.EarlyYearsQualification.Web.Models;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -28,6 +31,7 @@ public class HelpServiceTests
     private Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new();
     private Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new();
     private Mock<IStaticPageMapper> _mockStaticPageMapper = new();
+    private Mock<IPlaceholderUpdater> _mockPlaceholderUpdater = new();
 
     [TestMethod]
     public async Task GetRadioQuestionHelpPageAsync_Calls_ContentService_GetRadioQuestionHelpPage()
@@ -233,169 +237,206 @@ public class HelpServiceTests
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_SetsExpectedViewModelValues()
     {
         // Arrange
-        var viewModel = new QualificationDetailsPageViewModel();
+        var content = new HelpQualificationDetailsPage
+        {
+            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
+            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+        };
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Value = "OnOrAfter1September2014",
+                Question = new DateQuestionModel()
+            },
+            Before2014Option = new OptionModel { Value = "Before1September2014" }
+        };
 
         var enquiry = new HelpFormEnquiry
-                      {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
-                          AwardingOrganisation = "Test Awarding Organisation",
-                          QualificationName = "Test Qualification Name",
-                      };
+        {
+            ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
+            AwardingOrganisation = "Test Awarding Organisation",
+            QualificationName = "Test Qualification Name",
+            QualificationStartDate = "10/2015",
+            QualificationAwardedDate = "5/2017"
+        };
 
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((1, 2000));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((2, 2002));
 
         // Act
-        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel);
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
 
         // Assert
         viewModel.Should().NotBeNull();
-
-        viewModel.QuestionModel.StartedQuestion.Should().NotBeNull();
-        viewModel.QuestionModel.AwardedQuestion.Should().NotBeNull();
-
         viewModel.QualificationName.Should().Be(enquiry.QualificationName);
         viewModel.AwardingOrganisation.Should().Be(enquiry.AwardingOrganisation);
-        viewModel.QuestionModel.StartedQuestion.SelectedMonth.Should().Be(1);
-        viewModel.QuestionModel.StartedQuestion.SelectedYear.Should().Be(2000);
-        viewModel.QuestionModel.AwardedQuestion.SelectedMonth.Should().Be(2);
-        viewModel.QuestionModel.AwardedQuestion.SelectedYear.Should().Be(2002);
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth.Should().Be(10);
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear.Should().Be(2015);
+        viewModel.AwardedDate.SelectedMonth.Should().Be(5);
+        viewModel.AwardedDate.SelectedYear.Should().Be(2017);
+        viewModel.Option.Should().Be(content.AfterSeptember2014Option.Value);
     }
 
     [TestMethod]
-    public void
-        SetAnyPreviouslyEnteredQualificationDetailsFromCookie_Overwrites_GetWhenWasQualificationStartedAndAwarded()
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_Before2014_SetsCorrectOption()
     {
         // Arrange
-        var viewModel = new QualificationDetailsPageViewModel();
+        var content = new HelpQualificationDetailsPage
+        {
+            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
+            AfterSeptember2014Option = new() { StartedQuestion = new() }
+        };
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Value = "OnOrAfter1September2014",
+                Question = new DateQuestionModel()
+            },
+            Before2014Option = new OptionModel { Value = "Before1September2014" }
+        };
 
         var enquiry = new HelpFormEnquiry
-                      {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
-                          AwardingOrganisation = "Test Awarding Organisation",
-                          QualificationName = "Test Qualification Name",
-                          QualificationStartDate = "5/2004",
-                          QualificationAwardedDate = "7/2008"
-                      };
+        {
+            QualificationStartDate = "1/1900",
+            QualificationAwardedDate = "6/2010",
+            QualificationName = "Old Qualification",
+            AwardingOrganisation = "Old Org"
+        };
 
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((1, 2000));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((2, 2002));
 
         // Act
-        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel);
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
 
         // Assert
-        viewModel.Should().NotBeNull();
-
-        viewModel.QuestionModel.StartedQuestion.Should().NotBeNull();
-        viewModel.QuestionModel.AwardedQuestion.Should().NotBeNull();
-
-        viewModel.QualificationName.Should().Be(enquiry.QualificationName);
-        viewModel.AwardingOrganisation.Should().Be(enquiry.AwardingOrganisation);
-        viewModel.QuestionModel.StartedQuestion.SelectedMonth.Should().Be(5);
-        viewModel.QuestionModel.StartedQuestion.SelectedYear.Should().Be(2004);
-        viewModel.QuestionModel.AwardedQuestion.SelectedMonth.Should().Be(7);
-        viewModel.QuestionModel.AwardedQuestion.SelectedYear.Should().Be(2008);
+        viewModel.Option.Should().Be(content.BeforeSeptember2014Option.Value);
+        viewModel.QualificationName.Should().Be("Old Qualification");
+        viewModel.AwardingOrganisation.Should().Be("Old Org");
+        viewModel.AwardedDate.SelectedMonth.Should().Be(6);
+        viewModel.AwardedDate.SelectedYear.Should().Be(2010);
     }
 
     [TestMethod]
-    public void
-        MapHelpQualificationDetailsPageContentToViewModel_Calls_HelpQualificationDetailsPageMapper_MapRadioQuestionHelpPageContentToViewModelAsync()
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_NoEnquiry_DoesNotThrow()
     {
         // Arrange
         var content = new HelpQualificationDetailsPage();
         var viewModel = new QualificationDetailsPageViewModel();
-        var datesValidationResult = new DatesValidationResult();
-        var modelState = new ModelStateDictionary();
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         // Act
-        GetSut()
-            .MapHelpQualificationDetailsPageContentToViewModel(viewModel, content, datesValidationResult, modelState);
+        var act = () => GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
+
+        // Assert
+        act.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void MapHelpQualificationDetailsPageContentToViewModel_Calls_Mapper()
+    {
+        // Arrange
+        var content = new HelpQualificationDetailsPage();
+        var viewModel = new QualificationDetailsPageViewModel();
+
+        // Act
+        GetSut().MapHelpQualificationDetailsPageContentToViewModel(viewModel, content);
 
         // Assert
         _mockHelpQualificationDetailsPageMapper.Verify(o =>
-                                                           o.MapQualificationDetailsContentToViewModel(viewModel,
-                                                            content, datesValidationResult, modelState),
+                                                           o.MapQualificationDetailsContentToViewModel(viewModel, content),
                                                        Times.Once);
     }
 
     [TestMethod]
-    public void SetHelpQualificationDetailsInCookie_Updates_EnquiryValues()
+    public void SetHelpQualificationDetailsInCookie_Before2014_Updates_EnquiryValues()
     {
         // Arrange
-        var enquiry = new HelpFormEnquiry
-                      {
-                          ReasonForEnquiring = HelpFormEnquiryReasons.GetHelp.QuestionAboutAQualification,
-                      };
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
 
         var viewModel = new QualificationDetailsPageViewModel
-                        {
-                            AwardingOrganisation = "Test Awarding Organisation",
-                            QualificationName = "Test Qualification Name",
-                            QuestionModel = new()
-                                            {
-                                                StartedQuestion = new()
-                                                                  {
-                                                                      SelectedMonth = 2,
-                                                                      SelectedYear = 2003
-                                                                  },
-                                                AwardedQuestion = new()
-                                                                  {
-                                                                      SelectedMonth = 8,
-                                                                      SelectedYear = 2004
-                                                                  }
-                                            }
-                        };
+        {
+            AwardingOrganisation = "Test Awarding Organisation",
+            QualificationName = "Test Qualification Name",
+            Option = "Before1September2014",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Question = new DateQuestionModel()
+            },
+            AwardedDate = new DateQuestionModel
+            {
+                SelectedMonth = 8,
+                SelectedYear = 2004
+            }
+        };
 
         // Act
-        GetSut().SetHelpQualificationDetailsInCookie(enquiry, viewModel);
+        GetSut().SetHelpQualificationDetailsInCookie(viewModel);
 
         // Assert
-        enquiry.QualificationStartDate.Should().Be("2/2003");
-        enquiry.QualificationAwardedDate.Should().Be("8/2004");
-        enquiry.QualificationName.Should().Be("Test Qualification Name");
-        enquiry.AwardingOrganisation.Should().Be("Test Awarding Organisation");
-
-        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(enquiry), Times.Once);
+        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.Is<HelpFormEnquiry>(e =>
+            e.QualificationStartDate == "1/1900" &&
+            e.QualificationAwardedDate == "8/2004" &&
+            e.QualificationName == "Test Qualification Name" &&
+            e.AwardingOrganisation == "Test Awarding Organisation"
+        )), Times.Once);
     }
 
     [TestMethod]
-    [DataRow(true, true, true, true, false)]
-    [DataRow(false, true, true, true, true)]
-    [DataRow(true, false, true, true, true)]
-    [DataRow(true, true, false, true, true)]
-    [DataRow(true, true, true, false, true)]
-    public void HasInvalidDates_Returns_Expected(bool sMonthValid, bool sYearValid, bool aMonthValid, bool aYearValid,
-                                                 bool expected)
+    public void SetHelpQualificationDetailsInCookie_After2014_Updates_EnquiryValues()
     {
         // Arrange
-        var validationResult = new DatesValidationResult
-                               {
-                                   StartedValidationResult = new() { MonthValid = sMonthValid, YearValid = sYearValid },
-                                   AwardedValidationResult = new() { MonthValid = aMonthValid, YearValid = aYearValid },
-                               };
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(new HelpFormEnquiry());
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            AwardingOrganisation = "Test Awarding Organisation",
+            QualificationName = "Test Qualification Name",
+            Option = "OnOrAfter1September2014",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Question = new DateQuestionModel
+                {
+                    SelectedMonth = 9,
+                    SelectedYear = 2020
+                }
+            },
+            AwardedDate = new DateQuestionModel
+            {
+                SelectedMonth = 12,
+                SelectedYear = 2022
+            }
+        };
 
         // Act
-        var result = GetSut().HasInvalidDates(validationResult);
+        GetSut().SetHelpQualificationDetailsInCookie(viewModel);
 
         // Assert
-        result.Should().Be(expected);
+        _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(It.Is<HelpFormEnquiry>(e =>
+            e.QualificationStartDate == "9/2020" &&
+            e.QualificationAwardedDate == "12/2022" &&
+            e.QualificationName == "Test Qualification Name" &&
+            e.AwardingOrganisation == "Test Awarding Organisation"
+        )), Times.Once);
     }
 
     [TestMethod]
     public void ValidateDates_Calls_QuestionModelValidator_IsValid()
     {
         // Arrange
-        var questionModel = new DatesQuestionModel();
+        var model = new QualificationDetailsPageViewModel();
         var content = new HelpQualificationDetailsPage();
 
         // Act
-        GetSut().ValidateDates(questionModel, content);
+        GetSut().ValidateDates(model, content);
 
         // Assert
-        _mockDateQuestionModelValidator.Verify(o => o.IsValid(questionModel, content), Times.Once);
+        _mockDateQuestionModelValidator.Verify(o => o.IsValid(model, content), Times.Once);
     }
 
     [TestMethod]
@@ -769,6 +810,448 @@ public class HelpServiceTests
         _mockUserJourneyCookieService.Verify(o => o.SetHelpFormEnquiry(enquiry), Times.Once);
     }
 
+    [TestMethod]
+    public void DateIsValid_Calls_QuestionModelValidator_IsValid()
+    {
+        // Arrange
+        var model = new DateQuestionModel();
+        var content = new DateQuestion();
+
+        // Act
+        GetSut().DateIsValid(model, content);
+
+        // Assert
+        _mockDateQuestionModelValidator.Verify(o => o.IsValid(model, content), Times.Once);
+    }
+
+    [TestMethod]
+    public void DateIsValid_ReturnsValidationResult()
+    {
+        // Arrange
+        var model = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2020 };
+        var content = new DateQuestion();
+        var expectedResult = new DateValidationResult { MonthValid = true, YearValid = true };
+
+        _mockDateQuestionModelValidator.Setup(o => o.IsValid(model, content))
+                                      .Returns(expectedResult);
+
+        // Act
+        var result = GetSut().DateIsValid(model, content);
+
+        // Assert
+        result.Should().BeSameAs(expectedResult);
+    }
+
+    [TestMethod]
+    public void MapDateModel_ReplacesPlaceholders_AndMapsCorrectly()
+    {
+        // Arrange
+        var model = new DateQuestionModel { SelectedMonth = 3, SelectedYear = 2021 };
+        var question = new DateQuestion
+        {
+            QuestionHint = "Test hint",
+            ErrorMessage = "Test error message with [placeholder]"
+        };
+        var validationResult = new DateValidationResult
+        {
+            MonthValid = false,
+            YearValid = true,
+            ErrorMessages = new List<string> { "Month is invalid" },
+            BannerErrorMessages = new List<BannerError>
+            {
+                new BannerError("Banner error with [placeholder]", FieldId.Month)
+            }
+        };
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s.Replace("[placeholder]", "replaced"));
+
+        // Act
+        var result = GetSut().MapDateModel(model, question, validationResult, "TestObject");
+
+        // Assert
+        result.Should().NotBeNull();
+        result.SelectedMonth.Should().Be(3);
+        result.SelectedYear.Should().Be(2021);
+        _mockPlaceholderUpdater.Verify(o => o.Replace(It.IsAny<string>()), Times.AtLeastOnce);
+    }
+
+    [TestMethod]
+    public void MapDateModel_UpdatesErrorSummaryLinksWithObjectName()
+    {
+        // Arrange
+        var model = new DateQuestionModel();
+        var question = new DateQuestion();
+        var validationResult = new DateValidationResult
+        {
+            MonthValid = false,
+            YearValid = false,
+            ErrorMessages = new List<string> { "Invalid date" },
+            BannerErrorMessages = new List<BannerError>
+            {
+                new BannerError("Month error", FieldId.Month),
+                new BannerError("Year error", FieldId.Year)
+            }
+        };
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s);
+
+        // Act
+        var result = GetSut().MapDateModel(model, question, validationResult, "AwardedDate");
+
+        // Assert
+        result.ErrorSummaryLinks.Should().Contain(e => e.ElementLinkId == "AwardedDate.SelectedMonth");
+        result.ErrorSummaryLinks.Should().Contain(e => e.ElementLinkId == "AwardedDate.SelectedYear");
+    }
+
+    [TestMethod]
+    public void AddQualificationDetailsValidationErrors_AllFieldsValid_NoErrors()
+    {
+        // Arrange
+        var model = new QualificationDetailsPageViewModel
+        {
+            QualificationName = "Valid Name",
+            AwardingOrganisation = "Valid Org",
+            Option = "Before1September2014",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2020 }
+        };
+
+        var content = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion(),
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput
+            {
+                StartedQuestion = new DateQuestion()
+            }
+        };
+
+        var modelState = new ModelStateDictionary();
+
+        var awardedValidationResult = new DateValidationResult
+        {
+            MonthValid = true,
+            YearValid = true,
+            ErrorMessages = new List<string>(),
+            BannerErrorMessages = new List<BannerError>()
+        };
+
+        _mockDateQuestionModelValidator.Setup(o => o.IsValid(model.AwardedDate, content.AwardedDateQuestion))
+                                      .Returns(awardedValidationResult);
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s);
+
+        // Act
+        GetSut().AddQualificationDetailsValidationErrors(model, content, modelState);
+
+        // Assert
+        model.Errors.Should().BeEmpty();
+        model.HasQualificationNameError.Should().BeFalse();
+        model.HasOptionError.Should().BeFalse();
+        model.HasAwardingOrganisationError.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void AddQualificationDetailsValidationErrors_QualificationNameInvalid_AddsError()
+    {
+        // Arrange
+        var model = new QualificationDetailsPageViewModel
+        {
+            QualificationNameErrorMessage = "Qualification name is required",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            Option = "Before1September2014",
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var content = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion(),
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" }
+        };
+
+        var modelState = new ModelStateDictionary();
+        modelState.AddModelError("QualificationName", "Required");
+
+        var awardedValidationResult = new DateValidationResult
+        {
+            MonthValid = true,
+            YearValid = true,
+            ErrorMessages = new List<string>(),
+            BannerErrorMessages = new List<BannerError>()
+        };
+
+        _mockDateQuestionModelValidator.Setup(o => o.IsValid(model.AwardedDate, content.AwardedDateQuestion))
+                                      .Returns(awardedValidationResult);
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s);
+
+        // Act
+        GetSut().AddQualificationDetailsValidationErrors(model, content, modelState);
+
+        // Assert
+        model.HasQualificationNameError.Should().BeTrue();
+        model.Errors.Should().Contain(e => e.ElementLinkId == "QualificationName");
+        model.Errors.Should().Contain(e => e.ErrorBannerLinkText == "Qualification name is required");
+    }
+
+    [TestMethod]
+    public void AddQualificationDetailsValidationErrors_OptionInvalid_AddsError()
+    {
+        // Arrange
+        var model = new QualificationDetailsPageViewModel
+        {
+            MissingStartedDateOptionErrorMessage = "Please select an option",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var content = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion(),
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" }
+        };
+
+        var modelState = new ModelStateDictionary();
+        modelState.AddModelError("Option", "Required");
+
+        var awardedValidationResult = new DateValidationResult
+        {
+            MonthValid = true,
+            YearValid = true,
+            ErrorMessages = new List<string>(),
+            BannerErrorMessages = new List<BannerError>()
+        };
+
+        _mockDateQuestionModelValidator.Setup(o => o.IsValid(model.AwardedDate, content.AwardedDateQuestion))
+                                      .Returns(awardedValidationResult);
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s);
+
+        // Act
+        GetSut().AddQualificationDetailsValidationErrors(model, content, modelState);
+
+        // Assert
+        model.HasOptionError.Should().BeTrue();
+        model.Errors.Should().Contain(e => e.ElementLinkId == "Before1September2014");
+        model.Errors.Should().Contain(e => e.ErrorBannerLinkText == "Please select an option");
+    }
+
+    [TestMethod]
+    public void AddQualificationDetailsValidationErrors_AwardingOrganisationInvalid_AddsError()
+    {
+        // Arrange
+        var model = new QualificationDetailsPageViewModel
+        {
+            AwardingOrganisationErrorMessage = "Awarding organisation is required",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            Option = "Before1September2014",
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var content = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion(),
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" }
+        };
+
+        var modelState = new ModelStateDictionary();
+        modelState.AddModelError("AwardingOrganisation", "Required");
+
+        var awardedValidationResult = new DateValidationResult
+        {
+            MonthValid = true,
+            YearValid = true,
+            ErrorMessages = new List<string>(),
+            BannerErrorMessages = new List<BannerError>()
+        };
+
+        _mockDateQuestionModelValidator.Setup(o => o.IsValid(model.AwardedDate, content.AwardedDateQuestion))
+                                      .Returns(awardedValidationResult);
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s);
+
+        // Act
+        GetSut().AddQualificationDetailsValidationErrors(model, content, modelState);
+
+        // Assert
+        model.HasAwardingOrganisationError.Should().BeTrue();
+        model.Errors.Should().Contain(e => e.ElementLinkId == "AwardingOrganisation");
+        model.Errors.Should().Contain(e => e.ErrorBannerLinkText == "Awarding organisation is required");
+    }
+
+    [TestMethod]
+    public void AddQualificationDetailsValidationErrors_After2014WithInvalidDates_AddsDateErrors()
+    {
+        // Arrange
+        var model = new QualificationDetailsPageViewModel
+        {
+            Option = "OnOrAfter1September2014",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Question = new DateQuestionModel { SelectedMonth = 0, SelectedYear = 2020 }
+            },
+            AwardedDate = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2020 }
+        };
+
+        var content = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion { ErrorMessage = "Invalid awarded date" },
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput
+            {
+                StartedQuestion = new DateQuestion { ErrorMessage = "Invalid started date" }
+            }
+        };
+
+        var modelState = new ModelStateDictionary();
+
+        var startedValidationResult = new DateValidationResult
+        {
+            MonthValid = false,
+            YearValid = true,
+            ErrorMessages = new List<string> { "Invalid month" },
+            BannerErrorMessages = new List<BannerError>
+            {
+                new BannerError("Month must be between 1 and 12", FieldId.Month)
+            }
+        };
+
+        var awardedValidationResult = new DateValidationResult
+        {
+            MonthValid = true,
+            YearValid = true,
+            ErrorMessages = new List<string>(),
+            BannerErrorMessages = new List<BannerError>()
+        };
+
+        var datesValidationResult = new DatesValidationResult
+        {
+            StartedValidationResult = startedValidationResult,
+            AwardedValidationResult = awardedValidationResult
+        };
+
+        _mockDateQuestionModelValidator.Setup(o => o.IsValid(model, content))
+                                      .Returns(datesValidationResult);
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s);
+
+        // Act
+        GetSut().AddQualificationDetailsValidationErrors(model, content, modelState);
+
+        // Assert
+        model.Errors.Should().NotBeEmpty();
+        model.Errors.Should().Contain(e => e.ElementLinkId.Contains("RadioButtonWithDateInputModel.Question"));
+    }
+
+    [TestMethod]
+    public void AddQualificationDetailsValidationErrors_Before2014_RemovesStartedDateFromModelState()
+    {
+        // Arrange
+        var model = new QualificationDetailsPageViewModel
+        {
+            Option = "Before1September2014",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Question = new DateQuestionModel()
+            },
+            AwardedDate = new DateQuestionModel { SelectedMonth = 5, SelectedYear = 2020 }
+        };
+
+        var content = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion(),
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" }
+        };
+
+        var modelState = new ModelStateDictionary();
+        modelState.AddModelError("RadioButtonWithDateInputModel.Question.SelectedMonth", "Some error");
+        modelState.AddModelError("RadioButtonWithDateInputModel.Question.SelectedYear", "Some error");
+
+        var awardedValidationResult = new DateValidationResult
+        {
+            MonthValid = true,
+            YearValid = true,
+            ErrorMessages = new List<string>(),
+            BannerErrorMessages = new List<BannerError>()
+        };
+
+        _mockDateQuestionModelValidator.Setup(o => o.IsValid(model.AwardedDate, content.AwardedDateQuestion))
+                                      .Returns(awardedValidationResult);
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s);
+
+        // Act
+        GetSut().AddQualificationDetailsValidationErrors(model, content, modelState);
+
+        // Assert
+        modelState.Should().NotContainKey("RadioButtonWithDateInputModel.Question.SelectedMonth");
+        modelState.Should().NotContainKey("RadioButtonWithDateInputModel.Question.SelectedYear");
+    }
+
+    [TestMethod]
+    public void AddQualificationDetailsValidationErrors_MultipleErrors_AddsAllErrors()
+    {
+        // Arrange
+        var model = new QualificationDetailsPageViewModel
+        {
+            QualificationNameErrorMessage = "Name required",
+            AwardingOrganisationErrorMessage = "Organisation required",
+            MissingStartedDateOptionErrorMessage = "Option required",
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var content = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion(),
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" }
+        };
+
+        var modelState = new ModelStateDictionary();
+        modelState.AddModelError("QualificationName", "Required");
+        modelState.AddModelError("AwardingOrganisation", "Required");
+        modelState.AddModelError("Option", "Required");
+
+        var awardedValidationResult = new DateValidationResult
+        {
+            MonthValid = false,
+            YearValid = false,
+            ErrorMessages = new List<string> { "Invalid date" },
+            BannerErrorMessages = new List<BannerError>
+            {
+                new BannerError("Date error", FieldId.Month)
+            }
+        };
+
+        _mockDateQuestionModelValidator.Setup(o => o.IsValid(model.AwardedDate, content.AwardedDateQuestion))
+                                      .Returns(awardedValidationResult);
+
+        _mockPlaceholderUpdater.Setup(o => o.Replace(It.IsAny<string>()))
+                               .Returns<string>(s => s);
+
+        // Act
+        GetSut().AddQualificationDetailsValidationErrors(model, content, modelState);
+
+        // Assert
+        model.Errors.Count.Should().BeGreaterThan(0);
+        model.HasQualificationNameError.Should().BeTrue();
+        model.HasAwardingOrganisationError.Should().BeTrue();
+        model.HasOptionError.Should().BeTrue();
+        model.Errors.Should().Contain(e => e.ElementLinkId == "QualificationName");
+        model.Errors.Should().Contain(e => e.ElementLinkId == "AwardingOrganisation");
+        model.Errors.Should().Contain(e => e.ElementLinkId == "Before1September2014");
+    }
+
     private HelpService GetSut()
     {
         return new HelpService(
@@ -781,7 +1264,8 @@ public class HelpServiceTests
                                _mockHelpProvideDetailsPageMapper.Object,
                                _mockHelpEmailAddressPageMapper.Object,
                                _mockHelpConfirmationPageMapper.Object,
-                               _mockStaticPageMapper.Object
+                               _mockStaticPageMapper.Object,
+                               _mockPlaceholderUpdater.Object
                               );
     }
 }

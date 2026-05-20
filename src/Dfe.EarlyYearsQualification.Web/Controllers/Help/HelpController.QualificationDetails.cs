@@ -16,8 +16,6 @@ public partial class HelpController
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = new QualificationDetailsPageViewModel();
-
         var enquiry = helpService.GetHelpFormEnquiry();
 
         if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
@@ -26,10 +24,9 @@ public partial class HelpController
             return RedirectToAction("GetHelp", "Help");
         }
 
-        // set any previously entered qualification details from cookie
-        helpService.SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel);
+        var viewModel = helpService.MapHelpQualificationDetailsPageContentToViewModel(new QualificationDetailsPageViewModel(), content);
 
-        viewModel = helpService.MapHelpQualificationDetailsPageContentToViewModel(viewModel, content, null, ModelState);
+        helpService.SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
 
         return View("QualificationDetails", viewModel);
     }
@@ -45,38 +42,16 @@ public partial class HelpController
             return RedirectToAction("Index", "Error");
         }
 
-        var datesValidationResult = helpService.ValidateDates(model.QuestionModel, content);
+        model = helpService.MapHelpQualificationDetailsPageContentToViewModel(model, content);
 
-        if (datesValidationResult.StartedValidationResult is null)
+        helpService.AddQualificationDetailsValidationErrors(model, content, ModelState);
+
+        if (!ModelState.IsValid || model.Errors.Any())
         {
-            // optional date fields not provided so remove the required validation
-            ModelState.Remove("QuestionModel.StartedQuestion.SelectedMonth");
-            ModelState.Remove("QuestionModel.StartedQuestion.SelectedYear");
-        }
-
-        var hasInvalidDates = helpService.HasInvalidDates(datesValidationResult);
-
-        if (!ModelState.IsValid || hasInvalidDates)
-        {
-            model.HasQualificationNameError = ModelState.Keys.Any(_ => ModelState["QualificationName"]?.Errors.Count > 0);
-            model.HasAwardingOrganisationError = ModelState.Keys.Any(_ => ModelState["AwardingOrganisation"]?.Errors.Count > 0);
-            model.QuestionModel.HasErrors = hasInvalidDates;
-
-            helpService.MapHelpQualificationDetailsPageContentToViewModel(model, content, datesValidationResult, ModelState);
-
             return View("QualificationDetails", model);
         }
 
-        // valid submit 
-        var enquiry = helpService.GetHelpFormEnquiry();
-
-        if (string.IsNullOrEmpty(enquiry.ReasonForEnquiring))
-        {
-            logger.LogError("Help form enquiry reason is empty");
-            return RedirectToAction("GetHelp", "Help");
-        }
-
-        helpService.SetHelpQualificationDetailsInCookie(enquiry, model);
+        helpService.SetHelpQualificationDetailsInCookie(model);
 
         return RedirectToAction(nameof(ProvideDetails));
     }

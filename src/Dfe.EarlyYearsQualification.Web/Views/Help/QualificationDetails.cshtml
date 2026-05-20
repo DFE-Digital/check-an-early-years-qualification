@@ -4,6 +4,11 @@
     ViewData["Title"] = Model.Heading;
 }
 
+@section Scripts
+{
+    <script src="~/js/pages/components/radio-button-with-nested-input.js" asp-append-version="true"></script>
+}
+
 @section BeforeMainContent {
     @{
         await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
@@ -39,31 +44,70 @@
         </div>
     </div>
 
-    @if (Model.QuestionModel.StartedQuestion is not null)
-    {
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                @{ 
-                    await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.StartedQuestion); 
-                }
-            </div>
-        </div>
-    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
+            <div class="govuk-form-group @(Model is { HasOptionError: true } ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset govuk-!-margin-bottom-4">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h2 class="govuk-label govuk-label--s" for="question">
+                            @Model.RadioButtonWithDateInputModel.Question.QuestionHeader
+                        </h2>
+                    </legend>
+ 
+                    @if (Model.HasOptionError)
+                    {
+                        <govuk-error-message id="option-error" visually-hidden-text="Error">@Model.MissingStartedDateOptionErrorMessage</govuk-error-message>
+                    }
 
-    @if (Model.QuestionModel.AwardedQuestion is not null)
-    {
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                @{
-                    await Html.RenderPartialAsync("Partials/Date", Model.QuestionModel.AwardedQuestion);
-                }
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            @Html.RadioButtonFor(x => x.Option, Model.Before2014Option.Value, new { @class = "govuk-radios__input", id = Model.Before2014Option.Value, })
+                            <label class="govuk-label govuk-radios__label" for="@Model.Before2014Option.Value">
+                                @Model.Before2014Option.Label
+                            </label>
+                            @if (!string.IsNullOrEmpty(Model.Before2014Option.Hint))
+                            {
+                                var hintId = $"{Model.Before2014Option.Value}_hint";
+                                <div id="@hintId" class="govuk-hint govuk-radios__hint">
+                                    @Model.Before2014Option.Hint
+                                </div>
+                            }
+                        </div>
+                        <div class="govuk-radios__item">
+                            @Html.RadioButtonFor(x => x.Option, Model.RadioButtonWithDateInputModel.Value, new { @class = $"govuk-radios__input", id = Model.RadioButtonWithDateInputModel.Value, nested = "true" })
+                            <label class="govuk-label govuk-radios__label" for="@Model.RadioButtonWithDateInputModel.Value">
+                                @Model.RadioButtonWithDateInputModel.Label
+                            </label>
+                            @if (!string.IsNullOrEmpty(Model.RadioButtonWithDateInputModel.Hint))
+                            {
+                                <div id="@($"{Model.RadioButtonWithDateInputModel.Value}_hint")" class="govuk-hint govuk-radios__hint">
+                                    @Model.RadioButtonWithDateInputModel.Hint
+                                </div>
+                            }
+                        </div>
+                        <div class="govuk-radios__conditional govuk-!-margin-bottom-0 govuk-!-display-none">
+                            <div class="govuk-form-group">
+                                @{
+                                    await Html.RenderPartialAsync("Partials/Date", Model.RadioButtonWithDateInputModel.Question);
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
         </div>
-    }
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @{
+                await Html.RenderPartialAsync("Partials/Date", Model.AwardedDate);
+            }
+        </div>
+    </div>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full govuk-grid-column-two-thirds-from-desktop">
-
             <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasAwardingOrganisationError ? "govuk-form-group--error" : "")">
                 <h2 class="govuk-label-wrapper govuk-!-margin-bottom-3" id="awarding-organisation-heading">
                     <label class="govuk-label govuk-label--s" for="AwardingOrganisation">

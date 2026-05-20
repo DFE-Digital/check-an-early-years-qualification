@@ -970,25 +970,7 @@ public class MockContentfulService : IContentService
                 AwardingOrganisationErrorMessage = "Enter the awarding organisation",
                 ErrorBannerHeading = ThereIsAProblem,
                 AwardedDateIsAfterStartedDateErrorText = "The awarded date must be after the started date",
-                StartDateQuestion = new DateQuestion
-                {
-                    MonthLabel = "Month",
-                    YearLabel = "Year",
-                    QuestionHeader = "Start date (optional)",
-                    QuestionHint = "Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.",
-                    ErrorBannerLinkText = MissingMonthAndYearStartedError,
-                    ErrorMessage = MissingMonthAndYearStartedError,
-                    FutureDateErrorBannerLinkText = FutureStartedDateError,
-                    FutureDateErrorMessage = FutureStartedDateError,
-                    MissingMonthErrorMessage = MissingMonthStartedDateError,
-                    MissingYearErrorMessage = MissingYearStartedDateError,
-                    MissingMonthBannerLinkText = MissingMonthStartedDateError,
-                    MissingYearBannerLinkText = MissingYearStartedDateError,
-                    MonthOutOfBoundsErrorLinkText = MonthOutOfBoundsStartedDateError,
-                    MonthOutOfBoundsErrorMessage = MonthOutOfBoundsStartedDateError,
-                    YearOutOfBoundsErrorLinkText = YearOutOfBoundsStartedDateError,
-                    YearOutOfBoundsErrorMessage = YearOutOfBoundsStartedDateError
-                },
+                MissingStartedDateOptionErrorMessage = "Select when the qualification was started",
                 AwardedDateQuestion = new DateQuestion
                 {
                     MonthLabel = "Month",
@@ -1007,6 +989,37 @@ public class MockContentfulService : IContentService
                     MonthOutOfBoundsErrorMessage = "The month the qualification was awarded must be between 1 and 12",
                     YearOutOfBoundsErrorLinkText = "The year the qualification was awarded must be between 1900 and $[actual-year]$",
                     YearOutOfBoundsErrorMessage = "The year the qualification was awarded must be between 1900 and $[actual-year]$"
+                },
+                BeforeSeptember2014Option = new()
+                {
+                    Label = "Before 1 September 2014",
+                    Value = "Before1September2014"
+                },
+                AfterSeptember2014Option = new()
+                {
+                    Label = "On or after 1 September 2014",
+                    Value = "OnOrAfter1September2014",
+                    StartedQuestion = new()
+                    {
+                        MonthLabel = "Month",
+                        YearLabel = "Year",
+                        QuestionHeader = "Start date",
+                        QuestionHint = "Enter the specific start date. For example 9 2014.",
+                        ErrorBannerLinkText = "Enter the month and the year that the qualification was started",
+                        ErrorMessage = "Enter the month and the year that the qualification was started",
+                        FutureDateErrorBannerLinkText = "The date the qualification was awarded must be in the past",
+                        FutureDateErrorMessage = "The date the qualification was started must be in the past",
+                        MissingMonthErrorMessage = "Enter the month that the qualification was started",
+                        MissingYearErrorMessage = "Enter the month that the qualification was started",
+                        MissingMonthBannerLinkText = "Enter the year that the qualification was started",
+                        MissingYearBannerLinkText = "Enter the year that the qualification was started",
+                        MonthOutOfBoundsErrorLinkText = "The month the qualification was started must be between 1 and 12",
+                        MonthOutOfBoundsErrorMessage = "The month the qualification was started must be between 1 and 12",
+                        YearOutOfBoundsErrorLinkText = "The year the qualification was started must be between 1900 and $[actual-year]$",
+                        YearOutOfBoundsErrorMessage = "The year the qualification was started must be between 1900 and $[actual-year]$",
+                        DateAfterSeptember2014ErrorLinkText = "The date the qualification was started must be on or after September 2014. If it was started before, select Before 1 September 2014",
+                        DateAfterSeptember2014ErrorMessage = "The date the qualification was started must be on or after September 2014. If it was started before, select Before 1 September 2014",
+                    }
                 }
             }
         );

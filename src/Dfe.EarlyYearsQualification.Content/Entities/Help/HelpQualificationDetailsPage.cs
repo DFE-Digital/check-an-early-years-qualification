@@ -22,7 +22,11 @@ public class HelpQualificationDetailsPage
 
     public string AwardedDateIsAfterStartedDateErrorText { get; init; } = string.Empty;
 
-    public DateQuestion StartDateQuestion { get; init; } = new();
-
     public DateQuestion AwardedDateQuestion { get; init; } = new();
+
+    public string MissingStartedDateOptionErrorMessage { get; init; } = string.Empty;
+
+    public Option BeforeSeptember2014Option { get; init; } = new();
+
+    public RadioButtonAndDateInput AfterSeptember2014Option { get; init; } = new();
 }
