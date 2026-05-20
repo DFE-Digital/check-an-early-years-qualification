@@ -1,4 +1,5 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Filters;
+using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Validators;
 using Dfe.EarlyYearsQualification.Mock.Content;
@@ -14,6 +15,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IQualificationListFilter, QualificationListFilter>();
         services.AddSingleton<IContentService, MockContentfulService>();
         services.AddSingleton<IQualificationsRepository, MockQualificationsRepository>();
+        services.AddScoped<IQualificationDownloadService, ContentfulQualificationDownloadService>();
         return services;
     }
 }

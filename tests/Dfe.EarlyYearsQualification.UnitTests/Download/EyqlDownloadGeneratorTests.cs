@@ -43,7 +43,7 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,QualificationName,QualificationLevel,StaffChildRatio,AwardingOrganisation,FromWhichYear,ToWhichYear,QualificationNumber,AdditionalRequirements
+                           Tab,Qualification name,Qualification level,Staff child ratio,Awarding organisation,From which year,To which year,Qualification number,Additional requirements
                            Pre-September 2014,Qualification 1,3,3,AO 1,2014,2015,ABC-123-DEF,No additional requirements
                            Post-September 2014,Qualification 1,3,3,AO 1,2014,2015,ABC-123-DEF,No additional requirements
                            """);
@@ -103,7 +103,7 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,QualificationName,QualificationLevel,StaffChildRatio,AwardingOrganisation,FromWhichYear,ToWhichYear,QualificationNumber,AdditionalRequirements
+                           Tab,Qualification name,Qualification level,Staff child ratio,Awarding organisation,From which year,To which year,Qualification number,Additional requirements
                            Pre-September 2014,Qualification 1,3,3,AO 1,2014,2015,ABC-123-DEF,No additional requirements
                            Post-September 2014,New Qualification,4,3,AO 2,2015,2016,ABC-123-DEF,No additional requirements
                            Post-September 2024,New Qualification,3,3,AO 1,2015,2024,ABC-123-DEF,No additional requirements
@@ -135,7 +135,7 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,QualificationName,QualificationLevel,StaffChildRatio,AwardingOrganisation,FromWhichYear,ToWhichYear,QualificationNumber,AdditionalRequirements
+                           Tab,Qualification name,Qualification level,Staff child ratio,Awarding organisation,From which year,To which year,Qualification number,Additional requirements
                            Pre-September 2014,Qualification 1,3,3,AO 1,2014,2015,ABC-123-DEF,"No additional requirements, nothing"
                            """);
     }
@@ -164,7 +164,7 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,QualificationName,QualificationLevel,StaffChildRatio,AwardingOrganisation,FromWhichYear,ToWhichYear,QualificationNumber,AdditionalRequirements
+                           Tab,Qualification name,Qualification level,Staff child ratio,Awarding organisation,From which year,To which year,Qualification number,Additional requirements
                            Pre-September 2014,Qualification 1,3,3,AO 1,2014,2015,ABC-123-DEF,"No additional requirements "" nothing"
                            """);
     }
@@ -193,7 +193,7 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,QualificationName,QualificationLevel,StaffChildRatio,AwardingOrganisation,FromWhichYear,ToWhichYear,QualificationNumber,AdditionalRequirements
+                           Tab,Qualification name,Qualification level,Staff child ratio,Awarding organisation,From which year,To which year,Qualification number,Additional requirements
                            Pre-September 2014,Qualification 1,3,3,AO 1,2014,2015,ABC-123-DEF,"No additional requirements 
                             nothing"
                            """);

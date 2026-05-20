@@ -39,7 +39,7 @@ public class EyqlDownloadGenerator : IDownloadGenerator
         orderedQualifications = orderedQualifications.OrderBy(x => x.EyqlTabs[0].Order).ThenBy(x => x.QualificationName)
                                                      .ToList();
         const string headers =
-            "Tab,QualificationName,QualificationLevel,StaffChildRatio,AwardingOrganisation,FromWhichYear,ToWhichYear,QualificationNumber,AdditionalRequirements";
+            "Tab,Qualification name,Qualification level,Staff child ratio,Awarding organisation,From which year,To which year,Qualification number,Additional requirements";
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(headers);
         foreach (var qualification in orderedQualifications)

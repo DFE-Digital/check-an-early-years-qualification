@@ -34,34 +34,47 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient(ContentfulClientHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(ConfigureHttpMessageHandler);
 
-        services.TryAddScoped(ContentfulClientFactory);
+        services.TryAddKeyedScoped<IContentfulClient>(Clients.ContentfulDefaultClient, (sp, _) => ContentfulClientFactory(sp));
 
         services.AddTransient<HtmlRenderer>();
 
         SetupContentOptionsManagement(services, configuration);
 
-        services.AddKeyedTransient<IContentfulClient, ContentfulClient>(Clients.ContentfulDeliveryClientNoCache, (sp, _) =>
-                                                      {
-                                                          var options =
-                                                              sp.GetService<IOptions<ContentfulOptions>>()!
-                                                                .Value;
-                                                          options.UsePreviewApi = false;
-                                                          var client = sp.GetService<HttpClient>();
-                                                          return new ContentfulClient(client, options);
-                                                      });
+        services.TryAddKeyedScoped<IContentfulClient>(Clients.ContentfulDeliveryClientNoCache, (sp,_) =>
+                                                                        {
+                                                                            var options =
+                                                                                sp.GetService<IOptions<ContentfulOptions>>()!
+                                                                                    .Value;
+                                                                            var client = sp.GetService<HttpClient>();
+                                                                            return
+                                                                                new ContentfulClient(client, OverrideUsePreviewApi(options, false));
+                                                                        });
         
         services.TryAddTransient<IContentfulManagementClient>(sp =>
                                                               {
                                                                   var options =
                                                                       sp.GetService<IOptions<ContentfulOptions>>()!
                                                                         .Value;
-                                                                  options.UsePreviewApi = false;
                                                                   var client = sp.GetService<HttpClient>();
                                                                   return
-                                                                      new ContentfulManagementClient(client, options);
+                                                                      new ContentfulManagementClient(client, OverrideUsePreviewApi(options, false));
                                                               });
 
         return services;
+    }
+
+    private static ContentfulOptions OverrideUsePreviewApi(ContentfulOptions existingOptions, bool usePreviewApi)
+    {
+        return new ContentfulOptions
+               {
+                   DeliveryApiKey = existingOptions.DeliveryApiKey,
+                   PreviewApiKey = existingOptions.PreviewApiKey,
+                   ManagementApiKey = existingOptions.ManagementApiKey,
+                   MaxNumberOfRateLimitRetries = existingOptions.MaxNumberOfRateLimitRetries,
+                   SpaceId = existingOptions.SpaceId,
+                   Environment = existingOptions.Environment,
+                   UsePreviewApi = usePreviewApi
+               };
     }
 
     private static IContentfulClient ContentfulClientFactory(IServiceProvider sp)

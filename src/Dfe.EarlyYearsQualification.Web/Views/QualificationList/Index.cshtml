@@ -1,4 +1,3 @@
-@using Dfe.EarlyYearsQualification.Content.Entities
 @using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
 @model Dfe.EarlyYearsQualification.Web.Models.Content.EarlyYearsQualificationListModel
 
@@ -22,10 +21,12 @@
     <div class="govuk-grid-column-full">
         <h1 id="heading" class="govuk-heading-xl">@Model.Heading</h1>
         <div id="body" class="govuk-body">
-            <div class="govuk-!-margin-bottom-7" id="post-heading-content">
+            <div id="post-heading-content">
                 @Html.Raw(Model.PostHeadingContent)
+                <h2 id="download-heading" class="govuk-heading-m">@Model.DownloadHeading</h2>
+                @Html.Raw(Model.DownloadSectionContent)
             </div>
-            @* @Html.ActionLink("Download", "Download", "QualificationList", new { @class ="govuk-button" }) *@
+            @Html.ActionLink(Model.DownloadButtonText, "Download", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary" })
         </div>
     </div>
 </div>

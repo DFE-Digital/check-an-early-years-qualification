@@ -1,18 +1,20 @@
 ﻿using Contentful.Core;
 using Contentful.Core.Models;
 using Contentful.Core.Search;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Converters;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Validators;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentService(
     ILogger<ContentfulContentService> logger,
-    IContentfulClient contentfulClient,
+    [FromKeyedServices(Clients.ContentfulDefaultClient)]IContentfulClient contentfulClient,
     IDateValidator dateValidator)
     : ContentfulContentServiceBase(logger, contentfulClient), IContentService
 {

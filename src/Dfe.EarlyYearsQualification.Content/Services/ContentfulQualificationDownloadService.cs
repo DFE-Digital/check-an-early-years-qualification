@@ -44,7 +44,9 @@ public class ContentfulQualificationDownloadService(
             var managementAsset = CreateManagementAsset();
             var uploadedAsset = await contentfulManagementClient.UploadFileAndCreateAsset(managementAsset, Encoding.UTF8.GetBytes(content));
             var currentVersion = uploadedAsset?.SystemProperties.Version ?? Version;
-            await contentfulManagementClient.PublishAsset(Assets.EarlyYearsQualificationList, currentVersion + 1);
+            // Allows for the Contentful background process to complete
+            Thread.Sleep(4000); 
+            await contentfulManagementClient.PublishAsset(Assets.EarlyYearsQualificationList, currentVersion+1);
         }
         catch (Exception e)
         {

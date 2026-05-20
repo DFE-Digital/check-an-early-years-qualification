@@ -1386,6 +1386,8 @@ public class MockContentfulServiceTests
         result.Should().BeAssignableTo<WebViewPage>();
         result.Heading.Should().NotBeNullOrEmpty();
         result.Heading.Should().Be("Early Years Qualification List");
+        result.DownloadHeading.Should().Be("Download the early years qualification list");
+        result.DownloadSectionContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("The download section content"));
         result.DownloadButtonText.Should().Be("Download qualification list");
         result.QualificationLevelLabel.Should().Be("Qualification level");
         result.StaffChildRatioLabel.Should().Be("Staff:child ratios");

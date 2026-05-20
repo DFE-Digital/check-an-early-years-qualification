@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Filters;
+using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Validators;
 using Dfe.EarlyYearsQualification.Mock.Content;
@@ -32,7 +33,7 @@ public class MockContentfulSetupTests
         // ReSharper disable once InvokeAsExtensionMethod
         _ = ServiceCollectionExtensions.AddMockContentfulServices(services.Object);
 
-        serviceList.Count.Should().Be(4);
+        serviceList.Count.Should().Be(5);
 
         var dateValidatorService = serviceList[0];
         dateValidatorService.ImplementationType.Should().Be<DateValidator>();
@@ -53,5 +54,10 @@ public class MockContentfulSetupTests
         repositoryService.ImplementationType.Should().Be<MockQualificationsRepository>();
         repositoryService.ServiceType.Should().Be<IQualificationsRepository>();
         repositoryService.Lifetime.Should().Be(ServiceLifetime.Singleton);
+        
+        var contentfulDownloadService = serviceList[4];
+        contentfulDownloadService.ImplementationType.Should().Be<ContentfulQualificationDownloadService>();
+        contentfulDownloadService.ServiceType.Should().Be<IQualificationDownloadService>();
+        contentfulDownloadService.Lifetime.Should().Be(ServiceLifetime.Scoped);
     }
 }

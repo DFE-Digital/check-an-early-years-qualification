@@ -111,13 +111,13 @@ public class ServiceCollectionExtensionsTests
 
         VerifyService<HttpClient, HttpClient>(services, ServiceLifetime.Singleton);
 
-        VerifyService<IContentfulClient, ContentfulClient>(services, ServiceLifetime.Scoped);
-
         VerifyService<HtmlRenderer, HtmlRenderer>(services, ServiceLifetime.Transient);
         
         VerifyService<IContentfulManagementClient, ContentfulManagementClient>(services, ServiceLifetime.Transient);
         
-        VerifyService<IContentfulClient, ContentfulClient>(services, ServiceLifetime.Transient, Clients.ContentfulDeliveryClientNoCache);
+        VerifyService<IContentfulClient, ContentfulClient>(services, ServiceLifetime.Scoped, Clients.ContentfulDefaultClient);
+        
+        VerifyService<IContentfulClient, ContentfulClient>(services, ServiceLifetime.Scoped, Clients.ContentfulDeliveryClientNoCache);
     }
 
     /// <summary>
