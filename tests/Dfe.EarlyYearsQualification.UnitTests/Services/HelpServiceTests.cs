@@ -336,6 +336,265 @@ public class HelpServiceTests
     }
 
     [TestMethod]
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_UsesQualificationStartedFromCookie_WhenEnquiryStartDateIsEmpty()
+    {
+        // Arrange
+        var content = new HelpQualificationDetailsPage
+        {
+            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
+            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+        };
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Value = "OnOrAfter1September2014",
+                Question = new DateQuestionModel()
+            },
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var enquiry = new HelpFormEnquiry
+        {
+            AwardingOrganisation = "Test Organisation",
+            QualificationName = "Test Qualification",
+            QualificationStartDate = "",
+            QualificationAwardedDate = ""
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((9, 2018));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((6, 2020));
+
+        // Act
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
+
+        // Assert
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth.Should().Be(9);
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear.Should().Be(2018);
+        viewModel.AwardedDate.SelectedMonth.Should().Be(6);
+        viewModel.AwardedDate.SelectedYear.Should().Be(2020);
+        viewModel.Option.Should().Be(content.AfterSeptember2014Option.Value);
+    }
+
+    [TestMethod]
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_PrioritizesEnquiryStartDate_OverCookieStartDate()
+    {
+        // Arrange
+        var content = new HelpQualificationDetailsPage
+        {
+            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
+            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+        };
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Value = "OnOrAfter1September2014",
+                Question = new DateQuestionModel()
+            },
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var enquiry = new HelpFormEnquiry
+        {
+            AwardingOrganisation = "Test Organisation",
+            QualificationName = "Test Qualification",
+            QualificationStartDate = "11/2019",
+            QualificationAwardedDate = "7/2021"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((9, 2018));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((6, 2020));
+
+        // Act
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
+
+        // Assert
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth.Should().Be(11);
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear.Should().Be(2019);
+        viewModel.AwardedDate.SelectedMonth.Should().Be(7);
+        viewModel.AwardedDate.SelectedYear.Should().Be(2021);
+        viewModel.Option.Should().Be(content.AfterSeptember2014Option.Value);
+    }
+
+    [TestMethod]
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_HandlesCookieStartDateBefore2014_SetsCorrectOption()
+    {
+        // Arrange
+        var content = new HelpQualificationDetailsPage
+        {
+            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
+            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+        };
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Value = "OnOrAfter1September2014",
+                Question = new DateQuestionModel()
+            },
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var enquiry = new HelpFormEnquiry
+        {
+            QualificationStartDate = "",
+            QualificationAwardedDate = "",
+            AwardingOrganisation = "Test Organisation",
+            QualificationName = "Test Qualification"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((8, 2014));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((12, 2016));
+
+        // Act
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
+
+        // Assert
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth.Should().BeNull();
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear.Should().BeNull();
+        viewModel.Option.Should().Be(content.BeforeSeptember2014Option.Value);
+        viewModel.AwardedDate.SelectedMonth.Should().Be(12);
+        viewModel.AwardedDate.SelectedYear.Should().Be(2016);
+    }
+
+    [TestMethod]
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_HandlesNullCookieDates_WhenEnquiryDatesEmpty()
+    {
+        // Arrange
+        var content = new HelpQualificationDetailsPage
+        {
+            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
+            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+        };
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Value = "OnOrAfter1September2014",
+                Question = new DateQuestionModel()
+            },
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var enquiry = new HelpFormEnquiry
+        {
+            QualificationStartDate = "",
+            QualificationAwardedDate = "",
+            AwardingOrganisation = "Test Organisation",
+            QualificationName = "Test Qualification"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns(((int?)null, (int?)null));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns(((int?)null, (int?)null));
+
+        // Act
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
+
+        // Assert
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth.Should().BeNull();
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear.Should().BeNull();
+        viewModel.AwardedDate.SelectedMonth.Should().BeNull();
+        viewModel.AwardedDate.SelectedYear.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_EnquiryDateOnBoundary_September2014_SetsAfter2014Option()
+    {
+        // Arrange
+        var content = new HelpQualificationDetailsPage
+        {
+            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
+            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+        };
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Value = "OnOrAfter1September2014",
+                Question = new DateQuestionModel()
+            },
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var enquiry = new HelpFormEnquiry
+        {
+            QualificationStartDate = "9/2014",
+            QualificationAwardedDate = "12/2016",
+            AwardingOrganisation = "Test Organisation",
+            QualificationName = "Test Qualification"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
+
+        // Act
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
+
+        // Assert
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth.Should().Be(9);
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear.Should().Be(2014);
+        viewModel.Option.Should().Be(content.AfterSeptember2014Option.Value);
+        viewModel.AwardedDate.SelectedMonth.Should().Be(12);
+        viewModel.AwardedDate.SelectedYear.Should().Be(2016);
+    }
+
+    [TestMethod]
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie_CookieDateOnBoundary_August2014_SetsBefore2014Option()
+    {
+        // Arrange
+        var content = new HelpQualificationDetailsPage
+        {
+            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
+            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+        };
+
+        var viewModel = new QualificationDetailsPageViewModel
+        {
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel
+            {
+                Value = "OnOrAfter1September2014",
+                Question = new DateQuestionModel()
+            },
+            Before2014Option = new OptionModel { Value = "Before1September2014" },
+            AwardedDate = new DateQuestionModel()
+        };
+
+        var enquiry = new HelpFormEnquiry
+        {
+            QualificationStartDate = "",
+            QualificationAwardedDate = "",
+            AwardingOrganisation = "Test Organisation",
+            QualificationName = "Test Qualification"
+        };
+
+        _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((8, 2014));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((10, 2016));
+
+        // Act
+        GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
+
+        // Assert
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth.Should().BeNull();
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear.Should().BeNull();
+        viewModel.Option.Should().Be(content.BeforeSeptember2014Option.Value);
+    }
+
+    [TestMethod]
     public void MapHelpQualificationDetailsPageContentToViewModel_Calls_Mapper()
     {
         // Arrange

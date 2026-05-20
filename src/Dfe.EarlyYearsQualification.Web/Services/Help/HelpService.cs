@@ -120,40 +120,47 @@ public class HelpService(
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content)
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
-
         viewModel.AwardingOrganisation = enquiry.AwardingOrganisation;
         viewModel.QualificationName = enquiry.QualificationName;
 
+        var qualificationStarted = userJourneyCookieService.GetWhenWasQualificationStarted();
+        int? startMonth = qualificationStarted.startMonth;
+        int? startYear = qualificationStarted.startYear;
+
         if (!string.IsNullOrEmpty(enquiry.QualificationStartDate))
         {
-            var (startMonth, startYear) = StringDateHelper.SplitDate(enquiry.QualificationStartDate);
+            var (enquiryMonth, enquiryYear) = StringDateHelper.SplitDate(enquiry.QualificationStartDate);
+            startMonth = enquiryMonth;
+            startYear = enquiryYear;
+        }
 
-            if (startMonth is not null && startYear is not null)
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth = startMonth;
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear = startYear;
+
+        if (startMonth is not null && startYear is not null)
+        {
+            var date = new DateOnly(startYear.Value, startMonth.Value, 1);
+            if (date < new DateOnly(2014, 9, 1))
             {
-                var date = new DateOnly(startYear.Value, startMonth.Value, 1);
-                if (date < new DateOnly(2014, 9, 1))
-                {
-                    viewModel.Option = content.BeforeSeptember2014Option.Value;
-                }
-                else
-                {
-                    viewModel.Option = viewModel.RadioButtonWithDateInputModel.Value;
-
-                    if (viewModel.RadioButtonWithDateInputModel.Question is not null)
-                    {
-                        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth = startMonth.Value;
-                        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear = startYear.Value;
-                    }
-                }
+                viewModel.Option = content.BeforeSeptember2014Option.Value;
+                viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth = null;
+                viewModel.RadioButtonWithDateInputModel.Question.SelectedYear = null;
+            }
+            else
+            {
+                viewModel.Option = viewModel.RadioButtonWithDateInputModel.Value;
             }
         }
 
+        var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        viewModel.AwardedDate.SelectedMonth = qualificationAwarded.startMonth;
+        viewModel.AwardedDate.SelectedYear = qualificationAwarded.startYear;
+
         if (!string.IsNullOrEmpty(enquiry.QualificationAwardedDate))
         {
-            var enquiryAwarded = StringDateHelper.SplitDate(enquiry.QualificationAwardedDate);
-
-            viewModel.AwardedDate.SelectedMonth = enquiryAwarded.startMonth;
-            viewModel.AwardedDate.SelectedYear = enquiryAwarded.startYear;
+            var (awardedMonth, awardedYear) = StringDateHelper.SplitDate(enquiry.QualificationAwardedDate);
+            viewModel.AwardedDate.SelectedMonth = awardedMonth;
+            viewModel.AwardedDate.SelectedYear = awardedYear;
         }
     }
 
