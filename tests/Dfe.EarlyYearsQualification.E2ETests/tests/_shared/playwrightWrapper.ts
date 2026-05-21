@@ -298,10 +298,10 @@ export async function whenWasQualificationAwarded(page: Page, awardedMonth: stri
 export async function InputQualificationStartedAndAwardedDetailsOnHelpPage(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
     await checkUrl(page, '/help/qualification-details');
     await attributeContains(page, "#back-button", 'href', '/help/get-help');
-    await page.locator("#QuestionModel\\.StartedQuestion\\.SelectedMonth").fill(startedMonth);
-    await page.locator("#QuestionModel\\.StartedQuestion\\.SelectedYear").fill(startedYear);
-    await page.locator("#QuestionModel\\.AwardedQuestion\\.SelectedMonth").fill(awardedMonth);
-    await page.locator("#QuestionModel\\.AwardedQuestion\\.SelectedYear").fill(awardedYear);
+    await page.locator("#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth").fill(startedMonth);
+    await page.locator("#RadioButtonWithDateInputModel\\.Question\\.SelectedYear").fill(startedYear);
+    await page.locator("#AwardedDate\\.SelectedMonth").fill(awardedMonth);
+    await page.locator("#AwardedDate\\.SelectedYear").fill(awardedYear);
     await clickSubmit(page);
 }
 
@@ -483,4 +483,53 @@ export async function clickSubmit(page: Page) {
 export async function clickSubmitAndCheckSnapshot(page: Page) {
     await clickSubmit(page);
     await checkSnapshot(page);
+}
+
+// Help functions to reduce duplication
+export async function checkNoErrorsPresent(page: Page) {
+    await doesNotExist(page, ".govuk-error-summary");
+    await doesNotExist(page, "#started-error");
+    await doesNotExist(page, "#awarded-error");
+    await doesNotHaveClass(page, ".govuk-form-group", /govuk-form-group--error/, 0);
+}
+
+export async function checkErrorSummary(page: Page) {
+    await isVisible(page, ".govuk-error-summary");
+    await checkText(page, ".govuk-error-summary__title", "There is a problem");
+}
+
+export async function fillQualificationDates(page: Page, startMonth: string, startYear: string, awardMonth: string, awardYear: string) {
+    await page.click("#OnOrAfter1September2014");
+    if (startMonth) await page.locator("#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth").fill(startMonth);
+    if (startYear) await page.locator("#RadioButtonWithDateInputModel\\.Question\\.SelectedYear").fill(startYear);
+    if (awardMonth) await page.locator("#AwardedDate\\.SelectedMonth").fill(awardMonth);
+    if (awardYear) await page.locator("#AwardedDate\\.SelectedYear").fill(awardYear);
+}
+
+export async function checkStartedFieldErrors(page: Page, hasMonthError: boolean, hasYearError: boolean) {
+    if (hasMonthError) {
+        await hasClass(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth", /govuk-input--error/);
+    } else {
+        await doesNotHaveClass(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth", /govuk-input--error/);
+    }
+
+    if (hasYearError) {
+        await hasClass(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedYear", /govuk-input--error/);
+    } else {
+        await doesNotHaveClass(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedYear", /govuk-input--error/);
+    }
+}
+
+export async function checkAwardedFieldErrors(page: Page, hasMonthError: boolean, hasYearError: boolean) {
+    if (hasMonthError) {
+        await hasClass(page, "#AwardedDate\\.SelectedMonth", /govuk-input--error/);
+    } else {
+        await doesNotHaveClass(page, "#AwardedDate\\.SelectedMonth", /govuk-input--error/);
+    }
+
+    if (hasYearError) {
+        await hasClass(page, "#AwardedDate\\.SelectedYear", /govuk-input--error/);
+    } else {
+        await doesNotHaveClass(page, "#AwardedDate\\.SelectedYear", /govuk-input--error/);
+    }
 }

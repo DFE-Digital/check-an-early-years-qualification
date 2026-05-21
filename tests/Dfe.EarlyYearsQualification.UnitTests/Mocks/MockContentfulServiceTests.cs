@@ -911,9 +911,9 @@ public class MockContentfulServiceTests
         result.AfterSeptember2014Option.StartedQuestion.MissingMonthErrorMessage.Should()
               .Be("Enter the month that the qualification was started");
         result.AfterSeptember2014Option.StartedQuestion.MissingYearErrorMessage.Should()
-              .Be("Enter the month that the qualification was started");
-        result.AfterSeptember2014Option.StartedQuestion.MissingMonthBannerLinkText.Should()
               .Be("Enter the year that the qualification was started");
+        result.AfterSeptember2014Option.StartedQuestion.MissingMonthBannerLinkText.Should()
+              .Be("Enter the month that the qualification was started");
         result.AfterSeptember2014Option.StartedQuestion.MissingYearBannerLinkText.Should()
               .Be("Enter the year that the qualification was started");
         result.AfterSeptember2014Option.StartedQuestion.MonthOutOfBoundsErrorLinkText.Should()
