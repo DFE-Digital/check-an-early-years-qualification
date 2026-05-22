@@ -451,7 +451,7 @@ test.describe('A spec that tests the help qualification page', { tag: "@e2e" }, 
     test("shows the awarded month missing error message and the year out of bounds error message when a user doesnt type a year and types an invalid month on the help qualification-details page", async ({ page }) => {
         await checkNoErrorsPresent(page);
         await page.fill('#AwardedDate\\.SelectedYear', '20');
-
+        await clickSubmit(page);
         await checkUrl(page, "/help/qualification-details");
         await checkErrorSummary(page);
         await checkText(page, "#error-banner-link-AwardedDate\\.SelectedMonth", "Enter the month that the qualification was awarded");
