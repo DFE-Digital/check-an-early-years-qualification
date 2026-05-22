@@ -36,16 +36,18 @@ public class EyqlDownloadGenerator : IDownloadGenerator
                                                                              }));
         }
         
-        orderedQualifications = orderedQualifications.OrderBy(x => x.EyqlTabs[0].Order).ThenBy(x => x.QualificationName)
+        orderedQualifications = orderedQualifications.OrderBy(x => x.EyqlTabs[0].Order)
+                                                     .ThenBy(x => x.QualificationLevel)
+                                                     .ThenBy(x => x.QualificationName)
                                                      .ToList();
         const string headers =
-            "Tab,Qualification name,Qualification level,Staff child ratio,Awarding organisation,From which year,To which year,Qualification number,Additional requirements";
+            "Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements";
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(headers);
         foreach (var qualification in orderedQualifications)
         {
             var qualificationData =
-                $"{qualification.EyqlTabs[0].Heading},{EscapeCsvValue(qualification.QualificationName)},{qualification.QualificationLevel},{qualification.StaffChildRatio},{EscapeCsvValue(qualification.AwardingOrganisationTitle)},{qualification.FromWhichYear},{qualification.ToWhichYear},{qualification.QualificationNumber},{EscapeCsvValue(qualification.AdditionalRequirements)}";
+                $"{qualification.EyqlTabs[0].Heading},{qualification.QualificationLevel},{qualification.StaffChildRatio},{qualification.FromWhichYear},{qualification.ToWhichYear},{EscapeCsvValue(qualification.QualificationName)},{EscapeCsvValue(qualification.AwardingOrganisationTitle)},{qualification.QualificationNumber},{EscapeCsvValue(qualification.AdditionalRequirements)}";
             stringBuilder.AppendLine(qualificationData);
         }
 

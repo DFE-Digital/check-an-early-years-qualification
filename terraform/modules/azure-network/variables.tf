@@ -78,6 +78,11 @@ variable "contentful_preview_api_key" {
   type        = string
 }
 
+variable "contentful_management_api_key" {
+  description = "Contentful management API key"
+  type        = string
+}
+
 variable "contentful_space_id" {
   description = "Contentful space ID"
   type        = string
@@ -90,5 +95,10 @@ variable "govuk_notify_api_key" {
 
 variable "log_analytics_workspace_id" {
   description = "The log analytics workspace ID"
+  type        = string
+}
+
+variable "download_endpoint_secret" {
+  description = "Secret value to be supplied when calling download endpoint"
   type        = string
 }
