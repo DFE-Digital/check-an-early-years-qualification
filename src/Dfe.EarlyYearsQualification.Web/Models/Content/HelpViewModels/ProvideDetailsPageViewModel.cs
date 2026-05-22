@@ -28,6 +28,24 @@ public class ProvideDetailsPageViewModel
 
     public bool HasAdditionalInformationError { get; set; }
 
+    public Dictionary<string, object> GetAdditionalInformationInputAttributes()
+    {
+        var attributes = new Dictionary<string, object>
+                        {
+                            { "class", "govuk-textarea" },
+                            { "autocomplete", "off" },
+                            { "aria-describedby", "additional-information-hint warning-text-container" },
+                        };
+
+        if (HasAdditionalInformationError)
+        {
+            attributes["aria-describedby"] += " additional-information-error";
+            attributes["class"] += " govuk-input--error";
+        }
+
+        return attributes;
+    }
+
     List<ErrorSummaryLink> Errors
     {
         get
