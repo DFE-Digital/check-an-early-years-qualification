@@ -295,7 +295,7 @@ export async function whenWasQualificationAwarded(page: Page, awardedMonth: stri
     await clickSubmit(page);
 }
 
-export async function InputQualificationStartedAndAwardedDetailsOnHelpPage(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
+export async function inputQualificationStartedAndAwardedDetailsOnHelpPage(page: Page, startedMonth: string, startedYear: string, awardedMonth: string, awardedYear: string) {
     await checkUrl(page, '/help/qualification-details');
     await attributeContains(page, "#back-button", 'href', '/help/get-help');
     await page.locator("#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth").fill(startedMonth);

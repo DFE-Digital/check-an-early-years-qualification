@@ -12,7 +12,7 @@ import {
     hasClass,
     doesNotHaveClass,
     checkError,
-    InputQualificationStartedAndAwardedDetailsOnHelpPage,
+    inputQualificationStartedAndAwardedDetailsOnHelpPage,
     clickSubmit,
     checkElementIsChecked,
     checkAwardedFieldErrors,
