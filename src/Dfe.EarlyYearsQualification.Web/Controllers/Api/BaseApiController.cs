@@ -80,11 +80,11 @@ public abstract class BaseApiController<T>(ILogger<T> logger,
     {
         string? secretFromHeader = null;
 
-        var cacheSecrets = Request.Headers[AuthSecretKey];
+        var authSecrets = Request.Headers[AuthSecretKey];
 
-        if (cacheSecrets.Count > 0)
+        if (authSecrets.Count > 0)
         {
-            secretFromHeader = cacheSecrets[0];
+            secretFromHeader = authSecrets[0];
         }
 
         return secretFromHeader;
