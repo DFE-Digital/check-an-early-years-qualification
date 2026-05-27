@@ -4,5 +4,5 @@ namespace Dfe.EarlyYearsQualification.Web.Models.Content;
 
 public class RadioButtonAndDateInputModel : OptionModel
 {
-    public DateQuestionModel? Question { get; set; }
+    public required DateQuestionModel Question { get; set; }
 }
