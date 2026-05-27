@@ -26,7 +26,7 @@
                 <h2 id="download-heading" class="govuk-heading-m">@Model.DownloadHeading</h2>
                 @Html.Raw(Model.DownloadSectionContent)
             </div>
-            @Html.ActionLink(Model.DownloadButtonText, "Download", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary" })
+            @Html.ActionLink(Model.DownloadButtonText, "Download", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary", id="download-button" })
         </div>
     </div>
 </div>
