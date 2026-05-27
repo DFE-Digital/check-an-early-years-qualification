@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
+using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
@@ -99,45 +100,36 @@ public class DateQuestionModelValidator(IDateTimeAdapter dateTimeAdapter) : IDat
         }
     }
 
-    public DatesValidationResult IsValid(DatesQuestionModel model, HelpQualificationDetailsPage questionPage)
+    public DatesValidationResult IsValid(QualificationDetailsPageViewModel model, HelpQualificationDetailsPage questionPage)
     {
+        var startedQuestion = model.RadioButtonWithDateInputModel.Question;
+        var awardedQuestion = model.AwardedDate;
+
         try
         {
-            if (model.AwardedQuestion is null)
+            if (startedQuestion is null || awardedQuestion is null)
+                throw new NullReferenceException("Started question or awarded question is null");
+            var startedValidationResult = StartDateIsValid(startedQuestion, questionPage.AfterSeptember2014Option.StartedQuestion);
+            var awardedValidationResult = IsValid(awardedQuestion, questionPage.AwardedDateQuestion);
+
+            if (awardedValidationResult.YearValid &&
+                DisplayAwardedDateBeforeStartDateError(startedQuestion, awardedQuestion))
             {
-                throw new NullReferenceException("Awarded question is null");
-            }
-
-            var awardedValidationResult = IsValid(model.AwardedQuestion, questionPage.AwardedDateQuestion!);
-
-            if (model.StartedQuestion?.SelectedMonth is not null || model.StartedQuestion?.SelectedYear is not null)
-            {
-                var startedValidationResult = IsValid(model.StartedQuestion, questionPage.StartDateQuestion!);
-
-                if (awardedValidationResult.YearValid &&
-                    DisplayAwardedDateBeforeStartDateError(model.StartedQuestion, model.AwardedQuestion))
-                {
-                    awardedValidationResult.MonthValid = false;
-                    awardedValidationResult.YearValid = false;
-                    awardedValidationResult.ErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
-                    awardedValidationResult.BannerErrorMessages.Add(new BannerError(questionPage.AwardedDateIsAfterStartedDateErrorText, FieldId.Month));
-                }
-
-                return new DatesValidationResult
-                {
-                    StartedValidationResult = startedValidationResult,
-                    AwardedValidationResult = awardedValidationResult
-                };
+                awardedValidationResult.MonthValid = false;
+                awardedValidationResult.YearValid = false;
+                awardedValidationResult.ErrorMessages.Add(questionPage.AwardedDateIsAfterStartedDateErrorText);
+                awardedValidationResult.BannerErrorMessages.Add(new BannerError(questionPage.AwardedDateIsAfterStartedDateErrorText, FieldId.Month));
             }
 
             return new DatesValidationResult
             {
+                StartedValidationResult = startedValidationResult,
                 AwardedValidationResult = awardedValidationResult
             };
         }
         catch (Exception e)
         {
-            string message = $"Failed to validate dates (startedMonth:'{model.StartedQuestion?.SelectedMonth}'|startedYear:'{model.StartedQuestion?.SelectedYear}'|awardedMonth:'{model.AwardedQuestion?.SelectedMonth}'|awardedYear:'{model.AwardedQuestion?.SelectedYear}')";
+            string message = $"Failed to validate dates (startedMonth:'{startedQuestion?.SelectedMonth}'|startedYear:'{startedQuestion?.SelectedYear}'|awardedMonth:'{awardedQuestion?.SelectedMonth}'|awardedYear:'{awardedQuestion?.SelectedYear}')";
             throw new ArgumentException(message, e);
         }
     }

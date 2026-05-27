@@ -48,24 +48,20 @@ test.describe('A spec used to test the various routes through the journey', {tag
         await page.goto("/help/get-help");
         await page.click("input#QuestionAboutAQualification");
         await page.click("button#form-submit");
-
         await page.click("input#ContactTheEarlyYearsQualificationTeam");
         await page.click("button#form-submit");
-
         await inputText(page, "#QualificationName", "QualificationName");
-        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", "1");
-        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", "2000");
-        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", "2");
-        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", "2002");
-        await inputText(page, "#AwardingOrganisation", "AwardingOrganisation");
+        await page.click("#OnOrAfter1September2014");
+        await inputText(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth", "1");
+        await inputText(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedYear", "2015");
+        await inputText(page, "#AwardedDate\\.SelectedMonth", "2");
+        await inputText(page, "#AwardedDate\\.SelectedYear", "2022");
+        await inputText(page, "#AwardingOrganisation", "Entered awarding organisation");
         await page.click("#question-submit");
-
         await inputText(page, "#ProvideAdditionalInformation", "This is the message");
         await page.click("#question-submit");
-
         await inputText(page, "#EmailAddress", "test@test.com");
         await page.click("#question-submit");
-
         await checkUrl(page, "/help/confirmation");
         await isVisible(page, ".govuk-panel__title");
         await isVisible(page, "#help-confirmation-body");

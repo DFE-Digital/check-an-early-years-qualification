@@ -35,7 +35,8 @@
                 {
                     <govuk-error-message id="additional-information-error" visually-hidden-text="Error">@Model.AdditionalInformationErrorMessage</govuk-error-message>
                 }
-                @Html.TextAreaFor(x => x.ProvideAdditionalInformation, 5, 1, new { @class = "govuk-textarea", aria_describedby = "additional-information-hint" })
+
+                @Html.TextAreaFor(x => x.ProvideAdditionalInformation, 5, 1, Model.GetAdditionalInformationInputAttributes())
             </div>
 
             <div class="govuk-form-group">

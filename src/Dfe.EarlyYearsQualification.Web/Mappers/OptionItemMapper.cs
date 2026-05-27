@@ -16,7 +16,7 @@ public static class OptionItemMapper
             if (optionItem.GetType() == typeof(Option))
             {
                 var option = (Option)optionItem;
-                results.Add(new OptionModel { Hint = option.Hint, Value = option.Value, Label = option.Label });
+                results.Add(Map(option));
             }
 
             if (optionItem.GetType() == typeof(Divider))
@@ -53,5 +53,10 @@ public static class OptionItemMapper
         }
 
         return results;
+    }
+
+    public static OptionModel Map(Option option)
+    {
+        return new OptionModel { Hint = option.Hint, Value = option.Value, Label = option.Label };
     }
 }

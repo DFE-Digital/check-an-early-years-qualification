@@ -28,6 +28,24 @@ public class EmailAddressPageViewModel
     // validation handling
     public bool HasEmailAddressError { get; set; }
 
+    public Dictionary<string, object> GetAdditionalInformationInputAttributes()
+    {
+        var attributes = new Dictionary<string, object>
+                        {
+                            { "class", "govuk-input" },
+                            { "autocomplete", "on" },
+                            { "aria-describedby", "email-address-hint" },
+                        };
+
+        if (HasEmailAddressError)
+        {
+            attributes["aria-describedby"] += " email-address-error";
+            attributes["class"] += " govuk-input--error";
+        }
+
+        return attributes;
+    }
+
     public bool HasValidationErrors => Errors.Count > 0;
 
     List<ErrorSummaryLink> Errors
