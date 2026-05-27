@@ -888,37 +888,46 @@ public class MockContentfulServiceTests
         result.AwardingOrganisationErrorMessage.Should().Be("Enter the awarding organisation");
         result.ErrorBannerHeading.Should().Be("There is a problem");
         result.AwardedDateIsAfterStartedDateErrorText.Should().Be("The awarded date must be after the started date");
-
-        result.StartDateQuestion.MonthLabel.Should().Be("Month");
-        result.StartDateQuestion.YearLabel.Should().Be("Year");
-        result.StartDateQuestion.QuestionHeader.Should().Be("Start date (optional)");
-        result.StartDateQuestion.QuestionHint.Should()
-              .Be("Enter the start date so we can check if the qualification is approved as full and relevant. For example 9 2013.");
-        result.StartDateQuestion.ErrorBannerLinkText.Should()
-              .Be("Enter the month and year that the qualification was started");
-        result.StartDateQuestion.ErrorMessage.Should()
-              .Be("Enter the month and year that the qualification was started");
-        result.StartDateQuestion.FutureDateErrorBannerLinkText.Should()
+        result.BeforeSeptember2014Option.Should().NotBeNull();
+        result.BeforeSeptember2014Option.Label.Should().Be("Before 1 September 2014");
+        result.BeforeSeptember2014Option.Value.Should().Be("Before1September2014");
+        result.AfterSeptember2014Option.Should().NotBeNull();
+        result.AfterSeptember2014Option.Label.Should().Be("On or after 1 September 2014");
+        result.AfterSeptember2014Option.Value.Should().Be("OnOrAfter1September2014");
+        result.AfterSeptember2014Option.StartedQuestion.Should().NotBeNull();
+        result.AfterSeptember2014Option.StartedQuestion.MonthLabel.Should().Be("Month");
+        result.AfterSeptember2014Option.StartedQuestion.YearLabel.Should().Be("Year");
+        result.AfterSeptember2014Option.StartedQuestion.QuestionHeader.Should().Be("Start date");
+        result.AfterSeptember2014Option.StartedQuestion.QuestionHint.Should()
+              .Be("Enter the specific start date. For example 9 2014.");
+        result.AfterSeptember2014Option.StartedQuestion.ErrorBannerLinkText.Should()
+              .Be("Enter the month and the year that the qualification was started");
+        result.AfterSeptember2014Option.StartedQuestion.ErrorMessage.Should()
+              .Be("Enter the month and the year that the qualification was started");
+        result.AfterSeptember2014Option.StartedQuestion.FutureDateErrorBannerLinkText.Should()
+              .Be("The date the qualification was awarded must be in the past");
+        result.AfterSeptember2014Option.StartedQuestion.FutureDateErrorMessage.Should()
               .Be("The date the qualification was started must be in the past");
-        result.StartDateQuestion.FutureDateErrorMessage.Should()
-              .Be("The date the qualification was started must be in the past");
-        result.StartDateQuestion.MissingMonthErrorMessage.Should()
+        result.AfterSeptember2014Option.StartedQuestion.MissingMonthErrorMessage.Should()
               .Be("Enter the month that the qualification was started");
-        result.StartDateQuestion.MissingYearErrorMessage.Should()
+        result.AfterSeptember2014Option.StartedQuestion.MissingYearErrorMessage.Should()
               .Be("Enter the year that the qualification was started");
-        result.StartDateQuestion.MissingMonthBannerLinkText.Should()
+        result.AfterSeptember2014Option.StartedQuestion.MissingMonthBannerLinkText.Should()
               .Be("Enter the month that the qualification was started");
-        result.StartDateQuestion.MissingYearBannerLinkText.Should()
+        result.AfterSeptember2014Option.StartedQuestion.MissingYearBannerLinkText.Should()
               .Be("Enter the year that the qualification was started");
-        result.StartDateQuestion.MonthOutOfBoundsErrorLinkText.Should()
+        result.AfterSeptember2014Option.StartedQuestion.MonthOutOfBoundsErrorLinkText.Should()
               .Be("The month the qualification was started must be between 1 and 12");
-        result.StartDateQuestion.MonthOutOfBoundsErrorMessage.Should()
+        result.AfterSeptember2014Option.StartedQuestion.MonthOutOfBoundsErrorMessage.Should()
               .Be("The month the qualification was started must be between 1 and 12");
-        result.StartDateQuestion.YearOutOfBoundsErrorLinkText.Should()
+        result.AfterSeptember2014Option.StartedQuestion.YearOutOfBoundsErrorLinkText.Should()
               .Be("The year the qualification was started must be between 1900 and $[actual-year]$");
-        result.StartDateQuestion.YearOutOfBoundsErrorMessage.Should()
+        result.AfterSeptember2014Option.StartedQuestion.YearOutOfBoundsErrorMessage.Should()
               .Be("The year the qualification was started must be between 1900 and $[actual-year]$");
-
+        result.AfterSeptember2014Option.StartedQuestion.DateAfterSeptember2014ErrorLinkText.Should()
+              .Be("The date the qualification was started must be on or after September 2014. If it was started before, select Before 1 September 2014");
+        result.AfterSeptember2014Option.StartedQuestion.DateAfterSeptember2014ErrorMessage.Should()
+              .Be("The date the qualification was started must be on or after September 2014. If it was started before, select Before 1 September 2014");
         result.AwardedDateQuestion.MonthLabel.Should().Be("Month");
         result.AwardedDateQuestion.YearLabel.Should().Be("Year");
         result.AwardedDateQuestion.QuestionHeader.Should().Be("Award date");
@@ -947,6 +956,7 @@ public class MockContentfulServiceTests
               .Be("The year the qualification was awarded must be between 1900 and $[actual-year]$");
         result.AwardedDateQuestion.YearOutOfBoundsErrorMessage.Should()
               .Be("The year the qualification was awarded must be between 1900 and $[actual-year]$");
+        result.MissingStartedDateOptionErrorMessage.Should().Be("Select when the qualification was started");
     }
 
     [TestMethod]

@@ -21,10 +21,11 @@ test.describe('A spec that tests the confirmation page', { tag: "@e2e" }, () => 
         await page.click("input#ContactTheEarlyYearsQualificationTeam");
         await page.click("button#form-submit");
         await inputText(page, "#QualificationName", "Entered qualification name");
-        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedMonth", "1");
-        await inputText(page, "#QuestionModel\\.StartedQuestion\\.SelectedYear", "2001");
-        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedMonth", "2");
-        await inputText(page, "#QuestionModel\\.AwardedQuestion\\.SelectedYear", "2002");
+        await page.click("#OnOrAfter1September2014");
+        await inputText(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedMonth", "1");
+        await inputText(page, "#RadioButtonWithDateInputModel\\.Question\\.SelectedYear", "2015");
+        await inputText(page, "#AwardedDate\\.SelectedMonth", "2");
+        await inputText(page, "#AwardedDate\\.SelectedYear", "2022");
         await inputText(page, "#AwardingOrganisation", "Entered awarding organisation");
         await page.click("#question-submit");
         await checkUrl(page, "/help/provide-details");

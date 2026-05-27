@@ -31,11 +31,8 @@ public class HelpPageNotification
             message.AppendLine($"Qualification name: {enquiry.QualificationName}");
             message.AppendLine();
 
-            if (!string.IsNullOrEmpty(enquiry.QualificationStartDate))
-            {
-                message.AppendLine($"Qualification start date: {enquiry.QualificationStartDate}");
-                message.AppendLine();
-            }
+            message.AppendLine($"Qualification start date: {FormatStartDate(enquiry.QualificationStartDate)}");
+            message.AppendLine();
 
             message.AppendLine($"Qualification awarded date: {enquiry.QualificationAwardedDate}");
             message.AppendLine();
@@ -48,5 +45,20 @@ public class HelpPageNotification
         message.AppendLine();
 
         return message.ToString();
+    }
+
+    private static string FormatStartDate(string startDate)
+    {
+        var dateParts = startDate.Split('/');
+        var startMonth = int.Parse(dateParts[0]);
+        var startYear = int.Parse(dateParts[1]);
+
+        var date = new DateOnly(startYear, startMonth, 1);
+        if (date < new DateOnly(2014, 9, 1))
+        {
+            return "Before September 2014";
+        }
+
+        return startDate;
     }
 }

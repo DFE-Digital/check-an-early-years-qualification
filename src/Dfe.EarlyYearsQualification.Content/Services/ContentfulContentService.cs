@@ -339,7 +339,12 @@ public class ContentfulContentService(
 
     public async Task<HelpQualificationDetailsPage?> GetHelpQualificationDetailsPage()
     {
-        var helpQualificationDetailsPage = await GetEntriesByType<HelpQualificationDetailsPage>();
+        string contentType = ContentTypeLookup[typeof(HelpQualificationDetailsPage)];
+
+        var queryBuilder = new QueryBuilder<HelpQualificationDetailsPage>().ContentTypeIs(contentType)
+                                                .Include(2);
+
+        var helpQualificationDetailsPage = await GetEntriesByType(queryBuilder);
 
         // ReSharper disable once InvertIf
         if (helpQualificationDetailsPage is null || !helpQualificationDetailsPage.Any())

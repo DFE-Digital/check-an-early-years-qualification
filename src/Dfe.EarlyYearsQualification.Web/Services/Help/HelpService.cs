@@ -5,8 +5,10 @@ using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
+using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces.Help;
+using Dfe.EarlyYearsQualification.Web.Models;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
@@ -27,7 +29,8 @@ public class HelpService(
     IHelpProvideDetailsPageMapper helpProvideDetailsPageMapper,
     IHelpEmailAddressPageMapper helpEmailAddressPageMapper,
     IHelpConfirmationPageMapper helpConfirmationPageMapper,
-    IStaticPageMapper staticPageMapper
+    IStaticPageMapper staticPageMapper,
+    IPlaceholderUpdater placeholderUpdater
 ) : ServiceController, IHelpService
 {
 
@@ -114,82 +117,78 @@ public class HelpService(
         return await RadioQuestionHelpPageMapper.MapRadioQuestionHelpPageContentToViewModelAsync(content);
     }
 
-    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel)
+    public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content)
     {
         var enquiry = userJourneyCookieService.GetHelpFormEnquiry();
-
         viewModel.AwardingOrganisation = enquiry.AwardingOrganisation;
         viewModel.QualificationName = enquiry.QualificationName;
 
-        var qualificationStart = userJourneyCookieService.GetWhenWasQualificationStarted();
-        var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
-
-        viewModel.QuestionModel.StartedQuestion = new DateQuestionModel
-                                                  {
-                                                      SelectedMonth = qualificationStart.startMonth,
-                                                      SelectedYear = qualificationStart.startYear
-                                                  };
-
-        viewModel.QuestionModel.AwardedQuestion = new DateQuestionModel
-                                                  {
-                                                      SelectedMonth = qualificationAwarded.startMonth,
-                                                      SelectedYear = qualificationAwarded.startYear
-                                                  };
+        var qualificationStarted = userJourneyCookieService.GetWhenWasQualificationStarted();
+        int? startMonth = qualificationStarted.startMonth;
+        int? startYear = qualificationStarted.startYear;
 
         if (!string.IsNullOrEmpty(enquiry.QualificationStartDate))
         {
-            var enquiryStart = StringDateHelper.SplitDate(enquiry.QualificationStartDate);
-
-            viewModel.QuestionModel.StartedQuestion.SelectedMonth = enquiryStart.startMonth;
-            viewModel.QuestionModel.StartedQuestion.SelectedYear = enquiryStart.startYear;
+            var (enquiryMonth, enquiryYear) = StringDateHelper.SplitDate(enquiry.QualificationStartDate);
+            startMonth = enquiryMonth;
+            startYear = enquiryYear;
         }
+
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth = startMonth;
+        viewModel.RadioButtonWithDateInputModel.Question.SelectedYear = startYear;
+
+        if (startMonth is not null && startYear is not null)
+        {
+            var date = new DateOnly(startYear.Value, startMonth.Value, 1);
+            if (date < new DateOnly(2014, 9, 1))
+            {
+                viewModel.Option = content.BeforeSeptember2014Option.Value;
+                viewModel.RadioButtonWithDateInputModel.Question.SelectedMonth = null;
+                viewModel.RadioButtonWithDateInputModel.Question.SelectedYear = null;
+            }
+            else
+            {
+                viewModel.Option = viewModel.RadioButtonWithDateInputModel.Value;
+            }
+        }
+
+        var qualificationAwarded = userJourneyCookieService.GetWhenWasQualificationAwarded();
+        viewModel.AwardedDate.SelectedMonth = qualificationAwarded.startMonth;
+        viewModel.AwardedDate.SelectedYear = qualificationAwarded.startYear;
 
         if (!string.IsNullOrEmpty(enquiry.QualificationAwardedDate))
         {
-            var enquiryAwarded = StringDateHelper.SplitDate(enquiry.QualificationAwardedDate);
-
-            viewModel.QuestionModel.AwardedQuestion.SelectedMonth = enquiryAwarded.startMonth;
-            viewModel.QuestionModel.AwardedQuestion.SelectedYear = enquiryAwarded.startYear;
+            var (awardedMonth, awardedYear) = StringDateHelper.SplitDate(enquiry.QualificationAwardedDate);
+            viewModel.AwardedDate.SelectedMonth = awardedMonth;
+            viewModel.AwardedDate.SelectedYear = awardedYear;
         }
     }
 
-    public QualificationDetailsPageViewModel MapHelpQualificationDetailsPageContentToViewModel(
-        QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content,
-        DatesValidationResult? validationResult, ModelStateDictionary modelState)
+    public QualificationDetailsPageViewModel MapHelpQualificationDetailsPageContentToViewModel(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content)
     {
-        return helpQualificationDetailsPageMapper.MapQualificationDetailsContentToViewModel(viewModel, content,
-         validationResult, modelState);
+        return helpQualificationDetailsPageMapper.MapQualificationDetailsContentToViewModel(viewModel, content);
     }
 
-    public void SetHelpQualificationDetailsInCookie(HelpFormEnquiry enquiry,
-                                                    QualificationDetailsPageViewModel viewModel)
+    public void SetHelpQualificationDetailsInCookie(QualificationDetailsPageViewModel model)
     {
-        enquiry.QualificationName = viewModel.QualificationName;
-        if (viewModel.QuestionModel.StartedQuestion is not null)
-        {
-            enquiry.QualificationStartDate =
-                $"{viewModel.QuestionModel.StartedQuestion?.SelectedMonth}/{viewModel.QuestionModel.StartedQuestion?.SelectedYear}";
-        }
+        var enquiry = GetHelpFormEnquiry();
 
-        enquiry.QualificationAwardedDate =
-            $"{viewModel.QuestionModel.AwardedQuestion?.SelectedMonth}/{viewModel.QuestionModel.AwardedQuestion?.SelectedYear}";
-        enquiry.AwardingOrganisation = viewModel.AwardingOrganisation;
+        enquiry.QualificationName = model.QualificationName;
+
+        enquiry.QualificationStartDate = model.Option == model.Before2014Option.Value
+                    ? "1/1900"
+                    : $"{model.RadioButtonWithDateInputModel.Question.SelectedMonth}/{model.RadioButtonWithDateInputModel.Question.SelectedYear}";
+
+        enquiry.QualificationAwardedDate = $"{model.AwardedDate.SelectedMonth}/{model.AwardedDate.SelectedYear}";
+
+        enquiry.AwardingOrganisation = model.AwardingOrganisation;
 
         SetHelpFormEnquiry(enquiry);
     }
 
-    public bool HasInvalidDates(DatesValidationResult datesValidationResult)
+    public DatesValidationResult ValidateDates(QualificationDetailsPageViewModel model, HelpQualificationDetailsPage content)
     {
-        return !datesValidationResult.AwardedValidationResult!.MonthValid ||
-               !datesValidationResult.AwardedValidationResult.YearValid ||
-               (datesValidationResult.StartedValidationResult is not null &&
-                (!datesValidationResult.StartedValidationResult.MonthValid ||
-                 !datesValidationResult.StartedValidationResult.YearValid));
-    }
-
-    public DatesValidationResult ValidateDates(DatesQuestionModel questionModel, HelpQualificationDetailsPage content)
-    {
-        return questionModelValidator.IsValid(questionModel, content);
+        return questionModelValidator.IsValid(model, content);
     }
 
     public async Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage()
@@ -264,5 +263,127 @@ public class HelpService(
     public async Task<StaticPageModel?> MapStaticPage(StaticPage page)
     {
         return await staticPageMapper.Map(page);
+    }
+
+    public DateValidationResult DateIsValid(DateQuestionModel model, DateQuestion content)
+    {
+        return questionModelValidator.IsValid(model, content);
+    }
+
+    public DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question, DateValidationResult validationResult, string objectName)
+    {
+        var validationInfo = MapValidationResultToBanners(question, validationResult);
+
+        DateQuestionMapper.Map(model, question, validationInfo.banners, validationInfo.errorMessage, validationResult, model.SelectedMonth, model.SelectedYear);
+
+        ReplaceBannerDefaultIdWithElementId(model, objectName);
+
+        return model;
+    }
+
+    private static void ReplaceBannerDefaultIdWithElementId(DateQuestionModel model, string objectName)
+    {
+        foreach (var errorSummaryLink in model.ErrorSummaryLinks)
+        {
+            errorSummaryLink.ElementLinkId = errorSummaryLink.ElementLinkId switch
+            {
+                nameof(FieldId.Month) => $"{objectName}.SelectedMonth",
+                nameof(FieldId.Year) => $"{objectName}.SelectedYear",
+                _ => errorSummaryLink.ElementLinkId
+            };
+        }
+    }
+
+    private (List<BannerError> banners, string errorMessage) MapValidationResultToBanners(DateQuestion question, DateValidationResult validationResult)
+    {
+        var errorMessageText = validationResult.ErrorMessages.Count != 0
+                                   ? string.Join("<br />", validationResult.ErrorMessages)
+                                   : null;
+
+        var errorBannerMessages = new List<BannerError>();
+
+        foreach (var bannerError in validationResult.BannerErrorMessages)
+        {
+            errorBannerMessages.Add(new BannerError(placeholderUpdater.Replace(bannerError.Message), bannerError.FieldId));
+        }
+
+        return (errorBannerMessages, placeholderUpdater.Replace(errorMessageText ?? question.ErrorMessage));
+    }
+
+    public void AddQualificationDetailsValidationErrors(QualificationDetailsPageViewModel model, HelpQualificationDetailsPage content, ModelStateDictionary modelState)
+    {
+        AddQualificationNameError(model, modelState);
+        AddOptionError(model, modelState, content);
+
+        var isRadioOptionSelected = !string.IsNullOrEmpty(model.Option);
+        var isRadioOptionBefore2014 = model.Option == content.BeforeSeptember2014Option.Value;
+
+        if (isRadioOptionSelected && !isRadioOptionBefore2014)
+        {
+            var datesModelValidationResult = ValidateDates(model, content);
+
+            var startedDateErrors = MapDateModel(model.RadioButtonWithDateInputModel.Question, content.AfterSeptember2014Option.StartedQuestion, datesModelValidationResult.StartedValidationResult!, "RadioButtonWithDateInputModel.Question");
+            model.Errors.AddRange(startedDateErrors.ErrorSummaryLinks);
+
+            var awardedDateErrors = MapDateModel(model.AwardedDate, content.AwardedDateQuestion, datesModelValidationResult.AwardedValidationResult!, "AwardedDate");
+            model.Errors.AddRange(awardedDateErrors.ErrorSummaryLinks);
+        }
+        else
+        {
+            modelState.Remove("RadioButtonWithDateInputModel.Question.SelectedMonth");
+            modelState.Remove("RadioButtonWithDateInputModel.Question.SelectedYear");
+
+            var awardedDateValidationResult = DateIsValid(model.AwardedDate, content.AwardedDateQuestion);
+
+            var awardedDateErrors = MapDateModel(model.AwardedDate, content.AwardedDateQuestion, awardedDateValidationResult, "AwardedDate");
+            model.Errors.AddRange(awardedDateErrors.ErrorSummaryLinks);
+        }
+
+        AddAwardingOrganisationError(model, modelState);
+    }
+
+    private static void AddQualificationNameError(QualificationDetailsPageViewModel model, ModelStateDictionary modelState)
+    {
+        model.HasQualificationNameError = modelState.Keys.Any(_ => modelState["QualificationName"]?.Errors.Count > 0);
+        if (model.HasQualificationNameError)
+        {
+            model.Errors.Add(
+                new ErrorSummaryLink
+                {
+                    ErrorBannerLinkText = model.QualificationNameErrorMessage,
+                    ElementLinkId = "QualificationName"
+                }
+            );
+        }
+    }
+
+    private static void AddOptionError(QualificationDetailsPageViewModel model, ModelStateDictionary modelState, HelpQualificationDetailsPage content)
+    {
+        model.HasOptionError = modelState.Keys.Any(_ => modelState["Option"]?.Errors.Count > 0);
+        if (model.HasOptionError)
+        {
+            model.Errors.Add(
+                new ErrorSummaryLink
+                {
+                    ErrorBannerLinkText = model.MissingStartedDateOptionErrorMessage,
+                    ElementLinkId = model.Before2014Option.Value
+                }
+            );
+        }
+    }
+
+    private static void AddAwardingOrganisationError(QualificationDetailsPageViewModel model, ModelStateDictionary modelState)
+    {
+        model.HasAwardingOrganisationError = modelState.Keys.Any(_ => modelState["AwardingOrganisation"]?.Errors.Count > 0);
+        if (model.HasAwardingOrganisationError)
+        {
+            model.Errors.Add(
+                new ErrorSummaryLink
+                {
+                    ErrorBannerLinkText = model.AwardingOrganisationErrorMessage,
+                    ElementLinkId = "AwardingOrganisation"
+                }
+            );
+        }
     }
 }

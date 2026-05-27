@@ -1,5 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
+using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.Validators;
 using Dfe.EarlyYearsQualification.Web.Services.DatesAndTimes;
@@ -465,7 +467,11 @@ public class DateQuestionModelValidatorTests
     [TestMethod]
     public void HelpQualificationDetailsPage_DatesQuestionModel_IsValid_AwardedQuestionIsNull_ThrowsException()
     {
-        var model = new DatesQuestionModel { AwardedQuestion = null };
+        var model = new QualificationDetailsPageViewModel 
+        { 
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel { Question = new DateQuestionModel() },
+            AwardedDate = null! 
+        };
         var page = new HelpQualificationDetailsPage();
 
         var validator = new DateQuestionModelValidator(new Mock<IDateTimeAdapter>().Object);
@@ -484,8 +490,16 @@ public class DateQuestionModelValidatorTests
             SelectedYear = 2011
         };
 
-        var model = new DatesQuestionModel { AwardedQuestion = awardedDate };
-        var page = new HelpQualificationDetailsPage();
+        var model = new QualificationDetailsPageViewModel 
+        { 
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel { Question = new DateQuestionModel() },
+            AwardedDate = awardedDate 
+        };
+        var page = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion(),
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion() }
+        };
 
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
         dateTimeAdapter.Setup(d => d.Now())
@@ -495,7 +509,7 @@ public class DateQuestionModelValidatorTests
 
         var result = validator.IsValid(model, page);
 
-        result.StartedValidationResult.Should().BeNull();
+        result.StartedValidationResult.Should().NotBeNull();
 
         result.AwardedValidationResult.Should().NotBeNull();
         result.AwardedValidationResult.YearValid.Should().BeTrue();
@@ -519,8 +533,16 @@ public class DateQuestionModelValidatorTests
             SelectedYear = 2011
         };
 
-        var model = new DatesQuestionModel { StartedQuestion = startedDate, AwardedQuestion = awardedDate };
-        var page = new HelpQualificationDetailsPage();
+        var model = new QualificationDetailsPageViewModel 
+        { 
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel { Question = startedDate },
+            AwardedDate = awardedDate 
+        };
+        var page = new HelpQualificationDetailsPage
+        {
+            AwardedDateQuestion = new DateQuestion(),
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion() }
+        };
 
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
         dateTimeAdapter.Setup(d => d.Now())
@@ -557,8 +579,17 @@ public class DateQuestionModelValidatorTests
         };
 
         const string message = "Awarded date is before start date";
-        var model = new DatesQuestionModel { StartedQuestion = startedDate, AwardedQuestion = awardedDate };
-        var page = new HelpQualificationDetailsPage { AwardedDateIsAfterStartedDateErrorText = message };
+        var model = new QualificationDetailsPageViewModel 
+        { 
+            RadioButtonWithDateInputModel = new RadioButtonAndDateInputModel { Question = startedDate },
+            AwardedDate = awardedDate 
+        };
+        var page = new HelpQualificationDetailsPage 
+        { 
+            AwardedDateIsAfterStartedDateErrorText = message,
+            AwardedDateQuestion = new DateQuestion(),
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion() }
+        };
 
         var dateTimeAdapter = new Mock<IDateTimeAdapter>();
         dateTimeAdapter.Setup(d => d.Now())
