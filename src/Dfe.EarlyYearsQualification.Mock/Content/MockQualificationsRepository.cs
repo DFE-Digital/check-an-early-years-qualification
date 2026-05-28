@@ -177,7 +177,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                         new Tab
                         {
                             Heading = "Post-September 2014",
-                            Order = 1
+                            Order = 2
                         }
                     ]
                 },
@@ -191,7 +191,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                         new Tab
                         {
                             Heading = "Post-September 2014",
-                            Order = 1
+                            Order = 2
                         }
                     ]
                 },
@@ -205,7 +205,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                         new Tab
                         {
                             Heading = "Post-September 2014",
-                            Order = 1
+                            Order = 2
                         }
 
                     ]
@@ -220,7 +220,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                         new Tab
                         {
                             Heading = "Post-September 2024",
-                            Order = 1
+                            Order = 3
                         }
                     ]
                 },
