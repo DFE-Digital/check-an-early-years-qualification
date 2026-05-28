@@ -37,6 +37,7 @@ using Notify.Client;
 using Notify.Interfaces;
 using OwaspHeaders.Core.Extensions;
 using System.Diagnostics.CodeAnalysis;
+using Dfe.EarlyYearsQualification.Content.Download;
 using Dfe.EarlyYearsQualification.Web.Services.Questions;
 
 namespace Dfe.EarlyYearsQualification.Web
@@ -180,6 +181,7 @@ namespace Dfe.EarlyYearsQualification.Web
             builder.Services.AddTransient<OpenGraphDataHelper>();
             builder.Services.AddTransient<IPlaceholderUpdater, PlaceholderUpdater>();
             builder.Services.AddSingleton<ICheckServiceAccessKeysHelper, CheckServiceAccessKeysHelper>();
+            builder.Services.AddTransient<IDownloadGenerator, EyqlDownloadGenerator>();
             builder.Services.AddMappers();
 
             bool useMockNotificationService = builder.Configuration.GetValue("UseMockNotificationService", false);
