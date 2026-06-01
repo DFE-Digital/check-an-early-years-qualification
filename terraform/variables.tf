@@ -137,11 +137,19 @@ variable "service_gov_uk_custom_domain_name" {
 
 variable "contentful_delivery_api_key" {
   description = "Contentful delivery API key"
+  sensitive   = true
   type        = string
 }
 
 variable "contentful_preview_api_key" {
   description = "Contentful preview API key"
+  sensitive   = true
+  type        = string
+}
+
+variable "contentful_management_api_key" {
+  description = "Contentful management API key"
+  sensitive   = true
   type        = string
 }
 
@@ -227,4 +235,9 @@ variable "cache_type" {
     condition     = contains(["Redis", "Memory", "None"], var.cache_type)
     error_message = "Invalid cache type. Must be one of: Redis, Memory, None."
   }
+}
+
+variable "download_endpoint_secret" {
+  description = "Secret value to be supplied when calling download endpoint"
+  type        = string
 }

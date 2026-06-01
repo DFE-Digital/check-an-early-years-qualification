@@ -8,7 +8,11 @@ public class WebViewPage
 
     public string Heading  { get; init; } = string.Empty;
 
-    public Document PostHeadingContent  { get; init; } = new();
+    public Document PostHeadingContent  { get; init; } = new Document();
+
+    public string DownloadHeading { get; init; } = string.Empty;
+    
+    public Document DownloadSectionContent  { get; init; } = new Document();
 
     public string DownloadButtonText  { get; init; } = string.Empty;
 
@@ -28,9 +32,9 @@ public class WebViewPage
 
     public string ShowingAllQualificationsLabel { get; init; } = string.Empty;
 
-    public Document NoQualificationsFoundContent { get; init; } = new();
+    public Document NoQualificationsFoundContent { get; init; } = new Document();
 
-    public Document QualificationIsFullAndRelevantContent  { get; init; } = new();
+    public Document QualificationIsFullAndRelevantContent  { get; init; } = new Document();
 
     public string FilterHeading  { get; init; } = string.Empty;
 

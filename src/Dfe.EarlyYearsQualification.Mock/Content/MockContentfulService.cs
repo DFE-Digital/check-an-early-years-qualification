@@ -1151,6 +1151,8 @@ public class MockContentfulService : IContentService
             {
                 Heading = "Early Years Qualification List",
                 DownloadButtonText = "Download qualification list",
+                DownloadHeading = "Download the early years qualification list",
+                DownloadSectionContent = ContentfulContentHelper.Paragraph("The download section content"),
                 QualificationLevelLabel = "Qualification level",
                 StaffChildRatioLabel = "Staff:child ratios",
                 FromWhichYearLabel = "From which year",

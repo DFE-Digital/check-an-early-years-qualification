@@ -1,5 +1,6 @@
 using Contentful.Core;
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -79,7 +80,7 @@ public class ServiceCollectionExtensionsTests
         services.SetupContentfulServices();
 
         // Assert
-        services.Count.Should().Be(4);
+        services.Count.Should().Be(5);
 
         VerifyService<IDateValidator, DateValidator>(services, ServiceLifetime.Scoped);
 
@@ -88,6 +89,8 @@ public class ServiceCollectionExtensionsTests
         VerifyService<IContentService, ContentfulContentService>(services, ServiceLifetime.Scoped);
 
         VerifyService<IQualificationsRepository, QualificationsRepository>(services, ServiceLifetime.Scoped);
+        
+        VerifyService<IQualificationDownloadService, ContentfulQualificationDownloadService>(services, ServiceLifetime.Scoped);
     }
 
     [TestMethod]
@@ -101,16 +104,20 @@ public class ServiceCollectionExtensionsTests
             .Build();
 
         // Act
-        var result = services.AddContentful(configuration);
+        services.AddContentful(configuration);
 
         // Assert
         VerifyService<HttpClientHandler, HttpClientHandler>(services, ServiceLifetime.Scoped);
 
         VerifyService<HttpClient, HttpClient>(services, ServiceLifetime.Singleton);
 
-        VerifyService<IContentfulClient, ContentfulClient>(services, ServiceLifetime.Scoped);
-
         VerifyService<HtmlRenderer, HtmlRenderer>(services, ServiceLifetime.Transient);
+        
+        VerifyService<IContentfulManagementClient, ContentfulManagementClient>(services, ServiceLifetime.Transient);
+        
+        VerifyService<IContentfulClient, ContentfulClient>(services, ServiceLifetime.Scoped, Clients.ContentfulDefaultClient);
+        
+        VerifyService<IContentfulClient, ContentfulClient>(services, ServiceLifetime.Scoped, Clients.ContentfulDeliveryClientNoCache);
     }
 
     /// <summary>
@@ -123,5 +130,18 @@ public class ServiceCollectionExtensionsTests
     private static void VerifyService<TService, TInstance>(ServiceCollection services, ServiceLifetime lifetime)
     {
         services.Should().ContainSingle(s => s.ServiceType == typeof(TService) && s.Lifetime == lifetime);
+    }
+
+    /// <summary>
+    ///     This method is tested in the VerifyService_* methods
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="lifetime"></param>
+    /// <param name="serviceKey"></param>
+    /// <typeparam name="TService"></typeparam>
+    /// <typeparam name="TInstance"></typeparam>
+    private static void VerifyService<TService, TInstance>(ServiceCollection services, ServiceLifetime lifetime, object serviceKey)
+    {
+        services.Should().ContainSingle(s => s.ServiceType == typeof(TService) && s.Lifetime == lifetime && s.ServiceKey == serviceKey);
     }
 }

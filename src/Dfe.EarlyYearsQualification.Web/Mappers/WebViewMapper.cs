@@ -16,6 +16,8 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             PostHeadingContent = await contentParser.ToHtml(content.PostHeadingContent),
             BackButton = NavigationLinkMapper.Map(content.BackButton),
             Qualifications = MapToQualificationModels(qualifications),
+            DownloadHeading = content.DownloadHeading,
+            DownloadSectionContent = await contentParser.ToHtml(content.DownloadSectionContent),
             DownloadButtonText = content.DownloadButtonText,
             QualificationLevelLabel = content.QualificationLevelLabel,
             StaffChildRatioLabel = content.StaffChildRatioLabel,
