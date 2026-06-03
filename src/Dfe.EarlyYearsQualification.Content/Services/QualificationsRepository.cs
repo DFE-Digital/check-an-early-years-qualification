@@ -5,13 +5,14 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class QualificationsRepository(
     ILogger<QualificationsRepository> logger,
-    IContentfulClient contentfulClient,
+    [FromKeyedServices(Clients.ContentfulDefaultClient)]IContentfulClient contentfulClient,
     IQualificationListFilter qualificationListFilter)
     : ContentfulContentServiceBase(logger, contentfulClient), IQualificationsRepository
 {

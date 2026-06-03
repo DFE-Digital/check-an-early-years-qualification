@@ -47,9 +47,11 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_cache_type"></a> [cache\_type](#input\_cache\_type) | Cache type ("Redis", "Memory", or "None") | `string` | `"None"` | no |
 | <a name="input_clarity_tag"></a> [clarity\_tag](#input\_clarity\_tag) | The Microsoft Clarity tag | `string` | `""` | no |
 | <a name="input_contentful_delivery_api_key"></a> [contentful\_delivery\_api\_key](#input\_contentful\_delivery\_api\_key) | Contentful delivery API key | `string` | n/a | yes |
+| <a name="input_contentful_management_api_key"></a> [contentful\_management\_api\_key](#input\_contentful\_management\_api\_key) | Contentful management API key | `string` | n/a | yes |
 | <a name="input_contentful_preview_api_key"></a> [contentful\_preview\_api\_key](#input\_contentful\_preview\_api\_key) | Contentful preview API key | `string` | n/a | yes |
 | <a name="input_contentful_space_id"></a> [contentful\_space\_id](#input\_contentful\_space\_id) | Contentful space ID | `string` | n/a | yes |
 | <a name="input_contentful_use_preview_api"></a> [contentful\_use\_preview\_api](#input\_contentful\_use\_preview\_api) | Boolean used to set whether content is preview or published | `bool` | n/a | yes |
+| <a name="input_download_endpoint_secret"></a> [download\_endpoint\_secret](#input\_download\_endpoint\_secret) | Secret value to be supplied when calling download endpoint | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment to deploy resources | `string` | `"development"` | no |
 | <a name="input_google_search_console_tag"></a> [google\_search\_console\_tag](#input\_google\_search\_console\_tag) | The Google Search Console tag | `string` | `""` | no |
 | <a name="input_govuk_notify_api_key"></a> [govuk\_notify\_api\_key](#input\_govuk\_notify\_api\_key) | GovUK Notify API Key | `string` | n/a | yes |

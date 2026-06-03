@@ -10,6 +10,10 @@ public class EarlyYearsQualificationListModel
     
     public string PostHeadingContent { get; init; } = string.Empty;
 
+    public string DownloadHeading { get; init; } = string.Empty;
+
+    public string DownloadSectionContent { get; init; } = string.Empty;
+
     public string DownloadButtonText { get; init; } =  string.Empty;
 
     public string QualificationLevelLabel { get; init; } = string.Empty;

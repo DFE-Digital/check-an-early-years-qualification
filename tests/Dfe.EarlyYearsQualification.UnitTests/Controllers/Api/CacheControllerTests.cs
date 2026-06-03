@@ -1,11 +1,11 @@
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
-using Dfe.EarlyYearsQualification.Web.Controllers;
+using Dfe.EarlyYearsQualification.Web.Controllers.Api;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Primitives;
 
-namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
+namespace Dfe.EarlyYearsQualification.UnitTests.Controllers.Api;
 
 [TestClass]
 public class CacheControllerTests

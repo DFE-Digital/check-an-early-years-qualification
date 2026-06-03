@@ -6,6 +6,11 @@ public static class MockLoggerExtensions
     {
         Verify(mockLogger, LogLevel.Error, expectedMessage, Times.Once);
     }
+    
+    public static void VerifyError<T>(this Mock<ILogger<T>> mockLogger, string expectedMessage, Exception expectedException)
+    {
+        Verify(mockLogger, LogLevel.Error, expectedMessage, Times.Once, expectedException);
+    }
 
     public static void VerifyWarning<T>(this Mock<ILogger<T>> mockLogger, string expectedMessage)
     {
@@ -30,6 +35,25 @@ public static class MockLoggerExtensions
                                          It.Is<It.IsAnyType>((@object, _) =>
                                                                  @object.ToString() == expectedMessage),
                                          It.IsAny<Exception>(),
+                                         It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+                    expectedTimes);
+    }
+    
+    private static void Verify<T>(Mock<ILogger<T>> mockLogger,
+                                  LogLevel expectedLevel,
+                                  string expectedMessage,
+                                  Func<Times> expectedTimes,
+                                  Exception expectedException)
+    {
+        mockLogger
+            .Verify(
+                    logger => logger.Log(
+                                         expectedLevel,
+                                         It.IsAny<EventId>(),
+                                         It.Is<It.IsAnyType>((@object, _) =>
+                                                                 @object.ToString() == expectedMessage),
+                                         It.Is<Exception>((@object, _) =>
+                                                                 @object == expectedException),
                                          It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
                     expectedTimes);
     }

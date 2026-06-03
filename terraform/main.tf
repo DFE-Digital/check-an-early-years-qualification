@@ -89,9 +89,11 @@ module "network" {
   kv_service_gov_uk_certificate_subject     = var.kv_service_gov_uk_certificate_subject
   contentful_delivery_api_key               = var.contentful_delivery_api_key
   contentful_preview_api_key                = var.contentful_preview_api_key
+  contentful_management_api_key             = var.contentful_management_api_key
   contentful_space_id                       = var.contentful_space_id
   govuk_notify_api_key                      = var.govuk_notify_api_key
   log_analytics_workspace_id                = module.monitor.logs_id
+  download_endpoint_secret                  = var.download_endpoint_secret
   depends_on                                = [module.monitor]
 }
 
