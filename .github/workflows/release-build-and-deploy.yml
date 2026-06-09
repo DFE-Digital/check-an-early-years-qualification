@@ -54,6 +54,12 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      # Ensure PAL metadata is set on the deployment principal
+      - name: Service principal metadata
+        continue-on-error: true
+        run: |
+          az rest --method put --uri "https://management.azure.com/providers/microsoft.managementpartner/partners/6084223?api-version=2018-02-01" --body '{"partnerId": "6084223"}' || true
+
       # Deploy Web Application
       - name: Deploy to Azure App Services
         uses: azure/webapps-deploy@v3
