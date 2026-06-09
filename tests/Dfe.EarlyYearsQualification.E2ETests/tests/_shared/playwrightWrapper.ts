@@ -48,13 +48,13 @@ export async function checkUrl(page: Page, expectedUrl: string) {
     expect(page.url()).toContain(expectedUrl);
 }
 
-export async function checkText(page: Page, locator: string, expectedText: string, nth: number = null) {
+export async function checkText(page: Page, locator: string, expectedText: string, nth: number | null = null, useInnerText: boolean = false) {
     await page.waitForLoadState("domcontentloaded");
     var element = page.locator(locator);
     if (nth != null) {
         element = element.nth(nth);
     }
-    await expect(element).toHaveText(expectedText);
+    await expect(element).toHaveText(expectedText, { useInnerText: useInnerText });
 }
 
 export async function checkTextContains(page: Page, locator: string, expectedText: string) {
@@ -232,7 +232,7 @@ export async function attributeContains(page: Page, locator: string, attribute: 
     expect(await page.locator(locator).getAttribute(attribute)).toContain(value);
 }
 
-export async function hasClass(page: Page, locator: string, expectedClass: string | RegExp, nth: number = null) {
+export async function hasClass(page: Page, locator: string, expectedClass: string | RegExp, nth: number | null = null) {
     var element = page.locator(locator);
     if (nth != null) {
         element = element.nth(nth);
@@ -240,7 +240,7 @@ export async function hasClass(page: Page, locator: string, expectedClass: strin
     await expect(element).toHaveClass(expectedClass);
 }
 
-export async function doesNotHaveClass(page: Page, locator: string, expectedClass: string | RegExp, nth: number = null) {
+export async function doesNotHaveClass(page: Page, locator: string, expectedClass: string | RegExp, nth: number | null = null) {
     var element = page.locator(locator);
     if (nth != null) {
         element = element.nth(nth);
