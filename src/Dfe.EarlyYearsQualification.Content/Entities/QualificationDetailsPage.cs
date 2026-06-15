@@ -25,4 +25,12 @@ public class QualificationDetailsPage
     public string RequirementsHeading { get; init; } = string.Empty;
 
     public Document? RequirementsText { get; init; }
+    
+    public Document? UnqualifiedRatioRequirements { get; init; }
+
+    public Document? Level2RatioRequirements { get; set; }
+    
+    public Document? Level3RatioRequirements { get; set; }
+    
+    public Document? Level6RatioRequirements { get; set; }
 }

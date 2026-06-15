@@ -16,7 +16,7 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
         string dateAwarded,
-        List<Qualification> qualifications)
+        bool hasMultipleQualificationsWithSameName)
     {
         var requirementsTextHtml = await contentParser.ToHtml(content.RequirementsText);
         var printInformationBody = await contentParser.ToHtml(content.Labels.PrintInformationBody);
@@ -51,9 +51,10 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
                 QualificationNameLabel = content.Labels.QualificationNameLabel,
                 QualificationStartDateLabel = content.Labels.QualificationStartDateLabel,
                 QualificationAwardedDateLabel = content.Labels.QualificationAwardedDateLabel,
-                QualificationDetailsSummaryHeader = content.Labels.QualificationDetailsSummaryHeader
+                QualificationDetailsSummaryHeader = content.Labels.QualificationDetailsSummaryHeader,
+                QualificationResultHeading = content.Labels.QualificationResultHeading
             },
-            IsQualificationNameDuplicate = qualifications.Count(x => x.QualificationName.Equals(qualification.QualificationName, StringComparison.OrdinalIgnoreCase)) > 1,
+            IsQualificationNameDuplicate = hasMultipleQualificationsWithSameName,
             UserType = content.IsPractitionerSpecificPage ? UserTypes.Practitioner : UserTypes.Manager
         };
     }

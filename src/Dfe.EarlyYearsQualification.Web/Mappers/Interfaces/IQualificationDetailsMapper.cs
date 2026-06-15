@@ -12,6 +12,6 @@ public interface IQualificationDetailsMapper
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
         string dateAwarded,
-        List<Qualification> qualifications
+        bool hasMultipleQualificationsWithSameName
         );
 }

@@ -24,25 +24,17 @@ public class RatioRequirementModel
         }
     }
 
-    public string RequirementsHeadingForLevel2 { get; set; } = string.Empty;
-
     public string RequirementsForLevel2 { get; set; } = string.Empty;
-
-    public string RequirementsHeadingForLevel3 { get; set; } = string.Empty;
 
     public string RequirementsForLevel3 { get; set; } = string.Empty;
 
-    public bool ShowRequirementsForLevel3ByDefault { get; set; }
-    
-    public string RequirementsHeadingForLevel6 { get; set; } = string.Empty;
-
     public string RequirementsForLevel6 { get; set; } = string.Empty;
 
-    public bool ShowRequirementsForLevel6ByDefault { get; set; }
-
-    public bool ShowRequirementsForLevel2ByDefault { get; set; }
-
-    public string RequirementsHeadingForUnqualified { get; set; } = string.Empty;
+    // public bool ShowRequirementsForLevel2ByDefault { get; set; }
+    //
+    // public bool ShowRequirementsForLevel3ByDefault { get; set; }
+    //
+    // public bool ShowRequirementsForLevel6ByDefault { get; set; }
 
     public string RequirementsForUnqualified { get; set; } = string.Empty;
 }

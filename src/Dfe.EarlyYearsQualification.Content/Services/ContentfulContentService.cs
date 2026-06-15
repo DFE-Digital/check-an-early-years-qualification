@@ -44,14 +44,11 @@ public class ContentfulContentService(
                            .FieldEquals("fields.isPractitionerSpecificPage",
                                         userIsCheckingOwnQualification ? "1" : "0");
 
-        if (userIsCheckingOwnQualification)
-        {
-            queryBuilder = queryBuilder
-                           .FieldEquals("fields.level", level.ToString())
-                           .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0")
-                           .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0")
-                           .FieldEquals("fields.isAutomaticallyApprovedAtLevel6", isApprovedAtL6SpecificPage ? "1" : "0");
-        }
+        queryBuilder = queryBuilder
+                       .FieldEquals("fields.level", level.ToString())
+                       .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0")
+                       .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0")
+                       .FieldEquals("fields.isAutomaticallyApprovedAtLevel6", isApprovedAtL6SpecificPage ? "1" : "0");
 
         var qualificationDetailsPageEntries = await GetEntriesByType(queryBuilder);
 
@@ -62,12 +59,7 @@ public class ContentfulContentService(
         }
 
         // Filter out content where date is not between FromWhichYear and ToWhichYear
-        if (userIsCheckingOwnQualification)
-        {
-            return GetFilteredPractitionerQualificationDetailsPage(startMonth, startYear, qualificationDetailsPageEntries);
-        }
-
-        return qualificationDetailsPageEntries.First();
+        return GetFilteredPractitionerQualificationDetailsPage(startMonth, startYear, qualificationDetailsPageEntries);
     }
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()

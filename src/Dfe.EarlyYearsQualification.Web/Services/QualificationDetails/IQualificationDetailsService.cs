@@ -9,8 +9,7 @@ public interface IQualificationDetailsService
     
     Task<Qualification?> GetQualificationById(string qualificationId);
 
-    Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content,
-                                               List<Qualification> qualifications);
+    Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content);
 
     bool HasStartDate();
 
@@ -24,17 +23,17 @@ public interface IQualificationDetailsService
 
     RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model);
 
-    Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
-                                                           Qualification qualification);
+    // Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
+    //                                                        Qualification qualification);
 
-    Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model,
-                                          Qualification qualification);
+    // Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model,
+    //                                       Qualification qualification);
 
     // ReSharper disable once IdentifierTypo
-    Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model,
-                                            Qualification qualification);
+    // Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model,
+    //                                         Qualification qualification);
 
-    Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model);
+    //Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model);
 
     (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(
         QualificationDetailsModel details, AdditionalRequirementQuestion qtsQuestion);
@@ -44,10 +43,12 @@ public interface IQualificationDetailsService
 
     bool DoAdditionalAnswersMatchQuestions(QualificationDetailsModel details);
 
-    NavigationLink? CalculateBackButton(DetailsPageLabels content, string qualificationId);
+    // NavigationLink? CalculateBackButton(DetailsPageLabels content, string qualificationId);
 
     List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
         List<AdditionalRequirementQuestion>? additionalRequirementQuestions);
+    
+    Task SetRatioRequirements(Qualification qualification, QualificationDetailsModel model, QualificationDetailsPage pageContent);
 
     Task SetRatioText(QualificationDetailsModel model, DetailsPageLabels content);
 
@@ -55,9 +56,9 @@ public interface IQualificationDetailsService
 
     void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPageLabels content);
 
-    Task SetRequirementOverrides(Qualification qualification, QualificationDetailsModel model);
+    //Task SetRequirementOverrides(Qualification qualification, QualificationDetailsModel model);
 
-    Task SetDefaultCardContentForApprovedQualifications(Qualification qualification, QualificationDetailsModel model);
+    //Task SetDefaultCardContentForApprovedQualifications(Qualification qualification, QualificationDetailsModel model);
 
     bool GetUserIsCheckingOwnQualification();
 
@@ -67,7 +68,5 @@ public interface IQualificationDetailsService
 
     Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification,
                                                                 bool isFullAndRelevant, int level, int startMonth,
-                                                                int startYear, Qualification qualification,
-                                                                List<AdditionalRequirementAnswerModel>?
-                                                                    additionalRequirementAnswerModels);
+                                                                int startYear, Qualification qualification);
 }
