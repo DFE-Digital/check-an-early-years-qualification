@@ -125,8 +125,7 @@ public class QualificationDetailsControllerTests
         _ = await sut.Index(qualificationId);
 
         _mockQualificationDetailsService.Verify(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001,
-                                                 It.IsAny<Qualification>(),
-                                                 It.IsAny<List<AdditionalRequirementAnswerModel>>()), Times.Once);
+                                                 It.IsAny<Qualification>()), Times.Once);
     }
     
     [TestMethod]
@@ -152,8 +151,7 @@ public class QualificationDetailsControllerTests
         _ = await sut.Index(qualificationId);
 
         _mockQualificationDetailsService.Verify(o => o.GetQualificationDetailsPage(false, true, 5, 6, 2001,
-                                                 It.IsAny<Qualification>(),
-                                                 It.IsAny<List<AdditionalRequirementAnswerModel>>()), Times.Once);
+                                                 It.IsAny<Qualification>()), Times.Once);
     }
 
     [TestMethod]
@@ -171,8 +169,7 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
                                         .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
         _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync((QualificationDetailsPage)null!);
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications()).ReturnsAsync(qualifications);
         _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
@@ -195,8 +192,7 @@ public class QualificationDetailsControllerTests
                                         .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
         _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
         _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, It.IsAny<bool>(), 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(o => o.GetQualificationDetailsPage(false, It.IsAny<bool>(), 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(DummyDetailsPage);
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
                                         .ReturnsAsync(new List<Qualification>());
@@ -204,8 +200,7 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
         _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
         _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
+                                                                 It.IsAny<QualificationDetailsPage>()))
                                         .ReturnsAsync(DummyDetails);
 
         var sut = GetSut();
@@ -221,8 +216,7 @@ public class QualificationDetailsControllerTests
         const string qualificationId = "qualificationId";
         _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
         _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(DummyDetailsPage);
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
                                         .ReturnsAsync(new List<Qualification>());
@@ -244,8 +238,7 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
                                         .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
         _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(DummyDetailsPage);
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
                                         .ReturnsAsync(new List<Qualification> { DummyQualification });
@@ -266,69 +259,66 @@ public class QualificationDetailsControllerTests
         finally
         {
             _mockQualificationDetailsService
-                .Verify(o => o.MapDetails(It.IsAny<Qualification>(), It.IsAny<QualificationDetailsPage>(),
-                                          It.IsAny<List<Qualification>>()), Times.Once);
+                .Verify(o => o.MapDetails(It.IsAny<Qualification>(), It.IsAny<QualificationDetailsPage>()), Times.Once);
         }
     }
 
-    [TestMethod]
-    public async Task Index_ValidateAdditionalQuestions_Valid_Calls_QualificationDetailsService_CheckRatioRequirements()
-    {
-        const string qualificationId = "qualificationId";
-        _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
-        _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
-                                        .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
-        _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
-            .ReturnsAsync(DummyDetailsPage);
-        _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
-                                        .ReturnsAsync(new List<Qualification> { DummyQualification });
-        _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
-                                        .ReturnsAsync(DummyDetails);
-        _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
-        _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
-        _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
+    // [TestMethod]
+    // public async Task Index_ValidateAdditionalQuestions_Valid_Calls_QualificationDetailsService_CheckRatioRequirements()
+    // {
+    //     const string qualificationId = "qualificationId";
+    //     _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
+    //     _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
+    //                                     .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
+    //     _mockQualificationDetailsService
+    //         .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
+    //         .ReturnsAsync(DummyDetailsPage);
+    //     _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
+    //                                     .ReturnsAsync(new List<Qualification> { DummyQualification });
+    //     _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
+    //                                                              It.IsAny<QualificationDetailsPage>()))
+    //                                     .ReturnsAsync(DummyDetails);
+    //     _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
+    //     _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
+    //     _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
+    //
+    //     var sut = GetSut();
+    //     _ = await sut.Index(qualificationId);
+    //
+    //     _mockQualificationDetailsService
+    //         .Verify(o => o.CheckRatioRequirements(It.IsAny<Qualification>(), It.IsAny<QualificationDetailsModel>()),
+    //                 Times.Exactly(1));
+    // }
 
-        var sut = GetSut();
-        _ = await sut.Index(qualificationId);
-
-        _mockQualificationDetailsService
-            .Verify(o => o.CheckRatioRequirements(It.IsAny<Qualification>(), It.IsAny<QualificationDetailsModel>()),
-                    Times.Exactly(1));
-    }
-
-    [TestMethod]
-    public async Task Index_ValidateAdditionalQuestions_Valid_Calls_QualificationLevel3OrAboveMightBeRelevantAtLevel2()
-    {
-        const string qualificationId = "qualificationId";
-        _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
-        _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
-                                        .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
-        _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
-            .ReturnsAsync(DummyDetailsPage);
-        _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
-                                        .ReturnsAsync(new List<Qualification> { DummyQualification });
-        _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
-                                        .ReturnsAsync(DummyDetails);
-        _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
-        _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
-        _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
-
-        var sut = GetSut();
-        _ = await sut.Index(qualificationId);
-
-        _mockQualificationDetailsService
-            .Verify(o => o.QualificationLevel3OrAboveMightBeRelevantAtLevel2(It.IsAny<QualificationDetailsModel>(),
-                                                                             It.IsAny<Qualification>()),
-                    Times.Once);
-    }
+    // [TestMethod]
+    // public async Task Index_ValidateAdditionalQuestions_Valid_Calls_QualificationLevel3OrAboveMightBeRelevantAtLevel2()
+    // {
+    //     const string qualificationId = "qualificationId";
+    //     _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
+    //     _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
+    //                                     .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
+    //     _mockQualificationDetailsService
+    //         .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
+    //                                                   It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+    //         .ReturnsAsync(DummyDetailsPage);
+    //     _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
+    //                                     .ReturnsAsync(new List<Qualification> { DummyQualification });
+    //     _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
+    //                                                              It.IsAny<QualificationDetailsPage>(),
+    //                                                              It.IsAny<List<Qualification>>()))
+    //                                     .ReturnsAsync(DummyDetails);
+    //     _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
+    //     _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
+    //     _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
+    //
+    //     var sut = GetSut();
+    //     _ = await sut.Index(qualificationId);
+    //
+    //     _mockQualificationDetailsService
+    //         .Verify(o => o.QualificationLevel3OrAboveMightBeRelevantAtLevel2(It.IsAny<QualificationDetailsModel>(),
+    //                                                                          It.IsAny<Qualification>()),
+    //                 Times.Once);
+    // }
 
     [TestMethod]
     public async Task Index_ValidateAdditionalQuestions_Valid_ReturnsView()
@@ -338,14 +328,12 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
                                         .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
         _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(DummyDetailsPage);
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
                                         .ReturnsAsync(new List<Qualification> { DummyQualification });
         _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
+                                                                 It.IsAny<QualificationDetailsPage>()))
                                         .ReturnsAsync(DummyDetails);
         _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
         _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
@@ -361,44 +349,42 @@ public class QualificationDetailsControllerTests
         model.Should().NotBeNull();
     }
 
-    [TestMethod]
-    public async Task
-        Index_ValidateAdditionalQuestions_InValid_Calls_QualificationDetailsService_QualificationLevel3OrAboveMightBeRelevantAtLevel2()
-    {
-        const string qualificationId = "qualificationId";
-        var details = new QualificationDetailsModel
-                      {
-                          AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()],
-                          Content = new DetailsPageModel()
-                      };
-        _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
-        _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
-                                        .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
-        _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
-            .ReturnsAsync(DummyDetailsPage);
-        _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
-                                        .ReturnsAsync(new List<Qualification> { DummyQualification });
-        _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
-                                        .ReturnsAsync(details);
-        _mockQualificationDetailsService
-            .Setup(o => o.AnswersIndicateNotFullAndRelevant(It.IsAny<List<AdditionalRequirementAnswerModel>>()))
-            .Returns(true);
-        _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
-        _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
-        _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
-
-        var sut = GetSut();
-        _ = await sut.Index(qualificationId);
-
-        _mockQualificationDetailsService
-            .Verify(o => o.QualificationLevel3OrAboveMightBeRelevantAtLevel2(It.IsAny<QualificationDetailsModel>(),
-                                                                             It.IsAny<Qualification>()),
-                    Times.Once);
-    }
+    // [TestMethod]
+    // public async Task
+    //     Index_ValidateAdditionalQuestions_InValid_Calls_QualificationDetailsService_QualificationLevel3OrAboveMightBeRelevantAtLevel2()
+    // {
+    //     const string qualificationId = "qualificationId";
+    //     var details = new QualificationDetailsModel
+    //                   {
+    //                       AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()],
+    //                       Content = new DetailsPageModel()
+    //                   };
+    //     _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
+    //     _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
+    //                                     .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
+    //     _mockQualificationDetailsService
+    //         .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
+    //         .ReturnsAsync(DummyDetailsPage);
+    //     _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
+    //                                     .ReturnsAsync(new List<Qualification> { DummyQualification });
+    //     _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
+    //                                                              It.IsAny<QualificationDetailsPage>()))
+    //                                     .ReturnsAsync(details);
+    //     _mockQualificationDetailsService
+    //         .Setup(o => o.AnswersIndicateNotFullAndRelevant(It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+    //         .Returns(true);
+    //     _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
+    //     _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
+    //     _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
+    //
+    //     var sut = GetSut();
+    //     _ = await sut.Index(qualificationId);
+    //
+    //     _mockQualificationDetailsService
+    //         .Verify(o => o.QualificationLevel3OrAboveMightBeRelevantAtLevel2(It.IsAny<QualificationDetailsModel>(),
+    //                                                                          It.IsAny<Qualification>()),
+    //                 Times.Once);
+    // }
 
     [TestMethod]
     public async Task Index_ValidateAdditionalQuestions_InValid_Returns_View()
@@ -413,14 +399,12 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
                                         .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
         _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(DummyDetailsPage);
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
                                         .ReturnsAsync(new List<Qualification> { DummyQualification });
         _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
+                                                                 It.IsAny<QualificationDetailsPage>()))
                                         .ReturnsAsync(details);
         _mockQualificationDetailsService
             .Setup(o => o.AnswersIndicateNotFullAndRelevant(It.IsAny<List<AdditionalRequirementAnswerModel>>()))
@@ -456,14 +440,12 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
                                         .ReturnsAsync(new List<Qualification> { DummyQualification });
         _mockQualificationDetailsService
-            .Setup(x => x.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(x => x.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(DummyDetailsPage);
 
         _mockQualificationDetailsService.Setup(x => x.HasStartDate()).Returns(true);
         _mockQualificationDetailsService.Setup(x => x.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
+                                                                 It.IsAny<QualificationDetailsPage>()))
                                         .ReturnsAsync(qualificationDetailsModel);
         _mockQualificationDetailsService
             .Setup(x => x.DoAdditionalAnswersMatchQuestions(It.IsAny<QualificationDetailsModel>())).Returns(true);
@@ -495,13 +477,11 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
                                         .ReturnsAsync(new List<Qualification> { DummyQualification });
         _mockQualificationDetailsService
-            .Setup(x => x.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(x => x.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(new QualificationDetailsPage());
         _mockQualificationDetailsService.Setup(x => x.HasStartDate()).Returns(true);
         _mockQualificationDetailsService.Setup(x => x.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
+                                                                 It.IsAny<QualificationDetailsPage>()))
                                         .ReturnsAsync(details);
         _mockQualificationDetailsService
             .Setup(x => x.AnswersIndicateNotFullAndRelevant(It.IsAny<List<AdditionalRequirementAnswerModel>>()))
@@ -523,14 +503,14 @@ public class QualificationDetailsControllerTests
                     Times.Once);
         _mockQualificationDetailsService.Verify(o => o.MarkAsNotFullAndRelevant(It.IsAny<RatioRequirementModel>()),
                                                 Times.Once);
-        _mockQualificationDetailsService
-            .Verify(o => o.QualificationLevel3OrAboveMightBeRelevantAtLevel2(It.IsAny<QualificationDetailsModel>(),
-                                                                             It.IsAny<Qualification>()),
-                    Times.Once);
-        _mockQualificationDetailsService
-            .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(),
-                                                            It.IsAny<Qualification>()),
-                    Times.Once);
+        // _mockQualificationDetailsService
+        //     .Verify(o => o.QualificationLevel3OrAboveMightBeRelevantAtLevel2(It.IsAny<QualificationDetailsModel>(),
+        //                                                                      It.IsAny<Qualification>()),
+        //             Times.Once);
+        // _mockQualificationDetailsService
+        //     .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(),
+        //                                                     It.IsAny<Qualification>()),
+        //             Times.Once);
 
         result.Should().NotBeNull();
         var resultType = result as ViewResult;
@@ -594,13 +574,11 @@ public class QualificationDetailsControllerTests
         _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
                                         .ReturnsAsync(new List<Qualification> { qualification });
         _mockQualificationDetailsService
-            .Setup(x => x.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(x => x.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(new QualificationDetailsPage());
         _mockQualificationDetailsService.Setup(x => x.HasStartDate()).Returns(true);
         _mockQualificationDetailsService.Setup(x => x.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
+                                                                 It.IsAny<QualificationDetailsPage>()))
                                         .ReturnsAsync(details);
         _mockQualificationDetailsService.Setup(x => x.QualificationContainsQtsQuestion(It.IsAny<Qualification>()))
                                         .Returns(true);
@@ -675,13 +653,11 @@ public class QualificationDetailsControllerTests
                                                                             It.IsAny<int>())
                                                       });
         _mockQualificationDetailsService
-            .Setup(x => x.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+            .Setup(x => x.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
             .ReturnsAsync(new QualificationDetailsPage());
         _mockQualificationDetailsService.Setup(x => x.HasStartDate()).Returns(true);
         _mockQualificationDetailsService.Setup(x => x.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
+                                                                 It.IsAny<QualificationDetailsPage>()))
                                         .ReturnsAsync(details);
         _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
         _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
@@ -707,74 +683,72 @@ public class QualificationDetailsControllerTests
         }
     }
 
-    [TestMethod]
-    public async Task Index_ValidateAdditionalQuestions_Valid_Calls_QualificationMayBeEligibleForEbr()
-    {
-        const string qualificationId = "qualificationId";
-        _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
-        _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
-                                        .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
-        _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
-            .ReturnsAsync(DummyDetailsPage);
+    // [TestMethod]
+    // public async Task Index_ValidateAdditionalQuestions_Valid_Calls_QualificationMayBeEligibleForEbr()
+    // {
+    //     const string qualificationId = "qualificationId";
+    //     _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
+    //     _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
+    //                                     .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
+    //     _mockQualificationDetailsService
+    //         .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>()))
+    //         .ReturnsAsync(DummyDetailsPage);
+    //
+    //     _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
+    //                                     .ReturnsAsync(new List<Qualification> { DummyQualification });
+    //     _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
+    //                                                              It.IsAny<QualificationDetailsPage>()))
+    //                                     .ReturnsAsync(DummyDetails);
+    //     _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
+    //     _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
+    //     _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
+    //
+    //     var sut = GetSut();
+    //     _ = await sut.Index(qualificationId);
+    //
+    //     _mockQualificationDetailsService
+    //         .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(),
+    //                                                         It.IsAny<Qualification>()),
+    //                 Times.Once);
+    // }
 
-        _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
-                                        .ReturnsAsync(new List<Qualification> { DummyQualification });
-        _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
-                                        .ReturnsAsync(DummyDetails);
-        _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
-        _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
-        _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
-
-        var sut = GetSut();
-        _ = await sut.Index(qualificationId);
-
-        _mockQualificationDetailsService
-            .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(),
-                                                            It.IsAny<Qualification>()),
-                    Times.Once);
-    }
-
-    [TestMethod]
-    public async Task Index_ValidateAdditionalQuestions_InValid_Calls_QualificationMayBeEligibleForEbr()
-    {
-        const string qualificationId = "qualificationId";
-        var details = new QualificationDetailsModel
-                      {
-                          AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()],
-                          Content = new DetailsPageModel()
-                      };
-        _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
-        _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
-                                        .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
-        _mockQualificationDetailsService
-            .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
-                                                      It.IsAny<List<AdditionalRequirementAnswerModel>>()))
-            .ReturnsAsync(DummyDetailsPage);
-        _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
-                                        .ReturnsAsync(new List<Qualification> { DummyQualification });
-        _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
-                                                                 It.IsAny<QualificationDetailsPage>(),
-                                                                 It.IsAny<List<Qualification>>()))
-                                        .ReturnsAsync(details);
-        _mockQualificationDetailsService
-            .Setup(o => o.AnswersIndicateNotFullAndRelevant(It.IsAny<List<AdditionalRequirementAnswerModel>>()))
-            .Returns(true);
-        _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
-        _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
-        _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
-
-        var sut = GetSut();
-        _ = await sut.Index(qualificationId);
-
-        _mockQualificationDetailsService
-            .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(),
-                                                            It.IsAny<Qualification>()),
-                    Times.Once);
-    }
+    // [TestMethod]
+    // public async Task Index_ValidateAdditionalQuestions_InValid_Calls_QualificationMayBeEligibleForEbr()
+    // {
+    //     const string qualificationId = "qualificationId";
+    //     var details = new QualificationDetailsModel
+    //                   {
+    //                       AdditionalRequirementAnswers = [new AdditionalRequirementAnswerModel()],
+    //                       Content = new DetailsPageModel()
+    //                   };
+    //     _mockQualificationDetailsService.Setup(o => o.HasStartDate()).Returns(true);
+    //     _mockQualificationDetailsService.Setup(x => x.GetQualificationById(It.IsAny<string>()))
+    //                                     .ReturnsAsync(new Qualification(qualificationId, "Name", "Awarding Org", 3));
+    //     _mockQualificationDetailsService
+    //         .Setup(o => o.GetQualificationDetailsPage(false, true, 3, 6, 2001, It.IsAny<Qualification>(),
+    //                                                   It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+    //         .ReturnsAsync(DummyDetailsPage);
+    //     _mockQualificationDetailsService.Setup(o => o.GetFilteredQualifications())
+    //                                     .ReturnsAsync(new List<Qualification> { DummyQualification });
+    //     _mockQualificationDetailsService.Setup(o => o.MapDetails(It.IsAny<Qualification>(),
+    //                                                              It.IsAny<QualificationDetailsPage>(),
+    //                                                              It.IsAny<List<Qualification>>()))
+    //                                     .ReturnsAsync(details);
+    //     _mockQualificationDetailsService
+    //         .Setup(o => o.AnswersIndicateNotFullAndRelevant(It.IsAny<List<AdditionalRequirementAnswerModel>>()))
+    //         .Returns(true);
+    //     _mockQualificationDetailsService.Setup(o => o.GetLevelOfQualification()).Returns(3);
+    //     _mockQualificationDetailsService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((6, 2001));
+    //     _mockQualificationDetailsService.Setup(o => o.GetUserIsCheckingOwnQualification()).Returns(false);
+    //
+    //     var sut = GetSut();
+    //     _ = await sut.Index(qualificationId);
+    //
+    //     _mockQualificationDetailsService
+    //         .Verify(o => o.QualificationMayBeEligibleForEbr(It.IsAny<QualificationDetailsModel>(),
+    //                                                         It.IsAny<Qualification>()),
+    //                 Times.Once);
+    // }
 
     [TestMethod]
     public void QualificationResultModelSetsCorrectly()

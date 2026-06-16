@@ -53,6 +53,53 @@ public class QualificationDetailsService(
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         return startDateMonth is not null && startDateYear is not null;
     }
+    
+        public void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPageLabels content)
+    {
+        model.Content!.QualificationResultHeading = content.QualificationResultHeading;
+        model.Content.QualificationResultMessageHeading = content.QualificationResultFrMessageHeading;
+        model.Content.QualificationResultMessageBody = content.QualificationResultFrMessageBody;
+    }
+
+    public void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPageLabels content)
+    {
+        model.Content!.QualificationResultHeading = content.QualificationResultHeading;
+
+        if (model.RatioRequirements.IsNotFullAndRelevant && model.QualificationLevel > 2 &&
+            userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019())
+        {
+            if (model.QualificationLevel < 6)
+            {
+                model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrL3MessageHeading;
+                model.Content.QualificationResultMessageBody = content.QualificationResultNotFrL3MessageBody;
+            }
+            else
+            {
+                model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrL3OrL6MessageHeading;
+                model.Content.QualificationResultMessageBody = content.QualificationResultNotFrL3OrL6MessageBody;
+            }
+        }
+        else
+        {
+            model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrMessageHeading;
+            model.Content.QualificationResultMessageBody = content.QualificationResultNotFrMessageBody;
+        }
+    }
+
+    public bool GetUserIsCheckingOwnQualification()
+    {
+        return userJourneyCookieService.GetIsUserCheckingTheirOwnQualification() == Options.Yes;
+    }
+
+    public int? GetLevelOfQualification()
+    {
+        return userJourneyCookieService.GetLevelOfQualification();
+    }
+
+    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
+    {
+        return userJourneyCookieService.GetWhenWasQualificationStarted();
+    }
 
     public List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
         List<AdditionalRequirementQuestion>? additionalRequirementQuestions)
@@ -625,53 +672,6 @@ public class QualificationDetailsService(
     //         requirements.RequirementsForLevel6 = await contentParser.ToHtml(level6ContentSummary);
     //     }
     // }
-
-    public void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPageLabels content)
-    {
-        model.Content!.QualificationResultHeading = content.QualificationResultHeading;
-        model.Content.QualificationResultMessageHeading = content.QualificationResultFrMessageHeading;
-        model.Content.QualificationResultMessageBody = content.QualificationResultFrMessageBody;
-    }
-
-    public void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPageLabels content)
-    {
-        model.Content!.QualificationResultHeading = content.QualificationResultHeading;
-
-        if (model.RatioRequirements.IsNotFullAndRelevant && model.QualificationLevel > 2 &&
-            userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019())
-        {
-            if (model.QualificationLevel < 6)
-            {
-                model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrL3MessageHeading;
-                model.Content.QualificationResultMessageBody = content.QualificationResultNotFrL3MessageBody;
-            }
-            else
-            {
-                model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrL3OrL6MessageHeading;
-                model.Content.QualificationResultMessageBody = content.QualificationResultNotFrL3OrL6MessageBody;
-            }
-        }
-        else
-        {
-            model.Content.QualificationResultMessageHeading = content.QualificationResultNotFrMessageHeading;
-            model.Content.QualificationResultMessageBody = content.QualificationResultNotFrMessageBody;
-        }
-    }
-
-    public bool GetUserIsCheckingOwnQualification()
-    {
-        return userJourneyCookieService.GetIsUserCheckingTheirOwnQualification() == Options.Yes;
-    }
-
-    public int? GetLevelOfQualification()
-    {
-        return userJourneyCookieService.GetLevelOfQualification();
-    }
-
-    public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
-    {
-        return userJourneyCookieService.GetWhenWasQualificationStarted();
-    }
 
     private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
     {
