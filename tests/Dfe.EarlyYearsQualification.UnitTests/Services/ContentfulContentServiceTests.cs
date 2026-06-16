@@ -515,8 +515,10 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                                      It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
                                                      It.IsAny<CancellationToken>()))
                   .ReturnsAsync(content);
+        var mockDateValidator = new Mock<IDateValidator>();
+        mockDateValidator.Setup(x => x.GetDay()).Returns(28);
 
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
 
         var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001, false, false);
 
