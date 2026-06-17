@@ -430,9 +430,13 @@ public class QualificationDetailsService(
     {
         // Needed for displaying the qualification number if there is a duplicate cert with the same name.
         var filteredQualifications = await GetFilteredQualifications(qualification.QualificationName);
-        var hasMultipleQualificationsWithSameName = filteredQualifications
+        var hasMultipleQualificationsWithSameName = false;
+        if (filteredQualifications.Count != 0)
+        {
+            hasMultipleQualificationsWithSameName = filteredQualifications
                                                     .Select(x => x.QualificationName == qualification.QualificationName)
                                                     .Count() > 1;
+        }
 
         var backNavLink = CalculateBackButton(content.Labels, qualification.QualificationId);
 

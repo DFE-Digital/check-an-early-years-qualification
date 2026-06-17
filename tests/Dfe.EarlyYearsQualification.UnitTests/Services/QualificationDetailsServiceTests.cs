@@ -711,6 +711,7 @@ public class QualificationDetailsServiceTests
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardMonth, awardYear));
 
+        _mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
         _mockQualificationDetailsMapper
             .Setup(x => x.Map(qualification, detailsPage, backButton,
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded,
@@ -750,7 +751,7 @@ public class QualificationDetailsServiceTests
         // Start date: August 2014 => before September 2014
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns(((int?)8, (int?)2014));
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns(((int?)null, (int?)null));
-
+        _mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
         _mockQualificationDetailsMapper
             .Setup(x => x.Map(qualification, detailsPage, backButton,
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), "Before 1 September 2014", string.Empty,
@@ -802,6 +803,7 @@ public class QualificationDetailsServiceTests
         var userAnswers = new Dictionary<string, string> { { "Q1", "yes" } };
         _mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers()).Returns(userAnswers);
 
+        _mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
         _mockQualificationDetailsMapper
             .Setup(x => x.Map(It.IsAny<Qualification>(), It.IsAny<QualificationDetailsPage>(), It.IsAny<NavigationLink?>(),
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), It.IsAny<string>(), It.IsAny<string>(), false))
