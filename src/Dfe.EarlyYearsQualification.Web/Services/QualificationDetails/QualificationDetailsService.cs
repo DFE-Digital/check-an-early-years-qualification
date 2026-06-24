@@ -65,7 +65,7 @@ public class QualificationDetailsService(
     {
         model.Content!.QualificationResultHeading = content.QualificationResultHeading;
 
-        if (model.RatioRequirements.IsNotFullAndRelevant && model.QualificationLevel > 2 &&
+        if (!model.RatioRequirements.IsFullAndRelevant && model.QualificationLevel > 2 &&
             userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019())
         {
             if (model.QualificationLevel < 6)
@@ -226,8 +226,12 @@ public class QualificationDetailsService(
     }
 
     public async Task SetRatioRequirements(Qualification qualification, QualificationDetailsModel model,
-                                           QualificationDetailsPage pageContent)
+                                           QualificationDetailsPage pageContent, bool isFullAndRelevant)
     {
+        if (isFullAndRelevant)
+        {
+            
+        
         // Build up property name to check for each level
         var beforeOrAfter = userJourneyCookieService.WasStartedBeforeSeptember2014() ? "Before" : "After";
 
@@ -270,6 +274,11 @@ public class QualificationDetailsService(
         model.RatioRequirements.ApprovedForUnqualified = approvedForUnqualified
                                                              ? QualificationApprovalStatus.Approved
                                                              : QualificationApprovalStatus.NotApproved;
+        }
+        else
+        {
+            MarkAsNotFullAndRelevant(model.RatioRequirements);
+        }
 
         // Set the text for the requirement levels to be read from page content
         model.RatioRequirements.RequirementsForLevel2 = placeholderUpdater.Replace(await contentParser.ToHtml(pageContent.Level2RatioRequirements));
@@ -468,13 +477,13 @@ public class QualificationDetailsService(
 
     public async Task SetRatioText(QualificationDetailsModel model, DetailsPageLabels content)
     {
-        switch (model.RatioRequirements.IsNotFullAndRelevant)
+        switch (model.RatioRequirements.IsFullAndRelevant)
         {
             case true:
-                await SetRatioTextWhereIsNotFullAndRelevant(model, content);
+                SetRatioTextWhereIsFullAndRelevant(model);
                 break;
             case false:
-                SetRatioTextWhereIsFullAndRelevant(model);
+                await SetRatioTextWhereIsNotFullAndRelevant(model, content);
                 break;
         }
     }
@@ -504,8 +513,8 @@ public class QualificationDetailsService(
 
     private static void QualificationMayBeEligibleForEbr(QualificationDetailsModel model, Qualification qualification)
     {
-        var ebrEligible = (!model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel == 2) ||
-                           (model.RatioRequirements.IsNotFullAndRelevant && qualification.QualificationLevel >= 3);
+        var ebrEligible = (model.RatioRequirements.IsFullAndRelevant && qualification.QualificationLevel == 2) ||
+                           (!model.RatioRequirements.IsFullAndRelevant && qualification.QualificationLevel >= 3);
         if (ebrEligible)
         {
             model.RatioRequirements.ApprovedForLevel3 = QualificationApprovalStatus.PossibleRouteAvailable;
@@ -521,12 +530,12 @@ public class QualificationDetailsService(
                                                                          Qualification qualification)
     {
         // Check if the qualification is not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
-        if (model.RatioRequirements.IsNotFullAndRelevant &&
+        if (!model.RatioRequirements.IsFullAndRelevant &&
             userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() &&
             qualification.QualificationLevel > 2)
         {
             // This is needed to preserve the Not Full and Relevant messaging as changing the L2 status below makes it F&R 
-            model.RatioRequirements.OverrideToBeNotFullAndRelevant = true;
+            //model.RatioRequirements.OverrideToBeNotFullAndRelevant = true;
 
             // If the qualification is above a level 2 qualification, is not full and relevant and is started between Sept 2014 and Aug 2019
             // then policy have confirmed it can be automatically approved at L2
@@ -617,11 +626,11 @@ public class QualificationDetailsService(
 
         switch (model.QualificationLevel)
         {
-            case >= 3 when wasStartedBetweenSeptember2014AndAugust2019 &&
-                           model.RatioRequirements.OverrideToBeNotFullAndRelevant:
-                model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
-                model.Content!.RatiosAdditionalInfoText = string.Empty;
-                break;
+            // case >= 3 when wasStartedBetweenSeptember2014AndAugust2019:
+            //                //&& model.RatioRequirements.OverrideToBeNotFullAndRelevant:
+            //     model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
+            //     model.Content!.RatiosAdditionalInfoText = string.Empty;
+            //     break;
             case >= 3 when wasStartedBetweenSeptember2014AndAugust2019:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
                 model.Content!.RatiosAdditionalInfoText = await contentParser.ToHtml(content.RatiosTextL3Ebr);

@@ -109,12 +109,12 @@ test.describe('A spec used to test the various routes through the practitioner j
         await checkRatiosHeading(page, "Test ratio heading");
 
         await checkLevelRatioDetails(page, 0, "Level 3", RatioStatus.Approved, {
-            detailText: "Level 3 must English must PFA"
+            detailText: "Level 3 ratio requirement - F&R"
         });
         await checkLevelRatioDetails(page, 1, "Level 2", RatioStatus.Approved, {
-            detailText: "Level 2 must PFA"
+            detailText: "Level 2 ratio requirement - F&R"
         });
-        await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: "Summary card default content"  });
-        await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.PossibleRouteAvailable, { detailText: 'This is the EYITT content' });
+        await checkLevelRatioDetails(page, 2, "Unqualified", RatioStatus.Approved, { detailText: "Unqualified ratio requirement - F&R"  });
+        await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.PossibleRouteAvailable, { detailText: "Level 6 ratio requirement - F&R" });
     });
 });

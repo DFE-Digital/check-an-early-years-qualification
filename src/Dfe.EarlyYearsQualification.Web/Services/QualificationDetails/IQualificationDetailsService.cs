@@ -48,7 +48,7 @@ public interface IQualificationDetailsService
     List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
         List<AdditionalRequirementQuestion>? additionalRequirementQuestions);
     
-    Task SetRatioRequirements(Qualification qualification, QualificationDetailsModel model, QualificationDetailsPage pageContent);
+    Task SetRatioRequirements(Qualification qualification, QualificationDetailsModel model, QualificationDetailsPage pageContent, bool isFullAndRelevant);
 
     Task SetRatioText(QualificationDetailsModel model, DetailsPageLabels content);
 

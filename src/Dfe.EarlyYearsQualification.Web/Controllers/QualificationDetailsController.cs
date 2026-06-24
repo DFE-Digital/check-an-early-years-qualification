@@ -51,16 +51,20 @@ public class QualificationDetailsController(
         }
         
         var model = await qualificationDetailsService.MapDetails(qualification, content);
-        await qualificationDetailsService.SetRatioRequirements(qualification, model, content);
-        await qualificationDetailsService.SetRatioText(model, content.Labels);
-        if (model.RatioRequirements.IsNotFullAndRelevant)
+        // TODO: Move this into the mapper
+        model.RatioRequirements.IsFullAndRelevant = isFullAndRelevant;
+        await qualificationDetailsService.SetRatioRequirements(qualification, model, content, isFullAndRelevant);
+        if (isFullAndRelevant)
         {
-            qualificationDetailsService.SetQualificationResultFailureDetails(model, content.Labels);
+            
+            qualificationDetailsService.SetQualificationResultSuccessDetails(model, content.Labels);
         }
         else
         {
-            qualificationDetailsService.SetQualificationResultSuccessDetails(model, content.Labels);
+            //model.RatioRequirements = qualificationDetailsService.MarkAsNotFullAndRelevant(model.RatioRequirements);
+            qualificationDetailsService.SetQualificationResultFailureDetails(model, content.Labels);
         }
+        await qualificationDetailsService.SetRatioText(model, content.Labels);
 
         return View(model);
     }
@@ -177,8 +181,6 @@ public class QualificationDetailsController(
             return (true, ValidateAdditionalRequirementOutcomes.Default);
 
         // At this point, there will be at least one question answered in a non full and relevant way.
-        // we mark the ratios as not full and relevant and return.
-        details.RatioRequirements = qualificationDetailsService.MarkAsNotFullAndRelevant(details.RatioRequirements);
         return (false, ValidateAdditionalRequirementOutcomes.Default);
     }
 

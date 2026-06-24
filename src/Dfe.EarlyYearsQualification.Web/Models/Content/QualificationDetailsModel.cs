@@ -74,7 +74,7 @@ public class QualificationDetailsModel : BasicQualificationModel
                                                                         Content
                                                                             .QualificationResultMessageBody,
                                                                     IsFullAndRelevant =
-                                                                        !RatioRequirements
-                                                                            .IsNotFullAndRelevant
+                                                                        RatioRequirements
+                                                                            .IsFullAndRelevant
                                                                 };
 }
