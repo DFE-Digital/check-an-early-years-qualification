@@ -681,7 +681,6 @@ public class QualificationDetailsControllerTests
     [TestMethod]
     public async Task Index_NotFullAndRelevant_CallsFailCorrectly()
     {
-        // TODO: Fix this test, started refactor, needs completing
         const string qualificationId = "qualificationId";
 
         var details = new QualificationDetailsModel

@@ -53,8 +53,8 @@ public class QualificationDetailsService(
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         return startDateMonth is not null && startDateYear is not null;
     }
-    
-        public void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPageLabels content)
+
+    public void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPageLabels content)
     {
         model.Content!.QualificationResultHeading = content.QualificationResultHeading;
         model.Content.QualificationResultMessageHeading = content.QualificationResultFrMessageHeading;
@@ -230,50 +230,48 @@ public class QualificationDetailsService(
     {
         if (isFullAndRelevant)
         {
-            
-        
-        // Build up property name to check for each level
-        var beforeOrAfter = userJourneyCookieService.WasStartedBeforeSeptember2014() ? "Before" : "After";
+            // Build up property name to check for each level
+            var beforeOrAfter = userJourneyCookieService.WasStartedBeforeSeptember2014() ? "Before" : "After";
 
-        var fullAndRelevantPropertyToCheck =
-            $"FullAndRelevantForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
+            var fullAndRelevantPropertyToCheck =
+                $"FullAndRelevantForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
 
-        if (qualification.IsAutomaticallyApprovedAtLevel6 || (QualificationContainsQtsQuestion(qualification) &&
-                                                              UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification,
-                                                               model.AdditionalRequirementAnswers)))
-        {
-            // Check user against QTS criteria and swap to Qts Criteria if matches
-            fullAndRelevantPropertyToCheck = $"FullAndRelevantForQtsEtc{beforeOrAfter}2014";
-        }
+            if (qualification.IsAutomaticallyApprovedAtLevel6 || (QualificationContainsQtsQuestion(qualification) &&
+                                                                  UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification,
+                                                                   model.AdditionalRequirementAnswers)))
+            {
+                // Check user against QTS criteria and swap to Qts Criteria if matches
+                fullAndRelevantPropertyToCheck = $"FullAndRelevantForQtsEtc{beforeOrAfter}2014";
+            }
 
-        // Set ratio requirement approved or not approved
-        var approvedForLevel2 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
-                                                                new Level2RatioRequirements());
+            // Set ratio requirement approved or not approved
+            var approvedForLevel2 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
+                                                                    new Level2RatioRequirements());
 
-        model.RatioRequirements.ApprovedForLevel2 = approvedForLevel2
-                                                        ? QualificationApprovalStatus.Approved
-                                                        : QualificationApprovalStatus.NotApproved;
+            model.RatioRequirements.ApprovedForLevel2 = approvedForLevel2
+                                                            ? QualificationApprovalStatus.Approved
+                                                            : QualificationApprovalStatus.NotApproved;
 
-        var approvedForLevel3 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
-                                                                new Level3RatioRequirements());
+            var approvedForLevel3 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
+                                                                    new Level3RatioRequirements());
 
-        model.RatioRequirements.ApprovedForLevel3 = approvedForLevel3
-                                                        ? QualificationApprovalStatus.Approved
-                                                        : QualificationApprovalStatus.NotApproved;
+            model.RatioRequirements.ApprovedForLevel3 = approvedForLevel3
+                                                            ? QualificationApprovalStatus.Approved
+                                                            : QualificationApprovalStatus.NotApproved;
 
-        var approvedForLevel6 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
-                                                                new Level6RatioRequirements());
+            var approvedForLevel6 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
+                                                                    new Level6RatioRequirements());
 
-        model.RatioRequirements.ApprovedForLevel6 = approvedForLevel6
-                                                        ? QualificationApprovalStatus.Approved
-                                                        : QualificationApprovalStatus.NotApproved;
+            model.RatioRequirements.ApprovedForLevel6 = approvedForLevel6
+                                                            ? QualificationApprovalStatus.Approved
+                                                            : QualificationApprovalStatus.NotApproved;
 
-        var approvedForUnqualified = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
-                                                                     new UnqualifiedRatioRequirements());
+            var approvedForUnqualified = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
+                                                                         new UnqualifiedRatioRequirements());
 
-        model.RatioRequirements.ApprovedForUnqualified = approvedForUnqualified
-                                                             ? QualificationApprovalStatus.Approved
-                                                             : QualificationApprovalStatus.NotApproved;
+            model.RatioRequirements.ApprovedForUnqualified = approvedForUnqualified
+                                                                 ? QualificationApprovalStatus.Approved
+                                                                 : QualificationApprovalStatus.NotApproved;
         }
         else
         {
@@ -281,9 +279,12 @@ public class QualificationDetailsService(
         }
 
         // Set the text for the requirement levels to be read from page content
-        model.RatioRequirements.RequirementsForLevel2 = placeholderUpdater.Replace(await contentParser.ToHtml(pageContent.Level2RatioRequirements));
-        model.RatioRequirements.RequirementsForLevel3 = placeholderUpdater.Replace(await contentParser.ToHtml(pageContent.Level3RatioRequirements));
-        model.RatioRequirements.RequirementsForLevel6 = placeholderUpdater.Replace(await contentParser.ToHtml(pageContent.Level6RatioRequirements));
+        model.RatioRequirements.RequirementsForLevel2 =
+            placeholderUpdater.Replace(await contentParser.ToHtml(pageContent.Level2RatioRequirements));
+        model.RatioRequirements.RequirementsForLevel3 =
+            placeholderUpdater.Replace(await contentParser.ToHtml(pageContent.Level3RatioRequirements));
+        model.RatioRequirements.RequirementsForLevel6 =
+            placeholderUpdater.Replace(await contentParser.ToHtml(pageContent.Level6RatioRequirements));
         model.RatioRequirements.RequirementsForUnqualified =
             placeholderUpdater.Replace(await contentParser.ToHtml(pageContent.UnqualifiedRatioRequirements));
 
@@ -514,7 +515,7 @@ public class QualificationDetailsService(
     private static void QualificationMayBeEligibleForEbr(QualificationDetailsModel model, Qualification qualification)
     {
         var ebrEligible = (model.RatioRequirements.IsFullAndRelevant && qualification.QualificationLevel == 2) ||
-                           (!model.RatioRequirements.IsFullAndRelevant && qualification.QualificationLevel >= 3);
+                          (!model.RatioRequirements.IsFullAndRelevant && qualification.QualificationLevel >= 3);
         if (ebrEligible)
         {
             model.RatioRequirements.ApprovedForLevel3 = QualificationApprovalStatus.PossibleRouteAvailable;
@@ -527,7 +528,7 @@ public class QualificationDetailsService(
     }
 
     private void QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
-                                                                         Qualification qualification)
+                                                                   Qualification qualification)
     {
         // Check if the qualification is not full and relevant and was started between Sept 2014 and Aug 2019 and is above a level 2 qualification
         if (!model.RatioRequirements.IsFullAndRelevant &&
