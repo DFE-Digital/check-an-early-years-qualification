@@ -26,15 +26,15 @@ public class ContentfulQualificationDownloadService(
     
     public async Task GenerateEyqlDownloadByEnvironment(string environment)
     {
-        switch (environment)
+        switch (environment.ToLower())
         {
-            case "Production":
+            case "production":
             await GenerateEyqlDownload(Assets.EarlyYearsQualificationList, "EYQL Download", "Early-Years-Qualifications-List.csv");
             break;
-            case "Staging":
+            case "staging":
             await GenerateEyqlDownload(Assets.EarlyYearsQualificationListStaging, "EYQL Download Staging", "Early-Years-Qualifications-List-Staging.csv");
             break;
-            case "Development":
+            case "development":
             await GenerateEyqlDownload(Assets.EarlyYearsQualificationListDevelopment, "EYQL Download Development", "Early-Years-Qualifications-List-Development.csv");
             break;
             default:
@@ -45,13 +45,13 @@ public class ContentfulQualificationDownloadService(
 
     public async Task<(byte[] fileContents, string fileName)> GetEyqlDownload(string environment)
     {
-        switch (environment)
+        switch (environment.ToLower())
         {
-            case "Production":
+            case "production":
             return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationList), "Early-Years-Qualifications-List.csv");
-            case "Staging":
+            case "staging":
             return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationListStaging), "Early-Years-Qualifications-List-Staging.csv");
-            case "Development":
+            case "development":
             return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationListDevelopment), "Early-Years-Qualifications-List-Development.csv");
             default:
             logger.LogWarning("Unknown environment: {environment}. No EYQL asset found.", environment);
