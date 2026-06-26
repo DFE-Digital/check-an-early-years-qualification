@@ -22,7 +22,6 @@ public class QualificationListFilterTests
                               FromWhichYear = "Apr-15",
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "abc/123/987",
-                              AdditionalRequirements = "requirements"
                           },
                           new Qualification("EYQ-741",
                                             "test",
@@ -31,7 +30,6 @@ public class QualificationListFilterTests
                           {
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "def/456/951",
-                              AdditionalRequirements = "requirements"
                           }
                       };
         
@@ -59,7 +57,6 @@ public class QualificationListFilterTests
                               FromWhichYear = "Apr-15",
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "abc/123/987",
-                              AdditionalRequirements = "requirements"
                           }
                       };
 
@@ -87,14 +84,13 @@ public class QualificationListFilterTests
                               FromWhichYear = "Apr-15",
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "abc/123/987",
-                              AdditionalRequirements = "requirements"
                           }
                       };
 
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
         var mockDateValidator = new Mock<IDateValidator>();
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,AwardingOrganisations.Edexcel, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, AwardingOrganisations.Edexcel, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -113,14 +109,13 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
         var mockDateValidator = new Mock<IDateValidator>();
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,AwardingOrganisations.Pearson, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, AwardingOrganisations.Pearson, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -137,7 +132,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -154,7 +148,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2015,AwardingOrganisations.Cache, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2015, AwardingOrganisations.Cache, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -171,7 +165,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -188,7 +181,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013,AwardingOrganisations.Cache, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013, AwardingOrganisations.Cache, null);
 
         result.Count.Should().Be(0);
     }
@@ -204,7 +197,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -221,7 +213,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2015,AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2015, AwardingOrganisations.Ncfe, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -238,7 +230,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -255,7 +246,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013,AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013, AwardingOrganisations.Ncfe, null);
 
         result.Count.Should().Be(0);
     }
@@ -271,7 +262,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -288,7 +278,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, AwardingOrganisations.Ncfe, null);
 
         result.Count.Should().Be(0);
     }
@@ -304,7 +294,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -321,7 +310,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,AwardingOrganisations.Cache, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, AwardingOrganisations.Cache, null);
 
         result.Count.Should().Be(0);
     }
@@ -339,7 +328,6 @@ public class QualificationListFilterTests
                               FromWhichYear = "Apr-15",
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "abc/123/987",
-                              AdditionalRequirements = "requirements"
                           }
                       };
 
@@ -366,7 +354,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -393,7 +380,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -424,7 +410,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  },
                                  new Qualification("EYQ-124",
                                                    "Totally different qualification name",
@@ -434,7 +419,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/123",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -470,7 +454,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  },
                                  new Qualification("EYQ-124",
                                                    "Totally different qualification name",
@@ -480,7 +463,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/123",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -508,7 +490,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -544,7 +525,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Aug-15",
                                  ToWhichYear = null,
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>

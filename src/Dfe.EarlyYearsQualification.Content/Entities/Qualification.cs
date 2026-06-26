@@ -1,3 +1,5 @@
+using Contentful.Core.Models;
+
 namespace Dfe.EarlyYearsQualification.Content.Entities;
 
 public class Qualification(
@@ -18,9 +20,11 @@ public class Qualification(
     public string? FromWhichYear { get; init; }
     public string? ToWhichYear { get; init; }
     public string? QualificationNumber { get; init; }
-    public string? AdditionalRequirements { get; init; }
     public List<AdditionalRequirementQuestion>? AdditionalRequirementQuestions { get; init; }
     public List<RatioRequirement>? RatioRequirements { get; set; }
     public bool IsAutomaticallyApprovedAtLevel6 { get; init; }
     public bool IsTheQualificationADegree { get; set; }
+    public Document? AdditionalRequirementsRichText { get; init; }
+    public string? AdditionalRequirementsPlainText { get; init; }
+    public string? Notes { get; init; }
 }

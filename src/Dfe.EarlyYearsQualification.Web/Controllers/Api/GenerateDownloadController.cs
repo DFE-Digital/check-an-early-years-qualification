@@ -24,7 +24,14 @@ public class GenerateDownloadController(
             return new UnauthorizedResult();
         }
 
-        await qualificationDownloadService.GenerateEyqlDownload();
+        var environment = configuration["ENVIRONMENT"];
+
+        if (string.IsNullOrWhiteSpace(environment))
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Configuration missing");
+        }
+
+        await qualificationDownloadService.GenerateEyqlDownloadByEnvironment(environment);
 
         return new NoContentResult();
     }

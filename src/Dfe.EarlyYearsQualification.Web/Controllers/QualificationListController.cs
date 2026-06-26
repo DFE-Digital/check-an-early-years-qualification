@@ -11,7 +11,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class QualificationListController(
     ILogger<QualificationListController> logger,
     IWebViewService webViewService,
-    IQualificationDownloadService qualificationDownloadService) : ServiceController
+    IQualificationDownloadService qualificationDownloadService,
+    IConfiguration configuration) : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -32,9 +33,17 @@ public class QualificationListController(
     [HttpGet("/download")]
     public async Task<IActionResult> Download()
     {
-        var fileContent = await qualificationDownloadService.GetEyqlDownloadAsByteArray();
-        if (fileContent.Length != 0) 
-            return File(fileContent, "text/csv", "Early-Years-Qualifications-List.csv");
+        var environment = configuration["ENVIRONMENT"];
+
+        if (string.IsNullOrWhiteSpace(environment))
+        {
+            logger.LogError("Configuration missing");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var (fileContents, fileName) = await qualificationDownloadService.GetEyqlDownload(environment);
+        if (fileContents.Length != 0) 
+            return File(fileContents, "text/csv", fileName);
         
         logger.LogError("Null or empty EYQL content returned");
         return RedirectToAction("Index", "Error");

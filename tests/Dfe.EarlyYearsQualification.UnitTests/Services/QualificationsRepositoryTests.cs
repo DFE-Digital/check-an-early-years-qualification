@@ -95,7 +95,6 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                 FromWhichYear = "Test from which year",
                                 ToWhichYear = "Test to which year",
                                 QualificationNumber = "Test qualification number",
-                                AdditionalRequirements = "Test additional requirements"
                             };
 
         ClientMock.Setup(client =>
@@ -132,7 +131,6 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                 FromWhichYear = "Test from which year",
                                 ToWhichYear = "Test to which year",
                                 QualificationNumber = "Test qualification number",
-                                AdditionalRequirements = "Test additional requirements"
                             };
 
         ClientMock.Setup(client =>
@@ -188,7 +186,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
                                               6)
                             {
                                 FromWhichYear = "2014", ToWhichYear = "2020",
-                                QualificationNumber = "number", AdditionalRequirements = "Rq"
+                                QualificationNumber = "number",
                             };
 
         ClientMock.Setup(client =>

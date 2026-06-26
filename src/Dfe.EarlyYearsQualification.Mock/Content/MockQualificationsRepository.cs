@@ -46,6 +46,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
 
     public static Task<List<Qualification>> Get()
     {
+        var additionalInfoRichtext = ContentfulContentHelper.Paragraph("Additional requirements rich text");
+
         return Task.FromResult(new List<Qualification>
                                {
                                    new Qualification("1", "TEST",
@@ -59,7 +61,9 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                                    new Qualification("5", "TEST with additional requirements",
                                                      "E awarding organisation", 123)
                                    {
-                                       AdditionalRequirements = "Additional requirements",
+                                       AdditionalRequirementsRichText = additionalInfoRichtext,
+                                       AdditionalRequirementsPlainText = "Additional requirements plain text",
+                                       Notes = "Notes for this qualification",
                                        AdditionalRequirementQuestions =
                                        [
                                            new AdditionalRequirementQuestion
@@ -262,6 +266,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
         string? startDate,
         string endDate)
     {
+        var additionalInfoRichtext = ContentfulContentHelper.Paragraph("Additional requirements rich text");
+
         return new Qualification(qualificationId,
                                  $"{qualificationId}-test",
                                  awardingOrganisation,
@@ -270,7 +276,9 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    FromWhichYear = startDate,
                    ToWhichYear = endDate,
                    QualificationNumber = "ghi/456/123",
-                   AdditionalRequirements = "Additional requirements",
+                   AdditionalRequirementsPlainText = "Additional requirements plain text",
+                   AdditionalRequirementsRichText = additionalInfoRichtext,
+                   Notes = "Notes for this qualification",
                    AdditionalRequirementQuestions =
                    [
                        new AdditionalRequirementQuestion
@@ -300,6 +308,8 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
     private static Qualification CreateQualification(string qualificationId, string awardingOrganisation,
                                                      int level, string? startDate, string endDate)
     {
+        var additionalInfoRichtext = ContentfulContentHelper.Paragraph("Additional requirements rich text");
+
         return new Qualification(qualificationId,
                                  $"{qualificationId}-test",
                                  awardingOrganisation,
@@ -308,7 +318,9 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    FromWhichYear = startDate,
                    ToWhichYear = endDate,
                    QualificationNumber = "ghi/456/951",
-                   AdditionalRequirements = "additional requirements"
+                   AdditionalRequirementsPlainText = "Additional requirements plain text",
+                   AdditionalRequirementsRichText = additionalInfoRichtext,
+                   Notes = "Notes for this qualification"
                };
     }
 
@@ -360,8 +372,9 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    FromWhichYear = "Jan-20",
                    ToWhichYear = "Jan-21",
                    QualificationNumber = "603/5829/4",
-                   AdditionalRequirements =
-                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
+                   AdditionalRequirementsRichText = ContentfulContentHelper.Paragraph("The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change."),
+                   AdditionalRequirementsPlainText = "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
+                   Notes = "Notes for this qualification",
                    AdditionalRequirementQuestions = additionalRequirementQuestions,
                    RatioRequirements =
                    [
@@ -427,8 +440,11 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    FromWhichYear = "Sep-14",
                    ToWhichYear = "Aug-19",
                    QualificationNumber = "603/5829/4",
-                   AdditionalRequirements =
+                   AdditionalRequirementsRichText =
+                       ContentfulContentHelper.Paragraph("The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change."),
+                   AdditionalRequirementsPlainText =
                        "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
+                   Notes = "Notes for this qualification",
                    AdditionalRequirementQuestions =
                    [
                        new AdditionalRequirementQuestion
