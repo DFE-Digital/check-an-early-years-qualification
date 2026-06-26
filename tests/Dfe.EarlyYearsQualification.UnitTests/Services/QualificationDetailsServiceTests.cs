@@ -694,6 +694,8 @@ public class QualificationDetailsServiceTests
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
         const int qualificationLevel = 1;
         const string requirements = "requirements";
+        const bool hasMultipleQualificationsWithSameName = false;
+        const bool isFullAndRelevant = true;
         var requirementsText = new Document { NodeType = requirements };
         var backButton = new NavigationLink { Href = "backButton" };
         var qualification =
@@ -715,16 +717,16 @@ public class QualificationDetailsServiceTests
         _mockQualificationDetailsMapper
             .Setup(x => x.Map(qualification, detailsPage, backButton,
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded,
-                              false))
+                              hasMultipleQualificationsWithSameName, isFullAndRelevant))
             .ReturnsAsync(new QualificationDetailsModel());
 
         var sut = GetSut();
-        var result = await sut.MapDetails(qualification, detailsPage);
+        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant);
 
         result.Should().NotBeNull();
         _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
                                                           It.IsAny<List<AdditionalRequirementAnswerModel>>(),
-                                                          dateStarted, dateAwarded, false),
+                                                          dateStarted, dateAwarded, hasMultipleQualificationsWithSameName, isFullAndRelevant),
                                                Times.Once);
     }
 
@@ -735,6 +737,8 @@ public class QualificationDetailsServiceTests
         const string qualificationName = "qualificationName";
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
         const int qualificationLevel = 1;
+        const bool hasMultipleQualificationsWithSameName = false;
+        const bool isFullAndRelevant = true;
         var backButton = new NavigationLink { Href = "backButton" };
         var qualification =
             new Qualification(qualificationId, qualificationName, awardingOrganisationTitle, qualificationLevel)
@@ -755,17 +759,18 @@ public class QualificationDetailsServiceTests
         _mockQualificationDetailsMapper
             .Setup(x => x.Map(qualification, detailsPage, backButton,
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), "Before 1 September 2014", string.Empty,
-                              false))
+                              hasMultipleQualificationsWithSameName, isFullAndRelevant))
             .ReturnsAsync(new QualificationDetailsModel());
 
         var sut = GetSut();
 
-        var result = await sut.MapDetails(qualification, detailsPage);
+        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant);
 
         result.Should().NotBeNull();
         _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
                                                           It.IsAny<List<AdditionalRequirementAnswerModel>>(),
-                                                          "Before 1 September 2014", string.Empty, false),
+                                                          "Before 1 September 2014", string.Empty, 
+                                                          hasMultipleQualificationsWithSameName, isFullAndRelevant),
                                                Times.Once);
     }
 
@@ -776,6 +781,8 @@ public class QualificationDetailsServiceTests
         const string qualificationName = "qualificationName";
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
         const int qualificationLevel = 1;
+        const bool hasMultipleQualificationsWithSameName = false;
+        const bool isFullAndRelevant = true;
         var backButton = new NavigationLink { Href = "backButton" };
 
         var q1 = new AdditionalRequirementQuestion
@@ -806,12 +813,13 @@ public class QualificationDetailsServiceTests
         _mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
         _mockQualificationDetailsMapper
             .Setup(x => x.Map(It.IsAny<Qualification>(), It.IsAny<QualificationDetailsPage>(), It.IsAny<NavigationLink?>(),
-                              It.IsAny<List<AdditionalRequirementAnswerModel>>(), It.IsAny<string>(), It.IsAny<string>(), false))
+                              It.IsAny<List<AdditionalRequirementAnswerModel>>(), It.IsAny<string>(), It.IsAny<string>(),
+                              hasMultipleQualificationsWithSameName, isFullAndRelevant))
             .ReturnsAsync(new QualificationDetailsModel());
 
         var sut = GetSut();
 
-        var result = await sut.MapDetails(qualification, detailsPage);
+        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant);
 
         result.Should().NotBeNull();
 
@@ -822,7 +830,7 @@ public class QualificationDetailsServiceTests
             It.Is<List<AdditionalRequirementAnswerModel>>(list => list != null && list.Count == 1 && list[0].Question == "Q1" && list[0].Answer == "yes"),
             It.IsAny<string>(),
             It.IsAny<string>(),
-            false), Times.Once);
+            hasMultipleQualificationsWithSameName, isFullAndRelevant), Times.Once);
     }
 
     // [TestMethod]

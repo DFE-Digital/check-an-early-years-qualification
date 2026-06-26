@@ -9,7 +9,7 @@ public interface IQualificationDetailsService
     
     Task<Qualification?> GetQualificationById(string qualificationId);
 
-    Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content);
+    Task<QualificationDetailsModel> MapDetails(Qualification qualification, QualificationDetailsPage content, bool isFullAndRelevant);
 
     bool HasStartDate();
 

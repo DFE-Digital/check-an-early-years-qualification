@@ -50,9 +50,7 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
         
-        var model = await qualificationDetailsService.MapDetails(qualification, content);
-        // TODO: Move this into the mapper
-        model.RatioRequirements.IsFullAndRelevant = isFullAndRelevant;
+        var model = await qualificationDetailsService.MapDetails(qualification, content, isFullAndRelevant);
         await qualificationDetailsService.SetRatioRequirements(qualification, model, content, isFullAndRelevant);
         if (isFullAndRelevant)
         {

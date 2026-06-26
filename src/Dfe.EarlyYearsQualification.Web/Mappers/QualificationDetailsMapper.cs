@@ -16,7 +16,8 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
         List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers,
         string dateStarted,
         string dateAwarded,
-        bool hasMultipleQualificationsWithSameName)
+        bool hasMultipleQualificationsWithSameName,
+        bool isFullAndRelevant)
     {
         var requirementsTextHtml = await contentParser.ToHtml(content.RequirementsText);
         var printInformationBody = await contentParser.ToHtml(content.Labels.PrintInformationBody);
@@ -55,7 +56,8 @@ public class QualificationDetailsMapper(IGovUkContentParser contentParser) : IQu
                 QualificationResultHeading = content.Labels.QualificationResultHeading
             },
             IsQualificationNameDuplicate = hasMultipleQualificationsWithSameName,
-            UserType = content.IsPractitionerSpecificPage ? UserTypes.Practitioner : UserTypes.Manager
+            UserType = content.IsPractitionerSpecificPage ? UserTypes.Practitioner : UserTypes.Manager,
+            RatioRequirements = new RatioRequirementModel { IsFullAndRelevant =  isFullAndRelevant }
         };
     }
 }

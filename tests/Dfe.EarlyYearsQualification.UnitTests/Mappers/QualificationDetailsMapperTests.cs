@@ -74,6 +74,7 @@ public class QualificationDetailsMapperTests
         const string dateStarted = "Date started";
         const string dateAwarded = "Date awarded";
         const bool hasMultipleQualificationsWithSameName = true;
+        const bool isFullAndRelevant = true;
 
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(detailsPage.RequirementsText)).ReturnsAsync(requirementsText);
@@ -82,7 +83,7 @@ public class QualificationDetailsMapperTests
 
         var mapper = new QualificationDetailsMapper(mockContentParser.Object);
         var result = await mapper.Map(qualification, detailsPage, backNavLink,
-                                      additionalRequirementAnswers, dateStarted, dateAwarded, hasMultipleQualificationsWithSameName);
+                                      additionalRequirementAnswers, dateStarted, dateAwarded, hasMultipleQualificationsWithSameName, isFullAndRelevant);
 
         result.Should().NotBeNull();
         result.QualificationId.Should().BeSameAs(qualification.QualificationId);
@@ -127,6 +128,7 @@ public class QualificationDetailsMapperTests
         result.QualificationNumberLabel.Should().Be(detailsPage.Labels.QualificationNumberLabel);
         result.QualificationNumber.Should().Be(qualification.QualificationNumber);
         result.UserType.Should().Be(expectedUserType);
+        result.RatioRequirements.IsFullAndRelevant.Should().Be(isFullAndRelevant);
     }
 
     [TestMethod]
