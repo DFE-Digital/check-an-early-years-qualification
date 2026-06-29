@@ -38,7 +38,7 @@ public class ContentfulQualificationDownloadService(
             await GenerateEyqlDownload(Assets.EarlyYearsQualificationListDevelopment, "EYQL Download Development", "Early-Years-Qualifications-List-Development.csv");
             break;
             default:
-            logger.LogWarning("Unknown environment: {environment}. No EYQL download generated.", environment);
+            logger.LogWarning("Unknown environment: {Environment}. No EYQL download generated.", environment);
             break;
         }
     }
@@ -54,7 +54,7 @@ public class ContentfulQualificationDownloadService(
             case "development":
             return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationListDevelopment), "Early-Years-Qualifications-List-Development.csv");
             default:
-            logger.LogWarning("Unknown environment: {environment}. No EYQL asset found.", environment);
+            logger.LogWarning("Unknown environment: {Environment}. No EYQL asset found.", environment);
             return (Array.Empty<byte>(), string.Empty);
         }
     }

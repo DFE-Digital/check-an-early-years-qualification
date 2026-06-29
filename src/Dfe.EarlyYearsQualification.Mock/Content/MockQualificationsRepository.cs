@@ -9,6 +9,10 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockQualificationsRepository(IQualificationListFilter qualificationListFilter) : IQualificationsRepository
 {
+    private const string mockAdditionalInformationContent = "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.";
+
+    private const string mockNotesContent = "Notes for this qualification";
+
     public async Task<Qualification?> GetById(string qualificationId)
     {
         var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
@@ -63,7 +67,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                                    {
                                        AdditionalRequirementsRichText = additionalInfoRichtext,
                                        AdditionalRequirementsPlainText = "Additional requirements plain text",
-                                       Notes = "Notes for this qualification",
+                                       Notes = mockNotesContent,
                                        AdditionalRequirementQuestions =
                                        [
                                            new AdditionalRequirementQuestion
@@ -278,7 +282,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    QualificationNumber = "ghi/456/123",
                    AdditionalRequirementsPlainText = "Additional requirements plain text",
                    AdditionalRequirementsRichText = additionalInfoRichtext,
-                   Notes = "Notes for this qualification",
+                   Notes = mockNotesContent,
                    AdditionalRequirementQuestions =
                    [
                        new AdditionalRequirementQuestion
@@ -320,7 +324,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    QualificationNumber = "ghi/456/951",
                    AdditionalRequirementsPlainText = "Additional requirements plain text",
                    AdditionalRequirementsRichText = additionalInfoRichtext,
-                   Notes = "Notes for this qualification"
+                   Notes = mockNotesContent
                };
     }
 
@@ -372,9 +376,9 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    FromWhichYear = "Jan-20",
                    ToWhichYear = "Jan-21",
                    QualificationNumber = "603/5829/4",
-                   AdditionalRequirementsRichText = ContentfulContentHelper.Paragraph("The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change."),
-                   AdditionalRequirementsPlainText = "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                   Notes = "Notes for this qualification",
+                   AdditionalRequirementsRichText = ContentfulContentHelper.Paragraph(mockAdditionalInformationContent),
+                   AdditionalRequirementsPlainText = mockAdditionalInformationContent,
+                   Notes = mockNotesContent,
                    AdditionalRequirementQuestions = additionalRequirementQuestions,
                    RatioRequirements =
                    [
@@ -441,10 +445,10 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    ToWhichYear = "Aug-19",
                    QualificationNumber = "603/5829/4",
                    AdditionalRequirementsRichText =
-                       ContentfulContentHelper.Paragraph("The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change."),
+                       ContentfulContentHelper.Paragraph(mockAdditionalInformationContent),
                    AdditionalRequirementsPlainText =
-                       "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.",
-                   Notes = "Notes for this qualification",
+                       mockAdditionalInformationContent,
+                   Notes = mockNotesContent,
                    AdditionalRequirementQuestions =
                    [
                        new AdditionalRequirementQuestion
