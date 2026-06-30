@@ -131,9 +131,11 @@ public class QualificationDetailsController(
     {
         var level = qualificationDetailsService.GetLevelOfQualification();
         var (startMonth, startYear) = qualificationDetailsService.GetWhenWasQualificationStarted();
+        var (awardedMonth, awardedYear) = qualificationDetailsService.GetWhenWasQualificationAwarded();
         var isUserCheckingTheirOwnQualification = qualificationDetailsService.GetUserIsCheckingOwnQualification();
 
-        if (level is not null && startMonth is not null && startYear is not null)
+        if (level is not null && startMonth is not null && startYear is not null
+            && awardedMonth is not null && awardedYear is not null)
         {
             return await qualificationDetailsService.GetQualificationDetailsPage(
                         isUserCheckingTheirOwnQualification,
@@ -142,6 +144,8 @@ public class QualificationDetailsController(
                         level.Value == 0 ? qualification.QualificationLevel : level.Value,
                         startMonth.Value,
                         startYear.Value,
+                        awardedMonth.Value,
+                        awardedYear.Value,
                         qualification
                        );
         }

@@ -36,16 +36,17 @@ public class QualificationDetailsService(
 
     public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification,
                                                                              bool isFullAndRelevant, int level,
-                                                                             int startMonth,
-                                                                             int startYear, Qualification qualification)
+                                                                             int startMonth, int startYear,
+                                                                             int awardedMonth,
+                                                                             int awardedYear,Qualification qualification)
     {
         var additionalRequirementAnswerModels =
             MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions);
         var isApprovedAtL6SpecificPage = IsQts(qualification, additionalRequirementAnswerModels);
         var getDegreeSpecificPage = qualification.IsTheQualificationADegree;
         return await contentService.GetQualificationDetailsPage(userIsCheckingOwnQualification, isFullAndRelevant,
-                                                                level, startMonth, startYear, getDegreeSpecificPage,
-                                                                isApprovedAtL6SpecificPage);
+                                                                level, startMonth, startYear, awardedMonth, awardedYear,
+                                                                getDegreeSpecificPage, isApprovedAtL6SpecificPage);
     }
 
     public bool HasStartDate()
@@ -99,6 +100,11 @@ public class QualificationDetailsService(
     public (int? startMonth, int? startYear) GetWhenWasQualificationStarted()
     {
         return userJourneyCookieService.GetWhenWasQualificationStarted();
+    }
+    
+    public (int? awardedMonth, int? awardedYear) GetWhenWasQualificationAwarded()
+    {
+        return userJourneyCookieService.GetWhenWasQualificationAwarded();
     }
 
     public List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(

@@ -65,8 +65,11 @@ public interface IQualificationDetailsService
     int? GetLevelOfQualification();
 
     (int? startMonth, int? startYear) GetWhenWasQualificationStarted();
+    
+    (int? awardedMonth, int? awardedYear) GetWhenWasQualificationAwarded();
 
     Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification,
                                                                 bool isFullAndRelevant, int level, int startMonth,
-                                                                int startYear, Qualification qualification);
+                                                                int startYear, int awardedMonth,
+                                                                int awardedYear, Qualification qualification);
 }

@@ -63,6 +63,38 @@ public class DateValidator(ILogger<DateValidator> logger) : IDateValidator
         return default;
     }
 
+    public T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate, DateOnly enteredAwardedDate,
+                                   T entry)
+    {
+        // To cover specific scenarios around June 2016 specific dates
+        if (endDate is null
+            && enteredAwardedDate >= startDate)
+        {
+            return entry; 
+        }
+        
+        if (startDate is not null
+            && endDate is not null)
+        {
+            // There may be some instances when a page is for a qualification awarded in a specific month
+            // e.g. L3, F&R, started after Sept 14 but awarded in June 2016 where the start date is the same as the end date
+            if (startDate == endDate
+                && enteredAwardedDate == endDate)
+            {
+                return entry;
+            }
+        
+            // Check to see if the dates fall within the specific range
+            if (enteredStartDate >= startDate
+                && enteredAwardedDate <= endDate)
+            {
+                return entry;
+            }
+        }
+        
+        return ValidateDateEntry(startDate, endDate, enteredStartDate, entry);
+    }
+
     public DateOnly? GetDate(string? dateString)
     {
         if (string.IsNullOrEmpty(dateString) || dateString == "null")

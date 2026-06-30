@@ -83,9 +83,9 @@ public class QualificationDetailsServiceTests
         var qualification = new Qualification("TST001", "Qual Name", "Awarding Org", 6)
                             { IsTheQualificationADegree = true };
 
-        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, qualification);
+        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
 
-        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, true, false),
+        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, true, false),
                                    Times.Once);
     }
 
@@ -97,9 +97,9 @@ public class QualificationDetailsServiceTests
         var qualification = new Qualification("TST001", "Qual Name", "Awarding Org", 6)
                             { IsAutomaticallyApprovedAtLevel6 = true };
 
-        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, qualification);
+        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
 
-        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, false, true),
+        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019,false, true),
                                    Times.Once);
     }
 
@@ -110,9 +110,9 @@ public class QualificationDetailsServiceTests
 
         var qualification = new Qualification("TST001", "Qual Name", "Awarding Org", 3);
 
-        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, qualification);
+        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
 
-        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, false, false),
+        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, false, false),
                                    Times.Once);
     }
 
@@ -753,8 +753,8 @@ public class QualificationDetailsServiceTests
                           };
 
         // Start date: August 2014 => before September 2014
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns(((int?)8, (int?)2014));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns(((int?)null, (int?)null));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((8, 2014));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
         _mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
         _mockQualificationDetailsMapper
             .Setup(x => x.Map(qualification, detailsPage, backButton,
@@ -804,8 +804,8 @@ public class QualificationDetailsServiceTests
                                        }
                           };
 
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns(((int?)null, (int?)null));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns(((int?)null, (int?)null));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((null, null));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
 
         var userAnswers = new Dictionary<string, string> { { "Q1", "yes" } };
         _mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers()).Returns(userAnswers);
@@ -827,7 +827,7 @@ public class QualificationDetailsServiceTests
             qualification,
             detailsPage,
             backButton,
-            It.Is<List<AdditionalRequirementAnswerModel>>(list => list != null && list.Count == 1 && list[0].Question == "Q1" && list[0].Answer == "yes"),
+            It.Is<List<AdditionalRequirementAnswerModel>>(list => list.Count == 1 && list[0].Question == "Q1" && list[0].Answer == "yes"),
             It.IsAny<string>(),
             It.IsAny<string>(),
             hasMultipleQualificationsWithSameName, isFullAndRelevant), Times.Once);

@@ -33,7 +33,8 @@ public class ContentfulContentService(
     }
 
     public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(
-        bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear,
+        bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, 
+        int startMonth, int startYear, int awardedMonth, int awardedYear,
         bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage)
     {
         var qualificationDetailsPageType = ContentTypeLookup[typeof(QualificationDetailsPage)];
@@ -59,7 +60,7 @@ public class ContentfulContentService(
         }
 
         // Filter out content where date is not between FromWhichYear and ToWhichYear
-        return GetFilteredPractitionerQualificationDetailsPage(startMonth, startYear, qualificationDetailsPageEntries);
+        return GetFilteredQualificationDetailsPage(startMonth, startYear, awardedMonth, awardedYear, qualificationDetailsPageEntries);
     }
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
@@ -366,23 +367,39 @@ public class ContentfulContentService(
         return await GetEntryById<HelpConfirmationPage>(entryId);
     }
     
-    private QualificationDetailsPage? GetFilteredPractitionerQualificationDetailsPage(
-        int startMonth, int startYear, ContentfulCollection<QualificationDetailsPage> qualificationDetailsPageEntries)
+    private QualificationDetailsPage? GetFilteredQualificationDetailsPage(
+        int startMonth, int startYear, 
+        int awardedMonth, int awardedYear, ContentfulCollection<QualificationDetailsPage> qualificationDetailsPageEntries)
     {
         var enteredStartDate = new DateOnly(startYear, startMonth, dateValidator.GetDay());
+        var enteredAwardedDate = new DateOnly(awardedYear, awardedMonth, dateValidator.GetDay());
+        
+        var higherPriorityQualificationDetailsPage =
+            qualificationDetailsPageEntries.Where(x => x.FromWhichYear == x.ToWhichYear)
+                                           .OrderByDescending(x => dateValidator.GetDate(x.ToWhichYear))
+                                           .ToList();
+        
+        var lowerPriorityQualificationDetailsPageEntries = qualificationDetailsPageEntries
+                                                         .Where(x => x.FromWhichYear != x.ToWhichYear)
+                                                         .OrderBy(x => dateValidator.GetDate(x.ToWhichYear))
+                                                         .ToList();
 
-        foreach (var page in qualificationDetailsPageEntries)
+        // Make the same date pages at the top, so they are higher priority, then add the remaining ordered pages
+        higherPriorityQualificationDetailsPage.AddRange(lowerPriorityQualificationDetailsPageEntries);
+
+        foreach (var page in higherPriorityQualificationDetailsPage)
         {
             var pageStartDate = dateValidator.GetDate(page.FromWhichYear);
             var pageEndDate = dateValidator.GetDate(page.ToWhichYear);
 
             // Start & End dates are optional. If the results only contains 1 page, return that.
-            if (qualificationDetailsPageEntries.Items.Count() == 1 && pageStartDate is null && pageEndDate is null)
+            if (higherPriorityQualificationDetailsPage.Count == 1 && pageStartDate is null && pageEndDate is null)
             {
                 return page;
             }
 
-            var result = dateValidator.ValidateDateEntry(pageStartDate, pageEndDate, enteredStartDate, page);
+            var result = dateValidator.ValidateDateEntry(pageStartDate, pageEndDate, 
+                                                         enteredStartDate, enteredAwardedDate, page);
 
             if (result is not null)
             {
