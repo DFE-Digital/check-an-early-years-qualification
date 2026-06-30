@@ -29,7 +29,8 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             ToWhichYearLabel = content.ToWhichYearLabel,
             AwardingOrganisationLabel = content.AwardingOrganisationLabel,
             QualificationNumberLabel = content.QualificationNumberLabel,
-            NotesAdditionalRequirementsLabel = content.NotesAdditionalRequirementsLabel,
+            AdditionalRequirementsLabel = content.AdditionalRequirementsLabel,
+            NotesLabel = content.NotesLabel,
             QualificationLevelFilter = webViewFilters.QualificationLevel,
             QualificationStartDateFilter = webViewFilters.QualificationStartDate,
             SearchTermFilter = webViewFilters.SearchTerm,
@@ -80,6 +81,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             QualificationNumber = FormatQualificationNumber(qualification.QualificationNumber),
             EyqlTabs = qualification.EyqlTabs,
             AdditionalRequirements = await GetAdditionalRequirements(qualification),
+            Notes = qualification.Notes
         };
     }
 
@@ -90,7 +92,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
 
     private async Task<string> GetAdditionalRequirements(Qualification qualification)
     {
-        var additionalRequirements = $"{await contentParser.ToHtml(qualification.AdditionalRequirementsRichText)}{qualification.Notes}";
+        var additionalRequirements = await contentParser.ToHtml(qualification.AdditionalRequirementsRichText);
 
         return string.IsNullOrWhiteSpace(additionalRequirements) ? NoAdditionalRequirements : additionalRequirements;
     }

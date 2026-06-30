@@ -54,7 +54,8 @@ public class WebViewMapperTests
         result.ToWhichYearLabel.Should().Be(content.ToWhichYearLabel);
         result.AwardingOrganisationLabel.Should().Be(content.AwardingOrganisationLabel);
         result.QualificationNumberLabel.Should().Be(content.QualificationNumberLabel);
-        result.NotesAdditionalRequirementsLabel.Should().Be(content.NotesAdditionalRequirementsLabel);
+        result.AdditionalRequirementsLabel.Should().Be(content.AdditionalRequirementsLabel);
+        result.NotesLabel.Should().Be(content.NotesLabel);
         result.NoQualificationsFoundContent.Should().Be("No qualifications found");
         result.CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent.Should().Be("Qualification is full and relevant");
         result.ApplyFiltersButtonContent.Should().Be(content.ApplyFiltersButtonContent);
@@ -92,7 +93,8 @@ public class WebViewMapperTests
         qualificationModel.FromWhichYear.Should().Be("September 2016");
         qualificationModel.ToWhichYear.Should().Be("invalid-year");
         qualificationModel.QualificationNumber.Should().Be("123 / 456 / 789");
-        qualificationModel.AdditionalRequirements.Should().Be("Rich text additional requirementsSome notes");
+        qualificationModel.AdditionalRequirements.Should().Be("Rich text additional requirements");
+        qualificationModel.Notes.Should().Be("Some notes");
     }
 
     [TestMethod]
@@ -189,7 +191,8 @@ public class WebViewMapperTests
                    ToWhichYearLabel = "To which year",
                    AwardingOrganisationLabel = "Awarding organisation",
                    QualificationNumberLabel = "Qualification number",
-                   NotesAdditionalRequirementsLabel = "Notes and additional requirements",
+                   AdditionalRequirementsLabel = "Additional requirements",
+                   NotesLabel = "Notes",
                    ShowingAllQualificationsLabel = "Showing all qualifications",
                    NoQualificationsFoundContent = ContentfulContentHelper.Paragraph("No qualifications found"),
                    QualificationIsFullAndRelevantContent = ContentfulContentHelper.Paragraph("Qualification is full and relevant"),

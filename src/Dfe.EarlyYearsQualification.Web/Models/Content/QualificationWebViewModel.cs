@@ -16,5 +16,7 @@ public class QualificationWebViewModel : BasicQualificationModel
 
     public string? AdditionalRequirements { get; init; }
 
+    public string? Notes { get; init; }
+
     public List<Tab> EyqlTabs { get; init; }
 }
