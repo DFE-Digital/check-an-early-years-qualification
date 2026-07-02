@@ -40,7 +40,7 @@ public class MockContentfulService : IContentService
                                      });
     }
 
-    public async Task<StaticPage?> GetStaticPage(string entryId)
+    public async Task<StaticPage?> GetStaticPageById(string entryId)
     {
         var body = ContentfulContentHelper.Paragraph("Test Static Page Body");
 
@@ -96,6 +96,13 @@ public class MockContentfulService : IContentService
                                                               body, "/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol")),
                    _ => null
                };
+    }
+
+    public async Task<StaticPage?> GetStaticPageByRoute(string route)
+    {
+        var body = ContentfulContentHelper.Paragraph("This is the body of the dynamic route");
+        return await Task.FromResult(CreateStaticPage("Dynamic Page Heading",
+                                                      body, "/"));
     }
 
     public async Task<CookiesPage?> GetCookiesPage()

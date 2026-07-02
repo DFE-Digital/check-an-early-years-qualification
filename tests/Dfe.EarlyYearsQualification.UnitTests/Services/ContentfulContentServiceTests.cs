@@ -213,7 +213,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetStaticPage_Null_LogsAndReturnsDefault()
+    public async Task GetStaticPageById_Null_LogsAndReturnsDefault()
     {
         ClientMock.Setup(client =>
                              client.GetEntriesByType(
@@ -224,7 +224,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetStaticPage("SomeId");
+        var result = await service.GetStaticPageById("SomeId");
 
         Logger.VerifyWarning("Static page with SomeId could not be found");
 
@@ -232,7 +232,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetStaticPage_ReturnsContent_RendersHtmlAndReturns()
+    public async Task GetStaticPageById_ReturnsContent_RendersHtmlAndReturns()
     {
         var content = new ContentfulCollection<StaticPage>
                       {
@@ -255,7 +255,57 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetStaticPage("SomeId");
+        var result = await service.GetStaticPageById("SomeId");
+
+        result!.Heading.Should().Be("Test Heading");
+        result.Body.Should().Be(_testRichText);
+        result.Body.Should().NotBeNull();
+    }
+    
+    [TestMethod]
+    public async Task GetStaticPageByRoute_Null_LogsAndReturnsDefault()
+    {
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<StaticPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((ContentfulCollection<StaticPage>)null!);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetStaticPageByRoute("some-route");
+
+        Logger.VerifyWarning("No Static pages with 'some-route' could not be found");
+
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetStaticPageByRoute_ReturnsContent_RendersHtmlAndReturns()
+    {
+        var content = new ContentfulCollection<StaticPage>
+                      {
+                          Items =
+                          [
+                              new StaticPage
+                              {
+                                  Heading = "Test Heading",
+                                  Body = _testRichText
+                              }
+                          ]
+                      };
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<StaticPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetStaticPageByRoute("some-route");
 
         result!.Heading.Should().Be("Test Heading");
         result.Body.Should().Be(_testRichText);

@@ -204,7 +204,7 @@ public class HelpServiceTests
         _ = await sut.GetStaticPage(It.IsAny<string>());
 
         // Assert
-        _mockContentService.Verify(o => o.GetStaticPage(It.IsAny<string>()), Times.Once);
+        _mockContentService.Verify(o => o.GetStaticPageById(It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]

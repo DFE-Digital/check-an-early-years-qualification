@@ -104,7 +104,7 @@ public class QuestionService(
             QualificationAwardLocation.Wales => RedirectToAction("QualificationsAchievedInWales", "Advice"),
             QualificationAwardLocation.NorthernIreland =>
                 RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice"),
-            _ => RedirectToAction(nameof(QuestionsController.WhenWasTheQualificationStarted))
+            _ => RedirectToAction(nameof(QuestionsController.WhenWasTheQualificationStarted), "Questions")
         };
     }
 
