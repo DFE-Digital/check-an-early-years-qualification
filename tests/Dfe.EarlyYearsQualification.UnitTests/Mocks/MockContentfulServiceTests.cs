@@ -197,19 +197,6 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPageById_NursingQualifications_ReturnsExpectedDetails()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetStaticPageById(StaticPages.NursingQualifications);
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<StaticPage>();
-        result.Heading.Should().Be("Nursing Qualifications");
-        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-    }
-
-    [TestMethod]
     public async Task GetStaticPageById_UnknownEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
