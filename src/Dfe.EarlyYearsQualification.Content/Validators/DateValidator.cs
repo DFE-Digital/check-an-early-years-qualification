@@ -63,12 +63,11 @@ public class DateValidator(ILogger<DateValidator> logger) : IDateValidator
         return default;
     }
 
-    public T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? endDate, DateOnly enteredStartDate, DateOnly enteredAwardedDate,
+    public T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? awardedAfterDate, DateOnly? endDate, DateOnly enteredStartDate, DateOnly enteredAwardedDate,
                                    T entry)
     {
-        // To cover specific scenarios around June 2016 specific dates
-        if (endDate is null
-            && enteredAwardedDate >= startDate)
+        if (awardedAfterDate is not null
+            && enteredAwardedDate >= awardedAfterDate)
         {
             return entry; 
         }

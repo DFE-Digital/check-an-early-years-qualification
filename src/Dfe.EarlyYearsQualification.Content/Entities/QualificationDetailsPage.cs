@@ -19,6 +19,8 @@ public class QualificationDetailsPage
     public string? Level { get; init; }
 
     public string? FromWhichYear { get; init; }
+    
+    public string? AwardedAfterWhichYear { get; init; }
 
     public string? ToWhichYear { get; init; }
 

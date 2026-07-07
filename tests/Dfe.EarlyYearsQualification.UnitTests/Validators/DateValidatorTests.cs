@@ -155,17 +155,18 @@ public class DateValidatorTests
     }
 
     [TestMethod]
-    public void ValidateDateEntry_Override_TheEndDateIsNull_AwardedDateIsGreaterThanStartDate_ReturnsQualification()
+    public void ValidateDateEntry_Override_TheEndDateIsNull_AwardedDateIsGreaterThanAwardedAfterDate_ReturnsQualification()
     {
         var mockLogger = new Mock<ILogger<DateValidator>>();
         var dateValidator = new DateValidator(mockLogger.Object);
         
         var qualificationStartDate = new DateOnly(2015, 9, 1);
+        var qualificationAwardedAfterDate = new DateOnly(2017, 9, 1);
         var enteredStartDate = new DateOnly(2016, 7, 31);
         var enteredAwardedDate = new DateOnly(2018, 8, 31);
         var qualification = new Qualification("EYQ-123", "test", AwardingOrganisations.Ncfe, 3);
 
-        var result = dateValidator.ValidateDateEntry(qualificationStartDate, null, enteredStartDate, enteredAwardedDate, qualification);
+        var result = dateValidator.ValidateDateEntry(qualificationStartDate, qualificationAwardedAfterDate, null, enteredStartDate, enteredAwardedDate, qualification);
 
         result.Should().NotBeNull();
         result.Should().Be(qualification);
@@ -184,7 +185,7 @@ public class DateValidatorTests
         var enteredAwardedDate = date;
         var qualification = new Qualification("EYQ-123", "test", AwardingOrganisations.Ncfe, 3);
 
-        var result = dateValidator.ValidateDateEntry(qualificationStartDate, qualificationEndDate, enteredStartDate, enteredAwardedDate, qualification);
+        var result = dateValidator.ValidateDateEntry(qualificationStartDate, null, qualificationEndDate, enteredStartDate, enteredAwardedDate, qualification);
 
         result.Should().NotBeNull();
         result.Should().Be(qualification);
@@ -202,7 +203,7 @@ public class DateValidatorTests
         var enteredAwardedDate = new DateOnly(2018, 8, 31);
         var qualification = new Qualification("EYQ-123", "test", AwardingOrganisations.Ncfe, 3);
 
-        var result = dateValidator.ValidateDateEntry(qualificationStartDate, qualificationEndDate, enteredStartDate, enteredAwardedDate, qualification);
+        var result = dateValidator.ValidateDateEntry(qualificationStartDate, null, qualificationEndDate, enteredStartDate, enteredAwardedDate, qualification);
 
         result.Should().NotBeNull();
         result.Should().Be(qualification);

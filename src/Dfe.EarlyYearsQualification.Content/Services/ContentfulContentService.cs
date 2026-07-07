@@ -390,6 +390,7 @@ public class ContentfulContentService(
         foreach (var page in higherPriorityQualificationDetailsPage)
         {
             var pageStartDate = dateValidator.GetDate(page.FromWhichYear);
+            var pageAwardedAfterDate = dateValidator.GetDate(page.AwardedAfterWhichYear);
             var pageEndDate = dateValidator.GetDate(page.ToWhichYear);
 
             // Start & End dates are optional. If the results only contains 1 page, return that.
@@ -398,7 +399,7 @@ public class ContentfulContentService(
                 return page;
             }
 
-            var result = dateValidator.ValidateDateEntry(pageStartDate, pageEndDate, 
+            var result = dateValidator.ValidateDateEntry(pageStartDate, pageAwardedAfterDate, pageEndDate, 
                                                          enteredStartDate, enteredAwardedDate, page);
 
             if (result is not null)

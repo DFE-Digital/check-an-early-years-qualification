@@ -594,6 +594,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                   IsFullAndRelevant = true,
                                   IsPractitionerSpecificPage = true,
                                   FromWhichYear = "Feb-00",
+                                  AwardedAfterWhichYear = "Apr-03",
                                   ToWhichYear = "Mar-05",
                                   Level = "3",
                                   Name = "Practitioner specific page level 3 - F&R",
@@ -612,6 +613,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                   IsFullAndRelevant = false,
                                   IsPractitionerSpecificPage = true,
                                   FromWhichYear = "Feb-00",
+                                  AwardedAfterWhichYear = "Apr-03",
                                   ToWhichYear = "Mar-05",
                                   Level = "3",
                                   Name = "Practitioner specific page level 3 - NF&R",
@@ -631,14 +633,16 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var userEnteredStartDate = new DateOnly(2001, 3, 28);
         var userEnteredAwardedDate = new DateOnly(2019, 5, 28);
         var qualificationStartDate = new DateOnly(2000, 2, 28);
+        var qualificationAwardedAfterDate = new DateOnly(2003, 4, 28);
         var qualificationEndedDate = new DateOnly(2005, 3, 28);
 
         var mockDateValidator = new Mock<IDateValidator>();
         mockDateValidator.Setup(x => x.GetDay()).Returns(28);
         mockDateValidator.Setup(x => x.GetDate("Feb-00")).Returns(qualificationStartDate);
+        mockDateValidator.Setup(x => x.GetDate("Apr-03")).Returns(qualificationAwardedAfterDate);
         mockDateValidator.Setup(x => x.GetDate("Mar-05")).Returns(qualificationEndedDate);
         mockDateValidator
-            .Setup(x => x.ValidateDateEntry(qualificationStartDate, qualificationEndedDate, userEnteredStartDate,
+            .Setup(x => x.ValidateDateEntry(qualificationStartDate, qualificationAwardedAfterDate, qualificationEndedDate, userEnteredStartDate,
                                             userEnteredAwardedDate, It.IsAny<QualificationDetailsPage>())).Returns(content.Items.ElementAt(1));
 
         ClientMock.Setup(client =>
