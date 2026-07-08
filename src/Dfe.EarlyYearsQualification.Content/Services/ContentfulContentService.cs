@@ -46,7 +46,7 @@ public class ContentfulContentService(
                                         userIsCheckingOwnQualification ? "1" : "0");
 
         queryBuilder = queryBuilder
-                       .FieldEquals("fields.level", level.ToString())
+                       .FieldIncludes("fields.levels", [level.ToString()])
                        .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0")
                        .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0")
                        .FieldEquals("fields.isAutomaticallyApprovedAtLevel6", isApprovedAtL6SpecificPage ? "1" : "0");

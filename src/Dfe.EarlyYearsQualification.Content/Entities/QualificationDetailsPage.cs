@@ -16,7 +16,9 @@ public class QualificationDetailsPage
 
     public bool IsDegreeSpecificPage { get; init; }
 
-    public string? Level { get; init; }
+    //public string? Level { get; init; }
+    
+    public int[]? Levels { get; init; }
 
     public string? FromWhichYear { get; init; }
     

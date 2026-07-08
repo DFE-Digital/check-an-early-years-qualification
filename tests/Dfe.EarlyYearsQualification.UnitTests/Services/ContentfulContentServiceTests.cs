@@ -524,7 +524,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result!.Labels.AwardingOrgLabel.Should().Be("Test Awarding Org Label");
         result.IsPractitionerSpecificPage.Should().BeFalse();
-        result.Level.Should().BeNull();
+        result.Levels.Should().BeNull();
         result.FromWhichYear.Should().BeNull();
         result.ToWhichYear.Should().BeNull();
         result.IsFullAndRelevant.Should().BeFalse();
@@ -596,7 +596,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                   FromWhichYear = "Feb-00",
                                   AwardedAfterWhichYear = "Apr-03",
                                   ToWhichYear = "Mar-05",
-                                  Level = "3",
+                                  Levels = [3],
                                   Name = "Practitioner specific page level 3 - F&R",
                                   RequirementsHeading = "Requirements heading",
                                   RequirementsText = _testRichText,
@@ -615,7 +615,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                   FromWhichYear = "Feb-00",
                                   AwardedAfterWhichYear = "Apr-03",
                                   ToWhichYear = "Mar-05",
-                                  Level = "3",
+                                  Levels = [3],
                                   Name = "Practitioner specific page level 3 - NF&R",
                                   RequirementsHeading = "Requirements heading",
                                   RequirementsText = _testRichText,
@@ -658,7 +658,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result!.FromWhichYear.Should().Be("Feb-00");
         result.ToWhichYear.Should().Be("Mar-05");
-        result.Level.Should().Be("3");
+        result.Levels.Should().Contain(3);
         result.IsFullAndRelevant.Should().BeTrue();
         result.IsPractitionerSpecificPage.Should().BeTrue();
     }

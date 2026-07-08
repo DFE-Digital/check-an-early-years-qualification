@@ -367,7 +367,7 @@ public class MockContentfulService : IContentService
 
         return await Task.FromResult(qualificationDetailsPages
                                          .FirstOrDefault(x => x.IsPractitionerSpecificPage == userIsCheckingOwnQualification &&
-                                                              x.IsFullAndRelevant == isFullAndRelevant && x.Level == level.ToString()));
+                                                              x.IsFullAndRelevant == isFullAndRelevant && x.Levels.Contains(level)));
     }
 
     private QualificationDetailsPage CreateDetailsPage(bool isPractitionerSpecificPage, bool isFullAndRelevant, int level, DetailsPageLabels labels)
@@ -397,7 +397,8 @@ public class MockContentfulService : IContentService
             IsFullAndRelevant = isFullAndRelevant,
             FromWhichYear = "Sep-14",
             ToWhichYear = "Aug-19",
-            Level = level.ToString(),
+            //Level = level.ToString(),
+            Levels = [level],
             Name =
                 $"{(isPractitionerSpecificPage ? "Practitioner" : "Manager")} page - L{level} - {(isFullAndRelevant ? "" : "not")} F&R",
             RequirementsHeading = requirementsHeading,
