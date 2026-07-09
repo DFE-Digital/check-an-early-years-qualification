@@ -89,7 +89,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
     }
 
     public Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
-                                         string? awardingOrganisation, string? qualificationName)
+                                         string? awardingOrganisation, string? qualificationName, string? nation)
     {
         const string dupeQualificationName = "dupe qualification name";
 
@@ -179,7 +179,21 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Post-September 2014",
                             Order = 2
                         }
-                    ]
+                    ],
+                    Nations = [
+                        new Nation
+                        {
+                            Name = "England"
+                        },
+                        new Nation
+                        {
+                            Name = "Scotland"
+                        },
+                        new Nation
+                        {
+                            Name = "Northern Ireland"
+                        }
+                   ]
                 },
                 new Qualification("EYQ-304", "Qualification 304", AwardingOrganisations.Various, 5)
                 {
@@ -193,7 +207,21 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Post-September 2014",
                             Order = 2
                         }
-                    ]
+                    ],
+                    Nations = [
+                        new Nation
+                        {
+                            Name = "England"
+                        },
+                        new Nation
+                        {
+                            Name = "Scotland"
+                        },
+                        new Nation
+                        {
+                            Name = "Northern Ireland"
+                        }
+                   ]
                 },
                 new Qualification("EYQ-305", "Qualification 305", AwardingOrganisations.Edexcel, 6)
                 {
@@ -250,7 +278,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                 },
             };
 
-        var results = qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear, awardingOrganisation, qualificationName);
+        var results = qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear, awardingOrganisation, qualificationName, nation);
 
         return Task.FromResult(results);
     }
@@ -308,7 +336,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    FromWhichYear = startDate,
                    ToWhichYear = endDate,
                    QualificationNumber = "ghi/456/951",
-                   AdditionalRequirements = "additional requirements"
+                   AdditionalRequirements = "additional requirements",
+                   Nations = [
+                       new Nation
+                       {
+                           Name = "England"
+                       }
+                   ]
                };
     }
 
@@ -412,8 +446,14 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                                    .UnqualifiedRatioRequirementName,
                            SummaryCardDefaultContent = SummaryCardDefaultContent
                        }
+                   ],
+                   Nations = [
+                       new Nation
+                       {
+                           Name = "England"
+                       }
                    ]
-               };
+        };
     }
 
     private static Qualification CreateQtsQualification(string qualificationId, string qualificationName,
@@ -519,7 +559,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                            SummaryCardDefaultContent = SummaryCardDefaultContent
                        }
                    ],
-                   IsAutomaticallyApprovedAtLevel6 = false
+                   IsAutomaticallyApprovedAtLevel6 = false,
+                   Nations = [
+                       new Nation
+                       {
+                           Name = "England"
+                       }
+                   ]
                };
     }
 

@@ -7,5 +7,7 @@
         public string QualificationStartDate { get; set; } = string.Empty;
 
         public string QualificationLevel { get; set; } = string.Empty;
+
+        public string Nation { get; set; } = string.Empty;
     }
 }
