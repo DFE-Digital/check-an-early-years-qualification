@@ -58,12 +58,12 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         {
             nation: 'england',
             expectedNationText: 'England',
-            expectedQualificationsCount: 20,
+            expectedQualificationsCount: 31,
         },
         {
             nation: 'scotland',
             expectedNationText: 'Scotland',
-            expectedQualificationsCount: 2,
+            expectedQualificationsCount: 4,
         },
         {
             nation: 'wales',
@@ -73,7 +73,7 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         {
             nation: 'northern-ireland',
             expectedNationText: 'Northern Ireland',
-            expectedQualificationsCount: 2,
+            expectedQualificationsCount: 3,
         },
     ].forEach((scenario) => {
         test(`Check qualifications meet criteria based on nation filter ${scenario.nation}`, async ({ page }) => {

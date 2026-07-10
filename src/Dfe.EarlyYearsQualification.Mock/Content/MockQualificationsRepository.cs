@@ -120,13 +120,27 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "123/345/678"
+                    QualificationNumber = "123/345/678",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        }
+                    ]
                 },
                 new Qualification("EYQ-115", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "233/420/12"
+                    QualificationNumber = "233/420/12",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        }
+                    ]
                 },
                 CreateQualification("EYQ-240",
                                     "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
@@ -151,6 +165,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Pre-September 2014",
                             Order = 1
                         }
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        }
                     ]
                 },
                 new Qualification("EYQ-302", "Qualification 302", AwardingOrganisations.Pearson, 3)
@@ -164,6 +185,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                         {
                             Heading = "Pre-September 2014",
                             Order = 1
+                        }
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
                         }
                     ]
                 },
@@ -236,6 +264,21 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Order = 2
                         }
 
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        },
+                        new Nation
+                        {
+                            Name = "Scotland"
+                        },
+                        new Nation
+                        {
+                            Name = "Northern Ireland"
+                        }
                     ]
                 },
                 new Qualification("EYQ-306", "Qualification 306", AwardingOrganisations.Various, 7)
@@ -250,31 +293,70 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Post-September 2024",
                             Order = 3
                         }
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        },
+                        new Nation
+                        {
+                            Name = "Scotland"
+                        }
                     ]
                 },
                 new Qualification("EYQ-307", "Degrees at level 6", AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "123/345/679"
+                    QualificationNumber = "123/345/679",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        }
+                    ]
                 },
                 new Qualification("EYQ-308", "Joint degrees at level 6", AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "123/345/670"
+                    QualificationNumber = "123/345/670",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        }
+                    ]
                 },
                 new Qualification("EYQ-309", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "321/345/679"
+                    QualificationNumber = "321/345/679",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        }
+                    ]
                 },
                 new Qualification("EYQ-310", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "231/345/670"
+                    QualificationNumber = "231/345/670",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        }
+                    ]
                 },
             };
 
@@ -321,7 +403,14 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                                }
                            ]
                        }
-                   ]
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = "England"
+                        }
+                    ]
                };
     }
 
