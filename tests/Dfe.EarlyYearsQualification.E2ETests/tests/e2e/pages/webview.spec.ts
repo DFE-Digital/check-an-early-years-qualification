@@ -85,7 +85,7 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
             const rows = page.locator('.govuk-summary-card .govuk-summary-card__content > dl > div:nth-child(3) dd');
             const allRows = await rows.all();
 
-            expect(allRows.length).toBe(scenario.expectedQualificationsCount);
+            expect(allRows).toHaveLength(scenario.expectedQualificationsCount)
         });
     });
 

@@ -9,6 +9,10 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockQualificationsRepository(IQualificationListFilter qualificationListFilter) : IQualificationsRepository
 {
+    private const string englandNation = "England";
+    private const string scotlandNation = "Scotland";
+    private const string northernIrelandNation = "Northern Ireland";
+
     public async Task<Qualification?> GetById(string qualificationId)
     {
         var degreeQualification = CreateQtsQualification("EYQ-321", "NCFE",
@@ -125,7 +129,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                 },
@@ -138,7 +142,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                 },
@@ -170,7 +174,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                 },
@@ -191,7 +195,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                 },
@@ -211,15 +215,15 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     Nations = [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         },
                         new Nation
                         {
-                            Name = "Scotland"
+                            Name = scotlandNation
                         },
                         new Nation
                         {
-                            Name = "Northern Ireland"
+                            Name = northernIrelandNation
                         }
                    ]
                 },
@@ -239,15 +243,15 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     Nations = [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         },
                         new Nation
                         {
-                            Name = "Scotland"
+                            Name = scotlandNation
                         },
                         new Nation
                         {
-                            Name = "Northern Ireland"
+                            Name = northernIrelandNation
                         }
                    ]
                 },
@@ -269,15 +273,15 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         },
                         new Nation
                         {
-                            Name = "Scotland"
+                            Name = scotlandNation
                         },
                         new Nation
                         {
-                            Name = "Northern Ireland"
+                            Name = northernIrelandNation
                         }
                     ]
                 },
@@ -298,11 +302,11 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         },
                         new Nation
                         {
-                            Name = "Scotland"
+                            Name = scotlandNation
                         }
                     ]
                 },
@@ -315,7 +319,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                 },
@@ -328,7 +332,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                 },
@@ -341,7 +345,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                 },
@@ -354,7 +358,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                 },
@@ -408,7 +412,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                     [
                         new Nation
                         {
-                            Name = "England"
+                            Name = englandNation
                         }
                     ]
                };
@@ -429,7 +433,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    Nations = [
                        new Nation
                        {
-                           Name = "England"
+                           Name = englandNation
                        }
                    ]
                };
@@ -539,7 +543,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    Nations = [
                        new Nation
                        {
-                           Name = "England"
+                           Name = englandNation
                        }
                    ]
         };
@@ -652,7 +656,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    Nations = [
                        new Nation
                        {
-                           Name = "England"
+                           Name = englandNation
                        }
                    ]
                };

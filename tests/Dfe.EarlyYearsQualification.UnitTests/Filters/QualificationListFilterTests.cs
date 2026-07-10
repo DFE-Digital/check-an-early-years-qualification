@@ -567,4 +567,41 @@ public class QualificationListFilterTests
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
     }
+
+    [TestMethod]
+    public void ApplyFilters_PassInNation_ReturnsQualificationsForMatchingNation()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("EYQ-123",
+                                                   "test",
+                                                   AwardingOrganisations.Ncfe,
+                                                   4)
+                                 {
+                                     Nations = new List<Nation>
+                                               {
+                                                   new() { Name = "Northern Ireland" }
+                                               }
+                                 },
+                                 new Qualification("EYQ-124",
+                                                   "test",
+                                                   AwardingOrganisations.Pearson,
+                                                   3)
+                                 {
+                                     Nations = new List<Nation>
+                                               {
+                                                   new() { Name = "England" }
+                                               }
+                                 }
+                             };
+
+        var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
+        var mockDateValidator = new Mock<IDateValidator>();
+        var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
+
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, null, null, "northern-ireland");
+
+        result.Count.Should().Be(1);
+        result[0].QualificationId.Should().Be("EYQ-123");
+    }
 }
