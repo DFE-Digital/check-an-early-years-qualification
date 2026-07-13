@@ -97,7 +97,7 @@ public class ContentfulContentService(
         return cookiesContent;
     }
 
-    public async Task<StaticPage?> GetStaticPage(string entryId)
+    public async Task<StaticPage?> GetStaticPageById(string entryId)
     {
         var staticPage = await GetEntryById<StaticPage>(entryId);
 
@@ -109,6 +109,26 @@ public class ContentfulContentService(
         }
 
         return staticPage;
+    }
+
+    public async Task<StaticPage?> GetStaticPageByRoute(string route)
+    {
+        var staticPageContentType = ContentTypeLookup[typeof(StaticPage)];
+        var queryBuilder = new QueryBuilder<StaticPage>()
+                           .ContentTypeIs(staticPageContentType)
+                           .Include(2)
+                           .FieldEquals("fields.slug", route);
+        
+        var staticPageEntries = await GetEntriesByType(queryBuilder);
+        
+        // ReSharper disable once InvertIf
+        if (staticPageEntries is null || !staticPageEntries.Any())
+        {
+            Logger.LogWarning("No Static pages with '{Route}' could not be found", route);
+            return null;
+        }
+
+        return staticPageEntries.First();
     }
 
     public async Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId)
