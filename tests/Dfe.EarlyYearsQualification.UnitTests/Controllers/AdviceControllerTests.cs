@@ -28,7 +28,7 @@ public class AdviceControllerTests
                                               UserJourneyMockNoOp.Object,
                                               mockAdvicePageMapper.Object);
 
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsAchievedOutsideTheUk))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsAchievedOutsideTheUk))
                           .ReturnsAsync((StaticPage?)null).Verifiable();
         var result = await controller.QualificationOutsideTheUnitedKingdom();
 
@@ -57,7 +57,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsAchievedOutsideTheUk))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsAchievedOutsideTheUk))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -92,7 +92,7 @@ public class AdviceControllerTests
                                               UserJourneyMockNoOp.Object,
                                               mockAdvicePageMapper.Object);
 
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsStartedBetweenSept2014AndAug2019))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync((StaticPage?)null).Verifiable();
         var result = await controller.QualificationsStartedBetweenSept2014AndAug2019();
 
@@ -122,7 +122,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsStartedBetweenSept2014AndAug2019))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -156,7 +156,7 @@ public class AdviceControllerTests
                                               UserJourneyMockNoOp.Object,
                                               mockAdvicePageMapper.Object);
 
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsAchievedInNorthernIreland))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsAchievedInNorthernIreland))
                           .ReturnsAsync((StaticPage?)null).Verifiable();
 
         var result = await controller.QualificationsAchievedInNorthernIreland();
@@ -186,7 +186,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsAchievedInNorthernIreland))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsAchievedInNorthernIreland))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -220,7 +220,7 @@ public class AdviceControllerTests
                                               UserJourneyMockNoOp.Object,
                                               mockAdvicePageMapper.Object);
 
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsAchievedInScotland))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsAchievedInScotland))
                           .ReturnsAsync((StaticPage?)null).Verifiable();
 
         var result = await controller.QualificationsAchievedInScotland();
@@ -250,7 +250,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsAchievedInScotland))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsAchievedInScotland))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -284,7 +284,7 @@ public class AdviceControllerTests
                                               UserJourneyMockNoOp.Object,
                                               mockAdvicePageMapper.Object);
 
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsAchievedInWales))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsAchievedInWales))
                           .ReturnsAsync((StaticPage?)null).Verifiable();
 
         var result = await controller.QualificationsAchievedInWales();
@@ -314,7 +314,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationsAchievedInWales))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationsAchievedInWales))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -355,7 +355,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationNotOnTheList))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationNotOnTheList))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -419,7 +419,7 @@ public class AdviceControllerTests
         model.Heading.Should().Be(cannotFindQualificationPage.Heading);
         model.BodyContent.Should().Be(BodyContent);
 
-        mockContentService.Verify(x => x.GetStaticPage(StaticPages.QualificationNotOnTheList), Times.Never);
+        mockContentService.Verify(x => x.GetStaticPageById(StaticPages.QualificationNotOnTheList), Times.Never);
         mockContentService.Verify(x => x.GetCannotFindQualificationPage(2, 2, 2015, false), Times.Once);
         mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<CannotFindQualificationPage>()), Times.Once);
     }
@@ -436,7 +436,7 @@ public class AdviceControllerTests
                                               UserJourneyMockNoOp.Object,
                                               mockAdvicePageMapper.Object);
 
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationNotOnTheList))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationNotOnTheList))
                           .ReturnsAsync((StaticPage?)null).Verifiable();
 
         var result = await controller.QualificationNotOnTheList();
@@ -466,7 +466,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.QualificationNotOnTheList))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.QualificationNotOnTheList))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -501,7 +501,7 @@ public class AdviceControllerTests
                                               UserJourneyMockNoOp.Object,
                                               mockAdvicePageMapper.Object);
 
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync((StaticPage?)null).Verifiable();
 
         var result = await controller.Level7QualificationStartedBetweenSept2014AndAug2019();
@@ -536,7 +536,7 @@ public class AdviceControllerTests
                              Heading = Heading,
                              Body = ContentfulContentHelper.Text(BodyContent)
                          };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -571,7 +571,7 @@ public class AdviceControllerTests
                                               UserJourneyMockNoOp.Object,
                                               mockAdvicePageMapper.Object);
 
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.Level7QualificationAfterAug2019))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.Level7QualificationAfterAug2019))
                           .ReturnsAsync((StaticPage?)null).Verifiable();
 
         var result = await controller.Level7QualificationAfterAug2019();
@@ -601,7 +601,7 @@ public class AdviceControllerTests
                                               mockAdvicePageMapper.Object);
 
         var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
-        mockContentService.Setup(x => x.GetStaticPage(StaticPages.Level7QualificationAfterAug2019))
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.Level7QualificationAfterAug2019))
                           .ReturnsAsync(advicePage);
 
         mockAdvicePageMapper.Setup(x => x.Map(advicePage))
@@ -661,5 +661,70 @@ public class AdviceControllerTests
 
         resultType.ActionName.Should().Be("GetHelp");
         resultType.ControllerName.Should().Be("Help");
+    }
+    
+    [TestMethod]
+    public async Task DynamicRoute_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        const string route = "some-route";
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockAdvicePageMapper = new Mock<IStaticPageMapper>();
+
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
+
+        mockContentService.Setup(x => x.GetStaticPageByRoute(route))
+                          .ReturnsAsync((StaticPage?)null).Verifiable();
+        var result = await controller.DynamicRoute(route);
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the advice page");
+    }
+
+    [TestMethod]
+    public async Task DynamicRoute_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        const string route = "some-route";
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockAdvicePageMapper = new Mock<IStaticPageMapper>();
+
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
+
+        var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
+        mockContentService.Setup(x => x.GetStaticPageByRoute(route))
+                          .ReturnsAsync(advicePage);
+
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new StaticPageModel { Heading = Heading, BodyContent = BodyContent });
+
+        var result = await controller.DynamicRoute(route);
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as StaticPageModel;
+        model.Should().NotBeNull();
+
+        model.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be(BodyContent);
+
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<StaticPage>()), Times.Once);
     }
 }

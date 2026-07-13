@@ -257,7 +257,7 @@ public class HelpService(
 
     public async Task<StaticPage?> GetStaticPage(string entryId)
     {
-        return await contentService.GetStaticPage(entryId);
+        return await contentService.GetStaticPageById(entryId);
     }
 
     public async Task<StaticPageModel?> MapStaticPage(StaticPage page)

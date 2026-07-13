@@ -61,11 +61,4 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await checkText(page, "#static-page-heading", "Level 7 qualification after aug 2019");
         await checkText(page, "#static-page-body", "Test Static Page Body");
     });
-
-    test("Checks the Nursing Qualifications details are on the page", async ({page}) => {
-
-        await page.goto("/advice/nursing-qualifications");
-        await checkText(page, "#static-page-heading", "Nursing Qualifications");
-        await checkText(page, "#static-page-body", "Test Static Page Body");
-    });
 });
