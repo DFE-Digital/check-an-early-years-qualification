@@ -1458,10 +1458,10 @@ public class MockContentfulServiceTests
             new Document
             {
                 Content =
-                              [
-                                  ContentfulContentHelper.ParagraphWithEmbeddedLink("", "Check English equivalents of Scottish levels",
-                                                                                    "/advice/scottish-qualification-levels")
-                              ]
+                [
+                    ContentfulContentHelper.ParagraphWithEmbeddedLink("", "Check English equivalents of Scottish levels",
+                                                                    "/advice/scottish-qualification-levels")
+                ]
             }
         );
 
