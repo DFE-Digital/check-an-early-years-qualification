@@ -629,6 +629,6 @@ ol.govuk-list.govuk-list--number ol.govuk-list.govuk-list--number {
     margin-left: 8px;
 }
 
-legend.remove-p-margin > p {
-    margin: 0;
+legend.post-legend-content > p {
+    margin: 10px 0 0 0;
 }
