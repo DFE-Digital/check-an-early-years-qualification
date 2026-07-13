@@ -59,4 +59,6 @@ public class WebViewPage
     public string MultipleQualificationsFoundText { get; init; } = string.Empty;
 
     public string SingleQualificationFoundText { get; init; } = string.Empty;
+
+    public Document QualificationLevelPostHeaderContent { get; init; } = new Document();
 }

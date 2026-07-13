@@ -31,6 +31,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             SearchTermFilter = webViewFilters.SearchTerm,
             NoQualificationsFoundContent = await contentParser.ToHtml(content.NoQualificationsFoundContent),
             CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent = await contentParser.ToHtml(content.QualificationIsFullAndRelevantContent),
+            QualificationLevelPostHeaderContent = await contentParser.ToHtml(content.QualificationLevelPostHeaderContent),
             ApplyFiltersButtonContent = content.ApplyFiltersButtonContent,
             ClearFiltersLinkLabel = content.ClearFiltersLinkLabel,
             FilterHeading = content.FilterHeading,
