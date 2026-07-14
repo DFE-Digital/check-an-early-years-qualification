@@ -1206,7 +1206,16 @@ public class MockContentfulService : IContentService
                 PostHeadingContent = ContentfulContentHelper.Paragraph("This list shows all the qualifications that are approved by the Department for Education as full and relevant."),
                 QualificationIsFullAndRelevantContent = ContentfulContentHelper.Paragraph("Check if an early years qualification is approved as full and relevant"),
                 SingleQualificationFoundText = "qualification found",
-                MultipleQualificationsFoundText = "qualifications found"
+                MultipleQualificationsFoundText = "qualifications found",
+                QualificationLevelPostHeaderContent =
+                new Document
+                {
+                    Content =
+                          [
+                              ContentfulContentHelper.ParagraphWithEmbeddedLink("", "Check English equivalents of Scottish levels",
+                                                                                "/advice/scottish-qualification-levels")
+                          ]
+                }
             }
         );
     }
