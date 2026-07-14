@@ -374,27 +374,18 @@ public class ContentfulContentService(
         var enteredStartDate = new DateOnly(startYear, startMonth, dateValidator.GetDay());
         var enteredAwardedDate = new DateOnly(awardedYear, awardedMonth, dateValidator.GetDay());
         
-        var higherPriorityQualificationDetailsPage =
-            qualificationDetailsPageEntries.Where(x => x.FromWhichYear == x.ToWhichYear)
-                                           .OrderByDescending(x => dateValidator.GetDate(x.ToWhichYear))
-                                           .ToList();
-        
-        var lowerPriorityQualificationDetailsPageEntries = qualificationDetailsPageEntries
-                                                         .Where(x => x.FromWhichYear != x.ToWhichYear)
-                                                         .OrderBy(x => dateValidator.GetDate(x.ToWhichYear))
+        var orderedQualificationDetailsPageEntries = qualificationDetailsPageEntries
+                                                         .OrderByDescending(x => dateValidator.GetDate(x.ToWhichYear))
                                                          .ToList();
 
-        // Make the same date pages at the top, so they are higher priority, then add the remaining ordered pages
-        higherPriorityQualificationDetailsPage.AddRange(lowerPriorityQualificationDetailsPageEntries);
-
-        foreach (var page in higherPriorityQualificationDetailsPage)
+        foreach (var page in orderedQualificationDetailsPageEntries)
         {
             var pageStartDate = dateValidator.GetDate(page.FromWhichYear);
             var pageAwardedAfterDate = dateValidator.GetDate(page.AwardedAfterWhichYear);
             var pageEndDate = dateValidator.GetDate(page.ToWhichYear);
 
             // Start & End dates are optional. If the results only contains 1 page, return that.
-            if (higherPriorityQualificationDetailsPage.Count == 1 && pageStartDate is null && pageEndDate is null)
+            if (orderedQualificationDetailsPageEntries.Count == 1 && pageStartDate is null && pageEndDate is null)
             {
                 return page;
             }
@@ -408,7 +399,7 @@ public class ContentfulContentService(
             }
         }
 
-        Logger.LogError("No user is checking own qualification details page entry returned");
+        Logger.LogError("No qualification details page entry returned");
         return null;
     }
 

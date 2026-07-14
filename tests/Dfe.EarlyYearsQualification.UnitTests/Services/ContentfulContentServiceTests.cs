@@ -707,7 +707,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var result = await service.GetQualificationDetailsPage(true, true, 3, 2, 2015, 5, 2019, false, false);
 
-        Logger.VerifyError("No user is checking own qualification details page entry returned");
+        Logger.VerifyError("No qualification details page entry returned");
         result.Should().BeNull();
     }
 

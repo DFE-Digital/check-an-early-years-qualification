@@ -98,6 +98,14 @@ function buildCommand() {
         command += `--ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" `;
     }
 
+    if (process.env.CONTENTFUL_USE_PREVIEW_API !== undefined) {
+        command += `--ContentfulOptions:UsePreviewApi="${process.env.CONTENTFUL_USE_PREVIEW_API}" `;
+    }
+
+    if (process.env.CONTENTFUL_PREVIEW_API_KEY !== undefined) {
+        command += `--ContentfulOptions:PreviewApiKey="${process.env.CONTENTFUL_PREVIEW_API_KEY}" `;
+    }
+
     if (process.env.CONTENTFUL_SPACE_ID !== undefined) {
         command += `--ContentfulOptions:SpaceId="${process.env.CONTENTFUL_SPACE_ID}" `;
     }
