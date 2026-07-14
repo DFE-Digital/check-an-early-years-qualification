@@ -16,12 +16,22 @@ public class MockQualificationsRepositoryTests
                                              It.IsAny<int?>(),
                                              It.IsAny<int?>(),
                                              It.IsAny<string?>(),
+                                             It.IsAny<string?>(),
                                              It.IsAny<string?>()))
-                 .Returns((List<Qualification> q, int? level, int? m, int? y, string? ao, string? name) =>
-                              level is > 0
-                                  ? q.Where(x => x.QualificationLevel == level).ToList()
-                                  : q);
+                 .Returns((List<Qualification> q, int? level, int? m, int? y, string? ao, string? name, string? nation) =>
+                 {
+                    var filtered = level is > 0
+                        ? q.Where(x => x.QualificationLevel == level)
+                        : q;
 
+                    if (!string.IsNullOrEmpty(nation))
+                    {
+                        filtered = filtered.Where(x => x.Nations.Any(n => nation.Equals(n.Name.Replace(" ", "-"), StringComparison.OrdinalIgnoreCase)));
+                    }
+
+                    return filtered.ToList();
+                 });
+                              
         return new MockQualificationsRepository(mockFilter.Object);
     }
 
@@ -47,6 +57,7 @@ public class MockQualificationsRepositoryTests
                                  null,
                                  null,
                                  null,
+                                 null,
                                  null);
 
         results.Count.Should().Be(expectedQualificationIds.Length);
@@ -58,7 +69,7 @@ public class MockQualificationsRepositoryTests
     public async Task GetFilteredQualifications_PassInLevel3_ReturnsQualificationWithAdditionalRequirementQuestions()
     {
         var repository = CreateRepository();
-        var results = await repository.Get(3, null, null, null, null);
+        var results = await repository.Get(3, null, null, null, null, null);
 
         var qualificationWithAdditionalRequirements =
             results.FirstOrDefault(q => q.QualificationId == "EYQ-909");
@@ -851,5 +862,26 @@ public class MockQualificationsRepositoryTests
         answers[0].Value.Should().Be("yes");
         answers[1].Label.Should().Be("No");
         answers[1].Value.Should().Be("no");
+    }
+
+    [TestMethod]
+    [DataRow("England", 31)]
+    [DataRow("Scotland", 4)]
+    [DataRow("Wales", 0)]
+    [DataRow("northern-ireland", 3)]
+    public async Task GetFilteredQualifications_PassInNation_ReturnsExpectedQualifications(
+    string nation, int expectedQualificationCount)
+    {
+        var repository = CreateRepository();
+
+        var results =
+            await repository.Get(null,
+                                 null,
+                                 null,
+                                 null,
+                                 null,
+                                 nation);
+
+        results.Count.Should().Be(expectedQualificationCount);
     }
 }

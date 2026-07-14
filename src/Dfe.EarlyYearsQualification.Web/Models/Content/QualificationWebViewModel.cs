@@ -14,6 +14,7 @@ public class QualificationWebViewModel : BasicQualificationModel
         StaffChildRatio = qualification.StaffChildRatio;
         QualificationNumber = string.IsNullOrEmpty(QualificationNumber) ? MissingValue : QualificationNumber;
         EyqlTabs = qualification.EyqlTabs;
+        Nations = qualification.Nations;
     }
 
     public int StaffChildRatio { get; init; }
@@ -25,6 +26,8 @@ public class QualificationWebViewModel : BasicQualificationModel
     public string? AdditionalRequirements { get; init; }
 
     public List<Tab> EyqlTabs { get; init; }
+
+    public List<Nation> Nations { get; init; }
 
     private static string FormatYearContent(string? year)
     {

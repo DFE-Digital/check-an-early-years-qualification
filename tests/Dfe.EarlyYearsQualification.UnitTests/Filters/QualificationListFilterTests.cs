@@ -40,7 +40,7 @@ public class QualificationListFilterTests
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
         
         var filteredQualifications =
-            qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, null, null);
+            qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, null, null, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Count.Should().Be(2);
@@ -68,7 +68,7 @@ public class QualificationListFilterTests
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
         
         var result =
-            qualificationFilterFactory.ApplyFilters(qualifications, 4, null, null, null, null);
+            qualificationFilterFactory.ApplyFilters(qualifications, 4, null, null, null, null, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -94,7 +94,7 @@ public class QualificationListFilterTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
         var mockDateValidator = new Mock<IDateValidator>();
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,AwardingOrganisations.Edexcel, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, AwardingOrganisations.Edexcel, null, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -120,7 +120,7 @@ public class QualificationListFilterTests
         var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
         var mockDateValidator = new Mock<IDateValidator>();
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,AwardingOrganisations.Pearson, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, AwardingOrganisations.Pearson, null, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -154,7 +154,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2015,AwardingOrganisations.Cache, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2015, AwardingOrganisations.Cache, null, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -188,7 +188,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013,AwardingOrganisations.Cache, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013, AwardingOrganisations.Cache, null, null);
 
         result.Count.Should().Be(0);
     }
@@ -221,7 +221,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2015,AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2015, AwardingOrganisations.Ncfe, null, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -255,7 +255,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013,AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013, AwardingOrganisations.Ncfe, null, null);
 
         result.Count.Should().Be(0);
     }
@@ -288,7 +288,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, AwardingOrganisations.Ncfe, null, null);
 
         result.Count.Should().Be(0);
     }
@@ -321,7 +321,7 @@ public class QualificationListFilterTests
             .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(),
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,AwardingOrganisations.Cache, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, AwardingOrganisations.Cache, null, null);
 
         result.Count.Should().Be(0);
     }
@@ -347,7 +347,7 @@ public class QualificationListFilterTests
         var mockDateValidator = new Mock<IDateValidator>();
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
 
-        var result = qualificationFilterFactory.ApplyFilters(qualifications,null, null, null, AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications,null, null, null, AwardingOrganisations.Ncfe, null, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -374,7 +374,7 @@ public class QualificationListFilterTests
         var mockDateValidator = new Mock<IDateValidator>();
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
 
-        var result = qualificationFilterFactory.ApplyFilters(qualifications,null, null, null, AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications,null, null, null, AwardingOrganisations.Ncfe, null, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -401,7 +401,7 @@ public class QualificationListFilterTests
         var mockDateValidator = new Mock<IDateValidator>();
         mockDateValidator.Setup(x => x.GetDay()).Returns(28);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013,null, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, 1, 2013,null, null, null);
 
         result.Should().BeEmpty();
     }
@@ -446,7 +446,7 @@ public class QualificationListFilterTests
         var mockDateValidator = new Mock<IDateValidator>();
         mockDateValidator.Setup(x => x.GetDay()).Returns(28);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,null, qualificationSearch);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, null, qualificationSearch, null);
 
         result.Should().NotBeNull();
         result.Count.Should().Be(1);
@@ -492,7 +492,7 @@ public class QualificationListFilterTests
         var mockDateValidator = new Mock<IDateValidator>();
         mockDateValidator.Setup(x => x.GetDay()).Returns(28);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
-        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null,null, qualificationSearch);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, null, qualificationSearch, null);
 
         result.Should().BeEmpty();
     }
@@ -527,7 +527,7 @@ public class QualificationListFilterTests
         
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
 
-        var result = qualificationFilterFactory.ApplyFilters(qualifications,4,09, 2024, AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications,4,09, 2024, AwardingOrganisations.Ncfe, null, null);
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");
@@ -562,7 +562,44 @@ public class QualificationListFilterTests
                                             It.IsAny<Qualification>())).Returns(expectedResult);
         var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
 
-        var result = qualificationFilterFactory.ApplyFilters(qualifications,4, 08, 2019, AwardingOrganisations.Ncfe, null);
+        var result = qualificationFilterFactory.ApplyFilters(qualifications,4, 08, 2019, AwardingOrganisations.Ncfe, null, null);
+
+        result.Count.Should().Be(1);
+        result[0].QualificationId.Should().Be("EYQ-123");
+    }
+
+    [TestMethod]
+    public void ApplyFilters_PassInNation_ReturnsQualificationsForMatchingNation()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("EYQ-123",
+                                                   "test",
+                                                   AwardingOrganisations.Ncfe,
+                                                   4)
+                                 {
+                                     Nations = new List<Nation>
+                                               {
+                                                   new() { Name = "Northern Ireland" }
+                                               }
+                                 },
+                                 new Qualification("EYQ-124",
+                                                   "test",
+                                                   AwardingOrganisations.Pearson,
+                                                   3)
+                                 {
+                                     Nations = new List<Nation>
+                                               {
+                                                   new() { Name = "England" }
+                                               }
+                                 }
+                             };
+
+        var mockFuzzyAdapter = new Mock<IFuzzyAdapter>();
+        var mockDateValidator = new Mock<IDateValidator>();
+        var qualificationFilterFactory = new QualificationListFilter(mockFuzzyAdapter.Object, mockDateValidator.Object);
+
+        var result = qualificationFilterFactory.ApplyFilters(qualifications, null, null, null, null, null, "northern-ireland");
 
         result.Count.Should().Be(1);
         result[0].QualificationId.Should().Be("EYQ-123");

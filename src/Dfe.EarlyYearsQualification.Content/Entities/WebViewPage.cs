@@ -6,27 +6,27 @@ public class WebViewPage
 {
     public NavigationLink? BackButton { get; init; }
 
-    public string Heading  { get; init; } = string.Empty;
+    public string Heading { get; init; } = string.Empty;
 
-    public Document PostHeadingContent  { get; init; } = new Document();
+    public Document PostHeadingContent { get; init; } = new Document();
 
     public string DownloadHeading { get; init; } = string.Empty;
     
-    public Document DownloadSectionContent  { get; init; } = new Document();
+    public Document DownloadSectionContent { get; init; } = new Document();
 
-    public string DownloadButtonText  { get; init; } = string.Empty;
+    public string DownloadButtonText { get; init; } = string.Empty;
 
-    public string QualificationLevelLabel  { get; init; } = string.Empty;
+    public string QualificationLevelLabel { get; init; } = string.Empty;
 
-    public string StaffChildRatioLabel  { get; init; } = string.Empty;
+    public string StaffChildRatioLabel { get; init; } = string.Empty;
 
     public string FromWhichYearLabel { get; init; } = string.Empty;
 
     public string ToWhichYearLabel { get; init; } = string.Empty;
 
-    public string AwardingOrganisationLabel  { get; init; } = string.Empty;
+    public string AwardingOrganisationLabel { get; init; } = string.Empty;
 
-    public string QualificationNumberLabel  { get; init; } = string.Empty;
+    public string QualificationNumberLabel { get; init; } = string.Empty;
 
     public string NotesAdditionalRequirementsLabel  { get; init; } = string.Empty;
 
@@ -34,27 +34,31 @@ public class WebViewPage
 
     public Document NoQualificationsFoundContent { get; init; } = new Document();
 
-    public Document QualificationIsFullAndRelevantContent  { get; init; } = new Document();
+    public Document QualificationIsFullAndRelevantContent { get; init; } = new Document();
 
-    public string FilterHeading  { get; init; } = string.Empty;
+    public string FilterHeading { get; init; } = string.Empty;
 
-    public string SelectedFiltersHeading  { get; init; } = string.Empty;
+    public string SelectedFiltersHeading { get; init; } = string.Empty;
 
-    public string KeywordHeading  { get; init; } = string.Empty;
+    public string KeywordHeading { get; init; } = string.Empty;
 
-    public string QualificationStartDateHeading  { get; init; } = string.Empty;
+    public string QualificationStartDateHeading { get; init; } = string.Empty;
 
-    public string QualificationLevelHeading  { get; init; } = string.Empty;
+    public string QualificationLevelHeading { get; init; } = string.Empty;
 
-    public string ApplyFiltersButtonContent  { get; init; } = string.Empty;
+    public string NationHeading { get; init; } = string.Empty;
+
+    public string ApplyFiltersButtonContent { get; init; } = string.Empty;
 
     public string ClearFiltersLinkLabel { get; init; } = string.Empty;
 
-    public string NoFiltersSelectedContent  { get; init; } = string.Empty;
+    public string NoFiltersSelectedContent { get; init; } = string.Empty;
 
     public List<IOptionItem> StartDateFilters { get; init; } = [];
 
     public List<IOptionItem> LevelFilters { get; init; } = [];
+
+    public List<IOptionItem> NationFilters { get; init; } = [];
 
     public string MultipleQualificationsFoundText { get; init; } = string.Empty;
 

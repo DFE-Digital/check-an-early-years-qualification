@@ -1168,6 +1168,7 @@ public class MockContentfulService : IContentService
                 SelectedFiltersHeading = "Selected filters",
                 KeywordHeading = "Keywords",
                 QualificationStartDateHeading = "Qualification start date",
+                NationHeading = "Qualification awarded in",
                 QualificationLevelHeading = "Qualification level",
                 ApplyFiltersButtonContent = "Apply filters",
                 NoFiltersSelectedContent = "No filters selected.",
@@ -1200,6 +1201,17 @@ public class MockContentfulService : IContentService
                     { Label = "Level 6", Value = "6" },
                     new Option
                     { Label = "Level 7", Value = "7" },
+                ],
+                NationFilters =
+                [
+                    new Option
+                    { Label = "England", Value = "england" },
+                    new Option
+                    { Label = "Scotland", Value = "scotland" },
+                    new Option
+                    { Label = "Wales", Value = "wales" },
+                    new Option
+                    { Label = "Northern Ireland", Value = "northern-ireland" },
                 ],
                 ClearFiltersLinkLabel = "Clear filters",
                 NoQualificationsFoundContent = ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."),
