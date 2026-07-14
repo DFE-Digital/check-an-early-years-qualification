@@ -42,6 +42,8 @@ public class EarlyYearsQualificationListModel
 
     public string SingleQualificationFoundText { get; init; } = string.Empty;
 
+    public string QualificationLevelPostHeaderContent { get; init; } = string.Empty;
+
     // Filters content
     public string FilterHeading { get; init; } = string.Empty;
 

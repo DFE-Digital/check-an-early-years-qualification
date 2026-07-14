@@ -35,7 +35,8 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await checkText(page, "input[value='Pre-September 2014'] ~ label", "Before September 2014");
         await checkText(page, "input[value='Post-September 2014'] ~ label","On or after September 2014");
         await checkText(page, "input[value='Post-September 2024'] ~ label", "On or after September 2024");
-        await checkText(page, "#apply-filter-form div:nth-child(4) legend", "Qualification level");
+        await checkText(page, "#apply-filter-form div:nth-child(4) legend > div", "Qualification level");
+        await checkText(page, "#apply-filter-form div:nth-child(4) legend > p > a", "Check English equivalents of Scottish levels");
         await checkText(page, "input[value='2'] ~ label", "Level 2");
         await checkText(page, "input[value='3'] ~ label", "Level 3");
         await checkText(page, "input[value='4'] ~ label", "Level 4");

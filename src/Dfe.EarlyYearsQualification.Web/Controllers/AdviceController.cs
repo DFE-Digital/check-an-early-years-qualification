@@ -27,41 +27,41 @@ public class AdviceController(
         base.OnActionExecuting(context);
     }
 
+    [HttpGet("{route}")]
+    public async Task<IActionResult> DynamicRoute(string route)
+    {
+        return await GetViewByRoute(route);
+    }
+
     [HttpGet("qualification-outside-the-united-kingdom")]
     public async Task<IActionResult> QualificationOutsideTheUnitedKingdom()
     {
-        return await GetView(StaticPages.QualificationsAchievedOutsideTheUk);
+        return await GetViewById(StaticPages.QualificationsAchievedOutsideTheUk);
     }
 
     [HttpGet("level-2-qualifications-started-between-1-sept-2014-and-31-aug-2019")]
     [RedirectIfDateMissing]
     public async Task<IActionResult> QualificationsStartedBetweenSept2014AndAug2019()
     {
-        return await GetView(StaticPages.QualificationsStartedBetweenSept2014AndAug2019);
+        return await GetViewById(StaticPages.QualificationsStartedBetweenSept2014AndAug2019);
     }
 
     [HttpGet("qualifications-achieved-in-northern-ireland")]
     public async Task<IActionResult> QualificationsAchievedInNorthernIreland()
     {
-        return await GetView(StaticPages.QualificationsAchievedInNorthernIreland);
+        return await GetViewById(StaticPages.QualificationsAchievedInNorthernIreland);
     }
 
     [HttpGet("qualifications-achieved-in-scotland")]
     public async Task<IActionResult> QualificationsAchievedInScotland()
     {
-        return await GetView(StaticPages.QualificationsAchievedInScotland);
+        return await GetViewById(StaticPages.QualificationsAchievedInScotland);
     }
 
     [HttpGet("qualifications-achieved-in-wales")]
     public async Task<IActionResult> QualificationsAchievedInWales()
     {
-        return await GetView(StaticPages.QualificationsAchievedInWales);
-    }
-    
-    [HttpGet("nursing-qualifications")]
-    public async Task<IActionResult> NursingQualification()
-    {
-        return await GetView(StaticPages.NursingQualifications);
+        return await GetViewById(StaticPages.QualificationsAchievedInWales);
     }
 
     [HttpGet("qualification-not-on-the-list")]
@@ -88,21 +88,21 @@ public class AdviceController(
             }
         }
 
-        return await GetView(StaticPages.QualificationNotOnTheList);
+        return await GetViewById(StaticPages.QualificationNotOnTheList);
     }
 
     [HttpGet("level-7-qualifications-started-between-1-sept-2014-and-31-aug-2019")]
     [RedirectIfDateMissing]
     public async Task<IActionResult> Level7QualificationStartedBetweenSept2014AndAug2019()
     {
-        return await GetView(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019);
+        return await GetViewById(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019);
     }
 
     [HttpGet("level-7-qualification-after-aug-2019")]
     [RedirectIfDateMissing]
     public async Task<IActionResult> Level7QualificationAfterAug2019()
     {
-        return await GetView(StaticPages.Level7QualificationAfterAug2019);
+        return await GetViewById(StaticPages.Level7QualificationAfterAug2019);
     }
 
     [HttpGet("help")]
@@ -111,9 +111,23 @@ public class AdviceController(
         return RedirectToAction("GetHelp", "Help");
     }
 
-    private async Task<IActionResult> GetView(string staticPageId)
+    private async Task<IActionResult> GetViewById(string staticPageId)
     {
-        var staticPage = await contentService.GetStaticPage(staticPageId);
+        var staticPage = await contentService.GetStaticPageById(staticPageId);
+        if (staticPage is null)
+        {
+            logger.LogError("No content for the advice page");
+            return RedirectToAction("Index", "Error");
+        }
+
+        var model = await staticPageMapper.Map(staticPage);
+
+        return View("../Static/Static", model);
+    }
+    
+    private async Task<IActionResult> GetViewByRoute(string route)
+    {
+        var staticPage = await contentService.GetStaticPageByRoute(route);
         if (staticPage is null)
         {
             logger.LogError("No content for the advice page");

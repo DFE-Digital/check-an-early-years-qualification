@@ -9,7 +9,9 @@ public interface IContentService
 
     Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage);
 
-    Task<StaticPage?> GetStaticPage(string entryId);
+    Task<StaticPage?> GetStaticPageById(string entryId);
+    
+    Task<StaticPage?> GetStaticPageByRoute(string route);
 
     Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId);
 
