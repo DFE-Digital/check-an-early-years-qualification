@@ -92,3 +92,64 @@ Early Years Professional Status (EYPS)
 
 The qualification holder may be eligible for early years initial teacher training (EYITT) (opens in new tab). This route allows suitable early years practitioners with a Level 6 degree qualification to gain Early Years Teacher Status (EYTS) and be included in the Level 6 staff:child ratios.
 `;
+
+export const managementHeading = 'Management';
+
+export const managementContent = 'You may already be working as a manager, but if not, the Early years leadership national professional qualification (opens in new tab) is an 18-month course open to people who hold a full and relevant level 3 qualification.';
+
+export const workingAtLevel2Heading = 'Working at level 2';
+
+export const becomeAnEarlyYearsTeacher = 'Become an early years teacher';
+
+export const becomeAnEarlyYearsTeacherContent =
+"If you would like to develop your career in early years, this qualification gives you a number of options."
+
+export const becomeAnEarlyYearsTeacherContent2 =
+"Holding a level 6 degree qualification may mean that you are eligible for early years initial teacher training (EYITT). You can find out more about EYITT on the Get Into Teaching website (opens in new tab)."
+
+export const higherEducationHeading = 'Higher education';
+
+export const refreshYourKnowledgeHeading = 'Refresh your knowledge';
+
+export const experienceBasedRouteHeading = 'Experience-based route';
+
+export const experienceBasedRouteContent = 'You may be able to gain status to work in the staff:child ratios at level 3 through the experience-based route (opens in new tab).';
+
+export const experienceBasedRouteLevel2Content = 'The experience-based route is a way for experienced early years practitioners who have a full and relevant level 2 qualification to be able to count in the staff:child ratios at level 3. Eligibility criteria apply, including that your qualification must be relevant to the care or education of children.';
+
+export const experienceBasedRouteGeneralContent = 'The experience-based route is a way for experienced early years practitioners to be able to count in the staff:child ratios at level 3. Eligibility criteria apply, including that your qualification must be relevant to the care or education of children.';
+
+export const experienceBasedRouteEmployerContent = 'If you are interested in the experience-based route, you should discuss this with your employer to understand if it is available at your early years setting and if you are eligible.';
+
+export const experienceBasedRouteReadMoreContent = 'Read more about how the experience-based route works (opens in new tab).';
+
+export const refreshYourKnowledgeContent = 'The Department for Education offers free online courses (opens in new tab) in early years child development. The 8 interactive modules will give you a thorough understanding of the most important aspects of child development in the early years, and give you practical ideas that you can use in your setting.';
+
+export const trainForASpecialisedRoleHeading = 'Train for a specialised role';
+
+export const trainForASpecialisedRoleContent = 'You may be able to train for a specialised role in early years, for example as a special educational needs coordinator (SENCO) or a designated safeguarding lead (DSL). You should discuss with your employer to understand what opportunities are available at your early years setting.';
+
+export const helpAndSupportHeading = 'Help and support';
+
+export const noQualificationNeededContent = 'You don’t need a qualification to work in early years but it’s something that nurseries and pre-schools often look for. To count in the staff:child ratios set out in the early years foundation stage (opens in new tab) as a qualified member of staff, early years practitioners need to hold an approved (‘full and relevant’) qualification.';
+
+export const approvedQualificationRoutesContent = 'There are lots of ways to get an approved early years qualification. The Department for Education’s early years careers website (opens in new tab) has information on all the available training and qualification routes.';
+
+export const helpAndSupportContent = 'We’re here to support you with any questions or guidance you need about developing your career in early years education. Whether you want to understand more about early years qualifications or you want to explore your options, there’s help available. Contact the early careers team (opens in new tab)';
+
+export const helpAndSupportContent2 = 'If you don’t already work as a manager, you will also need to hold a suitable level 2 qualification in maths or achieve one within 2 years of starting a management role.';
+
+export const helpAndSupportContent3Level2 = 'Although this qualification is not full and relevant for working in the staff:child ratios at level 3, you can work at level 2. This is because the qualification was started between September 2014 and August 2019 and it meets all the other requirements set out in the early years qualification requirements and standards guidance document (opens in new tab).';
+
+export const helpAndSupportContent3Level36 =
+    'Although this qualification is not full and relevant for working in the staff:child ratios at level 3 or level 6, you can work at level 2. This is because the qualification was started between September 2014 and August 2019 and it meets all the other requirements set out in the early years qualification requirements and standards guidance document (opens in new tab).';
+
+export const helpAndSupportContent4 = 'You could study for a degree or other higher education qualification in disciplines like early years teaching, playwork, social work or early childhood studies. You can explore higher education courses on the UCAS website (opens in new tab).';
+
+export const helpAndSupportContent3 = 'You can also explore the Department for Education’s early years careers website (opens in new tab) for information on all the available training and qualification routes.';
+
+export const postRatioRequirementManagerContent = 'As set out in the early years foundation stage (EYFS) statutory framework (opens in new tab), providers must:';
+
+export const postRatioRequirementManagerContentList = `ensure that staffing arrangements meet the needs of all children and ensure their safety
+ensure that people looking after children are suitable
+meet all other requirements as set out in the EYFS and the early years qualification requirements and standards guidance document (opens in new tab)`;

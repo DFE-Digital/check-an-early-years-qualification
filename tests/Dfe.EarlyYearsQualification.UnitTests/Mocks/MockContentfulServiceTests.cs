@@ -53,11 +53,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_QualificationsAchievedOutsideTheUk_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_QualificationsAchievedOutsideTheUk_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsAchievedOutsideTheUk);
+        var result = await contentfulService.GetStaticPageById(StaticPages.QualificationsAchievedOutsideTheUk);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
@@ -66,11 +66,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_Level2SeptAndAug_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_Level2SeptAndAug_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsStartedBetweenSept2014AndAug2019);
+        var result = await contentfulService.GetStaticPageById(StaticPages.QualificationsStartedBetweenSept2014AndAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
@@ -79,11 +79,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_QualificationsAchievedInScotland_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_QualificationsAchievedInScotland_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsAchievedInScotland);
+        var result = await contentfulService.GetStaticPageById(StaticPages.QualificationsAchievedInScotland);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().Be("Qualifications achieved in Scotland");
@@ -92,11 +92,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_QualificationsAchievedInWales_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_QualificationsAchievedInWales_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsAchievedInWales);
+        var result = await contentfulService.GetStaticPageById(StaticPages.QualificationsAchievedInWales);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().Be("Qualifications achieved in Wales");
@@ -105,11 +105,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_QualificationsAchievedInNorthernIreland_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_QualificationsAchievedInNorthernIreland_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.QualificationsAchievedInNorthernIreland);
+        var result = await contentfulService.GetStaticPageById(StaticPages.QualificationsAchievedInNorthernIreland);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().Be("Qualifications achieved in Northern Ireland");
@@ -118,11 +118,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_QualificationNotOnTheList_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_QualificationNotOnTheList_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.QualificationNotOnTheList);
+        var result = await contentfulService.GetStaticPageById(StaticPages.QualificationNotOnTheList);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().Be("Qualification not on the list");
@@ -131,12 +131,12 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_Level7QualificationStartedBetweenSept2014AndAug2019_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_Level7QualificationStartedBetweenSept2014AndAug2019_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
         var result =
-            await contentfulService.GetStaticPage(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019);
+            await contentfulService.GetStaticPageById(StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
@@ -145,11 +145,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_Level7QualificationAfterAug2019_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_Level7QualificationAfterAug2019_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.Level7QualificationAfterAug2019);
+        var result = await contentfulService.GetStaticPageById(StaticPages.Level7QualificationAfterAug2019);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
@@ -158,11 +158,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_HowToGetACopyOfTheCertificateOrTranscript_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_HowToGetACopyOfTheCertificateOrTranscript_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.HowToGetACopyOfTheCertificateOrTranscript);
+        var result = await contentfulService.GetStaticPageById(StaticPages.HowToGetACopyOfTheCertificateOrTranscript);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
@@ -171,11 +171,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_HowToFindTheLevelOfAQualification_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_HowToFindTheLevelOfAQualification_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.HowToFindTheLevelOfAQualification);
+        var result = await contentfulService.GetStaticPageById(StaticPages.HowToFindTheLevelOfAQualification);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
@@ -184,11 +184,11 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_HowToFindASuitableCourse_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_HowToFindASuitableCourse_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.HowToFindASuitableCourse);
+        var result = await contentfulService.GetStaticPageById(StaticPages.HowToFindASuitableCourse);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<StaticPage>();
         result.Heading.Should().NotBeNullOrEmpty();
@@ -197,26 +197,28 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
-    public async Task GetStaticPage_NursingQualifications_ReturnsExpectedDetails()
+    public async Task GetStaticPageById_UnknownEntryId_ReturnsException()
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetStaticPage(StaticPages.NursingQualifications);
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<StaticPage>();
-        result.Heading.Should().Be("Nursing Qualifications");
-        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
-    }
-
-    [TestMethod]
-    public async Task GetStaticPage_UnknownEntryId_ReturnsException()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var page = await contentfulService.GetStaticPage("Invalid entry Id");
+        var page = await contentfulService.GetStaticPageById("Invalid entry Id");
 
         page.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task GetStaticPageByRoute_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var page = await contentfulService.GetStaticPageByRoute("fake-route");
+
+        page.Should().NotBeNull();
+        page.Should().BeAssignableTo<StaticPage>();
+        page.Heading.Should().NotBeNullOrEmpty();
+        page.Heading.Should().Be("Dynamic Page Heading");
+        page.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the body of the dynamic route");
     }
 
     [TestMethod]
@@ -1451,6 +1453,18 @@ public class MockContentfulServiceTests
         result.NoQualificationsFoundContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("No qualifications match the filters you selected."));
         result.PostHeadingContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("This list shows all the qualifications that are approved by the Department for Education as full and relevant."));
         result.QualificationIsFullAndRelevantContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("Check if an early years qualification is approved as full and relevant"));
+
+        result.QualificationIsFullAndRelevantContent.Should().BeEquivalentTo(
+            new Document
+            {
+                Content =
+                [
+                    ContentfulContentHelper.ParagraphWithEmbeddedLink("", "Check English equivalents of Scottish levels",
+                                                                    "/advice/scottish-qualification-levels")
+                ]
+            }
+        );
+
         result.SingleQualificationFoundText.Should().Be("qualification found");
         result.MultipleQualificationsFoundText.Should().Be("qualifications found");
     }

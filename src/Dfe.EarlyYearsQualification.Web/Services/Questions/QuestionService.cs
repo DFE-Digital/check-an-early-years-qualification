@@ -87,14 +87,14 @@ public class QuestionService(
                                  "Advice"),
             "7" when userJourneyCookieService.WasStartedOnOrAfterSeptember2019() =>
                 RedirectToAction(nameof(AdviceController.Level7QualificationAfterAug2019), "Advice"),
-            _ => RedirectToAction(nameof(QuestionsController.WhatIsTheAwardingOrganisation))
+            _ => RedirectToAction(nameof(QuestionsController.WhatIsTheAwardingOrganisation), "Questions")
         };
     }
 
     public IActionResult RedirectBasedOnWhereTheQualificationWasAwarded(string option)
     {
         userJourneyCookieService.SetWhereWasQualificationAwarded(option);
-
+        
         return option switch
         {
             QualificationAwardLocation.OutsideOfTheUnitedKingdom =>
@@ -104,7 +104,7 @@ public class QuestionService(
             QualificationAwardLocation.Wales => RedirectToAction("QualificationsAchievedInWales", "Advice"),
             QualificationAwardLocation.NorthernIreland =>
                 RedirectToAction("QualificationsAchievedInNorthernIreland", "Advice"),
-            _ => RedirectToAction(nameof(QuestionsController.WhenWasTheQualificationStarted))
+            _ => RedirectToAction(nameof(QuestionsController.WhenWasTheQualificationStarted), "Questions")
         };
     }
 
@@ -131,7 +131,7 @@ public class QuestionService(
     {
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
-        return await repository.Get(level, startDateMonth, startDateYear, null, null);
+        return await repository.Get(level, startDateMonth, startDateYear, null, null, null);
     }
 
     public async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model,
@@ -199,7 +199,7 @@ public class QuestionService(
 
     public DatesValidationResult IsValid(DatesQuestionModel model, DatesQuestionPage questionPage)
     {
-        return questionModelValidator.IsValid(model, questionPage!);
+        return questionModelValidator.IsValid(model, questionPage);
     }
 
     public DateValidationResult StartDateIsValid(DateQuestionModel model, DateQuestion content)
@@ -209,7 +209,7 @@ public class QuestionService(
 
     public void SetWhenWasQualificationStarted(DateQuestionModel question)
     {
-        userJourneyCookieService.SetWhenWasQualificationStarted(question!.SelectedMonth.ToString() + '/' +
+        userJourneyCookieService.SetWhenWasQualificationStarted(question.SelectedMonth.ToString() + '/' +
                                                                     question.SelectedYear);
     }
 
@@ -225,7 +225,7 @@ public class QuestionService(
 
     public void SetWhenWasQualificationAwarded(DateQuestionModel question)
     {
-        userJourneyCookieService.SetWhenWasQualificationAwarded(question!.SelectedMonth.ToString() + '/' +
+        userJourneyCookieService.SetWhenWasQualificationAwarded(question.SelectedMonth.ToString() + '/' +
                                                                 question.SelectedYear);
     }
 

@@ -30,14 +30,15 @@ public class QualificationsRepository(
         return qualifications.FirstOrDefault(x => string.Equals(x.QualificationId, qualificationId, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    public async Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear, string? awardingOrganisation, string? qualificationName)
+    public async Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear, string? awardingOrganisation, string? qualificationName, string? nation)
     {
-        Logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}",
+        Logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}, nation: {Nation}",
                               level,
                               startDateMonth,
                               startDateYear,
                               awardingOrganisation,
-                              qualificationName);
+                              qualificationName,
+                              nation);
         
         var qualifications = await GetAllQualifications();
 
@@ -48,7 +49,7 @@ public class QualificationsRepository(
 
         var filteredQualifications =
             qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear,
-                                                    awardingOrganisation, qualificationName);
+                                                    awardingOrganisation, qualificationName, nation);
         
         return filteredQualifications;
     }

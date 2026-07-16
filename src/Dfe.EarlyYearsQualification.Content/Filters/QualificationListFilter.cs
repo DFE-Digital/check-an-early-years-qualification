@@ -8,7 +8,7 @@ namespace Dfe.EarlyYearsQualification.Content.Filters;
 public class QualificationListFilter(IFuzzyAdapter fuzzyAdapter, IDateValidator dateValidator) : IQualificationListFilter
 {
     public List<Qualification> ApplyFilters(List<Qualification> qualifications, int? level, int? startDateMonth, int? startDateYear,
-                                            string? awardingOrganisation, string? qualificationName)
+                                            string? awardingOrganisation, string? qualificationName, string? nation)
     {
         var filteredQualifications = qualifications;
         
@@ -16,6 +16,7 @@ public class QualificationListFilter(IFuzzyAdapter fuzzyAdapter, IDateValidator 
         filteredQualifications = FilterQualificationsByAwardingOrganisation(startDateMonth, startDateYear, awardingOrganisation, filteredQualifications);
         filteredQualifications = FilterQualificationsByDate(startDateMonth, startDateYear, filteredQualifications);
         filteredQualifications = FilterQualificationsByName(filteredQualifications, qualificationName);
+        filteredQualifications = FilterQualificationsByNation(filteredQualifications, nation);
 
         return filteredQualifications;
     }
@@ -94,7 +95,16 @@ public class QualificationListFilter(IFuzzyAdapter fuzzyAdapter, IDateValidator 
 
         return matchedQualifications;
     }
-    
+
+    private static List<Qualification> FilterQualificationsByNation(List<Qualification> qualifications, string? nation)
+    {
+        if (string.IsNullOrEmpty(nation)) { 
+            return qualifications; 
+        }
+
+        return qualifications.Where(q => q.Nations.Any(n => string.Equals(n.Name.Replace(" ", "-"), nation, StringComparison.OrdinalIgnoreCase))).ToList();
+    }
+
     private static List<string> IncludeLinkedOrganisations(string awardingOrganisation, int? startDateMonth,
                                                            int? startDateYear)
     {

@@ -11,7 +11,9 @@ public interface IContentService
                                                                 int startMonth, int startYear, int awardedMonth, int awardedYear,
                                                                 bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage);
 
-    Task<StaticPage?> GetStaticPage(string entryId);
+    Task<StaticPage?> GetStaticPageById(string entryId);
+    
+    Task<StaticPage?> GetStaticPageByRoute(string route);
 
     Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId);
 
