@@ -33,13 +33,15 @@ public class WebViewService(
     {
         var searchCriteria = string.IsNullOrWhiteSpace(filters.SearchTerm) ? null : filters.SearchTerm;
         var qualificationLevel = GetQualificationLevel(filters.QualificationLevel);
+        var nation = GetNation(filters.Nation);
 
         var qualifications = await qualificationsRepository.Get(
                                                   qualificationLevel,
                                                   null,
                                                   null,
                                                   null,
-                                                  searchCriteria
+                                                  searchCriteria,
+                                                  nation
                                                  );
 
         qualifications = FilterQualificationsByStartDate(qualifications, filters.QualificationStartDate);
@@ -55,6 +57,7 @@ public class WebViewService(
         filters.SearchTerm = model.SearchTermFilter;
         filters.QualificationStartDate = model.QualificationStartDateFilter;
         filters.QualificationLevel = model.QualificationLevelFilter;
+        filters.Nation = model.NationFilter;
         SetWebViewFilters(filters);
     }
 
@@ -62,6 +65,14 @@ public class WebViewService(
     {
         var filters = GetWebViewFilters();
 
+        if (filter.Contains("search-term"))
+        {
+            filters.SearchTerm = string.Empty;
+        }
+        if (filter.Contains("nation"))
+        {
+            filters.Nation = string.Empty;
+        }
         if (filter.Contains("qualification-level"))
         {
             filters.QualificationLevel = string.Empty;
@@ -69,10 +80,6 @@ public class WebViewService(
         if (filter.Contains("start-date"))
         {
             filters.QualificationStartDate = string.Empty;
-        }
-        if (filter.Contains("search-term"))
-        {
-            filters.SearchTerm = string.Empty;
         }
 
         SetWebViewFilters(filters);
@@ -93,6 +100,16 @@ public class WebViewService(
         if (!string.IsNullOrWhiteSpace(qualificationLevel) && int.TryParse(qualificationLevel, out var parsedQualificationLevel))
         {
             return parsedQualificationLevel;
+        }
+
+        return null;
+    }
+
+    private static string? GetNation(string nation)
+    {
+        if (!string.IsNullOrWhiteSpace(nation))
+        {
+            return nation;
         }
 
         return null;

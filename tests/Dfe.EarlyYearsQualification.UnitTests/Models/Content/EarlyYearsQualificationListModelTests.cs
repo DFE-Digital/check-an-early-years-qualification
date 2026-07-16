@@ -42,6 +42,25 @@ public class EarlyYearsQualificationListModelTests
     }
 
     [TestMethod]
+    public void HasFilters_NationFilterSet_ReturnsTrue()
+    {
+        // Arrange
+        var model = new EarlyYearsQualificationListModel
+        {
+            SearchTermFilter = string.Empty,
+            QualificationStartDateFilter = string.Empty,
+            QualificationLevelFilter = string.Empty,
+            NationFilter = "Wales"
+        };
+
+        // Act
+        var result = model.HasFilters;
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
     public void HasFilters_QualificationStartDateFilterSet_ReturnsTrue()
     {
         // Arrange
@@ -153,6 +172,25 @@ public class EarlyYearsQualificationListModelTests
             SearchTermFilter = string.Empty,
             QualificationStartDateFilter = string.Empty,
             QualificationLevelFilter = "   "
+        };
+
+        // Act
+        var result = model.HasFilters;
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void HasFilters_WhitespaceNationFilter_ReturnsFalse()
+    {
+        // Arrange
+        var model = new EarlyYearsQualificationListModel
+        {
+            SearchTermFilter = string.Empty,
+            QualificationStartDateFilter = string.Empty,
+            QualificationLevelFilter = string.Empty,
+            NationFilter = "   "
         };
 
         // Act

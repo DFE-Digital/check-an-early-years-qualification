@@ -314,7 +314,7 @@ public class QuestionServiceTests
         _ = await GetSut().GetFilteredQualifications();
 
         // Assert
-        _mockQualificationsRepository.Verify(x => x.Get(3, 3, 2002, null, null), Times.Once);
+        _mockQualificationsRepository.Verify(x => x.Get(3, 3, 2002, null, null, null), Times.Once);
     }
 
     [TestMethod]
