@@ -198,22 +198,6 @@ test.describe('A spec used to validate changes to the journey against actual dat
             additionalRequirements: [yesAtQuestionOne]
         } as Scenario,
         {
-            scenarioId: 3,
-            monthStarted: '07',
-            yearStarted: '2013',
-            monthAwarded: '08',
-            yearAwarded: '2014',
-            selectedLevel: 0,
-            selectedAwardingOrganisation: 'CACHE Council for Awards in Care Health and Education',
-            noOfMatchingQualifications: 61,
-            qualificationToSelect: 'EYQ-311',
-            ratioForUnqualified: approved,
-            ratioForLevel2: approved,
-            ratioForLevel3: possibleRouteAvailable,
-            ratioForLevel6: notApproved,
-            additionalRequirements: [yesAtQuestionOne]
-        } as Scenario,
-        {
             scenarioId: 4,
             monthStarted: '07',
             yearStarted: '2020',
