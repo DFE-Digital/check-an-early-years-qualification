@@ -205,7 +205,7 @@ test.describe('A spec used to validate changes to the journey against actual dat
             yearAwarded: '2014',
             selectedLevel: 0,
             selectedAwardingOrganisation: 'CACHE Council for Awards in Care Health and Education',
-            noOfMatchingQualifications: 76,
+            noOfMatchingQualifications: 61,
             qualificationToSelect: 'EYQ-311',
             ratioForUnqualified: approved,
             ratioForLevel2: approved,
