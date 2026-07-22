@@ -205,7 +205,7 @@ public class QualificationDetailsController(
             qualificationDetailsService.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
         if (remainingAnswersIndicateFullAndRelevant.isFullAndRelevant) return (true, ValidateAdditionalRequirementOutcomes.Default);
 
-        details = await qualificationDetailsService.CheckLevel6Requirements(qualification, details);
+        await qualificationDetailsService.CheckLevel6Requirements(qualification, details);
 
         return (false, ValidateAdditionalRequirementOutcomes.Default);
     }

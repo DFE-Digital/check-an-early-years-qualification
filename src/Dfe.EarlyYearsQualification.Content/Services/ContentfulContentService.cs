@@ -395,8 +395,12 @@ public class ContentfulContentService(
         var enteredAwardedDate = new DateOnly(awardedYear, awardedMonth, dateValidator.GetDay());
         
         var orderedQualificationDetailsPageEntries = qualificationDetailsPageEntries
-                                                         .OrderByDescending(x => dateValidator.GetDate(x.ToWhichYear))
-                                                         .ToList();
+                                                     .Where(x => x.ToWhichYear is null 
+                                                                 || (x.ToWhichYear is not null && x.AwardedAfterWhichYear is not null && enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear) && enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
+                                                                 || enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear)
+                                                                 || enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear))    
+                                                     //.OrderByDescending(x => dateValidator.GetDate(x.ToWhichYear))
+                                                     .ToList();
 
         foreach (var page in orderedQualificationDetailsPageEntries)
         {

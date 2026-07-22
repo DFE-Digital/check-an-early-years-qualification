@@ -146,11 +146,7 @@ public class QualificationDetailsService(
         answersToCheck.AddRange(details.AdditionalRequirementAnswers!);
         // As L6 / L7 can potentially work at L3/2/unqualified, remove the Qts question and check answers
         answersToCheck.RemoveAll(x => x.Question == qtsQuestion.Question);
-
-        // As we know that they didn't answer the Qts question, we need to show the L6 requirements by default.
-        // Adding it here covers scenarios where they are OK for L2/3/Unqualified and just Unqualified.
-        //details.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
-
+        
         return AnswersIndicateNotFullAndRelevant(answersToCheck)
                    ? (false, details)
                    : (true, details);
