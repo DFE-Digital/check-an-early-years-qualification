@@ -26,11 +26,17 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await checkText(page, ".filter__selected-filters h2.govuk-heading-m", "Selected filters");
         await checkText(page, ".filter__selected-filters h2.govuk-heading-m ~ p", "No filters selected.");
         await checkText(page, "#apply-filter-form label[for='SearchTermFilter']", "Keywords");
-        await checkText(page, "#apply-filter-form div:nth-child(2) legend", "Qualification start date");
+        await checkText(page, "#apply-filter-form div:nth-child(2) legend", "Qualification awarded in");
+        await checkText(page, "input[value='england'] ~ label", "England");
+        await checkText(page, "input[value='scotland'] ~ label", "Scotland");
+        await checkText(page, "input[value='wales'] ~ label", "Wales");
+        await checkText(page, "input[value='northern-ireland'] ~ label", "Northern Ireland");
+        await checkText(page, "#apply-filter-form div:nth-child(3) legend", "Qualification start date");
         await checkText(page, "input[value='Pre-September 2014'] ~ label", "Before September 2014");
         await checkText(page, "input[value='Post-September 2014'] ~ label","On or after September 2014");
         await checkText(page, "input[value='Post-September 2024'] ~ label", "On or after September 2024");
-        await checkText(page, "#apply-filter-form div:nth-child(3) legend", "Qualification level");
+        await checkText(page, "#apply-filter-form div:nth-child(4) legend > div", "Qualification level");
+        await checkText(page, "#apply-filter-form div:nth-child(4) legend > p > a", "Check English equivalents of Scottish levels");
         await checkText(page, "input[value='2'] ~ label", "Level 2");
         await checkText(page, "input[value='3'] ~ label", "Level 3");
         await checkText(page, "input[value='4'] ~ label", "Level 4");
@@ -47,7 +53,42 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await checkTextContains(page, "button[value^='search-term']", "Education and Childcare (Specialism - Early Years Educator)");
         await checkText(page, "#qualification-webview-results > h2", "1 qualification found");
         await checkText(page, "#qualification-webview-results .govuk-summary-card h2", "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)");
-    }); 
+     });
+
+    [
+        {
+            nation: 'england',
+            expectedNationText: 'England',
+            expectedQualificationsCount: 31,
+        },
+        {
+            nation: 'scotland',
+            expectedNationText: 'Scotland',
+            expectedQualificationsCount: 4,
+        },
+        {
+            nation: 'wales',
+            expectedNationText: 'Wales',
+            expectedQualificationsCount: 0,
+        },
+        {
+            nation: 'northern-ireland',
+            expectedNationText: 'Northern Ireland',
+            expectedQualificationsCount: 3,
+        },
+    ].forEach((scenario) => {
+        test(`Check qualifications meet criteria based on nation filter ${scenario.nation}`, async ({ page }) => {
+            await page.locator(`input[value='${scenario.nation}']`).click();
+            await page.locator("#apply-filter-form button").click();
+            await checkUrl(page, "/early-years-qualification-list");
+            await checkTextContains(page, "button[value^='nation']", scenario.expectedNationText);
+
+            const rows = page.locator('.govuk-summary-card .govuk-summary-card__content > dl > div:nth-child(3) dd');
+            const allRows = await rows.all();
+
+            expect(allRows).toHaveLength(scenario.expectedQualificationsCount)
+        });
+    });
 
     test("Filter Pre-September 2014 is selected, qualifications started before Sept 2014 are returned", async ({page}) => {
         await page.locator("input[value='Pre-September 2014']").click();
@@ -125,17 +166,20 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
 
     test(`All filters are removed when the remove filters link is selected`, async ({ page }) => {
         await inputText(page, "#SearchTermFilter", "Qualification");
+        await page.locator(`input[value='england']`).click();
         await page.locator(`input[value='Post-September 2014']`).click();
         await page.locator(`[value='5']`).click();
         await page.locator("#apply-filter-form button").click();
         await checkUrl(page, "/early-years-qualification-list");
         await checkTextContains(page, "button[value^='search-term']", "Qualification");
+        await checkTextContains(page, "button[value^='nation']", "England");
         await checkTextContains(page, "button[value^='start-date']", "On or after September 2014");
         await checkTextContains(page, "button[value^='qualification-level']", `5`);
         await checkText(page, "#qualification-webview-results > h2", "1 qualification found");
         await page.locator(`a[href='/clear-filters']`).click();
         await checkText(page, "#qualification-webview-results > h2", "Showing all the qualifications");
         await doesNotExist(page, `button[value^='search-term']`);
+        await doesNotExist(page, `button[value^='nation']`);
         await doesNotExist(page, `button[value^='start-date']`);
         await doesNotExist(page, `button[value^='qualification-level']`);
     });
@@ -150,15 +194,22 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
 
     test(`Individual filters are removed when the active filter is selected`, async ({ page }) => {
         await inputText(page, "#SearchTermFilter", "Qualification");
+        await page.locator(`input[value='england']`).click();
         await page.locator(`input[value='Post-September 2014']`).click();
         await page.locator(`[value='5']`).click();
         await page.locator("#apply-filter-form button").click();
         await checkUrl(page, "/early-years-qualification-list");
         await checkTextContains(page, "button[value^='search-term']", "Qualification");
+        await checkTextContains(page, "button[value^='nation']", "England");
         await checkTextContains(page, "button[value^='start-date']", "On or after September 2014");
         await checkTextContains(page, "button[value^='qualification-level']", `5`);
         await page.locator("button[value^='search-term']").click();
         await doesNotExist(page, `button[value^='search-term']`);
+        await checkTextContains(page, "button[value^='nation']", "England");
+        await checkTextContains(page, "button[value^='start-date']", "On or after September 2014");
+        await checkTextContains(page, "button[value^='qualification-level']", `5`);
+        await page.locator("button[value^='nation']").click();
+        await doesNotExist(page, `button[value^='nation']`);
         await checkTextContains(page, "button[value^='start-date']", "On or after September 2014");
         await checkTextContains(page, "button[value^='qualification-level']", `5`);
         await page.locator("button[value^='start-date']").click();

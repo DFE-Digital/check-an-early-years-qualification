@@ -170,7 +170,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
-        var result = await service.Get(null, null, null, null, null);
+        var result = await service.Get(null, null, null, null, null, null);
 
         Logger.VerifyWarning("No ratio requirements returned");
 
@@ -206,13 +206,14 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         mockQualificationFilterFactory.Setup(x => x.ApplyFilters(It.IsAny<List<Qualification>>(), It.IsAny<int?>(),
                                                                  It.IsAny<int?>(), It.IsAny<int?>(),
                                                                  It.IsAny<string?>(),
+                                                                 It.IsAny<string?>(),
                                                                  It.IsAny<string?>()))
                                       .Returns([qualification]);
 
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, mockQualificationFilterFactory.Object);
 
-        var result = await service.Get(null, null, null, null, null);
+        var result = await service.Get(null, null, null, null, null, null);
 
         result.Should().HaveCount(1).And.Contain(qualification);
     }
@@ -236,7 +237,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
-        var result = await service.Get(null, null, null, null, null);
+        var result = await service.Get(null, null, null, null, null, null);
 
         result.Should().BeEmpty();
     }
@@ -255,7 +256,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
             new QualificationsRepository(mockLogger.Object, mockContentfulClient.Object,
                                          new Mock<IQualificationListFilter>().Object);
 
-        var filteredQualifications = await repository.Get(4, 5, 2016, null, null);
+        var filteredQualifications = await repository.Get(4, 5, 2016, null, null, null);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Should().BeEmpty();

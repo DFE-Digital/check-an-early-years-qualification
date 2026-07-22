@@ -9,8 +9,10 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockQualificationsRepository(IQualificationListFilter qualificationListFilter) : IQualificationsRepository
 {
+    private const string englandNation = "England";
+    private const string scotlandNation = "Scotland";
+    private const string northernIrelandNation = "Northern Ireland";
     private const string mockAdditionalInformationContent = "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.";
-
     private const string mockNotesContent = "Notes for this qualification";
 
     public async Task<Qualification?> GetById(string qualificationId)
@@ -97,7 +99,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
     }
 
     public Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
-                                         string? awardingOrganisation, string? qualificationName)
+                                         string? awardingOrganisation, string? qualificationName, string? nation)
     {
         const string dupeQualificationName = "dupe qualification name";
 
@@ -128,13 +130,27 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "123/345/678"
+                    QualificationNumber = "123/345/678",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        }
+                    ]
                 },
                 new Qualification("EYQ-115", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "233/420/12"
+                    QualificationNumber = "233/420/12",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        }
+                    ]
                 },
                 CreateQualification("EYQ-240",
                                     "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)",
@@ -159,6 +175,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Pre-September 2014",
                             Order = 1
                         }
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        }
                     ]
                 },
                 new Qualification("EYQ-302", "Qualification 302", AwardingOrganisations.Pearson, 3)
@@ -172,6 +195,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                         {
                             Heading = "Pre-September 2014",
                             Order = 1
+                        }
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
                         }
                     ]
                 },
@@ -187,7 +217,21 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Post-September 2014",
                             Order = 2
                         }
-                    ]
+                    ],
+                    Nations = [
+                        new Nation
+                        {
+                            Name = englandNation
+                        },
+                        new Nation
+                        {
+                            Name = scotlandNation
+                        },
+                        new Nation
+                        {
+                            Name = northernIrelandNation
+                        }
+                   ]
                 },
                 new Qualification("EYQ-304", "Qualification 304", AwardingOrganisations.Various, 5)
                 {
@@ -201,7 +245,21 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Post-September 2014",
                             Order = 2
                         }
-                    ]
+                    ],
+                    Nations = [
+                        new Nation
+                        {
+                            Name = englandNation
+                        },
+                        new Nation
+                        {
+                            Name = scotlandNation
+                        },
+                        new Nation
+                        {
+                            Name = northernIrelandNation
+                        }
+                   ]
                 },
                 new Qualification("EYQ-305", "Qualification 305", AwardingOrganisations.Edexcel, 6)
                 {
@@ -216,6 +274,21 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Order = 2
                         }
 
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        },
+                        new Nation
+                        {
+                            Name = scotlandNation
+                        },
+                        new Nation
+                        {
+                            Name = northernIrelandNation
+                        }
                     ]
                 },
                 new Qualification("EYQ-306", "Qualification 306", AwardingOrganisations.Various, 7)
@@ -230,35 +303,74 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                             Heading = "Post-September 2024",
                             Order = 3
                         }
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        },
+                        new Nation
+                        {
+                            Name = scotlandNation
+                        }
                     ]
                 },
                 new Qualification("EYQ-307", "Degrees at level 6", AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "123/345/679"
+                    QualificationNumber = "123/345/679",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        }
+                    ]
                 },
                 new Qualification("EYQ-308", "Joint degrees at level 6", AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "123/345/670"
+                    QualificationNumber = "123/345/670",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        }
+                    ]
                 },
                 new Qualification("EYQ-309", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "321/345/679"
+                    QualificationNumber = "321/345/679",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        }
+                    ]
                 },
                 new Qualification("EYQ-310", dupeQualificationName, AwardingOrganisations.Ncfe, 3)
                 {
                     FromWhichYear = startDate,
                     ToWhichYear = endDate,
-                    QualificationNumber = "231/345/670"
+                    QualificationNumber = "231/345/670",
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        }
+                    ]
                 },
             };
 
-        var results = qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear, awardingOrganisation, qualificationName);
+        var results = qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear, awardingOrganisation, qualificationName, nation);
 
         return Task.FromResult(results);
     }
@@ -305,7 +417,14 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                                }
                            ]
                        }
-                   ]
+                    ],
+                    Nations =
+                    [
+                        new Nation
+                        {
+                            Name = englandNation
+                        }
+                    ]
                };
     }
 
@@ -324,7 +443,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                    QualificationNumber = "ghi/456/951",
                    AdditionalRequirementsPlainText = "Additional requirements plain text",
                    AdditionalRequirementsRichText = additionalInfoRichtext,
-                   Notes = mockNotesContent
+                   Notes = mockNotesContent,
+                   Nations = [
+                       new Nation
+                       {
+                           Name = englandNation
+                       }
+                   ]
                };
     }
 
@@ -429,8 +554,14 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                                    .UnqualifiedRatioRequirementName,
                            SummaryCardDefaultContent = SummaryCardDefaultContent
                        }
+                   ],
+                   Nations = [
+                       new Nation
+                       {
+                           Name = englandNation
+                       }
                    ]
-               };
+        };
     }
 
     private static Qualification CreateQtsQualification(string qualificationId, string qualificationName,
@@ -539,7 +670,13 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
                            SummaryCardDefaultContent = SummaryCardDefaultContent
                        }
                    ],
-                   IsAutomaticallyApprovedAtLevel6 = false
+                   IsAutomaticallyApprovedAtLevel6 = false,
+                   Nations = [
+                       new Nation
+                       {
+                           Name = englandNation
+                       }
+                   ]
                };
     }
 

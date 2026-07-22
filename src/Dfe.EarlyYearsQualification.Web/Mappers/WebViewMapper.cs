@@ -34,8 +34,10 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             QualificationLevelFilter = webViewFilters.QualificationLevel,
             QualificationStartDateFilter = webViewFilters.QualificationStartDate,
             SearchTermFilter = webViewFilters.SearchTerm,
+            NationFilter = webViewFilters.Nation,
             NoQualificationsFoundContent = await contentParser.ToHtml(content.NoQualificationsFoundContent),
             CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent = await contentParser.ToHtml(content.QualificationIsFullAndRelevantContent),
+            QualificationLevelPostHeaderContent = await contentParser.ToHtml(content.QualificationLevelPostHeaderContent),
             ApplyFiltersButtonContent = content.ApplyFiltersButtonContent,
             ClearFiltersLinkLabel = content.ClearFiltersLinkLabel,
             FilterHeading = content.FilterHeading,
@@ -43,9 +45,11 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             KeywordHeading = content.KeywordHeading,
             QualificationStartDateHeading = content.QualificationStartDateHeading,
             QualificationLevelHeading = content.QualificationLevelHeading,
+            NationHeading = content.NationHeading,
             NoFiltersSelectedContent = content.NoFiltersSelectedContent,
             StartDateFilters = OptionItemMapper.Map(content.StartDateFilters),
-            LevelFilters = OptionItemMapper.Map(content.LevelFilters)
+            LevelFilters = OptionItemMapper.Map(content.LevelFilters),
+            NationFilters = OptionItemMapper.Map(content.NationFilters),
         };
         model.ShowingAllQualificationsLabel = GetShowingAllQualificationsLabel(model.HasFilters, qualifications.Count, content);
 

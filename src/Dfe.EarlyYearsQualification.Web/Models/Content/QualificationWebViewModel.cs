@@ -6,6 +6,7 @@ public class QualificationWebViewModel : BasicQualificationModel
     public QualificationWebViewModel(Qualification qualification) : base(qualification)
     {
         EyqlTabs = qualification.EyqlTabs;
+        Nations = qualification.Nations;
     }
 
     public int StaffChildRatio { get; init; }
@@ -17,6 +18,8 @@ public class QualificationWebViewModel : BasicQualificationModel
     public string? AdditionalRequirements { get; init; }
 
     public string? Notes { get; init; }
+
+    public List<Nation> Nations { get; init; }
 
     public List<Tab> EyqlTabs { get; init; }
 }

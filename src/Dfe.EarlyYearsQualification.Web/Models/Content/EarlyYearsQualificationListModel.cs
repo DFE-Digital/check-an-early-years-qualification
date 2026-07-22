@@ -44,6 +44,8 @@ public class EarlyYearsQualificationListModel
 
     public string SingleQualificationFoundText { get; init; } = string.Empty;
 
+    public string QualificationLevelPostHeaderContent { get; init; } = string.Empty;
+
     // Filters content
     public string FilterHeading { get; init; } = string.Empty;
 
@@ -54,6 +56,8 @@ public class EarlyYearsQualificationListModel
     public string QualificationStartDateHeading { get; init; } = string.Empty;
 
     public string QualificationLevelHeading { get; init; } = string.Empty;
+
+    public string NationHeading { get; init; } = string.Empty;
 
     public string ApplyFiltersButtonContent { get; init; } = string.Empty;
 
@@ -66,9 +70,13 @@ public class EarlyYearsQualificationListModel
 
     public List<IOptionItemModel> LevelFilters { get; set; } = [];
 
+    public List<IOptionItemModel> NationFilters { get; set; } = [];
+
     public string QualificationLevelFilter { get; init; } = string.Empty;
 
     public string QualificationStartDateFilter { get; init; } = string.Empty;
+
+    public string NationFilter { get; init; } = string.Empty;
 
     public string SearchTermFilter { get; init; } = string.Empty;
 
@@ -78,7 +86,8 @@ public class EarlyYearsQualificationListModel
         {
             return !string.IsNullOrWhiteSpace(SearchTermFilter) ||
                    !string.IsNullOrWhiteSpace(QualificationStartDateFilter) ||
-                   !string.IsNullOrWhiteSpace(QualificationLevelFilter);
+                   !string.IsNullOrWhiteSpace(QualificationLevelFilter) ||
+                   !string.IsNullOrWhiteSpace(NationFilter);
         }
     }
 }

@@ -15,6 +15,7 @@ public class Qualification(
     public int QualificationLevel { get; } = qualificationLevel;
     public int StaffChildRatio { get; init; }
     public List<Tab> EyqlTabs { get; init; } = [];
+    public List<Nation> Nations { get; set; } = [];
 
     // Optional Fields
     public string? FromWhichYear { get; init; }

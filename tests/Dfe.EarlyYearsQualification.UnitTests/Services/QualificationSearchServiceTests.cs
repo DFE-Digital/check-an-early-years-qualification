@@ -78,7 +78,7 @@ public class QualificationSearchServiceTests
     public async Task GetQualifications_GotList_Calls_Repository_Get()
     {
         _mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync(new QualificationListPage());
-        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>()))
                        .ReturnsAsync([]);
         var sut = GetSut();
         await sut.GetQualifications();
@@ -88,6 +88,7 @@ public class QualificationSearchServiceTests
                                           It.IsAny<int?>(),
                                           It.IsAny<int?>(),
                                           It.IsAny<string?>(),
+                                          It.IsAny<string?>(),
                                           It.IsAny<string?>()
                                          ), Times.Once);
     }
@@ -95,7 +96,7 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_GetsDetails_From_CookieService()
     {
-        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>()))
                        .ReturnsAsync([]);
         var sut = GetSut();
         await sut.GetFilteredQualifications();
@@ -104,6 +105,7 @@ public class QualificationSearchServiceTests
         _mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
         _mockUserJourneyCookieService.Verify(o => o.GetAwardingOrganisation(), Times.Once);
         _mockUserJourneyCookieService.Verify(o => o.GetSearchCriteria(), Times.Once);
+        _mockUserJourneyCookieService.Verify(o => o.GetWhereWasQualificationAwarded(), Times.Once);
     }
 
     [TestMethod]
@@ -114,12 +116,14 @@ public class QualificationSearchServiceTests
         const int startDateYear = 2016;
         const string awardingOrganisation = "awarding organisation";
         const string qualificationName = "qualification name";
+        const string nationAwardedIn = "england";
 
         _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(levelOfQualification);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
                                      .Returns((startDateMonth, startDateYear));
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns(awardingOrganisation);
         _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(qualificationName);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhereWasQualificationAwarded()).Returns(nationAwardedIn);
 
         var sut = GetSut();
         await sut.GetFilteredQualifications();
@@ -129,7 +133,8 @@ public class QualificationSearchServiceTests
                                           startDateMonth,
                                           startDateYear,
                                           awardingOrganisation,
-                                          qualificationName
+                                          qualificationName,
+                                           nationAwardedIn
                                          ), Times.Once);
     }
     
@@ -152,7 +157,8 @@ public class QualificationSearchServiceTests
                                          startDateMonth,
                                          startDateYear,
                                          null,
-                                         qualificationName
+                                         qualificationName,
+                                         null
                                         )).ReturnsAsync([new Qualification("123", qualificationName, "Wrong awarding organisation", 3),
                                                             new Qualification("456", qualificationName, AwardingOrganisations.Various, 3),
                                                             new Qualification("789", qualificationName, AwardingOrganisations.AllHigherEducation, 3)]);
@@ -410,7 +416,7 @@ public class QualificationSearchServiceTests
                              };
 
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
-        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>()))
                        .ReturnsAsync(qualifications);
 
         var sut = GetSut();
@@ -431,7 +437,7 @@ public class QualificationSearchServiceTests
                              };
 
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
-        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>()))
                        .ReturnsAsync(qualifications);
 
         var sut = GetSut();
@@ -452,7 +458,7 @@ public class QualificationSearchServiceTests
                              };
 
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("Pearson Education Ltd");
-        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>()))
                        .ReturnsAsync(qualifications);
 
         var sut = GetSut();
@@ -472,7 +478,7 @@ public class QualificationSearchServiceTests
                              };
 
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
-        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>()))
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>()))
                        .ReturnsAsync(qualifications);
 
         var sut = GetSut();
@@ -488,13 +494,13 @@ public class QualificationSearchServiceTests
         var qualifications = new List<Qualification>();
 
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("some org");
-        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), overrideSearch))
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), overrideSearch, It.IsAny<string?>()))
                        .ReturnsAsync(qualifications);
 
         var sut = GetSut();
         await sut.GetFilteredQualifications(overrideSearch);
 
-        _mockRepository.Verify(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), overrideSearch), Times.Once);
+        _mockRepository.Verify(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), overrideSearch, It.IsAny<string?>()), Times.Once);
         _mockUserJourneyCookieService.Verify(o => o.GetSearchCriteria(), Times.Never);
     }
 
@@ -506,12 +512,12 @@ public class QualificationSearchServiceTests
 
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("some org");
         _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(cookieSearch);
-        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), cookieSearch))
+        _mockRepository.Setup(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), cookieSearch, It.IsAny<string?>()))
                        .ReturnsAsync(qualifications);
 
         var sut = GetSut();
         await sut.GetFilteredQualifications();
 
-        _mockRepository.Verify(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), cookieSearch), Times.Once);
+        _mockRepository.Verify(o => o.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), cookieSearch, It.IsAny<string?>()), Times.Once);
     }
 }

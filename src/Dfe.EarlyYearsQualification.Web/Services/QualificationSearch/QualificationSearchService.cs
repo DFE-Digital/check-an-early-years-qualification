@@ -37,13 +37,15 @@ public class QualificationSearchService(
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         var awardingOrganisation = userJourneyCookieService.GetAwardingOrganisation();
         var searchCriteria = searchCriteriaOverride ?? userJourneyCookieService.GetSearchCriteria();
+        var nationAwardedIn = userJourneyCookieService.GetWhereWasQualificationAwarded();
 
         var qualifications = await qualificationsRepository.Get(
                                                   level,
                                                   startDateMonth,
                                                   startDateYear,
                                                   awardingOrganisation,
-                                                  searchCriteria
+                                                  searchCriteria,
+                                                  nationAwardedIn
                                                  );
 
         // Not in list has been selected so we need to filter out qualifications with specific awarding organisations

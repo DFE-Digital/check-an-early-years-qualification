@@ -309,12 +309,21 @@ public class QuestionServiceTests
         // Arrange
         _mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(3);
         _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((3, 2002));
+        _mockUserJourneyCookieService.Setup(x => x.GetWhereWasQualificationAwarded())
+                                     .Returns(QualificationAwardLocation.England);
 
         // Act
         _ = await GetSut().GetFilteredQualifications();
 
         // Assert
-        _mockQualificationsRepository.Verify(x => x.Get(3, 3, 2002, null, null), Times.Once);
+        _mockQualificationsRepository.Verify(x => x.Get(3,
+                                                        3,
+                                                        2002,
+                                                        null,
+                                                        null,
+                                                        QualificationAwardLocation.England),
+                                             Times.Once);
+        _mockUserJourneyCookieService.Verify(x => x.GetWhereWasQualificationAwarded(), Times.Once);
     }
 
     [TestMethod]

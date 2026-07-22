@@ -92,7 +92,7 @@ public class WebViewServiceTests
         var expectedModel = new EarlyYearsQualificationListModel();
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
-        mockQualificationsRepository.Setup(x => x.Get(3, null, null, null, "Qualification"))
+        mockQualificationsRepository.Setup(x => x.Get(3, null, null, null, "Qualification", null))
             .ReturnsAsync(qualifications);
         mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>()))
             .ReturnsAsync(expectedModel);
@@ -109,7 +109,7 @@ public class WebViewServiceTests
         // Assert
         result.Should().Be(expectedModel);
         mockUserJourneyCookieService.Verify(x => x.GetWebViewFilters(), Times.Once);
-        mockQualificationsRepository.Verify(x => x.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         mockWebViewPageMapper.Verify(x => x.Map(content, filters, It.IsAny<List<Qualification>>()), Times.Once);
     }
 
@@ -134,7 +134,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -149,7 +149,7 @@ public class WebViewServiceTests
         // Assert
         result.Should().HaveCount(1);
         result[0].Should().Be(qualifications[0]);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
@@ -173,7 +173,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -187,7 +187,7 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
@@ -211,7 +211,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, "test search"))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, "test search", null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -225,7 +225,7 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, "test search"), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, "test search", null), Times.Once);
     }
 
     [TestMethod]
@@ -249,7 +249,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 5)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(5, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(5, null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -263,7 +263,7 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(5, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(5, null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
@@ -287,7 +287,7 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -301,7 +301,86 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
+
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_WithValidNation_PassesNationToRepository()
+    {
+        // Arrange
+        var mockContentService = new Mock<IContentService>();
+        var mockWebViewPageMapper = new Mock<IWebViewPageMapper>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockQualificationsRepository = new Mock<IQualificationsRepository>();
+
+        var filters = new WebViewFilters
+        {
+            SearchTerm = string.Empty,
+            QualificationLevel = string.Empty,
+            QualificationStartDate = string.Empty,
+            Nation = "Northern-Ireland"
+        };
+
+        var qualifications = new List<Qualification>
+        {
+            new("Q1", "Qualification 1", "Org 1", 3)
+        };
+
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, "Northern-Ireland"))
+            .ReturnsAsync(qualifications);
+
+        var service = new WebViewService(
+            mockContentService.Object,
+            mockWebViewPageMapper.Object,
+            mockUserJourneyCookieService.Object,
+            mockQualificationsRepository.Object);
+
+        // Act
+        var result = await service.GetQualifications(filters);
+
+        // Assert
+        result.Should().HaveCount(1);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, "Northern-Ireland"), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_WithWhitespaceNation_PassesNullNationToRepository()
+    {
+        // Arrange
+        var mockContentService = new Mock<IContentService>();
+        var mockWebViewPageMapper = new Mock<IWebViewPageMapper>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockQualificationsRepository = new Mock<IQualificationsRepository>();
+
+        var filters = new WebViewFilters
+        {
+            SearchTerm = string.Empty,
+            QualificationLevel = string.Empty,
+            QualificationStartDate = string.Empty,
+            Nation = "   "
+        };
+
+        var qualifications = new List<Qualification>
+        {
+            new("Q1", "Qualification 1", "Org 1", 3)
+        };
+
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
+            .ReturnsAsync(qualifications);
+
+        var service = new WebViewService(
+            mockContentService.Object,
+            mockWebViewPageMapper.Object,
+            mockUserJourneyCookieService.Object,
+            mockQualificationsRepository.Object);
+
+        // Act
+        var result = await service.GetQualifications(filters);
+
+        // Assert
+        result.Should().HaveCount(1);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
@@ -345,7 +424,7 @@ public class WebViewServiceTests
             }
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -386,7 +465,7 @@ public class WebViewServiceTests
             new("Q2", "Qualification 2", "Org 2", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -426,7 +505,7 @@ public class WebViewServiceTests
             new("Q4", "A Qualification", "Org 4", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -459,7 +538,8 @@ public class WebViewServiceTests
         {
             SearchTerm = "old",
             QualificationLevel = "2",
-            QualificationStartDate = "Pre-September 2014"
+            QualificationStartDate = "Pre-September 2014",
+            Nation = "Wales"
         };
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(existingFilters);
@@ -468,7 +548,8 @@ public class WebViewServiceTests
         {
             SearchTermFilter = "new search",
             QualificationStartDateFilter = "Post-September 2014",
-            QualificationLevelFilter = "3"
+            QualificationLevelFilter = "3",
+            NationFilter = "Northern-Ireland"
         };
 
         var service = new WebViewService(
@@ -484,6 +565,7 @@ public class WebViewServiceTests
         existingFilters.SearchTerm.Should().Be("new search");
         existingFilters.QualificationStartDate.Should().Be("Post-September 2014");
         existingFilters.QualificationLevel.Should().Be("3");
+        existingFilters.Nation.Should().Be("Northern-Ireland");
         mockUserJourneyCookieService.Verify(x => x.GetWebViewFilters(), Times.Once);
         mockUserJourneyCookieService.Verify(x => x.SetWebViewFilters(existingFilters), Times.Once);
     }
@@ -501,7 +583,8 @@ public class WebViewServiceTests
         {
             SearchTerm = "test",
             QualificationLevel = "3",
-            QualificationStartDate = "Pre-September 2014"
+            QualificationStartDate = "Pre-September 2014",
+            Nation = "Wales"
         };
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
@@ -519,6 +602,7 @@ public class WebViewServiceTests
         filters.QualificationLevel.Should().BeEmpty();
         filters.SearchTerm.Should().Be("test");
         filters.QualificationStartDate.Should().Be("Pre-September 2014");
+        filters.Nation.Should().Be("Wales");
         mockUserJourneyCookieService.Verify(x => x.SetWebViewFilters(filters), Times.Once);
     }
 
@@ -535,7 +619,8 @@ public class WebViewServiceTests
         {
             SearchTerm = "test",
             QualificationLevel = "3",
-            QualificationStartDate = "Post-September 2014"
+            QualificationStartDate = "Post-September 2014",
+            Nation = "Scotland"
         };
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
@@ -553,6 +638,7 @@ public class WebViewServiceTests
         filters.QualificationStartDate.Should().BeEmpty();
         filters.SearchTerm.Should().Be("test");
         filters.QualificationLevel.Should().Be("3");
+        filters.Nation.Should().Be("Scotland");
         mockUserJourneyCookieService.Verify(x => x.SetWebViewFilters(filters), Times.Once);
     }
 
@@ -569,7 +655,8 @@ public class WebViewServiceTests
         {
             SearchTerm = "test",
             QualificationLevel = "3",
-            QualificationStartDate = "Post-September 2014"
+            QualificationStartDate = "Post-September 2014",
+            Nation = "England"
         };
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
@@ -585,6 +672,43 @@ public class WebViewServiceTests
 
         // Assert
         filters.SearchTerm.Should().BeEmpty();
+        filters.QualificationLevel.Should().Be("3");
+        filters.QualificationStartDate.Should().Be("Post-September 2014");
+        filters.Nation.Should().Be("England");
+        mockUserJourneyCookieService.Verify(x => x.SetWebViewFilters(filters), Times.Once);
+    }
+
+    [TestMethod]
+    public void RemoveFilter_RemovesNation_WhenFilterContainsNation()
+    {
+        // Arrange
+        var mockContentService = new Mock<IContentService>();
+        var mockWebViewPageMapper = new Mock<IWebViewPageMapper>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockQualificationsRepository = new Mock<IQualificationsRepository>();
+
+        var filters = new WebViewFilters
+        {
+            SearchTerm = "test",
+            QualificationLevel = "3",
+            QualificationStartDate = "Post-September 2014",
+            Nation = "Northern-Ireland"
+        };
+
+        mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
+
+        var service = new WebViewService(
+            mockContentService.Object,
+            mockWebViewPageMapper.Object,
+            mockUserJourneyCookieService.Object,
+            mockQualificationsRepository.Object);
+
+        // Act
+        service.RemoveFilter("nation");
+
+        // Assert
+        filters.Nation.Should().BeEmpty();
+        filters.SearchTerm.Should().Be("test");
         filters.QualificationLevel.Should().Be("3");
         filters.QualificationStartDate.Should().Be("Post-September 2014");
         mockUserJourneyCookieService.Verify(x => x.SetWebViewFilters(filters), Times.Once);
@@ -603,7 +727,8 @@ public class WebViewServiceTests
         {
             SearchTerm = "test",
             QualificationLevel = "3",
-            QualificationStartDate = "Post-September 2014"
+            QualificationStartDate = "Post-September 2014",
+            Nation = "Wales"
         };
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
@@ -621,6 +746,7 @@ public class WebViewServiceTests
         filters.QualificationLevel.Should().BeEmpty();
         filters.QualificationStartDate.Should().BeEmpty();
         filters.SearchTerm.Should().Be("test");
+        filters.Nation.Should().Be("Wales");
         mockUserJourneyCookieService.Verify(x => x.SetWebViewFilters(filters), Times.Once);
     }
 
@@ -637,7 +763,8 @@ public class WebViewServiceTests
         {
             SearchTerm = "test",
             QualificationLevel = "3",
-            QualificationStartDate = "Post-September 2014"
+            QualificationStartDate = "Post-September 2014",
+            Nation = "Scotland"
         };
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
@@ -655,6 +782,7 @@ public class WebViewServiceTests
         filters.SearchTerm.Should().Be("test");
         filters.QualificationLevel.Should().Be("3");
         filters.QualificationStartDate.Should().Be("Post-September 2014");
+        filters.Nation.Should().Be("Scotland");
         mockUserJourneyCookieService.Verify(x => x.SetWebViewFilters(filters), Times.Once);
     }
 
@@ -690,7 +818,7 @@ public class WebViewServiceTests
             }
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
             .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
@@ -730,7 +858,7 @@ public class WebViewServiceTests
         var expectedModel = new EarlyYearsQualificationListModel();
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null))
+        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
             .ReturnsAsync(qualifications);
         mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>()))
             .ReturnsAsync(expectedModel);
@@ -747,7 +875,7 @@ public class WebViewServiceTests
         // Assert
         result.Should().Be(expectedModel);
         mockUserJourneyCookieService.Verify(x => x.GetWebViewFilters(), Times.Once);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
     }
 
     [TestMethod]
