@@ -105,6 +105,7 @@ public class QualificationSearchServiceTests
         _mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
         _mockUserJourneyCookieService.Verify(o => o.GetAwardingOrganisation(), Times.Once);
         _mockUserJourneyCookieService.Verify(o => o.GetSearchCriteria(), Times.Once);
+        _mockUserJourneyCookieService.Verify(o => o.GetWhereWasQualificationAwarded(), Times.Once);
     }
 
     [TestMethod]
@@ -115,12 +116,14 @@ public class QualificationSearchServiceTests
         const int startDateYear = 2016;
         const string awardingOrganisation = "awarding organisation";
         const string qualificationName = "qualification name";
+        const string nationAwardedIn = "england";
 
         _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(levelOfQualification);
         _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
                                      .Returns((startDateMonth, startDateYear));
         _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns(awardingOrganisation);
         _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(qualificationName);
+        _mockUserJourneyCookieService.Setup(o => o.GetWhereWasQualificationAwarded()).Returns(nationAwardedIn);
 
         var sut = GetSut();
         await sut.GetFilteredQualifications();
@@ -131,7 +134,7 @@ public class QualificationSearchServiceTests
                                           startDateYear,
                                           awardingOrganisation,
                                           qualificationName,
-                                          null
+                                           nationAwardedIn
                                          ), Times.Once);
     }
     
