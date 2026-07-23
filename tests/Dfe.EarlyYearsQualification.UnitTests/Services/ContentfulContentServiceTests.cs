@@ -623,7 +623,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetQualificationDetailsPage_UserIsCheckingOwnQualification_Content_RendersHtmlAndReturns()
+    public async Task GetQualificationDetailsPage_UserIsCheckingOwnQualification_Content_Returns()
     {
         var content = new ContentfulCollection<QualificationDetailsPage>
                       {
@@ -645,7 +645,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                   IsPractitionerSpecificPage = true,
                                   FromWhichYear = "Feb-00",
                                   AwardedAfterWhichYear = "Apr-03",
-                                  ToWhichYear = "Mar-05",
+                                  ToWhichYear = "Mar-25",
                                   Levels = [3],
                                   Name = "Practitioner specific page level 3 - F&R",
                                   RequirementsHeading = "Requirements heading",
@@ -664,7 +664,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                                   IsPractitionerSpecificPage = true,
                                   FromWhichYear = "Feb-00",
                                   AwardedAfterWhichYear = "Apr-03",
-                                  ToWhichYear = "Mar-05",
+                                  ToWhichYear = "Mar-25",
                                   Levels = [3],
                                   Name = "Practitioner specific page level 3 - NF&R",
                                   RequirementsHeading = "Requirements heading",
@@ -684,13 +684,13 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var userEnteredAwardedDate = new DateOnly(2019, 5, 28);
         var qualificationStartDate = new DateOnly(2000, 2, 28);
         var qualificationAwardedAfterDate = new DateOnly(2003, 4, 28);
-        var qualificationEndedDate = new DateOnly(2005, 3, 28);
+        var qualificationEndedDate = new DateOnly(2025, 3, 28);
 
         var mockDateValidator = new Mock<IDateValidator>();
         mockDateValidator.Setup(x => x.GetDay()).Returns(28);
         mockDateValidator.Setup(x => x.GetDate("Feb-00")).Returns(qualificationStartDate);
         mockDateValidator.Setup(x => x.GetDate("Apr-03")).Returns(qualificationAwardedAfterDate);
-        mockDateValidator.Setup(x => x.GetDate("Mar-05")).Returns(qualificationEndedDate);
+        mockDateValidator.Setup(x => x.GetDate("Mar-25")).Returns(qualificationEndedDate);
         mockDateValidator
             .Setup(x => x.ValidateDateEntry(qualificationStartDate, qualificationAwardedAfterDate, qualificationEndedDate, userEnteredStartDate,
                                             userEnteredAwardedDate, It.IsAny<QualificationDetailsPage>())).Returns(content.Items.ElementAt(1));
@@ -707,7 +707,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         var result = await service.GetQualificationDetailsPage(true, true, 3, 3, 2001, 5, 2019, false, false);
 
         result!.FromWhichYear.Should().Be("Feb-00");
-        result.ToWhichYear.Should().Be("Mar-05");
+        result.ToWhichYear.Should().Be("Mar-25");
         result.Levels.Should().Contain(3);
         result.IsFullAndRelevant.Should().BeTrue();
         result.IsPractitionerSpecificPage.Should().BeTrue();
