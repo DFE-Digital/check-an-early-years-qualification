@@ -77,7 +77,9 @@ Paediatric first aid certificate
 If this qualification was awarded on or after 30 June 2016, the member of staff must obtain a paediatric first aid certificate which meets the criteria in the early years foundation stage (EYFS) statutory framework (opens in new tab) within 3 months of starting work. To continue to be included in the ratio, the certificate must be renewed every 3 years.
 `;
 
-export const level6NotApprovedContentQTSEYTSEYPS = `To be included in the staff:child ratios at level 6, staff must have gained one of the following:
+export const level6NotApprovedContentQTSEYTSEYPS = `The qualification is not approved to count in the staff:child ratios at Level 6.
+
+To be included in the staff:child ratios at level 6, staff must have gained one of the following:
 
 Qualified Teacher Status (QTS)
 Early Years Teacher Status (EYTS)

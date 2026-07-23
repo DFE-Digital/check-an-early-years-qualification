@@ -121,6 +121,12 @@ public class DateValidator(ILogger<DateValidator> logger) : IDateValidator
                 return entry;
             }
         }
+
+        // This covers the scenario where a page is created as a 'catch-all' page that is applicable if it doesn't meet one of the other scenarios
+        if (startDate is null && awardedAfterDate is null && endDate is null)
+        {
+            return entry;
+        }
         
         return ValidateDateEntry(startDate, endDate, enteredStartDate, entry);
     }

@@ -14,7 +14,8 @@ namespace Dfe.EarlyYearsQualification.Content.Services;
 
 public class ContentfulContentService(
     ILogger<ContentfulContentService> logger,
-    [FromKeyedServices(Clients.ContentfulDefaultClient)]IContentfulClient contentfulClient,
+    [FromKeyedServices(Clients.ContentfulDefaultClient)]
+    IContentfulClient contentfulClient,
     IDateValidator dateValidator)
     : ContentfulContentServiceBase(logger, contentfulClient), IContentService
 {
@@ -33,7 +34,7 @@ public class ContentfulContentService(
     }
 
     public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(
-        bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, 
+        bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level,
         int startMonth, int startYear, int awardedMonth, int awardedYear,
         bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage)
     {
@@ -43,13 +44,12 @@ public class ContentfulContentService(
                            .ContentTypeIs(qualificationDetailsPageType)
                            .Include(5)
                            .FieldEquals("fields.isPractitionerSpecificPage",
-                                        userIsCheckingOwnQualification ? "1" : "0");
-
-        queryBuilder = queryBuilder
-                       .FieldIncludes("fields.levels", [level.ToString()])
-                       .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0")
-                       .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0")
-                       .FieldEquals("fields.isAutomaticallyApprovedAtLevel6", isApprovedAtL6SpecificPage ? "1" : "0");
+                                        userIsCheckingOwnQualification ? "1" : "0")
+                           .FieldIncludes("fields.levels", [level.ToString()])
+                           .FieldEquals("fields.isFullAndRelevant", isFullAndRelevant ? "1" : "0")
+                           .FieldEquals("fields.isDegreeSpecificPage", isDegreeSpecificPage ? "1" : "0")
+                           .FieldEquals("fields.isAutomaticallyApprovedAtLevel6",
+                                        isApprovedAtL6SpecificPage ? "1" : "0");
 
         var qualificationDetailsPageEntries = await GetEntriesByType(queryBuilder);
 
@@ -60,7 +60,8 @@ public class ContentfulContentService(
         }
 
         // Filter out content where date is not between FromWhichYear and ToWhichYear
-        return GetFilteredQualificationDetailsPage(startMonth, startYear, awardedMonth, awardedYear, qualificationDetailsPageEntries);
+        return GetFilteredQualificationDetailsPage(startMonth, startYear, awardedMonth, awardedYear,
+                                                   qualificationDetailsPageEntries);
     }
 
     public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
@@ -111,9 +112,9 @@ public class ContentfulContentService(
                            .ContentTypeIs(staticPageContentType)
                            .Include(2)
                            .FieldEquals("fields.slug", route);
-        
+
         var staticPageEntries = await GetEntriesByType(queryBuilder);
-        
+
         // ReSharper disable once InvertIf
         if (staticPageEntries is null || !staticPageEntries.Any())
         {
@@ -355,7 +356,7 @@ public class ContentfulContentService(
         string contentType = ContentTypeLookup[typeof(HelpQualificationDetailsPage)];
 
         var queryBuilder = new QueryBuilder<HelpQualificationDetailsPage>().ContentTypeIs(contentType)
-                                                .Include(2);
+                                                                           .Include(2);
 
         var helpQualificationDetailsPage = await GetEntriesByType(queryBuilder);
 
@@ -386,21 +387,32 @@ public class ContentfulContentService(
 
         return await GetEntryById<HelpConfirmationPage>(entryId);
     }
-    
+
     private QualificationDetailsPage? GetFilteredQualificationDetailsPage(
-        int startMonth, int startYear, 
-        int awardedMonth, int awardedYear, ContentfulCollection<QualificationDetailsPage> qualificationDetailsPageEntries)
+        int startMonth, int startYear,
+        int awardedMonth, int awardedYear,
+        ContentfulCollection<QualificationDetailsPage> qualificationDetailsPageEntries)
     {
         var enteredStartDate = new DateOnly(startYear, startMonth, dateValidator.GetDay());
         var enteredAwardedDate = new DateOnly(awardedYear, awardedMonth, dateValidator.GetDay());
-        
+
         var orderedQualificationDetailsPageEntries = qualificationDetailsPageEntries
-                                                     .Where(x => x.ToWhichYear is null 
-                                                                 || (x.ToWhichYear is not null && x.AwardedAfterWhichYear is not null && enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear) && enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
-                                                                 || enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear)
-                                                                 || enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear))    
-                                                     //.OrderByDescending(x => dateValidator.GetDate(x.ToWhichYear))
+                                                     .Where(x => 
+                                                                (x.ToWhichYear is not null && x.AwardedAfterWhichYear is not null &&
+                                                                 enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear) &&
+                                                                 enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
+                                                                || (x.ToWhichYear is not null && x.AwardedAfterWhichYear is null &&
+                                                                    enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
+                                                                || (x.ToWhichYear is null && x.AwardedAfterWhichYear is not null &&
+                                                                    enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear)))
+                                                     .OrderBy(x => dateValidator.GetDate(x.ToWhichYear))
                                                      .ToList();
+
+        var allNullDates = qualificationDetailsPageEntries
+                           .Where(x => x.FromWhichYear is null && x.AwardedAfterWhichYear is null &&
+                                       x.ToWhichYear is null).ToList();
+
+        orderedQualificationDetailsPageEntries.AddRange(allNullDates);
 
         foreach (var page in orderedQualificationDetailsPageEntries)
         {
@@ -414,7 +426,7 @@ public class ContentfulContentService(
                 return page;
             }
 
-            var result = dateValidator.ValidateDateEntry(pageStartDate, pageAwardedAfterDate, pageEndDate, 
+            var result = dateValidator.ValidateDateEntry(pageStartDate, pageAwardedAfterDate, pageEndDate,
                                                          enteredStartDate, enteredAwardedDate, page);
 
             if (result is not null)
