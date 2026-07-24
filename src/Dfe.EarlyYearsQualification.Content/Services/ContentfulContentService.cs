@@ -396,6 +396,7 @@ public class ContentfulContentService(
         var enteredStartDate = new DateOnly(startYear, startMonth, dateValidator.GetDay());
         var enteredAwardedDate = new DateOnly(awardedYear, awardedMonth, dateValidator.GetDay());
 
+        // Make sure dates are filtered to the most relevant
         var orderedQualificationDetailsPageEntries = qualificationDetailsPageEntries
                                                      .Where(x => 
                                                                 (x.ToWhichYear is not null && x.AwardedAfterWhichYear is not null &&
@@ -408,9 +409,14 @@ public class ContentfulContentService(
                                                      .OrderBy(x => dateValidator.GetDate(x.ToWhichYear))
                                                      .ToList();
 
+        // Any that have dates that are null are the 'catch all' scenario. These are lower priority and will be added to the bottom of the list
         var allNullDates = qualificationDetailsPageEntries
-                           .Where(x => x.FromWhichYear is null && x.AwardedAfterWhichYear is null &&
-                                       x.ToWhichYear is null).ToList();
+                           .Where(x => 
+                                      x.FromWhichYear is null && x.AwardedAfterWhichYear is null && x.ToWhichYear is null
+                                      || x.FromWhichYear is not null && x.AwardedAfterWhichYear is null 
+                                                                     && x.ToWhichYear is null 
+                                                                     && enteredStartDate >= dateValidator.GetDate(x.FromWhichYear))
+                           .OrderByDescending(x => dateValidator.GetDate(x.FromWhichYear)).ToList();
 
         orderedQualificationDetailsPageEntries.AddRange(allNullDates);
 

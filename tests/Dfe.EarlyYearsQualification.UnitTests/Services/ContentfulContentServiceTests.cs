@@ -540,7 +540,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetQualificationDetailsPage_UserIsNotCheckingOwnQualification_Content_RendersHtmlAndReturns()
+    public async Task GetQualificationDetailsPage_UserIsNotCheckingOwnQualification_Content_Returns()
     {
         var content = new ContentfulCollection<QualificationDetailsPage>
                       {
@@ -713,6 +713,80 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         result.IsPractitionerSpecificPage.Should().BeTrue();
     }
 
+    [TestMethod]
+    public async Task GetQualificationDetailsPage_QualificationOutsideOfDateRanges_ReturnsPageWithNullDates()
+    {
+        var content = new ContentfulCollection<QualificationDetailsPage>
+                      {
+                          Items =
+                          [
+                              new QualificationDetailsPage
+                              {
+                                  IsFullAndRelevant = false,
+                                  IsPractitionerSpecificPage = true,
+                                  FromWhichYear = "Feb-00",
+                                  AwardedAfterWhichYear = "Apr-03",
+                                  ToWhichYear = "Mar-05",
+                                  Levels = [3],
+                                  Name = "Practitioner specific page level 3 - NF&R",
+                                  RequirementsHeading = "Requirements heading",
+                                  RequirementsText = _testRichText,
+                                  Labels = new DetailsPageLabels
+                                           {
+                                               AwardingOrgLabel = "Test Awarding Org Label",
+                                               DateOfCheckLabel = "Test date of check label",
+                                               LevelLabel = "Test level label",
+                                               MainHeader = "Test main header"
+                                           }
+                              },
+                              new QualificationDetailsPage
+                              {
+                                  IsFullAndRelevant = true,
+                                  IsPractitionerSpecificPage = true,
+                                  FromWhichYear = null,
+                                  AwardedAfterWhichYear = null,
+                                  ToWhichYear = null,
+                                  Levels = [3],
+                                  Name = "Practitioner specific page level 3 - F&R",
+                                  RequirementsHeading = "Requirements heading",
+                                  RequirementsText = _testRichText,
+                                  Labels = new DetailsPageLabels
+                                           {
+                                               AwardingOrgLabel = "Test Awarding Org Label",
+                                               DateOfCheckLabel = "Test date of check label",
+                                               LevelLabel = "Test level label",
+                                               MainHeader = "Test main header"
+                                           }
+                              }
+                          ]
+                      };
+
+        var userEnteredStartDate = new DateOnly(2006, 3, 28);
+        var userEnteredAwardedDate = new DateOnly(2019, 5, 28);
+        var mockDateValidator = new Mock<IDateValidator>();
+        mockDateValidator.Setup(x => x.GetDay()).Returns(28);
+        mockDateValidator
+            .Setup(x => x.ValidateDateEntry(It.IsAny<DateOnly?>(), It.IsAny<DateOnly?>(), It.IsAny<DateOnly?>(), userEnteredStartDate,
+                                            userEnteredAwardedDate, It.IsAny<QualificationDetailsPage>())).Returns(content.Items.ElementAt(1));
+
+        ClientMock.Setup(client =>
+                             client.GetEntriesByType(
+                                                     It.IsAny<string>(),
+                                                     It.IsAny<QueryBuilder<QualificationDetailsPage>>(),
+                                                     It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(content);
+
+        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, mockDateValidator.Object);
+
+        var result = await service.GetQualificationDetailsPage(true, true, 3, 3, 2006, 5, 2019, false, false);
+
+        result.Should().NotBeNull();
+        result.Name.Should().Be("Practitioner specific page level 3 - F&R");
+        result.Levels.Should().Contain(3);
+        result.IsFullAndRelevant.Should().BeTrue();
+        result.IsPractitionerSpecificPage.Should().BeTrue();
+    }
+    
     [TestMethod]
     public async Task GetQualificationDetailsPage_UserIsCheckingOwnQualification_ContentNotFound()
     {
