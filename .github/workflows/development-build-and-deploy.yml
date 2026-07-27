@@ -56,7 +56,7 @@ jobs:
 
       # Deploy Web Application
       - name: Deploy to Azure App Services
-        uses: azure/webapps-deploy@02a81bead700e1610e206085a53be4bd8a4df54d # v3.0.8
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.0
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
           images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
