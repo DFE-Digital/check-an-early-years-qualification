@@ -43,6 +43,6 @@ test.describe('error and console log check', {tag: ["@e2e", "@smoke"]}, () => {
         }
 
         expect.soft(logs.length).toBe(0);
-        expect(errorMsg.length).toBe(0);
+        expect(errorMsg).toHaveLength(0);
     })
 })

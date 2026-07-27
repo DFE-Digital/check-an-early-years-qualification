@@ -48,7 +48,7 @@ jobs:
 
       # Login to Azure using OIDC
       - name: Login to Azure CLI
-        uses: azure/login@v3
+        uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -56,7 +56,7 @@ jobs:
 
       # Deploy Web Application
       - name: Deploy to Azure App Services
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead700e1610e206085a53be4bd8a4df54d # v3.0.8
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
           images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
@@ -108,7 +108,7 @@ jobs:
 
       # Login to Azure using OIDC
       - name: Login to Azure CLI
-        uses: azure/login@v3
+        uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -116,7 +116,7 @@ jobs:
 
       # Deploy Web Application
       - name: Deploy to Azure App Services
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead700e1610e206085a53be4bd8a4df54d # v3.0.8
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
           images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
