@@ -21,7 +21,7 @@ runs:
         AUTH_SECRET: ${{ inputs.auth_secret }}
         TEST_TYPE: ${{ inputs.test_type }}
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: WEBAPP_URL="https://${WEBAPP_URL}" DOMAIN="https://${WEBAPP_URL}" AUTH_SECRET="${AUTH_SECRET}" npx playwright test --grep "@${TEST_TYPE}"
+      run: WEBAPP_URL="https://${WEBAPP_URL}" DOMAIN="https://${WEBAPP_URL}" AUTH_SECRET="${AUTH_SECRET}" npx --ignore-scripts playwright@1.61.1 test --grep "@${TEST_TYPE}"
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

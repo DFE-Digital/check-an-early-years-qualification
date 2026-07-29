@@ -48,7 +48,7 @@ jobs:
 
       # Login to Azure using OIDC
       - name: Login to Azure CLI
-        uses: azure/login@v3
+        uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -56,7 +56,7 @@ jobs:
 
       # Deploy Web Application
       - name: Deploy to Azure App Services
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.0
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
           images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}

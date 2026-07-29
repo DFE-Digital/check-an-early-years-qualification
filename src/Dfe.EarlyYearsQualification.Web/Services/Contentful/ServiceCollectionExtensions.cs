@@ -77,7 +77,7 @@ public static class ServiceCollectionExtensions
                };
     }
 
-    private static IContentfulClient ContentfulClientFactory(IServiceProvider sp)
+    private static ContentfulClient ContentfulClientFactory(IServiceProvider sp)
     {
         var contentOptionsManager = sp.GetService<IContentOptionsManager>();
 
