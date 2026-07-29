@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Dfe.EarlyYearsQualification.Web.Services.WebView;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ public class QualificationListController(
     ILogger<QualificationListController> logger,
     IWebViewService webViewService,
     IQualificationDownloadService qualificationDownloadService,
-    IConfiguration configuration) : ServiceController
+    IEnvironmentService environmentService) : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -33,13 +34,7 @@ public class QualificationListController(
     [HttpGet("/download")]
     public async Task<IActionResult> Download()
     {
-        var environment = configuration["ENVIRONMENT"];
-
-        if (string.IsNullOrWhiteSpace(environment))
-        {
-            logger.LogError("Configuration missing");
-            return RedirectToAction("Index", "Error");
-        }
+        var environment = environmentService.GetEnvironment();
 
         var (fileContents, fileName) = await qualificationDownloadService.GetEyqlDownload(environment);
         if (fileContents.Length != 0) 

@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.EarlyYearsQualification.Web.Controllers.Api;
@@ -9,17 +10,18 @@ public class GenerateDownloadController : BaseApiController<GenerateDownloadCont
 {
     private readonly ILogger<GenerateDownloadController> _logger;
     private readonly IQualificationDownloadService _qualificationDownloadService;
-    private readonly IConfiguration _configuration;
+    private readonly IEnvironmentService _environmentService;
 
     public GenerateDownloadController(
         ILogger<GenerateDownloadController> logger,
         IQualificationDownloadService qualificationDownloadService,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IEnvironmentService environmentService)
         : base(logger, configuration)
     {
         _logger = logger;
         _qualificationDownloadService = qualificationDownloadService;
-        _configuration = configuration;
+        _environmentService = environmentService;
     }
 
     [HttpGet]
@@ -33,12 +35,7 @@ public class GenerateDownloadController : BaseApiController<GenerateDownloadCont
             return new UnauthorizedResult();
         }
 
-        var environment = _configuration["ENVIRONMENT"];
-
-        if (string.IsNullOrWhiteSpace(environment))
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Configuration missing");
-        }
+        var environment = _environmentService.GetEnvironment();
 
         await _qualificationDownloadService.GenerateEyqlDownloadByEnvironment(environment);
 
