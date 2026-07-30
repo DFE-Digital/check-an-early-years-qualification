@@ -91,11 +91,6 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
 
     private static string FormatQualificationNumber(string? qualificationNumber)
     {
-        if (string.IsNullOrWhiteSpace(qualificationNumber))
-        {
-            return MissingValue;
-        }
-
         return StringFormattingHelper.FormatSlashedNumbers(qualificationNumber) ?? MissingValue;
     }
 
