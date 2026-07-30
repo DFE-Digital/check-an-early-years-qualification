@@ -198,9 +198,16 @@
                             <govuk-summary-list-row-value>@qualification.QualificationNumber</govuk-summary-list-row-value>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>@Model.NotesAdditionalRequirementsLabel</govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>@qualification.AdditionalRequirements</govuk-summary-list-row-value>
+                            <govuk-summary-list-row-key>@Model.AdditionalRequirementsLabel</govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>@Html.Raw(qualification.AdditionalRequirements)</govuk-summary-list-row-value>
                         </govuk-summary-list-row>
+                        @if(!string.IsNullOrEmpty(qualification.Notes))
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>@Model.NotesLabel</govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>@qualification.Notes</govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+                        }
                     </govuk-summary-list>
                 </govuk-summary-card>
             }

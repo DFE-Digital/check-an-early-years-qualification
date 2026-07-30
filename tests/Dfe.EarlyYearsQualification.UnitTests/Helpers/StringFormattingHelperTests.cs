@@ -11,6 +11,8 @@ public class StringFormattingHelperTests
     [DataRow("1 /   2   /   3456", "1 / 2 / 3456")]
     [DataRow(null, null)]
     [DataRow("somestring", "somestring")]
+    [DataRow("   ", null)]
+    [DataRow(" ", null)]
     public void FormatSlashedNumbers_ReturnsExpected(string input, string expected)
     {
         // Act

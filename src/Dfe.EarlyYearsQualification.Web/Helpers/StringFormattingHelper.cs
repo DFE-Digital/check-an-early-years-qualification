@@ -9,7 +9,7 @@ public static partial class StringFormattingHelper
 
     public static string? FormatSlashedNumbers(string? input)
     {
-        if (input is null)
+        if (string.IsNullOrWhiteSpace(input))
         {
             return null;
         }

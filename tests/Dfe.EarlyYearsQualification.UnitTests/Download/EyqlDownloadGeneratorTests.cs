@@ -1,5 +1,6 @@
 using Dfe.EarlyYearsQualification.Content.Download;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Download;
 
@@ -30,9 +31,12 @@ public class EyqlDownloadGeneratorTests
                                          new Tab { Heading = "Pre-September 2014", Order = 1 },
                                          new Tab { Heading = "Post-September 2014", Order = 2 }
                                      ],
-                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
+                                     StaffChildRatio = 3,
                                      ToWhichYear = "2015", FromWhichYear = "2014",
-                                     QualificationNumber = "ABC-123-DEF"
+                                     QualificationNumber = "ABC-123-DEF",
+                                     AdditionalRequirementsRichText = ContentfulContentHelper.Paragraph("Rich text additional requirements"),
+                                     AdditionalRequirementsPlainText = "Plain text additional requirements",
+                                     Notes = "Some notes"
                                  }
                              };
 
@@ -43,9 +47,9 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,No additional requirements
-                           Post-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,No additional requirements
+                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
+                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
+                           Post-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
                            """);
     }
 
@@ -60,9 +64,12 @@ public class EyqlDownloadGeneratorTests
                                      [
                                          new Tab { Heading = "Pre-September 2014", Order = 1 }
                                      ],
-                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
+                                     StaffChildRatio = 3,
                                      FromWhichYear = "2014", ToWhichYear = "2015", 
-                                     QualificationNumber = "ABC-123-DEF"
+                                     QualificationNumber = "ABC-123-DEF",
+                                     AdditionalRequirementsRichText = ContentfulContentHelper.Paragraph("Rich text additional requirements"),
+                                     AdditionalRequirementsPlainText = "Plain text additional requirements",
+                                     Notes = "Some notes"
                                  },
                                  new Qualification("TST-002", "New Qualification", "AO 2", 4)
                                  {
@@ -70,9 +77,12 @@ public class EyqlDownloadGeneratorTests
                                      [
                                          new Tab { Heading = "Post-September 2014", Order = 2 }
                                      ],
-                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
+                                     StaffChildRatio = 3,
                                      FromWhichYear = "2015", ToWhichYear = "2016",
-                                     QualificationNumber = "ABC-123-DEF"
+                                     QualificationNumber = "ABC-123-DEF",
+                                     AdditionalRequirementsRichText = ContentfulContentHelper.Paragraph("Rich text additional requirements"),
+                                     AdditionalRequirementsPlainText = "Plain text additional requirements",
+                                     Notes = "Some notes"
                                  },
                                  new Qualification("TST-003", "Qualification 2", "AO 1", 3)
                                  {
@@ -80,9 +90,12 @@ public class EyqlDownloadGeneratorTests
                                      [
                                          new Tab { Heading = "Post-September 2024", Order = 3 }
                                      ],
-                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
+                                     StaffChildRatio = 3,
                                      FromWhichYear = "2015", ToWhichYear = "2024",
-                                     QualificationNumber = "ABC-123-DEF"
+                                     QualificationNumber = "ABC-123-DEF",
+                                     AdditionalRequirementsRichText = ContentfulContentHelper.Paragraph("Rich text additional requirements"),
+                                     AdditionalRequirementsPlainText = "",
+                                     Notes = ""
                                  },
                                  new Qualification("TST-004", "New Qualification", "AO 1", 3)
                                  {
@@ -90,9 +103,12 @@ public class EyqlDownloadGeneratorTests
                                      [
                                          new Tab { Heading = "Post-September 2024", Order = 3 }
                                      ],
-                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements",
+                                     StaffChildRatio = 3,
                                      FromWhichYear = "2015", ToWhichYear = "2024",
-                                     QualificationNumber = "ABC-123-DEF"
+                                     QualificationNumber = "ABC-123-DEF",
+                                     AdditionalRequirementsRichText = ContentfulContentHelper.Paragraph("Rich text additional requirements"),
+                                     AdditionalRequirementsPlainText = "Plain text additional requirements",
+                                     Notes = ""
                                  }
                              };
 
@@ -103,11 +119,11 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,No additional requirements
-                           Post-September 2014,4,3,2015,2016,New Qualification,AO 2,ABC-123-DEF,No additional requirements
-                           Post-September 2024,3,3,2015,2024,New Qualification,AO 1,ABC-123-DEF,No additional requirements
-                           Post-September 2024,3,3,2015,2024,Qualification 2,AO 1,ABC-123-DEF,No additional requirements
+                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
+                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
+                           Post-September 2014,4,3,2015,2016,New Qualification,AO 2,ABC-123-DEF,Plain text additional requirements,Some notes
+                           Post-September 2024,3,3,2015,2024,New Qualification,AO 1,ABC-123-DEF,Plain text additional requirements,""
+                           Post-September 2024,3,3,2015,2024,Qualification 2,AO 1,ABC-123-DEF,"",""
                            """);
     }
     
@@ -122,9 +138,10 @@ public class EyqlDownloadGeneratorTests
                                      [
                                          new Tab { Heading = "Pre-September 2014", Order = 1 }
                                      ],
-                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements, nothing",
+                                     StaffChildRatio = 3,
                                      ToWhichYear = "2015", FromWhichYear = "2014",
-                                     QualificationNumber = "ABC-123-DEF"
+                                     QualificationNumber = "ABC-123-DEF",
+                                     AdditionalRequirementsPlainText = "No additional requirements, nothing"
                                  }
                              };
 
@@ -135,8 +152,8 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,"No additional requirements, nothing"
+                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
+                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,"No additional requirements, nothing",""
                            """);
     }
     
@@ -151,9 +168,10 @@ public class EyqlDownloadGeneratorTests
                                      [
                                          new Tab { Heading = "Pre-September 2014", Order = 1 }
                                      ],
-                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements \" nothing",
+                                     StaffChildRatio = 3,
                                      ToWhichYear = "2015", FromWhichYear = "2014",
-                                     QualificationNumber = "ABC-123-DEF"
+                                     QualificationNumber = "ABC-123-DEF",
+                                     AdditionalRequirementsPlainText = "No additional requirements \" nothing"
                                  }
                              };
 
@@ -164,8 +182,8 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,"No additional requirements "" nothing"
+                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
+                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,"No additional requirements "" nothing",""
                            """);
     }
     
@@ -180,22 +198,23 @@ public class EyqlDownloadGeneratorTests
                                      [
                                          new Tab { Heading = "Pre-September 2014", Order = 1 }
                                      ],
-                                     StaffChildRatio = 3, AdditionalRequirements = "No additional requirements \n nothing",
+                                     StaffChildRatio = 3,
                                      ToWhichYear = "2015", FromWhichYear = "2014",
-                                     QualificationNumber = "ABC-123-DEF"
+                                     QualificationNumber = "ABC-123-DEF",
+                                     AdditionalRequirementsPlainText = "No additional requirements \n nothing"
                                  }
                              };
 
         var downloadGenerator = new EyqlDownloadGenerator();
 
+        var expectedContent = "Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes"
+                              + Environment.NewLine
+                              + "Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,\"No additional requirements \n nothing\",\"\"";
+
         var downloadContent = downloadGenerator.GenerateQualificationListContent(qualifications);
 
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
-                       .Be("""
-                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,"No additional requirements 
-                            nothing"
-                           """);
+                       .Be(expectedContent);
     }
 }

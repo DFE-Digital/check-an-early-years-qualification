@@ -30,9 +30,10 @@ public class EyqlDownloadGenerator : IDownloadGenerator
                                                                                  QualificationNumber =
                                                                                      qualification
                                                                                          .QualificationNumber,
-                                                                                 AdditionalRequirements =
+                                                                                 AdditionalRequirementsPlainText =
                                                                                      qualification
-                                                                                         .AdditionalRequirements
+                                                                                         .AdditionalRequirementsPlainText,
+                                                                                 Notes = qualification.Notes
                                                                              }));
         }
         
@@ -41,19 +42,19 @@ public class EyqlDownloadGenerator : IDownloadGenerator
                                                      .ThenBy(x => x.QualificationName)
                                                      .ToList();
         const string headers =
-            "Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements";
+            "Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes";
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(headers);
         foreach (var qualification in orderedQualifications)
         {
             var qualificationData =
-                $"{qualification.EyqlTabs[0].Heading},{qualification.QualificationLevel},{qualification.StaffChildRatio},{qualification.FromWhichYear},{qualification.ToWhichYear},{EscapeCsvValue(qualification.QualificationName)},{EscapeCsvValue(qualification.AwardingOrganisationTitle)},{qualification.QualificationNumber},{EscapeCsvValue(qualification.AdditionalRequirements)}";
+                $"{qualification.EyqlTabs[0].Heading},{qualification.QualificationLevel},{qualification.StaffChildRatio},{qualification.FromWhichYear},{qualification.ToWhichYear},{EscapeCsvValue(qualification.QualificationName)},{EscapeCsvValue(qualification.AwardingOrganisationTitle)},{qualification.QualificationNumber},{EscapeCsvValue(qualification.AdditionalRequirementsPlainText)},{EscapeCsvValue(qualification.Notes)}";
             stringBuilder.AppendLine(qualificationData);
         }
 
         // Remove empty last line
-        stringBuilder.Remove(stringBuilder.Length - 1, 1);
-        
+        stringBuilder.Remove(stringBuilder.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+
         return stringBuilder.ToString();
     }
     
