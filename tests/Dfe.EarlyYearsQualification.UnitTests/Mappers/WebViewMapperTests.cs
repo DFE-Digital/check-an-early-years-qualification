@@ -170,6 +170,31 @@ public class WebViewMapperTests
         qualificationModel.AdditionalRequirements.Should().Be("None");
     }
 
+    [TestMethod]
+    public async Task Map_WhenQualificationNumberContainsEmptyValues_UsesFallbackValue()
+    {
+        var content = CreateContent();
+        var qualification = new Qualification("qualification-1", "Test qualification", "Awarding organisation", 3)
+        {
+            QualificationNumber = "  ",
+        };
+
+        var mockContentParser = CreateContentParser(
+            (content.PostHeadingContent, "PostHeadingHtml"),
+            (content.DownloadSectionContent, "Download section"),
+            (content.NoQualificationsFoundContent, "No qualifications found"),
+            (content.QualificationIsFullAndRelevantContent, "Qualification is full and relevant"),
+            (null, string.Empty));
+
+        var mapper = new WebViewMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(content, new WebViewFilters(), [qualification]);
+
+        result.Qualifications.Should().HaveCount(1);
+        var qualificationModel = result.Qualifications[0];
+        qualificationModel.QualificationNumber.Should().Be("-");
+    }
+
     private static WebViewPage CreateContent()
     {
         return new WebViewPage
