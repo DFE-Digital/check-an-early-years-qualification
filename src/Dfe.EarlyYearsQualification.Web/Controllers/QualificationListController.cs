@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Dfe.EarlyYearsQualification.Web.Services.WebView;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,8 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers;
 public class QualificationListController(
     ILogger<QualificationListController> logger,
     IWebViewService webViewService,
-    IQualificationDownloadService qualificationDownloadService) : ServiceController
+    IQualificationDownloadService qualificationDownloadService,
+    IEnvironmentService environmentService) : ServiceController
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -32,9 +34,11 @@ public class QualificationListController(
     [HttpGet("/download")]
     public async Task<IActionResult> Download()
     {
-        var fileContent = await qualificationDownloadService.GetEyqlDownloadAsByteArray();
-        if (fileContent.Length != 0) 
-            return File(fileContent, "text/csv", "Early-Years-Qualifications-List.csv");
+        var environment = environmentService.GetEnvironment();
+
+        var (fileContents, fileName) = await qualificationDownloadService.GetEyqlDownload(environment);
+        if (fileContents.Length != 0) 
+            return File(fileContents, "text/csv", fileName);
         
         logger.LogError("Null or empty EYQL content returned");
         return RedirectToAction("Index", "Error");

@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Dfe.EarlyYearsQualification.Web.Services.WebView;
 
@@ -17,9 +18,11 @@ public class QualificationListControllerTests
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
         var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
 
         var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
-                                                         mockQualificationDownloadService.Object);
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
 
         mockWebViewService.Setup(x => x.GetWebViewPage()).ReturnsAsync((WebViewPage?)null);
 
@@ -41,9 +44,11 @@ public class QualificationListControllerTests
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
         var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
 
         var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
-                                                         mockQualificationDownloadService.Object);
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
 
         var webViewPage = new WebViewPage();
         var expectedModel = new EarlyYearsQualificationListModel();
@@ -72,9 +77,11 @@ public class QualificationListControllerTests
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
         var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
 
         var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
-                                                         mockQualificationDownloadService.Object);
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
 
         var result = controller.ClearFilters();
 
@@ -93,9 +100,11 @@ public class QualificationListControllerTests
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
         var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
 
         var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
-                                                         mockQualificationDownloadService.Object);
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
 
         var model = new EarlyYearsQualificationListModel();
 
@@ -116,9 +125,11 @@ public class QualificationListControllerTests
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
         var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
 
         var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
-                                                         mockQualificationDownloadService.Object);
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
 
         const string filter = "test-filter";
 
@@ -139,13 +150,16 @@ public class QualificationListControllerTests
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
         var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
 
         var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
-                                                         mockQualificationDownloadService.Object);
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
         
-        var returnedArray = Encoding.UTF8.GetBytes("test");
-        mockQualificationDownloadService.Setup(x => x.GetEyqlDownloadAsByteArray())
-                                        .ReturnsAsync(returnedArray);
+        (byte[] fileContents, string fileName) = (Encoding.UTF8.GetBytes("test"), "test.csv");
+
+        mockQualificationDownloadService.Setup(x => x.GetEyqlDownload(It.IsAny<string>()))
+                                        .ReturnsAsync((fileContents, fileName));
 
         var result = await controller.Download();
 
@@ -154,9 +168,10 @@ public class QualificationListControllerTests
         var resultType = result as FileContentResult;
         resultType.Should().NotBeNull();
         resultType.FileContents.Should().NotBeEmpty();
-        resultType.FileContents.Should().Equal(returnedArray);
+        resultType.FileContents.Should().Equal(fileContents);
+        resultType.FileDownloadName.Should().Be(fileName);
 
-        mockQualificationDownloadService.Verify(x => x.GetEyqlDownloadAsByteArray(), Times.Once);
+        mockQualificationDownloadService.Verify(x => x.GetEyqlDownload("Development"), Times.Once);
     }
     
     [TestMethod]
@@ -165,12 +180,17 @@ public class QualificationListControllerTests
         var mockLogger = new Mock<ILogger<QualificationListController>>();
         var mockWebViewService = new Mock<IWebViewService>();
         var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
 
         var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
-                                                         mockQualificationDownloadService.Object);
-        
-        mockQualificationDownloadService.Setup(x => x.GetEyqlDownloadAsByteArray())
-                                        .ReturnsAsync([]);
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
+
+
+        (byte[] fileContents, string fileName) = (Array.Empty<byte>(), "test.csv");
+
+        mockQualificationDownloadService.Setup(x => x.GetEyqlDownload(It.IsAny<string>()))
+                                        .ReturnsAsync((fileContents, fileName));
 
         var result = await controller.Download();
 
@@ -182,6 +202,13 @@ public class QualificationListControllerTests
         resultType.ControllerName.Should().Be("Error");
 
         mockLogger.VerifyError("Null or empty EYQL content returned");
-        mockQualificationDownloadService.Verify(x => x.GetEyqlDownloadAsByteArray(), Times.Once);
+        mockQualificationDownloadService.Verify(x => x.GetEyqlDownload("Development"), Times.Once);
+    }
+
+    private static Mock<IEnvironmentService> CreateEnvironmentService(string environment = "Development")
+    {
+        var mockEnvironmentService = new Mock<IEnvironmentService>();
+        mockEnvironmentService.Setup(x => x.GetEnvironment()).Returns(environment);
+        return mockEnvironmentService;
     }
 }

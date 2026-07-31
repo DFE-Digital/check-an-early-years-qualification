@@ -1,6 +1,6 @@
-using Dfe.EarlyYearsQualification.Caching.Interfaces;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Api;
+using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -31,7 +31,8 @@ public class GenerateDownloadControllerTests
         var controller =
             new GenerateDownloadController(new NullLogger<GenerateDownloadController>(),
                                            mockQualificationDownloadService.Object,
-                                           mockConfiguration.Object)
+                                           mockConfiguration.Object,
+                                           CreateEnvironmentService().Object)
             {
                 ControllerContext = controllerContext
             };
@@ -66,7 +67,8 @@ public class GenerateDownloadControllerTests
         var controller =
             new GenerateDownloadController(new NullLogger<GenerateDownloadController>(),
                                            mockQualificationDownloadService.Object,
-                                           mockConfiguration.Object)
+                                           mockConfiguration.Object,
+                                           CreateEnvironmentService().Object)
             {
                 ControllerContext = controllerContext
             };
@@ -75,7 +77,47 @@ public class GenerateDownloadControllerTests
 
         await action.Should().ThrowAsync<InvalidOperationException>();
     }
-    
+
+    [TestMethod]
+    public async Task Index_CorrectSecretSubmittedInHeaderNoEnvironmentSupplied_CallsGenerateEyqlDownloadWithDefaultEnvironment()
+    {
+        const string secret = "secret";
+
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Headers["Download-Secret"] = secret;
+
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(new Dictionary<string, string?>
+                                                   {
+                                                       ["Download:AuthSecret"] = secret
+                                                   })
+                            .Build();
+        var mockEnvironmentService = CreateEnvironmentService("production");
+
+        var controllerContext = new ControllerContext
+        {
+            HttpContext = httpContext
+        };
+
+        var controller =
+            new GenerateDownloadController(new NullLogger<GenerateDownloadController>(),
+                                           mockQualificationDownloadService.Object,
+                                           configuration,
+                                           mockEnvironmentService.Object)
+            {
+                ControllerContext = controllerContext
+            };
+
+        var result = await controller.Index();
+
+        mockQualificationDownloadService
+            .Verify(x => x.GenerateEyqlDownloadByEnvironment("production"),
+                    Times.Once);
+
+        result.Should().BeOfType<NoContentResult>();
+    }
+
     [TestMethod]
     public async Task Index_CorrectSecretSubmittedInHeader_CallsGenerateEyqlDownload()
     {
@@ -92,11 +134,12 @@ public class GenerateDownloadControllerTests
         mockHttpContext.Setup(c => c.Request).Returns(mockRequest.Object);
         
         var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
-        var section = new Mock<IConfigurationSection>();
-        section.Setup(s => s["AuthSecret"]).Returns(secret);
+        var downloadSection = new Mock<IConfigurationSection>();
+        downloadSection.Setup(s => s["AuthSecret"]).Returns(secret);
 
         var mockConfiguration = new Mock<IConfiguration>();
-        mockConfiguration.Setup(c => c.GetSection("Download")).Returns(section.Object);
+        mockConfiguration.Setup(c => c.GetSection("Download")).Returns(downloadSection.Object);
+        var mockEnvironmentService = CreateEnvironmentService();
 
         var controllerContext = new ControllerContext
                                 {
@@ -106,7 +149,8 @@ public class GenerateDownloadControllerTests
         var controller =
             new GenerateDownloadController(new NullLogger<GenerateDownloadController>(),
                                            mockQualificationDownloadService.Object,
-                                           mockConfiguration.Object)
+                                           mockConfiguration.Object,
+                                           mockEnvironmentService.Object)
             {
                 ControllerContext = controllerContext
             };
@@ -114,9 +158,16 @@ public class GenerateDownloadControllerTests
         var result = await controller.Index();
 
         mockQualificationDownloadService
-            .Verify(x => x.GenerateEyqlDownload(),
+            .Verify(x => x.GenerateEyqlDownloadByEnvironment("Development"),
                     Times.Once);
 
         result.Should().BeOfType<NoContentResult>();
+    }
+
+    private static Mock<IEnvironmentService> CreateEnvironmentService(string environment = "Development")
+    {
+        var mockEnvironmentService = new Mock<IEnvironmentService>();
+        mockEnvironmentService.Setup(x => x.GetEnvironment()).Returns(environment);
+        return mockEnvironmentService;
     }
 }
