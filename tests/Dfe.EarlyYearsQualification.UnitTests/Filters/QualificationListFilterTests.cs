@@ -22,7 +22,6 @@ public class QualificationListFilterTests
                               FromWhichYear = "Apr-15",
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "abc/123/987",
-                              AdditionalRequirements = "requirements"
                           },
                           new Qualification("EYQ-741",
                                             "test",
@@ -31,7 +30,6 @@ public class QualificationListFilterTests
                           {
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "def/456/951",
-                              AdditionalRequirements = "requirements"
                           }
                       };
         
@@ -59,7 +57,6 @@ public class QualificationListFilterTests
                               FromWhichYear = "Apr-15",
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "abc/123/987",
-                              AdditionalRequirements = "requirements"
                           }
                       };
 
@@ -87,7 +84,6 @@ public class QualificationListFilterTests
                               FromWhichYear = "Apr-15",
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "abc/123/987",
-                              AdditionalRequirements = "requirements"
                           }
                       };
 
@@ -113,7 +109,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -137,7 +132,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -171,7 +165,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -204,7 +197,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -238,7 +230,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -271,7 +262,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -304,7 +294,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -339,7 +328,6 @@ public class QualificationListFilterTests
                               FromWhichYear = "Apr-15",
                               ToWhichYear = "Aug-19",
                               QualificationNumber = "abc/123/987",
-                              AdditionalRequirements = "requirements"
                           }
                       };
 
@@ -366,7 +354,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -393,7 +380,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -424,7 +410,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  },
                                  new Qualification("EYQ-124",
                                                    "Totally different qualification name",
@@ -434,7 +419,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/123",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -470,7 +454,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/987",
-                                     AdditionalRequirements = "requirements"
                                  },
                                  new Qualification("EYQ-124",
                                                    "Totally different qualification name",
@@ -480,7 +463,6 @@ public class QualificationListFilterTests
                                      FromWhichYear = "Apr-15",
                                      ToWhichYear = "Aug-19",
                                      QualificationNumber = "abc/123/123",
-                                     AdditionalRequirements = "requirements"
                                  }
                              };
 
@@ -508,7 +490,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Apr-15",
                                  ToWhichYear = "Aug-19",
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>
@@ -544,7 +525,6 @@ public class QualificationListFilterTests
                                  FromWhichYear = "Aug-15",
                                  ToWhichYear = null,
                                  QualificationNumber = "abc/123/987",
-                                 AdditionalRequirements = "requirements"
                              };
         
         var qualifications = new List<Qualification>

@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Mock.Content;
+using Dfe.EarlyYearsQualification.Mock.Helpers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 
@@ -99,7 +100,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("test_id");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -162,7 +163,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-108");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -225,7 +226,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-321");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -289,7 +290,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-115");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -330,7 +331,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-241");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -394,7 +395,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-242");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -458,7 +459,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-250");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -522,7 +523,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-107");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -586,7 +587,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-105");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().Be(AwardingOrganisations.Various);
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -650,7 +651,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-109");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -713,7 +714,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-110");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().Be(AwardingOrganisations.Various);
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -777,7 +778,7 @@ public class MockQualificationsRepositoryTests
         var result = await repository.GetById("eyq-111");
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Qualification>();
-        result.AdditionalRequirements.Should().NotBeNullOrEmpty();
+        AssertAdditionalRequirements(result);
         result.AwardingOrganisationTitle.Should().NotBeNullOrEmpty();
         result.FromWhichYear.Should().NotBeNullOrEmpty();
         result.QualificationId.Should().NotBeNullOrEmpty();
@@ -883,5 +884,16 @@ public class MockQualificationsRepositoryTests
                                  nation);
 
         results.Count.Should().Be(expectedQualificationCount);
+    }
+    
+    private static void AssertAdditionalRequirements(Qualification result)
+    {
+        const string AdditionalRequirementsText = "The course must be assessed within the EYFS in an Early Years setting in England. Please note that the name of this qualification changed in February 2023. Qualifications achieved under either name are full and relevant provided that the start date for the qualification aligns with the date of the name change.";
+        const string QualificationNotes = "Notes for this qualification";
+
+    result.AdditionalRequirementsRichText.Should()
+              .BeEquivalentTo(ContentfulContentHelper.Paragraph(AdditionalRequirementsText));
+        result.AdditionalRequirementsPlainText.Should().Be(AdditionalRequirementsText);
+        result.Notes.Should().Be(QualificationNotes);
     }
 }

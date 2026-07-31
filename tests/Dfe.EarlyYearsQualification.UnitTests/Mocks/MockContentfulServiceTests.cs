@@ -1407,7 +1407,8 @@ public class MockContentfulServiceTests
         result.ToWhichYearLabel.Should().Be("To which year");
         result.AwardingOrganisationLabel.Should().Be("Awarding organisation");
         result.QualificationNumberLabel.Should().Be("Qualification number");
-        result.NotesAdditionalRequirementsLabel.Should().Be("Notes / Additional requirements");
+        result.AdditionalRequirementsLabel.Should().Be("Additional requirements");
+        result.NotesLabel.Should().Be("Notes");
         result.ShowingAllQualificationsLabel.Should().Be("Showing all the qualifications");
         result.FilterHeading.Should().Be("Filter");
         result.SelectedFiltersHeading.Should().Be("Selected filters");

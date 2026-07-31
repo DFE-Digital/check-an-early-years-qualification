@@ -99,7 +99,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements"
         };
 
         var qualifications = new List<Qualification> { qualification };
@@ -154,7 +153,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements"
         };
 
         var qualifications = new List<Qualification> { qualification };
@@ -200,7 +198,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements"
         };
 
         var qualifications = new List<Qualification> { qualification };
@@ -298,7 +295,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements"
         };
 
 
@@ -347,7 +343,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements",
             AdditionalRequirementQuestions = additionalRequirements
         };
 
@@ -394,7 +389,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements",
             AdditionalRequirementQuestions = additionalRequirements,
             IsAutomaticallyApprovedAtLevel6 = true
         };
@@ -439,7 +433,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements"
         };
 
 
@@ -482,7 +475,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements"
         };
 
         var qualifications = new List<Qualification> { qualification };
@@ -524,7 +516,6 @@ public class ConfirmQualificationControllerTests
             FromWhichYear = "2014",
             ToWhichYear = "2019",
             QualificationNumber = "ABC/547/900",
-            AdditionalRequirements = "additional requirements"
         };
 
 
