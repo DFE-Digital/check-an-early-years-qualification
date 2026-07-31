@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
@@ -26,7 +27,7 @@ public class FooterMapperTests
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(footer.RightHandSideFooterSection.Body)).ReturnsAsync(rightHandSectionBody);
         var mapper = new FooterMapper(mockContentParser.Object);
-        var result = await mapper.Map(footer);
+        var result = await mapper.Map(footer, "/");
 
         result.Should().NotBeNull();
         result.NavigationLinks.Should().NotBeEmpty();
@@ -62,7 +63,7 @@ public class FooterMapperTests
         mockContentParser.Setup(x => x.ToHtml(footer.LeftHandSideFooterSection.Body)).ReturnsAsync(string.Empty);
         mockContentParser.Setup(x => x.ToHtml(footer.RightHandSideFooterSection.Body)).ReturnsAsync(rightHandSectionBody);
         var mapper = new FooterMapper(mockContentParser.Object);
-        var result = await mapper.Map(footer);
+        var result = await mapper.Map(footer, "/");
 
         result.Should().NotBeNull();
         result.NavigationLinks.Should().NotBeEmpty();
@@ -93,7 +94,7 @@ public class FooterMapperTests
         var mockContentParser = new Mock<IGovUkContentParser>();
         mockContentParser.Setup(x => x.ToHtml(footer.LeftHandSideFooterSection.Body)).ReturnsAsync(leftHandSectionBody);
         var mapper = new FooterMapper(mockContentParser.Object);
-        var result = await mapper.Map(footer);
+        var result = await mapper.Map(footer, "/");
 
         result.Should().NotBeNull();
         result.NavigationLinks.Should().NotBeEmpty();
@@ -129,7 +130,7 @@ public class FooterMapperTests
         mockContentParser.Setup(x => x.ToHtml(footer.LeftHandSideFooterSection.Body)).ReturnsAsync(leftHandSectionBody);
         mockContentParser.Setup(x => x.ToHtml(footer.RightHandSideFooterSection.Body)).ReturnsAsync(string.Empty);
         var mapper = new FooterMapper(mockContentParser.Object);
-        var result = await mapper.Map(footer);
+        var result = await mapper.Map(footer, "/");
 
         result.Should().NotBeNull();
         result.NavigationLinks.Should().NotBeEmpty();
@@ -140,5 +141,51 @@ public class FooterMapperTests
         result.LeftHandSideFooterSection.Body.Should().Be(leftHandSectionBody);
 
         result.RightHandSideFooterSection.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task Map_RouteIsEyqlRelated_RemovesServiceAccessibilityStatementLink()
+    {
+        var footer = new Footer
+                     {
+                         NavigationLinks =
+                         [
+                             new NavigationLink { DisplayText = "Accessibility statement", Href = Urls.AccessibilityStatement },
+                             new NavigationLink { DisplayText = "Early years accessibility statement", Href = Urls.AccessibilityStatementEYQL },
+                             new NavigationLink { DisplayText = "Test", Href = "/test" }
+                         ]
+                     };
+
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mapper = new FooterMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(footer, "/early-years-qualification-list");
+
+        result.NavigationLinks.Should().HaveCount(2);
+        result.NavigationLinks.Should().Contain(link => link!.Href == Urls.AccessibilityStatementEYQL);
+        result.NavigationLinks.Should().NotContain(link => link!.Href == Urls.AccessibilityStatement);
+    }
+
+    [TestMethod]
+    public async Task Map_RouteIsNotEyqlRelated_RemovesEyqlAccessibilityStatementLink()
+    {
+        var footer = new Footer
+                     {
+                         NavigationLinks =
+                         [
+                             new NavigationLink { DisplayText = "Accessibility statement", Href = Urls.AccessibilityStatement },
+                             new NavigationLink { DisplayText = "Early years accessibility statement", Href = Urls.AccessibilityStatementEYQL },
+                             new NavigationLink { DisplayText = "Test", Href = "/test" }
+                         ]
+                     };
+
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mapper = new FooterMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(footer, "/qualification-details");
+
+        result.NavigationLinks.Should().HaveCount(2);
+        result.NavigationLinks.Should().Contain(link => link!.Href == Urls.AccessibilityStatement);
+        result.NavigationLinks.Should().NotContain(link => link!.Href == Urls.AccessibilityStatementEYQL);
     }
 }

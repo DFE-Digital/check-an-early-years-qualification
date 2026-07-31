@@ -95,9 +95,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetAccessibilityStatementPage();
-
-        Logger.VerifyWarning("No accessibility statement page entry returned");
+        var result = await service.GetAccessibilityStatementPage(AccessibilityStatements.Service);
 
         result.Should().BeNull();
     }
@@ -114,11 +112,10 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetAccessibilityStatementPage();
-
-        Logger.VerifyWarning("No accessibility statement page entry returned");
+        var result = await service.GetAccessibilityStatementPage(AccessibilityStatements.Service);
 
         result.Should().BeNull();
+        Logger.VerifyError("Exception trying to retrieve entryId 4hz3c9wMsCz2i6k0XAslCi for type T from Contentful.");
     }
 
     [TestMethod]
@@ -138,7 +135,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
 
-        var result = await service.GetAccessibilityStatementPage();
+        var result = await service.GetAccessibilityStatementPage(AccessibilityStatements.Service);
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(accessibilityStatementPage);

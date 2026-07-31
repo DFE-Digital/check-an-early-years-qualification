@@ -5,6 +5,8 @@ using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Dfe.EarlyYearsQualification.Web.ViewComponents;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.ViewComponents;
@@ -49,12 +51,12 @@ public class FooterViewComponentTests
         var environmentService = new Mock<IEnvironmentService>();
         environmentService.Setup(x => x.IsProduction()).Returns(true);
         
-        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
+        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>(), It.IsAny<string?>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
 
-        var footerViewComponent = new FooterViewComponent(mockLogger.Object,
-                                                                    mockContentService.Object,
-                                                                    environmentService.Object,
-                                                                    mockFooterMapper.Object);
+        var footerViewComponent = CreateFooterViewComponent(mockLogger.Object,
+                                                            mockContentService.Object,
+                                                            environmentService.Object,
+                                                            mockFooterMapper.Object);
         var result = await footerViewComponent.InvokeAsync();
 
         result.Should().NotBeNull();
@@ -101,15 +103,15 @@ public class FooterViewComponentTests
         mockContentService.Setup(x => x.GetFooter())
                           .ReturnsAsync(footer);
         
-        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
+        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>(), It.IsAny<string?>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
         
         var environmentService = new Mock<IEnvironmentService>();
         environmentService.Setup(x => x.IsProduction()).Returns(false);
 
-        var footerViewComponent = new FooterViewComponent(mockLogger.Object,
-                                                          mockContentService.Object,
-                                                          environmentService.Object,
-                                                          mockFooterMapper.Object);
+        var footerViewComponent = CreateFooterViewComponent(mockLogger.Object,
+                                                            mockContentService.Object,
+                                                            environmentService.Object,
+                                                            mockFooterMapper.Object);
         
         var result = await footerViewComponent.InvokeAsync();
 
@@ -131,12 +133,12 @@ public class FooterViewComponentTests
         var environmentService = new Mock<IEnvironmentService>();
         environmentService.Setup(x => x.IsProduction()).Returns(true);
         
-        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
+        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>(), It.IsAny<string?>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
 
-        var footerViewComponent = new FooterViewComponent(mockLogger.Object,
-                                                          mockContentService.Object,
-                                                          environmentService.Object,
-                                                          mockFooterMapper.Object);
+        var footerViewComponent = CreateFooterViewComponent(mockLogger.Object,
+                                                            mockContentService.Object,
+                                                            environmentService.Object,
+                                                            mockFooterMapper.Object);
 
         var result = await footerViewComponent.InvokeAsync();
 
@@ -165,12 +167,12 @@ public class FooterViewComponentTests
         var environmentService = new Mock<IEnvironmentService>();
         environmentService.Setup(x => x.IsProduction()).Returns(false);
 
-        var footerViewComponent = new FooterViewComponent(mockLogger.Object,
-                                                          mockContentService.Object,
-                                                          environmentService.Object,
-                                                          mockFooterMapper.Object);
-        
-        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
+        var footerViewComponent = CreateFooterViewComponent(mockLogger.Object,
+                                                            mockContentService.Object,
+                                                            environmentService.Object,
+                                                            mockFooterMapper.Object);
+
+        mockFooterMapper.Setup(x => x.Map(It.IsAny<Footer>(), It.IsAny<string?>())).ReturnsAsync(new FooterModel { NavigationLinks = [] });
 
         var result = await footerViewComponent.InvokeAsync();
 
@@ -185,5 +187,54 @@ public class FooterViewComponentTests
         data.NavigationLinks.Should().BeEmpty();
 
         mockLogger.VerifyError("Error retrieving navigation links for footer");
+    }
+
+    [TestMethod]
+    public async Task InvokeAsync_PassesCurrentRequestPathToFooterMapper()
+    {
+        var mockContentService = new Mock<IContentService>();
+        var mockLogger = new Mock<ILogger<FooterViewComponent>>();
+        var mockFooterMapper = new Mock<IFooterMapper>();
+        var environmentService = new Mock<IEnvironmentService>();
+        var footer = new Footer { NavigationLinks = [] };
+
+        mockContentService.Setup(x => x.GetFooter()).ReturnsAsync(footer);
+        mockFooterMapper.Setup(x => x.Map(footer, "/early-years-qualification-list")).ReturnsAsync(new FooterModel { NavigationLinks = [] });
+
+        var footerViewComponent = CreateFooterViewComponent(mockLogger.Object,
+                                                            mockContentService.Object,
+                                                            environmentService.Object,
+                                                            mockFooterMapper.Object,
+                                                            "/early-years-qualification-list");
+
+        await footerViewComponent.InvokeAsync();
+
+        mockFooterMapper.Verify(x => x.Map(footer, "/early-years-qualification-list"), Times.Once);
+    }
+
+    private static FooterViewComponent CreateFooterViewComponent(
+        ILogger<FooterViewComponent> logger,
+        IContentService contentService,
+        IEnvironmentService environmentService,
+        IFooterMapper footerMapper,
+        string path = "/")
+    {
+        var footerViewComponent = new FooterViewComponent(logger,
+                                                          contentService,
+                                                          environmentService,
+                                                          footerMapper);
+
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Path = path;
+
+        footerViewComponent.ViewComponentContext = new ViewComponentContext
+                                                  {
+                                                      ViewContext = new ViewContext
+                                                                    {
+                                                                        HttpContext = httpContext
+                                                                    }
+                                                  };
+
+        return footerViewComponent;
     }
 }

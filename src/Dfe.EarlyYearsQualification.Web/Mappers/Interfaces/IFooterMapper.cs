@@ -5,5 +5,5 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 
 public interface IFooterMapper
 {
-    Task<FooterModel> Map(Footer footer);
+    Task<FooterModel> Map(Footer footer, string? route);
 }

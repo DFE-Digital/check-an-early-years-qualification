@@ -218,4 +218,12 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await page.locator("button[value^='qualification-level']").click();
         await doesNotExist(page, `button[value^='qualification-level']`);
     });
+
+    test("Checks that the webview accessibility statement link is displayed correctly", async ({ page }) => {
+        await page.goto("/early-years-qualification-list/accessibility-statement");
+        await checkText(page, "a[href='/early-years-qualification-list/accessibility-statement']", "Accessibility statement");
+        await doesNotExist(page, "a[href='/accessibility-statement']");
+        await page.locator("a[href='/early-years-qualification-list/accessibility-statement']").click();
+        await checkUrl(page, "/early-years-qualification-list/accessibility-statement");
+    });
 });
