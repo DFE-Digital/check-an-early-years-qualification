@@ -26,16 +26,6 @@ const betweenSeptember2014AndMay2016 = [
     [5, 2016]
 ];
 
-// const l2ContactDfe = "Level 2 further action required text";
-// const l2MaybePFA = "Level 2 maybe PFA";
-// const l2MustPFA = "Level 2 must PFA";
-// const l3Ebr = "Level 3 EBR";
-// const l3MustEnglish = "Level 3 must English";
-// const l3MustEnglishMaybePFA = "Level 3 must English maybe PFA";
-// const l3MustEnglishMustPFA = "Level 3 must English must PFA";
-// const l6MustQTS = "Level 6 must QTS";
-// const defaultRatioSummaryContent = "Summary card default content";
-
 const l2FandR = "Level 2 ratio requirement - F&R";
 const l2NotFandR = "Level 2 ratio requirement - not F&R";
 const l3FandR = "Level 3 ratio requirement - F&R";
@@ -305,35 +295,6 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6NotFandR});
             });
         });
-
-
-        // betweenSeptember2014AndAugust2019.forEach((startDate) => {
-        //     test(`Checks level ${level} not F&R started between September 2014 and August 2019 sees expected result (${startDate})`, async ({
-        //                                                                                                                                         page,
-        //                                                                                                                                         context
-        //                                                                                                                                     }) => {
-        //         await goToDetailsPageOfQualification({
-        //             context: context,
-        //             location: "england",
-        //             startDate: startDate,
-        //             awardDate: [1, 2020],
-        //             level: level,
-        //             organisation: "NCFE",
-        //             organisationNotOnList: false,
-        //             searchCriteria: '',
-        //             additionalQuestions: [["Test%20question", "no"], ["Test%20question%202", "no"]],
-        //             selectedFromList: true
-        //         }, page);
-        //
-        //         await checkDetailsInset(page, "Qualification result heading", "Not full and relevant L3", "Not full and relevant L3 body");
-        //         await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19");
-        //
-        //         await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, { detailText: l2NotFandR });
-        //         await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, { detailText: UnqualifiedNotFandR });
-        //         await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, { detailText: l3NotFandR });
-        //         await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6NotFandR});
-        //     });
-        // });
     });
 
     sixSeven.forEach((level) => {
@@ -506,33 +467,5 @@ test.describe("A spec used to test the qualification details page ratios", {tag:
                 await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, {detailText: l6NotFandR});
             });
         });
-
-        // betweenSeptember2014AndAugust2019.forEach((startDate) => {
-        //     test(`Checks level ${level} not F&R started between September 2014 and August 2019 sees expected result (${startDate})`, async ({
-        //                                                                                                                                         page,
-        //                                                                                                                                         context
-        //                                                                                                                                     }) => {
-        //         await goToDetailsPageOfQualification({
-        //             context: context,
-        //             location: "england",
-        //             startDate: startDate,
-        //             awardDate: [12, 2020],
-        //             level: level,
-        //             organisation: "NCFE",
-        //             organisationNotOnList: false,
-        //             searchCriteria: '',
-        //             additionalQuestions: [["This%20is%20the%20Qts%20question", "no"], ["Test%20question%202", "no"]],
-        //             selectedFromList: true
-        //         }, page);
-        //
-        //         await checkDetailsInset(page, "Qualification result heading", "Not full and relevant L3 or L6", "Not full and relevant L3 or L6 body");
-        //         await checkRatiosHeading(page, "Test ratio heading", "This is not F&R for L3 between Sep14 & Aug19");
-        //
-        //         await checkLevelRatioDetails(page, 0, "Level 2", RatioStatus.Approved, { detailText: l2NotFandR });
-        //         await checkLevelRatioDetails(page, 1, "Unqualified", RatioStatus.Approved, { detailText: UnqualifiedNotFandR });
-        //         await checkLevelRatioDetails(page, 2, "Level 3", RatioStatus.PossibleRouteAvailable, { detailText: l3NotFandR });
-        //         await checkLevelRatioDetails(page, 3, "Level 6", RatioStatus.NotApproved, { detailText: l6NotFandR });
-        //     });
-        // });
     });
 });

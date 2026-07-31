@@ -16,8 +16,6 @@ public class QualificationDetailsPage
 
     public bool IsDegreeSpecificPage { get; init; }
 
-    //public string? Level { get; init; }
-    
     public int[]? Levels { get; init; }
 
     public string? FromWhichYear { get; init; }
@@ -32,9 +30,9 @@ public class QualificationDetailsPage
     
     public Document? UnqualifiedRatioRequirements { get; init; }
 
-    public Document? Level2RatioRequirements { get; set; }
+    public Document? Level2RatioRequirements { get; init; }
     
-    public Document? Level3RatioRequirements { get; set; }
+    public Document? Level3RatioRequirements { get; init; }
     
-    public Document? Level6RatioRequirements { get; set; }
+    public Document? Level6RatioRequirements { get; init; }
 }

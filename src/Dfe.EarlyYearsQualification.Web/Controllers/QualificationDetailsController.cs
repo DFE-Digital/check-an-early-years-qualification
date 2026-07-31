@@ -59,73 +59,12 @@ public class QualificationDetailsController(
         }
         else
         {
-            //model.RatioRequirements = qualificationDetailsService.MarkAsNotFullAndRelevant(model.RatioRequirements);
             qualificationDetailsService.SetQualificationResultFailureDetails(model, content.Labels);
         }
         await qualificationDetailsService.SetRatioText(model, content.Labels);
 
         return View(model);
     }
-
-    // [HttpGet("qualification-details/{qualificationId}/old")]
-    // public async Task<IActionResult> IndexOld(string qualificationId)
-    // {
-    //     if (!ModelState.IsValid || string.IsNullOrEmpty(qualificationId)) return BadRequest();
-    //     if (!qualificationDetailsService.HasStartDate()) return RedirectToAction("Index", "Home");
-    //
-    //     var qualification = await qualificationDetailsService.GetQualificationById(qualificationId);
-    //     if (qualification is null)
-    //     {
-    //         logger.LogError("Could not find details for qualification with ID: {QualificationId}", qualificationId);
-    //         return RedirectToAction("Index", "Error");
-    //     }
-    //
-    //     var content = await GetPageContent(qualification);
-    //
-    //     if (content is null)
-    //     {
-    //         logger.LogError("No content for the qualification details page");
-    //         return RedirectToAction("Index", "Error");
-    //     }
-    //
-    //     var filteredQualifications =
-    //         await qualificationDetailsService.GetFilteredQualifications(qualification.QualificationName);
-    //
-    //     var model = await qualificationDetailsService.MapDetails(qualification, content, filteredQualifications);
-    //
-    //     var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
-    //
-    //     
-    //
-    //     if (!validateAdditionalRequirementQuestions.isFullAndRelevant)
-    //     {
-    //         await qualificationDetailsService.SetDefaultCardContentForApprovedQualifications(qualification, model);
-    //
-    //         await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
-    //         qualificationDetailsService.SetQualificationResultFailureDetails(model, content.Labels);
-    //         await qualificationDetailsService.QualificationMayBeEligibleForEbr(model, qualification);
-    //         await qualificationDetailsService.QualificationMayBeEligibleForEyitt(model, qualification);
-    //         await qualificationDetailsService.SetRatioText(model, content.Labels);
-    //         return validateAdditionalRequirementQuestions.actionResult!;
-    //     }
-    //
-    //     await qualificationDetailsService.CheckRatioRequirements(qualification, model);
-    //     if (model.RatioRequirements.IsNotFullAndRelevant)
-    //     {
-    //         qualificationDetailsService.SetQualificationResultFailureDetails(model, content.Labels);
-    //     }
-    //     else
-    //     {
-    //         qualificationDetailsService.SetQualificationResultSuccessDetails(model, content.Labels);
-    //     }
-    //
-    //     await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
-    //     await qualificationDetailsService.QualificationMayBeEligibleForEbr(model, qualification);
-    //     await qualificationDetailsService.QualificationMayBeEligibleForEyitt(model, qualification);
-    //     await qualificationDetailsService.SetRatioText(model, content.Labels);
-    //
-    //     return View(model);
-    // }
 
     private async Task<QualificationDetailsPage?> GetPageContent(Qualification qualification, bool isFullAndRelevant)
     {

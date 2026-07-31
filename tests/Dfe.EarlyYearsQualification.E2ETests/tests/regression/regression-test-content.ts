@@ -77,7 +77,7 @@ Paediatric first aid certificate
 If this qualification was awarded on or after 30 June 2016, the member of staff must obtain a paediatric first aid certificate which meets the criteria in the early years foundation stage (EYFS) statutory framework (opens in new tab) within 3 months of starting work. To continue to be included in the ratio, the certificate must be renewed every 3 years.
 `;
 
-export const level6NotApprovedContentQTSEYTSEYPS = `The qualification is not approved to count in the staff:child ratios at Level 6.
+export const level6NotApprovedContentQTSEYTSEYPS = `The qualification is not approved to count in the staff:child ratios at level 6.
 
 To be included in the staff:child ratios at level 6, staff must have gained one of the following:
 
@@ -85,7 +85,7 @@ Qualified Teacher Status (QTS)
 Early Years Teacher Status (EYTS)
 Early Years Professional Status (EYPS)`;
 
-export const level6EBRContentEYITT = `The qualification is not approved to count in the staff:child ratios at Level 6.
+export const level6EBRContentEYITT = `The qualification is not approved to count in the staff:child ratios at level 6.
 
 To be included in the staff:child ratios at level 6, staff must have gained one of the following:
 Qualified Teacher Status (QTS)
@@ -155,3 +155,7 @@ export const postRatioRequirementManagerContent = 'As set out in the early years
 export const postRatioRequirementManagerContentList = `ensure that staffing arrangements meet the needs of all children and ensure their safety
 ensure that people looking after children are suitable
 meet all other requirements as set out in the EYFS and the early years qualification requirements and standards guidance document (opens in new tab)`;
+
+export const practitionerNotFullAndReleventRequirementsTextParagraphOne = "There are lots of ways to get an approved early years qualification. The Department for Education’s early years careers website (opens in new tab) has information on all the available training and qualification routes.";
+
+export const practitionerNotFullAndReleventRequirementsTextParagraphTwo = "We’re here to support you with any questions or guidance you need about developing your career in early years education. Whether you want to understand more about early years qualifications or you want to explore your options, there’s help available. Contact the early careers team (opens in new tab)";

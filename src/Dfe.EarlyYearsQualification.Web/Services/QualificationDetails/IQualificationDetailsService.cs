@@ -21,20 +21,6 @@ public interface IQualificationDetailsService
 
     bool AnswersIndicateNotFullAndRelevant(List<AdditionalRequirementAnswerModel> additionalRequirementsAnswers);
 
-    RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model);
-
-    // Task QualificationLevel3OrAboveMightBeRelevantAtLevel2(QualificationDetailsModel model,
-    //                                                        Qualification qualification);
-
-    // Task QualificationMayBeEligibleForEbr(QualificationDetailsModel model,
-    //                                       Qualification qualification);
-
-    // ReSharper disable once IdentifierTypo
-    // Task QualificationMayBeEligibleForEyitt(QualificationDetailsModel model,
-    //                                         Qualification qualification);
-
-    //Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model);
-
     (bool isFullAndRelevant, QualificationDetailsModel details) RemainingAnswersIndicateFullAndRelevant(
         QualificationDetailsModel details, AdditionalRequirementQuestion qtsQuestion);
 
@@ -42,8 +28,6 @@ public interface IQualificationDetailsService
                                                             QualificationDetailsModel details);
 
     bool DoAdditionalAnswersMatchQuestions(QualificationDetailsModel details);
-
-    // NavigationLink? CalculateBackButton(DetailsPageLabels content, string qualificationId);
 
     List<AdditionalRequirementAnswerModel>? MapAdditionalRequirementAnswers(
         List<AdditionalRequirementQuestion>? additionalRequirementQuestions);
@@ -55,10 +39,6 @@ public interface IQualificationDetailsService
     void SetQualificationResultSuccessDetails(QualificationDetailsModel model, DetailsPageLabels content);
 
     void SetQualificationResultFailureDetails(QualificationDetailsModel model, DetailsPageLabels content);
-
-    //Task SetRequirementOverrides(Qualification qualification, QualificationDetailsModel model);
-
-    //Task SetDefaultCardContentForApprovedQualifications(Qualification qualification, QualificationDetailsModel model);
 
     bool GetUserIsCheckingOwnQualification();
 

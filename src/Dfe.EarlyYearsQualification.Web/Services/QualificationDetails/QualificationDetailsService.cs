@@ -158,17 +158,7 @@ public class QualificationDetailsService(
                && qualification.AdditionalRequirementQuestions.Exists(x => x.Sys.Id == AdditionalRequirementQuestions
                                                                                .QtsQuestion);
     }
-
-    public RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
-    {
-        model.ApprovedForLevel2 = QualificationApprovalStatus.NotApproved;
-        model.ApprovedForLevel3 = QualificationApprovalStatus.NotApproved;
-        model.ApprovedForLevel6 = QualificationApprovalStatus.NotApproved;
-        model.ApprovedForUnqualified = QualificationApprovalStatus.Approved;
-
-        return model;
-    }
-
+    
     public bool DoAdditionalAnswersMatchQuestions(QualificationDetailsModel details)
     {
         return details.AdditionalRequirementAnswers!.Count == 0 ||
@@ -296,147 +286,6 @@ public class QualificationDetailsService(
         QualificationMayBeEligibleForEyitt(model, qualification);
     }
 
-    // public async Task CheckRatioRequirements(Qualification qualification, QualificationDetailsModel model)
-    // {
-    //     // Build up property name to check for each level
-    //     var beforeOrAfter = userJourneyCookieService.WasStartedBeforeSeptember2014() ? "Before" : "After";
-    //
-    //     var fullAndRelevantPropertyToCheck =
-    //         $"FullAndRelevantForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
-    //
-    //     var additionalRequirementDetailPropertyToCheck =
-    //         $"RequirementForLevel{qualification.QualificationLevel}{beforeOrAfter}2014";
-    //
-    //     if (qualification.IsAutomaticallyApprovedAtLevel6 || (QualificationContainsQtsQuestion(qualification) &&
-    //                                                           UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification,
-    //                                                                                                                 model.AdditionalRequirementAnswers)))
-    //     {
-    //         // Check user against QTS criteria and swap to Qts Criteria if matches
-    //         fullAndRelevantPropertyToCheck = $"FullAndRelevantForQtsEtc{beforeOrAfter}2014";
-    //         additionalRequirementDetailPropertyToCheck = $"RequirementForQtsEtc{beforeOrAfter}2014";
-    //     }
-    //
-    //     const string additionalRequirementHeading = "RequirementHeading";
-    //
-    //     var approvedForLevel2 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
-    //                                                             new Level2RatioRequirements());
-    //
-    //     model.RatioRequirements.ApprovedForLevel2 = approvedForLevel2
-    //                                                     ? QualificationApprovalStatus.Approved
-    //                                                     : QualificationApprovalStatus.NotApproved;
-    //
-    //     var requirementsForLevel2 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
-    //                                                            RatioRequirements.Level2RatioRequirementName,
-    //                                                            qualification);
-    //     model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(requirementsForLevel2);
-    //
-    //     model.RatioRequirements.RequirementsHeadingForLevel2 =
-    //         GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level2RatioRequirementName,
-    //                                  qualification);
-    //
-    //     var approvedForLevel3 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
-    //                                                             new Level3RatioRequirements());
-    //
-    //     model.RatioRequirements.ApprovedForLevel3 = approvedForLevel3
-    //                                                     ? QualificationApprovalStatus.Approved
-    //                                                     : QualificationApprovalStatus.NotApproved;
-    //
-    //     var requirementsForLevel3 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
-    //                                                            RatioRequirements.Level3RatioRequirementName,
-    //                                                            qualification);
-    //     model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(requirementsForLevel3);
-    //
-    //     model.RatioRequirements.RequirementsHeadingForLevel3 =
-    //         GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level3RatioRequirementName,
-    //                                  qualification);
-    //
-    //     var approvedForLevel6 = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
-    //                                                             new Level6RatioRequirements());
-    //
-    //     model.RatioRequirements.ApprovedForLevel6 = approvedForLevel6
-    //                                                     ? QualificationApprovalStatus.Approved
-    //                                                     : QualificationApprovalStatus.NotApproved;
-    //
-    //     var requirementsForLevel6 = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
-    //                                                            RatioRequirements.Level6RatioRequirementName,
-    //                                                            qualification);
-    //     model.RatioRequirements.RequirementsForLevel6 = await contentParser.ToHtml(requirementsForLevel6);
-    //
-    //     model.RatioRequirements.RequirementsHeadingForLevel6 =
-    //         GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.Level6RatioRequirementName,
-    //                                  qualification);
-    //
-    //     var approvedForUnqualified = GetFullAndRelevantRatioProperty(fullAndRelevantPropertyToCheck,
-    //                                                                  new UnqualifiedRatioRequirements());
-    //
-    //     model.RatioRequirements.ApprovedForUnqualified = approvedForUnqualified
-    //                                                          ? QualificationApprovalStatus.Approved
-    //                                                          : QualificationApprovalStatus.NotApproved;
-    //
-    //     var requirementsForUnqualified = GetRatioProperty<Document>(additionalRequirementDetailPropertyToCheck,
-    //                                                                 RatioRequirements.UnqualifiedRatioRequirementName,
-    //                                                                 qualification);
-    //     model.RatioRequirements.RequirementsForUnqualified = await contentParser.ToHtml(requirementsForUnqualified);
-    //
-    //     model.RatioRequirements.RequirementsHeadingForUnqualified =
-    //         GetRatioProperty<string>(additionalRequirementHeading, RatioRequirements.UnqualifiedRatioRequirementName,
-    //                                  qualification);
-    //
-    //     await SetRequirementOverrides(qualification, model);
-    // }
-
-    // public async Task SetRequirementOverrides(Qualification qualification, QualificationDetailsModel model)
-    // {
-    //     if (model.RatioRequirements.IsNotFullAndRelevant) return;
-    //     bool wasAwardedInJune2016 = userJourneyCookieService.WasAwardedInJune2016();
-    //     bool wasAwardedAfterJune2016 = userJourneyCookieService.WasAwardedAfterJune2016();
-    //     bool wasAwardedBetweenSeptember2014AndMay2016 = userJourneyCookieService.WasAwardedBetweenSeptember2014AndMay2016();
-    //
-    //     var qts = IsQts(qualification, model.AdditionalRequirementAnswers);
-    //
-    //     var l2RequirementForInJune2016 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForInJune2016),
-    //                                                                 RatioRequirements.Level2RatioRequirementName,
-    //                                                                 qualification);
-    //     var l2RequirementForAfterJune2016 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForAfterJune2016),
-    //                                                                    RatioRequirements.Level2RatioRequirementName,
-    //                                                                    qualification);
-    //
-    //     await SetDefaultCardContentForApprovedQualifications(qualification, model);
-    //     
-    //     switch (qualification.QualificationLevel)
-    //     {
-    //         case 2 when wasAwardedInJune2016:
-    //             model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(l2RequirementForInJune2016);
-    //             break;
-    //         case 2 when wasAwardedAfterJune2016:
-    //             model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(l2RequirementForAfterJune2016);
-    //             break;
-    //         case >= 3 and <= 5 when wasAwardedBetweenSeptember2014AndMay2016:
-    //         case >= 6 when wasAwardedBetweenSeptember2014AndMay2016 && !qts:
-    //             var l3RequirementForL3PlusBetweenSept14AndMay16 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForL3PlusBetweenSept14AndMay16),
-    //                                                                                          RatioRequirements.Level3RatioRequirementName,
-    //                                                                                          qualification);
-    //             model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(l3RequirementForL3PlusBetweenSept14AndMay16);
-    //             break;
-    //         case >= 3 and <= 5 when wasAwardedInJune2016:
-    //         case >= 6 when wasAwardedInJune2016 && !qts:
-    //             var l3RequirementForInJune2016 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForInJune2016),
-    //                                                                         RatioRequirements.Level3RatioRequirementName,
-    //                                                                         qualification);
-    //             model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(l3RequirementForInJune2016);
-    //             model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(l2RequirementForInJune2016);
-    //             break;
-    //         case >= 3 and <= 5 when wasAwardedAfterJune2016:
-    //         case >= 6 when wasAwardedAfterJune2016 && !qts:
-    //             var l3RequirementForAfterJune2016 = GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForAfterJune2016),
-    //                                                                            RatioRequirements.Level3RatioRequirementName,
-    //                                                                            qualification);
-    //             model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(l3RequirementForAfterJune2016);
-    //             model.RatioRequirements.RequirementsForLevel2 = await contentParser.ToHtml(l2RequirementForAfterJune2016);
-    //             break;
-    //     }
-    // }
-
     public async Task<QualificationDetailsModel> MapDetails(Qualification qualification,
                                                             QualificationDetailsPage content, bool isFullAndRelevant)
     {
@@ -506,11 +355,6 @@ public class QualificationDetailsService(
             && !isQts)
         {
             model.RatioRequirements.ApprovedForLevel6 = QualificationApprovalStatus.PossibleRouteAvailable;
-            // var requirementsForLevel6 = GetRatioProperty<Document>(nameof(RatioRequirement.EyittRouteAvailable),
-            //                                                        RatioRequirements.Level6RatioRequirementName,
-            //                                                        qualification);
-            //model.RatioRequirements.RequirementsForLevel6 = await contentParser.ToHtml(requirementsForLevel6);
-            //model.RatioRequirements.ShowRequirementsForLevel6ByDefault = true;
         }
     }
 
@@ -521,11 +365,6 @@ public class QualificationDetailsService(
         if (ebrEligible)
         {
             model.RatioRequirements.ApprovedForLevel3 = QualificationApprovalStatus.PossibleRouteAvailable;
-            // var requirementsForLevel3 = GetRatioProperty<Document>(nameof(RatioRequirement.Level3EbrRouteAvailable),
-            //                                                        RatioRequirements.Level3RatioRequirementName,
-            //                                                        qualification);
-            // model.RatioRequirements.RequirementsForLevel3 = await contentParser.ToHtml(requirementsForLevel3);
-            //model.RatioRequirements.ShowRequirementsForLevel3ByDefault = true;
         }
     }
 
@@ -537,19 +376,9 @@ public class QualificationDetailsService(
             userJourneyCookieService.WasStartedBetweenSeptember2014AndAugust2019() &&
             qualification.QualificationLevel > 2)
         {
-            // This is needed to preserve the Not Full and Relevant messaging as changing the L2 status below makes it F&R 
-            //model.RatioRequirements.OverrideToBeNotFullAndRelevant = true;
-
             // If the qualification is above a level 2 qualification, is not full and relevant and is started between Sept 2014 and Aug 2019
             // then policy have confirmed it can be automatically approved at L2
             model.RatioRequirements.ApprovedForLevel2 = QualificationApprovalStatus.Approved;
-            // var requirementsForLevel2 =
-            //     GetRatioProperty<Document>(nameof(RatioRequirement.RequirementForLevel2BetweenSept14AndAug19),
-            //                                RatioRequirements.Level2RatioRequirementName,
-            //                                qualification);
-            // var parsedContent = await contentParser.ToHtml(requirementsForLevel2);
-            // model.RatioRequirements.RequirementsForLevel2 = placeholderUpdater.Replace(parsedContent);
-            //model.RatioRequirements.ShowRequirementsForLevel2ByDefault = true;
         }
     }
 
@@ -629,11 +458,6 @@ public class QualificationDetailsService(
 
         switch (model.QualificationLevel)
         {
-            // case >= 3 when wasStartedBetweenSeptember2014AndAugust2019:
-            //                //&& model.RatioRequirements.OverrideToBeNotFullAndRelevant:
-            //     model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
-            //     model.Content!.RatiosAdditionalInfoText = string.Empty;
-            //     break;
             case >= 3 when wasStartedBetweenSeptember2014AndAugust2019:
                 model.Content!.RatiosText = await contentParser.ToHtml(content.RatiosTextL3PlusNotFrBetweenSep14Aug19);
                 model.Content!.RatiosAdditionalInfoText = await contentParser.ToHtml(content.RatiosTextL3Ebr);
@@ -647,47 +471,6 @@ public class QualificationDetailsService(
                 break;
         }
     }
-
-    // public async Task SetDefaultCardContentForApprovedQualifications(Qualification qualification, QualificationDetailsModel model)
-    // {
-    //     var requirements = model.RatioRequirements;
-    //     
-    //     if (IsApproved(requirements.ApprovedForUnqualified))
-    //     {
-    //         var unqualifiedContentSummary = GetRatioProperty<Document>(nameof(RatioRequirement.SummaryCardDefaultContent),
-    //                                                                    RatioRequirements.UnqualifiedRatioRequirementName,
-    //                                                                    qualification);
-    //         
-    //         requirements.RequirementsForUnqualified = await contentParser.ToHtml(unqualifiedContentSummary);
-    //     }
-    //     
-    //     if (IsApproved(requirements.ApprovedForLevel2))
-    //     {
-    //         var level2ContentSummary = GetRatioProperty<Document>(nameof(RatioRequirement.SummaryCardDefaultContent),
-    //                                                               RatioRequirements.Level2RatioRequirementName,
-    //                                                               qualification);
-    //         
-    //         requirements.RequirementsForLevel2 = await contentParser.ToHtml(level2ContentSummary);
-    //     }
-    //     
-    //     if (IsApproved(requirements.ApprovedForLevel3))
-    //     {
-    //         var level3ContentSummary = GetRatioProperty<Document>(nameof(RatioRequirement.SummaryCardDefaultContent),
-    //                                                               RatioRequirements.Level3RatioRequirementName,
-    //                                                               qualification);
-    //         
-    //         requirements.RequirementsForLevel3 = await contentParser.ToHtml(level3ContentSummary);
-    //     }
-    //     
-    //     if (IsApproved(requirements.ApprovedForLevel6))
-    //     {
-    //         var level6ContentSummary = GetRatioProperty<Document>(nameof(RatioRequirement.SummaryCardDefaultContent),
-    //                                                               RatioRequirements.Level6RatioRequirementName,
-    //                                                               qualification);
-    //         
-    //         requirements.RequirementsForLevel6 = await contentParser.ToHtml(level6ContentSummary);
-    //     }
-    // }
 
     private T GetRatioProperty<T>(string propertyToCheck, string ratioName, Qualification qualification)
     {
@@ -720,6 +503,14 @@ public class QualificationDetailsService(
             throw;
         }
     }
+    
+    private RatioRequirementModel MarkAsNotFullAndRelevant(RatioRequirementModel model)
+    {
+        model.ApprovedForLevel2 = QualificationApprovalStatus.NotApproved;
+        model.ApprovedForLevel3 = QualificationApprovalStatus.NotApproved;
+        model.ApprovedForLevel6 = QualificationApprovalStatus.NotApproved;
+        model.ApprovedForUnqualified = QualificationApprovalStatus.Approved;
 
-    //private static bool IsApproved(QualificationApprovalStatus status) => status == QualificationApprovalStatus.Approved;
+        return model;
+    }
 }
