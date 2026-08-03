@@ -52,7 +52,7 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await checkUrl(page, "/early-years-qualification-list");
         await checkTextContains(page, "button[value^='search-term']", "Education and Childcare (Specialism - Early Years Educator)");
         await checkText(page, "#qualification-webview-results > h2", "1 qualification found");
-        await checkText(page, "#qualification-webview-results .govuk-summary-card h2", "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)");
+        await checkText(page, "#qualification-webview-results .govuk-summary-card h3", "T Level Technical Qualification in Education and Childcare (Specialism - Early Years Educator)");
      });
 
     [
