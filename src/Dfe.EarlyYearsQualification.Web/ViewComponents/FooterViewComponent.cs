@@ -16,8 +16,8 @@ public class FooterViewComponent(
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var footer = await GetFooterAsync();
-        
-        var footerModel = await footerMapper.Map(footer);
+
+        var footerModel = await footerMapper.Map(footer, HttpContext.Request.Path.Value);
 
         return View(footerModel);
     }
