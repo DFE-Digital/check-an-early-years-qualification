@@ -45,7 +45,7 @@ public static class SecureHeaderConfiguration
         var govukAllMinifiedElement = new ContentSecurityPolicyElement
                                       {
                                           CommandType = CspCommandType.Directive,
-                                          DirectiveOrUri = "sha256-3xwLPs4LREgDyNSSVv8/3oWOgYIvt6htNlJZmczt86M="
+                                          DirectiveOrUri = "sha256-gRhA/MUlDBqc23Q1P/MS1NmGrI+aA9NqloW+bxt4Yi8="
                                       };
 
         var unsafeHashesElement = new ContentSecurityPolicyElement
