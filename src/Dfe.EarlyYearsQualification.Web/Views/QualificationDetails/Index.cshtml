@@ -38,10 +38,10 @@
             @if (Model.IsQualificationNameDuplicate && !string.IsNullOrEmpty(Model.QualificationNumber))
             {
                 <govuk-summary-list-row id="qualification-number-row">
-                    <govuk-summary-list-row-key id="qualification-name-label">
+                    <govuk-summary-list-row-key id="qualification-number-label">
                         @Model.QualificationNumberLabel
                     </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value id="qualification-name-value">
+                    <govuk-summary-list-row-value id="qualification-number-value">
                         @Model.QualificationNumber
                     </govuk-summary-list-row-value>
                 </govuk-summary-list-row>

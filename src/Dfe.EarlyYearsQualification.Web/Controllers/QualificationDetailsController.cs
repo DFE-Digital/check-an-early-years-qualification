@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Attributes;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
@@ -28,58 +29,87 @@ public class QualificationDetailsController(
             logger.LogError("Could not find details for qualification with ID: {QualificationId}", qualificationId);
             return RedirectToAction("Index", "Error");
         }
-
-        var content = await GetPageContent(qualification);
+       
+        var (isFullAndRelevant, outcome) = await ValidateAdditionalQuestions(qualification);
+        if (outcome == ValidateAdditionalRequirementOutcomes.RedirectToAdditionalRequirementQuestions)
+        {
+            return RedirectToAction("Index", "CheckAdditionalRequirements",
+                                    new
+                                    {
+                                        qualification.QualificationId,
+                                        questionIndex = 1
+                                    }
+                                   );
+        }
+        
+        var content = await GetPageContent(qualification, isFullAndRelevant);
 
         if (content is null)
         {
             logger.LogError("No content for the qualification details page");
             return RedirectToAction("Index", "Error");
         }
-
-        var filteredQualifications = await qualificationDetailsService.GetFilteredQualifications(qualification.QualificationName);
-
-        var model = await qualificationDetailsService.MapDetails(qualification, content, filteredQualifications);
-
-        var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
-
-        model.Content!.QualificationResultHeading = content.Labels.QualificationResultHeading;
-
-        if (!validateAdditionalRequirementQuestions.isValid)
+        
+        var model = await qualificationDetailsService.MapDetails(qualification, content, isFullAndRelevant);
+        await qualificationDetailsService.SetRatioRequirements(qualification, model, content, isFullAndRelevant);
+        if (isFullAndRelevant)
         {
-            await qualificationDetailsService.SetDefaultCardContentForApprovedQualifications(qualification, model);
-
-            await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
-            qualificationDetailsService.SetQualificationResultFailureDetails(model, content.Labels);
-            await qualificationDetailsService.QualificationMayBeEligibleForEbr(model, qualification);
-            await qualificationDetailsService.QualificationMayBeEligibleForEyitt(model, qualification);
-            await qualificationDetailsService.SetRatioText(model, content.Labels);
-            return validateAdditionalRequirementQuestions.actionResult!;
-        }
-
-        await qualificationDetailsService.CheckRatioRequirements(qualification, model);
-        if (model.RatioRequirements.IsNotFullAndRelevant)
-        {
-            qualificationDetailsService.SetQualificationResultFailureDetails(model, content.Labels);
+            
+            qualificationDetailsService.SetQualificationResultSuccessDetails(model, content.Labels);
         }
         else
         {
-            qualificationDetailsService.SetQualificationResultSuccessDetails(model, content.Labels);
+            qualificationDetailsService.SetQualificationResultFailureDetails(model, content.Labels);
         }
-
-        await qualificationDetailsService.QualificationLevel3OrAboveMightBeRelevantAtLevel2(model, qualification);
-        await qualificationDetailsService.QualificationMayBeEligibleForEbr(model, qualification);
-        await qualificationDetailsService.QualificationMayBeEligibleForEyitt(model, qualification);
         await qualificationDetailsService.SetRatioText(model, content.Labels);
 
         return View(model);
     }
 
-    private async Task<(bool isValid, IActionResult? actionResult)> ValidateAdditionalQuestions(
-        QualificationDetailsModel details, Qualification qualification)
+    private async Task<QualificationDetailsPage?> GetPageContent(Qualification qualification, bool isFullAndRelevant)
     {
+        var level = qualificationDetailsService.GetLevelOfQualification();
+        var (startMonth, startYear) = qualificationDetailsService.GetWhenWasQualificationStarted();
+        var (awardedMonth, awardedYear) = qualificationDetailsService.GetWhenWasQualificationAwarded();
+        var isUserCheckingTheirOwnQualification = qualificationDetailsService.GetUserIsCheckingOwnQualification();
+
+        if (level is null || !HasValidDate(startMonth, startYear) || !HasValidDate(awardedMonth, awardedYear))
+        {
+            return null;
+        }
+
+        return await qualificationDetailsService.GetQualificationDetailsPage(
+                                                                             isUserCheckingTheirOwnQualification,
+                                                                             isFullAndRelevant,
+                                                                             // If the user selected not sure on the level page, use the qualification level instead
+                                                                             level.Value == 0 ? qualification.QualificationLevel : level.Value,
+                                                                             startMonth!.Value,
+                                                                             startYear!.Value,
+                                                                             awardedMonth!.Value,
+                                                                             awardedYear!.Value,
+                                                                             qualification
+                                                                            );
+    }
+
+    private static bool HasValidDate(int? month, int? year)
+    {
+        return month is not null && year is not null;
+    }
+
+    private async Task<(bool isFullAndRelevant, ValidateAdditionalRequirementOutcomes outcome)> ValidateAdditionalQuestions(
+        Qualification qualification)
+    {
+        var additionalRequirementQuestions =
+            qualificationDetailsService.MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions);
+        
         // If the qualification has no additional requirements then skip all checks and return.
-        if (details.AdditionalRequirementAnswers == null) return (true, null);
+        if (additionalRequirementQuestions == null) return (true, ValidateAdditionalRequirementOutcomes.Default);
+        
+        
+        var details = new QualificationDetailsModel
+                      {
+                          AdditionalRequirementAnswers = additionalRequirementQuestions
+                      };
 
         // If qualification contains the QTS question, check the answers
         if (qualificationDetailsService.QualificationContainsQtsQuestion(qualification))
@@ -88,28 +118,18 @@ public class QualificationDetailsController(
         // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
         if (qualificationDetailsService.DoAdditionalAnswersMatchQuestions(details))
         {
-            return (false,
-                    RedirectToAction("Index", "CheckAdditionalRequirements",
-                                     new
-                                     {
-                                         details.QualificationId,
-                                         questionIndex = 1
-                                     }
-                                    )
-                   );
+            return (false, ValidateAdditionalRequirementOutcomes.RedirectToAdditionalRequirementQuestions);
         }
 
         // If there are not any answers to the questions that are not full and relevant we can continue back to check the ratios.
         if (!qualificationDetailsService.AnswersIndicateNotFullAndRelevant(details.AdditionalRequirementAnswers))
-            return (true, null);
+            return (true, ValidateAdditionalRequirementOutcomes.Default);
 
         // At this point, there will be at least one question answered in a non full and relevant way.
-        // we mark the ratios as not full and relevant and return.
-        details.RatioRequirements = qualificationDetailsService.MarkAsNotFullAndRelevant(details.RatioRequirements);
-        return (false, View(details));
+        return (false, ValidateAdditionalRequirementOutcomes.Default);
     }
 
-    private async Task<(bool isValid, IActionResult? actionResult)> CheckAnswersWhereQtsAnswered(
+    private async Task<(bool isFullAndRelevant, ValidateAdditionalRequirementOutcomes outcome)> CheckAnswersWhereQtsAnswered(
         QualificationDetailsModel details, Qualification qualification)
     {
         var qtsQuestion =
@@ -121,47 +141,15 @@ public class QualificationDetailsController(
         {
             // Remove the additional requirements that they didn't answer following the bypass.
             details.AdditionalRequirementAnswers!.RemoveAll(x => x.Question != qtsQuestion.Question);
-            return (true, null);
+            return (true, ValidateAdditionalRequirementOutcomes.Default);
         }
 
         var remainingAnswersIndicateFullAndRelevant =
             qualificationDetailsService.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
-        if (remainingAnswersIndicateFullAndRelevant.isFullAndRelevant) return (true, null);
+        if (remainingAnswersIndicateFullAndRelevant.isFullAndRelevant) return (true, ValidateAdditionalRequirementOutcomes.Default);
 
-        details = await qualificationDetailsService.CheckLevel6Requirements(qualification, details);
+        await qualificationDetailsService.CheckLevel6Requirements(qualification, details);
 
-        return (false, View(details));
-    }
-
-    private async Task<QualificationDetailsPage?> GetPageContent(Qualification qualification)
-    {
-        var model = new QualificationDetailsModel
-                    {
-                        AdditionalRequirementAnswers =
-                            qualificationDetailsService.MapAdditionalRequirementAnswers(qualification
-                                .AdditionalRequirementQuestions)
-                    };
-
-        var validateAdditionalRequirementQuestions = await ValidateAdditionalQuestions(model, qualification);
-        var isFullAndRelevant = validateAdditionalRequirementQuestions.isValid;
-        var level = qualificationDetailsService.GetLevelOfQualification();
-        var (startMonth, startYear) = qualificationDetailsService.GetWhenWasQualificationStarted();
-        var isUserCheckingTheirOwnQualification = qualificationDetailsService.GetUserIsCheckingOwnQualification();
-
-        if (level is not null && startMonth is not null && startYear is not null)
-        {
-            return await qualificationDetailsService.GetQualificationDetailsPage(
-                        isUserCheckingTheirOwnQualification,
-                        isFullAndRelevant,
-                        // If the user selected not sure on the level page, use the qualification level instead
-                        level.Value == 0 ? qualification.QualificationLevel : level.Value,
-                        startMonth.Value,
-                        startYear.Value,
-                        qualification,
-                        model.AdditionalRequirementAnswers
-                       );
-        }
-
-        return null;
+        return (false, ValidateAdditionalRequirementOutcomes.Default);
     }
 }
