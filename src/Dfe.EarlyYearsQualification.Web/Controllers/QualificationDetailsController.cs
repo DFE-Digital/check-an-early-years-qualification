@@ -73,23 +73,27 @@ public class QualificationDetailsController(
         var (awardedMonth, awardedYear) = qualificationDetailsService.GetWhenWasQualificationAwarded();
         var isUserCheckingTheirOwnQualification = qualificationDetailsService.GetUserIsCheckingOwnQualification();
 
-        if (level is not null && startMonth is not null && startYear is not null
-            && awardedMonth is not null && awardedYear is not null)
+        if (level is null || !HasValidDate(startMonth, startYear) || !HasValidDate(awardedMonth, awardedYear))
         {
-            return await qualificationDetailsService.GetQualificationDetailsPage(
-                        isUserCheckingTheirOwnQualification,
-                        isFullAndRelevant,
-                        // If the user selected not sure on the level page, use the qualification level instead
-                        level.Value == 0 ? qualification.QualificationLevel : level.Value,
-                        startMonth.Value,
-                        startYear.Value,
-                        awardedMonth.Value,
-                        awardedYear.Value,
-                        qualification
-                       );
+            return null;
         }
 
-        return null;
+        return await qualificationDetailsService.GetQualificationDetailsPage(
+                                                                             isUserCheckingTheirOwnQualification,
+                                                                             isFullAndRelevant,
+                                                                             // If the user selected not sure on the level page, use the qualification level instead
+                                                                             level.Value == 0 ? qualification.QualificationLevel : level.Value,
+                                                                             startMonth!.Value,
+                                                                             startYear!.Value,
+                                                                             awardedMonth!.Value,
+                                                                             awardedYear!.Value,
+                                                                             qualification
+                                                                            );
+    }
+
+    private static bool HasValidDate(int? month, int? year)
+    {
+        return month is not null && year is not null;
     }
 
     private async Task<(bool isFullAndRelevant, ValidateAdditionalRequirementOutcomes outcome)> ValidateAdditionalQuestions(
