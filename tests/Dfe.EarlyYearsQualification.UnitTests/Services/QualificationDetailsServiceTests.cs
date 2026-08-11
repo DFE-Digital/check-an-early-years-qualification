@@ -537,7 +537,7 @@ public class QualificationDetailsServiceTests
             .ReturnsAsync(new QualificationDetailsModel());
 
         var sut = GetSut();
-        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant);
+        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant, null);
 
         result.Should().NotBeNull();
         _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
@@ -580,7 +580,7 @@ public class QualificationDetailsServiceTests
 
         var sut = GetSut();
 
-        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant);
+        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant, null);
 
         result.Should().NotBeNull();
         _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
@@ -632,10 +632,19 @@ public class QualificationDetailsServiceTests
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), It.IsAny<string>(), It.IsAny<string>(),
                               hasMultipleQualificationsWithSameName, isFullAndRelevant))
             .ReturnsAsync(new QualificationDetailsModel());
+        
+        var additionalRequirementAnswerModels = new List<AdditionalRequirementAnswerModel>
+                                             {
+                                                 new AdditionalRequirementAnswerModel
+                                                 {
+                                                     Answer = "yes",
+                                                     Question = "Q1"
+                                                 }
+                                             };
 
         var sut = GetSut();
 
-        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant);
+        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant, additionalRequirementAnswerModels);
 
         result.Should().NotBeNull();
 

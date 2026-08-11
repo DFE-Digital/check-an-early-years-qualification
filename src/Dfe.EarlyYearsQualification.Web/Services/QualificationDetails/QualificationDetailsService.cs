@@ -287,7 +287,8 @@ public class QualificationDetailsService(
     }
 
     public async Task<QualificationDetailsModel> MapDetails(Qualification qualification,
-                                                            QualificationDetailsPage content, bool isFullAndRelevant)
+                                                            QualificationDetailsPage content,
+                                                            bool isFullAndRelevant, List<AdditionalRequirementAnswerModel>? additionalRequirementAnswers)
     {
         // Needed for displaying the qualification number if there is a duplicate cert with the same name.
         var filteredQualifications = await GetFilteredQualifications(qualification.QualificationName);
@@ -322,8 +323,7 @@ public class QualificationDetailsService(
         }
 
         return await qualificationDetailsMapper.Map(qualification, content, backNavLink,
-                                                    MapAdditionalRequirementAnswers(qualification
-                                                        .AdditionalRequirementQuestions),
+                                                    additionalRequirementAnswers,
                                                     dateStarted, dateAwarded, hasMultipleQualificationsWithSameName, isFullAndRelevant);
     }
 
