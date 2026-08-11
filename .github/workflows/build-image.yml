@@ -30,6 +30,8 @@ jobs:
 
         runs-on: ubuntu-22.04
         name: Build & Publish Image
+        permissions: 
+          packages: write
         outputs:
           dockerImageTag: ${{ steps.image.outputs.dockerImageTag }}
         steps:
