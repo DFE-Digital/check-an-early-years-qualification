@@ -31,6 +31,8 @@ jobs:
   build-app:  
     name: Build, check and run tests
     runs-on: ubuntu-22.04
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Check out repository
