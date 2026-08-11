@@ -30,7 +30,7 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
        
-        var (isFullAndRelevant, outcome) = await ValidateAdditionalQuestions(qualification);
+        var (isFullAndRelevant, outcome, additionalRequirementAnswerModels) = await ValidateAdditionalQuestions(qualification);
         if (outcome == ValidateAdditionalRequirementOutcomes.RedirectToAdditionalRequirementQuestions)
         {
             return RedirectToAction("Index", "CheckAdditionalRequirements",
@@ -50,7 +50,7 @@ public class QualificationDetailsController(
             return RedirectToAction("Index", "Error");
         }
         
-        var model = await qualificationDetailsService.MapDetails(qualification, content, isFullAndRelevant);
+        var model = await qualificationDetailsService.MapDetails(qualification, content, isFullAndRelevant, additionalRequirementAnswerModels);
         await qualificationDetailsService.SetRatioRequirements(qualification, model, content, isFullAndRelevant);
         if (isFullAndRelevant)
         {
@@ -96,14 +96,14 @@ public class QualificationDetailsController(
         return month is not null && year is not null;
     }
 
-    private async Task<(bool isFullAndRelevant, ValidateAdditionalRequirementOutcomes outcome)> ValidateAdditionalQuestions(
+    private async Task<(bool isFullAndRelevant, ValidateAdditionalRequirementOutcomes outcome, List<AdditionalRequirementAnswerModel>? additionalRequirementAnswerModels)> ValidateAdditionalQuestions(
         Qualification qualification)
     {
         var additionalRequirementQuestions =
             qualificationDetailsService.MapAdditionalRequirementAnswers(qualification.AdditionalRequirementQuestions);
         
         // If the qualification has no additional requirements then skip all checks and return.
-        if (additionalRequirementQuestions == null) return (true, ValidateAdditionalRequirementOutcomes.Default);
+        if (additionalRequirementQuestions == null) return (true, ValidateAdditionalRequirementOutcomes.Default, null);
         
         
         var details = new QualificationDetailsModel
@@ -118,18 +118,18 @@ public class QualificationDetailsController(
         // If there is a mismatch between the questions answered, then clear the answers and navigate back to the additional requirements check page
         if (qualificationDetailsService.DoAdditionalAnswersMatchQuestions(details))
         {
-            return (false, ValidateAdditionalRequirementOutcomes.RedirectToAdditionalRequirementQuestions);
+            return (false, ValidateAdditionalRequirementOutcomes.RedirectToAdditionalRequirementQuestions, details.AdditionalRequirementAnswers);
         }
 
         // If there are not any answers to the questions that are not full and relevant we can continue back to check the ratios.
         if (!qualificationDetailsService.AnswersIndicateNotFullAndRelevant(details.AdditionalRequirementAnswers))
-            return (true, ValidateAdditionalRequirementOutcomes.Default);
+            return (true, ValidateAdditionalRequirementOutcomes.Default, details.AdditionalRequirementAnswers);
 
         // At this point, there will be at least one question answered in a non full and relevant way.
-        return (false, ValidateAdditionalRequirementOutcomes.Default);
+        return (false, ValidateAdditionalRequirementOutcomes.Default, details.AdditionalRequirementAnswers);
     }
 
-    private async Task<(bool isFullAndRelevant, ValidateAdditionalRequirementOutcomes outcome)> CheckAnswersWhereQtsAnswered(
+    private async Task<(bool isFullAndRelevant, ValidateAdditionalRequirementOutcomes outcome, List<AdditionalRequirementAnswerModel>? additionalRequirementAnswerModels)> CheckAnswersWhereQtsAnswered(
         QualificationDetailsModel details, Qualification qualification)
     {
         var qtsQuestion =
@@ -141,15 +141,15 @@ public class QualificationDetailsController(
         {
             // Remove the additional requirements that they didn't answer following the bypass.
             details.AdditionalRequirementAnswers!.RemoveAll(x => x.Question != qtsQuestion.Question);
-            return (true, ValidateAdditionalRequirementOutcomes.Default);
+            return (true, ValidateAdditionalRequirementOutcomes.Default, details.AdditionalRequirementAnswers);
         }
 
         var remainingAnswersIndicateFullAndRelevant =
             qualificationDetailsService.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
-        if (remainingAnswersIndicateFullAndRelevant.isFullAndRelevant) return (true, ValidateAdditionalRequirementOutcomes.Default);
+        if (remainingAnswersIndicateFullAndRelevant.isFullAndRelevant) return (true, ValidateAdditionalRequirementOutcomes.Default, details.AdditionalRequirementAnswers);
 
         await qualificationDetailsService.CheckLevel6Requirements(qualification, details);
 
-        return (false, ValidateAdditionalRequirementOutcomes.Default);
+        return (false, ValidateAdditionalRequirementOutcomes.Default, details.AdditionalRequirementAnswers);
     }
 }
