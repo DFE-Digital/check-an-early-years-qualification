@@ -514,9 +514,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001, 5, 2019, false, false);
 
-        Logger.VerifyWarning($"No qualification details entry returned for: userIsCheckingOwnQualification={false}, " +
-                             $"isFullAndRelevant={false}, level={3}, isDegreeSpecificPage={false} " +
-                             $"isApprovedAtL6SpecificPage={false}");
+        Logger.VerifyWarning("No qualification details entry returned for: userIsCheckingOwnQualification=False, isFullAndRelevant=False, level=3, isDegreeSpecificPage=False, isApprovedAtL6SpecificPage=False");
 
         result.Should().BeNull();
     }
@@ -536,9 +534,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var result = await service.GetQualificationDetailsPage(false, false, 3, 1, 2001, 5, 2019,  false, false);
 
-        Logger.VerifyWarning($"No qualification details entry returned for: userIsCheckingOwnQualification={false}, " +
-                             $"isFullAndRelevant={false}, level={3}, isDegreeSpecificPage={false} " +
-                             $"isApprovedAtL6SpecificPage={false}");
+        Logger.VerifyWarning("No qualification details entry returned for: userIsCheckingOwnQualification=False, isFullAndRelevant=False, level=3, isDegreeSpecificPage=False, isApprovedAtL6SpecificPage=False");
 
         result.Should().BeNull();
     }
@@ -601,9 +597,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var result = await service.GetQualificationDetailsPage(true, true, 1, 6, 2013, 5, 2019, false, false);
 
-        Logger.VerifyWarning($"No qualification details entry returned for: userIsCheckingOwnQualification={true}, " +
-                             $"isFullAndRelevant={true}, level={1}, isDegreeSpecificPage={false} " +
-                             $"isApprovedAtL6SpecificPage={false}");
+        Logger.VerifyWarning("No qualification details entry returned for: userIsCheckingOwnQualification=True, isFullAndRelevant=True, level=1, isDegreeSpecificPage=False, isApprovedAtL6SpecificPage=False");
 
         result.Should().BeNull();
     }
@@ -623,9 +617,7 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         var result = await service.GetQualificationDetailsPage(true, true, 1, 6, 2013, 5, 2019, false, false);
 
-        Logger.VerifyWarning($"No qualification details entry returned for: userIsCheckingOwnQualification={true}, " +
-                             $"isFullAndRelevant={true}, level={1}, isDegreeSpecificPage={false} " +
-                             $"isApprovedAtL6SpecificPage={false}");
+        Logger.VerifyWarning("No qualification details entry returned for: userIsCheckingOwnQualification=True, isFullAndRelevant=True, level=1, isDegreeSpecificPage=False, isApprovedAtL6SpecificPage=False");
 
         result.Should().BeNull();
     }

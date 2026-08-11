@@ -55,9 +55,9 @@ public class ContentfulContentService(
 
         if (qualificationDetailsPageEntries is null || !qualificationDetailsPageEntries.Any())
         {
-            Logger.LogWarning($"No qualification details entry returned for: userIsCheckingOwnQualification={userIsCheckingOwnQualification}, " +
-                              $"isFullAndRelevant={isFullAndRelevant}, level={level}, isDegreeSpecificPage={isDegreeSpecificPage} " +
-                              $"isApprovedAtL6SpecificPage={isApprovedAtL6SpecificPage}");
+            Logger.LogWarning("No qualification details entry returned for: userIsCheckingOwnQualification={userIsCheckingOwnQualification}, isFullAndRelevant={isFullAndRelevant}, level={level}, isDegreeSpecificPage={isDegreeSpecificPage}, isApprovedAtL6SpecificPage={isApprovedAtL6SpecificPage}", 
+                              userIsCheckingOwnQualification, isFullAndRelevant, 
+                              level, isDegreeSpecificPage, isApprovedAtL6SpecificPage);
             return null;
         }
 
