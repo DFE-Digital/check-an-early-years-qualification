@@ -16,6 +16,7 @@ require('dotenv').config();
 var chromeUse = process.env.CI ? {...devices['Desktop Chrome'], channel: 'chromium'} : {...devices['Desktop Chrome']};
 
 export default defineConfig({
+    timeout: 45_000,
     snapshotPathTemplate: 'tests/e2e/snapshots/.snaps/{arg}{ext}',
     testDir: './tests',
     /* Run tests in files in parallel */
@@ -96,6 +97,14 @@ function buildCommand() {
 
     if (process.env.CONTENTFUL_DELIVERY_API_KEY !== undefined) {
         command += `--ContentfulOptions:DeliveryApiKey="${process.env.CONTENTFUL_DELIVERY_API_KEY}" `;
+    }
+
+    if (process.env.CONTENTFUL_USE_PREVIEW_API !== undefined) {
+        command += `--ContentfulOptions:UsePreviewApi="${process.env.CONTENTFUL_USE_PREVIEW_API}" `;
+    }
+
+    if (process.env.CONTENTFUL_PREVIEW_API_KEY !== undefined) {
+        command += `--ContentfulOptions:PreviewApiKey="${process.env.CONTENTFUL_PREVIEW_API_KEY}" `;
     }
 
     if (process.env.CONTENTFUL_SPACE_ID !== undefined) {

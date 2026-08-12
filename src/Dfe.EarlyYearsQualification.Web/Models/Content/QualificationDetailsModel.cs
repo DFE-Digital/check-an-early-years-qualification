@@ -10,7 +10,7 @@ public class QualificationDetailsModel : BasicQualificationModel
 
     public List<AdditionalRequirementAnswerModel>? AdditionalRequirementAnswers { get; init; }
 
-    public RatioRequirementModel RatioRequirements { get; set; } = new();
+    public RatioRequirementModel RatioRequirements { get; set; } = new RatioRequirementModel();
 
     public string DateStarted { get; init; } = string.Empty;
 
@@ -74,7 +74,7 @@ public class QualificationDetailsModel : BasicQualificationModel
                                                                         Content
                                                                             .QualificationResultMessageBody,
                                                                     IsFullAndRelevant =
-                                                                        !RatioRequirements
-                                                                            .IsNotFullAndRelevant
+                                                                        RatioRequirements
+                                                                            .IsFullAndRelevant
                                                                 };
 }

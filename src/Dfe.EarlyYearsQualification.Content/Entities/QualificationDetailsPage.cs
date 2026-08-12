@@ -16,13 +16,23 @@ public class QualificationDetailsPage
 
     public bool IsDegreeSpecificPage { get; init; }
 
-    public string? Level { get; init; }
+    public int[]? Levels { get; init; }
 
     public string? FromWhichYear { get; init; }
+    
+    public string? AwardedAfterWhichYear { get; init; }
 
     public string? ToWhichYear { get; init; }
 
     public string RequirementsHeading { get; init; } = string.Empty;
 
     public Document? RequirementsText { get; init; }
+    
+    public Document? UnqualifiedRatioRequirements { get; init; }
+
+    public Document? Level2RatioRequirements { get; init; }
+    
+    public Document? Level3RatioRequirements { get; init; }
+    
+    public Document? Level6RatioRequirements { get; init; }
 }
